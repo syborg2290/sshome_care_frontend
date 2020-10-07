@@ -72,6 +72,8 @@ function AddItem() {
     }
   };
 
+  const addItem = () => {};
+
   const uploadButton = (
     <div>
       {loading ? <LoadingOutlined /> : <PlusOutlined />}
@@ -192,7 +194,6 @@ function AddItem() {
                   value={amountPerInstallment}
                   onChange={(e) => {
                     setAmountPerInstallment(e.target.value);
-                    console.log(e.target.value);
                   }}
                 />
               </Form.Item>
@@ -210,7 +211,6 @@ function AddItem() {
                   value={downPayment}
                   onChange={(e) => {
                     setDownPayment(e.target.value);
-                    
                   }}
                 />
               </Form.Item>
@@ -222,7 +222,6 @@ function AddItem() {
                   value={guaranteePeriod}
                   onChange={(e) => {
                     setGuaranteePeriod(e.target.value);
-                    
                   }}
                 />
               </Form.Item>
@@ -289,7 +288,20 @@ function AddItem() {
                 </Upload>
               </Form.Item>
 
-              <Button className="btn" type="primary" htmlType="submit">
+              <Button
+                disabled={
+                  itemName &&
+                  cashPrice &&
+                  salePrice &&
+                  downPayment &&
+                  guaranteePeriod !== ""
+                    ? false
+                    : true
+                }
+                className="btn"
+                type="primary"
+                onClick={addItem}
+              >
                 Submit
               </Button>
             </Form>

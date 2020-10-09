@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Grid } from "@material-ui/core";
+import { Spin } from "antd";
 import axios from "axios";
 import MUIDataTable from "mui-datatables";
 import socketIOClient from "socket.io-client";
@@ -13,6 +14,7 @@ const {
 
 export default function ItemTable() {
   const [itemTableData, setItemTableData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     axios.get(SeverApi + "item/getAllItems").then((response) => {
@@ -38,6 +40,7 @@ export default function ItemTable() {
             ],
           ]);
         });
+        setIsLoading(false);
       }
     });
   }, []);
@@ -74,7 +77,8 @@ export default function ItemTable() {
       <Grid container spacing={4}>
         <Grid item xs={12}>
           <MUIDataTable
-            title="Item List" 
+            title="Item List"
+            className="item_table"
             data={itemTableData}
             columns={[
               "ITEM NAME",
@@ -87,6 +91,23 @@ export default function ItemTable() {
             ]}
             options={{
               filterType: "checkbox",
+              textLabels: {
+                body: {
+                  noMatch: isLoading ? (
+                    <Spin
+                      size="large"
+                      spinning="true"
+                      style={{ margin: "auto", width: "50%" }}
+                    />
+                  ) : (
+                    <img
+                      alt="Empty data"
+                      className="empty_data"
+                      src={require("../../../../../assets/empty.png")}
+                    />
+                  ),
+                },
+              },
             }}
           />
         </Grid>

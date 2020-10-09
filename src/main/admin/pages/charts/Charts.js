@@ -16,7 +16,7 @@ import {
 } from "recharts";
 
 // components
-import Widget from "../../Widget";
+import Widget from "../../Widget/Widget";
 import ApexLineChart from "./components/ApexLineChart";
 import ApexHeatmap from "./components/ApexHeatmap";
 import PageTitle from "../../PageTitle/PageTitle";

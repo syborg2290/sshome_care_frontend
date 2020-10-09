@@ -26,9 +26,9 @@ import useStyles from "./styles";
 
 // components
 import mock from "./mock";
-import Widget from "../../Widget";
+import Widget from "../../Widget/Widget";
 import PageTitle from "../../PageTitle/PageTitle";
-import { Typography } from "../../Wrappers";
+import { Typography } from "../../Wrappers/Wrappers";
 import Dot from "../../Sidebar/components/Dot";
 import Table from "./components/Table/Table";
 import BigStat from "./components/BigStat/BigStat";

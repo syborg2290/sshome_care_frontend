@@ -1,14 +1,78 @@
 import React from "react";
-import "./App.css";
-// import Header from "./components/Header/Header";
-import Login from "./components/Login/Login";
+import { HashRouter, Route, Switch, Redirect } from "react-router-dom";
 
-function App() {
+// components
+import Layout from "../src/main/admin/Layout/Layout";
+
+// pages
+import Error from "./main/admin/pages/error/Error";
+import Login from "./main/login/Login";
+
+// context
+import { useUserState } from "./context/UserContext";
+
+export default function App() {
+  // global
+  var { isAuthenticated } = useUserState();
+
   return (
-    <div className="app">
-      <Login />
-    </div>
+    <HashRouter>
+      <Switch>
+        {/* <Route
+          exact
+          path="/app"
+          render={(
+            
+          ) => <Redirect to="/app/dashboard" />}
+        /> */}
+        <Route exact path="/" render={() => <Redirect to="/app/dashboard" />} />
+        <PrivateRoute path="/app" component={Layout} />
+        <PublicRoute path="/login" component={Login} />
+        <Route component={Error} />
+      </Switch>
+    </HashRouter>
   );
-}
 
-export default App;
+  // #######################################################################
+
+  function PrivateRoute({ component, ...rest }) {
+    return (
+      <Route
+        {...rest}
+        render={(props) =>
+          isAuthenticated ? (
+            React.createElement(component, props)
+          ) : (
+            <Redirect
+              to={{
+                pathname: "/login",
+                state: {
+                  from: props.location,
+                },
+              }}
+            />
+          )
+        }
+      />
+    );
+  }
+
+  function PublicRoute({ component, ...rest }) {
+    return (
+      <Route
+        {...rest}
+        render={(props) =>
+          isAuthenticated ? (
+            <Redirect
+              to={{
+                pathname: "/",
+              }}
+            />
+          ) : (
+            React.createElement(component, props)
+          )
+        }
+      />
+    );
+  }
+}

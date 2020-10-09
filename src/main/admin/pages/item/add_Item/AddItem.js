@@ -427,15 +427,15 @@ function AddItem() {
 
               <Button
                 disabled={
-                  loadingSubmit === true ||
-                  (itemName &&
-                    cashPrice &&
-                    salePrice &&
-                    downPayment &&
-                    qty &&
-                    guaranteePeriod === "")
-                    ? true
-                    : false
+                  !loadingSubmit &&
+                  (itemName ||
+                    cashPrice ||
+                    salePrice ||
+                    downPayment ||
+                    qty ||
+                    guaranteePeriod !== "")
+                    ? false
+                    : true
                 }
                 className="btn"
                 type="primary"

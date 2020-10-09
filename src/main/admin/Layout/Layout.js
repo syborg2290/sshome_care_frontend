@@ -7,7 +7,7 @@ import classnames from "classnames";
 import useStyles from "./styles";
 
 // components
-import Header from "../../admin/Header/Header";
+import Header from "../Header/Header";
 import Sidebar from "../Sidebar/Sidebar";
 
 // pages

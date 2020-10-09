@@ -7,11 +7,11 @@ import classnames from "classnames";
 import useStyles from "./styles";
 
 // components
-import Header from "../Header";
-import Sidebar from "../Sidebar";
+import Header from "../../admin/Header/Header";
+import Sidebar from "../Sidebar/Sidebar";
 
 // pages
-import Dashboard from "../pages/dashboard";
+import Dashboard from "../pages/dashboard/Dashboard";
 import Charts from "../pages/charts/Charts";
 import ItemTable from "../pages/item/item_table/Item_table";
 import AddItem from "../pages/item/add_Item/AddItem";

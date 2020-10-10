@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Grid } from "@material-ui/core";
-import { Spin, Modal } from "antd";
+import { Spin, Modal} from "antd";
+import { ExclamationCircleOutlined } from '@ant-design/icons';
 import axios from "axios";
 import MUIDataTable from "mui-datatables";
 import socketIOClient from "socket.io-client";
@@ -20,11 +21,13 @@ const {
 
 
 export default function ItemTable() {
+ 
   const [itemTableData, setItemTableData] = useState([]);
   const [allTtemData, setAllItemData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [visible,setVisible] = useState(false);
-  const [currentIndx,setCurrentIndx] = useState(0);
+  const [currentIndx, setCurrentIndx] = useState(0);
+  const { confirm } = Modal;
   
   const showModal = () => {
    setVisible(true)
@@ -68,13 +71,12 @@ export default function ItemTable() {
   }, []);
 
   useEffect(() => {
-    const socket = socketIOClient(RealtimeServerApi);
+   const socket = socketIOClient(RealtimeServerApi);
     socket.on("messageFromServer", (data) => {
      setAllItemData(data);
       data.forEach((element) => {
         
-        setItemTableData((oldArray) => [
-          ...oldArray,
+        itemTableData.push(
           [
             <img alt="img" className="Item_img" src={element["photo"]!==null?element["photo"]: require("../../../../../assets/empty_item.png")} />,
             element["item_name"],
@@ -97,11 +99,59 @@ export default function ItemTable() {
             </div>
           
           ],
-        ]);
+        );
       });
     });
-    
+    // eslint-disable-next-line
   }, []);
+  
+  
+  const showDeleteItemsConfirm=(rowsDeleted)=> {
+   
+  confirm({
+    title: 'Do you want to delete these items?',
+    icon: <ExclamationCircleOutlined />,
+    content: 'Confirm your action',
+    onOk() {
+     
+       
+        for (var key in rowsDeleted.data) {
+            // eslint-disable-next-line
+          if (allTtemData.data[key["dataIndex"]].photo !== null) {
+            // eslint-disable-next-line
+            axios.get(SeverApi + "deleteImage/deleteImage", { "imageUrl": allTtemData.data[key["dataIndex"]].photo }).then((response) => {
+              if (response.status === 200) {
+                      
+                axios.get(SeverApi + "item/deleteItem", { "item_id": allTtemData.data[key["dataIndex"]].item_id }).then((response) => {
+                  if (response.status === 200) {
+                    console.log("deleted");
+                  }
+	
+                });
+                       
+              }
+	
+            });
+          } else {
+            // eslint-disable-next-line
+              axios.get(SeverApi + "item/deleteItem", { "item_id": allTtemData.data[key["dataIndex"]].item_id }).then((response) => {
+                  if (response.status === 200) {
+                    console.log("deleted");
+                  }
+	
+                });
+          }
+           
+                
+    }
+        
+        
+      
+    },
+    onCancel() {},
+  });
+}
+  
 
   return (
    
@@ -149,7 +199,7 @@ export default function ItemTable() {
             title={<span className="title_Span">ITEM LIST</span>}
             className="item_table"
             data={itemTableData}
-            
+           
             columns={[
               "IMG",
               "ITEM NAME",
@@ -164,6 +214,11 @@ export default function ItemTable() {
             ]}
             options={{
               filterType: "checkbox",
+              onRowsDelete: (rowsDeleted) => {
+                showDeleteItemsConfirm(rowsDeleted);
+                  let socketDeleteItem = socketIOClient(RealtimeServerApi);
+                socketDeleteItem.emit("fetchItems");
+            },
               download:false,
               print:false,
               searchPlaceholder:"Search using any column names",

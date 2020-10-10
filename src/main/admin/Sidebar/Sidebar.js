@@ -9,16 +9,12 @@ import {
   PersonAddDisabled as PersonAddDisabledIcon,
   PermIdentity as PermIdentityIcon,
   Settings as SettingsIcon,
-  QuestionAnswer as SupportIcon,
   LibraryBooks as LibraryIcon,
   ArrowBack as ArrowBackIcon,
 } from "@material-ui/icons";
 import { useTheme } from "@material-ui/styles";
 import { withRouter } from "react-router-dom";
 import classNames from "classnames";
-
-
-
 
 // styles
 import useStyles from "./styles";

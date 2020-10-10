@@ -9,8 +9,6 @@ import socketIOClient from "socket.io-client";
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import EditIcon from '@material-ui/icons/Edit';
 
-
-
 // styles
 import "./Item_table.css";
 
@@ -20,94 +18,21 @@ const {
 } = require("../../../../../config/settings.js");
 
 
-
 export default function ItemTable() {
   const [itemTableData, setItemTableData] = useState([]);
+  const [allTtemData, setAllItemData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [visible,setVisible] = useState(false);
-   const [currentIndx,setCurrentIndx] = useState(0);
+  const [currentIndx,setCurrentIndx] = useState(0);
   
-
   const showModal = () => {
    setVisible(true)
   };
 
- 
-
-  const dumydata =[
-  [<img alt="img"  className="Item_img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQTwQ_4WDaG622jZ5R3qrM7FREuRobYcWfo_Q&usqp=CAU" />,"dad","dada","dada","dada","dada","dada",
-     <div
-              color="secondary"
-              size="small"
-              className={true?false?"px-2":"px-3":"px-4"}
-              variant="contained"
-            >
-             {true?false?"Available":"Low Stock":"Out Of Stock"}
-            </div>,
-            <div className="table_Icon">
-
-            <VisibilityIcon/>
-            <span className="icon_Edit"><EditIcon/></span>
-            
-          </div>
-          
-          ],
-
-              [<img alt="img"  className="Item_img" src="https://upload.wikimedia.org/wikipedia/commons/9/92/The_death.png" />,"dad","dada","dada","dada","dada","dada",  
-               <div
-                 color="secondary"
-              size="small"
-              className={false?true?"px-2":"px-3":"px-4"}
-              variant="contained"
-            >
-             {false?true?"Available":"Low Stock":"Out Of Stock"}
-            </div>, 
-             <div className="table_Icon">
-
-            <VisibilityIcon/>
-            <span className="icon_Edit"><EditIcon/></span>
-            
-          </div>
-          ],
-
-              [<img alt="img"  className="Item_img" src="https://www.thetoyshop.com/medias/542391-Primary-515Wx515H?context=bWFzdGVyfGltYWdlc3wyMTI4ODF8aW1hZ2UvcG5nfGltYWdlcy9oMGQvaGQ0LzkxNzkwMzk1NjM4MDYucG5nfDY5ZDM3MGExMzczNjU2NzBjM2ZmYjAwMmU3ZjhhZmI0ZmM1Y2ExZDc3Y2IwZDNjODhkMWY1ZDBiZDdmZDJiYTI" />,"dad","dada","dada","dada","dada","dada", 
-                <div
-                color="secondary"
-              size="small"
-              className={false?false?"px-2":"px-3":"px-4"}
-              variant="contained"
-            >
-             {false?false?"Available":"Low Stock":"Out Of Stock"}
-            </div>, 
-             <div className="table_Icon">
-
-            <VisibilityIcon/>
-            <span className="icon_Edit"><EditIcon/></span>
-            
-          </div>
-          ],
-
-              [<img alt="img"  className="Item_img" src="https://www.nintendo.com/content/dam/noa/en_US/characters/Kirby_B_character.png" />,"dad","dada","dada","dada","dada","dada", 
-                <div
-                  color="secondary"
-              size="small"
-              className={true?true?"px-2":"px-3":"px-4"}
-              variant="contained"
-            >
-             {true?true?"Available":"Low Stock":"Out Of Stock"}
-            </div>, 
-             <div className="table_Icon">
-
-            <VisibilityIcon onClick={showModal}/>
-            <span className="icon_Edit"><EditIcon/></span>
-            
-          </div>
-          ]
-]
-
   useEffect(() => {
     axios.get(SeverApi + "item/getAllItems").then((response) => {
       if (response.status === 200) {
+        setAllItemData(response);
         response.data.forEach((element) => {
           setItemTableData((oldArray) => [
             ...oldArray,
@@ -126,19 +51,27 @@ export default function ItemTable() {
               variant="contained"
             >
              {element["qty"]!==0?element["qty"]>=3?"Available":"Low Stock":"Out Of Stock"}
+              </div>,
+               <div className="table_icon">
+                <VisibilityIcon onClick={showModal}/>,
+            <span className="icon_Edit"><EditIcon/></span>
             </div>
+              
             ],
           ]);
         });
         setIsLoading(false);
       }
     });
+     
   }, []);
 
   useEffect(() => {
     const socket = socketIOClient(RealtimeServerApi);
     socket.on("messageFromServer", (data) => {
+     setAllItemData(data);
       data.forEach((element) => {
+        
         setItemTableData((oldArray) => [
           ...oldArray,
           [
@@ -156,29 +89,55 @@ export default function ItemTable() {
               variant="contained"
             >
              {element["qty"]!==0?element["qty"]>=3?"Available":"Low Stock":"Out Of Stock"}
+            </div>,
+            <div className="table_icon">
+                <VisibilityIcon onClick={showModal}/>,
+            <span className="icon_Edit"><EditIcon/></span>
             </div>
+          
           ],
         ]);
       });
     });
+    
   }, []);
 
   return (
+   
     <>
     <Modal
-        title="Basic Modal"
+        title={<span className="model_title">{allTtemData.data && allTtemData.data[currentIndx] ? allTtemData.data[currentIndx].item_name : null}</span>}
         visible={visible}
         footer={null}
-
+        className="model_Item"
         onCancel={
-          ()=>{
+          () => {
             setVisible(false)       
            }
         }
         >
 <div className="table_Model">
-
-          <img className="model_img" src={dumydata[3][0]} alt={dumydata[3][2]}/>
+<div className="model_Main">
+          <img className="model_img" src={allTtemData.data && allTtemData.data[currentIndx] ? allTtemData.data[currentIndx].photo : ""} alt="" />
+           <div className="model_Detail">
+            <p>BRAND<span className="load_Item">: {allTtemData.data && allTtemData.data[currentIndx] ? allTtemData.data[currentIndx].brand : " - "}</span></p>
+            <p>QTY<span className="load_Item"> : {allTtemData.data && allTtemData.data[currentIndx] ? allTtemData.data[currentIndx].qty : " - "} </span></p>
+            <p>COLOR<span className="load_Item"> : {allTtemData.data && allTtemData.data[currentIndx] ? allTtemData.data[currentIndx].color : " - "} </span></p>
+            <p>MODEL NO<span className="load_Item"> : {allTtemData.data && allTtemData.data[currentIndx] ? allTtemData.data[currentIndx].model_no : " - "} </span></p>
+            <p>SALE PRICE<span className="load_Item"> : {allTtemData.data && allTtemData.data[currentIndx] ? allTtemData.data[currentIndx].sale_price : " - "} </span></p>
+            <p>CHASSIS NO<span className="load_Item"> : {allTtemData.data && allTtemData.data[currentIndx] ? allTtemData.data[currentIndx].chassis_no : " - "} </span></p>
+            <p>CASH PRICE<span className="load_Item"> : {allTtemData.data && allTtemData.data[currentIndx] ? allTtemData.data[currentIndx].cash_price : " - "} </span></p>
+            <p>DOWN PAYMENT<span className="load_Item"> : {allTtemData.data && allTtemData.data[currentIndx] ? allTtemData.data[currentIndx].down_payment : " - "} </span></p>
+            <p>NO OF INSTALLMENT<span className="load_Item"> : {allTtemData.data && allTtemData.data[currentIndx] ? allTtemData.data[currentIndx].no_of_installments : " - "} </span></p>
+            <p>AMOUNT PER INSTALLMENT<span className="load_Item"> : {allTtemData.data && allTtemData.data[currentIndx] ? allTtemData.data[currentIndx].amount_per_installment : " - "} </span></p>
+            <p>GUARANTEE MONTHS/YEARS<span className="load_Item"> : {allTtemData.data && allTtemData.data[currentIndx] ? allTtemData.data[currentIndx].guarantee_months_years : " - "} </span></p>
+            <p>GUARANTEE PERIOD<span className="load_Item"> : {allTtemData.data && allTtemData.data[currentIndx] ? allTtemData.data[currentIndx].guarantee_period : " - "} </span></p>
+            <p>DISCOUNT<span className="load_Item"> : {allTtemData.data && allTtemData.data[currentIndx] ? allTtemData.data[currentIndx].discount : " - "} </span></p>
+            <p>DESCRIPTION<span className="load_Item"> : {allTtemData.data && allTtemData.data[currentIndx] ? allTtemData.data[currentIndx].description : " - "} </span></p>
+            <p>COMPANY INVOICE NO<span className="load_Item"> : {allTtemData.data && allTtemData.data[currentIndx] ? allTtemData.data[currentIndx].company_invoice_no : " - "} </span></p>
+            <p>GUARANTEE CARD NO<span className="load_Item"> : {allTtemData.data && allTtemData.data[currentIndx] ? allTtemData.data[currentIndx].guarantee_card_no : " - "} </span></p>
+            </div>
+            </div>
 </div>
           
         </Modal>
@@ -187,7 +146,7 @@ export default function ItemTable() {
           <MUIDataTable
             title={<span className="title_Span">ITEM LIST</span>}
             className="item_table"
-            data={dumydata}
+            data={itemTableData}
             
             columns={[
               "IMG",
@@ -203,14 +162,14 @@ export default function ItemTable() {
             ]}
             options={{
               filterType: "checkbox",
-          onRowClick:(rowData, rowMeta)=>{
-            setCurrentIndx(rowMeta.rowIndex);
-          },
               download:false,
               print:false,
               searchPlaceholder:"Search using any column names",
               elevation: 4,
               sort: true,
+          onRowClick:(rowData, rowMeta)=>{
+            setCurrentIndx(rowMeta.rowIndex);
+          },
               textLabels: {
                 body: {
                   noMatch: isLoading ? (

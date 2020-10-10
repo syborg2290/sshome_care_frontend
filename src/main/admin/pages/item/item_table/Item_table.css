@@ -474,13 +474,27 @@
 
 /* End  icon 1024 responsive */
 
-.table_Model {
-   display: flex; 
-   justify-content: center; 
-   
-}
+/* Start  model */
 
 .model_img {
   width: 35%;
   height: 35%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
+
+.model_Item {
+  font-weight: 400;
+}
+
+.load_Item {
+  color: #000000;
+  font-weight: 700 !important;
+}
+
+.model_title {
+  color: red;
+}
+
+/* END  model */

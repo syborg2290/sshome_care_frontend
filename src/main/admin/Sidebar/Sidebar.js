@@ -2,7 +2,13 @@ import React, { useState, useEffect } from "react";
 import { Drawer, IconButton, List } from "@material-ui/core";
 import {
   Home as HomeIcon,
-  FilterNone as UIElementsIcon,
+  Tv as TvIcon,
+  Group as GroupIcon,
+  MoneyOff as MoneyOffIcon,
+  Build as BuildIcon,
+  PersonAddDisabled as PersonAddDisabledIcon,
+  PermIdentity as PermIdentityIcon,
+  Settings as SettingsIcon,
   QuestionAnswer as SupportIcon,
   LibraryBooks as LibraryIcon,
   ArrowBack as ArrowBackIcon,
@@ -10,6 +16,9 @@ import {
 import { useTheme } from "@material-ui/styles";
 import { withRouter } from "react-router-dom";
 import classNames from "classnames";
+
+
+
 
 // styles
 import useStyles from "./styles";
@@ -31,7 +40,7 @@ const structure = [
     id: 1,
     label: "Items",
     link: "/app/ui",
-    icon: <UIElementsIcon />,
+    icon: <TvIcon />,
     children: [
       { label: "Item Table", link: "/app/ui/item/itemTable" },
       { label: "View Item", link: "/app/ui/item/view_item" },
@@ -43,7 +52,7 @@ const structure = [
     id: 4,
     label: "Customers",
     link: "/app/ui",
-    icon: <UIElementsIcon />,
+    icon: <GroupIcon />,
     children: [
       { label: "Add Customer", link: "/app/ui/icons" },
       { label: "Charts", link: "/app/ui/charts" },
@@ -52,12 +61,12 @@ const structure = [
   },
 
   { id: 5, type: "divider" },
-  { id: 10, label: "Arreas", link: "", icon: <LibraryIcon /> },
-  { id: 6, label: "Repairs", link: "", icon: <LibraryIcon /> },
-  { id: 9, label: "Black list", link: "", icon: <LibraryIcon /> },
+  { id: 10, label: "Arreas", link: "", icon: <MoneyOffIcon /> },
+  { id: 6, label: "Repairs", link: "", icon: <BuildIcon /> },
+  { id: 9, label: "Black list", link: "", icon: <PersonAddDisabledIcon /> },
   { id: 2, type: "divider" },
-  { id: 7, label: "Accounts", link: "", icon: <LibraryIcon /> },
-  { id: 8, label: "Settings", link: "", icon: <SupportIcon /> },
+  { id: 7, label: "Accounts", link: "", icon: <PermIdentityIcon /> },
+  { id: 8, label: "Settings", link: "", icon: <SettingsIcon /> },
 ];
 
 function Sidebar({ location }) {

@@ -420,12 +420,21 @@
 
 /* End ststus lbl 1024 responsive */
 
-@media screen and (min-width: 1024px) {
+@media only screen and (min-width: 1024px) and (max-width: 1365px) {
   .px-2 {
     width: 100%;
     font-size: 14px !important;
     margin: auto;
-    padding: 4px 0px 7px 36px;
+    padding: 15px 15px 15px 10px;
+  }
+}
+
+@media screen and (min-width: 1366px) {
+  .px-2 {
+    width: 100%;
+    font-size: 14px !important;
+    margin: auto;
+    padding: 3px 0px 7px 35px;
   }
 }
 
@@ -448,3 +457,30 @@
 }
 
 /* End ststus lbl 1024 responsive */
+
+.icon_Edit {
+  margin-left: 20px;
+}
+
+/* Start icon  1024 responsive */
+
+@media screen and (min-width: 1024px) {
+  .icon_Edit {
+    width: 100%;
+    margin: auto;
+    padding-left: 11px;
+  }
+}
+
+/* End  icon 1024 responsive */
+
+.table_Model {
+   display: flex; 
+   justify-content: center; 
+   
+}
+
+.model_img {
+  width: 35%;
+  height: 35%;
+}

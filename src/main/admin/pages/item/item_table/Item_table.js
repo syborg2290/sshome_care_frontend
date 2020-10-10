@@ -4,6 +4,7 @@ import { Spin, Modal } from "antd";
 import axios from "axios";
 import MUIDataTable from "mui-datatables";
 import socketIOClient from "socket.io-client";
+import Moment from 'react-moment';
 
 // icons
 import VisibilityIcon from '@material-ui/icons/Visibility';
@@ -135,7 +136,8 @@ export default function ItemTable() {
             <p>DISCOUNT<span className="load_Item"> : {allTtemData.data && allTtemData.data[currentIndx] ? allTtemData.data[currentIndx].discount : " - "} </span></p>
             <p>DESCRIPTION<span className="load_Item"> : {allTtemData.data && allTtemData.data[currentIndx] ? allTtemData.data[currentIndx].description : " - "} </span></p>
             <p>COMPANY INVOICE NO<span className="load_Item"> : {allTtemData.data && allTtemData.data[currentIndx] ? allTtemData.data[currentIndx].company_invoice_no : " - "} </span></p>
-            <p>GUARANTEE CARD NO<span className="load_Item"> : {allTtemData.data && allTtemData.data[currentIndx] ? allTtemData.data[currentIndx].guarantee_card_no : " - "} </span></p>
+              <p>GUARANTEE CARD NO<span className="load_Item"> : {allTtemData.data && allTtemData.data[currentIndx] ? allTtemData.data[currentIndx].guarantee_card_no : " - "} </span></p>
+              <p>CREATED DATE<span className="load_Item"> : <Moment format="YYYY/MM/DD">{allTtemData.data && allTtemData.data[currentIndx] ? allTtemData.data[currentIndx].created_at  : " - "}</Moment> </span></p>
             </div>
             </div>
 </div>

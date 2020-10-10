@@ -84,6 +84,7 @@ export default function ItemTable() {
             title={<span className="title_Span">ITEM LIST</span>}
             className="item_table"
             data={itemTableData}
+            
             columns={[
               "IMG",
               "ITEM NAME",
@@ -97,6 +98,11 @@ export default function ItemTable() {
             ]}
             options={{
               filterType: "checkbox",
+              download:false,
+              print:false,
+              searchPlaceholder:"Search using any column names",
+              elevation: 4,
+              sort: true,
               textLabels: {
                 body: {
                   noMatch: isLoading ? (

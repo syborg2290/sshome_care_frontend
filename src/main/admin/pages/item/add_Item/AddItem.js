@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Form, Radio, Input, Layout, Button, Spin } from "antd";
 import axios from "axios";
 import socketIOClient from "socket.io-client";
-import imageCompression from 'browser-image-compression';
+import imageCompression from "browser-image-compression";
 import "antd/dist/antd.css";
 import {
   NotificationContainer,
@@ -148,8 +148,11 @@ function AddItem() {
                         maxSizeMB: 1,
                         maxWidthOrHeight: 1920,
                         useWebWorker: true,
-                      }
-                      const compressedFile = await imageCompression(imageFile, options);
+                      };
+                      const compressedFile = await imageCompression(
+                        imageFile,
+                        options
+                      );
                       formData.append("image", compressedFile);
                       const configFile = {
                         headers: {

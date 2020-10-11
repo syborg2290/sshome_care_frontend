@@ -141,7 +141,7 @@ function AddItem() {
                   } else {
                     //Rest of code here
                     setLoadingSubmit(true);
-                    let imageDownloadUrl = null;
+                    let imageDownloadUrl = "null";
                     if (imageFile !== null) {
                       const formData = new FormData();
                       const options = {
@@ -442,6 +442,9 @@ function AddItem() {
                     cashPrice ||
                     salePrice ||
                     downPayment ||
+                    color ||
+                    brand || 
+                    modelNo ||
                     qty ||
                     guaranteePeriod !== "")
                     ? false

@@ -37,6 +37,8 @@ function EditModel({
   cInvoiceNoProp,
   GCardNoProp,
   guaranteeProp,
+  editModalClose,
+  socketParent,
 }) {
   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const [imageUrl, setImageUrl] = useState(null);
@@ -129,7 +131,7 @@ function EditModel({
                 } else {
                   //Rest of code here
                   setLoadingSubmit(true);
-                  let imageDownloadUrl = imageUrlProp;
+                  let imageDownloadUrl = "null";
                   if (imageFile !== null) {
                     const formData = new FormData();
                     const options = {
@@ -178,7 +180,9 @@ function EditModel({
                     cInvoiceNo: cInvoiceNo,
                     GCardNo: GCardNo,
                     guarantee: guarantee,
-                    itemDownImageUrl: imageDownloadUrl,
+                    itemDownImageUrl: imageDownloadUrl==="null"
+                      ? imageUrlProp
+                      : imageDownloadUrl,
                   };
                   await axios
                     .post(SeverApi + "item/updateItem", variable)
@@ -186,7 +190,9 @@ function EditModel({
                       if (response.status === 200) {
                         setLoadingSubmit(false);
                         NotificationManager.success("Item updated!", "Done");
-                        setInterval(() => window.location.reload(), 1000);
+                        // setInterval(() => window.location.reload(), 1000);
+                        editModalClose();
+                        socketParent.emit("fetchItems");
                       } else {
                         setLoadingSubmit(false);
                         NotificationManager.warning(
@@ -408,7 +414,7 @@ function EditModel({
               }}
               src={
                 imageUrl == null
-                  ? imageUrlProp !== null
+                  ? imageUrlProp !== "null"
                     ? imageUrlProp
                     : require("../../../../../../assets/images_upload.png")
                   : imageUrl

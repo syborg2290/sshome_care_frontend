@@ -11,6 +11,7 @@ import {
   NotificationManager,
 } from "react-notifications";
 import "react-notifications/lib/notifications.css";
+import CurrencyFormat from "react-currency-format";
 
 // components
 import EditModel from "./components/Edit_model";
@@ -35,6 +36,7 @@ export default function ItemTable() {
   const [currentIndx, setCurrentIndx] = useState(0);
   const { confirm } = Modal;
   const [editVisible, setEditVisible] = useState(false);
+  let socket = socketIOClient(RealtimeServerApi);
 
   const showModal = () => {
     setVisible(true);
@@ -56,7 +58,7 @@ export default function ItemTable() {
                 alt="img"
                 className="Item_img"
                 src={
-                  element["photo"] !== null
+                  element["photo"] !== "null"
                     ? element["photo"]
                     : require("../../../../../assets/empty_item.png")
                 }
@@ -66,7 +68,12 @@ export default function ItemTable() {
               element["qty"],
               element["color"],
               element["model_no"],
-              element["sale_price"],
+              <CurrencyFormat
+                value={element["sale_price"]}
+                displayType={"text"}
+                thousandSeparator={true}
+                prefix={" "}
+              />,
               <div
                 color="secondary"
                 size="small"
@@ -100,55 +107,64 @@ export default function ItemTable() {
   }, []);
 
   useEffect(() => {
-    const socket = socketIOClient(RealtimeServerApi);
     socket.on("messageFromServer", (data) => {
-      setAllItemData(data);
-      data.forEach((element) => {
-        itemTableData.push([
-          <img
-            alt="img"
-            className="Item_img"
-            src={
-              element["photo"] !== null
-                ? element["photo"]
-                : require("../../../../../assets/empty_item.png")
-            }
-          />,
-          element["item_name"],
-          element["brand"],
-          element["qty"],
-          element["color"],
-          element["model_no"],
-          element["sale_price"],
-          <div
-            color="secondary"
-            size="small"
-            className={
-              element["qty"] !== 0
+      var newData = [];
+      if (itemTableData.length < 1) {
+        data.forEach((element) => {
+          allTtemData.push(element);
+
+          newData.push([
+            <img
+              alt="img"
+              className="Item_img"
+              src={
+                element["photo"] !== "null"
+                  ? element["photo"]
+                  : require("../../../../../assets/empty_item.png")
+              }
+            />,
+            element["item_name"],
+            element["brand"],
+            element["qty"],
+            element["color"],
+            element["model_no"],
+            <CurrencyFormat
+              value={element["sale_price"]}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={" "}
+            />,
+            <div
+              color="secondary"
+              size="small"
+              className={
+                element["qty"] !== 0
+                  ? element["qty"] >= 3
+                    ? "px-2"
+                    : "px-3"
+                  : "px-4"
+              }
+              variant="contained"
+            >
+              {element["qty"] !== 0
                 ? element["qty"] >= 3
-                  ? "px-2"
-                  : "px-3"
-                : "px-4"
-            }
-            variant="contained"
-          >
-            {element["qty"] !== 0
-              ? element["qty"] >= 3
-                ? "Available"
-                : "Low Stock"
-              : "Out Of Stock"}
-          </div>,
-          <div className="table_icon">
-            <VisibilityIcon onClick={showModal} />,
-            <span className="icon_Edit">
-              <EditIcon onClick={editModal} />
-            </span>
-          </div>,
-        ]);
-      });
+                  ? "Available"
+                  : "Low Stock"
+                : "Out Of Stock"}
+            </div>,
+            <div className="table_icon">
+              <VisibilityIcon onClick={showModal} />,
+              <span className="icon_Edit">
+                <EditIcon onClick={editModal} />
+              </span>
+            </div>,
+          ]);
+        });
+        setItemTableData(newData);
+      }
     });
     // eslint-disable-next-line
-  }, []);
+  }, [itemTableData]);
 
   const showDeleteItemsConfirm = (rowsDeleted) => {
     confirm({
@@ -183,7 +199,17 @@ export default function ItemTable() {
                       })
                       .then((response) => {
                         if (response.status === 200) {
-                          console.log("deleted");
+                          NotificationManager.success(
+                            "Item deletion successfully!",
+                            "Done"
+                          );
+
+                          socket.emit("fetchItems");
+                        } else {
+                          NotificationManager.warning(
+                            "Failed to continue the process!",
+                            "Please try again"
+                          );
                         }
                       });
                   }
@@ -203,8 +229,8 @@ export default function ItemTable() {
                       "Item deletion successfully!",
                       "Done"
                     );
-                    let socketDeleteItem = socketIOClient(RealtimeServerApi);
-                    socketDeleteItem.emit("fetchItems");
+
+                    socket.emit("fetchItems");
                   } else {
                     NotificationManager.warning(
                       "Failed to continue the process!",
@@ -218,6 +244,10 @@ export default function ItemTable() {
       },
       onCancel() {},
     });
+  };
+
+  const editModalClose = () => {
+    setEditVisible(false);
   };
 
   return (
@@ -243,10 +273,12 @@ export default function ItemTable() {
               className="model_img"
               src={
                 allTtemData.data && allTtemData.data[currentIndx]
-                  ? allTtemData.data[currentIndx].photo
+                  ? allTtemData.data[currentIndx].photo === "null"
+                    ? ""
+                    : allTtemData.data[currentIndx].photo
                   : ""
               }
-              alt=""
+              alt="item_image"
             />
             <div className="model_Detail">
               <p>
@@ -289,13 +321,20 @@ export default function ItemTable() {
                 </span>
               </p>
               <p>
-                SALE PRICE
+                SALE PRICE(LKR)
                 <span className="load_Item">
                   {" "}
                   :{" "}
-                  {allTtemData.data && allTtemData.data[currentIndx]
-                    ? allTtemData.data[currentIndx].sale_price
-                    : " - "}{" "}
+                  {allTtemData.data && allTtemData.data[currentIndx] ? (
+                    <CurrencyFormat
+                      value={allTtemData.data[currentIndx].sale_price}
+                      displayType={"text"}
+                      thousandSeparator={true}
+                      prefix={"  "}
+                    />
+                  ) : (
+                    " - "
+                  )}{" "}
                 </span>
               </p>
               <p>
@@ -309,23 +348,37 @@ export default function ItemTable() {
                 </span>
               </p>
               <p>
-                CASH PRICE
+                CASH PRICE(LKR)
                 <span className="load_Item">
                   {" "}
                   :{" "}
-                  {allTtemData.data && allTtemData.data[currentIndx]
-                    ? allTtemData.data[currentIndx].cash_price
-                    : " - "}{" "}
+                  {allTtemData.data && allTtemData.data[currentIndx] ? (
+                    <CurrencyFormat
+                      value={allTtemData.data[currentIndx].cash_price}
+                      displayType={"text"}
+                      thousandSeparator={true}
+                      prefix={" "}
+                    />
+                  ) : (
+                    " - "
+                  )}{" "}
                 </span>
               </p>
               <p>
-                DOWN PAYMENT
+                DOWN PAYMENT(LKR)
                 <span className="load_Item">
                   {" "}
                   :{" "}
-                  {allTtemData.data && allTtemData.data[currentIndx]
-                    ? allTtemData.data[currentIndx].down_payment
-                    : " - "}{" "}
+                  {allTtemData.data && allTtemData.data[currentIndx] ? (
+                    <CurrencyFormat
+                      value={allTtemData.data[currentIndx].down_payment}
+                      displayType={"text"}
+                      thousandSeparator={true}
+                      prefix={" "}
+                    />
+                  ) : (
+                    " - "
+                  )}{" "}
                 </span>
               </p>
               <p>
@@ -339,13 +392,22 @@ export default function ItemTable() {
                 </span>
               </p>
               <p>
-                AMOUNT PER INSTALLMENT
+                AMOUNT PER INSTALLMENT(LKR)
                 <span className="load_Item">
                   {" "}
                   :{" "}
-                  {allTtemData.data && allTtemData.data[currentIndx]
-                    ? allTtemData.data[currentIndx].amount_per_installment
-                    : " - "}{" "}
+                  {allTtemData.data && allTtemData.data[currentIndx] ? (
+                    <CurrencyFormat
+                      value={
+                        allTtemData.data[currentIndx].amount_per_installment
+                      }
+                      displayType={"text"}
+                      thousandSeparator={true}
+                      prefix={" "}
+                    />
+                  ) : (
+                    " - "
+                  )}{" "}
                 </span>
               </p>
               <p>
@@ -369,13 +431,20 @@ export default function ItemTable() {
                 </span>
               </p>
               <p>
-                DISCOUNT
+                DISCOUNT(LKR)
                 <span className="load_Item">
                   {" "}
                   :{" "}
-                  {allTtemData.data && allTtemData.data[currentIndx]
-                    ? allTtemData.data[currentIndx].discount
-                    : " - "}{" "}
+                  {allTtemData.data && allTtemData.data[currentIndx] ? (
+                    <CurrencyFormat
+                      value={allTtemData.data[currentIndx].discount}
+                      displayType={"text"}
+                      thousandSeparator={true}
+                      prefix={" "}
+                    />
+                  ) : (
+                    " - "
+                  )}{" "}
                 </span>
               </p>
               <p>
@@ -538,6 +607,8 @@ export default function ItemTable() {
                     ? allTtemData.data[currentIndx].guarantee_months_years
                     : "Years"
                 }
+                editModalClose={editModalClose}
+                socketParent={socket}
               />
             </div>
           </div>
@@ -565,8 +636,7 @@ export default function ItemTable() {
               filterType: "checkbox",
               onRowsDelete: (rowsDeleted) => {
                 showDeleteItemsConfirm(rowsDeleted);
-                let socketDeleteItem = socketIOClient(RealtimeServerApi);
-                socketDeleteItem.emit("fetchItems");
+                socket.emit("fetchItems");
               },
               download: false,
               print: false,

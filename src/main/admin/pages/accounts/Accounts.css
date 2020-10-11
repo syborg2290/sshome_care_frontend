@@ -1,0 +1,45 @@
+.icon_delete{
+    padding: 2px;
+    margin-left: 9px;
+}
+
+.btn_newUser{
+    margin-top: 80px !important;
+    float: right;
+    border-radius: 10px;
+    height: 40px;
+    text-align: center;
+   
+}
+
+.item_table{
+    margin-top: -5px;
+}
+
+.new_UserIcon{
+padding-left: 18px;
+font-size: 5px;
+
+
+}
+
+.offline{
+background-color: #f01919 !important;
+  color: aliceblue;
+  font-weight: 700 !important;
+  /* margin: auto; */
+  width: 50%;
+  border-radius: 10px;
+  padding: 4px 10px 4px 25px;
+
+}
+
+.active{
+background-color: #01c11b !important;
+  color: aliceblue;
+  font-weight: 700 !important;
+  /* margin: auto; */
+  width: 50%;
+  border-radius: 10px;
+  padding: 4px 10px 4px 25px;
+}

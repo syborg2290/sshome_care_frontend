@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Form, Radio, Input, Layout, Button, Spin } from "antd";
 import axios from "axios";
 import socketIOClient from "socket.io-client";
-import imageCompression from 'browser-image-compression';
+import imageCompression from "browser-image-compression";
 import "antd/dist/antd.css";
 import {
   NotificationContainer,
@@ -149,8 +149,11 @@ function Edit_model() {
                         maxSizeMB: 1,
                         maxWidthOrHeight: 1920,
                         useWebWorker: true,
-                      }
-                      const compressedFile = await imageCompression(imageFile, options);
+                      };
+                      const compressedFile = await imageCompression(
+                        imageFile,
+                        options
+                      );
                       formData.append("image", compressedFile);
                       const configFile = {
                         headers: {
@@ -221,240 +224,239 @@ function Edit_model() {
   return (
     <div>
       <Content>
-            <Form className="form">
-              <Form.Item label="* Item Name">
-                <Input
-                  allowClear
-                  placeholder="xx Device"
-                  value={itemName}
-                  onChange={(e) => {
-                    setItemName(e.target.value);
-                  }}
-                />
-              </Form.Item>
-              <Form.Item label="Brand ">
-                <Input
-                  allowClear
-                  placeholder="xx Brand "
-                  value={brand}
-                  onChange={(e) => {
-                    setBrand(e.target.value);
-                  }}
-                />
-              </Form.Item>
-              <Form.Item label="Model no ">
-                <Input
-                  allowClear
-                  placeholder="xx 0091"
-                  value={modelNo}
-                  onChange={(e) => {
-                    setModelNo(e.target.value);
-                  }}
-                />
-              </Form.Item>
-              <Form.Item label="Chassis no ">
-                <Input
-                  allowClear
-                  placeholder="xx 95091"
-                  value={chassisNo}
-                  onChange={(e) => {
-                    setChassisNo(e.target.value);
-                  }}
-                />
-              </Form.Item>
-              <Form.Item label="Color ">
-                <Input
-                  allowClear
-                  placeholder="xx pink"
-                  value={color}
-                  onChange={(e) => {
-                    setColor(e.target.value);
-                  }}
-                />
-              </Form.Item>
-              <Form.Item label="* Qty ">
-                <Input
-                  type="number"
-                  min={1}
-                  allowClear
-                  placeholder="120 "
-                  value={qty}
-                  onChange={(e) => {
-                    setQty(e.target.value);
-                  }}
-                />
-              </Form.Item>
-              <Form.Item label="* Cash price (LKR)">
-                <Input
-                  type="number"
-                  min={1}
-                  allowClear
-                  placeholder=" 15000.00"
-                  value={cashPrice}
-                  onChange={(e) => {
-                    setCashPrice(e.target.value);
-                  }}
-                />
-              </Form.Item>
-              <Form.Item label="* Sale Price (LKR)">
-                <Input
-                  type="number"
-                  min={1}
-                  allowClear
-                  placeholder="17000.00"
-                  value={salePrice}
-                  onChange={(e) => {
-                    setSalePrice(e.target.value);
-                  }}
-                />
-              </Form.Item>
-              <Form.Item label="* No Of Installments  ">
-                <Input
-                  type="number"
-                  min={1}
-                  allowClear
-                  placeholder="20"
-                  value={noOfInstallments}
-                  onChange={(e) => {
-                    setNoOfInstallments(e.target.value);
-                  }}
-                />
-              </Form.Item>
-              <Form.Item label="* Amount Per Installment  (LKR)">
-                <Input
-                  type="number"
-                  min={1}
-                  allowClear
-                  placeholder="3000.00"
-                  value={amountPerInstallment}
-                  onChange={(e) => {
-                    setAmountPerInstallment(e.target.value);
-                  }}
-                />
-              </Form.Item>
-              <Form.Item label="* Guarantee Months / Years  ">
-                <Radio.Group onChange={radioOnChange} value={guarantee.value}>
-                  <Radio value={"Years"}>Years</Radio>
-                  <Radio value={"Months"}>Months</Radio>
-                </Radio.Group>
-              </Form.Item>
-              <Form.Item label="* Guarantee Period">
-                <Input
-                  type="number"
-                  min={1}
-                  allowClear
-                  placeholder="6"
-                  value={guaranteePeriod}
-                  onChange={(e) => {
-                    setGuaranteePeriod(e.target.value);
-                  }}
-                />
-              </Form.Item>
-              <Form.Item label="* Down Payment (LKR)">
-                <Input
-                  type="number"
-                  min={1}
-                  allowClear
-                  placeholder="5000.00"
-                  value={downPayment}
-                  onChange={(e) => {
-                    setDownPayment(e.target.value);
-                  }}
-                />
-              </Form.Item>
+        <Form className="form">
+          <Form.Item label="* Item Name">
+            <Input
+              allowClear
+              placeholder="xx Device"
+              value={itemName}
+              onChange={(e) => {
+                setItemName(e.target.value);
+              }}
+            />
+          </Form.Item>
+          <Form.Item label="Brand ">
+            <Input
+              allowClear
+              placeholder="xx Brand "
+              value={brand}
+              onChange={(e) => {
+                setBrand(e.target.value);
+              }}
+            />
+          </Form.Item>
+          <Form.Item label="Model no ">
+            <Input
+              allowClear
+              placeholder="xx 0091"
+              value={modelNo}
+              onChange={(e) => {
+                setModelNo(e.target.value);
+              }}
+            />
+          </Form.Item>
+          <Form.Item label="Chassis no ">
+            <Input
+              allowClear
+              placeholder="xx 95091"
+              value={chassisNo}
+              onChange={(e) => {
+                setChassisNo(e.target.value);
+              }}
+            />
+          </Form.Item>
+          <Form.Item label="Color ">
+            <Input
+              allowClear
+              placeholder="xx pink"
+              value={color}
+              onChange={(e) => {
+                setColor(e.target.value);
+              }}
+            />
+          </Form.Item>
+          <Form.Item label="* Qty ">
+            <Input
+              type="number"
+              min={1}
+              allowClear
+              placeholder="120 "
+              value={qty}
+              onChange={(e) => {
+                setQty(e.target.value);
+              }}
+            />
+          </Form.Item>
+          <Form.Item label="* Cash price (LKR)">
+            <Input
+              type="number"
+              min={1}
+              allowClear
+              placeholder=" 15000.00"
+              value={cashPrice}
+              onChange={(e) => {
+                setCashPrice(e.target.value);
+              }}
+            />
+          </Form.Item>
+          <Form.Item label="* Sale Price (LKR)">
+            <Input
+              type="number"
+              min={1}
+              allowClear
+              placeholder="17000.00"
+              value={salePrice}
+              onChange={(e) => {
+                setSalePrice(e.target.value);
+              }}
+            />
+          </Form.Item>
+          <Form.Item label="* No Of Installments  ">
+            <Input
+              type="number"
+              min={1}
+              allowClear
+              placeholder="20"
+              value={noOfInstallments}
+              onChange={(e) => {
+                setNoOfInstallments(e.target.value);
+              }}
+            />
+          </Form.Item>
+          <Form.Item label="* Amount Per Installment  (LKR)">
+            <Input
+              type="number"
+              min={1}
+              allowClear
+              placeholder="3000.00"
+              value={amountPerInstallment}
+              onChange={(e) => {
+                setAmountPerInstallment(e.target.value);
+              }}
+            />
+          </Form.Item>
+          <Form.Item label="* Guarantee Months / Years  ">
+            <Radio.Group onChange={radioOnChange} value={guarantee.value}>
+              <Radio value={"Years"}>Years</Radio>
+              <Radio value={"Months"}>Months</Radio>
+            </Radio.Group>
+          </Form.Item>
+          <Form.Item label="* Guarantee Period">
+            <Input
+              type="number"
+              min={1}
+              allowClear
+              placeholder="6"
+              value={guaranteePeriod}
+              onChange={(e) => {
+                setGuaranteePeriod(e.target.value);
+              }}
+            />
+          </Form.Item>
+          <Form.Item label="* Down Payment (LKR)">
+            <Input
+              type="number"
+              min={1}
+              allowClear
+              placeholder="5000.00"
+              value={downPayment}
+              onChange={(e) => {
+                setDownPayment(e.target.value);
+              }}
+            />
+          </Form.Item>
 
-              <Form.Item label="Discount (LKR)">
-                <Input
-                  type="number"
-                  min={1}
-                  allowClear
-                  placeholder="500.00"
-                  value={discount}
-                  onChange={(e) => {
-                    setDiscount(e.target.value);
-                  }}
-                />
-              </Form.Item>
-              <Form.Item label="Description ">
-                <TextArea
-                  placeholder="About Item"
-                  autoSize={{ minRows: 3, maxRows: 5 }}
-                  value={description}
-                  onChange={(e) => {
-                    setDescription(e.target.value);
-                  }}
-                />
-              </Form.Item>
-              <Form.Item label="Company Invoice No ">
-                <Input
-                  allowClear
-                  placeholder="In-6101"
-                  value={cInvoiceNo}
-                  onChange={(e) => {
-                    setCInvoiceNo(e.target.value);
-                  }}
-                />
-              </Form.Item>
-              <Form.Item label="Guarantee Card No  ">
-                <Input
-                  allowClear
-                  placeholder="00101"
-                  value={GCardNo}
-                  onChange={(e) => {
-                    setGCardNo(e.target.value);
-                  }}
-                />
-              </Form.Item>
-              <Form.Item label="Upload Image  ">
-                <input
-                  type="file"
-                  accept="image/*"
-                  name=""
-                  onChange={onImageChange}
-                  className="image"
-                  id="item_image"
-                  hidden
-                />
-                <img
-                  alt="Item upload"
-                  onClick={() => {
-                    document.getElementById("item_image").click();
-                  }}
-                  src={
-                    imageUrl == null
-                      ? require("../../../../../../assets/images_upload.png")
-                      : imageUrl
-                  }
-                  className="image"
-                />
-              </Form.Item>
+          <Form.Item label="Discount (LKR)">
+            <Input
+              type="number"
+              min={1}
+              allowClear
+              placeholder="500.00"
+              value={discount}
+              onChange={(e) => {
+                setDiscount(e.target.value);
+              }}
+            />
+          </Form.Item>
+          <Form.Item label="Description ">
+            <TextArea
+              placeholder="About Item"
+              autoSize={{ minRows: 3, maxRows: 5 }}
+              value={description}
+              onChange={(e) => {
+                setDescription(e.target.value);
+              }}
+            />
+          </Form.Item>
+          <Form.Item label="Company Invoice No ">
+            <Input
+              allowClear
+              placeholder="In-6101"
+              value={cInvoiceNo}
+              onChange={(e) => {
+                setCInvoiceNo(e.target.value);
+              }}
+            />
+          </Form.Item>
+          <Form.Item label="Guarantee Card No  ">
+            <Input
+              allowClear
+              placeholder="00101"
+              value={GCardNo}
+              onChange={(e) => {
+                setGCardNo(e.target.value);
+              }}
+            />
+          </Form.Item>
+          <Form.Item label="Upload Image  ">
+            <input
+              type="file"
+              accept="image/*"
+              name=""
+              onChange={onImageChange}
+              className="image"
+              id="item_image"
+              hidden
+            />
+            <img
+              alt="Item upload"
+              onClick={() => {
+                document.getElementById("item_image").click();
+              }}
+              src={
+                imageUrl == null
+                  ? require("../../../../../../assets/images_upload.png")
+                  : imageUrl
+              }
+              className="image"
+            />
+          </Form.Item>
 
-              <Button
-                disabled={
-                  !loadingSubmit &&
-                  (itemName ||
-                    cashPrice ||
-                    salePrice ||
-                    downPayment ||
-                    qty ||
-                    guaranteePeriod !== "")
-                    ? false
-                    : true
-                }
-                className="btn"
-                type="primary"
-                onClick={addItem}
-              >
-                {loadingSubmit ? (
-                  <Spin spinning={loadingSubmit} size="large" />
-                ) : (
-                  "Update"
-                )}
-              </Button>
-            </Form>
-        
-          <NotificationContainer />
-       
+          <Button
+            disabled={
+              !loadingSubmit &&
+              (itemName ||
+                cashPrice ||
+                salePrice ||
+                downPayment ||
+                qty ||
+                guaranteePeriod !== "")
+                ? false
+                : true
+            }
+            className="btn"
+            type="primary"
+            onClick={addItem}
+          >
+            {loadingSubmit ? (
+              <Spin spinning={loadingSubmit} size="large" />
+            ) : (
+              "Update"
+            )}
+          </Button>
+        </Form>
+
+        <NotificationContainer />
       </Content>
     </div>
   );

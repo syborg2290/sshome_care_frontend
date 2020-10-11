@@ -1,0 +1,57 @@
+.logotype {
+  color: white !important;
+  margin-left: 20px;
+  margin-right: 20px;
+  font-weight: 500;
+  font-size: 18;
+  white-space: nowrap;
+}
+
+@media only screen and (min-width: 120px) and (max-width: 502px) {
+  .logotype {
+    display: none !important;
+  }
+}
+
+.toolbar {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.grow {
+  flex-grow: 1;
+}
+
+.search {
+  position: relative;
+  border-radius: 25;
+  padding-left: 20px;
+  width: 36;
+}
+
+.headerMenu {
+  margin-top: 20px;
+}
+
+.profileMenuUser {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.profileMenuLink {
+  font-size: 16px;
+  text-decoration: none;
+}
+.profileMenuLink :hover {
+  cursor: pointer !important;
+}
+
+.profileMenu {
+  min-width: 265px !important;
+}
+
+.headerIcon {
+  font-size: 28px;
+  color: rgba(255, 255, 255, 0.35);
+}

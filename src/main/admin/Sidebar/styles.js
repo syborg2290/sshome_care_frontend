@@ -6,18 +6,19 @@ const drawerWidth = 250;
 export default makeStyles((theme) => ({
 
   
-  menuButton: {
-    marginLeft: 12,
-    marginRight: 36,
-  },
-  hide: {
-    display: "none",
-  },
+  // menuButton: {
+  //   marginLeft: 12,
+  //   marginRight: 36,
+  // },
+  // hide: {
+  //   display: "none",
+  // },
   drawer: {
     width: drawerWidth,
     flexShrink: 0,
     whiteSpace: "nowrap",
   },
+  
   drawerOpen: {
     // color: "white",
     // backgroundColor: "#222A44",
@@ -38,28 +39,32 @@ export default makeStyles((theme) => ({
       width: drawerWidth,
     },
   },
-  toolbar: {
-    ...theme.mixins.toolbar,
-    [theme.breakpoints.down("sm")]: {
-      display: "none",
-    },
-  },
-  content: {
-    flexGrow: 1,
-    padding: theme.spacing(3),
-  },
+  // sidebarList: {
+  //   marginTop: theme.spacing(6),
+  // },
+  // toolbar: {
+  //   ...theme.mixins.toolbar,
+  //   [theme.breakpoints.down("sm")]: {
+  //     display: "none",
+  //   },
+  // },
+
+  // content: {
+  //   flexGrow: 1,
+  //   padding: theme.spacing(3),
+  // },
   /* sidebarList: {
     marginTop: theme.spacing(6),
   }, */
-  mobileBackButton: {
-    marginTop: theme.spacing(0.5),
-    marginLeft: theme.spacing(3),
-    [theme.breakpoints.only("sm")]: {
-      marginTop: theme.spacing(0.625),
-    },
-    [theme.breakpoints.up("md")]: {
-      display: "none",
-    },
-  },
+  // mobileBackButton: {
+  //   marginTop: theme.spacing(0.5),
+  //   marginLeft: theme.spacing(3),
+  //   [theme.breakpoints.only("sm")]: {
+  //     marginTop: theme.spacing(0.625),
+  //   },
+  //   [theme.breakpoints.up("md")]: {
+  //     display: "none",
+  //   },
+  // },
 }));
 

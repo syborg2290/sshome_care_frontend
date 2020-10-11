@@ -23,6 +23,7 @@ import {
 
 // styles
 import useStyles from "./styles";
+import "./Dashboard.css";
 
 // components
 import mock from "./mock";
@@ -57,9 +58,9 @@ export default function Dashboard(props) {
             title="Visits Today"
             upperTitle
             bodyClass={classes.fullHeightBody}
-            className={classes.card}
+            className="card"
           >
-            <div className={classes.visitsNumberContainer}>
+            <div className="visitsNumberContainer">
               <Typography size="xl" weight="medium">
                 12, 678
               </Typography>

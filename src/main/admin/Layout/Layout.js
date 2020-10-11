@@ -1,10 +1,10 @@
 import React from "react";
 // eslint-disable-next-line
 import { Route, Switch, Redirect, withRouter } from "react-router-dom";
-import classnames from "classnames";
+
 
 // styles
-import useStyles from "./styles";
+import "./Layout.css";
 
 // components
 import Header from "../Header/Header";
@@ -16,33 +16,35 @@ import Charts from "../pages/charts/Charts";
 import ItemTable from "../pages/item/item_table/Item_table";
 import AddItem from "../pages/item/add_Item/AddItem";
 import View_Item from "../pages/item/View_Item";
+import Accounts from "../pages/accounts/Accounts";
+import Settings from "../pages/settings/Settings";
+
 
 // context
 import { useLayoutState } from "../../../context/LayoutContext";
 
 function Layout(props) {
-  var classes = useStyles();
 
   // global
-  var layoutState = useLayoutState();
+  // var layoutState = useLayoutState();
 
   return (
-    <div className={classes.root}>
+    <div className="root">
       <>
         <Header history={props.history} />
         <Sidebar />
         <div
-          className={classnames(classes.content, {
-            [classes.contentShift]: layoutState.isSidebarOpened,
-          })}
+          className="content"
         >
-          <div className={classes.fakeToolbar} />
+          <div className="fakeToolbar" />
           <Switch>
             <Route path="/app/dashboard" component={Dashboard} />
             <Route path="/app/ui/item/itemTable" component={ItemTable} />
             <Route path="/app/ui/item/add_item" component={AddItem} />
             <Route path="/app/ui/item/view_item" component={View_Item} />
             <Route path="/app/ui/charts" component={Charts} />
+            <Route path="/app/ui/accounts" component={Accounts} />
+            <Route path="/app/ui/settings" component={Settings} />
           </Switch>
         </div>
       </>

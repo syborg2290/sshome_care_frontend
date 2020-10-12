@@ -1,5 +1,5 @@
 .item_table{
-margin-top: 70px;
+margin-top: 70px !important;
 }
 
 @media screen and (min-width: 280px) {

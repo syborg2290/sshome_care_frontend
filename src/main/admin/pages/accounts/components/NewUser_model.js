@@ -1,57 +1,81 @@
 import React, { useState } from "react";
-import { Form, Input, Layout, Button, Select  } from "antd";
+import { Form, Input, Layout, Button, Select } from "antd";
 import "antd/dist/antd.css";
 
+// styles
+import "./Style_accounts.css";
 
 const { Content } = Layout;
 const { Option } = Select;
 
-export default function NewUser_model() {
-
+export default function NewUsermodel() {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [roll, setRoll] = useState("");
 
-    return (
-     <div>
+  return (
+    <div>
       <Content>
         <Form className="form">
-          <Form.Item label="* User Name">
+          <Form.Item
+            name="User Name"
+            label="User Name"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
             <Input
               allowClear
               value={userName}
+              onChange={(e) => {
+                setUserName(e.target.value);
+              }}
               placeholder="Enter user name"
             />
           </Form.Item>
-         
-          <Form.Item label="* Password ">
+
+          <Form.Item
+            name="Password"
+            label="Password"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
             <Input.Password
               allowClear
               value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
               placeholder="Enter new Password"
             />
           </Form.Item>
-           <Form.Item
-          name="Roll"
-          label="Roll"
-          value={roll}
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-        >
-          <Select
-            placeholder="Select a option and change input text above"
-            allowClear
+          <Form.Item
+            name="Roll"
+            label="Roll"
+            value={roll}
+            onChange={(e) => {
+              setRoll(e.target.value);
+            }}
+            rules={[
+              {
+                required: true,
+              },
+            ]}
           >
-            <Option value="assistant">Assistant</Option>
-            <Option value="Showroom">Showroom</Option>
-            <Option value="admin">Admin</Option>			
-                              
-          
-          </Select>
-        </Form.Item>
+            <Select
+              placeholder="Select a option and change input text above"
+              allowClear
+            >
+              <Option value="assistant">Assistant</Option>
+              <Option value="Showroom">Showroom</Option>
+              <Option value="admin">Admin</Option>
+            </Select>
+          </Form.Item>
           <Button
             // disabled={
             //   !loadingSubmit &&
@@ -64,22 +88,18 @@ export default function NewUser_model() {
             // }
             className="btn"
             type="primary"
-            
-        //   onClick={updateUser}
+
+            //   onClick={updateUser}
           >
             {/* {loadingSubmit ? (
               <Spin spinning={loadingSubmit} size="large" />
             ) : (
               "Update"
             )} */}
-
             Submit
           </Button>
         </Form>
-
       </Content>
     </div>
-       
-
-    )
+  );
 }

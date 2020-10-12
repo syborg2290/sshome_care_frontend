@@ -227,7 +227,7 @@ export default function ItemTable() {
                     : allTtemData.data[currentIndx].photo
                   : ""
               }
-              alt="item_image"
+              alt=""
             /> */}
             <div className="model_Detail">
               <p>

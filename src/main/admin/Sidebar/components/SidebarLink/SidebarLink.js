@@ -14,6 +14,8 @@ import classnames from "classnames";
 
 // styles
 import useStyles from "../../styles";
+import   "../../Sidebar.css";
+
 
 // components
 import Dot from "../Dot";
@@ -47,7 +49,7 @@ export default function SidebarLink({
       </Typography>
     );
 
-  if (type === "divider") return <Divider className={classes.divider} />;
+  if (type === "divider") return <Divider className="divider" />;
 
   if (!children)
     return (

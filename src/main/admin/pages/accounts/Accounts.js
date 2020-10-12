@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Grid, Button} from "@material-ui/core";
-import { Spin, Modal  } from "antd";
-import axios from "axios";
+import { Modal  } from "antd";
+
 import MUIDataTable from "mui-datatables";
 
 // components
-import Edit_model from "../accounts/components/Edit_model";
-import NewUser_model from "../accounts/components/NewUser_model";
+import Editmodel from "../accounts/components/Edit_model";
+import NewUsermodel from "../accounts/components/NewUser_model";
 
 // icons
 import EditIcon from "@material-ui/icons/Edit";
@@ -93,7 +93,7 @@ const newUserModal = () => {
         <Grid item xs={12}>
           <MUIDataTable
             title={<span className="title_Span">ALL USERS</span>}
-            className="item_table"
+            className="account_table"
             data={dumydata}
             columns={[
               "User Name",
@@ -128,7 +128,7 @@ const newUserModal = () => {
         <div className="table_edit_Model">
           <div className="model_edit_Main">
             <div className="model_edit_Detail">
-              <Edit_model />
+              <Editmodel />
             </div>
           </div>
         </div>
@@ -143,15 +143,15 @@ const newUserModal = () => {
         title="Add New User"
         visible={newUserVisible}
         footer={null}
-        className="model_edit_Item"
+        className="model_add_User"
         onCancel={() => {
           setNewUserVisible(false);
         }}
       >
-        <div className="table_edit_Model">
-          <div className="model_edit_Main">
-            <div className="model_edit_Detail">
-              <NewUser_model />
+        <div className="table_add_Model">
+          <div className="model_add_Main">
+            <div className="model_add_Detail">
+              <NewUsermodel />
             </div>
           </div>
         </div>

@@ -18,6 +18,10 @@ import AddItem from "../pages/item/add_Item/AddItem";
 import Accounts from "../pages/accounts/Accounts";
 import Settings from "../pages/settings/Settings";
 
+
+// context
+// import { useLayoutState } from "../../../context/LayoutContext";
+
 function Layout(props) {
 
   // global

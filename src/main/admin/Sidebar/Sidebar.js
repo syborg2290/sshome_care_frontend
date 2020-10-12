@@ -31,16 +31,26 @@ import {
 } from "../../../context/LayoutContext";
 
 const structure = [
-  { id: 0, label: "Dashboard", link: "/app/dashboard", icon: <HomeIcon /> },
-  { id: 11, label: "Invoice", link: "", icon: <LibraryIcon /> },
+  {
+    id: 0,
+    label: "Dashboard",
+    link: "/app/dashboard",
+    icon: <HomeIcon className="icons" />,
+  },
+
+  {
+    id: 11,
+    label: "Invoice",
+    link: "",
+    icon: <LibraryIcon className="icons" />,
+  },
   {
     id: 1,
     label: "Items",
     link: "/app/ui",
-    icon: <TvIcon />,
+    icon: <TvIcon className="icons" />,
     children: [
       { label: "Item Table", link: "/app/ui/item/itemTable" },
-      { label: "View Item", link: "/app/ui/item/view_item" },
       { label: "Add Item", link: "/app/ui/item/add_item" },
     ],
   },
@@ -49,7 +59,7 @@ const structure = [
     id: 4,
     label: "Customers",
     link: "/app/ui",
-    icon: <GroupIcon />,
+    icon: <GroupIcon className="icons" />,
     children: [
       { label: "Add Customer", link: "/app/ui/icons" },
       { label: "Charts", link: "/app/ui/charts" },
@@ -58,14 +68,33 @@ const structure = [
   },
 
   { id: 5, type: "divider" },
-  { id: 10, label: "Arreas", link: "", icon: <MoneyOffIcon /> },
-  { id: 6, label: "Repairs", link: "", icon: <BuildIcon /> },
-  { id: 9, label: "Black list", link: "", icon: <PersonAddDisabledIcon /> },
+  {
+    id: 10,
+    label: "Arreas",
+    link: "",
+    icon: <MoneyOffIcon className="icons" />,
+  },
+  { id: 6, label: "Repairs", link: "", icon: <BuildIcon className="icons" /> },
+  {
+    id: 9,
+    label: "Black list",
+    link: "",
+    icon: <PersonAddDisabledIcon className="icons" />,
+  },
   { id: 2, type: "divider" },
 
-  
-  { id: 7, label: "Accounts", link: "/app/ui/accounts", icon: <PermIdentityIcon /> },
-  { id: 8, label: "Settings", link: "/app/ui/settings", icon: <SettingsIcon /> },
+  {
+    id: 7,
+    label: "Accounts",
+    link: "/app/ui/accounts",
+    icon: <PermIdentityIcon className="icons" />,
+  },
+  {
+    id: 8,
+    label: "Settings",
+    link: "/app/ui/settings",
+    icon: <SettingsIcon className="icons" />,
+  },
 ];
 
 function Sidebar({ location }) {

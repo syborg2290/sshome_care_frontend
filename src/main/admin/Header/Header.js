@@ -38,7 +38,6 @@ export default function Header(props) {
 
   // local
   var [profileMenu, setProfileMenu] = useState(null);
-
   return (
     <AppBar position="fixed" className={classes.appBar}>
       <Toolbar className="toolbar">

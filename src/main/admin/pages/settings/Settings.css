@@ -1,0 +1,107 @@
+.form_Settings{
+margin: auto;
+width: 100%;
+margin-top: 100px !important;
+background-color:rgb(255, 255, 255);
+ box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+padding: 50px 30px 0px 30px;
+}
+
+
+
+/* Start form_Settings lbl 1024px responsive */
+
+@media screen and (min-width: 1024px){
+  .form_Settings {
+    width: 50%;
+    margin: auto;
+    font-size: 11px !important;
+    padding: 50px 40px 4px 40px;
+  }
+}
+
+@media screen and (min-width: 1024px){
+  .offline {
+    width: 50%;
+    margin: auto;
+    font-size: 11px !important;
+    padding: 4px 0px 4px 35px;
+    margin-left: 16px;
+  }
+}
+
+/* End lastseen lbl 1024px responsive */
+
+/* Start lastseen lbl 1080px responsive */
+
+@media screen and (min-width: 1080px){
+  .active {
+    width: 60%;
+    margin: auto;
+    font-size: 11px !important;
+    padding: 4px 0px 4px 20px;
+    margin-left: 16px;
+  }
+}
+
+@media screen and (min-width: 1080px){
+  .offline {
+    width: 60%;
+    margin: auto;
+    font-size: 11px !important;
+    padding: 4px 0px 4px 20px;
+    margin-left: 16px;
+  }
+}
+
+/* End lastseen lbl 1080px responsive */
+
+
+/* Start lastseen lbl 1280px responsive */
+
+@media screen and (min-width: 1280px){
+  .active {
+    width: 40%;
+    margin: auto;
+    font-size: 11px !important;
+    padding: 4px 0px 4px 15px;
+    margin-left: 16px;
+  }
+}
+
+@media screen and (min-width: 1280px){
+  .offline {
+    width: 40%;
+    margin: auto;
+    font-size: 11px !important;
+    padding: 4px 0px 4px 15px;
+    margin-left: 16px;
+  }
+}
+
+/* End lastseen lbl 1280px responsive */
+
+
+/* Start lastseen lbl 1440px responsive */
+
+@media screen and (min-width: 1440px){
+  .active {
+    width: 40%;
+    margin: auto;
+    font-size: 11px !important;
+    padding: 4px 0px 4px 25px;
+    margin-left: 16px;
+  }
+}
+
+@media screen and (min-width: 1440px){
+  .offline {
+    width: 40%;
+    margin: auto;
+    font-size: 11px !important;
+    padding: 4px 0px 4px 25px;
+    margin-left: 16px;
+  }
+}
+
+/* End lastseen lbl 1440px responsive */

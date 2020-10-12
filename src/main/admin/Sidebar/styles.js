@@ -4,8 +4,6 @@ import { makeStyles } from "@material-ui/styles";
 const drawerWidth = 250;
 
 export default makeStyles((theme) => ({
-
-  
   // menuButton: {
   //   marginLeft: 12,
   //   marginRight: 36,
@@ -17,11 +15,12 @@ export default makeStyles((theme) => ({
     width: drawerWidth,
     flexShrink: 0,
     whiteSpace: "nowrap",
-  },
-  
-  drawerOpen: {
-    // color: "white",
     // backgroundColor: "#222A44",
+  },
+
+  drawerOpen: {
+    color: "white",
+    backgroundColor: "#222A44",
     width: drawerWidth,
     transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
@@ -29,6 +28,7 @@ export default makeStyles((theme) => ({
     }),
   },
   drawerClose: {
+    backgroundColor: "#222A44",
     transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
@@ -39,9 +39,9 @@ export default makeStyles((theme) => ({
       width: drawerWidth,
     },
   },
-  // sidebarList: {
-  //   marginTop: theme.spacing(6),
-  // },
+  sidebarList: {
+    marginTop: theme.spacing(6),
+  },
   // toolbar: {
   //   ...theme.mixins.toolbar,
   //   [theme.breakpoints.down("sm")]: {
@@ -49,22 +49,26 @@ export default makeStyles((theme) => ({
   //   },
   // },
 
-  // content: {
-  //   flexGrow: 1,
-  //   padding: theme.spacing(3),
-  // },
-  /* sidebarList: {
-    marginTop: theme.spacing(6),
-  }, */
-  // mobileBackButton: {
-  //   marginTop: theme.spacing(0.5),
-  //   marginLeft: theme.spacing(3),
-  //   [theme.breakpoints.only("sm")]: {
-  //     marginTop: theme.spacing(0.625),
+  //   content: {
+  //     flexGrow: 1,
+  //     padding: theme.spacing(3),
   //   },
-  //   [theme.breakpoints.up("md")]: {
-  //     display: "none",
+  //  sidebarList: {
+  //     marginTop: theme.spacing(6),
   //   },
-  // },
+  mobileBackButton: {
+    marginTop: theme.spacing(0.5),
+    marginLeft: theme.spacing(3),
+    [theme.breakpoints.only("sm")]: {
+      marginTop: theme.spacing(0.625),
+    },
+    [theme.breakpoints.up("md")]: {
+      display: "none",
+    },
+  },
+
+  headerIcon:{
+color:"white",
+  }
 }));
 

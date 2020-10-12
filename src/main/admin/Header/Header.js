@@ -8,7 +8,6 @@ import {
 import {
   Menu as MenuIcon,
   Person as AccountIcon,
-  Search as SearchIcon,
   ArrowBack as ArrowBackIcon,
 } from "@material-ui/icons";
 import classNames from "classnames";
@@ -39,8 +38,7 @@ export default function Header(props) {
 
   // local
   var [profileMenu, setProfileMenu] = useState(null);
-  var [isSearchOpen, setSearchOpen] = useState(false);
-
+  
   return (
     <AppBar position="fixed" className={classes.appBar}>
       <Toolbar className="toolbar">

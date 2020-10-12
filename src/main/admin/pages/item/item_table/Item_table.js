@@ -39,11 +39,11 @@ export default function ItemTable() {
 
   const dumydata = [
     [
-      <img
-        alt="img"
-        className="Item_img"
-        src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQTwQ_4WDaG622jZ5R3qrM7FREuRobYcWfo_Q&usqp=CAU"
-      />,
+      // <img
+      //   alt="img"
+      //   className="Item_img"
+      //   src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQTwQ_4WDaG622jZ5R3qrM7FREuRobYcWfo_Q&usqp=CAU"
+      // />,
       "dad",
       "dada",
       "dada",
@@ -70,15 +70,15 @@ export default function ItemTable() {
           setItemTableData((oldArray) => [
             ...oldArray,
             [
-              <img
-                alt="img"
-                className="Item_img"
-                src={
-                  element["photo"] !== null
-                    ? element["photo"]
-                    : require("../../../../../assets/empty_item.png")
-                }
-              />,
+              // <img
+              //   alt="img"
+              //   className="Item_img"
+              //   src={
+              //     element["photo"] !== null
+              //       ? element["photo"]
+              //       : require("../../../../../assets/empty_item.png")
+              //   }
+              // />,
               element["item_name"],
               element["brand"],
               element["qty"],
@@ -125,15 +125,15 @@ export default function ItemTable() {
         setItemTableData((oldArray) => [
           ...oldArray,
           [
-            <img
-              alt="img"
-              className="Item_img"
-              src={
-                element["photo"] !== null
-                  ? element["photo"]
-                  : require("../../../../../assets/empty_item.png")
-              }
-            />,
+            // <img
+            //   alt="img"
+            //   className="Item_img"
+            //   src={
+            //     element["photo"] !== null
+            //       ? element["photo"]
+            //       : require("../../../../../assets/empty_item.png")
+            //   }
+            // />,
             element["item_name"],
             element["brand"],
             element["qty"],
@@ -189,7 +189,7 @@ export default function ItemTable() {
       >
         <div className="table_Model">
           <div className="model_Main">
-            <img
+            {/* <img
               className="model_img"
               src={
                 allTtemData.data && allTtemData.data[currentIndx]
@@ -197,7 +197,7 @@ export default function ItemTable() {
                   : ""
               }
               alt=""
-            />
+            /> */}
             <div className="model_Detail">
               <p>
                 BRAND
@@ -400,7 +400,7 @@ export default function ItemTable() {
             className="item_table"
             data={dumydata}
             columns={[
-              "IMG",
+              // "IMG",
               "ITEM NAME",
               "BRAND",
               "QTY",

@@ -21,7 +21,7 @@ import Settings from "../pages/settings/Settings";
 
 
 // context
-import { useLayoutState } from "../../../context/LayoutContext";
+// import { useLayoutState } from "../../../context/LayoutContext";
 
 function Layout(props) {
 

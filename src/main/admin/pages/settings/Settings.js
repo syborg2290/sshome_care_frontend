@@ -49,6 +49,7 @@ export default function Settings() {
             <Input.Password
               allowClear
               value={currntPassword}
+
               onChange={(e) => {
                 setCurrntPassword(e.target.value);
               }}
@@ -76,6 +77,7 @@ export default function Settings() {
           </Form.Item>
 
           <Button
+
             // disabled={
             //   !loadingSubmit &&
             //   (itemName ||

@@ -334,7 +334,15 @@ function AddItem() {
           <hr className="line"></hr>
           <div className="xx">
             <Form className="form">
-              <Form.Item label="* Item Name">
+              <Form.Item
+                label="Item Name"
+                name="itemName"
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+              >
                 <Input
                   allowClear
                   placeholder="xx Device"
@@ -344,7 +352,15 @@ function AddItem() {
                   }}
                 />
               </Form.Item>
-              <Form.Item label="Brand ">
+              <Form.Item
+                label="Brand"
+                name="brand"
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+              >
                 <Input
                   allowClear
                   placeholder="xx Brand "
@@ -354,7 +370,15 @@ function AddItem() {
                   }}
                 />
               </Form.Item>
-              <Form.Item label="Model no ">
+              <Form.Item
+                label="Model no "
+                name="modelNo"
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+              >
                 <Input
                   allowClear
                   placeholder="xx 0091"
@@ -374,7 +398,15 @@ function AddItem() {
                   }}
                 />
               </Form.Item>
-              <Form.Item label="Color ">
+              <Form.Item
+                label="Color "
+                name="color"
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+              >
                 <Input
                   allowClear
                   placeholder="xx pink"
@@ -384,7 +416,15 @@ function AddItem() {
                   }}
                 />
               </Form.Item>
-              <Form.Item label="* Qty ">
+              <Form.Item
+                label="Qty "
+                name="qty"
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+              >
                 <Input
                   type="number"
                   min={1}
@@ -396,7 +436,15 @@ function AddItem() {
                   }}
                 />
               </Form.Item>
-              <Form.Item label="* Cash price (LKR)">
+              <Form.Item
+                label="Cash price (LKR)"
+                name="cashPrice"
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+              >
                 <Input
                   type="number"
                   min={1}
@@ -408,7 +456,15 @@ function AddItem() {
                   }}
                 />
               </Form.Item>
-              <Form.Item label="* Sale Price (LKR)">
+              <Form.Item
+                label="Sale Price (LKR)"
+                name="salePrice"
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+              >
                 <Input
                   type="number"
                   min={1}
@@ -420,7 +476,15 @@ function AddItem() {
                   }}
                 />
               </Form.Item>
-              <Form.Item label="* No Of Installments  ">
+              <Form.Item
+                label="No Of Installments"
+                name="noOfInstallment"
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+              >
                 <Input
                   type="number"
                   min={1}
@@ -432,7 +496,15 @@ function AddItem() {
                   }}
                 />
               </Form.Item>
-              <Form.Item label="* Amount Per Installment  (LKR)">
+              <Form.Item
+                label="Amount Per Installment (LKR)"
+                name="amountPerInstallment"
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+              >
                 <Input
                   type="number"
                   min={1}
@@ -444,13 +516,21 @@ function AddItem() {
                   }}
                 />
               </Form.Item>
-              <Form.Item label="* Guarantee Months / Years  ">
+              <Form.Item label="Guarantee Months / Years  ">
                 <Radio.Group onChange={radioOnChange} value={guarantee.value}>
                   <Radio value={"Years"}>Years</Radio>
                   <Radio value={"Months"}>Months</Radio>
                 </Radio.Group>
               </Form.Item>
-              <Form.Item label="* Guarantee Period">
+              <Form.Item
+                label="Guarantee Period"
+                name="guaranteePeriod"
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+              >
                 <Input
                   type="number"
                   min={1}
@@ -462,7 +542,15 @@ function AddItem() {
                   }}
                 />
               </Form.Item>
-              <Form.Item label="* Down Payment (LKR)">
+              <Form.Item
+                label="Down Payment (LKR)"
+                name="downPayment"
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+              >
                 <Input
                   type="number"
                   min={1}
@@ -475,7 +563,15 @@ function AddItem() {
                 />
               </Form.Item>
 
-              <Form.Item label="Discount (LKR)">
+              <Form.Item
+                label="Discount (LKR)"
+                name="discount"
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+              >
                 <Input
                   type="number"
                   min={1}

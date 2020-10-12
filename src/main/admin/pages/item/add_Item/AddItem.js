@@ -11,14 +11,12 @@ import {
 import "react-notifications/lib/notifications.css";
 // styles
 import "./Additem.css";
-import firebase from "firebase";
 
 // const {
 //   SeverApi,
 //   RealtimeServerApi,
 // } = require("../../../../../config/settings.js");
-const { db } = require("../../../../../config/firebase.js");
-
+import db from "../../../../../config/firebase.js";
 
 const { Content } = Layout;
 const { TextArea } = Input;
@@ -227,95 +225,186 @@ function AddItem() {
   const addItem = async (e) => {
     e.preventDefault();
 
-    if (qty < 1) {
+    if (itemName === "") {
       NotificationManager.info(
-        "Qty must be greater than 0",
+        "Item name is required!",
         "Remember validations"
       );
     } else {
-      if (cashPrice < 0) {
+      if (brand === "") {
         NotificationManager.info(
-          "Check again the amount of cash price",
+          "Item brand is required!",
           "Remember validations"
         );
       } else {
-        if (salePrice < 0) {
+        if (modelNo === "") {
           NotificationManager.info(
-            "Check again the amount of sale price",
+            "Item model number is required!",
             "Remember validations"
           );
         } else {
-          if (noOfInstallments < 0) {
+          if (color === "") {
             NotificationManager.info(
-              "Check again the value of installments value",
+              "Item color is required!",
               "Remember validations"
             );
           } else {
-            if (amountPerInstallment < 0) {
+            if (qty === "") {
               NotificationManager.info(
-                "Check again the amount per installment",
+                "Qty is required!",
                 "Remember validations"
               );
             } else {
-              if (downPayment < 0) {
+              if (cashPrice === "") {
                 NotificationManager.info(
-                  "Check again the amount of down payment",
+                  "Item cash price is required!",
                   "Remember validations"
                 );
               } else {
-                if (guaranteePeriod < 0) {
+                if (salePrice === "") {
                   NotificationManager.info(
-                    "Check again the value of gurantee period",
+                    "Item sale price is required!",
                     "Remember validations"
                   );
                 } else {
-                  if (discount < 0) {
+                  if (noOfInstallments === "") {
                     NotificationManager.info(
-                      "Check again the amount of discount",
+                      "Number of installment is required!",
                       "Remember validations"
                     );
                   } else {
-                    //Rest of code here
-                    setLoadingSubmit(true);
-                    let variable = {
-                      itemName: itemName,
-                      brand: brand,
-                      modelNo: modelNo,
-                      chassisNo: chassisNo,
-                      color: color,
-                      qty: qty,
-                      cashPrice: cashPrice,
-                      salePrice: salePrice,
-                      noOfInstallments: noOfInstallments,
-                      amountPerInstallment: amountPerInstallment,
-                      downPayment: downPayment,
-                      guaranteePeriod: guaranteePeriod,
-                      discount: discount,
-                      description: description,
-                      cInvoiceNo: cInvoiceNo,
-                      GCardNo: GCardNo,
-                      guarantee: guarantee,
-                      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                    };
+                    if (amountPerInstallment === "") {
+                      NotificationManager.info(
+                        "Amount per installment is required!",
+                        "Remember validations"
+                      );
+                    } else {
+                      if (noOfInstallments === "") {
+                        NotificationManager.info(
+                          "Number of installment is required!",
+                          "Remember validations"
+                        );
+                      } else {
+                        if (guaranteePeriod === "") {
+                          NotificationManager.info(
+                            "Item guarantee period is required!",
+                            "Remember validations"
+                          );
+                        } else {
+                          if (downPayment === "") {
+                            NotificationManager.info(
+                              "Item down payment is required!",
+                              "Remember validations"
+                            );
+                          } else {
+                            if (discount === "") {
+                              NotificationManager.info(
+                                "Item discount is required!",
+                                "Remember validations"
+                              );
+                            } else {
+                              if (qty < 1) {
+                                NotificationManager.info(
+                                  "Qty must be greater than 0",
+                                  "Remember validations"
+                                );
+                              } else {
+                                if (cashPrice < 0) {
+                                  NotificationManager.info(
+                                    "Check again the amount of cash price",
+                                    "Remember validations"
+                                  );
+                                } else {
+                                  if (salePrice < 0) {
+                                    NotificationManager.info(
+                                      "Check again the amount of sale price",
+                                      "Remember validations"
+                                    );
+                                  } else {
+                                    if (noOfInstallments < 0) {
+                                      NotificationManager.info(
+                                        "Check again the value of installments value",
+                                        "Remember validations"
+                                      );
+                                    } else {
+                                      if (amountPerInstallment < 0) {
+                                        NotificationManager.info(
+                                          "Check again the amount per installment",
+                                          "Remember validations"
+                                        );
+                                      } else {
+                                        if (downPayment < 0) {
+                                          NotificationManager.info(
+                                            "Check again the amount of down payment",
+                                            "Remember validations"
+                                          );
+                                        } else {
+                                          if (guaranteePeriod < 0) {
+                                            NotificationManager.info(
+                                              "Check again the value of gurantee period",
+                                              "Remember validations"
+                                            );
+                                          } else {
+                                            if (discount < 0) {
+                                              NotificationManager.info(
+                                                "Check again the amount of discount",
+                                                "Remember validations"
+                                              );
+                                            } else {
+                                              //Rest of code here
+                                              setLoadingSubmit(true);
+                                              let variable = {
+                                                itemName: itemName,
+                                                brand: brand,
+                                                modelNo: modelNo,
+                                                chassisNo: chassisNo,
+                                                color: color,
+                                                qty: qty,
+                                                cashPrice: cashPrice,
+                                                salePrice: salePrice,
+                                                noOfInstallments: noOfInstallments,
+                                                amountPerInstallment: amountPerInstallment,
+                                                downPayment: downPayment,
+                                                guaranteePeriod: guaranteePeriod,
+                                                discount: discount,
+                                                description: description,
+                                                cInvoiceNo: cInvoiceNo,
+                                                GCardNo: GCardNo,
+                                                guarantee: guarantee,
+                                                timestamp: Date.now(),
+                                              };
 
-                    await db
-                      .collection("item")
-                      .add(variable)
-                      .then(function (docRef) {
-                        setLoadingSubmit(false);
-                        valuesInitialState();
-                        NotificationManager.success(
-                          "Item creation successfully!",
-                          "Done"
-                        );
-                      })
-                      .catch(function (error) {
-                        setLoadingSubmit(false);
-                        NotificationManager.warning(
-                          "Failed to make the item!",
-                          "Please try again"
-                        );
-                      });
+                                              await db
+                                                .collection("item")
+                                                .add(variable)
+                                                .then(function (docRef) {
+                                                  setLoadingSubmit(false);
+                                                  valuesInitialState();
+                                                  NotificationManager.success(
+                                                    "Item creation successfully!",
+                                                    "Done"
+                                                  );
+                                                })
+                                                .catch(function (error) {
+                                                  setLoadingSubmit(false);
+                                                  NotificationManager.warning(
+                                                    "Failed to make the item!",
+                                                    "Please try again"
+                                                  );
+                                                });
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
                   }
                 }
               }
@@ -336,6 +425,7 @@ function AddItem() {
             <Form className="form">
               <Form.Item label="* Item Name">
                 <Input
+                  required={true}
                   allowClear
                   placeholder="xx Device"
                   value={itemName}
@@ -346,6 +436,7 @@ function AddItem() {
               </Form.Item>
               <Form.Item label="Brand ">
                 <Input
+                  required={true}
                   allowClear
                   placeholder="xx Brand "
                   value={brand}
@@ -356,6 +447,7 @@ function AddItem() {
               </Form.Item>
               <Form.Item label="Model no ">
                 <Input
+                  required={true}
                   allowClear
                   placeholder="xx 0091"
                   value={modelNo}
@@ -366,6 +458,7 @@ function AddItem() {
               </Form.Item>
               <Form.Item label="Chassis no ">
                 <Input
+                  required={true}
                   allowClear
                   placeholder="xx 95091"
                   value={chassisNo}
@@ -376,6 +469,7 @@ function AddItem() {
               </Form.Item>
               <Form.Item label="Color ">
                 <Input
+                  required={true}
                   allowClear
                   placeholder="xx pink"
                   value={color}
@@ -386,6 +480,7 @@ function AddItem() {
               </Form.Item>
               <Form.Item label="* Qty ">
                 <Input
+                  required={true}
                   type="number"
                   min={1}
                   allowClear
@@ -398,6 +493,7 @@ function AddItem() {
               </Form.Item>
               <Form.Item label="* Cash price (LKR)">
                 <Input
+                  required={true}
                   type="number"
                   min={1}
                   allowClear
@@ -410,6 +506,7 @@ function AddItem() {
               </Form.Item>
               <Form.Item label="* Sale Price (LKR)">
                 <Input
+                  required={true}
                   type="number"
                   min={1}
                   allowClear
@@ -422,6 +519,7 @@ function AddItem() {
               </Form.Item>
               <Form.Item label="* No Of Installments  ">
                 <Input
+                  required={true}
                   type="number"
                   min={1}
                   allowClear
@@ -434,6 +532,7 @@ function AddItem() {
               </Form.Item>
               <Form.Item label="* Amount Per Installment  (LKR)">
                 <Input
+                  required={true}
                   type="number"
                   min={1}
                   allowClear
@@ -452,6 +551,7 @@ function AddItem() {
               </Form.Item>
               <Form.Item label="* Guarantee Period">
                 <Input
+                  required={true}
                   type="number"
                   min={1}
                   allowClear
@@ -464,6 +564,7 @@ function AddItem() {
               </Form.Item>
               <Form.Item label="* Down Payment (LKR)">
                 <Input
+                  required={true}
                   type="number"
                   min={1}
                   allowClear
@@ -477,6 +578,7 @@ function AddItem() {
 
               <Form.Item label="Discount (LKR)">
                 <Input
+                  required={true}
                   type="number"
                   min={1}
                   allowClear
@@ -542,20 +644,7 @@ function AddItem() {
               </Form.Item> */}
 
               <Button
-                disabled={
-                  !loadingSubmit &&
-                  (itemName ||
-                    cashPrice ||
-                    salePrice ||
-                    downPayment ||
-                    color ||
-                    brand ||
-                    modelNo ||
-                    qty ||
-                    guaranteePeriod !== "")
-                    ? false
-                    : true
-                }
+                disabled={!loadingSubmit ? false : true}
                 className="btn"
                 type="primary"
                 onClick={addItem}

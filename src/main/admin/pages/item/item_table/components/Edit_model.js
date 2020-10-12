@@ -11,7 +11,7 @@ import "react-notifications/lib/notifications.css";
 // styles
 import "../components/Edit_model.css";
 
-const { db } = require("../../../../../../config/firebase.js");
+import  db from "../../../../../../config/firebase.js";
 
 const { Content } = Layout;
 const { TextArea } = Input;
@@ -351,15 +351,7 @@ function EditModel({
 
           <Button
             disabled={
-              !loadingSubmit &&
-              (itemName ||
-                cashPrice ||
-                salePrice ||
-                downPayment ||
-                qty ||
-                color ||
-                modelNo ||
-                guaranteePeriod !== "")
+              !loadingSubmit
                 ? false
                 : true
             }

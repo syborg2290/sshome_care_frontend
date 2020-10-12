@@ -5,13 +5,14 @@ import { ExclamationCircleOutlined } from "@ant-design/icons";
 // import axios from "axios";
 import MUIDataTable from "mui-datatables";
 // import socketIOClient from "socket.io-client";
-import Moment from "react-moment";
+
 import {
   NotificationContainer,
   NotificationManager,
 } from "react-notifications";
 import "react-notifications/lib/notifications.css";
 import CurrencyFormat from "react-currency-format";
+import moment from "moment";
 
 // components
 import EditModel from "./components/Edit_model";
@@ -28,10 +29,11 @@ import "./Item_table.css";
 //   SeverApi,
 // } = require("../../../../../config/settings.js");
 
-const { db } = require("../../../../../config/firebase.js");
+import db from "../../../../../config/firebase.js";
 
 export default function ItemTable() {
   const [itemTableData, setItemTableData] = useState([]);
+  // eslint-disable-next-line
   const [allTtemData, setAllItemData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [visible, setVisible] = useState(false);
@@ -52,17 +54,13 @@ export default function ItemTable() {
     db.collection("item")
       .orderBy("timestamp", "desc")
       .onSnapshot((snapshot) => {
-        setAllItemData(
-          snapshot.docs.map((doc) => ({
-            id: doc.id,
-            data: doc.data(),
-          }))
-        );
-
+        var newData = [];
         snapshot.docs.forEach((element) => {
-          setItemTableData((oldArray) => [
-            ...oldArray,
-            [
+          allTtemData.push({
+            id: element.id,
+            data: element.data(),
+          });
+          newData.push( [
               element.data().item_name,
               element.data().brand,
               element.data().qty,
@@ -93,16 +91,19 @@ export default function ItemTable() {
                   : "Out Of Stock"}
               </div>,
               <div className="table_icon">
-                <VisibilityIcon onClick={showModal} />,
+                <VisibilityIcon onClick={showModal} />
                 <span className="icon_Edit">
                   <EditIcon onClick={editModal} />
                 </span>
-              </div>,
-            ],
-          ]);
+              </div>
+            ],);
+
+         
         });
+        setItemTableData(newData);
         setIsLoading(false);
       });
+    // eslint-disable-next-line
   }, []);
 
   // useEffect(() => {
@@ -175,7 +176,11 @@ export default function ItemTable() {
           // eslint-disable-next-line
 
           db.collection("item")
-            .doc(allTtemData[rowsDeleted.data[key]["index"]].id)
+            .doc(
+              allTtemData[currentIndx] && allTtemData[currentIndx].data
+                ? allTtemData[rowsDeleted.data[key]["index"]].id
+                : ""
+            )
             .delete()
             .then(function () {
               NotificationManager.success(
@@ -204,8 +209,8 @@ export default function ItemTable() {
       <Modal
         title={
           <span className="model_title">
-            {allTtemData.data && allTtemData.data[currentIndx]
-              ? allTtemData.data[currentIndx].item_name
+            {allTtemData[currentIndx] && allTtemData[currentIndx].data
+              ? allTtemData[currentIndx].data.item_name
               : null}
           </span>
         }
@@ -234,8 +239,8 @@ export default function ItemTable() {
                 BRAND
                 <span className="load_Item">
                   :{" "}
-                  {allTtemData.data && allTtemData.data[currentIndx]
-                    ? allTtemData.data[currentIndx].brand
+                  {allTtemData[currentIndx] && allTtemData[currentIndx].data
+                    ? allTtemData[currentIndx].data.brand
                     : " - "}
                 </span>
               </p>
@@ -244,8 +249,8 @@ export default function ItemTable() {
                 <span className="load_Item">
                   {" "}
                   :{" "}
-                  {allTtemData.data && allTtemData.data[currentIndx]
-                    ? allTtemData.data[currentIndx].qty
+                  {allTtemData[currentIndx] && allTtemData[currentIndx].data
+                    ? allTtemData[currentIndx].data.qty
                     : " - "}{" "}
                 </span>
               </p>
@@ -255,7 +260,7 @@ export default function ItemTable() {
                   {" "}
                   :{" "}
                   {allTtemData.data && allTtemData.data[currentIndx]
-                    ? allTtemData.data[currentIndx].color
+                    ? allTtemData[currentIndx].data.color
                     : " - "}{" "}
                 </span>
               </p>
@@ -264,8 +269,8 @@ export default function ItemTable() {
                 <span className="load_Item">
                   {" "}
                   :{" "}
-                  {allTtemData.data && allTtemData.data[currentIndx]
-                    ? allTtemData.data[currentIndx].model_no
+                  {allTtemData[currentIndx] && allTtemData[currentIndx].data
+                    ? allTtemData[currentIndx].data.model_no
                     : " - "}{" "}
                 </span>
               </p>
@@ -274,9 +279,9 @@ export default function ItemTable() {
                 <span className="load_Item">
                   {" "}
                   :{" "}
-                  {allTtemData.data && allTtemData.data[currentIndx] ? (
+                  {allTtemData[currentIndx] && allTtemData[currentIndx].data ? (
                     <CurrencyFormat
-                      value={allTtemData.data[currentIndx].sale_price}
+                      value={allTtemData[currentIndx].data.sale_price}
                       displayType={"text"}
                       thousandSeparator={true}
                       prefix={"  "}
@@ -291,8 +296,8 @@ export default function ItemTable() {
                 <span className="load_Item">
                   {" "}
                   :{" "}
-                  {allTtemData.data && allTtemData.data[currentIndx]
-                    ? allTtemData.data[currentIndx].chassis_no
+                  {allTtemData[currentIndx] && allTtemData[currentIndx].data
+                    ? allTtemData[currentIndx].data.chassis_no
                     : " - "}{" "}
                 </span>
               </p>
@@ -301,9 +306,9 @@ export default function ItemTable() {
                 <span className="load_Item">
                   {" "}
                   :{" "}
-                  {allTtemData.data && allTtemData.data[currentIndx] ? (
+                  {allTtemData[currentIndx] && allTtemData[currentIndx].data ? (
                     <CurrencyFormat
-                      value={allTtemData.data[currentIndx].cash_price}
+                      value={allTtemData[currentIndx].data.cash_price}
                       displayType={"text"}
                       thousandSeparator={true}
                       prefix={" "}
@@ -318,9 +323,9 @@ export default function ItemTable() {
                 <span className="load_Item">
                   {" "}
                   :{" "}
-                  {allTtemData.data && allTtemData.data[currentIndx] ? (
+                  {allTtemData[currentIndx] && allTtemData[currentIndx].data ? (
                     <CurrencyFormat
-                      value={allTtemData.data[currentIndx].down_payment}
+                      value={allTtemData[currentIndx].data.down_payment}
                       displayType={"text"}
                       thousandSeparator={true}
                       prefix={" "}
@@ -335,8 +340,8 @@ export default function ItemTable() {
                 <span className="load_Item">
                   {" "}
                   :{" "}
-                  {allTtemData.data && allTtemData.data[currentIndx]
-                    ? allTtemData.data[currentIndx].no_of_installments
+                  {allTtemData[currentIndx] && allTtemData[currentIndx].data
+                    ? allTtemData[currentIndx].data.no_of_installments
                     : " - "}{" "}
                 </span>
               </p>
@@ -345,10 +350,10 @@ export default function ItemTable() {
                 <span className="load_Item">
                   {" "}
                   :{" "}
-                  {allTtemData.data && allTtemData.data[currentIndx] ? (
+                  {allTtemData[currentIndx] && allTtemData[currentIndx].data ? (
                     <CurrencyFormat
                       value={
-                        allTtemData.data[currentIndx].amount_per_installment
+                        allTtemData[currentIndx].data.amount_per_installment
                       }
                       displayType={"text"}
                       thousandSeparator={true}
@@ -364,8 +369,8 @@ export default function ItemTable() {
                 <span className="load_Item">
                   {" "}
                   :{" "}
-                  {allTtemData.data && allTtemData.data[currentIndx]
-                    ? allTtemData.data[currentIndx].guarantee_months_years
+                  {allTtemData[currentIndx] && allTtemData[currentIndx].data
+                    ? allTtemData[currentIndx].data.guarantee_months_years
                     : " - "}{" "}
                 </span>
               </p>
@@ -374,8 +379,8 @@ export default function ItemTable() {
                 <span className="load_Item">
                   {" "}
                   :{" "}
-                  {allTtemData.data && allTtemData.data[currentIndx]
-                    ? allTtemData.data[currentIndx].guarantee_period
+                  {allTtemData[currentIndx] && allTtemData[currentIndx].data
+                    ? allTtemData[currentIndx].data.guarantee_period
                     : " - "}{" "}
                 </span>
               </p>
@@ -384,9 +389,9 @@ export default function ItemTable() {
                 <span className="load_Item">
                   {" "}
                   :{" "}
-                  {allTtemData.data && allTtemData.data[currentIndx] ? (
+                  {allTtemData[currentIndx] && allTtemData[currentIndx].data ? (
                     <CurrencyFormat
-                      value={allTtemData.data[currentIndx].discount}
+                      value={allTtemData[currentIndx].data.discount}
                       displayType={"text"}
                       thousandSeparator={true}
                       prefix={" "}
@@ -401,8 +406,8 @@ export default function ItemTable() {
                 <span className="load_Item">
                   {" "}
                   :{" "}
-                  {allTtemData.data && allTtemData.data[currentIndx]
-                    ? allTtemData.data[currentIndx].description
+                  {allTtemData[currentIndx] && allTtemData[currentIndx].data
+                    ? allTtemData[currentIndx].data.description
                     : " - "}{" "}
                 </span>
               </p>
@@ -411,8 +416,8 @@ export default function ItemTable() {
                 <span className="load_Item">
                   {" "}
                   :{" "}
-                  {allTtemData.data && allTtemData.data[currentIndx]
-                    ? allTtemData.data[currentIndx].company_invoice_no
+                  {allTtemData[currentIndx] && allTtemData[currentIndx].data
+                    ? allTtemData[currentIndx].data.company_invoice_no
                     : " - "}{" "}
                 </span>
               </p>
@@ -421,21 +426,22 @@ export default function ItemTable() {
                 <span className="load_Item">
                   {" "}
                   :{" "}
-                  {allTtemData.data && allTtemData.data[currentIndx]
-                    ? allTtemData.data[currentIndx].guarantee_card_no
+                  {allTtemData[currentIndx] && allTtemData[currentIndx].data
+                    ? allTtemData[currentIndx].data.guarantee_card_no
                     : " - "}{" "}
                 </span>
               </p>
               <p>
                 CREATED DATE
                 <span className="load_Item">
-                  {" "}
-                  :{" "}
-                  <Moment format="YYYY/MM/DD">
-                    {allTtemData.data && allTtemData.data[currentIndx]
-                      ? allTtemData.data[currentIndx].timestamp
-                      : " - "}
-                  </Moment>{" "}
+                 {" "}
+                  :{" "} {moment
+                    .unix(
+                      allTtemData[currentIndx] && allTtemData[currentIndx].data
+                        ? allTtemData[currentIndx].data.timestamp
+                        : " - "
+                    )
+                    .format("MMMM Do YYYY, h:mma")}
                 </span>
               </p>
             </div>
@@ -456,100 +462,94 @@ export default function ItemTable() {
           <div className="model_edit_Main">
             <div className="model_edit_Detail">
               <EditModel
-               
-                item_idProp={
-                  allTtemData.data && allTtemData.data[currentIndx]
-                    ? allTtemData.data[currentIndx].item_id
-                    : null
-                }
                 itemNameProp={
-                  allTtemData.data && allTtemData.data[currentIndx]
-                    ? allTtemData.data[currentIndx].item_name
+                  allTtemData[currentIndx] && allTtemData[currentIndx].data
+                    ? allTtemData[currentIndx].data.item_name
                     : ""
                 }
                 brandProp={
-                  allTtemData.data && allTtemData.data[currentIndx]
-                    ? allTtemData.data[currentIndx].brand
+                  allTtemData[currentIndx] && allTtemData[currentIndx].data
+                    ? allTtemData[currentIndx].data.brand
                     : ""
                 }
                 modelNoProp={
-                  allTtemData.data && allTtemData.data[currentIndx]
-                    ? allTtemData.data[currentIndx].model_no
+                  allTtemData[currentIndx] && allTtemData[currentIndx].data
+                    ? allTtemData[currentIndx].data.model_no
                     : ""
                 }
                 chassisNoProp={
-                  allTtemData.data && allTtemData.data[currentIndx]
-                    ? allTtemData.data[currentIndx].chassis_no
+                  allTtemData[currentIndx] && allTtemData[currentIndx].data
+                    ? allTtemData[currentIndx].data.chassis_no
                     : ""
                 }
                 colorProp={
-                  allTtemData.data && allTtemData.data[currentIndx]
-                    ? allTtemData.data[currentIndx].color
+                  allTtemData[currentIndx] && allTtemData[currentIndx].data
+                    ? allTtemData[currentIndx].data.color
                     : ""
                 }
                 qtyProp={
-                  allTtemData.data && allTtemData.data[currentIndx]
-                    ? allTtemData.data[currentIndx].qty
+                  allTtemData[currentIndx] && allTtemData[currentIndx].data
+                    ? allTtemData[currentIndx].data.qty
                     : 1
                 }
                 cashpriceProp={
-                  allTtemData.data && allTtemData.data[currentIndx]
-                    ? allTtemData.data[currentIndx].cash_price
+                  allTtemData[currentIndx] && allTtemData[currentIndx].data
+                    ? allTtemData[currentIndx].data.cash_price
                     : 0
                 }
                 salepriceProp={
-                  allTtemData.data && allTtemData.data[currentIndx]
-                    ? allTtemData.data[currentIndx].sale_price
+                  allTtemData[currentIndx] && allTtemData[currentIndx].data
+                    ? allTtemData[currentIndx].data.sale_price
                     : 0
                 }
                 noOfInstallmentsProp={
-                  allTtemData.data && allTtemData.data[currentIndx]
-                    ? allTtemData.data[currentIndx].no_of_installments
+                  allTtemData[currentIndx] && allTtemData[currentIndx].data
+                    ? allTtemData[currentIndx].data.no_of_installments
                     : 0
                 }
                 amountPerInstallmentProp={
-                  allTtemData.data && allTtemData.data[currentIndx]
-                    ? allTtemData.data[currentIndx].amount_per_installment
+                  allTtemData[currentIndx] && allTtemData[currentIndx].data
+                    ? allTtemData[currentIndx].data.amount_per_installment
                     : 0
                 }
                 downPaymentProp={
-                  allTtemData.data && allTtemData.data[currentIndx]
-                    ? allTtemData.data[currentIndx].down_payment
+                  allTtemData[currentIndx] && allTtemData[currentIndx].data
+                    ? allTtemData[currentIndx].data.down_payment
                     : 0
                 }
                 guaranteePeriodProp={
-                  allTtemData.data && allTtemData.data[currentIndx]
-                    ? allTtemData.data[currentIndx].guarantee_period
+                  allTtemData[currentIndx] && allTtemData[currentIndx].data
+                    ? allTtemData[currentIndx].data.guarantee_period
                     : 0
                 }
                 discountProp={
-                  allTtemData.data && allTtemData.data[currentIndx]
-                    ? allTtemData.data[currentIndx].discount
+                  allTtemData[currentIndx] && allTtemData[currentIndx].data
+                    ? allTtemData[currentIndx].data.discount
                     : 0
                 }
                 descriptionProp={
-                  allTtemData.data && allTtemData.data[currentIndx]
-                    ? allTtemData.data[currentIndx].description
+                  allTtemData[currentIndx] && allTtemData[currentIndx].data
+                    ? allTtemData[currentIndx].data.description
                     : ""
                 }
                 cInvoiceNoProp={
-                  allTtemData.data && allTtemData.data[currentIndx]
-                    ? allTtemData.data[currentIndx].company_invoice_no
+                  allTtemData[currentIndx] && allTtemData[currentIndx].data
+                    ? allTtemData[currentIndx].data.company_invoice_no
                     : ""
                 }
                 GCardNoProp={
-                  allTtemData.data && allTtemData.data[currentIndx]
-                    ? allTtemData.data[currentIndx].guarantee_card_no
+                  allTtemData[currentIndx] && allTtemData[currentIndx].data
+                    ? allTtemData[currentIndx].data.guarantee_card_no
                     : ""
                 }
                 guaranteeProp={
-                  allTtemData.data && allTtemData.data[currentIndx]
-                    ? allTtemData.data[currentIndx].guarantee_months_years
+                  allTtemData[currentIndx] && allTtemData[currentIndx].data
+                    ? allTtemData[currentIndx].data.guarantee_months_years
                     : "Years"
                 }
                 editModalClose={editModalClose}
                 docId={
-                  allTtemData.data && allTtemData.data[currentIndx]
+                  allTtemData[currentIndx] && allTtemData[currentIndx].id
                     ? allTtemData[currentIndx].id
                     : ""
                 }

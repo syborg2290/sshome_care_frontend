@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Form, Input, Layout, Button, Select } from "antd";
 import "antd/dist/antd.css";
 
@@ -13,18 +13,22 @@ export default function Editmodel() {
   const [password, setPassword] = useState("");
   const [roll, setRoll] = useState("");
 
+   const [form] = Form.useForm();
+  const [, forceUpdate] = useState();
+
+  // To disable submit button at the beginning.
+  useEffect(() => {
+    forceUpdate({});
+  }, []);
+
   return (
     <div>
       <Content>
         <Form className="form">
           <Form.Item
-            name="User Name"
             label="User Name"
-            rules={[
-              {
-                required: true,
-              },
-            ]}
+            name="username"
+            rules={[{ required: true, message: "Please input your username!" }]}
           >
             <Input
               allowClear
@@ -37,13 +41,9 @@ export default function Editmodel() {
           </Form.Item>
 
           <Form.Item
-            name="Password"
             label="Password "
-            rules={[
-              {
-                required: true,
-              },
-            ]}
+            name="password"
+            rules={[{ required: true, message: "Please input your password!" }]}
           >
             <Input.Password
               allowClear
@@ -55,17 +55,13 @@ export default function Editmodel() {
             />
           </Form.Item>
           <Form.Item
-            name="Roll"
             label="Roll"
             value={roll}
+            name="roll"
+            rules={[{ required: true, message: "Please input your roll!" }]}
             onChange={(e) => {
               setRoll(e.target.value);
             }}
-            rules={[
-              {
-                required: true,
-              },
-            ]}
           >
             <Select
               placeholder="Select a option and change input text above"
@@ -76,28 +72,26 @@ export default function Editmodel() {
               <Option value="admin">Admin</Option>
             </Select>
           </Form.Item>
-          <Button
-            // disabled={
-            //   !loadingSubmit &&
-            //   (itemName ||
-            //     name ||
-            //     password ||
-            //     roll ||
-            //     ? false
-            //     : true
-            // }
-            className="btn"
-            type="primary"
-
-            //   onClick={updateUser}
-          >
-            {/* {loadingSubmit ? (
+          <Form.Item shouldUpdate={true}>
+            <Button
+              className="btn"
+              type="primary"
+              htmlType="submit"
+              disabled={
+                !form.isFieldsTouched(true) ||
+                form.getFieldsError().filter(({ errors }) => errors.length)
+                  .length
+              }
+              // onClick={updateUser}
+            >
+              {/* {loadingSubmit ? (
               <Spin spinning={loadingSubmit} size="large" />
             ) : (
               "Update"
             )} */}
-            update
-          </Button>
+              update
+            </Button>
+          </Form.Item>
         </Form>
       </Content>
     </div>

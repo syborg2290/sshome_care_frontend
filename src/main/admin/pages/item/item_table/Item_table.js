@@ -60,43 +60,43 @@ export default function ItemTable() {
             id: element.id,
             data: element.data(),
           });
-          newData.push( [
-              element.data().item_name,
-              element.data().brand,
-              element.data().qty,
-              element.data().color,
-              element.data().model_no,
-              <CurrencyFormat
-                value={element.data().sale_price}
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={" "}
-              />,
-              <div
-                color="secondary"
-                size="small"
-                className={
-                  element.data().qty !== 0
-                    ? element.data().qty >= 3
-                      ? "px-2"
-                      : "px-3"
-                    : "px-4"
-                }
-                variant="contained"
-              >
-                {element.data().qty !== 0
+          newData.push([
+            element.data().itemName,
+            element.data().brand,
+            element.data().qty,
+            element.data().color,
+            element.data().modelNo,
+            <CurrencyFormat
+              value={element.data().salePrice}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={" "}
+            />,
+            <div
+              color="secondary"
+              size="small"
+              className={
+                element.data().qty !== 0
                   ? element.data().qty >= 3
-                    ? "Available"
-                    : "Low Stock"
-                  : "Out Of Stock"}
-              </div>,
-              <div className="table_icon">
-                <VisibilityIcon onClick={showModal} />
-                <span className="icon_Edit">
-                  <EditIcon onClick={editModal} />
-                </span>
-              </div>
-            ],);
+                    ? "px-2"
+                    : "px-3"
+                  : "px-4"
+              }
+              variant="contained"
+            >
+              {element.data().qty !== 0
+                ? element.data().qty >= 3
+                  ? "Available"
+                  : "Low Stock"
+                : "Out Of Stock"}
+            </div>,
+            <div className="table_icon">
+              <VisibilityIcon onClick={showModal} />
+              <span className="icon_Edit">
+                <EditIcon onClick={editModal} />
+              </span>
+            </div>,
+          ]);
 
          
         });
@@ -210,7 +210,7 @@ export default function ItemTable() {
         title={
           <span className="model_title">
             {allTtemData[currentIndx] && allTtemData[currentIndx].data
-              ? allTtemData[currentIndx].data.item_name
+              ? allTtemData[currentIndx].data.itemName
               : null}
           </span>
         }
@@ -259,7 +259,7 @@ export default function ItemTable() {
                 <span className="load_Item">
                   {" "}
                   :{" "}
-                  {allTtemData.data && allTtemData.data[currentIndx]
+                  {allTtemData[currentIndx] && allTtemData[currentIndx].data
                     ? allTtemData[currentIndx].data.color
                     : " - "}{" "}
                 </span>
@@ -270,7 +270,7 @@ export default function ItemTable() {
                   {" "}
                   :{" "}
                   {allTtemData[currentIndx] && allTtemData[currentIndx].data
-                    ? allTtemData[currentIndx].data.model_no
+                    ? allTtemData[currentIndx].data.modelNo
                     : " - "}{" "}
                 </span>
               </p>
@@ -281,7 +281,7 @@ export default function ItemTable() {
                   :{" "}
                   {allTtemData[currentIndx] && allTtemData[currentIndx].data ? (
                     <CurrencyFormat
-                      value={allTtemData[currentIndx].data.sale_price}
+                      value={allTtemData[currentIndx].data.salePrice}
                       displayType={"text"}
                       thousandSeparator={true}
                       prefix={"  "}
@@ -297,7 +297,7 @@ export default function ItemTable() {
                   {" "}
                   :{" "}
                   {allTtemData[currentIndx] && allTtemData[currentIndx].data
-                    ? allTtemData[currentIndx].data.chassis_no
+                    ? allTtemData[currentIndx].data.chassisNo
                     : " - "}{" "}
                 </span>
               </p>
@@ -308,7 +308,7 @@ export default function ItemTable() {
                   :{" "}
                   {allTtemData[currentIndx] && allTtemData[currentIndx].data ? (
                     <CurrencyFormat
-                      value={allTtemData[currentIndx].data.cash_price}
+                      value={allTtemData[currentIndx].data.cashPrice}
                       displayType={"text"}
                       thousandSeparator={true}
                       prefix={" "}
@@ -325,7 +325,7 @@ export default function ItemTable() {
                   :{" "}
                   {allTtemData[currentIndx] && allTtemData[currentIndx].data ? (
                     <CurrencyFormat
-                      value={allTtemData[currentIndx].data.down_payment}
+                      value={allTtemData[currentIndx].data.downPayment}
                       displayType={"text"}
                       thousandSeparator={true}
                       prefix={" "}
@@ -341,7 +341,7 @@ export default function ItemTable() {
                   {" "}
                   :{" "}
                   {allTtemData[currentIndx] && allTtemData[currentIndx].data
-                    ? allTtemData[currentIndx].data.no_of_installments
+                    ? allTtemData[currentIndx].data.noOfInstallments
                     : " - "}{" "}
                 </span>
               </p>
@@ -352,9 +352,7 @@ export default function ItemTable() {
                   :{" "}
                   {allTtemData[currentIndx] && allTtemData[currentIndx].data ? (
                     <CurrencyFormat
-                      value={
-                        allTtemData[currentIndx].data.amount_per_installment
-                      }
+                      value={allTtemData[currentIndx].data.amountPerInstallment}
                       displayType={"text"}
                       thousandSeparator={true}
                       prefix={" "}
@@ -370,7 +368,7 @@ export default function ItemTable() {
                   {" "}
                   :{" "}
                   {allTtemData[currentIndx] && allTtemData[currentIndx].data
-                    ? allTtemData[currentIndx].data.guarantee_months_years
+                    ? allTtemData[currentIndx].data.guarantee
                     : " - "}{" "}
                 </span>
               </p>
@@ -380,7 +378,7 @@ export default function ItemTable() {
                   {" "}
                   :{" "}
                   {allTtemData[currentIndx] && allTtemData[currentIndx].data
-                    ? allTtemData[currentIndx].data.guarantee_period
+                    ? allTtemData[currentIndx].data.guaranteePeriod
                     : " - "}{" "}
                 </span>
               </p>
@@ -417,7 +415,7 @@ export default function ItemTable() {
                   {" "}
                   :{" "}
                   {allTtemData[currentIndx] && allTtemData[currentIndx].data
-                    ? allTtemData[currentIndx].data.company_invoice_no
+                    ? allTtemData[currentIndx].data.cInvoiceNo
                     : " - "}{" "}
                 </span>
               </p>
@@ -427,15 +425,16 @@ export default function ItemTable() {
                   {" "}
                   :{" "}
                   {allTtemData[currentIndx] && allTtemData[currentIndx].data
-                    ? allTtemData[currentIndx].data.guarantee_card_no
+                    ? allTtemData[currentIndx].data.GCardNo
                     : " - "}{" "}
                 </span>
               </p>
               <p>
                 CREATED DATE
                 <span className="load_Item">
-                 {" "}
-                  :{" "} {moment
+                  {" "}
+                  :{" "}
+                  {moment
                     .unix(
                       allTtemData[currentIndx] && allTtemData[currentIndx].data
                         ? allTtemData[currentIndx].data.timestamp
@@ -464,7 +463,7 @@ export default function ItemTable() {
               <EditModel
                 itemNameProp={
                   allTtemData[currentIndx] && allTtemData[currentIndx].data
-                    ? allTtemData[currentIndx].data.item_name
+                    ? allTtemData[currentIndx].data.itemName
                     : ""
                 }
                 brandProp={
@@ -474,12 +473,12 @@ export default function ItemTable() {
                 }
                 modelNoProp={
                   allTtemData[currentIndx] && allTtemData[currentIndx].data
-                    ? allTtemData[currentIndx].data.model_no
+                    ? allTtemData[currentIndx].data.modelNo
                     : ""
                 }
                 chassisNoProp={
                   allTtemData[currentIndx] && allTtemData[currentIndx].data
-                    ? allTtemData[currentIndx].data.chassis_no
+                    ? allTtemData[currentIndx].data.chassisNo
                     : ""
                 }
                 colorProp={
@@ -494,32 +493,32 @@ export default function ItemTable() {
                 }
                 cashpriceProp={
                   allTtemData[currentIndx] && allTtemData[currentIndx].data
-                    ? allTtemData[currentIndx].data.cash_price
+                    ? allTtemData[currentIndx].data.cashPrice
                     : 0
                 }
                 salepriceProp={
                   allTtemData[currentIndx] && allTtemData[currentIndx].data
-                    ? allTtemData[currentIndx].data.sale_price
+                    ? allTtemData[currentIndx].data.salePrice
                     : 0
                 }
                 noOfInstallmentsProp={
                   allTtemData[currentIndx] && allTtemData[currentIndx].data
-                    ? allTtemData[currentIndx].data.no_of_installments
+                    ? allTtemData[currentIndx].data.noOfInstallments
                     : 0
                 }
                 amountPerInstallmentProp={
                   allTtemData[currentIndx] && allTtemData[currentIndx].data
-                    ? allTtemData[currentIndx].data.amount_per_installment
+                    ? allTtemData[currentIndx].data.amountPerInstallment
                     : 0
                 }
                 downPaymentProp={
                   allTtemData[currentIndx] && allTtemData[currentIndx].data
-                    ? allTtemData[currentIndx].data.down_payment
+                    ? allTtemData[currentIndx].data.downPayment
                     : 0
                 }
                 guaranteePeriodProp={
                   allTtemData[currentIndx] && allTtemData[currentIndx].data
-                    ? allTtemData[currentIndx].data.guarantee_period
+                    ? allTtemData[currentIndx].data.guaranteePeriod
                     : 0
                 }
                 discountProp={
@@ -534,17 +533,17 @@ export default function ItemTable() {
                 }
                 cInvoiceNoProp={
                   allTtemData[currentIndx] && allTtemData[currentIndx].data
-                    ? allTtemData[currentIndx].data.company_invoice_no
+                    ? allTtemData[currentIndx].data.cInvoiceNo
                     : ""
                 }
                 GCardNoProp={
                   allTtemData[currentIndx] && allTtemData[currentIndx].data
-                    ? allTtemData[currentIndx].data.guarantee_card_no
+                    ? allTtemData[currentIndx].data.GCardNo
                     : ""
                 }
                 guaranteeProp={
                   allTtemData[currentIndx] && allTtemData[currentIndx].data
-                    ? allTtemData[currentIndx].data.guarantee_months_years
+                    ? allTtemData[currentIndx].data.guarantee
                     : "Years"
                 }
                 editModalClose={editModalClose}

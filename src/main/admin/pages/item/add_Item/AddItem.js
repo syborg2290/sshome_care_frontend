@@ -365,7 +365,7 @@ function AddItem() {
                                                 noOfInstallments: noOfInstallments,
                                                 amountPerInstallment: amountPerInstallment,
                                                 downPayment: downPayment,
-                                                guaranteePeriod: guaranteePeriod,
+                                                guarantee: guaranteePeriod,
                                                 discount: discount,
                                                 description: description,
                                                 cInvoiceNo: cInvoiceNo,
@@ -423,15 +423,7 @@ function AddItem() {
           <hr className="line"></hr>
           <div className="xx">
             <Form className="form">
-              <Form.Item
-                label="Item Name"
-                name="itemName"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
+              <Form.Item label="* Item Name">
                 <Input
                   required={true}
                   allowClear
@@ -442,15 +434,7 @@ function AddItem() {
                   }}
                 />
               </Form.Item>
-              <Form.Item
-                label="Brand"
-                name="brand"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
+              <Form.Item label="* Brand">
                 <Input
                   required={true}
                   allowClear
@@ -461,15 +445,7 @@ function AddItem() {
                   }}
                 />
               </Form.Item>
-              <Form.Item
-                label="Model no "
-                name="modelNo"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
+              <Form.Item label="* Model no ">
                 <Input
                   required={true}
                   allowClear
@@ -491,15 +467,7 @@ function AddItem() {
                   }}
                 />
               </Form.Item>
-              <Form.Item
-                label="Color "
-                name="color"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
+              <Form.Item label="* Color ">
                 <Input
                   required={true}
                   allowClear
@@ -510,15 +478,7 @@ function AddItem() {
                   }}
                 />
               </Form.Item>
-              <Form.Item
-                label="Qty "
-                name="qty"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
+              <Form.Item label="* Qty">
                 <Input
                   required={true}
                   type="number"
@@ -531,15 +491,7 @@ function AddItem() {
                   }}
                 />
               </Form.Item>
-              <Form.Item
-                label="Cash price (LKR)"
-                name="cashPrice"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
+              <Form.Item label="* Cash price (LKR)">
                 <Input
                   required={true}
                   type="number"
@@ -552,15 +504,7 @@ function AddItem() {
                   }}
                 />
               </Form.Item>
-              <Form.Item
-                label="Sale Price (LKR)"
-                name="salePrice"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
+              <Form.Item label="* Sale Price (LKR)">
                 <Input
                   required={true}
                   type="number"
@@ -573,15 +517,7 @@ function AddItem() {
                   }}
                 />
               </Form.Item>
-              <Form.Item
-                label="No Of Installments"
-                name="noOfInstallment"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
+              <Form.Item label="* No Of Installments">
                 <Input
                   required={true}
                   type="number"
@@ -594,15 +530,7 @@ function AddItem() {
                   }}
                 />
               </Form.Item>
-              <Form.Item
-                label="Amount Per Installment (LKR)"
-                name="amountPerInstallment"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
+              <Form.Item label="* Amount Per Installment (LKR)">
                 <Input
                   required={true}
                   type="number"
@@ -621,15 +549,7 @@ function AddItem() {
                   <Radio value={"Months"}>Months</Radio>
                 </Radio.Group>
               </Form.Item>
-              <Form.Item
-                label="Guarantee Period"
-                name="guaranteePeriod"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
+              <Form.Item label="* Guarantee Period">
                 <Input
                   required={true}
                   type="number"
@@ -642,15 +562,7 @@ function AddItem() {
                   }}
                 />
               </Form.Item>
-              <Form.Item
-                label="Down Payment (LKR)"
-                name="downPayment"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
+              <Form.Item label="* Down Payment (LKR)">
                 <Input
                   required={true}
                   type="number"
@@ -664,15 +576,7 @@ function AddItem() {
                 />
               </Form.Item>
 
-              <Form.Item
-                label="Discount (LKR)"
-                name="discount"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
+              <Form.Item label="* Discount (LKR)">
                 <Input
                   required={true}
                   type="number"

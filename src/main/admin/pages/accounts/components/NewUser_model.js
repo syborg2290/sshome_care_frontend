@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Form, Input, Layout, Button, Select } from "antd";
 import "antd/dist/antd.css";
 
@@ -13,18 +13,22 @@ export default function NewUsermodel() {
   const [password, setPassword] = useState("");
   const [roll, setRoll] = useState("");
 
+  const [form] = Form.useForm();
+  const [, forceUpdate] = useState();
+
+  // To disable submit button at the beginning.
+  useEffect(() => {
+    forceUpdate({});
+  }, []);
+
   return (
     <div>
       <Content>
         <Form className="form">
           <Form.Item
-            name="User Name"
             label="User Name"
-            rules={[
-              {
-                required: true,
-              },
-            ]}
+            name="username"
+            rules={[{ required: true, message: "Please input your username!" }]}
           >
             <Input
               allowClear
@@ -37,13 +41,9 @@ export default function NewUsermodel() {
           </Form.Item>
 
           <Form.Item
-            name="Password"
             label="Password"
-            rules={[
-              {
-                required: true,
-              },
-            ]}
+            name="password"
+            rules={[{ required: true, message: "Please input your Password!" }]}
           >
             <Input.Password
               allowClear
@@ -55,17 +55,13 @@ export default function NewUsermodel() {
             />
           </Form.Item>
           <Form.Item
-            name="Roll"
             label="Roll"
+            name="roll"
+            rules={[{ required: true, message: "Please input your Roll!" }]}
             value={roll}
             onChange={(e) => {
               setRoll(e.target.value);
             }}
-            rules={[
-              {
-                required: true,
-              },
-            ]}
           >
             <Select
               placeholder="Select a option and change input text above"
@@ -77,17 +73,13 @@ export default function NewUsermodel() {
             </Select>
           </Form.Item>
           <Button
-            // disabled={
-            //   !loadingSubmit &&
-            //   (itemName ||
-            //     name ||
-            //     password ||
-            //     roll ||
-            //     ? false
-            //     : true
-            // }
             className="btn"
             type="primary"
+            htmlType="submit"
+            disabled={
+              !form.isFieldsTouched(true) ||
+              form.getFieldsError().filter(({ errors }) => errors.length).length
+            }
 
             //   onClick={updateUser}
           >

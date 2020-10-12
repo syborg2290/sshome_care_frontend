@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Form, Radio, Input, Layout, Button, Spin } from "antd";
-import axios from "axios";
-import imageCompression from "browser-image-compression";
+
 import "antd/dist/antd.css";
 import {
   NotificationContainer,
@@ -12,14 +11,12 @@ import "react-notifications/lib/notifications.css";
 // styles
 import "../components/Edit_model.css";
 
-const { SeverApi } = require("../../../../../../config/settings.js");
+const { db } = require("../../../../../../config/firebase.js");
 
 const { Content } = Layout;
 const { TextArea } = Input;
 
 function EditModel({
-  item_idProp,
-  imageUrlProp,
   itemNameProp,
   brandProp,
   modelNoProp,
@@ -38,11 +35,9 @@ function EditModel({
   GCardNoProp,
   guaranteeProp,
   editModalClose,
-  socketParent,
+  docId,
 }) {
   const [loadingSubmit, setLoadingSubmit] = useState(false);
-  const [imageUrl, setImageUrl] = useState(null);
-  const [imageFile, setImageFile] = useState(null);
   const [itemName, setItemName] = useState(itemNameProp);
   const [brand, setBrand] = useState(brandProp);
   const [modelNo, setModelNo] = useState(modelNoProp);
@@ -71,17 +66,6 @@ function EditModel({
     setGuarantee({
       value: e.target.value,
     });
-  };
-
-  const onImageChange = (event) => {
-    if (event.target.files && event.target.files[0]) {
-      setImageFile(event.target.files[0]);
-      let reader = new FileReader();
-      reader.onload = (e) => {
-        setImageUrl(e.target.result);
-      };
-      reader.readAsDataURL(event.target.files[0]);
-    }
   };
 
   const updateItem = async (e) => {
@@ -131,38 +115,8 @@ function EditModel({
                 } else {
                   //Rest of code here
                   setLoadingSubmit(true);
-                  let imageDownloadUrl = "null";
-                  if (imageFile !== null) {
-                    const formData = new FormData();
-                    const options = {
-                      maxSizeMB: 1,
-                      maxWidthOrHeight: 1920,
-                      useWebWorker: true,
-                    };
-                    const compressedFile = await imageCompression(
-                      imageFile,
-                      options
-                    );
-                    formData.append("image", compressedFile);
-                    const configFile = {
-                      headers: {
-                        "content-type": "multipart/form-data",
-                      },
-                    };
-
-                    await axios
-                      .post(
-                        SeverApi + "imageUpload/uploadImage",
-                        formData,
-                        configFile
-                      )
-                      .then((response) => {
-                        imageDownloadUrl = response.data.publicUrl;
-                      });
-                  }
 
                   let variable = {
-                    item_id: item_idProp,
                     itemName: itemName,
                     brand: brand,
                     modelNo: modelNo,
@@ -180,26 +134,23 @@ function EditModel({
                     cInvoiceNo: cInvoiceNo,
                     GCardNo: GCardNo,
                     guarantee: guarantee,
-                    itemDownImageUrl: imageDownloadUrl==="null"
-                      ? imageUrlProp
-                      : imageDownloadUrl,
                   };
-                  await axios
-                    .post(SeverApi + "item/updateItem", variable)
-                    .then((response) => {
-                      if (response.status === 200) {
-                        setLoadingSubmit(false);
-                        NotificationManager.success("Item updated!", "Done");
-                        // setInterval(() => window.location.reload(), 1000);
-                        editModalClose();
-                        socketParent.emit("fetchItems");
-                      } else {
-                        setLoadingSubmit(false);
-                        NotificationManager.warning(
-                          "Failed to update the item!",
-                          "Please try again"
-                        );
-                      }
+
+                  await db
+                    .collection("item")
+                    .doc(docId)
+                    .update(variable)
+                    .then(function (docRef) {
+                      setLoadingSubmit(false);
+                      NotificationManager.success("Item updated!", "Done");
+                      editModalClose();
+                    })
+                    .catch(function (error) {
+                      setLoadingSubmit(false);
+                      NotificationManager.warning(
+                        "Failed to update the item!",
+                        "Please try again"
+                      );
                     });
                 }
               }
@@ -397,31 +348,6 @@ function EditModel({
               }}
             />
           </Form.Item>
-          <Form.Item label="Upload Image  ">
-            <input
-              type="file"
-              accept="image/*"
-              name=""
-              onChange={onImageChange}
-              className="image"
-              id="item_image"
-              hidden
-            />
-            <img
-              alt="Item upload"
-              onClick={() => {
-                document.getElementById("item_image").click();
-              }}
-              src={
-                imageUrl == null
-                  ? imageUrlProp !== "null"
-                    ? imageUrlProp
-                    : require("../../../../../../assets/images_upload.png")
-                  : imageUrl
-              }
-              className="image"
-            />
-          </Form.Item>
 
           <Button
             disabled={
@@ -431,6 +357,8 @@ function EditModel({
                 salePrice ||
                 downPayment ||
                 qty ||
+                color ||
+                modelNo ||
                 guaranteePeriod !== "")
                 ? false
                 : true

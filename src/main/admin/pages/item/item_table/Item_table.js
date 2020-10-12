@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Grid } from "@material-ui/core";
 import { Spin, Modal } from "antd";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
-import axios from "axios";
+// import axios from "axios";
 import MUIDataTable from "mui-datatables";
-import socketIOClient from "socket.io-client";
+// import socketIOClient from "socket.io-client";
 import Moment from "react-moment";
 import {
   NotificationContainer,
@@ -23,10 +23,12 @@ import EditIcon from "@material-ui/icons/Edit";
 // styles
 import "./Item_table.css";
 
-const {
-  RealtimeServerApi,
-  SeverApi,
-} = require("../../../../../config/settings.js");
+// const {
+//   RealtimeServerApi,
+//   SeverApi,
+// } = require("../../../../../config/settings.js");
+
+const { db } = require("../../../../../config/firebase.js");
 
 export default function ItemTable() {
   const [itemTableData, setItemTableData] = useState([]);
@@ -36,7 +38,7 @@ export default function ItemTable() {
   const [currentIndx, setCurrentIndx] = useState(0);
   const { confirm } = Modal;
   const [editVisible, setEditVisible] = useState(false);
-  let socket = socketIOClient(RealtimeServerApi);
+  // let socket = socketIOClient(RealtimeServerApi);
 
   const showModal = () => {
     setVisible(true);
@@ -47,29 +49,27 @@ export default function ItemTable() {
   };
 
   useEffect(() => {
-    axios.get(SeverApi + "item/getAllItems").then((response) => {
-      if (response.status === 200) {
-        setAllItemData(response);
-        response.data.forEach((element) => {
+    db.collection("item")
+      .orderBy("timestamp", "desc")
+      .onSnapshot((snapshot) => {
+        setAllItemData(
+          snapshot.docs.map((doc) => ({
+            id: doc.id,
+            data: doc.data(),
+          }))
+        );
+
+        snapshot.docs.forEach((element) => {
           setItemTableData((oldArray) => [
             ...oldArray,
             [
-              <img
-                alt="img"
-                className="Item_img"
-                src={
-                  element["photo"] !== "null"
-                    ? element["photo"]
-                    : require("../../../../../assets/empty_item.png")
-                }
-              />,
-              element["item_name"],
-              element["brand"],
-              element["qty"],
-              element["color"],
-              element["model_no"],
+              element.data().item_name,
+              element.data().brand,
+              element.data().qty,
+              element.data().color,
+              element.data().model_no,
               <CurrencyFormat
-                value={element["sale_price"]}
+                value={element.data().sale_price}
                 displayType={"text"}
                 thousandSeparator={true}
                 prefix={" "}
@@ -78,16 +78,16 @@ export default function ItemTable() {
                 color="secondary"
                 size="small"
                 className={
-                  element["qty"] !== 0
-                    ? element["qty"] >= 3
+                  element.data().qty !== 0
+                    ? element.data().qty >= 3
                       ? "px-2"
                       : "px-3"
                     : "px-4"
                 }
                 variant="contained"
               >
-                {element["qty"] !== 0
-                  ? element["qty"] >= 3
+                {element.data().qty !== 0
+                  ? element.data().qty >= 3
                     ? "Available"
                     : "Low Stock"
                   : "Out Of Stock"}
@@ -102,69 +102,68 @@ export default function ItemTable() {
           ]);
         });
         setIsLoading(false);
-      }
-    });
+      });
   }, []);
 
-  useEffect(() => {
-    socket.on("messageFromServer", (data) => {
-      var newData = [];
-      if (itemTableData.length < 1) {
-        data.forEach((element) => {
-          allTtemData.push(element);
+  // useEffect(() => {
+  //   socket.on("messageFromServer", (data) => {
+  //     var newData = [];
+  //     if (itemTableData.length < 1) {
+  //       data.forEach((element) => {
+  //         allTtemData.push(element);
 
-          newData.push([
-            <img
-              alt="img"
-              className="Item_img"
-              src={
-                element["photo"] !== "null"
-                  ? element["photo"]
-                  : require("../../../../../assets/empty_item.png")
-              }
-            />,
-            element["item_name"],
-            element["brand"],
-            element["qty"],
-            element["color"],
-            element["model_no"],
-            <CurrencyFormat
-              value={element["sale_price"]}
-              displayType={"text"}
-              thousandSeparator={true}
-              prefix={" "}
-            />,
-            <div
-              color="secondary"
-              size="small"
-              className={
-                element["qty"] !== 0
-                  ? element["qty"] >= 3
-                    ? "px-2"
-                    : "px-3"
-                  : "px-4"
-              }
-              variant="contained"
-            >
-              {element["qty"] !== 0
-                ? element["qty"] >= 3
-                  ? "Available"
-                  : "Low Stock"
-                : "Out Of Stock"}
-            </div>,
-            <div className="table_icon">
-              <VisibilityIcon onClick={showModal} />,
-              <span className="icon_Edit">
-                <EditIcon onClick={editModal} />
-              </span>
-            </div>,
-          ]);
-        });
-        setItemTableData(newData);
-      }
-    });
-    // eslint-disable-next-line
-  }, [itemTableData]);
+  //         newData.push([
+  //           <img
+  //             alt="img"
+  //             className="Item_img"
+  //             src={
+  //               element["photo"] !== "null"
+  //                 ? element["photo"]
+  //                 : require("../../../../../assets/empty_item.png")
+  //             }
+  //           />,
+  //           element["item_name"],
+  //           element["brand"],
+  //           element["qty"],
+  //           element["color"],
+  //           element["model_no"],
+  //           <CurrencyFormat
+  //             value={element["sale_price"]}
+  //             displayType={"text"}
+  //             thousandSeparator={true}
+  //             prefix={" "}
+  //           />,
+  //           <div
+  //             color="secondary"
+  //             size="small"
+  //             className={
+  //               element["qty"] !== 0
+  //                 ? element["qty"] >= 3
+  //                   ? "px-2"
+  //                   : "px-3"
+  //                 : "px-4"
+  //             }
+  //             variant="contained"
+  //           >
+  //             {element["qty"] !== 0
+  //               ? element["qty"] >= 3
+  //                 ? "Available"
+  //                 : "Low Stock"
+  //               : "Out Of Stock"}
+  //           </div>,
+  //           <div className="table_icon">
+  //             <VisibilityIcon onClick={showModal} />,
+  //             <span className="icon_Edit">
+  //               <EditIcon onClick={editModal} />
+  //             </span>
+  //           </div>,
+  //         ]);
+  //       });
+  //       setItemTableData(newData);
+  //     }
+  //   });
+  //   // eslint-disable-next-line
+  // }, [itemTableData]);
 
   const showDeleteItemsConfirm = (rowsDeleted) => {
     confirm({
@@ -174,72 +173,22 @@ export default function ItemTable() {
       onOk() {
         for (var key in rowsDeleted.data) {
           // eslint-disable-next-line
-          if (
-            allTtemData.data && [rowsDeleted.data[key]["index"]] &&
-            [rowsDeleted.data[key]["index"]].photo
-          ) {
-            // eslint-disable-next-line
-            axios
-              .post(SeverApi + "deleteImage/deleteImage", {
-                imageUrl:
-                  allTtemData.data[rowsDeleted.data[key]["index"]].photo,
-              })
-              // eslint-disable-next-line
-              .then((response) => {
-                if (response.status === 200) {
-                  if (
-                    allTtemData.data &&
-                    [rowsDeleted.data[key]["index"]] !== null
-                  ) {
-                    axios
-                      .post(SeverApi + "item/deleteItem", {
-                        item_id:
-                          allTtemData.data[rowsDeleted.data[key]["index"]]
-                            .item_id,
-                      })
-                      .then((response) => {
-                        if (response.status === 200) {
-                          NotificationManager.success(
-                            "Item deletion successfully!",
-                            "Done"
-                          );
 
-                          socket.emit("fetchItems");
-                        } else {
-                          NotificationManager.warning(
-                            "Failed to continue the process!",
-                            "Please try again"
-                          );
-                        }
-                      });
-                  }
-                }
-              });
-          } else {
-            // eslint-disable-next-line
-            if (allTtemData.data && [rowsDeleted.data[key]["index"]] !== null) {
-              axios
-                .post(SeverApi + "item/deleteItem", {
-                  item_id:
-                    allTtemData.data[rowsDeleted.data[key]["index"]].item_id,
-                })
-                .then((response) => {
-                  if (response.status === 200) {
-                    NotificationManager.success(
-                      "Item deletion successfully!",
-                      "Done"
-                    );
-
-                    socket.emit("fetchItems");
-                  } else {
-                    NotificationManager.warning(
-                      "Failed to continue the process!",
-                      "Please try again"
-                    );
-                  }
-                });
-            }
-          }
+          db.collection("item")
+            .doc(allTtemData[rowsDeleted.data[key]["index"]].id)
+            .delete()
+            .then(function () {
+              NotificationManager.success(
+                "Item deletion successfully!",
+                "Done"
+              );
+            })
+            .catch(function (error) {
+              NotificationManager.warning(
+                "Failed to continue the process!",
+                "Please try again"
+              );
+            });
         }
       },
       onCancel() {},
@@ -269,7 +218,7 @@ export default function ItemTable() {
       >
         <div className="table_Model">
           <div className="model_Main">
-            <img
+            {/* <img
               className="model_img"
               src={
                 allTtemData.data && allTtemData.data[currentIndx]
@@ -279,7 +228,7 @@ export default function ItemTable() {
                   : ""
               }
               alt="item_image"
-            />
+            /> */}
             <div className="model_Detail">
               <p>
                 BRAND
@@ -484,7 +433,7 @@ export default function ItemTable() {
                   :{" "}
                   <Moment format="YYYY/MM/DD">
                     {allTtemData.data && allTtemData.data[currentIndx]
-                      ? allTtemData.data[currentIndx].created_at
+                      ? allTtemData.data[currentIndx].timestamp
                       : " - "}
                   </Moment>{" "}
                 </span>
@@ -507,19 +456,10 @@ export default function ItemTable() {
           <div className="model_edit_Main">
             <div className="model_edit_Detail">
               <EditModel
-                key={
-                  allTtemData.data && allTtemData.data[currentIndx]
-                    ? allTtemData.data[currentIndx].item_id
-                    : null
-                }
+               
                 item_idProp={
                   allTtemData.data && allTtemData.data[currentIndx]
                     ? allTtemData.data[currentIndx].item_id
-                    : null
-                }
-                imageUrlProp={
-                  allTtemData.data && allTtemData.data[currentIndx]
-                    ? allTtemData.data[currentIndx].photo
                     : null
                 }
                 itemNameProp={
@@ -608,7 +548,11 @@ export default function ItemTable() {
                     : "Years"
                 }
                 editModalClose={editModalClose}
-                socketParent={socket}
+                docId={
+                  allTtemData.data && allTtemData.data[currentIndx]
+                    ? allTtemData[currentIndx].id
+                    : ""
+                }
               />
             </div>
           </div>
@@ -622,7 +566,6 @@ export default function ItemTable() {
             className="item_table"
             data={itemTableData}
             columns={[
-              "IMG",
               "ITEM NAME",
               "BRAND",
               "QTY",
@@ -636,7 +579,6 @@ export default function ItemTable() {
               filterType: "checkbox",
               onRowsDelete: (rowsDeleted) => {
                 showDeleteItemsConfirm(rowsDeleted);
-                socket.emit("fetchItems");
               },
               download: false,
               print: false,

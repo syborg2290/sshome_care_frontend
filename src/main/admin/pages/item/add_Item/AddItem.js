@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Form, Radio, Input, Layout, Button, Spin } from "antd";
-import axios from "axios";
-import socketIOClient from "socket.io-client";
-import imageCompression from "browser-image-compression";
+// import axios from "axios";
+// import socketIOClient from "socket.io-client";
+// import imageCompression from "browser-image-compression";
 import "antd/dist/antd.css";
 import {
   NotificationContainer,
@@ -11,19 +11,22 @@ import {
 import "react-notifications/lib/notifications.css";
 // styles
 import "./Additem.css";
+import firebase from "firebase";
 
-const {
-  SeverApi,
-  RealtimeServerApi,
-} = require("../../../../../config/settings.js");
+// const {
+//   SeverApi,
+//   RealtimeServerApi,
+// } = require("../../../../../config/settings.js");
+const { db } = require("../../../../../config/firebase.js");
+
 
 const { Content } = Layout;
 const { TextArea } = Input;
 
 function AddItem() {
   const [loadingSubmit, setLoadingSubmit] = useState(false);
-  const [imageUrl, setImageUrl] = useState(null);
-  const [imageFile, setImageFile] = useState(null);
+  // const [imageUrl, setImageUrl] = useState(null);
+  // const [imageFile, setImageFile] = useState(null);
   const [itemName, setItemName] = useState("");
   const [brand, setBrand] = useState("");
   const [modelNo, setModelNo] = useState("");
@@ -45,11 +48,11 @@ function AddItem() {
     value: "Years",
   });
 
-  let socket = socketIOClient(RealtimeServerApi);
+  // let socket = socketIOClient(RealtimeServerApi);
 
   const valuesInitialState = () => {
-    setImageUrl(null);
-    setImageFile(null);
+    // setImageUrl(null);
+    // setImageFile(null);
     setItemName("");
     setBrand("");
     setModelNo("");
@@ -77,16 +80,149 @@ function AddItem() {
     });
   };
 
-  const onImageChange = (event) => {
-    if (event.target.files && event.target.files[0]) {
-      setImageFile(event.target.files[0]);
-      let reader = new FileReader();
-      reader.onload = (e) => {
-        setImageUrl(e.target.result);
-      };
-      reader.readAsDataURL(event.target.files[0]);
-    }
-  };
+  // const onImageChange = (event) => {
+  //   if (event.target.files && event.target.files[0]) {
+  //     setImageFile(event.target.files[0]);
+  //     let reader = new FileReader();
+  //     reader.onload = (e) => {
+  //       setImageUrl(e.target.result);
+  //     };
+  //     reader.readAsDataURL(event.target.files[0]);
+  //   }
+  // };
+
+  // const addItem = async (e) => {
+  //   e.preventDefault();
+
+  //   if (qty < 1) {
+  //     NotificationManager.info(
+  //       "Qty must be greater than 0",
+  //       "Remember validations"
+  //     );
+  //   } else {
+  //     if (cashPrice < 0) {
+  //       NotificationManager.info(
+  //         "Check again the amount of cash price",
+  //         "Remember validations"
+  //       );
+  //     } else {
+  //       if (salePrice < 0) {
+  //         NotificationManager.info(
+  //           "Check again the amount of sale price",
+  //           "Remember validations"
+  //         );
+  //       } else {
+  //         if (noOfInstallments < 0) {
+  //           NotificationManager.info(
+  //             "Check again the value of installments value",
+  //             "Remember validations"
+  //           );
+  //         } else {
+  //           if (amountPerInstallment < 0) {
+  //             NotificationManager.info(
+  //               "Check again the amount per installment",
+  //               "Remember validations"
+  //             );
+  //           } else {
+  //             if (downPayment < 0) {
+  //               NotificationManager.info(
+  //                 "Check again the amount of down payment",
+  //                 "Remember validations"
+  //               );
+  //             } else {
+  //               if (guaranteePeriod < 0) {
+  //                 NotificationManager.info(
+  //                   "Check again the value of gurantee period",
+  //                   "Remember validations"
+  //                 );
+  //               } else {
+  //                 if (discount < 0) {
+  //                   NotificationManager.info(
+  //                     "Check again the amount of discount",
+  //                     "Remember validations"
+  //                   );
+  //                 } else {
+  //                   //Rest of code here
+  //                   setLoadingSubmit(true);
+  //                   let imageDownloadUrl = "null";
+  //                   if (imageFile !== null) {
+  //                     const formData = new FormData();
+  //                     const options = {
+  //                       maxSizeMB: 1,
+  //                       maxWidthOrHeight: 1920,
+  //                       useWebWorker: true,
+  //                     };
+  //                     const compressedFile = await imageCompression(
+  //                       imageFile,
+  //                       options
+  //                     );
+  //                     formData.append("image", compressedFile);
+  //                     const configFile = {
+  //                       headers: {
+  //                         "content-type": "multipart/form-data",
+  //                       },
+  //                     };
+
+  //                     await axios
+  //                       .post(
+  //                         SeverApi + "imageUpload/uploadImage",
+  //                         formData,
+  //                         configFile
+  //                       )
+  //                       .then((response) => {
+  //                         imageDownloadUrl = response.data.publicUrl;
+  //                       });
+  //                   }
+
+  //                   let variable = {
+  //                     itemName: itemName,
+  //                     brand: brand,
+  //                     modelNo: modelNo,
+  //                     chassisNo: chassisNo,
+  //                     color: color,
+  //                     qty: qty,
+  //                     cashPrice: cashPrice,
+  //                     salePrice: salePrice,
+  //                     noOfInstallments: noOfInstallments,
+  //                     amountPerInstallment: amountPerInstallment,
+  //                     downPayment: downPayment,
+  //                     guaranteePeriod: guaranteePeriod,
+  //                     discount: discount,
+  //                     description: description,
+  //                     cInvoiceNo: cInvoiceNo,
+  //                     GCardNo: GCardNo,
+  //                     guarantee: guarantee,
+  //                     itemDownImageUrl: imageDownloadUrl,
+  //                   };
+
+  //                   await axios
+  //                     .post(SeverApi + "item/addItem", variable)
+  //                     .then((response) => {
+  //                       if (response.status === 200) {
+  //                         setLoadingSubmit(false);
+  //                         valuesInitialState();
+  //                         NotificationManager.success(
+  //                           "Item creation successfully!",
+  //                           "Done"
+  //                         );
+  //                         socket.emit("fetchItems");
+  //                       } else {
+  //                         setLoadingSubmit(false);
+  //                         NotificationManager.warning(
+  //                           "Failed to make the item!",
+  //                           "Please try again"
+  //                         );
+  //                       }
+  //                     });
+  //                 }
+  //               }
+  //             }
+  //           }
+  //         }
+  //       }
+  //     }
+  //   }
+  // };
 
   const addItem = async (e) => {
     e.preventDefault();
@@ -141,36 +277,6 @@ function AddItem() {
                   } else {
                     //Rest of code here
                     setLoadingSubmit(true);
-                    let imageDownloadUrl = "null";
-                    if (imageFile !== null) {
-                      const formData = new FormData();
-                      const options = {
-                        maxSizeMB: 1,
-                        maxWidthOrHeight: 1920,
-                        useWebWorker: true,
-                      };
-                      const compressedFile = await imageCompression(
-                        imageFile,
-                        options
-                      );
-                      formData.append("image", compressedFile);
-                      const configFile = {
-                        headers: {
-                          "content-type": "multipart/form-data",
-                        },
-                      };
-
-                      await axios
-                        .post(
-                          SeverApi + "imageUpload/uploadImage",
-                          formData,
-                          configFile
-                        )
-                        .then((response) => {
-                          imageDownloadUrl = response.data.publicUrl;
-                        });
-                    }
-
                     let variable = {
                       itemName: itemName,
                       brand: brand,
@@ -189,26 +295,26 @@ function AddItem() {
                       cInvoiceNo: cInvoiceNo,
                       GCardNo: GCardNo,
                       guarantee: guarantee,
-                      itemDownImageUrl: imageDownloadUrl,
+                      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                     };
-                    await axios
-                      .post(SeverApi + "item/addItem", variable)
-                      .then((response) => {
-                        if (response.status === 200) {
-                          setLoadingSubmit(false);
-                          valuesInitialState();
-                          NotificationManager.success(
-                            "Item creation successfully!",
-                            "Done"
-                          );
-                          socket.emit("fetchItems");
-                        } else {
-                          setLoadingSubmit(false);
-                          NotificationManager.warning(
-                            "Failed to make the item!",
-                            "Please try again"
-                          );
-                        }
+
+                    await db
+                      .collection("item")
+                      .add(variable)
+                      .then(function (docRef) {
+                        setLoadingSubmit(false);
+                        valuesInitialState();
+                        NotificationManager.success(
+                          "Item creation successfully!",
+                          "Done"
+                        );
+                      })
+                      .catch(function (error) {
+                        setLoadingSubmit(false);
+                        NotificationManager.warning(
+                          "Failed to make the item!",
+                          "Please try again"
+                        );
                       });
                   }
                 }
@@ -411,7 +517,7 @@ function AddItem() {
                   }}
                 />
               </Form.Item>
-              <Form.Item label="Upload Image  ">
+              {/* <Form.Item label="Upload Image  ">
                 <input
                   type="file"
                   accept="image/*"
@@ -433,7 +539,7 @@ function AddItem() {
                   }
                   className="image"
                 />
-              </Form.Item>
+              </Form.Item> */}
 
               <Button
                 disabled={
@@ -443,7 +549,7 @@ function AddItem() {
                     salePrice ||
                     downPayment ||
                     color ||
-                    brand || 
+                    brand ||
                     modelNo ||
                     qty ||
                     guaranteePeriod !== "")

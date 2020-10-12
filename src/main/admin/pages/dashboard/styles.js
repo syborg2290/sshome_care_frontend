@@ -1,17 +1,17 @@
 import { makeStyles } from "@material-ui/styles";
 
 export default makeStyles(theme => ({
-  card: {
-    minHeight: "100%",
-    display: "flex",
-    flexDirection: "column",
-  },
-  visitsNumberContainer: {
-    display: "flex",
-    alignItems: "center",
-    flexGrow: 1,
-    paddingBottom: theme.spacing(1),
-  },
+  // card: {
+  //   minHeight: "100%",
+  //   display: "flex",
+  //   flexDirection: "column",
+  // },
+  // visitsNumberContainer: {
+  //   display: "flex",
+  //   alignItems: "center",
+  //   flexGrow: 1,
+  //   paddingBottom: theme.spacing(1),
+  // },
   progressSection: {
     marginBottom: theme.spacing(1),
   },
@@ -73,6 +73,9 @@ export default makeStyles(theme => ({
   serverOverviewElementChartWrapper: {
     width: "100%",
   },
+
+
+  
   mainChartBody: {
     overflowX: "auto",
   },

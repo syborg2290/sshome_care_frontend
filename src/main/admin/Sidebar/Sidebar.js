@@ -18,6 +18,7 @@ import classNames from "classnames";
 
 // styles
 import useStyles from "./styles";
+import "./Sidebar.css";
 
 // components
 import SidebarLink from "./components/SidebarLink/SidebarLink";
@@ -61,8 +62,10 @@ const structure = [
   { id: 6, label: "Repairs", link: "", icon: <BuildIcon /> },
   { id: 9, label: "Black list", link: "", icon: <PersonAddDisabledIcon /> },
   { id: 2, type: "divider" },
-  { id: 7, label: "Accounts", link: "", icon: <PermIdentityIcon /> },
-  { id: 8, label: "Settings", link: "", icon: <SettingsIcon /> },
+
+  
+  { id: 7, label: "Accounts", link: "/app/ui/accounts", icon: <PermIdentityIcon /> },
+  { id: 8, label: "Settings", link: "/app/ui/settings", icon: <SettingsIcon /> },
 ];
 
 function Sidebar({ location }) {
@@ -99,8 +102,8 @@ function Sidebar({ location }) {
       }}
       open={isSidebarOpened}
     >
-      <div className={classes.toolbar} />
-      <div className={classes.mobileBackButton}>
+      <div className="toolbar" />
+      <div className="mobileBackButton">
         <IconButton onClick={() => toggleSidebar(layoutDispatch)}>
           <ArrowBackIcon
             classes={{
@@ -109,7 +112,7 @@ function Sidebar({ location }) {
           />
         </IconButton>
       </div>
-      <List className={classes.sidebarList}>
+      <List className="sidebarList">
         {structure.map((link) => (
           <SidebarLink
             key={link.id}

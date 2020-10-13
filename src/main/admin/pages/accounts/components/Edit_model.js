@@ -29,7 +29,7 @@ export default function Editmodel({ editModalClose, usernameProp, docid }) {
         setLoadingSubmit(true);
         let variable = {
           username: username,
-          password: password,
+          password: password.trim(),
         };
 
         await db.collection("user").doc(docid).update(variable);

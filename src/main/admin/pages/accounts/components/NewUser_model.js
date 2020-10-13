@@ -31,8 +31,8 @@ export default function NewUsermodel({ newUserModal }) {
       if (password !== "") {
         setLoadingSubmit(true);
         let variable = {
-          username: userName,
-          password: password,
+          username: userName.trim(),
+          password: password.trim(),
           role: role,
           lastlog: firebase.firestore.FieldValue.serverTimestamp(),
           timestamp: firebase.firestore.FieldValue.serverTimestamp(),

@@ -18,8 +18,8 @@ export default function App() {
   return (
     <HashRouter>
       <Switch>
-        <Route exact path="/" render={() => <Redirect to="/app/dashboard" />} />
-        <PrivateRoute path="/app" component={Layout} />
+        <Route exact path="/" render={() => <Redirect to="/login" />} />
+        <PrivateRoute path="/admin" component={Layout} />
         <PublicRoute path="/login" component={Login} />
         <Route component={Error} />
       </Switch>
@@ -58,7 +58,7 @@ export default function App() {
           isAuthenticated ? (
             <Redirect
               to={{
-                pathname: "/",
+                pathname: "/admin/dashboard",
               }}
             />
           ) : (

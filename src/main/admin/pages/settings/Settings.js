@@ -12,7 +12,6 @@ export default function Settings() {
   const [currntPassword, setCurrntPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
 
-  const [form] = Form.useForm();
   const [, forceUpdate] = useState();
 
   // To disable submit button at the beginning.

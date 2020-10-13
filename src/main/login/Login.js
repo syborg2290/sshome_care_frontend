@@ -4,11 +4,15 @@ import {
   CircularProgress,
   Typography,
   Button,
-  Tab,
   TextField,
 } from "@material-ui/core";
 import { withRouter } from "react-router-dom";
 import LockOpenIcon from "@material-ui/icons/LockOpen";
+import {
+  NotificationContainer,
+  NotificationManager,
+} from "react-notifications";
+import "react-notifications/lib/notifications.css";
 
 // styles
 import useStyles from "./styles";
@@ -16,6 +20,7 @@ import "./Login.css";
 
 // context
 import { useUserDispatch, loginUser } from "../../context/UserContext";
+import db from "../../config/firebase.js";
 
 function Login(props) {
   var classes = useStyles();
@@ -24,10 +29,35 @@ function Login(props) {
   var userDispatch = useUserDispatch();
 
   // local
+
   var [isLoading, setIsLoading] = useState(false);
   var [, setError] = useState(null);
   var [loginValue, setLoginValue] = useState("");
   var [passwordValue, setPasswordValue] = useState("");
+
+  const onLogin = async (e) => {
+    e.preventDefault();
+    await (await db.collection("user").get()).docs.forEach((user) => {
+      if (
+        user.data().username === loginValue.trim() &&
+        user.data().username === passwordValue.trim()
+      ) {
+        loginUser(
+          userDispatch,
+          loginValue,
+          passwordValue,
+          user.data().role,
+          props.history,
+          setIsLoading,
+          setError
+        );
+      } else {
+        NotificationManager.info(
+          "Username && passsword incorrect,please try again!"
+        );
+      }
+    });
+  };
 
   return (
     <Grid container className="container">
@@ -50,9 +80,9 @@ function Login(props) {
               className="txt_login"
               value={loginValue}
               onChange={(e) => setLoginValue(e.target.value)}
-              placeholder="User Name"
+              placeholder="Username"
               type="name"
-              label="User Name"
+              label="Username"
               variant="outlined"
               fullWidth
             />
@@ -77,16 +107,7 @@ function Login(props) {
                   disabled={
                     loginValue.length === 0 || passwordValue.length === 0
                   }
-                  onClick={() =>
-                    loginUser(
-                      userDispatch,
-                      loginValue,
-                      passwordValue,
-                      props.history,
-                      setIsLoading,
-                      setError
-                    )
-                  }
+                  onClick={onLogin}
                   variant="contained"
                   color="primary"
                   size="large"
@@ -98,6 +119,7 @@ function Login(props) {
           </React.Fragment>
         </div>
       </div>
+      <NotificationContainer />
     </Grid>
   );
 }

@@ -1,52 +1,54 @@
-.btn_Login{
-
-margin: auto !important;
-width: 100% !important;
-    
+.btn_Login {
+  margin: auto !important;
+  width: 100% !important;
 }
 
-.loginLoader{
-    margin: auto !important;
+.loginLoader {
+  margin: auto !important;
 }
 
-.form{
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-bottom: 50px;
+.form {
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 50px;
 }
 
-.formContainer{
-    background-color: white;
-    border-radius: 10px;
-     box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
-
+.formContainer {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  padding-left: 30px !important;
+  padding-right: 30px !important;
 }
 
-.container{
-    height: 100vh;
-    width: 100vw;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    top: 0;
-    left: 0;
-    /* background-color: white; */
-
+.container {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  /* background-color: white; */
 }
 
-.lock_Icon{
-
-    color: rgba(84, 84, 92, 0.87);
+.lock_Icon {
+  color: rgba(84, 84, 92, 0.87);
 }
 
-.lbl_Login{
-    font-weight: 400;
-    font-size: 18;
+.lbl_Login {
+  font-weight: 400;
+  font-size: 18;
 }
 
-.greeting{
-    font-weight: 500;
-    text-align: center;
-    margin-top: 10px;
+.greeting {
+  font-weight: 500;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.txt_login {
+  /* padding-left: 20px !important;
+  padding-right: 20px !important; */
 }

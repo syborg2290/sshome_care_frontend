@@ -20,6 +20,7 @@ import EditModel from "./components/Edit_model";
 // icons
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import EditIcon from "@material-ui/icons/Edit";
+import DeleteIcon from "@material-ui/icons/Delete";
 
 // styles
 import "./Item_table.css";
@@ -94,6 +95,9 @@ export default function ItemTable() {
               <VisibilityIcon onClick={showModal} />
               <span className="icon_Edit">
                 <EditIcon onClick={editModal} />
+              </span>
+              <span className="icon_delete">
+                <DeleteIcon />
               </span>
             </div>,
           ]);
@@ -575,6 +579,8 @@ export default function ItemTable() {
               "ACTION",
             ]}
             options={{
+              selectableRows:false,
+              customToolbarSelect:() => {},
               filterType: "checkbox",
               onRowsDelete: (rowsDeleted) => {
                 showDeleteItemsConfirm(rowsDeleted);

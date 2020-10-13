@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Grid } from "@material-ui/core";
-import { Spin, Modal } from "antd";
+import { Spin, Modal, Space } from "antd";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
+
 // import axios from "axios";
 import MUIDataTable from "mui-datatables";
 // import socketIOClient from "socket.io-client";
@@ -13,6 +14,9 @@ import {
 import "react-notifications/lib/notifications.css";
 import CurrencyFormat from "react-currency-format";
 import moment from "moment";
+
+//Conform
+import Conform from "../../dialogs/Conform";
 
 // components
 import EditModel from "./components/Edit_model";
@@ -43,6 +47,10 @@ export default function ItemTable() {
   const [editVisible, setEditVisible] = useState(false);
   // let socket = socketIOClient(RealtimeServerApi);
 
+  // const [comformVisible, setComformVisible] = useState(false);
+
+  // const [state, setState] = useState(false);
+
   const showModal = () => {
     setVisible(true);
   };
@@ -50,6 +58,10 @@ export default function ItemTable() {
   const editModal = () => {
     setEditVisible(true);
   };
+
+  // const comformModel = () => {
+  //   setComformVisible(true);
+  // };
 
   useEffect(() => {
     db.collection("item")
@@ -99,7 +111,7 @@ export default function ItemTable() {
                 <EditIcon onClick={editModal} />
               </span>
               <span className="icon_delete">
-                <DeleteIcon onClick={showDeleteItemsConfirm} />
+                <DeleteIcon onClick={showModal} />
               </span>
             </div>,
           ]);
@@ -178,7 +190,7 @@ export default function ItemTable() {
       content: "Confirm your action",
       onOk() {
         // eslint-disable-next-line
-      
+
         db.collection("item")
           .doc(
             allTtemData[currentIndx] && allTtemData[currentIndx].id

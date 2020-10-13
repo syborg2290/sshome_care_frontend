@@ -368,7 +368,7 @@ export default function ItemTable() {
                   {" "}
                   :{" "}
                   {allTtemData[currentIndx] && allTtemData[currentIndx].data
-                    ? allTtemData[currentIndx].data.guarantee
+                    ? allTtemData[currentIndx].data.guarantee.value
                     : " - "}{" "}
                 </span>
               </p>
@@ -543,7 +543,7 @@ export default function ItemTable() {
                 }
                 guaranteeProp={
                   allTtemData[currentIndx] && allTtemData[currentIndx].data
-                    ? allTtemData[currentIndx].data.guarantee
+                    ? allTtemData[currentIndx].data.guarantee.value
                     : "Years"
                 }
                 editModalClose={editModalClose}

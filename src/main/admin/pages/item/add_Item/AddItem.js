@@ -365,7 +365,7 @@ function AddItem() {
                                                 noOfInstallments: noOfInstallments,
                                                 amountPerInstallment: amountPerInstallment,
                                                 downPayment: downPayment,
-                                                guarantee: guaranteePeriod,
+                                                guaranteePeriod: guaranteePeriod,
                                                 discount: discount,
                                                 description: description,
                                                 cInvoiceNo: cInvoiceNo,

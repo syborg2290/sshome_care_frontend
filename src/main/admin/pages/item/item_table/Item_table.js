@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Grid } from "@material-ui/core";
 import { Spin, Modal } from "antd";
-import HelpIcon from '@material-ui/icons/Help';
+import HelpIcon from "@material-ui/icons/Help";
 // import axios from "axios";
 import MUIDataTable from "mui-datatables";
 // import socketIOClient from "socket.io-client";
@@ -206,15 +206,17 @@ export default function ItemTable() {
         visible={confirmVisible}
         cancelText="No"
         okText="Yes"
-        bodyStyle={{ borderRadius:"30px" }}
+        bodyStyle={{ borderRadius: "30px" }}
         onOk={showDeleteItemsConfirm}
         onCancel={() => {
           setConfirmVisible(false);
         }}
       >
-        <div style={{display:"flex",flexDirection:"row"}}>
-          <HelpIcon style={{color:"red",fontSize:"40"}}/>
-          <h2 style={{marginLeft:"20"}}>Do you want to delete this item? </h2>
+        <div style={{ display: "flex", flexDirection: "row" }}>
+          <HelpIcon style={{ color: "red", fontSize: "40" }} />
+          <h2 style={{ marginLeft: "20" }}>
+            Do you want to delete this item?{" "}
+          </h2>
         </div>
       </Modal>
       <Modal

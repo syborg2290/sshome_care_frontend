@@ -49,18 +49,28 @@ export { UserProvider, useUserState, useUserDispatch, loginUser, signOut };
 
 // ###########################################################
 
-function loginUser(dispatch, login, password, history, setIsLoading, setError) {
+function loginUser(
+  dispatch,
+  login,
+  password,
+  role,
+  history,
+  setIsLoading,
+  setError
+) {
   setError(false);
   setIsLoading(true);
 
   if (!!login && !!password) {
     setTimeout(() => {
-      localStorage.setItem('id_token', 1)
-      setError(null)
-      setIsLoading(false)
-      dispatch({ type: 'LOGIN_SUCCESS' })
-
-      history.push('/app/dashboard')
+      localStorage.setItem("id_token", 1);
+      localStorage.setItem("role", role);
+      setError(null);
+      setIsLoading(false);
+      dispatch({ type: "LOGIN_SUCCESS" });
+      if (role === "admin") {
+        history.push("/admin/dashboard");
+      }
     }, 2000);
   } else {
     dispatch({ type: "LOGIN_FAILURE" });
@@ -71,6 +81,7 @@ function loginUser(dispatch, login, password, history, setIsLoading, setError) {
 
 function signOut(dispatch, history) {
   localStorage.removeItem("id_token");
+  localStorage.removeItem("role");
   dispatch({ type: "SIGN_OUT_SUCCESS" });
   history.push("/login");
 }

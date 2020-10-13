@@ -33,7 +33,7 @@ function Login(props) {
     <Grid container className="container">
       <div className="formContainer">
         <div className="form">
-          <Tab label="Login" className="lbl_Login" />
+          <Typography className="lbl_Login">Login</Typography>
           <React.Fragment>
             <Typography variant="h3" className="greeting">
               S S HOME CARE CITY
@@ -48,15 +48,8 @@ function Login(props) {
             <TextField
               id="name"
               className="txt_login"
-              // InputProps={{
-              //   classes: {
-              //     underline: classes.textFieldUnderline,
-              //     input: classes.textField,
-              //   },
-              // }}
               value={loginValue}
               onChange={(e) => setLoginValue(e.target.value)}
-              // margin="normal"
               placeholder="User Name"
               type="name"
               label="User Name"
@@ -66,12 +59,6 @@ function Login(props) {
             <TextField
               id="password"
               className="txt_login"
-              // InputProps={{
-              //   classes: {
-              //     underline: classes.textFieldUnderline,
-              //     input: classes.textField,
-              //   },
-              // }}
               value={passwordValue}
               onChange={(e) => setPasswordValue(e.target.value)}
               margin="normal"

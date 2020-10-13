@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Grid, Button } from "@material-ui/core";
 import { Modal, Spin } from "antd";
+import HelpIcon from '@material-ui/icons/Help';
 
 import MUIDataTable from "mui-datatables";
 import moment from "moment";
@@ -13,6 +14,11 @@ import NewUsermodel from "../accounts/components/NewUser_model";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import PersonAddIcon from "@material-ui/icons/PersonAdd";
+
+import {
+  NotificationContainer,
+  NotificationManager,
+} from "react-notifications";
 import "react-notifications/lib/notifications.css";
 
 // styles
@@ -26,6 +32,7 @@ export default function Accounts() {
   const [isLoading, setIsLoading] = useState(true);
   const [currentIndx, setCurrentIndx] = useState(0);
   const [allUserData, setAllUserData] = useState([]);
+  const [confirmVisible, setConfirmVisible] = useState(false);
 
   useEffect(() => {
     db.collection("user")
@@ -47,7 +54,7 @@ export default function Accounts() {
             <div>
               <EditIcon onClick={editModal} />
               <span className="icon_delete">
-                <DeleteIcon />
+                <DeleteIcon onClick={showModalConfirmModal}/>
               </span>
             </div>,
           ]);
@@ -65,6 +72,10 @@ export default function Accounts() {
   const newUserModalClose = () => {
     setNewUserVisible(false);
   };
+  
+   const showModalConfirmModal = () => {
+    setConfirmVisible(true);
+  };
 
   const editModal = () => {
     setEditVisible(true);
@@ -73,6 +84,28 @@ export default function Accounts() {
   const editModalClose = () => {
     setEditVisible(false);
   };
+  
+  const showDeleteUsersConfirm = async () => {
+    await db
+      .collection("user")
+      .doc(
+        allUserData[currentIndx] && allUserData[currentIndx].id
+          ? allUserData[currentIndx].id
+          : ""
+      )
+      .delete()
+      .then(function () {
+        NotificationManager.success("User deletion successfully!", "Done");
+        setConfirmVisible(false);
+      })
+      .catch(function (error) {
+        NotificationManager.warning(
+          "Failed to continue the process!",
+          "Please try again"
+        );
+      });
+  };
+
 
   return (
     <>
@@ -122,6 +155,23 @@ export default function Accounts() {
           />
         </Grid>
       </Grid>
+      
+      <Modal
+        title="Confirm your action"
+        visible={confirmVisible}
+        cancelText="No"
+        okText="Yes"
+        bodyStyle={{ borderRadius:"30px" }}
+        onOk={showDeleteUsersConfirm}
+        onCancel={() => {
+          setConfirmVisible(false);
+        }}
+      >
+        <div style={{display:"flex",flexDirection:"row"}}>
+          <HelpIcon style={{color:"red",fontSize:"40"}}/>
+          <h2 style={{marginLeft:"20"}}>Do you want to delete this user? </h2>
+        </div>
+      </Modal>
 
       {/*Edit User Model */}
 
@@ -174,6 +224,7 @@ export default function Accounts() {
         </div>
       </Modal>
       {/*End add new User Model */}
+       <NotificationContainer />
     </>
   );
 }

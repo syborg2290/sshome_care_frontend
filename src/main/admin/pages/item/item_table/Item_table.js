@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Grid } from "@material-ui/core";
 import { Spin, Modal } from "antd";
-import { ExclamationCircleOutlined } from "@ant-design/icons";
+import HelpIcon from '@material-ui/icons/Help';
 // import axios from "axios";
 import MUIDataTable from "mui-datatables";
 // import socketIOClient from "socket.io-client";
@@ -16,7 +16,6 @@ import moment from "moment";
 
 // components
 import EditModel from "./components/Edit_model";
-
 // icons
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import EditIcon from "@material-ui/icons/Edit";
@@ -39,12 +38,16 @@ export default function ItemTable() {
   const [isLoading, setIsLoading] = useState(true);
   const [visible, setVisible] = useState(false);
   const [currentIndx, setCurrentIndx] = useState(0);
-  const { confirm } = Modal;
   const [editVisible, setEditVisible] = useState(false);
+  const [confirmVisible, setConfirmVisible] = useState(false);
   // let socket = socketIOClient(RealtimeServerApi);
 
   const showModal = () => {
     setVisible(true);
+  };
+
+  const showModalConfirmModal = () => {
+    setConfirmVisible(true);
   };
 
   const editModal = () => {
@@ -99,7 +102,7 @@ export default function ItemTable() {
                 <EditIcon onClick={editModal} />
               </span>
               <span className="icon_delete">
-                <DeleteIcon onClick={()=>showDeleteItemsConfirm(currentIndx)} />
+                <DeleteIcon onClick={showModalConfirmModal} />
               </span>
             </div>,
           ]);
@@ -109,7 +112,7 @@ export default function ItemTable() {
         setIsLoading(false);
       });
     // eslint-disable-next-line
-  }, [currentIndx]);
+  }, []);
 
   // useEffect(() => {
   //   socket.on("messageFromServer", (data) => {
@@ -171,33 +174,25 @@ export default function ItemTable() {
   //   // eslint-disable-next-line
   // }, [itemTableData]);
 
-  const showDeleteItemsConfirm = (index) => {
-    confirm({
-      title: "Do you want to delete these items?",
-      icon: <ExclamationCircleOutlined />,
-      content: "Confirm your action",
-     async onOk(){
-        // eslint-disable-next-line
-        console.log(index);
-       await db.collection("item")
-          .doc(
-            allTtemData[index] && allTtemData[index].id
-              ? allTtemData[index].id
-              : ""
-          )
-          .delete()
-          .then(function () {
-            NotificationManager.success("Item deletion successfully!", "Done");
-          })
-          .catch(function (error) {
-            NotificationManager.warning(
-              "Failed to continue the process!",
-              "Please try again"
-            );
-          });
-      },
-      onCancel() {},
-    });
+  const showDeleteItemsConfirm = async () => {
+    await db
+      .collection("item")
+      .doc(
+        allTtemData[currentIndx] && allTtemData[currentIndx].id
+          ? allTtemData[currentIndx].id
+          : ""
+      )
+      .delete()
+      .then(function () {
+        NotificationManager.success("Item deletion successfully!", "Done");
+        setConfirmVisible(false);
+      })
+      .catch(function (error) {
+        NotificationManager.warning(
+          "Failed to continue the process!",
+          "Please try again"
+        );
+      });
   };
 
   const editModalClose = () => {
@@ -206,6 +201,22 @@ export default function ItemTable() {
 
   return (
     <>
+      <Modal
+        title="Confirm your action"
+        visible={confirmVisible}
+        cancelText="No"
+        okText="Yes"
+        bodyStyle={{ borderRadius:"30px" }}
+        onOk={showDeleteItemsConfirm}
+        onCancel={() => {
+          setConfirmVisible(false);
+        }}
+      >
+        <div style={{display:"flex",flexDirection:"row"}}>
+          <HelpIcon style={{color:"red",fontSize:"40"}}/>
+          <h2 style={{marginLeft:"20"}}>Do you want to delete this item? </h2>
+        </div>
+      </Modal>
       <Modal
         title={
           <span className="model_title">

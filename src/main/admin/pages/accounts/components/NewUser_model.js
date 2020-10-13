@@ -31,8 +31,8 @@ export default function NewUsermodel({ newUserModal }) {
       if (password !== "") {
         setLoadingSubmit(true);
         let variable = {
-          username: userName,
-          password: password,
+          username: userName.trim(),
+          password: password.trim(),
           role: role,
           lastlog: firebase.firestore.FieldValue.serverTimestamp(),
           timestamp: firebase.firestore.FieldValue.serverTimestamp(),
@@ -82,7 +82,6 @@ export default function NewUsermodel({ newUserModal }) {
           <Form.Item label="* Role">
             <Select
               placeholder="Select a option and change input text above"
-              allowClear
               value={role}
               onChange={(e) => {
                 setRole(e);
@@ -93,16 +92,18 @@ export default function NewUsermodel({ newUserModal }) {
               <Option value="admin">Admin</Option>
             </Select>
           </Form.Item>
+
           {userName !== "" || !usernameClick ? (
             ""
           ) : (
-            <p>Username is required!</p>
+            <p className="name_Msg">Username is required!</p>
           )}
           {password !== "" || !passwordClick ? (
             ""
           ) : (
-            <p>Password is required!</p>
+            <p className="pw_Msg">Password is required!</p>
           )}
+
           <Button
             className="btn"
             type="primary"

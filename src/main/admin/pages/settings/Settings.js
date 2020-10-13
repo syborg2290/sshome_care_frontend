@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Form, Input, Layout, Button, } from "antd";
+import { Form, Input, Layout, Button } from "antd";
 import "antd/dist/antd.css";
 
 // styles
@@ -7,19 +7,17 @@ import "./Settings.css";
 
 const { Content } = Layout;
 
-
 export default function Settings() {
   const [userName, setUserName] = useState("");
   const [currntPassword, setCurrntPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
 
-   const [form] = Form.useForm();
-   const [, forceUpdate] = useState();
+  const [, forceUpdate] = useState();
 
-   // To disable submit button at the beginning.
-   useEffect(() => {
-     forceUpdate({});
-   }, []);
+  // To disable submit button at the beginning.
+  useEffect(() => {
+    forceUpdate({});
+  }, []);
 
   return (
     <div>
@@ -87,11 +85,7 @@ export default function Settings() {
             //     ? false
             //     : true
             // }
-            htmlType="submit"
-            disabled={
-              !form.isFieldsTouched(true) ||
-              form.getFieldsError().filter(({ errors }) => errors.length).length
-            }
+
             className="btn"
             type="primary"
 

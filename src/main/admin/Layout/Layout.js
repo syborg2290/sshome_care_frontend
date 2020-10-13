@@ -37,12 +37,12 @@ function Layout(props) {
         >
           <div className="fakeToolbar" />
           <Switch>
-            <Route path="/app/dashboard" component={Dashboard} />
-            <Route path="/app/ui/item/itemTable" component={ItemTable} />
-            <Route path="/app/ui/item/add_item" component={AddItem} />
-            <Route path="/app/ui/charts" component={Charts} />
-            <Route path="/app/ui/accounts" component={Accounts} />
-            <Route path="/app/ui/settings" component={Settings} />
+            <Route path="/admin/dashboard" component={Dashboard} />
+            <Route path="/admin/ui/item/itemTable" component={ItemTable} />
+            <Route path="/admin/ui/item/add_item" component={AddItem} />
+            <Route path="/admin/ui/charts" component={Charts} />
+            <Route path="/admin/ui/accounts" component={Accounts} />
+            <Route path="/admin/ui/settings" component={Settings} />
           </Switch>
         </div>
       </>

@@ -13,16 +13,15 @@ import "./Style_accounts.css";
 
 const { Content } = Layout;
 
-export default function Editmodel({ editModalClose,usernameProp,docid }) {
+export default function Editmodel({ editModalClose, usernameProp, docid }) {
   const [username, setUsername] = useState(usernameProp);
   const [password, setPassword] = useState("");
   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const [usernameClick, setusernameClick] = useState(false);
   const [passwordClick, setPasswordClick] = useState(false);
-  
-  
-  const updateUser = async(e) => {
-     e.preventDefault();
+
+  const updateUser = async (e) => {
+    e.preventDefault();
     setPasswordClick(true);
     setusernameClick(true);
     if (username !== "") {
@@ -30,7 +29,7 @@ export default function Editmodel({ editModalClose,usernameProp,docid }) {
         setLoadingSubmit(true);
         let variable = {
           username: username,
-          password: password,
+          password: password.trim(),
         };
 
         await db.collection("user").doc(docid).update(variable);
@@ -39,7 +38,7 @@ export default function Editmodel({ editModalClose,usernameProp,docid }) {
         editModalClose();
       }
     }
-  }
+  };
 
   return (
     <div>
@@ -53,7 +52,7 @@ export default function Editmodel({ editModalClose,usernameProp,docid }) {
               onClick={() => {
                 setusernameClick(true);
               }}
-               onChange={(e) => {
+              onChange={(e) => {
                 setUsername(e.target.value);
               }}
               placeholder="Enter username"
@@ -68,7 +67,7 @@ export default function Editmodel({ editModalClose,usernameProp,docid }) {
               onClick={() => {
                 setPasswordClick(true);
               }}
-               onChange={(e) => {
+              onChange={(e) => {
                 setPassword(e.target.value);
               }}
               placeholder="Enter new password"
@@ -77,12 +76,12 @@ export default function Editmodel({ editModalClose,usernameProp,docid }) {
           {username !== "" || !usernameClick ? (
             ""
           ) : (
-            <p>Username is required!</p>
+            <p className="name_Msg">Username is required!</p>
           )}
           {password !== "" || !passwordClick ? (
             ""
           ) : (
-            <p>Password is required!</p>
+            <p className="pw_Msg">Password is required!</p>
           )}
 
           <Button
@@ -98,7 +97,7 @@ export default function Editmodel({ editModalClose,usernameProp,docid }) {
             )}
           </Button>
         </Form>
-         <NotificationContainer />
+        <NotificationContainer />
       </Content>
     </div>
   );

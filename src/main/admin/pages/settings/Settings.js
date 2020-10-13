@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Form, Input, Layout, Button, } from "antd";
 import "antd/dist/antd.css";
 
@@ -13,19 +13,22 @@ export default function Settings() {
   const [currntPassword, setCurrntPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
 
+   const [form] = Form.useForm();
+   const [, forceUpdate] = useState();
+
+   // To disable submit button at the beginning.
+   useEffect(() => {
+     forceUpdate({});
+   }, []);
 
   return (
     <div>
       <Content>
         <Form className="form_Settings">
           <Form.Item
-            name="User Name"
             label="User Name"
-            rules={[
-              {
-                required: true,
-              },
-            ]}
+            name="username"
+            rules={[{ required: true, message: "Please input your username!" }]}
           >
             <Input
               allowClear
@@ -38,18 +41,18 @@ export default function Settings() {
           </Form.Item>
 
           <Form.Item
-            name="currentPassword"
             label="Current Password "
+            name="cPassword"
             rules={[
               {
                 required: true,
+                message: "Please input your Current Password!",
               },
             ]}
           >
             <Input.Password
               allowClear
               value={currntPassword}
-
               onChange={(e) => {
                 setCurrntPassword(e.target.value);
               }}
@@ -58,12 +61,10 @@ export default function Settings() {
           </Form.Item>
 
           <Form.Item
-            name="newPassword"
             label="New Password "
+            name="nPassword"
             rules={[
-              {
-                required: true,
-              },
+              { required: true, message: "Please input your New Password!" },
             ]}
           >
             <Input.Password
@@ -77,7 +78,6 @@ export default function Settings() {
           </Form.Item>
 
           <Button
-
             // disabled={
             //   !loadingSubmit &&
             //   (itemName ||
@@ -87,6 +87,11 @@ export default function Settings() {
             //     ? false
             //     : true
             // }
+            htmlType="submit"
+            disabled={
+              !form.isFieldsTouched(true) ||
+              form.getFieldsError().filter(({ errors }) => errors.length).length
+            }
             className="btn"
             type="primary"
 

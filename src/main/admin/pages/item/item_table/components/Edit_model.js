@@ -11,7 +11,7 @@ import "react-notifications/lib/notifications.css";
 // styles
 import "../components/Edit_model.css";
 
-import  db from "../../../../../../config/firebase.js";
+import db from "../../../../../../config/firebase.js";
 
 const { Content } = Layout;
 const { TextArea } = Input;
@@ -62,6 +62,8 @@ function EditModel({
     value: guaranteeProp,
   });
 
+  const [validation, setValidation] = useState("");
+
   const radioOnChange = (e) => {
     setGuarantee({
       value: e.target.value,
@@ -70,88 +72,139 @@ function EditModel({
 
   const updateItem = async (e) => {
     e.preventDefault();
-
-    if (cashPrice < 0) {
-      NotificationManager.info(
-        "Check again the amount of cash price",
-        "Remember validations"
-      );
+    if (itemName === "") {
+      setValidation("Item name is required!");
     } else {
-      if (salePrice < 0) {
-        NotificationManager.info(
-          "Check again the amount of sale price",
-          "Remember validations"
-        );
+      if (brand === "") {
+        setValidation("Item brand is required!");
       } else {
-        if (noOfInstallments < 0) {
-          NotificationManager.info(
-            "Check again the value of installments value",
-            "Remember validations"
-          );
+        if (modelNo === "") {
+          setValidation("Item model number is required!");
         } else {
-          if (amountPerInstallment < 0) {
-            NotificationManager.info(
-              "Check again the amount per installment",
-              "Remember validations"
-            );
+          if (color === "") {
+            setValidation("Item color is required!");
           } else {
-            if (downPayment < 0) {
-              NotificationManager.info(
-                "Check again the amount of down payment",
-                "Remember validations"
-              );
+            if (qty === "") {
+              setValidation("Qty is required!");
             } else {
-              if (guaranteePeriod < 0) {
-                NotificationManager.info(
-                  "Check again the value of gurantee period",
-                  "Remember validations"
-                );
+              if (cashPrice === "") {
+                setValidation("Item cash price is required!");
               } else {
-                if (discount < 0) {
-                  NotificationManager.info(
-                    "Check again the amount of discount",
-                    "Remember validations"
-                  );
+                if (salePrice === "") {
+                  setValidation("Item sale price is required!");
                 } else {
-                  //Rest of code here
-                  setLoadingSubmit(true);
+                  if (noOfInstallments === "") {
+                    setValidation("Number of installment is required!");
+                  } else {
+                    if (amountPerInstallment === "") {
+                      setValidation("Amount per installment is required!");
+                    } else {
+                      if (noOfInstallments === "") {
+                        setValidation("Number of installment is required!");
+                      } else {
+                        if (guaranteePeriod === "") {
+                          setValidation("Item guarantee period is required!");
+                        } else {
+                          if (downPayment === "") {
+                            setValidation("Item down payment is required!");
+                          } else {
+                            if (discount === "") {
+                              setValidation("Item discount is required!");
+                            } else {
+                              if (qty < 1) {
+                                setValidation("Qty must be greater than 0");
+                              } else {
+                                if (cashPrice < 0) {
+                                  setValidation(
+                                    "Check again the amount of cash price"
+                                  );
+                                } else {
+                                  if (salePrice < 0) {
+                                    setValidation(
+                                      "Check again the amount of sale price"
+                                    );
+                                  } else {
+                                    if (noOfInstallments < 0) {
+                                      setValidation(
+                                        "Check again the value of installments value"
+                                      );
+                                    } else {
+                                      if (amountPerInstallment < 0) {
+                                        setValidation(
+                                          "Check again the amount per installment"
+                                        );
+                                      } else {
+                                        if (downPayment < 0) {
+                                          setValidation(
+                                            "Check again the amount of down payment"
+                                          );
+                                        } else {
+                                          if (guaranteePeriod < 0) {
+                                            setValidation(
+                                              "Check again the value of gurantee period"
+                                            );
+                                          } else {
+                                            if (discount < 0) {
+                                              setValidation(
+                                                "Check again the amount of discount"
+                                              );
+                                            } else {
+                                              //Rest of code here
+                                              setLoadingSubmit(true);
 
-                  let variable = {
-                    itemName: itemName,
-                    brand: brand,
-                    modelNo: modelNo,
-                    chassisNo: chassisNo,
-                    color: color,
-                    qty: qty,
-                    cashPrice: cashPrice,
-                    salePrice: salePrice,
-                    noOfInstallments: noOfInstallments,
-                    amountPerInstallment: amountPerInstallment,
-                    downPayment: downPayment,
-                    guaranteePeriod: guaranteePeriod,
-                    discount: discount,
-                    description: description,
-                    cInvoiceNo: cInvoiceNo,
-                    GCardNo: GCardNo,
-                    guarantee: guarantee,
-                  };
+                                              let variable = {
+                                                itemName: itemName,
+                                                brand: brand,
+                                                modelNo: modelNo,
+                                                chassisNo: chassisNo,
+                                                color: color,
+                                                qty: qty,
+                                                cashPrice: cashPrice,
+                                                salePrice: salePrice,
+                                                noOfInstallments: noOfInstallments,
+                                                amountPerInstallment: amountPerInstallment,
+                                                downPayment: downPayment,
+                                                guaranteePeriod: guaranteePeriod,
+                                                discount: discount,
+                                                description: description,
+                                                cInvoiceNo: cInvoiceNo,
+                                                GCardNo: GCardNo,
+                                                guarantee: guarantee,
+                                              };
 
-                  await db
-                    .collection("item")
-                    .doc(docId)
-                    .update(variable)
-                    .then(function (docRef) {
-                      setLoadingSubmit(false);
-                      NotificationManager.success("Item updated!", "Done");
-                      editModalClose();
-                    })
-                    .catch(function (error) {
-                      setLoadingSubmit(false);
-                      NotificationManager.warning(
-                        "Failed to update the item!",
-                        "Please try again"
-                      );
-                    });
+                                              await db
+                                                .collection("item")
+                                                .doc(docId)
+                                                .update(variable)
+                                                .then(function (docRef) {
+                                                  setLoadingSubmit(false);
+                                                  NotificationManager.success(
+                                                    "Item updated!",
+                                                    "Done"
+                                                  );
+                                                  editModalClose();
+                                                })
+                                                .catch(function (error) {
+                                                  setLoadingSubmit(false);
+                                                  NotificationManager.warning(
+                                                    "Failed to update the item!",
+                                                    "Please try again"
+                                                  );
+                                                });
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -349,12 +402,9 @@ function EditModel({
             />
           </Form.Item>
 
+          <p className="validate_Edit">{validation}</p>
           <Button
-            disabled={
-              !loadingSubmit
-                ? false
-                : true
-            }
+            disabled={!loadingSubmit ? false : true}
             className="btn"
             type="primary"
             onClick={updateItem}

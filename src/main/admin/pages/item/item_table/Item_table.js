@@ -111,7 +111,9 @@ export default function ItemTable() {
                 <EditIcon onClick={editModal} />
               </span>
               <span className="icon_delete">
-                <DeleteIcon onClick={showModal} />
+                <DeleteIcon
+                  onClick={() => showDeleteItemsConfirm(currentIndx)}
+                />
               </span>
             </div>,
           ]);
@@ -183,18 +185,19 @@ export default function ItemTable() {
   //   // eslint-disable-next-line
   // }, [itemTableData]);
 
-  const showDeleteItemsConfirm = () => {
+  const showDeleteItemsConfirm = (index) => {
     confirm({
       title: "Do you want to delete these items?",
       icon: <ExclamationCircleOutlined />,
       content: "Confirm your action",
-      onOk() {
+      async onOk() {
         // eslint-disable-next-line
-
-        db.collection("item")
+        console.log(index);
+        await db
+          .collection("item")
           .doc(
-            allTtemData[currentIndx] && allTtemData[currentIndx].id
-              ? allTtemData[currentIndx].id
+            allTtemData[index] && allTtemData[index].id
+              ? allTtemData[index].id
               : ""
           )
           .delete()
@@ -452,7 +455,7 @@ export default function ItemTable() {
                         ? allTtemData[currentIndx].data.timestamp
                         : " - "
                     )
-                    .format("MMMM Do YYYY, h:mma")}
+                    .format("dddd, MMMM Do YYYY, h:mm:ss a")}
                 </span>
               </p>
             </div>

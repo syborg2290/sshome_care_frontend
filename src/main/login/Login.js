@@ -37,11 +37,13 @@ function Login(props) {
 
   const onLogin = async (e) => {
     e.preventDefault();
+    var isLogged = false;
     await (await db.collection("user").get()).docs.forEach((user) => {
       if (
         user.data().username === loginValue.trim() &&
         user.data().username === passwordValue.trim()
       ) {
+        isLogged = true;
         loginUser(
           userDispatch,
           loginValue,
@@ -52,11 +54,14 @@ function Login(props) {
           setError
         );
       } else {
-        NotificationManager.info(
-          "Username && passsword incorrect,please try again!"
-        );
+        isLogged = false;
       }
     });
+    if (!isLogged) {
+       NotificationManager.info(
+          "Username && passsword incorrect,please try again!"
+        );
+    }
   };
 
   return (

@@ -51,6 +51,7 @@ export default function App() {
   }
 
   function PublicRoute({ component, ...rest }) {
+    var role = localStorage.getItem("role");
     return (
       <Route
         {...rest}
@@ -58,7 +59,7 @@ export default function App() {
           isAuthenticated ? (
             <Redirect
               to={{
-                pathname: "/admin/dashboard",
+                pathname:role==="admin"? "/admin/dashboard":"",
               }}
             />
           ) : (

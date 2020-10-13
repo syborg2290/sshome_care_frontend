@@ -1,6 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { Form, Input, Layout, Button, Select } from "antd";
+import React, { useState } from "react";
+import { Form, Input, Layout, Button, Select, Spin } from "antd";
 import "antd/dist/antd.css";
+import firebase from "firebase";
+import {
+  NotificationContainer,
+  NotificationManager,
+} from "react-notifications";
+import "react-notifications/lib/notifications.css";
+import db from "../../../../../config/firebase.js";
 
 // styles
 import "./Style_accounts.css";
@@ -8,89 +15,108 @@ import "./Style_accounts.css";
 const { Content } = Layout;
 const { Option } = Select;
 
-export default function NewUsermodel() {
+export default function NewUsermodel({ newUserModal }) {
+  const [loadingSubmit, setLoadingSubmit] = useState(false);
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
-  const [roll, setRoll] = useState("");
+  const [role, setRole] = useState("admin");
+  const [usernameClick, setusernameClick] = useState(false);
+  const [passwordClick, setPasswordClick] = useState(false);
 
-  const [form] = Form.useForm();
-  const [, forceUpdate] = useState();
+  const addUser = async (e) => {
+    e.preventDefault();
+    setPasswordClick(true);
+    setusernameClick(true);
+    if (userName !== "") {
+      if (password !== "") {
+        setLoadingSubmit(true);
+        let variable = {
+          username: userName,
+          password: password,
+          role: role,
+          lastlog: firebase.firestore.FieldValue.serverTimestamp(),
+          timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+        };
 
-  // To disable submit button at the beginning.
-  useEffect(() => {
-    forceUpdate({});
-  }, []);
+        await db.collection("user").add(variable);
+        setLoadingSubmit(false);
+        NotificationManager.success("User creation successfully!", "Done");
+        newUserModal();
+      }
+    }
+  };
 
   return (
     <div>
       <Content>
         <Form className="form">
-          <Form.Item
-            label="User Name"
-            name="username"
-            rules={[{ required: true, message: "Please input your username!" }]}
-          >
+          <Form.Item label="* Username">
             <Input
               allowClear
+              required={true}
               value={userName}
+              onClick={() => {
+                setusernameClick(true);
+              }}
               onChange={(e) => {
                 setUserName(e.target.value);
               }}
-              placeholder="Enter user name"
+              placeholder="Enter username"
             />
           </Form.Item>
 
-          <Form.Item
-            label="Password"
-            name="password"
-            rules={[{ required: true, message: "Please input your Password!" }]}
-          >
+          <Form.Item label="* Password">
             <Input.Password
               allowClear
+              required={true}
               value={password}
+              onClick={() => {
+                setPasswordClick(true);
+              }}
               onChange={(e) => {
                 setPassword(e.target.value);
               }}
               placeholder="Enter new Password"
             />
           </Form.Item>
-          <Form.Item
-            label="Roll"
-            name="roll"
-            rules={[{ required: true, message: "Please input your Roll!" }]}
-            value={roll}
-            onChange={(e) => {
-              setRoll(e.target.value);
-            }}
-          >
+          <Form.Item label="* Role">
             <Select
               placeholder="Select a option and change input text above"
               allowClear
+              value={role}
+              onChange={(e) => {
+                setRole(e);
+              }}
             >
               <Option value="assistant">Assistant</Option>
               <Option value="Showroom">Showroom</Option>
               <Option value="admin">Admin</Option>
             </Select>
           </Form.Item>
+          {userName !== "" || !usernameClick ? (
+            ""
+          ) : (
+            <p>Username is required!</p>
+          )}
+          {password !== "" || !passwordClick ? (
+            ""
+          ) : (
+            <p>Password is required!</p>
+          )}
           <Button
             className="btn"
             type="primary"
-            htmlType="submit"
-            disabled={
-              !form.isFieldsTouched(true) ||
-              form.getFieldsError().filter(({ errors }) => errors.length).length
-            }
-
-            //   onClick={updateUser}
+            disabled={!loadingSubmit ? false : true}
+            onClick={addUser}
           >
-            {/* {loadingSubmit ? (
+            {loadingSubmit ? (
               <Spin spinning={loadingSubmit} size="large" />
             ) : (
-              "Update"
-            )} */}
-            Submit
+              "Submit"
+            )}
           </Button>
         </Form>
+        <NotificationContainer />
       </Content>
     </div>
   );

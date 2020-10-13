@@ -1,98 +1,104 @@
-import React, { useState, useEffect } from "react";
-import { Form, Input, Layout, Button, Select } from "antd";
+import React, { useState } from "react";
+import { Form, Input, Layout, Button, Spin } from "antd";
+import {
+  NotificationContainer,
+  NotificationManager,
+} from "react-notifications";
+import "react-notifications/lib/notifications.css";
+import db from "../../../../../config/firebase.js";
 import "antd/dist/antd.css";
 
 // styles
 import "./Style_accounts.css";
 
 const { Content } = Layout;
-const { Option } = Select;
 
-export default function Editmodel() {
-  const [userName, setUserName] = useState("");
+export default function Editmodel({ editModalClose,usernameProp,docid }) {
+  const [username, setUsername] = useState(usernameProp);
   const [password, setPassword] = useState("");
-  const [roll, setRoll] = useState("");
+  const [loadingSubmit, setLoadingSubmit] = useState(false);
+  const [usernameClick, setusernameClick] = useState(false);
+  const [passwordClick, setPasswordClick] = useState(false);
+  
+  
+  const updateUser = async(e) => {
+     e.preventDefault();
+    setPasswordClick(true);
+    setusernameClick(true);
+    if (username !== "") {
+      if (password !== "") {
+        setLoadingSubmit(true);
+        let variable = {
+          username: username,
+          password: password,
+        };
 
-   const [form] = Form.useForm();
-  const [, forceUpdate] = useState();
-
-  // To disable submit button at the beginning.
-  useEffect(() => {
-    forceUpdate({});
-  }, []);
+        await db.collection("user").doc(docid).update(variable);
+        setLoadingSubmit(false);
+        NotificationManager.success("User updated!", "Done");
+        editModalClose();
+      }
+    }
+  }
 
   return (
     <div>
       <Content>
         <Form className="form">
-          <Form.Item
-            label="User Name"
-            name="username"
-            rules={[{ required: true, message: "Please input your username!" }]}
-          >
+          <Form.Item label="* Username">
             <Input
               allowClear
-              value={userName}
-              onChange={(e) => {
-                setUserName(e.target.value);
+              required={true}
+              value={username}
+              onClick={() => {
+                setusernameClick(true);
               }}
-              placeholder="Enter user name"
+               onChange={(e) => {
+                setUsername(e.target.value);
+              }}
+              placeholder="Enter username"
             />
           </Form.Item>
 
-          <Form.Item
-            label="Password "
-            name="password"
-            rules={[{ required: true, message: "Please input your password!" }]}
-          >
+          <Form.Item label="* Password ">
             <Input.Password
               allowClear
+              required={true}
               value={password}
-              onChange={(e) => {
+              onClick={() => {
+                setPasswordClick(true);
+              }}
+               onChange={(e) => {
                 setPassword(e.target.value);
               }}
-              placeholder="Enter new Password"
+              placeholder="Enter new password"
             />
           </Form.Item>
-          <Form.Item
-            label="Roll"
-            value={roll}
-            name="roll"
-            rules={[{ required: true, message: "Please input your roll!" }]}
-            onChange={(e) => {
-              setRoll(e.target.value);
-            }}
+          {username !== "" || !usernameClick ? (
+            ""
+          ) : (
+            <p>Username is required!</p>
+          )}
+          {password !== "" || !passwordClick ? (
+            ""
+          ) : (
+            <p>Password is required!</p>
+          )}
+
+          <Button
+            className="btn"
+            type="primary"
+            disabled={!loadingSubmit ? false : true}
+            onClick={updateUser}
           >
-            <Select
-              placeholder="Select a option and change input text above"
-              allowClear
-            >
-              <Option value="assistant">Assistant</Option>
-              <Option value="Showroom">Showroom</Option>
-              <Option value="admin">Admin</Option>
-            </Select>
-          </Form.Item>
-          <Form.Item shouldUpdate={true}>
-            <Button
-              className="btn"
-              type="primary"
-              htmlType="submit"
-              disabled={
-                !form.isFieldsTouched(true) ||
-                form.getFieldsError().filter(({ errors }) => errors.length)
-                  .length
-              }
-              // onClick={updateUser}
-            >
-              {/* {loadingSubmit ? (
+            {loadingSubmit ? (
               <Spin spinning={loadingSubmit} size="large" />
             ) : (
               "Update"
-            )} */}
-              update
-            </Button>
-          </Form.Item>
+            )}
+          </Button>
         </Form>
+         <NotificationContainer />
       </Content>
     </div>
   );

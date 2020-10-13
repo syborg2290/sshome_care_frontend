@@ -469,10 +469,11 @@ margin-top: 70px !important;
 /* Start icon  1024 responsive */
 
 @media screen and (min-width: 1024px) {
-   .icon_delete {
+  .icon_delete {
     width: 100%;
     margin: auto;
     padding-left: 11px;
+    margin-top: 5px;
   }
 }
 
@@ -485,10 +486,11 @@ margin-top: 70px !important;
 /* Start icon  1024 responsive */
 
 @media screen and (min-width: 1024px) {
-  .icon_Edit .icon_delete {
+  .icon_Edit {
     width: 100%;
     margin: auto;
     padding-left: 11px;
+    margin-top: 5px;
   }
 }
 

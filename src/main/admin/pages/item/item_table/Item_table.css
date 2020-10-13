@@ -462,6 +462,22 @@ margin-top: 70px !important;
 
 /* End ststus lbl 1024 responsive */
 
+.icon_delete{
+  margin-left: 20px;
+}
+
+/* Start icon  1024 responsive */
+
+@media screen and (min-width: 1024px) {
+   .icon_delete {
+    width: 100%;
+    margin: auto;
+    padding-left: 11px;
+  }
+}
+
+/* End  icon 1024 responsive */
+
 .icon_Edit {
   margin-left: 20px;
 }
@@ -469,7 +485,7 @@ margin-top: 70px !important;
 /* Start icon  1024 responsive */
 
 @media screen and (min-width: 1024px) {
-  .icon_Edit {
+  .icon_Edit .icon_delete {
     width: 100%;
     margin: auto;
     padding-left: 11px;

@@ -99,7 +99,7 @@ export default function ItemTable() {
                 <EditIcon onClick={editModal} />
               </span>
               <span className="icon_delete">
-                <DeleteIcon />
+                <DeleteIcon onClick={showDeleteItemsConfirm} />
               </span>
             </div>,
           ]);
@@ -109,7 +109,7 @@ export default function ItemTable() {
         setIsLoading(false);
       });
     // eslint-disable-next-line
-  }, []);
+  }, [currentIndx]);
 
   // useEffect(() => {
   //   socket.on("messageFromServer", (data) => {
@@ -178,10 +178,10 @@ export default function ItemTable() {
       content: "Confirm your action",
       onOk() {
         // eslint-disable-next-line
-
+      
         db.collection("item")
           .doc(
-            allTtemData[currentIndx] && allTtemData[currentIndx].data
+            allTtemData[currentIndx] && allTtemData[currentIndx].id
               ? allTtemData[currentIndx].id
               : ""
           )
@@ -461,6 +461,11 @@ export default function ItemTable() {
           <div className="model_edit_Main">
             <div className="model_edit_Detail">
               <EditModel
+                key={
+                  allTtemData[currentIndx] && allTtemData[currentIndx].id
+                    ? allTtemData[currentIndx].id
+                    : ""
+                }
                 itemNameProp={
                   allTtemData[currentIndx] && allTtemData[currentIndx].data
                     ? allTtemData[currentIndx].data.itemName
@@ -575,11 +580,9 @@ export default function ItemTable() {
               "ACTION",
             ]}
             options={{
-              selectableRows:false,
-              customToolbarSelect:() => {},
-              filterType: "checkbox",
-              selectableRows: false ,
+              selectableRows: false,
               customToolbarSelect: () => {},
+              filterType: "checkbox",
               download: false,
               print: false,
               searchPlaceholder: "Search using any column names",

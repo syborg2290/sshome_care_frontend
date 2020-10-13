@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Form, Radio, Input, Layout, Button, Spin } from "antd";
+import firebase from 'firebase';
 // import axios from "axios";
 // import socketIOClient from "socket.io-client";
 // import imageCompression from "browser-image-compression";
@@ -371,7 +372,7 @@ function AddItem() {
                                                 cInvoiceNo: cInvoiceNo,
                                                 GCardNo: GCardNo,
                                                 guarantee: guarantee,
-                                                timestamp: Date.now(),
+                                                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                                               };
 
                                               await db

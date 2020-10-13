@@ -55,11 +55,13 @@ export default function ItemTable() {
       .orderBy("timestamp", "desc")
       .onSnapshot((snapshot) => {
         var newData = [];
+        var itemData = [];
         snapshot.docs.forEach((element) => {
-          allTtemData.push({
+          itemData.push({
             id: element.id,
             data: element.data(),
           });
+
           newData.push([
             element.data().itemName,
             element.data().brand,
@@ -97,10 +99,9 @@ export default function ItemTable() {
               </span>
             </div>,
           ]);
-
-         
         });
         setItemTableData(newData);
+        setAllItemData(itemData);
         setIsLoading(false);
       });
     // eslint-disable-next-line
@@ -166,35 +167,30 @@ export default function ItemTable() {
   //   // eslint-disable-next-line
   // }, [itemTableData]);
 
-  const showDeleteItemsConfirm = (rowsDeleted) => {
+  const showDeleteItemsConfirm = () => {
     confirm({
       title: "Do you want to delete these items?",
       icon: <ExclamationCircleOutlined />,
       content: "Confirm your action",
       onOk() {
-        for (var key in rowsDeleted.data) {
-          // eslint-disable-next-line
+        // eslint-disable-next-line
 
-          db.collection("item")
-            .doc(
-              allTtemData[currentIndx] && allTtemData[currentIndx].data
-                ? allTtemData[rowsDeleted.data[key]["index"]].id
-                : ""
-            )
-            .delete()
-            .then(function () {
-              NotificationManager.success(
-                "Item deletion successfully!",
-                "Done"
-              );
-            })
-            .catch(function (error) {
-              NotificationManager.warning(
-                "Failed to continue the process!",
-                "Please try again"
-              );
-            });
-        }
+        db.collection("item")
+          .doc(
+            allTtemData[currentIndx] && allTtemData[currentIndx].data
+              ? allTtemData[currentIndx].id
+              : ""
+          )
+          .delete()
+          .then(function () {
+            NotificationManager.success("Item deletion successfully!", "Done");
+          })
+          .catch(function (error) {
+            NotificationManager.warning(
+              "Failed to continue the process!",
+              "Please try again"
+            );
+          });
       },
       onCancel() {},
     });
@@ -576,9 +572,8 @@ export default function ItemTable() {
             ]}
             options={{
               filterType: "checkbox",
-              onRowsDelete: (rowsDeleted) => {
-                showDeleteItemsConfirm(rowsDeleted);
-              },
+              selectableRows: false ,
+              customToolbarSelect: () => {},
               download: false,
               print: false,
               searchPlaceholder: "Search using any column names",

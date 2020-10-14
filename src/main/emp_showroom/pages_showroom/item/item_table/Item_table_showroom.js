@@ -25,7 +25,7 @@ export default function ItemTable() {
   const [visible, setVisible] = useState(false);
   const [currentIndx, setCurrentIndx] = useState(0);
   // eslint-disable-next-line
-  const [selectedItems, setSelectedItems] = useState([]);
+  var [selectedItems, setSelectedItems] = useState([]);
   let history = useHistory();
 
   const showModal = () => {
@@ -110,14 +110,14 @@ export default function ItemTable() {
     }
   };
 
-  function getIndex(value, arr, prop) {
-    for (var i = 0; i < arr.length; i++) {
-      if (arr[i][prop] === value) {
-        return i;
-      }
-    }
-    return -1; //to handle the case where the value doesn't exist
-  }
+  // function getIndex(value, arr, prop) {
+  //   for (var i = 0; i < arr.length; i++) {
+  //     if (arr[i][prop] === value) {
+  //       return i;
+  //     }
+  //   }
+  //   return -1; //to handle the case where the value doesn't exist
+  // }
 
   return (
     <>
@@ -387,28 +387,32 @@ export default function ItemTable() {
               searchPlaceholder: "Search using any column names",
               elevation: 4,
               sort: true,
+              
               onRowsSelect: (curRowSelected, allRowsSelected) => {
-                // console.log("Row Selected: ", curRowSelected[0].dataIndex);
+                selectedItems = [];
+                allRowsSelected.forEach((single) => { 
+                  selectedItems.push(allTtemData[single.dataIndex]);
+                });
 
-                if (
-                  !selectedItems.some(
-                    (item) =>
-                      item.id ===
-                      allTtemData[curRowSelected[0].dataIndex].id
-                  )
-                ) {
-                  selectedItems.push(allTtemData[curRowSelected[0].dataIndex]);
-                } else {
+                // if (
+                //   !selectedItems.some(
+                //     (item) =>
+                //       item.id ===
+                //       allTtemData[curRowSelected[0].dataIndex].id
+                //   )
+                // ) {
+                //   selectedItems.push(allTtemData[curRowSelected[0].dataIndex]);
+                // } else {
                  
-                  var index = getIndex(
-                    allTtemData[curRowSelected[0].dataIndex],
-                    selectedItems,
-                    "id"
-                  );
-                  if (index >= 0) {
-                    selectedItems.splice(index, 1);
-                  }
-                }
+                //   var index = getIndex(
+                //     allTtemData[curRowSelected[0].dataIndex],
+                //     selectedItems,
+                //     "id"
+                //   );
+                //   if (index >= 0) {
+                //     selectedItems.splice(index, 1);
+                //   }
+                // }
               },
               selectableRowsHeader: false,
               onRowClick: (rowData, rowMeta) => {

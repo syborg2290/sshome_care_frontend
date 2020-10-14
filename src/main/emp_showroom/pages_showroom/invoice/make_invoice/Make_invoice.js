@@ -10,7 +10,7 @@ function Make_invoice() {
   useEffect(() => {
     console.log(location.pathname); // result: '/secondpage'
     console.log(location.search); // result: '?query=abc'
-    console.log(location.state.detail); // result: 'some_value'
+    console.log(location.state?location.state.detail:""); // result: 'some_value'
   }, [location]);
 
     return <div className="make__invoice">

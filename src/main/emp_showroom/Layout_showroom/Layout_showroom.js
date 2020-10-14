@@ -6,13 +6,13 @@ import { Route, Switch, Redirect, withRouter } from "react-router-dom";
 import "./Layout_showroom.css";
 
 // components
-import Header from "../Header/Header_showroom";
-import Sidebar from "../Sidebar/Sidebar_showroom";
+import Header from "../Header_showroom/Header_showroom";
+import Sidebar from "../Sidebar_showroom/Sidebar_showroom";
 
 // pages
-import Dashboard from "../pages/dashboard/Dashboard_showroom";
-import Charts from "../pages/charts/Charts_showroom";
-import ItemTable from "../pages/item/item_table/Item_table_showroom";
+import Dashboard from "../pages_showroom/dashboard/Dashboard_showroom";
+import Charts from "../pages_showroom/charts/Charts_showroom";
+import ItemTable from "../pages_showroom/item/item_table/Item_table_showroom";
 
 function LayoutShowroom(props) {
   return (

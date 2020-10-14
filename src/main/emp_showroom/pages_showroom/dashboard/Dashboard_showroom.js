@@ -28,9 +28,9 @@ import "./Dashboard_showroom.css";
 // components
 import mock from "./mock";
 import Widget from "../../Widget/Widget";
-import PageTitle from "../../PageTitle/PageTitle_showroom";
+import PageTitle from "../../PageTitle_showroom/PageTitle_showroom";
 import { Typography } from "../../Wrappers/Wrappers";
-import Dot from "../../Sidebar/components/Dot";
+import Dot from "../../Sidebar_showroom/components/Dot";
 import Table from "./components/Table/Table";
 import BigStat from "./components/BigStat/BigStat";
 

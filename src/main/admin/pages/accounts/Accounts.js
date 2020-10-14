@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Grid, Button } from "@material-ui/core";
 import { Modal, Spin } from "antd";
-import HelpIcon from '@material-ui/icons/Help';
+import HelpIcon from "@material-ui/icons/Help";
 
 import MUIDataTable from "mui-datatables";
 import moment from "moment";
@@ -54,7 +54,7 @@ export default function Accounts() {
             <div>
               <EditIcon onClick={editModal} />
               <span className="icon_delete">
-                <DeleteIcon onClick={showModalConfirmModal}/>
+                <DeleteIcon onClick={showModalConfirmModal} />
               </span>
             </div>,
           ]);
@@ -72,8 +72,8 @@ export default function Accounts() {
   const newUserModalClose = () => {
     setNewUserVisible(false);
   };
-  
-   const showModalConfirmModal = () => {
+
+  const showModalConfirmModal = () => {
     setConfirmVisible(true);
   };
 
@@ -84,7 +84,7 @@ export default function Accounts() {
   const editModalClose = () => {
     setEditVisible(false);
   };
-  
+
   const showDeleteUsersConfirm = async () => {
     await db
       .collection("user")
@@ -106,6 +106,44 @@ export default function Accounts() {
       });
   };
 
+  const columns = [
+    {
+      name: "User Name",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "Role",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "Last logged at",
+      options: {
+        filter: false,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "Action",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+  ];
 
   return (
     <>
@@ -125,7 +163,7 @@ export default function Accounts() {
             title={<span className="title_Span">ALL USERS</span>}
             className="account_table"
             data={users}
-            columns={["User Name", "Role", "Last logged at", "Action"]}
+            columns={columns}
             options={{
               selectableRows: false,
               customToolbarSelect: () => {},
@@ -155,21 +193,23 @@ export default function Accounts() {
           />
         </Grid>
       </Grid>
-      
+
       <Modal
         title="Confirm your action"
         visible={confirmVisible}
         cancelText="No"
         okText="Yes"
-        bodyStyle={{ borderRadius:"30px" }}
+        bodyStyle={{ borderRadius: "30px" }}
         onOk={showDeleteUsersConfirm}
         onCancel={() => {
           setConfirmVisible(false);
         }}
       >
-        <div style={{display:"flex",flexDirection:"row"}}>
-          <HelpIcon style={{color:"red",fontSize:"40"}}/>
-          <h2 style={{marginLeft:"20"}}>Do you want to delete this user? </h2>
+        <div style={{ display: "flex", flexDirection: "row" }}>
+          <HelpIcon style={{ color: "red", fontSize: "40" }} />
+          <h2 style={{ marginLeft: "20" }}>
+            Do you want to delete this user?{" "}
+          </h2>
         </div>
       </Modal>
 
@@ -192,12 +232,16 @@ export default function Accounts() {
                     ? allUserData[currentIndx].id
                     : ""
                 }
-                docid={  allUserData[currentIndx] && allUserData[currentIndx].id
+                docid={
+                  allUserData[currentIndx] && allUserData[currentIndx].id
                     ? allUserData[currentIndx].id
-                  : ""}
-                usernameProp={ allUserData[currentIndx] && allUserData[currentIndx].data
+                    : ""
+                }
+                usernameProp={
+                  allUserData[currentIndx] && allUserData[currentIndx].data
                     ? allUserData[currentIndx].data.username
-                  : ""}
+                    : ""
+                }
               />
             </div>
           </div>
@@ -224,7 +268,7 @@ export default function Accounts() {
         </div>
       </Modal>
       {/*End add new User Model */}
-       <NotificationContainer />
+      <NotificationContainer />
     </>
   );
 }

@@ -203,6 +203,81 @@ export default function ItemTable() {
     setEditVisible(false);
   };
 
+  const columns = [
+    {
+      name: "Item name",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "Brand",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "Qty",
+      options: {
+        filter: false,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "Color",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "Model no",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "Sale price(LKR)",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "Status",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "Action",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+  ];
+
   return (
     <>
       <Modal
@@ -580,24 +655,16 @@ export default function ItemTable() {
         </div>
       </Modal>
 
-      <Grid container spacing={4}>
+      <Grid className="tbl_Container" container spacing={4}>
         <Grid item xs={12}>
           <MUIDataTable
-            title={<span className="title_Span">ITEM LIST</span>}
+            title={<span className="title_Span">Item List</span>}
             className="item_table"
             data={itemTableData}
-            columns={[
-              "ITEM NAME",
-              "BRAND",
-              "QTY",
-              "COLOR",
-              "MODEL NO",
-              "SALE PRICE(LKR)",
-              "STATUS",
-              "ACTION",
-            ]}
+            columns={columns}
             options={{
               selectableRows: false,
+
               customToolbarSelect: () => {},
               filterType: "checkbox",
               download: false,

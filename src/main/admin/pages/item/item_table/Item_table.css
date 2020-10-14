@@ -1,6 +1,9 @@
 .item_table {
   margin-top: 70px !important;
 }
+.tbl_Container {
+  margin-top: 70px !important;
+}
 
 @media screen and (min-width: 280px) {
   .tblSpinner {
@@ -133,9 +136,9 @@
 }
 
 .title_Span {
-  font-weight: 700;
+  font-weight: 800 !important;
   font-size: large;
-  color: #34314c;
+  color: #222a44;
 }
 
 .status {

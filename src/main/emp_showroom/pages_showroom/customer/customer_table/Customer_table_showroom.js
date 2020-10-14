@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Grid } from "@material-ui/core";
+// eslint-disable-next-line
+import { Grid  } from "@material-ui/core";
 import { Spin, Modal } from "antd";
 import MUIDataTable from "mui-datatables";
 
@@ -17,6 +18,7 @@ export default function ItemTable() {
   const [allCustomerData, setAllCustomerData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [visible, setVisible] = useState(false);
+  // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
   // let socket = socketIOClient(RealtimeServerApi);
 

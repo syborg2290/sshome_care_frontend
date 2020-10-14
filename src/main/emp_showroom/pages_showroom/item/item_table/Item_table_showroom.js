@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Grid, Button } from "@material-ui/core";
 import { Spin, Modal } from "antd";
-// import axios from "axios";
+import { useHistory } from "react-router-dom";
 import MUIDataTable from "mui-datatables";
-// import socketIOClient from "socket.io-client";
 
 import CurrencyFormat from "react-currency-format";
 import moment from "moment";
@@ -18,13 +17,16 @@ import "./Item_table_showroom.css";
 import db from "../../../../../config/firebase.js";
 
 export default function ItemTable() {
+  const [isLoaingToInvoice, setLoaingToInvoice] = useState(false);
   const [itemTableData, setItemTableData] = useState([]);
   // eslint-disable-next-line
   const [allTtemData, setAllItemData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [visible, setVisible] = useState(false);
   const [currentIndx, setCurrentIndx] = useState(0);
-  // let socket = socketIOClient(RealtimeServerApi);
+  // eslint-disable-next-line
+  var [selectedItems, setSelectedItems] = useState([]);
+  let history = useHistory();
 
   const showModal = () => {
     setVisible(true);
@@ -160,6 +162,36 @@ export default function ItemTable() {
       },
     },
   ];
+  const onMakeInvoid = () => {
+    
+    if (selectedItems.length > 0) {
+      setLoaingToInvoice(true);
+      var itemList = [];
+      selectedItems.forEach((reItem) => {
+        itemList.push({
+          qty: 1,
+          item: reItem,
+        });
+      });
+
+      var moveWith = {
+        pathname: "/showroom/ui/makeInvoice",
+        search: "?query=abc",
+        state: { detail: itemList },
+      };
+       setLoaingToInvoice(false);
+      history.push(moveWith);
+    }
+  };
+
+  // function getIndex(value, arr, prop) {
+  //   for (var i = 0; i < arr.length; i++) {
+  //     if (arr[i][prop] === value) {
+  //       return i;
+  //     }
+  //   }
+  //   return -1; //to handle the case where the value doesn't exist
+  // }
 
   return (
     <>
@@ -399,8 +431,13 @@ export default function ItemTable() {
         color="primary"
         className="btn_MakeInvoice"
         endIcon={<DescriptionIcon />}
+        onClick={onMakeInvoid}
       >
-        Make Invoice
+        {isLoaingToInvoice ? (
+          <Spin spinning={isLoaingToInvoice} size="large" />
+        ) : (
+          "Make Invoice"
+        )}
       </Button>
 
       <Grid container spacing={4}>
@@ -411,7 +448,7 @@ export default function ItemTable() {
             data={itemTableData}
             columns={columns}
             options={{
-              selectableRows: false,
+              selectableRows: true,
               customToolbarSelect: () => {},
               filterType: "checkbox",
               download: false,
@@ -419,6 +456,34 @@ export default function ItemTable() {
               searchPlaceholder: "Search using any column names",
               elevation: 4,
               sort: true,
+
+              onRowsSelect: (curRowSelected, allRowsSelected) => {
+                selectedItems = [];
+                allRowsSelected.forEach((single) => {
+                  selectedItems.push(allTtemData[single.dataIndex]);
+                });
+
+                // if (
+                //   !selectedItems.some(
+                //     (item) =>
+                //       item.id ===
+                //       allTtemData[curRowSelected[0].dataIndex].id
+                //   )
+                // ) {
+                //   selectedItems.push(allTtemData[curRowSelected[0].dataIndex]);
+                // } else {
+
+                //   var index = getIndex(
+                //     allTtemData[curRowSelected[0].dataIndex],
+                //     selectedItems,
+                //     "id"
+                //   );
+                //   if (index >= 0) {
+                //     selectedItems.splice(index, 1);
+                //   }
+                // }
+              },
+              selectableRowsHeader: false,
               onRowClick: (rowData, rowMeta) => {
                 setCurrentIndx(rowMeta.rowIndex);
               },

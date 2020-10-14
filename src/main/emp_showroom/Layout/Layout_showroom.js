@@ -3,19 +3,18 @@ import React from "react";
 import { Route, Switch, Redirect, withRouter } from "react-router-dom";
 
 // styles
-import "./Layout.css";
+import "./Layout_showroom.css";
 
 // components
-import Header from "../Header/Header";
-import Sidebar from "../Sidebar/Sidebar";
+import Header from "../Header/Header_showroom";
+import Sidebar from "../Sidebar/Sidebar_showroom";
 
 // pages
-import Dashboard from "../pages/dashboard/Dashboard";
-import Charts from "../pages/charts/Charts";
-import ItemTable from "../pages/item/item_table/Item_table";
+import Dashboard from "../pages/dashboard/Dashboard_showroom";
+import Charts from "../pages/charts/Charts_showroom";
+import ItemTable from "../pages/item/item_table/Item_table_showroom";
 
 function LayoutShowroom(props) {
-
   return (
     <div className="root">
       <>

@@ -9,7 +9,7 @@ import classNames from "classnames";
 
 // styles
 import useStyles from "./styles";
-import "./Header.css";
+import "./Header_showroom.css";
 
 // components
 import { Typography } from "../Wrappers/Wrappers";
@@ -64,7 +64,7 @@ export default function HeaderShowroom(props) {
           )}
         </IconButton>
         <Typography variant="h6" weight="medium" className="logotype">
-          S S Home Care City | Admin
+          S S Home Care City | Showroom
         </Typography>
         <div className="grow" />
         {/* <div className={classNames(classes.search, {

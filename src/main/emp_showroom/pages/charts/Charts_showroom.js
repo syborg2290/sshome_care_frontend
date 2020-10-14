@@ -19,7 +19,7 @@ import {
 import Widget from "../../Widget/Widget";
 import ApexLineChart from "./components/ApexLineChart";
 import ApexHeatmap from "./components/ApexHeatmap";
-import PageTitle from "../../PageTitle/PageTitle";
+import PageTitle from "../../PageTitle/PageTitle_showroom";
 
 const lineChartData = [
   {

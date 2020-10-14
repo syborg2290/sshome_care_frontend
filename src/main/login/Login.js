@@ -38,39 +38,42 @@ function Login(props) {
 
   const onLogin = async (e) => {
     e.preventDefault();
-    var isLogged = false;
+    var iUsernameNot = true;
+    var isPasswordNot = true;
+
     await (await db.collection("user").get()).docs.forEach(async (user) => {
-      console.log(user);
       if (
-        user.data().username === loginValue.trim() &&
-        user.data().username === passwordValue.trim()
+        user.data().username.toString().toLowerCase().trim() ===
+        loginValue.toString().toLowerCase().trim()
       ) {
-        await db.collection('login_logs').add({
-          user_id: user.id,
-          login_at:firebase.firestore.FieldValue.serverTimestamp(),
-        });
-        await db.collection("user").doc(user.id).update({
-          lastlog: firebase.firestore.FieldValue.serverTimestamp()
-        });
-        isLogged = true;
-        loginUser(
-          userDispatch,
-          loginValue,
-          passwordValue,
-          user.data().role,
-          props.history,
-          setIsLoading,
-          setError
-        );
+        if (
+          user.data().password.toString().toLowerCase().trim() ===
+          passwordValue.toString().toLowerCase().trim()
+        ) {
+          await db.collection("login_logs").add({
+            user_id: user.id,
+            login_at: firebase.firestore.FieldValue.serverTimestamp(),
+          });
+          await db.collection("user").doc(user.id).update({
+            lastlog: firebase.firestore.FieldValue.serverTimestamp(),
+          });
+
+          loginUser(
+            userDispatch,
+            loginValue,
+            passwordValue,
+            user.data().role,
+            props.history,
+            setIsLoading,
+            setError
+          );
+        } else {
+          isPasswordNot = false;
+        }
       } else {
-        isLogged = false;
+        iUsernameNot = false;
       }
     });
-    if (!isLogged) {
-       NotificationManager.info(
-          "Username && passsword incorrect,please try again!"
-        );
-    }
   };
 
   return (

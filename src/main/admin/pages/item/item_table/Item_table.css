@@ -518,14 +518,21 @@
 }
 
 .load_Item {
-  color: #000000;
-  font-weight: 700 !important;
+  color: rgb(0, 0, 0) !important;
+  font-size: 19px !important;
 }
 
 .model_title {
-  color: red;
+  color: #222a44 !important;
+  font-weight: 900 !important;
+  font-size: 20px !important;
 }
 
+.model_Detail {
+  color: #222a44 !important;
+  font-weight: 800 !important;
+  font-size: 12px !important;
+}
 /* END  model */
 
 .model_conform {

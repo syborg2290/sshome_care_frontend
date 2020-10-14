@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Grid, Button } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import { Spin, Modal } from "antd";
 import MUIDataTable from "mui-datatables";
-
-import CurrencyFormat from "react-currency-format";
-import moment from "moment";
 
 // icons
 import VisibilityIcon from "@material-ui/icons/Visibility";
@@ -134,17 +131,7 @@ export default function ItemTable() {
       >
         <div className="table_Model">
           <div className="model_Main">
-            {/* <img
-              className="model_img"
-              src={
-                allTtemData.data && allTtemData.data[currentIndx]
-                  ? allTtemData.data[currentIndx].photo === "null"
-                    ? ""
-                    : allTtemData.data[currentIndx].photo
-                  : ""
-              }
-              alt=""
-            /> */}
+
             <div className="model_Detail">
               <p>BRAND</p>
               <p>QTY</p>

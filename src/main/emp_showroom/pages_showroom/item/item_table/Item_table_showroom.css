@@ -480,17 +480,25 @@
   margin-right: auto;
 }
 
-.model_Item {
+.model_Item_Showroom {
   font-weight: 400;
 }
 
-.load_Item {
-  color: #000000;
-  font-weight: 700 !important;
+.load_Item_Showroom {
+  color: rgb(0, 0, 0) !important;
+  font-size: 19px !important;
 }
 
-.model_title {
-  color: red;
+.model_title_Showroom {
+  color: #222a44 !important;
+  font-weight: 900 !important;
+  font-size: 20px !important;
+}
+
+.model_Detail_Showroom {
+  color: #222a44 !important;
+  font-weight: 800 !important;
+  font-size: 12px !important;
 }
 
 /* END  model */

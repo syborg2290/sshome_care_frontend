@@ -21,6 +21,7 @@ import "./Login.css";
 // context
 import { useUserDispatch, loginUser } from "../../context/UserContext";
 import db from "../../config/firebase.js";
+import firebase from "firebase";
 
 function Login(props) {
   var classes = useStyles();
@@ -43,6 +44,13 @@ function Login(props) {
         user.data().username === loginValue.trim() &&
         user.data().username === passwordValue.trim()
       ) {
+        await db.collection('login_logs').add({
+          user_id: user.id,
+          login_at:firebase.firestore.FieldValue.serverTimestamp(),
+        });
+        await db.collection("user").doc(user.id).update({
+          lastlog: firebase.firestore.FieldValue.serverTimestamp()
+        });
         isLogged = true;
         loginUser(
           userDispatch,

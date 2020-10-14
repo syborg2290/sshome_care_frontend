@@ -1,5 +1,5 @@
 .item_table {
-  margin-top: 70px !important;
+  margin-top: 15px !important;
 }
 
 @media screen and (min-width: 280px) {
@@ -138,34 +138,38 @@
   color: #34314c;
 }
 
+.status {
+  font-size: small !important;
+  font-family: Helvetica, sans-serif !important;
+  margin: auto !important;
+  font-weight: 100 !important;
+}
+
 .px-2 {
-  background-color: #01c11b !important;
+  background-color: #09b66d !important;
   color: aliceblue;
-  font-weight: 700 !important;
   margin: auto;
-  width: 100%;
-  border-radius: 10px;
-  padding: 4px 10px 4px 35px;
+  text-align: center !important;
+  border-radius: 4px !important;
+  padding: 2px 0px 2px 0px !important;
 }
 
 .px-3 {
-  background-color: #ff9f3f !important;
-  color: aliceblue;
-  font-weight: 700 !important;
+  background-color: #ff9900 !important;
+  color: black !important;
   margin: auto;
-  width: 100%;
-  border-radius: 10px;
-  padding: 4px 0px 4px 25px;
+  text-align: center !important;
+  border-radius: 4px !important;
+  padding: 2px 0px 2px 0px !important;
 }
 
 .px-4 {
-  background-color: #ff0000 !important;
+  background-color: #ff3d57 !important;
   color: aliceblue;
-  font-weight: 700 !important;
   margin: auto;
-  width: 100%;
-  border-radius: 10px;
-  padding: 4px 0px 4px 25px;
+  text-align: center !important;
+  border-radius: 4px !important;
+  padding: 2px 0px 2px 0px !important;
 }
 
 /* Start ststus lbl 280 responsive */
@@ -462,39 +466,9 @@
 
 /* End ststus lbl 1024 responsive */
 
-.icon_delete {
+.icon_Visible {
   margin-left: 20px;
 }
-
-/* Start icon  1024 responsive */
-
-@media screen and (min-width: 1024px) {
-  .icon_delete {
-    width: 100%;
-    margin: auto;
-    padding-left: 11px;
-    margin-top: 5px;
-  }
-}
-
-/* End  icon 1024 responsive */
-
-.icon_Edit {
-  margin-left: 20px;
-}
-
-/* Start icon  1024 responsive */
-
-@media screen and (min-width: 1024px) {
-  .icon_Edit {
-    width: 100%;
-    margin: auto;
-    padding-left: 11px;
-    margin-top: 5px;
-  }
-}
-
-/* End  icon 1024 responsive */
 
 /* Start  model */
 
@@ -531,3 +505,11 @@
   margin-top: -20px !important;
   
 } */
+
+.btn_MakeInvoice {
+  margin-top: 80px !important;
+  float: right;
+  border-radius: 10px;
+  height: 40px;
+  text-align: center;
+}

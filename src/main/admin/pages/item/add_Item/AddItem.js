@@ -1,9 +1,6 @@
 import React, { useState } from "react";
 import { Form, Radio, Input, Layout, Button, Spin } from "antd";
-import firebase from 'firebase';
-// import axios from "axios";
-// import socketIOClient from "socket.io-client";
-// import imageCompression from "browser-image-compression";
+import firebase from "firebase";
 import "antd/dist/antd.css";
 import {
   NotificationContainer,
@@ -13,10 +10,6 @@ import "react-notifications/lib/notifications.css";
 // styles
 import "./Additem.css";
 
-// const {
-//   SeverApi,
-//   RealtimeServerApi,
-// } = require("../../../../../config/settings.js");
 import db from "../../../../../config/firebase.js";
 
 const { Content } = Layout;
@@ -24,8 +17,6 @@ const { TextArea } = Input;
 
 function AddItem() {
   const [loadingSubmit, setLoadingSubmit] = useState(false);
-  // const [imageUrl, setImageUrl] = useState(null);
-  // const [imageFile, setImageFile] = useState(null);
   const [itemName, setItemName] = useState("");
   const [brand, setBrand] = useState("");
   const [modelNo, setModelNo] = useState("");
@@ -47,11 +38,7 @@ function AddItem() {
     value: "Years",
   });
 
-  // let socket = socketIOClient(RealtimeServerApi);
-
   const valuesInitialState = () => {
-    // setImageUrl(null);
-    // setImageFile(null);
     setItemName("");
     setBrand("");
     setModelNo("");
@@ -89,61 +76,7 @@ function AddItem() {
   //     reader.readAsDataURL(event.target.files[0]);
   //   }
   // };
-
-  // const addItem = async (e) => {
-  //   e.preventDefault();
-
-  //   if (qty < 1) {
-  //     NotificationManager.info(
-  //       "Qty must be greater than 0",
-  //       "Remember validations"
-  //     );
-  //   } else {
-  //     if (cashPrice < 0) {
-  //       NotificationManager.info(
-  //         "Check again the amount of cash price",
-  //         "Remember validations"
-  //       );
-  //     } else {
-  //       if (salePrice < 0) {
-  //         NotificationManager.info(
-  //           "Check again the amount of sale price",
-  //           "Remember validations"
-  //         );
-  //       } else {
-  //         if (noOfInstallments < 0) {
-  //           NotificationManager.info(
-  //             "Check again the value of installments value",
-  //             "Remember validations"
-  //           );
-  //         } else {
-  //           if (amountPerInstallment < 0) {
-  //             NotificationManager.info(
-  //               "Check again the amount per installment",
-  //               "Remember validations"
-  //             );
-  //           } else {
-  //             if (downPayment < 0) {
-  //               NotificationManager.info(
-  //                 "Check again the amount of down payment",
-  //                 "Remember validations"
-  //               );
-  //             } else {
-  //               if (guaranteePeriod < 0) {
-  //                 NotificationManager.info(
-  //                   "Check again the value of gurantee period",
-  //                   "Remember validations"
-  //                 );
-  //               } else {
-  //                 if (discount < 0) {
-  //                   NotificationManager.info(
-  //                     "Check again the amount of discount",
-  //                     "Remember validations"
-  //                   );
-  //                 } else {
-  //                   //Rest of code here
-  //                   setLoadingSubmit(true);
-  //                   let imageDownloadUrl = "null";
+  // let imageDownloadUrl = "null";
   //                   if (imageFile !== null) {
   //                     const formData = new FormData();
   //                     const options = {
@@ -161,67 +94,6 @@ function AddItem() {
   //                         "content-type": "multipart/form-data",
   //                       },
   //                     };
-
-  //                     await axios
-  //                       .post(
-  //                         SeverApi + "imageUpload/uploadImage",
-  //                         formData,
-  //                         configFile
-  //                       )
-  //                       .then((response) => {
-  //                         imageDownloadUrl = response.data.publicUrl;
-  //                       });
-  //                   }
-
-  //                   let variable = {
-  //                     itemName: itemName,
-  //                     brand: brand,
-  //                     modelNo: modelNo,
-  //                     chassisNo: chassisNo,
-  //                     color: color,
-  //                     qty: qty,
-  //                     cashPrice: cashPrice,
-  //                     salePrice: salePrice,
-  //                     noOfInstallments: noOfInstallments,
-  //                     amountPerInstallment: amountPerInstallment,
-  //                     downPayment: downPayment,
-  //                     guaranteePeriod: guaranteePeriod,
-  //                     discount: discount,
-  //                     description: description,
-  //                     cInvoiceNo: cInvoiceNo,
-  //                     GCardNo: GCardNo,
-  //                     guarantee: guarantee,
-  //                     itemDownImageUrl: imageDownloadUrl,
-  //                   };
-
-  //                   await axios
-  //                     .post(SeverApi + "item/addItem", variable)
-  //                     .then((response) => {
-  //                       if (response.status === 200) {
-  //                         setLoadingSubmit(false);
-  //                         valuesInitialState();
-  //                         NotificationManager.success(
-  //                           "Item creation successfully!",
-  //                           "Done"
-  //                         );
-  //                         socket.emit("fetchItems");
-  //                       } else {
-  //                         setLoadingSubmit(false);
-  //                         NotificationManager.warning(
-  //                           "Failed to make the item!",
-  //                           "Please try again"
-  //                         );
-  //                       }
-  //                     });
-  //                 }
-  //               }
-  //             }
-  //           }
-  //         }
-  //       }
-  //     }
-  //   }
-  // };
 
   const addItem = async (e) => {
     e.preventDefault();

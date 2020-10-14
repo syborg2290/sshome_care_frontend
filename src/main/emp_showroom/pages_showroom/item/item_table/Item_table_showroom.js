@@ -1,57 +1,35 @@
 import React, { useState, useEffect } from "react";
-import { Grid } from "@material-ui/core";
+import { Grid, Button } from "@material-ui/core";
 import { Spin, Modal } from "antd";
-import HelpIcon from "@material-ui/icons/Help";
-// import axios from "axios";
+import { useHistory } from "react-router-dom";
 import MUIDataTable from "mui-datatables";
-// import socketIOClient from "socket.io-client";
 
-import {
-  NotificationContainer,
-  NotificationManager,
-} from "react-notifications";
-import "react-notifications/lib/notifications.css";
 import CurrencyFormat from "react-currency-format";
 import moment from "moment";
 
-// components
-import EditModel from "./components/Edit_model";
 // icons
 import VisibilityIcon from "@material-ui/icons/Visibility";
-import EditIcon from "@material-ui/icons/Edit";
-import DeleteIcon from "@material-ui/icons/Delete";
+import DescriptionIcon from "@material-ui/icons/Description";
 
 // styles
 import "./Item_table_showroom.css";
 
-// const {
-//   RealtimeServerApi,
-//   SeverApi,
-// } = require("../../../../../config/settings.js");
-
 import db from "../../../../../config/firebase.js";
 
 export default function ItemTable() {
+  const [isLoaingToInvoice, setLoaingToInvoice] = useState(false);
   const [itemTableData, setItemTableData] = useState([]);
   // eslint-disable-next-line
   const [allTtemData, setAllItemData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [visible, setVisible] = useState(false);
   const [currentIndx, setCurrentIndx] = useState(0);
-  const [editVisible, setEditVisible] = useState(false);
-  const [confirmVisible, setConfirmVisible] = useState(false);
-  // let socket = socketIOClient(RealtimeServerApi);
+  // eslint-disable-next-line
+  const [selectedItems, setSelectedItems] = useState([]);
+  let history = useHistory();
 
   const showModal = () => {
     setVisible(true);
-  };
-
-  const showModalConfirmModal = () => {
-    setConfirmVisible(true);
-  };
-
-  const editModal = () => {
-    setEditVisible(true);
   };
 
   useEffect(() => {
@@ -79,8 +57,6 @@ export default function ItemTable() {
               prefix={" "}
             />,
             <div
-              color="secondary"
-              size="small"
               className={
                 element.data().qty !== 0
                   ? element.data().qty >= 3
@@ -90,20 +66,18 @@ export default function ItemTable() {
               }
               variant="contained"
             >
-              {element.data().qty !== 0
-                ? element.data().qty >= 3
-                  ? "Available"
-                  : "Low Stock"
-                : "Out Of Stock"}
+              {element.data().qty !== 0 ? (
+                element.data().qty >= 3 ? (
+                  <p className="status">Available</p>
+                ) : (
+                  <p className="status">Low Stock</p>
+                )
+              ) : (
+                <p className="status">Out Of Stock</p>
+              )}
             </div>,
             <div className="table_icon">
-              <VisibilityIcon onClick={showModal} />
-              <span className="icon_Edit">
-                <EditIcon onClick={editModal} />
-              </span>
-              <span className="icon_delete">
-                <DeleteIcon onClick={showModalConfirmModal} />
-              </span>
+              <VisibilityIcon className="icon_Visible" onClick={showModal} />
             </div>,
           ]);
         });
@@ -114,111 +88,39 @@ export default function ItemTable() {
     // eslint-disable-next-line
   }, []);
 
-  // useEffect(() => {
-  //   socket.on("messageFromServer", (data) => {
-  //     var newData = [];
-  //     if (itemTableData.length < 1) {
-  //       data.forEach((element) => {
-  //         allTtemData.push(element);
-
-  //         newData.push([
-  //           <img
-  //             alt="img"
-  //             className="Item_img"
-  //             src={
-  //               element["photo"] !== "null"
-  //                 ? element["photo"]
-  //                 : require("../../../../../assets/empty_item.png")
-  //             }
-  //           />,
-  //           element["item_name"],
-  //           element["brand"],
-  //           element["qty"],
-  //           element["color"],
-  //           element["model_no"],
-  //           <CurrencyFormat
-  //             value={element["sale_price"]}
-  //             displayType={"text"}
-  //             thousandSeparator={true}
-  //             prefix={" "}
-  //           />,
-  //           <div
-  //             color="secondary"
-  //             size="small"
-  //             className={
-  //               element["qty"] !== 0
-  //                 ? element["qty"] >= 3
-  //                   ? "px-2"
-  //                   : "px-3"
-  //                 : "px-4"
-  //             }
-  //             variant="contained"
-  //           >
-  //             {element["qty"] !== 0
-  //               ? element["qty"] >= 3
-  //                 ? "Available"
-  //                 : "Low Stock"
-  //               : "Out Of Stock"}
-  //           </div>,
-  //           <div className="table_icon">
-  //             <VisibilityIcon onClick={showModal} />,
-  //             <span className="icon_Edit">
-  //               <EditIcon onClick={editModal} />
-  //             </span>
-  //           </div>,
-  //         ]);
-  //       });
-  //       setItemTableData(newData);
-  //     }
-  //   });
-  //   // eslint-disable-next-line
-  // }, [itemTableData]);
-
-  const showDeleteItemsConfirm = async () => {
-    await db
-      .collection("item")
-      .doc(
-        allTtemData[currentIndx] && allTtemData[currentIndx].id
-          ? allTtemData[currentIndx].id
-          : ""
-      )
-      .delete()
-      .then(function () {
-        NotificationManager.success("Item deletion successfully!", "Done");
-        setConfirmVisible(false);
-      })
-      .catch(function (error) {
-        NotificationManager.warning(
-          "Failed to continue the process!",
-          "Please try again"
-        );
+  const onMakeInvoid = () => {
+    
+    if (selectedItems.length > 0) {
+      setLoaingToInvoice(true);
+      var itemList = [];
+      selectedItems.forEach((reItem) => {
+        itemList.push({
+          qty: 1,
+          item: reItem,
+        });
       });
+
+      var moveWith = {
+        pathname: "/showroom/ui/makeInvoice",
+        search: "?query=abc",
+        state: { detail: itemList },
+      };
+       setLoaingToInvoice(false);
+      history.push(moveWith);
+    }
   };
 
-  const editModalClose = () => {
-    setEditVisible(false);
-  };
+  function getIndex(value, arr, prop) {
+    for (var i = 0; i < arr.length; i++) {
+      if (arr[i][prop] === value) {
+        return i;
+      }
+    }
+    return -1; //to handle the case where the value doesn't exist
+  }
 
   return (
     <>
-      <Modal
-        title="Confirm your action"
-        visible={confirmVisible}
-        cancelText="No"
-        okText="Yes"
-        bodyStyle={{ borderRadius: "30px" }}
-        onOk={showDeleteItemsConfirm}
-        onCancel={() => {
-          setConfirmVisible(false);
-        }}
-      >
-        <div style={{ display: "flex", flexDirection: "row" }}>
-          <HelpIcon style={{ color: "red", fontSize: "40" }} />
-          <h2 style={{ marginLeft: "20" }}>
-            Do you want to delete this item?{" "}
-          </h2>
-        </div>
-      </Modal>
       <Modal
         title={
           <span className="model_title">
@@ -236,17 +138,6 @@ export default function ItemTable() {
       >
         <div className="table_Model">
           <div className="model_Main">
-            {/* <img
-              className="model_img"
-              src={
-                allTtemData.data && allTtemData.data[currentIndx]
-                  ? allTtemData.data[currentIndx].photo === "null"
-                    ? ""
-                    : allTtemData.data[currentIndx].photo
-                  : ""
-              }
-              alt=""
-            /> */}
             <div className="model_Detail">
               <p>
                 BRAND
@@ -461,139 +352,34 @@ export default function ItemTable() {
         </div>
       </Modal>
 
-      <Modal
-        title="Edit item"
-        visible={editVisible}
-        footer={null}
-        className="model_edit_Item"
-        onCancel={() => {
-          setEditVisible(false);
-        }}
+      <Button
+        variant="contained"
+        color="primary"
+        className="btn_MakeInvoice"
+        endIcon={<DescriptionIcon />}
+        onClick={onMakeInvoid}
       >
-        <div className="table_edit_Model">
-          <div className="model_edit_Main">
-            <div className="model_edit_Detail">
-              <EditModel
-                key={
-                  allTtemData[currentIndx] && allTtemData[currentIndx].id
-                    ? allTtemData[currentIndx].id
-                    : ""
-                }
-                itemNameProp={
-                  allTtemData[currentIndx] && allTtemData[currentIndx].data
-                    ? allTtemData[currentIndx].data.itemName
-                    : ""
-                }
-                brandProp={
-                  allTtemData[currentIndx] && allTtemData[currentIndx].data
-                    ? allTtemData[currentIndx].data.brand
-                    : ""
-                }
-                modelNoProp={
-                  allTtemData[currentIndx] && allTtemData[currentIndx].data
-                    ? allTtemData[currentIndx].data.modelNo
-                    : ""
-                }
-                chassisNoProp={
-                  allTtemData[currentIndx] && allTtemData[currentIndx].data
-                    ? allTtemData[currentIndx].data.chassisNo
-                    : ""
-                }
-                colorProp={
-                  allTtemData[currentIndx] && allTtemData[currentIndx].data
-                    ? allTtemData[currentIndx].data.color
-                    : ""
-                }
-                qtyProp={
-                  allTtemData[currentIndx] && allTtemData[currentIndx].data
-                    ? allTtemData[currentIndx].data.qty
-                    : 1
-                }
-                cashpriceProp={
-                  allTtemData[currentIndx] && allTtemData[currentIndx].data
-                    ? allTtemData[currentIndx].data.cashPrice
-                    : 0
-                }
-                salepriceProp={
-                  allTtemData[currentIndx] && allTtemData[currentIndx].data
-                    ? allTtemData[currentIndx].data.salePrice
-                    : 0
-                }
-                noOfInstallmentsProp={
-                  allTtemData[currentIndx] && allTtemData[currentIndx].data
-                    ? allTtemData[currentIndx].data.noOfInstallments
-                    : 0
-                }
-                amountPerInstallmentProp={
-                  allTtemData[currentIndx] && allTtemData[currentIndx].data
-                    ? allTtemData[currentIndx].data.amountPerInstallment
-                    : 0
-                }
-                downPaymentProp={
-                  allTtemData[currentIndx] && allTtemData[currentIndx].data
-                    ? allTtemData[currentIndx].data.downPayment
-                    : 0
-                }
-                guaranteePeriodProp={
-                  allTtemData[currentIndx] && allTtemData[currentIndx].data
-                    ? allTtemData[currentIndx].data.guaranteePeriod
-                    : 0
-                }
-                discountProp={
-                  allTtemData[currentIndx] && allTtemData[currentIndx].data
-                    ? allTtemData[currentIndx].data.discount
-                    : 0
-                }
-                descriptionProp={
-                  allTtemData[currentIndx] && allTtemData[currentIndx].data
-                    ? allTtemData[currentIndx].data.description
-                    : ""
-                }
-                cInvoiceNoProp={
-                  allTtemData[currentIndx] && allTtemData[currentIndx].data
-                    ? allTtemData[currentIndx].data.cInvoiceNo
-                    : ""
-                }
-                GCardNoProp={
-                  allTtemData[currentIndx] && allTtemData[currentIndx].data
-                    ? allTtemData[currentIndx].data.GCardNo
-                    : ""
-                }
-                guaranteeProp={
-                  allTtemData[currentIndx] && allTtemData[currentIndx].data
-                    ? allTtemData[currentIndx].data.guarantee.value
-                    : "Years"
-                }
-                editModalClose={editModalClose}
-                docId={
-                  allTtemData[currentIndx] && allTtemData[currentIndx].id
-                    ? allTtemData[currentIndx].id
-                    : ""
-                }
-              />
-            </div>
-          </div>
-        </div>
-      </Modal>
+        Make Invoice
+      </Button>
 
       <Grid container spacing={4}>
         <Grid item xs={12}>
           <MUIDataTable
-            title={<span className="title_Span">ITEM LIST</span>}
+            title={<span className="title_Span">All Items</span>}
             className="item_table"
             data={itemTableData}
             columns={[
-              "ITEM NAME",
-              "BRAND",
-              "QTY",
-              "COLOR",
-              "MODEL NO",
-              "SALE PRICE(LKR)",
-              "STATUS",
-              "ACTION",
+              "Item Name",
+              "Brand",
+              "Qty",
+              "Color",
+              "Model No",
+              "Sale Price(LKR)",
+              "Status",
+              "Action",
             ]}
             options={{
-              selectableRows: false,
+              selectableRows: true,
               customToolbarSelect: () => {},
               filterType: "checkbox",
               download: false,
@@ -601,6 +387,30 @@ export default function ItemTable() {
               searchPlaceholder: "Search using any column names",
               elevation: 4,
               sort: true,
+              onRowsSelect: (curRowSelected, allRowsSelected) => {
+                // console.log("Row Selected: ", curRowSelected[0].dataIndex);
+
+                if (
+                  !selectedItems.some(
+                    (item) =>
+                      item.id ===
+                      allTtemData[curRowSelected[0].dataIndex].id
+                  )
+                ) {
+                  selectedItems.push(allTtemData[curRowSelected[0].dataIndex]);
+                } else {
+                 
+                  var index = getIndex(
+                    allTtemData[curRowSelected[0].dataIndex],
+                    selectedItems,
+                    "id"
+                  );
+                  if (index >= 0) {
+                    selectedItems.splice(index, 1);
+                  }
+                }
+              },
+              selectableRowsHeader: false,
               onRowClick: (rowData, rowMeta) => {
                 setCurrentIndx(rowMeta.rowIndex);
               },
@@ -619,7 +429,6 @@ export default function ItemTable() {
               },
             }}
           />
-          <NotificationContainer />
         </Grid>
       </Grid>
     </>

@@ -113,12 +113,12 @@ export default function Header(props) {
         >
           <div className="profileMenuUser">
             <Typography variant="h4" weight="medium">
-             User Name
+             {localStorage.getItem("username")}
             </Typography>
             <Typography
               className="user_Type"
             >
-             User Type
+             {localStorage.getItem("role")}
             </Typography>
           </div>
           <div className="profileMenuUser">

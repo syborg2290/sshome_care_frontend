@@ -107,9 +107,9 @@ export default function HeaderShowroom(props) {
         >
           <div className="profileMenuUser">
             <Typography variant="h4" weight="medium">
-              User Name
+              {localStorage.getItem("username")}
             </Typography>
-            <Typography className="user_Type">User Type</Typography>
+            <Typography className="user_Type"> {localStorage.getItem("role")}</Typography>
           </div>
           <div className="profileMenuUser">
             <Typography

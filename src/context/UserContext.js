@@ -54,6 +54,7 @@ function loginUser(
   login,
   password,
   role,
+  username,
   history,
   setIsLoading,
   setError
@@ -65,6 +66,7 @@ function loginUser(
     setTimeout(() => {
       localStorage.setItem("id_token", 1);
       localStorage.setItem("role", role);
+      localStorage.setItem("username", username);
       setError(null);
       setIsLoading(false);
       dispatch({ type: "LOGIN_SUCCESS" });
@@ -82,6 +84,7 @@ function loginUser(
 function signOut(dispatch, history) {
   localStorage.removeItem("id_token");
   localStorage.removeItem("role");
+  localStorage.removeItem("username");
   dispatch({ type: "SIGN_OUT_SUCCESS" });
   history.push("/login");
 }

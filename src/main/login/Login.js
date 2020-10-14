@@ -66,6 +66,7 @@ function Login(props) {
             loginValue,
             passwordValue,
             user.data().role,
+            user.data().username,
             props.history,
             setIsLoading,
             setError

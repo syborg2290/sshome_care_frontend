@@ -38,11 +38,14 @@ function Login(props) {
 
   const onLogin = async (e) => {
     e.preventDefault();
+    var itemsProcessed = 0;
     var iUsernameNot = true;
     var isPasswordNot = true;
-    var userDocs = await (await db.collection("user").get()).docs;
-    var useLast = userDocs[userDocs.length-1];
-    await (await db.collection("user").get()).docs.forEach(async (user) => {
+    var length = await (await db.collection("user").get()).docs.length;
+
+    (await db.collection("user").get()).docs.every(async (user) => {
+      itemsProcessed++;
+
       if (
         user.data().username.toString().toLowerCase().trim() ===
         loginValue.toString().toLowerCase().trim()
@@ -71,24 +74,16 @@ function Login(props) {
             setIsLoading,
             setError
           );
-        } else {
-          isPasswordNot = true;
-        }
-      } else {
-        iUsernameNot = true;
-      }
-      if (useLast.id === user.id) {
-        if (iUsernameNot) {
-          NotificationManager.info("Username not found,please try again!");
-        } else {
-          if (isPasswordNot) {
-            NotificationManager.info(
-              "Username and password not matched,please try again!"
-            );
-          }
         }
       }
     });
+    if (itemsProcessed === length) {
+      if (iUsernameNot || isPasswordNot) {
+        NotificationManager.info(
+          "Username and password not matched,please try again!"
+        );
+      }
+    }
   };
 
   return (

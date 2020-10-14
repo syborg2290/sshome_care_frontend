@@ -34,7 +34,7 @@ const structure = [
   {
     id: 0,
     label: "Dashboard",
-    link: "/app/dashboard",
+    link: "/showroom/dashboard",
     icon: <HomeIcon className="icons" />,
   },
 
@@ -47,23 +47,23 @@ const structure = [
   {
     id: 1,
     label: "Items",
-    link: "/app/ui",
+    link: "/showroom/ui",
     icon: <TvIcon className="icons" />,
     children: [
-      { label: "Item Table", link: "/app/ui/item/itemTable" },
-      { label: "Add Item", link: "/app/ui/item/add_item" },
+      { label: "Item Table", link: "/showroom/ui/item/itemTable" },
+      { label: "Add Item", link: "/showroom/ui/item/add_item" },
     ],
   },
 
   {
     id: 4,
     label: "Customers",
-    link: "/app/ui",
+    link: "/showroom/ui",
     icon: <GroupIcon className="icons" />,
     children: [
-      { label: "Add Customer", link: "/app/ui/icons" },
-      { label: "Charts", link: "/app/ui/charts" },
-      { label: "View Customer", link: "/app/uioo/maps" },
+      { label: "Add Customer", link: "/showroom/ui/icons" },
+      { label: "Charts", link: "/showroom/ui/charts" },
+      { label: "View Customer", link: "/showroom/uioo/maps" },
     ],
   },
 
@@ -86,13 +86,13 @@ const structure = [
   {
     id: 7,
     label: "Accounts",
-    link: "/app/ui/accounts",
+    link: "/showroom/ui/accounts",
     icon: <PermIdentityIcon className="icons" />,
   },
   {
     id: 8,
     label: "Settings",
-    link: "/app/ui/settings",
+    link: "/showroom/ui/settings",
     icon: <SettingsIcon className="icons" />,
   },
 ];

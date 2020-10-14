@@ -16,7 +16,7 @@
 .toolbar {
   padding-left: 20px;
   padding-right: 20px;
-  background-color:#FFFFFF;
+  background-color: #ffffff;
   color: rgba(0, 0, 0, 0.35) !important;
 }
 
@@ -33,7 +33,6 @@
 
 .headerMenu {
   margin-top: 20px;
-
 }
 
 .profileMenuUser {
@@ -45,6 +44,7 @@
 .profileMenuLink {
   font-size: 16px;
   text-decoration: none;
+  cursor: pointer;
 }
 .profileMenuLink :hover {
   cursor: pointer !important;
@@ -52,7 +52,6 @@
 
 .profileMenu {
   min-width: 265px !important;
- 
 }
 
 .headerIcon {

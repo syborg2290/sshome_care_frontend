@@ -39,7 +39,8 @@ function Login(props) {
   const onLogin = async (e) => {
     e.preventDefault();
     var isLogged = false;
-    await (await db.collection("user").get()).docs.forEach((user) => {
+    await (await db.collection("user").get()).docs.forEach(async (user) => {
+      console.log(user);
       if (
         user.data().username === loginValue.trim() &&
         user.data().username === passwordValue.trim()

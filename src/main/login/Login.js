@@ -40,16 +40,19 @@ function Login(props) {
     e.preventDefault();
     var iUsernameNot = true;
     var isPasswordNot = true;
-
+    var userDocs = await (await db.collection("user").get()).docs;
+    var useLast = userDocs[userDocs.length-1];
     await (await db.collection("user").get()).docs.forEach(async (user) => {
       if (
         user.data().username.toString().toLowerCase().trim() ===
         loginValue.toString().toLowerCase().trim()
       ) {
+        iUsernameNot = false;
         if (
           user.data().password.toString().toLowerCase().trim() ===
           passwordValue.toString().toLowerCase().trim()
         ) {
+          isPasswordNot = false;
           await db.collection("login_logs").add({
             user_id: user.id,
             login_at: firebase.firestore.FieldValue.serverTimestamp(),
@@ -68,10 +71,21 @@ function Login(props) {
             setError
           );
         } else {
-          isPasswordNot = false;
+          isPasswordNot = true;
         }
       } else {
-        iUsernameNot = false;
+        iUsernameNot = true;
+      }
+      if (useLast.id === user.id) {
+        if (iUsernameNot) {
+          NotificationManager.info("Username not found,please try again!");
+        } else {
+          if (isPasswordNot) {
+            NotificationManager.info(
+              "Username and password not matched,please try again!"
+            );
+          }
+        }
       }
     });
   };

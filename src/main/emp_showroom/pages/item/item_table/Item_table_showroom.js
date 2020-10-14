@@ -22,7 +22,7 @@ import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 
 // styles
-import "./Item_table.css";
+import "./Item_table_showroom.css";
 
 // const {
 //   RealtimeServerApi,

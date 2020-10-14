@@ -39,17 +39,17 @@ function Login(props) {
   const onLogin = async (e) => {
     e.preventDefault();
     var isLogged = false;
-    await (await db.collection("user").get()).docs.forEach((user) => {
+    await (await db.collection("user").get()).docs.forEach(async (user) => {
       if (
         user.data().username === loginValue.trim() &&
         user.data().username === passwordValue.trim()
       ) {
-        await db.collection('login_logs').add({
+        await db.collection("login_logs").add({
           user_id: user.id,
-          login_at:firebase.firestore.FieldValue.serverTimestamp(),
+          login_at: firebase.firestore.FieldValue.serverTimestamp(),
         });
         await db.collection("user").doc(user.id).update({
-          lastlog: firebase.firestore.FieldValue.serverTimestamp()
+          lastlog: firebase.firestore.FieldValue.serverTimestamp(),
         });
         isLogged = true;
         loginUser(
@@ -66,9 +66,9 @@ function Login(props) {
       }
     });
     if (!isLogged) {
-       NotificationManager.info(
-          "Username && passsword incorrect,please try again!"
-        );
+      NotificationManager.info(
+        "Username && passsword incorrect,please try again!"
+      );
     }
   };
 

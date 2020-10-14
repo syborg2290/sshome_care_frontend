@@ -23,12 +23,12 @@ import {
 
 // styles
 import useStyles from "./styles";
-import "./Dashboard.css";
+import "./Dashboard_showroom.css";
 
 // components
 import mock from "./mock";
 import Widget from "../../Widget/Widget";
-import PageTitle from "../../PageTitle/PageTitle";
+import PageTitle from "../../PageTitle/PageTitle_showroom";
 import { Typography } from "../../Wrappers/Wrappers";
 import Dot from "../../Sidebar/components/Dot";
 import Table from "./components/Table/Table";

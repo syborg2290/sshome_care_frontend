@@ -22,7 +22,7 @@ import {
 } from "../../../context/LayoutContext";
 import { useUserDispatch, signOut } from "../../../context/UserContext";
 
-export default function Header(props) {
+export default function HeaderShowroom(props) {
   var classes = useStyles();
 
   // global

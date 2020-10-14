@@ -3,6 +3,7 @@ import { HashRouter, Route, Switch, Redirect } from "react-router-dom";
 
 // components
 import Layout from "../src/main/admin/Layout/Layout";
+import Layoutshowroom from "../src/main/emp_showroom/Layout/Layout_showroom";
 
 // pages
 import Error from "./main/admin/pages/error/Error";
@@ -20,6 +21,7 @@ export default function App() {
       <Switch>
         <Route exact path="/" render={() => <Redirect to="/login" />} />
         <PrivateRoute path="/admin" component={Layout} />
+        <PrivateRoute path="/showroom" component={Layoutshowroom} />
         <PublicRoute path="/login" component={Login} />
         <Route component={Error} />
       </Switch>
@@ -59,7 +61,7 @@ export default function App() {
           isAuthenticated ? (
             <Redirect
               to={{
-                pathname:role==="admin"? "/admin/dashboard":"",
+                pathname:role==="admin"? "/admin/dashboard":"/showroom/dashboard",
               }}
             />
           ) : (

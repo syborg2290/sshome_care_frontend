@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-// eslint-disable-next-line
-import { Grid, Button } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import { Spin, Modal } from "antd";
 import MUIDataTable from "mui-datatables";
 
@@ -55,6 +54,72 @@ export default function ItemTable() {
       });
   }, []);
 
+  const columns = [
+    {
+      name: "IMG",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "Customer Name",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "NIC",
+      options: {
+        filter: false,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "Address",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "MODEL NO",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "STATUS",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "ACTION",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+  ];
+
   return (
     <>
       <Modal
@@ -67,35 +132,11 @@ export default function ItemTable() {
       >
         <div className="table_Model">
           <div className="model_Main">
-            {/* <img
-              className="model_img"
-              src={
-                allTtemData.data && allTtemData.data[currentIndx]
-                  ? allTtemData.data[currentIndx].photo === "null"
-                    ? ""
-                    : allTtemData.data[currentIndx].photo
-                  : ""
-              }
-              alt=""
-            /> */}
+
             <div className="model_Detail">
               <p>BRAND</p>
               <p>QTY</p>
               <p>COLOR</p>
-              <p>MODEL NO</p>
-              <p>SALE PRICE(LKR)</p>
-              <p>CHASSIS NO</p>
-              <p>CASH PRICE(LKR)</p>
-              <p>DOWN PAYMENT(LKR)</p>
-              <p>NO OF INSTALLMENT</p>
-              <p>AMOUNT PER INSTALLMENT(LKR)</p>
-              <p>GUARANTEE MONTHS/YEARS</p>
-              <p>GUARANTEE PERIOD</p>
-              <p>DISCOUNT(LKR)</p>
-              <p>DESCRIPTION</p>
-              <p>COMPANY INVOICE NO</p>
-              <p>GUARANTEE CARD NO</p>
-              <p>CREATED DATE</p>
             </div>
           </div>
         </div>
@@ -107,15 +148,7 @@ export default function ItemTable() {
             title={<span className="title_Span">ALL CUSTOMERS</span>}
             className="customer_table"
             data={customerTableData}
-            columns={[
-              "IMG",
-              "Customer Name",
-              "NIC",
-              "Address",
-              "MODEL NO",
-              "STATUS",
-              "ACTION",
-            ]}
+            columns={columns}
             options={{
               selectableRows: false,
               customToolbarSelect: () => {},

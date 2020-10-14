@@ -118,12 +118,86 @@ export default function ItemTable() {
   //   }
   //   return -1; //to handle the case where the value doesn't exist
   // }
+  const columns = [
+    {
+      name: "Item name",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "Brand",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "Qty",
+      options: {
+        filter: false,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "Color",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "Model no",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "Sale price(LKR)",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "Status",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "Action",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+  ];
 
   return (
     <>
       <Modal
         title={
-          <span className="model_title">
+          <span className="model_title_Showroom">
             {allTtemData[currentIndx] && allTtemData[currentIndx].data
               ? allTtemData[currentIndx].data.itemName
               : null}
@@ -131,17 +205,17 @@ export default function ItemTable() {
         }
         visible={visible}
         footer={null}
-        className="model_Item"
+        className="model_Item_Showroom"
         onCancel={() => {
           setVisible(false);
         }}
       >
-        <div className="table_Model">
-          <div className="model_Main">
-            <div className="model_Detail">
-              <p>
+        <div className="table_Model_Showroom">
+          <div className="model_Main_Showroom">
+            <div className="model_Detail_Showroom">
+              <p className="model_List_Showroom">
                 BRAND
-                <span className="load_Item">
+                <span className="load_Item_Showroom">
                   :{" "}
                   {allTtemData[currentIndx] && allTtemData[currentIndx].data
                     ? allTtemData[currentIndx].data.brand
@@ -150,7 +224,7 @@ export default function ItemTable() {
               </p>
               <p>
                 QTY
-                <span className="load_Item">
+                <span className="load_Item_Showroom">
                   {" "}
                   :{" "}
                   {allTtemData[currentIndx] && allTtemData[currentIndx].data
@@ -160,7 +234,7 @@ export default function ItemTable() {
               </p>
               <p>
                 COLOR
-                <span className="load_Item">
+                <span className="load_Item_Showroom">
                   {" "}
                   :{" "}
                   {allTtemData[currentIndx] && allTtemData[currentIndx].data
@@ -170,7 +244,7 @@ export default function ItemTable() {
               </p>
               <p>
                 MODEL NO
-                <span className="load_Item">
+                <span className="load_Item_Showroom">
                   {" "}
                   :{" "}
                   {allTtemData[currentIndx] && allTtemData[currentIndx].data
@@ -180,7 +254,7 @@ export default function ItemTable() {
               </p>
               <p>
                 SALE PRICE(LKR)
-                <span className="load_Item">
+                <span className="load_Item_Showroom">
                   {" "}
                   :{" "}
                   {allTtemData[currentIndx] && allTtemData[currentIndx].data ? (
@@ -197,7 +271,7 @@ export default function ItemTable() {
               </p>
               <p>
                 CHASSIS NO
-                <span className="load_Item">
+                <span className="load_Item_Showroom">
                   {" "}
                   :{" "}
                   {allTtemData[currentIndx] && allTtemData[currentIndx].data
@@ -207,7 +281,7 @@ export default function ItemTable() {
               </p>
               <p>
                 CASH PRICE(LKR)
-                <span className="load_Item">
+                <span className="load_Item_Showroom">
                   {" "}
                   :{" "}
                   {allTtemData[currentIndx] && allTtemData[currentIndx].data ? (
@@ -224,7 +298,7 @@ export default function ItemTable() {
               </p>
               <p>
                 DOWN PAYMENT(LKR)
-                <span className="load_Item">
+                <span className="load_Item_Showroom">
                   {" "}
                   :{" "}
                   {allTtemData[currentIndx] && allTtemData[currentIndx].data ? (
@@ -241,7 +315,7 @@ export default function ItemTable() {
               </p>
               <p>
                 NO OF INSTALLMENT
-                <span className="load_Item">
+                <span className="load_Item_Showroom">
                   {" "}
                   :{" "}
                   {allTtemData[currentIndx] && allTtemData[currentIndx].data
@@ -251,7 +325,7 @@ export default function ItemTable() {
               </p>
               <p>
                 AMOUNT PER INSTALLMENT(LKR)
-                <span className="load_Item">
+                <span className="load_Item_Showroom">
                   {" "}
                   :{" "}
                   {allTtemData[currentIndx] && allTtemData[currentIndx].data ? (
@@ -268,7 +342,7 @@ export default function ItemTable() {
               </p>
               <p>
                 GUARANTEE MONTHS/YEARS
-                <span className="load_Item">
+                <span className="load_Item_Showroom">
                   {" "}
                   :{" "}
                   {allTtemData[currentIndx] && allTtemData[currentIndx].data
@@ -278,7 +352,7 @@ export default function ItemTable() {
               </p>
               <p>
                 GUARANTEE PERIOD
-                <span className="load_Item">
+                <span className="load_Item_Showroom">
                   {" "}
                   :{" "}
                   {allTtemData[currentIndx] && allTtemData[currentIndx].data
@@ -288,7 +362,7 @@ export default function ItemTable() {
               </p>
               <p>
                 DISCOUNT(LKR)
-                <span className="load_Item">
+                <span className="load_Item_Showroom">
                   {" "}
                   :{" "}
                   {allTtemData[currentIndx] && allTtemData[currentIndx].data ? (
@@ -305,7 +379,7 @@ export default function ItemTable() {
               </p>
               <p>
                 DESCRIPTION
-                <span className="load_Item">
+                <span className="load_Item_Showroom">
                   {" "}
                   :{" "}
                   {allTtemData[currentIndx] && allTtemData[currentIndx].data
@@ -315,7 +389,7 @@ export default function ItemTable() {
               </p>
               <p>
                 COMPANY INVOICE NO
-                <span className="load_Item">
+                <span className="load_Item_Showroom">
                   {" "}
                   :{" "}
                   {allTtemData[currentIndx] && allTtemData[currentIndx].data
@@ -325,7 +399,7 @@ export default function ItemTable() {
               </p>
               <p>
                 GUARANTEE CARD NO
-                <span className="load_Item">
+                <span className="load_Item_Showroom">
                   {" "}
                   :{" "}
                   {allTtemData[currentIndx] && allTtemData[currentIndx].data
@@ -335,7 +409,7 @@ export default function ItemTable() {
               </p>
               <p>
                 CREATED DATE
-                <span className="load_Item">
+                <span className="load_Item_Showroom">
                   {" "}
                   :{" "}
                   {moment
@@ -368,16 +442,7 @@ export default function ItemTable() {
             title={<span className="title_Span">All Items</span>}
             className="item_table"
             data={itemTableData}
-            columns={[
-              "Item Name",
-              "Brand",
-              "Qty",
-              "Color",
-              "Model No",
-              "Sale Price(LKR)",
-              "Status",
-              "Action",
-            ]}
+            columns={columns}
             options={{
               selectableRows: true,
               customToolbarSelect: () => {},

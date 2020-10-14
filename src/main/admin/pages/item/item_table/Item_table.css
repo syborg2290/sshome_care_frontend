@@ -1,6 +1,9 @@
 .item_table {
   margin-top: 70px !important;
 }
+.tbl_Container {
+  margin-top: 70px !important;
+}
 
 @media screen and (min-width: 280px) {
   .tblSpinner {
@@ -133,9 +136,9 @@
 }
 
 .title_Span {
-  font-weight: 700;
+  font-weight: 800 !important;
   font-size: large;
-  color: #34314c;
+  color: #222a44;
 }
 
 .status {
@@ -515,14 +518,21 @@
 }
 
 .load_Item {
-  color: #000000;
-  font-weight: 700 !important;
+  color: rgb(0, 0, 0) !important;
+  font-size: 19px !important;
 }
 
 .model_title {
-  color: red;
+  color: #222a44 !important;
+  font-weight: 900 !important;
+  font-size: 20px !important;
 }
 
+.model_Detail {
+  color: #222a44 !important;
+  font-weight: 800 !important;
+  font-size: 12px !important;
+}
 /* END  model */
 
 .model_conform {

@@ -202,67 +202,81 @@ export default function ItemTable() {
   const editModalClose = () => {
     setEditVisible(false);
   };
-  
-  
-   const columns = [
-      {
-        name: 'Item name',
-        options: {
-          filter: true,
-         setCellHeaderProps: value => ({ style: { fontSize: '20px',color:"gray",fontWeight:"400px" } }),
-         
-        },
+
+  const columns = [
+    {
+      name: "Item name",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
       },
-      {
-        name: 'Brand',
-        options: {
-          filter: true,
-          setCellHeaderProps: value => ({ style: {fontSize: '20px',color:"gray",fontWeight:"400px" } }),
-        },
+    },
+    {
+      name: "Brand",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
       },
-      {
-        name: 'Qty',
-        options: {
-          filter: false,
-          setCellHeaderProps: value => ({ style: { fontSize: '20px',color:"gray",fontWeight:"400px" } }),
-        },
+    },
+    {
+      name: "Qty",
+      options: {
+        filter: false,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
       },
-      {
-        name: 'Color',
-        options: {
-          filter: true,
-          setCellHeaderProps: value => ({ style: { fontSize: '20px',color:"gray",fontWeight:"400px" } }),
-        },
+    },
+    {
+      name: "Color",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
       },
-      {
-        name: 'Model no',
-        options: {
-          filter: true,
-          setCellHeaderProps: value => ({ style: { fontSize: '20px',color:"gray",fontWeight:"400px" } }),
-        },
-     },
-       {
-        name: 'Sale price(LKR)',
-        options: {
-          filter: true,
-          setCellHeaderProps: value => ({ style: { fontSize: '20px',color:"gray",fontWeight:"400px" } }),
-        },
-     },
-        {
-        name: 'Status',
-        options: {
-          filter: true,
-          setCellHeaderProps: value => ({ style: { fontSize: '20px',color:"gray",fontWeight:"400px" } }),
-        },
-     },
-         {
-        name: 'Action',
-        options: {
-          filter: true,
-          setCellHeaderProps: value => ({ style: { fontSize: '20px',color:"gray",fontWeight:"400px" } }),
-        },
+    },
+    {
+      name: "Model no",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
       },
-    ];
+    },
+    {
+      name: "Sale price(LKR)",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "Status",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "Action",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+  ];
 
   return (
     <>
@@ -641,17 +655,16 @@ export default function ItemTable() {
         </div>
       </Modal>
 
-      <Grid container spacing={4}>
+      <Grid className="tbl_Container" container spacing={4}>
         <Grid item xs={12}>
           <MUIDataTable
-            title={<span className="title_Span">ITEM LIST</span>}
+            title={<span className="title_Span">Item List</span>}
             className="item_table"
             data={itemTableData}
             columns={columns}
-             
             options={{
               selectableRows: false,
-            
+
               customToolbarSelect: () => {},
               filterType: "checkbox",
               download: false,

@@ -58,13 +58,8 @@ const structure = [
   {
     id: 4,
     label: "Customers",
-    link: "/admin/ui",
+    link: "/admin/ui/customers/customerTable",
     icon: <GroupIcon className="icons" />,
-    children: [
-      { label: "Add Customer", link: "/admin/ui/icons" },
-      { label: "Charts", link: "/admin/ui/charts" },
-      { label: "View Customer", link: "/admin/uioo/maps" },
-    ],
   },
 
   { id: 5, type: "divider" },

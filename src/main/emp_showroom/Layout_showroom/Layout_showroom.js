@@ -10,9 +10,8 @@ import Header from "../Header_showroom/Header_showroom";
 import Sidebar from "../Sidebar_showroom/Sidebar_showroom";
 
 // pages
-import Dashboard from "../pages_showroom/dashboard/Dashboard_showroom";
-import Charts from "../pages_showroom/charts/Charts_showroom";
 import ItemTable from "../pages_showroom/item/item_table/Item_table_showroom";
+import CustomerTable from "../pages_showroom/customer/customer_table/Customer_table_showroom";
 
 function LayoutShowroom(props) {
   return (
@@ -23,9 +22,8 @@ function LayoutShowroom(props) {
         <div className="content">
           <div className="fakeToolbar" />
           <Switch>
-            <Route path="/showroom/dashboard" component={Dashboard} />
-            <Route path="/showroom/ui/item/itemTable" component={ItemTable} />
-            <Route path="/showroom/ui/charts" component={Charts} />
+            <Route path="/showroom/itemTable" component={ItemTable} />
+            <Route path="/showroom/ui/customer" component={CustomerTable} />
           </Switch>
         </div>
       </>

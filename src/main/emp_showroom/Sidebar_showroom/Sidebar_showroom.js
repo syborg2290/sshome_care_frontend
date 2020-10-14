@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Drawer, IconButton, List } from "@material-ui/core";
 import {
-  Home as HomeIcon,
   Tv as TvIcon,
   Group as GroupIcon,
   MoneyOff as MoneyOffIcon,
   Build as BuildIcon,
   PersonAddDisabled as PersonAddDisabledIcon,
-  PermIdentity as PermIdentityIcon,
-  Settings as SettingsIcon,
   LibraryBooks as LibraryIcon,
   ArrowBack as ArrowBackIcon,
 } from "@material-ui/icons";
@@ -33,9 +30,16 @@ import {
 const structure = [
   {
     id: 0,
-    label: "Dashboard",
-    link: "/app/dashboard",
-    icon: <HomeIcon className="icons" />,
+    label: "Items",
+    link: "/showroom/itemTable",
+    icon: <TvIcon className="icons" />,
+  },
+
+  {
+    id: 4,
+    label: "Customers",
+    link: "/showroom/ui/customer",
+    icon: <GroupIcon className="icons" />,
   },
 
   {
@@ -43,28 +47,6 @@ const structure = [
     label: "Invoice",
     link: "",
     icon: <LibraryIcon className="icons" />,
-  },
-  {
-    id: 1,
-    label: "Items",
-    link: "/app/ui",
-    icon: <TvIcon className="icons" />,
-    children: [
-      { label: "Item Table", link: "/app/ui/item/itemTable" },
-      { label: "Add Item", link: "/app/ui/item/add_item" },
-    ],
-  },
-
-  {
-    id: 4,
-    label: "Customers",
-    link: "/app/ui",
-    icon: <GroupIcon className="icons" />,
-    children: [
-      { label: "Add Customer", link: "/app/ui/icons" },
-      { label: "Charts", link: "/app/ui/charts" },
-      { label: "View Customer", link: "/app/uioo/maps" },
-    ],
   },
 
   { id: 5, type: "divider" },
@@ -82,19 +64,6 @@ const structure = [
     icon: <PersonAddDisabledIcon className="icons" />,
   },
   { id: 2, type: "divider" },
-
-  {
-    id: 7,
-    label: "Accounts",
-    link: "/app/ui/accounts",
-    icon: <PermIdentityIcon className="icons" />,
-  },
-  {
-    id: 8,
-    label: "Settings",
-    link: "/app/ui/settings",
-    icon: <SettingsIcon className="icons" />,
-  },
 ];
 
 function Sidebar({ location }) {

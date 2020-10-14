@@ -6,7 +6,7 @@ import Layout from "../src/main/admin/Layout/Layout";
 import Layoutshowroom from "../src/main/emp_showroom/Layout_showroom/Layout_showroom";
 
 // pages
-import Error from "./main/admin/pages/error/Error";
+import Error from "./main/error/Error";
 import Login from "./main/login/Login";
 
 // context
@@ -62,7 +62,7 @@ export default function App() {
             <Redirect
               to={{
                 pathname:
-                  role === "admin" ? "/admin/dashboard" : "/showroom/dashboard",
+                  role === "admin" ? "/admin/dashboard" : "/showroom/itemTable",
               }}
             />
           ) : (

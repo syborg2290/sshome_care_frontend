@@ -90,11 +90,15 @@ export default function ItemTable() {
               }
               variant="contained"
             >
-              {element.data().qty !== 0
-                ? element.data().qty >= 3
-                  ? "Available"
-                  : "Low Stock"
-                : "Out Of Stock"}
+              {element.data().qty !== 0 ? (
+                element.data().qty >= 3 ? (
+                  <p className="status">Available</p>
+                ) : (
+                  <p className="status">Low Stock</p>
+                )
+              ) : (
+                <p className="status">Out Of Stock</p>
+              )}
             </div>,
             <div className="table_icon">
               <VisibilityIcon onClick={showModal} />

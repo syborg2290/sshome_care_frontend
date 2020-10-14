@@ -198,6 +198,67 @@ export default function ItemTable() {
   const editModalClose = () => {
     setEditVisible(false);
   };
+  
+  
+   const columns = [
+      {
+        name: 'Item name',
+        options: {
+          filter: true,
+         setCellHeaderProps: value => ({ style: { fontSize: '20px',color:"gray",fontWeight:"400px" } }),
+         
+        },
+      },
+      {
+        name: 'Brand',
+        options: {
+          filter: true,
+          setCellHeaderProps: value => ({ style: {fontSize: '20px',color:"gray",fontWeight:"400px" } }),
+        },
+      },
+      {
+        name: 'Qty',
+        options: {
+          filter: false,
+          setCellHeaderProps: value => ({ style: { fontSize: '20px',color:"gray",fontWeight:"400px" } }),
+        },
+      },
+      {
+        name: 'Color',
+        options: {
+          filter: true,
+          setCellHeaderProps: value => ({ style: { fontSize: '20px',color:"gray",fontWeight:"400px" } }),
+        },
+      },
+      {
+        name: 'Model no',
+        options: {
+          filter: true,
+          setCellHeaderProps: value => ({ style: { fontSize: '20px',color:"gray",fontWeight:"400px" } }),
+        },
+     },
+       {
+        name: 'Sale price(LKR)',
+        options: {
+          filter: true,
+          setCellHeaderProps: value => ({ style: { fontSize: '20px',color:"gray",fontWeight:"400px" } }),
+        },
+     },
+        {
+        name: 'Status',
+        options: {
+          filter: true,
+          setCellHeaderProps: value => ({ style: { fontSize: '20px',color:"gray",fontWeight:"400px" } }),
+        },
+     },
+         {
+        name: 'Action',
+        options: {
+          filter: true,
+          setCellHeaderProps: value => ({ style: { fontSize: '20px',color:"gray",fontWeight:"400px" } }),
+        },
+      },
+    ];
 
   return (
     <>
@@ -582,18 +643,11 @@ export default function ItemTable() {
             title={<span className="title_Span">ITEM LIST</span>}
             className="item_table"
             data={itemTableData}
-            columns={[
-              "ITEM NAME",
-              "BRAND",
-              "QTY",
-              "COLOR",
-              "MODEL NO",
-              "SALE PRICE(LKR)",
-              "STATUS",
-              "ACTION",
-            ]}
+            columns={columns}
+             
             options={{
               selectableRows: false,
+            
               customToolbarSelect: () => {},
               filterType: "checkbox",
               download: false,

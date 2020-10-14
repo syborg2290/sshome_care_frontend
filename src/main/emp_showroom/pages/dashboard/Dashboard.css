@@ -1,0 +1,12 @@
+.card {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.visitsNumberContainer {
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+  padding-bottom: 20px;
+}

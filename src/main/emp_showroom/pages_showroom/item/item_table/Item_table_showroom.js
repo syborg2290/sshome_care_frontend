@@ -222,7 +222,7 @@ export default function ItemTable() {
       {/*Selected Item Model */}
 
       <Modal
-        title="Selected Item"
+        title="Selected Items"
         visible={selectedItemtVisible}
         footer={null}
         className="model_selected Item"

@@ -387,6 +387,167 @@ function AddItem() {
                   value={salePrice}
                   onChange={(e) => {
                     setSalePrice(e.target.value);
+                    if (e.target.value > 0 || e.target.value != null) {
+                      setAmountPerInstallment(0);
+                    }
+                    if (noOfInstallments > 0 && downPayment > 0) {
+                      var value = e.target.value;
+                      var rest = value - downPayment;
+                      var amountPerIns = rest / noOfInstallments;
+                      if (amountPerIns > 0) {
+                        setAmountPerInstallment(Math.round(amountPerIns));
+                      } else {
+                        setAmountPerInstallment(0);
+                      }
+                    }
+                  }}
+                />
+              </Form.Item>
+              <Form.Item label="* Down Payment (LKR)">
+                <Input
+                  required={true}
+                  type="number"
+                  min={1}
+                  allowClear
+                  placeholder="5000.00"
+                  value={downPayment}
+                  onChange={(e) => {
+                    if (e.target.value > 0 || e.target.value != null) {
+                      setAmountPerInstallment(0);
+                      setNoOfInstallments(0);
+                    }
+                    var rest = 0;
+                    var amountPerIns = 0;
+                    setDownPayment(e.target.value);
+                    var value = e.target.value;
+                    if (value > 0 && value <= 5000) {
+                      setNoOfInstallments(3);
+                      if (salePrice > 0) {
+                        rest = salePrice - value;
+                        amountPerIns = rest / 3;
+                        if (amountPerIns > 0) {
+                          setAmountPerInstallment(Math.round(amountPerIns));
+                        } else {
+                          setAmountPerInstallment(0);
+                        }
+                      }
+                    }
+
+                    if (value > 5001 && value <= 8000) {
+                      setNoOfInstallments(4);
+                      if (salePrice > 0) {
+                        rest = salePrice - value;
+                        amountPerIns = rest / 4;
+                        if (amountPerIns > 0) {
+                          setAmountPerInstallment(Math.round(amountPerIns));
+                        } else {
+                          setAmountPerInstallment(0);
+                        }
+                      }
+                    }
+
+                    if (value > 8001 && value <= 11000) {
+                      setNoOfInstallments(5);
+                      if (salePrice > 0) {
+                        rest = salePrice - value;
+                        amountPerIns = rest / 5;
+                        if (amountPerIns > 0) {
+                          setAmountPerInstallment(Math.round(amountPerIns));
+                        } else {
+                          setAmountPerInstallment(0);
+                        }
+                      }
+                    }
+
+                    if (value > 11001 && value <= 14000) {
+                      setNoOfInstallments(6);
+                      if (salePrice > 0) {
+                        rest = salePrice - value;
+                        amountPerIns = rest / 6;
+                        if (amountPerIns > 0) {
+                          setAmountPerInstallment(Math.round(amountPerIns));
+                        } else {
+                          setAmountPerInstallment(0);
+                        }
+                      }
+                    }
+
+                    if (value > 14001 && value <= 17000) {
+                      setNoOfInstallments(7);
+                      if (salePrice > 0) {
+                        rest = salePrice - value;
+                        amountPerIns = rest / 7;
+                        if (amountPerIns > 0) {
+                          setAmountPerInstallment(Math.round(amountPerIns));
+                        } else {
+                          setAmountPerInstallment(0);
+                        }
+                      }
+                    }
+                    if (value > 17001 && value <= 20000) {
+                      setNoOfInstallments(8);
+                      if (salePrice > 0) {
+                        rest = salePrice - value;
+                        amountPerIns = rest / 8;
+                        if (amountPerIns > 0) {
+                          setAmountPerInstallment(Math.round(amountPerIns));
+                        } else {
+                          setAmountPerInstallment(0);
+                        }
+                      }
+                    }
+
+                    if (value > 20001 && value <= 23000) {
+                      setNoOfInstallments(9);
+                      if (salePrice > 0) {
+                        rest = salePrice - value;
+                        amountPerIns = rest / 9;
+                        if (amountPerIns > 0) {
+                          setAmountPerInstallment(Math.round(amountPerIns));
+                        } else {
+                          setAmountPerInstallment(0);
+                        }
+                      }
+                    }
+
+                    if (value > 23001 && value <= 26000) {
+                      setNoOfInstallments(10);
+                      if (salePrice > 0) {
+                        rest = salePrice - value;
+                        amountPerIns = rest / 10;
+                        if (amountPerIns > 0) {
+                          setAmountPerInstallment(Math.round(amountPerIns));
+                        } else {
+                          setAmountPerInstallment(0);
+                        }
+                      }
+                    }
+
+                    if (value > 26001 && value <= 29000) {
+                      setNoOfInstallments(11);
+                      if (salePrice > 0) {
+                        rest = salePrice - value;
+                        amountPerIns = rest / 11;
+                        if (amountPerIns > 0) {
+                          setAmountPerInstallment(Math.round(amountPerIns));
+                        } else {
+                          setAmountPerInstallment(0);
+                        }
+                      }
+                    }
+
+                    if (value > 29001 && value >= 32000) {
+                      setNoOfInstallments(12);
+                      if (salePrice > 0) {
+                        rest = salePrice - value;
+                        amountPerIns = rest / 12;
+                        if (amountPerIns > 0) {
+                          setAmountPerInstallment(Math.round(amountPerIns));
+                        } else {
+                          setAmountPerInstallment(0);
+                        }
+                      }
+                    }
                   }}
                 />
               </Form.Item>
@@ -400,6 +561,19 @@ function AddItem() {
                   value={noOfInstallments}
                   onChange={(e) => {
                     setNoOfInstallments(e.target.value);
+                    if (e.target.value > 0 || e.target.value != null) {
+                      setAmountPerInstallment(0);
+                    }
+                    if (salePrice > 0 && downPayment > 0) {
+                      var value = e.target.value;
+                      var rest = salePrice - downPayment;
+                      var amountPerIns = rest / value;
+                      if (amountPerIns > 0) {
+                        setAmountPerInstallment(Math.round(amountPerIns));
+                      } else {
+                        setAmountPerInstallment(0);
+                      }
+                    }
                   }}
                 />
               </Form.Item>
@@ -435,20 +609,6 @@ function AddItem() {
                   }}
                 />
               </Form.Item>
-              <Form.Item label="* Down Payment (LKR)">
-                <Input
-                  required={true}
-                  type="number"
-                  min={1}
-                  allowClear
-                  placeholder="5000.00"
-                  value={downPayment}
-                  onChange={(e) => {
-                    setDownPayment(e.target.value);
-                  }}
-                />
-              </Form.Item>
-
               <Form.Item label="* Discount (LKR)">
                 <Input
                   required={true}
@@ -459,6 +619,24 @@ function AddItem() {
                   value={discount}
                   onChange={(e) => {
                     setDiscount(e.target.value);
+                    var value = e.target.value;
+                    if (value > 0) {
+                      if (salePrice > 0) {
+                        var restSalePricce = salePrice - value;
+                        if (restSalePricce > 0) {
+                          setSalePrice(restSalePricce);
+                          if (downPayment > 0 && noOfInstallments > 0) {
+                            var amountInst = (salePrice - downPayment) / noOfInstallments;
+                            if (amountInst > 0) {
+                              setAmountPerInstallment(Math.round(amountInst));
+                            } else {
+                              setAmountPerInstallment(0);
+                            }
+                          }
+                        }
+                      }
+                     
+                    }
                   }}
                 />
               </Form.Item>

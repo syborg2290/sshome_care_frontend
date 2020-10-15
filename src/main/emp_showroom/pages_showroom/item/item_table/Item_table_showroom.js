@@ -6,6 +6,11 @@ import MUIDataTable from "mui-datatables";
 
 import CurrencyFormat from "react-currency-format";
 import moment from "moment";
+import {
+  NotificationContainer,
+  NotificationManager,
+} from "react-notifications";
+import "react-notifications/lib/notifications.css";
 
 // icons
 import VisibilityIcon from "@material-ui/icons/Visibility";
@@ -89,7 +94,6 @@ export default function ItemTable() {
   }, []);
 
   const onMakeInvoid = () => {
-    
     if (selectedItems.length > 0) {
       setLoaingToInvoice(true);
       var itemList = [];
@@ -105,8 +109,12 @@ export default function ItemTable() {
         search: "?query=abc",
         state: { detail: itemList },
       };
-       setLoaingToInvoice(false);
+      setLoaingToInvoice(false);
       history.push(moveWith);
+    } else {
+       NotificationManager.info(
+          "Please select items"
+        );
     }
   };
 
@@ -433,7 +441,11 @@ export default function ItemTable() {
         endIcon={<DescriptionIcon />}
         onClick={onMakeInvoid}
       >
-        Make Invoice
+        {isLoaingToInvoice ? (
+          <Spin spinning={isLoaingToInvoice} size="large" />
+        ) : (
+          "Make Invoice"
+        )}
       </Button>
 
       <Grid container spacing={4}>
@@ -446,16 +458,16 @@ export default function ItemTable() {
             options={{
               selectableRows: true,
               customToolbarSelect: () => {},
-              filterType: "checkbox",
+              filterType: "textField",
               download: false,
               print: false,
-              searchPlaceholder: "Search using any column names",
+              searchPlaceholder: "Search using any field",
               elevation: 4,
               sort: true,
-              
+
               onRowsSelect: (curRowSelected, allRowsSelected) => {
                 selectedItems = [];
-                allRowsSelected.forEach((single) => { 
+                allRowsSelected.forEach((single) => {
                   selectedItems.push(allTtemData[single.dataIndex]);
                 });
 
@@ -468,7 +480,7 @@ export default function ItemTable() {
                 // ) {
                 //   selectedItems.push(allTtemData[curRowSelected[0].dataIndex]);
                 // } else {
-                 
+
                 //   var index = getIndex(
                 //     allTtemData[curRowSelected[0].dataIndex],
                 //     selectedItems,
@@ -499,7 +511,9 @@ export default function ItemTable() {
             }}
           />
         </Grid>
+         <NotificationContainer />
       </Grid>
+     
     </>
   );
 }

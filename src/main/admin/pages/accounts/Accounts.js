@@ -186,7 +186,7 @@ export default function Accounts() {
               filterType: "textField",
               download: false,
               print: false,
-              searchPlaceholder: "Search using any column names",
+              searchPlaceholder: "Search using any field",
               elevation: 4,
               sort: true,
             }}

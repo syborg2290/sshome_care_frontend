@@ -666,10 +666,10 @@ export default function ItemTable() {
               selectableRows: false,
 
               customToolbarSelect: () => {},
-              filterType: "checkbox",
+              filterType: "textField",
               download: false,
               print: false,
-              searchPlaceholder: "Search using any column names",
+              searchPlaceholder: "Search using any field",
               elevation: 4,
               sort: true,
               onRowClick: (rowData, rowMeta) => {

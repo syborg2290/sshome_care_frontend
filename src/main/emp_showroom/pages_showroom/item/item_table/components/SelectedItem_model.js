@@ -1,6 +1,7 @@
 import React from "react";
-import { List } from "antd";
-import { FolderOpenFilled, CloseCircleOutlined } from "@ant-design/icons";
+import { List, Switch } from "antd";
+import { ShoppingCartOutlined, CloseOutlined } from "@ant-design/icons";
+import { Grid } from "@material-ui/core";
 
 // styles
 import "./SelectedItem_model.css";
@@ -8,8 +9,10 @@ import "./SelectedItem_model.css";
 export default function SelectedItem_Model() {
   const data = [
     {
+      container: "dfdf",
       title: "Gass Coocker",
     },
+
     {
       title: "Television",
     },
@@ -22,15 +25,32 @@ export default function SelectedItem_Model() {
       renderItem={(item) => (
         <List.Item>
           <span className="icons_List">
-            <FolderOpenFilled twoToneColor="#52c41a" />
+            <ShoppingCartOutlined twoToneColor="#52c41a" />
           </span>
           <List.Item.Meta
-            title={<a href="https://ant.design">{item.title}</a>}
-            description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+            title={
+              <Grid container spacing={2}>
+                <Grid item xs={4}>
+                  <a>{item.title}</a>
+                </Grid>
+                <Grid item xs={4}>
+                  <span>
+                    <Switch size="small" />
+                  </span>
+                </Grid>
+                <Grid item xs={4}>
+                  <span className="icons_Close">
+                    <CloseOutlined />
+                  </span>
+                </Grid>
+              </Grid>
+            }
+            description="1499.00"
           />
-          <span className="icons_Close">
+
+          {/* <span className="icons_Close">
             <CloseCircleOutlined twoToneColor="#52c41a" />
-          </span>
+          </span> */}
         </List.Item>
       )}
     />

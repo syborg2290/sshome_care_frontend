@@ -5,6 +5,7 @@
 }
 
 .icons_Close {
-  font-size: 20px !important;
-  color: rgb(243, 11, 11) !important;
+  font-size: 15px !important;
+  color: rgb(245, 67, 67) !important;
+  float: right !important;
 }

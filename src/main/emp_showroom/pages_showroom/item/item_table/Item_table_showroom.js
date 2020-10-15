@@ -124,9 +124,7 @@ export default function ItemTable() {
       setLoaingToInvoice(false);
       history.push(moveWith);
     } else {
-       NotificationManager.info(
-          "Please select items"
-        );
+      NotificationManager.info("Please select items");
     }
   };
 
@@ -138,8 +136,7 @@ export default function ItemTable() {
   //   }
   //   return -1; //to handle the case where the value doesn't exist
   // }
-  
-  
+
   const columns = [
     {
       name: "Item name",
@@ -214,8 +211,6 @@ export default function ItemTable() {
       },
     },
   ];
-  
-
 
   return (
     <>
@@ -548,9 +543,8 @@ export default function ItemTable() {
             }}
           />
         </Grid>
-         <NotificationContainer />
+        <NotificationContainer />
       </Grid>
-     
     </>
   );
 }

@@ -127,7 +127,7 @@ function Make_invoice() {
                   className="btn_newItem"
                   endIcon={<TvIcon />}
                 >
-                  Add new Item
+                  Add more items
                 </Button>
               </Grid>
 

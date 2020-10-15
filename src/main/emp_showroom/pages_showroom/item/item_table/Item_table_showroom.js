@@ -6,6 +6,11 @@ import MUIDataTable from "mui-datatables";
 
 import CurrencyFormat from "react-currency-format";
 import moment from "moment";
+import {
+  NotificationContainer,
+  NotificationManager,
+} from "react-notifications";
+import "react-notifications/lib/notifications.css";
 
 //components
 import SelectedtModel from "./components/SelectedItem_model";
@@ -100,6 +105,37 @@ export default function ItemTable() {
     // eslint-disable-next-line
   }, []);
 
+  const onMakeInvoid = () => {
+    if (selectedItems.length > 0) {
+      setLoaingToInvoice(true);
+      var itemList = [];
+      selectedItems.forEach((reItem) => {
+        itemList.push({
+          qty: 1,
+          item: reItem,
+        });
+      });
+
+      var moveWith = {
+        pathname: "/showroom/ui/makeInvoice",
+        search: "?query=abc",
+        state: { detail: itemList },
+      };
+      setLoaingToInvoice(false);
+      history.push(moveWith);
+    } else {
+      NotificationManager.info("Please select items");
+    }
+  };
+
+  // function getIndex(value, arr, prop) {
+  //   for (var i = 0; i < arr.length; i++) {
+  //     if (arr[i][prop] === value) {
+  //       return i;
+  //     }
+  //   }
+  //   return -1; //to handle the case where the value doesn't exist
+  // }
   const columns = [
     {
       name: "Item name",
@@ -174,35 +210,6 @@ export default function ItemTable() {
       },
     },
   ];
-  const onMakeInvoid = () => {
-    if (selectedItems.length > 0) {
-      setLoaingToInvoice(true);
-      var itemList = [];
-      selectedItems.forEach((reItem) => {
-        itemList.push({
-          qty: 1,
-          item: reItem,
-        });
-      });
-
-      var moveWith = {
-        pathname: "/showroom/ui/makeInvoice",
-        search: "?query=abc",
-        state: { detail: itemList },
-      };
-      setLoaingToInvoice(false);
-      history.push(moveWith);
-    }
-  };
-
-  // function getIndex(value, arr, prop) {
-  //   for (var i = 0; i < arr.length; i++) {
-  //     if (arr[i][prop] === value) {
-  //       return i;
-  //     }
-  //   }
-  //   return -1; //to handle the case where the value doesn't exist
-  // }
 
   return (
     <>
@@ -482,10 +489,10 @@ export default function ItemTable() {
             options={{
               selectableRows: true,
               customToolbarSelect: () => {},
-              filterType: "checkbox",
+              filterType: "textField",
               download: false,
               print: false,
-              searchPlaceholder: "Search using any column names",
+              searchPlaceholder: "Search using any field",
               elevation: 4,
               sort: true,
 
@@ -535,6 +542,7 @@ export default function ItemTable() {
             }}
           />
         </Grid>
+        <NotificationContainer />
       </Grid>
     </>
   );

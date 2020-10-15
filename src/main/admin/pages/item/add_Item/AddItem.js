@@ -412,7 +412,11 @@ function AddItem() {
                   placeholder="5000.00"
                   value={downPayment}
                   onChange={(e) => {
-                    if (e.target.value > 0 || e.target.value != null) {
+                    if (
+                      e.target.value > 0 ||
+                      e.target.value != null ||
+                      salePrice === e.target.value
+                    ) {
                       setAmountPerInstallment(0);
                       setNoOfInstallments(0);
                     }
@@ -420,9 +424,7 @@ function AddItem() {
                     var amountPerIns = 0;
                     setDownPayment(e.target.value);
                     var value = e.target.value;
-                    if (salePrice === value) {
-                      setNoOfInstallments(0);
-                    }
+
                     if (value > 0 && value <= 5000) {
                       setNoOfInstallments(3);
                       if (salePrice > 0) {

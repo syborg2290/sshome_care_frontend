@@ -237,8 +237,10 @@ function AddItem() {
                                               var value =
                                                 finalSalePrice -
                                                 Math.round(downPayment);
-                                              setInstallmentCount(value);
-
+                                              var inst = returnInstallmentCount(value);
+                                              if (inst) {
+                                                
+                                                
                                               let variable = {
                                                 itemName: itemName,
                                                 brand: brand,
@@ -253,7 +255,7 @@ function AddItem() {
                                                   finalSalePrice
                                                 ),
                                                 noOfInstallments: Math.round(
-                                                  noOfInstallments
+                                                  inst
                                                 ),
                                                 amountPerInstallment: Math.round(
                                                   amountPerInstallment
@@ -290,6 +292,10 @@ function AddItem() {
                                                     "Please try again"
                                                   );
                                                 });
+                                                
+                                                
+                                              }
+
                                             }
                                           }
                                         }
@@ -313,7 +319,48 @@ function AddItem() {
     }
   };
 
-  const setInstallmentCount = (value) => {
+  const returnInstallmentCount = (value) => {
+    if (value > 0 && value <= 5000) {
+      return 3;
+    }
+
+    if (value > 5001 && value <= 8000) {
+      return 4;
+    }
+
+    if (value > 8001 && value <= 11000) {
+      return 5;
+    }
+
+    if (value > 11001 && value <= 14000) {
+      return 6;
+    }
+
+    if (value > 14001 && value <= 17000) {
+      return 7;
+    }
+    if (value > 17001 && value <= 20000) {
+      return 8;
+    }
+
+    if (value > 20001 && value <= 23000) {
+      return 9;
+    }
+
+    if (value > 23001 && value <= 26000) {
+     return 10;
+    }
+
+    if (value > 26001 && value <= 29000) {
+      return 11;
+    }
+
+    if (value > 29001 && value >= 32000) {
+      return 12;
+    }
+  };
+  
+   const setInstallmentCount = (value) => {
     if (value > 0 && value <= 5000) {
       setNoOfInstallments(3);
     }

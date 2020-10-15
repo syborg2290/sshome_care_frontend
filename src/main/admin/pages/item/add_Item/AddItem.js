@@ -226,20 +226,45 @@ function AddItem() {
                                             } else {
                                               //Rest of code here
                                               setLoadingSubmit(true);
+
+                                              var finalSalePrice =
+                                                Math.round(salePrice) -
+                                                  Math.round(discount) >
+                                                0
+                                                  ? Math.round(salePrice) -
+                                                    Math.round(discount)
+                                                  : 0;
+                                              var value =
+                                                finalSalePrice -
+                                                Math.round(downPayment);
+                                              setInstallmentCount(value);
+
                                               let variable = {
                                                 itemName: itemName,
                                                 brand: brand,
                                                 modelNo: modelNo,
                                                 chassisNo: chassisNo,
                                                 color: color,
-                                                qty: qty,
-                                                cashPrice: cashPrice,
-                                                salePrice: salePrice,
-                                                noOfInstallments: noOfInstallments,
-                                                amountPerInstallment: amountPerInstallment,
-                                                downPayment: downPayment,
-                                                guaranteePeriod: guaranteePeriod,
-                                                discount: discount,
+                                                qty: Math.round(qty),
+                                                cashPrice: Math.round(
+                                                  cashPrice
+                                                ),
+                                                salePrice: Math.round(
+                                                  finalSalePrice
+                                                ),
+                                                noOfInstallments: Math.round(
+                                                  noOfInstallments
+                                                ),
+                                                amountPerInstallment: Math.round(
+                                                  amountPerInstallment
+                                                ),
+                                                downPayment: Math.round(
+                                                  downPayment
+                                                ),
+                                                guaranteePeriod: Math.round(
+                                                  guaranteePeriod
+                                                ),
+                                                discount: Math.round(discount),
                                                 description: description,
                                                 cInvoiceNo: cInvoiceNo,
                                                 GCardNo: GCardNo,
@@ -285,6 +310,47 @@ function AddItem() {
           }
         }
       }
+    }
+  };
+
+  const setInstallmentCount = (value) => {
+    if (value > 0 && value <= 5000) {
+      setNoOfInstallments(3);
+    }
+
+    if (value > 5001 && value <= 8000) {
+      setNoOfInstallments(4);
+    }
+
+    if (value > 8001 && value <= 11000) {
+      setNoOfInstallments(5);
+    }
+
+    if (value > 11001 && value <= 14000) {
+      setNoOfInstallments(6);
+    }
+
+    if (value > 14001 && value <= 17000) {
+      setNoOfInstallments(7);
+    }
+    if (value > 17001 && value <= 20000) {
+      setNoOfInstallments(8);
+    }
+
+    if (value > 20001 && value <= 23000) {
+      setNoOfInstallments(9);
+    }
+
+    if (value > 23001 && value <= 26000) {
+      setNoOfInstallments(10);
+    }
+
+    if (value > 26001 && value <= 29000) {
+      setNoOfInstallments(11);
+    }
+
+    if (value > 29001 && value >= 32000) {
+      setNoOfInstallments(12);
     }
   };
 
@@ -386,20 +452,21 @@ function AddItem() {
                   placeholder="17000.00"
                   value={salePrice}
                   onChange={(e) => {
-                    setSalePrice(e.target.value);
-                    if (e.target.value > 0 || e.target.value != null) {
-                      setAmountPerInstallment(0);
-                    }
-                    if (noOfInstallments > 0 && downPayment > 0) {
-                      var value = e.target.value;
-                      var rest = value - downPayment;
-                      var amountPerIns = rest / noOfInstallments;
-                      if (amountPerIns > 0) {
-                        setAmountPerInstallment(Math.round(amountPerIns));
+                    if (e.target.value.length === 0) {
+                      setNoOfInstallments(0);
+                    } else {
+                      if (e.target.value === downPayment) {
+                        setNoOfInstallments(0);
                       } else {
-                        setAmountPerInstallment(0);
+                        if (e.target.value === 0) {
+                          setNoOfInstallments(0);
+                        } else {
+                          setInstallmentCount(e.target.value -downPayment);
+                        }
                       }
                     }
+
+                    setSalePrice(e.target.value);
                   }}
                 />
               </Form.Item>
@@ -407,152 +474,27 @@ function AddItem() {
                 <Input
                   required={true}
                   type="number"
+                  disabled={salePrice > 0 ? false : true}
                   min={1}
                   allowClear
                   placeholder="5000.00"
                   value={downPayment}
                   onChange={(e) => {
-                    if (
-                      e.target.value > 0 ||
-                      e.target.value != null ||
-                      salePrice === e.target.value
-                    ) {
-                      setAmountPerInstallment(0);
+                    if (e.target.value.length === 0) {
                       setNoOfInstallments(0);
+                    } else {
+                      if (e.target.value === salePrice) {
+                        setNoOfInstallments(0);
+                      } else {
+                        if (e.target.value === 0) {
+                          setNoOfInstallments(0);
+                        } else {
+                          setInstallmentCount(salePrice - e.target.value);
+                        }
+                      }
                     }
-                    var rest = 0;
-                    var amountPerIns = 0;
+
                     setDownPayment(e.target.value);
-                    var value = e.target.value;
-
-                    if (value > 0 && value <= 5000) {
-                      setNoOfInstallments(3);
-                      if (salePrice > 0) {
-                        rest = salePrice - value;
-                        amountPerIns = rest / 3;
-                        if (amountPerIns > 0) {
-                          setAmountPerInstallment(Math.round(amountPerIns));
-                        } else {
-                          setAmountPerInstallment(0);
-                        }
-                      }
-                    }
-
-                    if (value > 5001 && value <= 8000) {
-                      setNoOfInstallments(4);
-                      if (salePrice > 0) {
-                        rest = salePrice - value;
-                        amountPerIns = rest / 4;
-                        if (amountPerIns > 0) {
-                          setAmountPerInstallment(Math.round(amountPerIns));
-                        } else {
-                          setAmountPerInstallment(0);
-                        }
-                      }
-                    }
-
-                    if (value > 8001 && value <= 11000) {
-                      setNoOfInstallments(5);
-                      if (salePrice > 0) {
-                        rest = salePrice - value;
-                        amountPerIns = rest / 5;
-                        if (amountPerIns > 0) {
-                          setAmountPerInstallment(Math.round(amountPerIns));
-                        } else {
-                          setAmountPerInstallment(0);
-                        }
-                      }
-                    }
-
-                    if (value > 11001 && value <= 14000) {
-                      setNoOfInstallments(6);
-                      if (salePrice > 0) {
-                        rest = salePrice - value;
-                        amountPerIns = rest / 6;
-                        if (amountPerIns > 0) {
-                          setAmountPerInstallment(Math.round(amountPerIns));
-                        } else {
-                          setAmountPerInstallment(0);
-                        }
-                      }
-                    }
-
-                    if (value > 14001 && value <= 17000) {
-                      setNoOfInstallments(7);
-                      if (salePrice > 0) {
-                        rest = salePrice - value;
-                        amountPerIns = rest / 7;
-                        if (amountPerIns > 0) {
-                          setAmountPerInstallment(Math.round(amountPerIns));
-                        } else {
-                          setAmountPerInstallment(0);
-                        }
-                      }
-                    }
-                    if (value > 17001 && value <= 20000) {
-                      setNoOfInstallments(8);
-                      if (salePrice > 0) {
-                        rest = salePrice - value;
-                        amountPerIns = rest / 8;
-                        if (amountPerIns > 0) {
-                          setAmountPerInstallment(Math.round(amountPerIns));
-                        } else {
-                          setAmountPerInstallment(0);
-                        }
-                      }
-                    }
-
-                    if (value > 20001 && value <= 23000) {
-                      setNoOfInstallments(9);
-                      if (salePrice > 0) {
-                        rest = salePrice - value;
-                        amountPerIns = rest / 9;
-                        if (amountPerIns > 0) {
-                          setAmountPerInstallment(Math.round(amountPerIns));
-                        } else {
-                          setAmountPerInstallment(0);
-                        }
-                      }
-                    }
-
-                    if (value > 23001 && value <= 26000) {
-                      setNoOfInstallments(10);
-                      if (salePrice > 0) {
-                        rest = salePrice - value;
-                        amountPerIns = rest / 10;
-                        if (amountPerIns > 0) {
-                          setAmountPerInstallment(Math.round(amountPerIns));
-                        } else {
-                          setAmountPerInstallment(0);
-                        }
-                      }
-                    }
-
-                    if (value > 26001 && value <= 29000) {
-                      setNoOfInstallments(11);
-                      if (salePrice > 0) {
-                        rest = salePrice - value;
-                        amountPerIns = rest / 11;
-                        if (amountPerIns > 0) {
-                          setAmountPerInstallment(Math.round(amountPerIns));
-                        } else {
-                          setAmountPerInstallment(0);
-                        }
-                      }
-                    }
-
-                    if (value > 29001 && value >= 32000) {
-                      setNoOfInstallments(12);
-                      if (salePrice > 0) {
-                        rest = salePrice - value;
-                        amountPerIns = rest / 12;
-                        if (amountPerIns > 0) {
-                          setAmountPerInstallment(Math.round(amountPerIns));
-                        } else {
-                          setAmountPerInstallment(0);
-                        }
-                      }
-                    }
                   }}
                 />
               </Form.Item>
@@ -562,23 +504,11 @@ function AddItem() {
                   type="number"
                   min={1}
                   allowClear
+                  disabled={salePrice > 0 ? false : true}
                   placeholder="20"
                   value={noOfInstallments}
                   onChange={(e) => {
                     setNoOfInstallments(e.target.value);
-                    if (e.target.value > 0 || e.target.value != null) {
-                      setAmountPerInstallment(0);
-                    }
-                    if (salePrice > 0 && downPayment > 0) {
-                      var value = e.target.value;
-                      var rest = salePrice - downPayment;
-                      var amountPerIns = rest / value;
-                      if (amountPerIns > 0) {
-                        setAmountPerInstallment(Math.round(amountPerIns));
-                      } else {
-                        setAmountPerInstallment(0);
-                      }
-                    }
                   }}
                 />
               </Form.Item>
@@ -587,6 +517,7 @@ function AddItem() {
                   required={true}
                   type="number"
                   min={1}
+                  disabled={salePrice > 0 ? false : true}
                   allowClear
                   placeholder="3000.00"
                   value={amountPerInstallment}
@@ -619,36 +550,13 @@ function AddItem() {
                   required={true}
                   type="number"
                   min={1}
+                  disabled={salePrice > 0 ? false : true}
                   allowClear
                   placeholder="500.00"
                   value={discount}
                   onChange={(e) => {
                     var value = e.target.value;
-                    if (value > 0) {
-                      setDiscount(e.target.value);
-                      if (salePrice > 0) {
-                        var restSalePricce = salePrice - value;
-                        if (restSalePricce > 0) {
-                          setSalePrice(restSalePricce);
-                          if (downPayment > 0 && noOfInstallments > 0) {
-                            var amountInst =
-                              (salePrice - downPayment) / noOfInstallments;
-                            if (amountInst > 0) {
-                              setAmountPerInstallment(Math.round(amountInst));
-                            } else {
-                              setAmountPerInstallment(0);
-                            }
-                          }
-                        }
-                      }
-                    } else {
-                      var newSalePrice = restSalePricce + discount;
-                      if (newSalePrice > 0) {
-                        setSalePrice(Math.round(newSalePrice));
-                      }
-
-                      setDiscount(e.target.value);
-                    }
+                    setDiscount(value);
                   }}
                 />
               </Form.Item>

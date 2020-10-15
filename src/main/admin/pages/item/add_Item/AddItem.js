@@ -420,6 +420,9 @@ function AddItem() {
                     var amountPerIns = 0;
                     setDownPayment(e.target.value);
                     var value = e.target.value;
+                    if (salePrice === value) {
+                      setNoOfInstallments(0);
+                    }
                     if (value > 0 && value <= 5000) {
                       setNoOfInstallments(3);
                       if (salePrice > 0) {
@@ -618,15 +621,16 @@ function AddItem() {
                   placeholder="500.00"
                   value={discount}
                   onChange={(e) => {
-                    setDiscount(e.target.value);
                     var value = e.target.value;
                     if (value > 0) {
+                      setDiscount(e.target.value);
                       if (salePrice > 0) {
                         var restSalePricce = salePrice - value;
                         if (restSalePricce > 0) {
                           setSalePrice(restSalePricce);
                           if (downPayment > 0 && noOfInstallments > 0) {
-                            var amountInst = (salePrice - downPayment) / noOfInstallments;
+                            var amountInst =
+                              (salePrice - downPayment) / noOfInstallments;
                             if (amountInst > 0) {
                               setAmountPerInstallment(Math.round(amountInst));
                             } else {
@@ -635,7 +639,13 @@ function AddItem() {
                           }
                         }
                       }
-                     
+                    } else {
+                      var newSalePrice = restSalePricce + discount;
+                      if (newSalePrice > 0) {
+                        setSalePrice(Math.round(newSalePrice));
+                      }
+
+                      setDiscount(e.target.value);
                     }
                   }}
                 />

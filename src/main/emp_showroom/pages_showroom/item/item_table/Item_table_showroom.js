@@ -136,6 +136,7 @@ export default function ItemTable() {
   //   }
   //   return -1; //to handle the case where the value doesn't exist
   // }
+
   const columns = [
     {
       name: "Item name",

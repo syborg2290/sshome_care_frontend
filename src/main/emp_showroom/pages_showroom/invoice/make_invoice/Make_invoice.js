@@ -8,7 +8,6 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 
-import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -25,12 +24,6 @@ import TvIcon from "@material-ui/icons/Tv";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 
 const TAX_RATE = 0.07;
-
-const useStyles = makeStyles({
-  table: {
-    minWidth: 700,
-  },
-});
 
 // function ccyFormat(num) {
 //   return `${num.toFixed(2)}`;
@@ -83,6 +76,7 @@ const rows = [
 
 const invoiceSubtotal = subtotal(rows);
 const invoiceTaxes = TAX_RATE * invoiceSubtotal;
+// eslint-disable-next-line
 const invoiceTotal = invoiceTaxes + invoiceSubtotal;
 
 function Make_invoice() {
@@ -107,10 +101,10 @@ function Make_invoice() {
             </Typography>
             <hr className="hr_invoice" />
             <Grid container spacing={2}>
-              <Grid item xs={12} xs={2}>
+              <Grid item xs={2}>
                 <div className="lbl_invoice">Invoice#</div>
               </Grid>
-              <Grid item xs={12} xs={5}>
+              <Grid item xs={5}>
                 <TextField
                   className="txt_Invoice"
                   autoComplete="iNo"
@@ -124,7 +118,7 @@ function Make_invoice() {
                   autoFocus
                 />
               </Grid>
-              <Grid item xs={12} xs={5}>
+              <Grid item xs={5}>
                 <Button
                   type="submit"
                   fullWidth

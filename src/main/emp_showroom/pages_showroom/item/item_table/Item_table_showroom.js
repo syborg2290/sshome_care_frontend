@@ -7,6 +7,9 @@ import MUIDataTable from "mui-datatables";
 import CurrencyFormat from "react-currency-format";
 import moment from "moment";
 
+//components
+import SelectedtModel from "./components/SelectedItem_model";
+
 // icons
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import DescriptionIcon from "@material-ui/icons/Description";
@@ -17,6 +20,8 @@ import "./Item_table_showroom.css";
 import db from "../../../../../config/firebase.js";
 
 export default function ItemTable() {
+  const [selectedItemtVisible, setSelectedItemtVisible] = useState(false);
+
   const [isLoaingToInvoice, setLoaingToInvoice] = useState(false);
   const [itemTableData, setItemTableData] = useState([]);
   // eslint-disable-next-line
@@ -30,6 +35,13 @@ export default function ItemTable() {
 
   const showModal = () => {
     setVisible(true);
+  };
+
+  const selectedModal = () => {
+    setSelectedItemtVisible(true);
+  };
+  const selectedModalClose = () => {
+    setSelectedItemtVisible(false);
   };
 
   useEffect(() => {
@@ -163,7 +175,6 @@ export default function ItemTable() {
     },
   ];
   const onMakeInvoid = () => {
-    
     if (selectedItems.length > 0) {
       setLoaingToInvoice(true);
       var itemList = [];
@@ -179,7 +190,7 @@ export default function ItemTable() {
         search: "?query=abc",
         state: { detail: itemList },
       };
-       setLoaingToInvoice(false);
+      setLoaingToInvoice(false);
       history.push(moveWith);
     }
   };
@@ -195,6 +206,26 @@ export default function ItemTable() {
 
   return (
     <>
+      {/*Selected Item Model */}
+
+      <Modal
+        title="Selected Item"
+        visible={selectedItemtVisible}
+        footer={null}
+        className="model_selected Item"
+        onCancel={selectedModalClose}
+      >
+        <div className="table_selected_Model">
+          <div className="model_selected_Main">
+            <div className="model_selected_Detail">
+              <SelectedtModel />
+            </div>
+          </div>
+        </div>
+      </Modal>
+
+      {/*Selected Item Model */}
+
       <Modal
         title={
           <span className="model_title_Showroom">
@@ -431,7 +462,8 @@ export default function ItemTable() {
         color="primary"
         className="btn_MakeInvoice"
         endIcon={<DescriptionIcon />}
-        onClick={onMakeInvoid}
+        // onClick={onMakeInvoid}
+        onClick={selectedModal}
       >
         {isLoaingToInvoice ? (
           <Spin spinning={isLoaingToInvoice} size="large" />

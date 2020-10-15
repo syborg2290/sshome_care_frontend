@@ -3,7 +3,7 @@ import { Grid, Button } from "@material-ui/core";
 import { Spin, Modal } from "antd";
 import { useHistory } from "react-router-dom";
 import MUIDataTable from "mui-datatables";
-
+import { Row, Col } from "antd";
 import CurrencyFormat from "react-currency-format";
 import moment from "moment";
 import {
@@ -252,214 +252,227 @@ export default function ItemTable() {
         <div className="table_Model_Showroom">
           <div className="model_Main_Showroom">
             <div className="model_Detail_Showroom">
-              <p className="model_List_Showroom">
-                BRAND
-                <span className="load_Item_Showroom">
-                  :{" "}
-                  {allTtemData[currentIndx] && allTtemData[currentIndx].data
-                    ? allTtemData[currentIndx].data.brand
-                    : " - "}
-                </span>
-              </p>
-              <p>
-                QTY
-                <span className="load_Item_Showroom">
-                  {" "}
-                  :{" "}
-                  {allTtemData[currentIndx] && allTtemData[currentIndx].data
-                    ? allTtemData[currentIndx].data.qty
-                    : " - "}{" "}
-                </span>
-              </p>
-              <p>
-                COLOR
-                <span className="load_Item_Showroom">
-                  {" "}
-                  :{" "}
-                  {allTtemData[currentIndx] && allTtemData[currentIndx].data
-                    ? allTtemData[currentIndx].data.color
-                    : " - "}{" "}
-                </span>
-              </p>
-              <p>
-                MODEL NO
-                <span className="load_Item_Showroom">
-                  {" "}
-                  :{" "}
-                  {allTtemData[currentIndx] && allTtemData[currentIndx].data
-                    ? allTtemData[currentIndx].data.modelNo
-                    : " - "}{" "}
-                </span>
-              </p>
-              <p>
-                SALE PRICE(LKR)
-                <span className="load_Item_Showroom">
-                  {" "}
-                  :{" "}
-                  {allTtemData[currentIndx] && allTtemData[currentIndx].data ? (
-                    <CurrencyFormat
-                      value={allTtemData[currentIndx].data.salePrice}
-                      displayType={"text"}
-                      thousandSeparator={true}
-                      prefix={"  "}
-                    />
-                  ) : (
-                    " - "
-                  )}{" "}
-                </span>
-              </p>
-              <p>
-                CHASSIS NO
-                <span className="load_Item_Showroom">
-                  {" "}
-                  :{" "}
-                  {allTtemData[currentIndx] && allTtemData[currentIndx].data
-                    ? allTtemData[currentIndx].data.chassisNo
-                    : " - "}{" "}
-                </span>
-              </p>
-              <p>
-                CASH PRICE(LKR)
-                <span className="load_Item_Showroom">
-                  {" "}
-                  :{" "}
-                  {allTtemData[currentIndx] && allTtemData[currentIndx].data ? (
-                    <CurrencyFormat
-                      value={allTtemData[currentIndx].data.cashPrice}
-                      displayType={"text"}
-                      thousandSeparator={true}
-                      prefix={" "}
-                    />
-                  ) : (
-                    " - "
-                  )}{" "}
-                </span>
-              </p>
-              <p>
-                DOWN PAYMENT(LKR)
-                <span className="load_Item_Showroom">
-                  {" "}
-                  :{" "}
-                  {allTtemData[currentIndx] && allTtemData[currentIndx].data ? (
-                    <CurrencyFormat
-                      value={allTtemData[currentIndx].data.downPayment}
-                      displayType={"text"}
-                      thousandSeparator={true}
-                      prefix={" "}
-                    />
-                  ) : (
-                    " - "
-                  )}{" "}
-                </span>
-              </p>
-              <p>
-                NO OF INSTALLMENT
-                <span className="load_Item_Showroom">
-                  {" "}
-                  :{" "}
-                  {allTtemData[currentIndx] && allTtemData[currentIndx].data
-                    ? allTtemData[currentIndx].data.noOfInstallments
-                    : " - "}{" "}
-                </span>
-              </p>
-              <p>
-                AMOUNT PER INSTALLMENT(LKR)
-                <span className="load_Item_Showroom">
-                  {" "}
-                  :{" "}
-                  {allTtemData[currentIndx] && allTtemData[currentIndx].data ? (
-                    <CurrencyFormat
-                      value={allTtemData[currentIndx].data.amountPerInstallment}
-                      displayType={"text"}
-                      thousandSeparator={true}
-                      prefix={" "}
-                    />
-                  ) : (
-                    " - "
-                  )}{" "}
-                </span>
-              </p>
-              <p>
-                GUARANTEE MONTHS/YEARS
-                <span className="load_Item_Showroom">
-                  {" "}
-                  :{" "}
-                  {allTtemData[currentIndx] && allTtemData[currentIndx].data
-                    ? allTtemData[currentIndx].data.guarantee.value
-                    : " - "}{" "}
-                </span>
-              </p>
-              <p>
-                GUARANTEE PERIOD
-                <span className="load_Item_Showroom">
-                  {" "}
-                  :{" "}
-                  {allTtemData[currentIndx] && allTtemData[currentIndx].data
-                    ? allTtemData[currentIndx].data.guaranteePeriod
-                    : " - "}{" "}
-                </span>
-              </p>
-              <p>
-                DISCOUNT(LKR)
-                <span className="load_Item_Showroom">
-                  {" "}
-                  :{" "}
-                  {allTtemData[currentIndx] && allTtemData[currentIndx].data ? (
-                    <CurrencyFormat
-                      value={allTtemData[currentIndx].data.discount}
-                      displayType={"text"}
-                      thousandSeparator={true}
-                      prefix={" "}
-                    />
-                  ) : (
-                    " - "
-                  )}{" "}
-                </span>
-              </p>
-              <p>
-                DESCRIPTION
-                <span className="load_Item_Showroom">
-                  {" "}
-                  :{" "}
-                  {allTtemData[currentIndx] && allTtemData[currentIndx].data
-                    ? allTtemData[currentIndx].data.description
-                    : " - "}{" "}
-                </span>
-              </p>
-              <p>
-                COMPANY INVOICE NO
-                <span className="load_Item_Showroom">
-                  {" "}
-                  :{" "}
-                  {allTtemData[currentIndx] && allTtemData[currentIndx].data
-                    ? allTtemData[currentIndx].data.cInvoiceNo
-                    : " - "}{" "}
-                </span>
-              </p>
-              <p>
-                GUARANTEE CARD NO
-                <span className="load_Item_Showroom">
-                  {" "}
-                  :{" "}
-                  {allTtemData[currentIndx] && allTtemData[currentIndx].data
-                    ? allTtemData[currentIndx].data.GCardNo
-                    : " - "}{" "}
-                </span>
-              </p>
-              <p>
-                CREATED DATE
-                <span className="load_Item_Showroom">
-                  {" "}
-                  :{" "}
-                  {moment
-                    .unix(
-                      allTtemData[currentIndx] && allTtemData[currentIndx].data
-                        ? allTtemData[currentIndx].data.timestamp
-                        : " - "
-                    )
-                    .format("dddd, MMMM Do YYYY, h:mm:ss a")}
-                </span>
-              </p>
+              <Row>
+                <Col span={12}>BRAND</Col>
+                <Col span={12}>
+                  <span className="load_Item">
+                    <span className="colan">:</span>{" "}
+                    {allTtemData[currentIndx] && allTtemData[currentIndx].data
+                      ? allTtemData[currentIndx].data.brand
+                      : " - "}
+                  </span>
+                </Col>
+
+                <Col span={12}>QTY</Col>
+                <Col span={12}>
+                  <span className="load_Item">
+                    {" "}
+                    <span className="colan">:</span>{" "}
+                    {allTtemData[currentIndx] && allTtemData[currentIndx].data
+                      ? allTtemData[currentIndx].data.qty
+                      : " - "}{" "}
+                  </span>
+                </Col>
+
+                <Col span={12}> COLOR</Col>
+                <Col span={12}>
+                  <span className="load_Item">
+                    {" "}
+                    <span className="colan">:</span>{" "}
+                    {allTtemData[currentIndx] && allTtemData[currentIndx].data
+                      ? allTtemData[currentIndx].data.color
+                      : " - "}{" "}
+                  </span>
+                </Col>
+                <Col span={12}>MODEL NO</Col>
+                <Col span={12}>
+                  <span className="load_Item">
+                    {" "}
+                    <span className="colan">:</span>{" "}
+                    {allTtemData[currentIndx] && allTtemData[currentIndx].data
+                      ? allTtemData[currentIndx].data.modelNo
+                      : " - "}{" "}
+                  </span>
+                </Col>
+                <Col span={12}>SALE PRICE(LKR)</Col>
+                <Col span={12}>
+                  <span className="load_Item">
+                    {" "}
+                    <span className="colan">:</span>{" "}
+                    {allTtemData[currentIndx] &&
+                    allTtemData[currentIndx].data ? (
+                      <CurrencyFormat
+                        value={allTtemData[currentIndx].data.salePrice}
+                        displayType={"text"}
+                        thousandSeparator={true}
+                        prefix={"  "}
+                      />
+                    ) : (
+                      " - "
+                    )}{" "}
+                  </span>
+                </Col>
+                <Col span={12}>CHASSIS NO</Col>
+                <Col span={12}>
+                  <span className="load_Item">
+                    {" "}
+                    <span className="colan">:</span>{" "}
+                    {allTtemData[currentIndx] && allTtemData[currentIndx].data
+                      ? allTtemData[currentIndx].data.chassisNo
+                      : " - "}{" "}
+                  </span>
+                </Col>
+                <Col span={12}>CASH PRICE(LKR)</Col>
+                <Col span={12}>
+                  <span className="load_Item">
+                    {" "}
+                    <span className="colan">:</span>{" "}
+                    {allTtemData[currentIndx] &&
+                    allTtemData[currentIndx].data ? (
+                      <CurrencyFormat
+                        value={allTtemData[currentIndx].data.cashPrice}
+                        displayType={"text"}
+                        thousandSeparator={true}
+                        prefix={" "}
+                      />
+                    ) : (
+                      " - "
+                    )}{" "}
+                  </span>
+                </Col>
+                <Col span={12}>DOWN PAYMENT(LKR)</Col>
+                <Col span={12}>
+                  <span className="load_Item">
+                    {" "}
+                    <span className="colan">:</span>{" "}
+                    {allTtemData[currentIndx] &&
+                    allTtemData[currentIndx].data ? (
+                      <CurrencyFormat
+                        value={allTtemData[currentIndx].data.downPayment}
+                        displayType={"text"}
+                        thousandSeparator={true}
+                        prefix={" "}
+                      />
+                    ) : (
+                      " - "
+                    )}{" "}
+                  </span>
+                </Col>
+                <Col span={12}>NO OF INSTALLMENT</Col>
+                <Col span={12}>
+                  <span className="load_Item">
+                    {" "}
+                    <span className="colan">:</span>{" "}
+                    {allTtemData[currentIndx] && allTtemData[currentIndx].data
+                      ? allTtemData[currentIndx].data.noOfInstallments
+                      : " - "}{" "}
+                  </span>
+                </Col>
+                <Col span={12}>AMOUNT PER INSTALLMENT(LKR)</Col>
+                <Col span={12}>
+                  <span className="load_Item">
+                    {" "}
+                    <span className="colan">:</span>{" "}
+                    {allTtemData[currentIndx] &&
+                    allTtemData[currentIndx].data ? (
+                      <CurrencyFormat
+                        value={
+                          allTtemData[currentIndx].data.amountPerInstallment
+                        }
+                        displayType={"text"}
+                        thousandSeparator={true}
+                        prefix={" "}
+                      />
+                    ) : (
+                      " - "
+                    )}{" "}
+                  </span>
+                </Col>
+
+                <Col span={12}>GUARANTEE MONTHS/YEARS</Col>
+                <Col span={12}>
+                  <span className="load_Item">
+                    {" "}
+                    <span className="colan">:</span>{" "}
+                    {allTtemData[currentIndx] && allTtemData[currentIndx].data
+                      ? allTtemData[currentIndx].data.guarantee.value
+                      : " - "}{" "}
+                  </span>
+                </Col>
+                <Col span={12}>GUARANTEE PERIOD</Col>
+                <Col span={12}>
+                  <span className="load_Item">
+                    {" "}
+                    <span className="colan">:</span>{" "}
+                    {allTtemData[currentIndx] && allTtemData[currentIndx].data
+                      ? allTtemData[currentIndx].data.guaranteePeriod
+                      : " - "}{" "}
+                  </span>
+                </Col>
+                <Col span={12}>DISCOUNT(LKR)</Col>
+                <Col span={12}>
+                  <span className="load_Item">
+                    {" "}
+                    <span className="colan">:</span>{" "}
+                    {allTtemData[currentIndx] &&
+                    allTtemData[currentIndx].data ? (
+                      <CurrencyFormat
+                        value={allTtemData[currentIndx].data.discount}
+                        displayType={"text"}
+                        thousandSeparator={true}
+                        prefix={" "}
+                      />
+                    ) : (
+                      " - "
+                    )}{" "}
+                  </span>
+                </Col>
+                <Col span={12}>DESCRIPTION</Col>
+                <Col span={12}>
+                  <span className="load_Item">
+                    {" "}
+                    <span className="colan">:</span>{" "}
+                    {allTtemData[currentIndx] && allTtemData[currentIndx].data
+                      ? allTtemData[currentIndx].data.description
+                      : " - "}{" "}
+                  </span>
+                </Col>
+                <Col span={12}>COMPANY INVOICE NO</Col>
+                <Col span={12}>
+                  <span className="load_Item">
+                    {" "}
+                    <span className="colan">:</span>{" "}
+                    {allTtemData[currentIndx] && allTtemData[currentIndx].data
+                      ? allTtemData[currentIndx].data.cInvoiceNo
+                      : " - "}{" "}
+                  </span>
+                </Col>
+                <Col span={12}>GUARANTEE CARD NO</Col>
+                <Col span={12}>
+                  <span className="load_Item">
+                    {" "}
+                    <span className="colan">:</span>{" "}
+                    {allTtemData[currentIndx] && allTtemData[currentIndx].data
+                      ? allTtemData[currentIndx].data.GCardNo
+                      : " - "}{" "}
+                  </span>
+                </Col>
+                <Col span={12}>CREATED DATE</Col>
+                <Col span={12}>
+                  <span className="load_Item">
+                    {" "}
+                    <span className="colan">:</span>{" "}
+                    {moment
+                      .unix(
+                        allTtemData[currentIndx] &&
+                          allTtemData[currentIndx].data
+                          ? allTtemData[currentIndx].data.timestamp
+                          : " - "
+                      )
+                      .format("dddd, MMMM Do YYYY, h:mm:ss a")}
+                  </span>
+                </Col>
+              </Row>
             </div>
           </div>
         </div>

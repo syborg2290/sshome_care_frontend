@@ -519,7 +519,8 @@
 
 .load_Item {
   color: rgb(0, 0, 0) !important;
-  font-size: 19px !important;
+  font-size: 14px !important;
+  float: left !important;
 }
 
 .model_title {
@@ -545,3 +546,7 @@
   margin-top: -20px !important;
   
 } */
+
+.colan {
+  padding-right: 10px !important;
+}

@@ -521,3 +521,7 @@
   height: 40px;
   text-align: center;
 }
+
+.colan {
+  padding-right: 10px !important;
+}

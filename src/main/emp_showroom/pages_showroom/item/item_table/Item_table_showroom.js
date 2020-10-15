@@ -12,6 +12,9 @@ import {
 } from "react-notifications";
 import "react-notifications/lib/notifications.css";
 
+//components
+import SelectedtModel from "./components/SelectedItem_model";
+
 // icons
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import DescriptionIcon from "@material-ui/icons/Description";
@@ -22,6 +25,8 @@ import "./Item_table_showroom.css";
 import db from "../../../../../config/firebase.js";
 
 export default function ItemTable() {
+  const [selectedItemtVisible, setSelectedItemtVisible] = useState(false);
+
   const [isLoaingToInvoice, setLoaingToInvoice] = useState(false);
   const [itemTableData, setItemTableData] = useState([]);
   // eslint-disable-next-line
@@ -35,6 +40,13 @@ export default function ItemTable() {
 
   const showModal = () => {
     setVisible(true);
+  };
+
+  const selectedModal = () => {
+    setSelectedItemtVisible(true);
+  };
+  const selectedModalClose = () => {
+    setSelectedItemtVisible(false);
   };
 
   useEffect(() => {
@@ -126,6 +138,8 @@ export default function ItemTable() {
   //   }
   //   return -1; //to handle the case where the value doesn't exist
   // }
+  
+  
   const columns = [
     {
       name: "Item name",
@@ -200,9 +214,31 @@ export default function ItemTable() {
       },
     },
   ];
+  
+
 
   return (
     <>
+      {/*Selected Item Model */}
+
+      <Modal
+        title="Selected Item"
+        visible={selectedItemtVisible}
+        footer={null}
+        className="model_selected Item"
+        onCancel={selectedModalClose}
+      >
+        <div className="table_selected_Model">
+          <div className="model_selected_Main">
+            <div className="model_selected_Detail">
+              <SelectedtModel />
+            </div>
+          </div>
+        </div>
+      </Modal>
+
+      {/*Selected Item Model */}
+
       <Modal
         title={
           <span className="model_title_Showroom">
@@ -439,7 +475,8 @@ export default function ItemTable() {
         color="primary"
         className="btn_MakeInvoice"
         endIcon={<DescriptionIcon />}
-        onClick={onMakeInvoid}
+        // onClick={onMakeInvoid}
+        onClick={selectedModal}
       >
         {isLoaingToInvoice ? (
           <Spin spinning={isLoaingToInvoice} size="large" />

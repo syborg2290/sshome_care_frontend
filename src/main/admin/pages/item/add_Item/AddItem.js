@@ -237,65 +237,64 @@ function AddItem() {
                                               var value =
                                                 finalSalePrice -
                                                 Math.round(downPayment);
-                                              var inst = returnInstallmentCount(value);
+                                              var inst = returnInstallmentCount(
+                                                value
+                                              );
                                               if (inst) {
-                                                
-                                                
-                                              let variable = {
-                                                itemName: itemName,
-                                                brand: brand,
-                                                modelNo: modelNo,
-                                                chassisNo: chassisNo,
-                                                color: color,
-                                                qty: Math.round(qty),
-                                                cashPrice: Math.round(
-                                                  cashPrice
-                                                ),
-                                                salePrice: Math.round(
-                                                  finalSalePrice
-                                                ),
-                                                noOfInstallments: Math.round(
-                                                  inst
-                                                ),
-                                                amountPerInstallment: Math.round(
-                                                  amountPerInstallment
-                                                ),
-                                                downPayment: Math.round(
-                                                  downPayment
-                                                ),
-                                                guaranteePeriod: Math.round(
-                                                  guaranteePeriod
-                                                ),
-                                                discount: Math.round(discount),
-                                                description: description,
-                                                cInvoiceNo: cInvoiceNo,
-                                                GCardNo: GCardNo,
-                                                guarantee: guarantee,
-                                                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                                              };
+                                                let variable = {
+                                                  itemName: itemName,
+                                                  brand: brand,
+                                                  modelNo: modelNo,
+                                                  chassisNo: chassisNo,
+                                                  color: color,
+                                                  qty: Math.round(qty),
+                                                  cashPrice: Math.round(
+                                                    cashPrice
+                                                  ),
+                                                  salePrice: Math.round(
+                                                    finalSalePrice
+                                                  ),
+                                                  noOfInstallments: Math.round(
+                                                    inst
+                                                  ),
+                                                  amountPerInstallment: Math.round(
+                                                    amountPerInstallment
+                                                  ),
+                                                  downPayment: Math.round(
+                                                    downPayment
+                                                  ),
+                                                  guaranteePeriod: Math.round(
+                                                    guaranteePeriod
+                                                  ),
+                                                  discount: Math.round(
+                                                    discount
+                                                  ),
+                                                  description: description,
+                                                  cInvoiceNo: cInvoiceNo,
+                                                  GCardNo: GCardNo,
+                                                  guarantee: guarantee,
+                                                  timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                                                };
 
-                                              await db
-                                                .collection("item")
-                                                .add(variable)
-                                                .then(function (docRef) {
-                                                  setLoadingSubmit(false);
-                                                  valuesInitialState();
-                                                  NotificationManager.success(
-                                                    "Item creation successfully!",
-                                                    "Done"
-                                                  );
-                                                })
-                                                .catch(function (error) {
-                                                  setLoadingSubmit(false);
-                                                  NotificationManager.warning(
-                                                    "Failed to make the item!",
-                                                    "Please try again"
-                                                  );
-                                                });
-                                                
-                                                
+                                                await db
+                                                  .collection("item")
+                                                  .add(variable)
+                                                  .then(function (docRef) {
+                                                    setLoadingSubmit(false);
+                                                    valuesInitialState();
+                                                    NotificationManager.success(
+                                                      "Item creation successfully!",
+                                                      "Done"
+                                                    );
+                                                  })
+                                                  .catch(function (error) {
+                                                    setLoadingSubmit(false);
+                                                    NotificationManager.warning(
+                                                      "Failed to make the item!",
+                                                      "Please try again"
+                                                    );
+                                                  });
                                               }
-
                                             }
                                           }
                                         }
@@ -348,7 +347,7 @@ function AddItem() {
     }
 
     if (value > 23001 && value <= 26000) {
-     return 10;
+      return 10;
     }
 
     if (value > 26001 && value <= 29000) {
@@ -359,8 +358,8 @@ function AddItem() {
       return 12;
     }
   };
-  
-   const setInstallmentCount = (value) => {
+
+  const setInstallmentCount = (value) => {
     if (value > 0 && value <= 5000) {
       setNoOfInstallments(3);
     }
@@ -499,20 +498,28 @@ function AddItem() {
                   placeholder="17000.00"
                   value={salePrice}
                   onChange={(e) => {
-                    if (e.target.value.length === 0) {
-                      setNoOfInstallments(0);
-                    } else {
-                      if (e.target.value === downPayment) {
+                   
+                      if (e.target.value.length === 0) {
                         setNoOfInstallments(0);
                       } else {
-                        if (e.target.value === 0) {
+                        if (e.target.value === downPayment) {
                           setNoOfInstallments(0);
                         } else {
-                          setInstallmentCount(e.target.value -downPayment);
+                          if (e.target.value === 0) {
+                            setNoOfInstallments(0);
+                          } else {
+                            if (
+                              downPayment > 0 &&
+                              downPayment < e.target.value
+                            ) {
+                              setInstallmentCount(e.target.value - downPayment);
+                            } else {
+                              setNoOfInstallments(0);
+                            }
+                          }
                         }
                       }
-                    }
-
+                   
                     setSalePrice(e.target.value);
                   }}
                 />
@@ -527,20 +534,25 @@ function AddItem() {
                   placeholder="5000.00"
                   value={downPayment}
                   onChange={(e) => {
-                    if (e.target.value.length === 0) {
-                      setNoOfInstallments(0);
-                    } else {
-                      if (e.target.value === salePrice) {
+                   
+                      if (e.target.value.length === 0) {
                         setNoOfInstallments(0);
                       } else {
-                        if (e.target.value === 0) {
+                        if (e.target.value === salePrice) {
                           setNoOfInstallments(0);
                         } else {
-                          setInstallmentCount(salePrice - e.target.value);
+                          if (e.target.value === 0) {
+                            setNoOfInstallments(0);
+                          } else {
+                            if (e.target.value > 0) {
+                              setInstallmentCount(salePrice - e.target.value);
+                            } else {
+                              setNoOfInstallments(0);
+                            }
+                          }
                         }
                       }
-                    }
-
+                  
                     setDownPayment(e.target.value);
                   }}
                 />

@@ -9,7 +9,6 @@ import "./SelectedItem_model.css";
 export default function SelectedItem_Model() {
   const data = [
     {
-      container: "dfdf",
       title: "Gass Coocker",
     },
 
@@ -31,7 +30,7 @@ export default function SelectedItem_Model() {
             title={
               <Grid container spacing={2}>
                 <Grid item xs={4}>
-                  <a>{item.title}</a>
+                  {item.title}
                 </Grid>
                 <Grid item xs={4}>
                   <span>

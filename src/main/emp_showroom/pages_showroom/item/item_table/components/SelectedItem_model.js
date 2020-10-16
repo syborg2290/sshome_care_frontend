@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { List, Radio, Row, Col } from "antd";
 import { ShoppingCartOutlined, CloseOutlined } from "@ant-design/icons";
 import { Button } from "@material-ui/core";
@@ -7,16 +7,32 @@ import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 // styles
 import "./SelectedItem_model.css";
 
-export default function SelectedItem_Model() {
-  const data = [
-    {
-      title: "Gass Coocker",
-    },
+export default function SelectedItem_Model({ itemListProps, closeModel }) {
+  const [itemsData, setItemsData] = useState([]);
 
-    {
-      title: "Television",
-    },
-  ];
+  useEffect(() => {
+    var keepData = [];
+    itemListProps.forEach((ele) => {
+      keepData.push({
+        id:ele.item.id,
+        title: ele.item.data.itemName,
+        price: ele.item.data.salePrice,
+        qty:ele.qty,
+      });
+    });
+    setItemsData(keepData);
+  }, [itemListProps]);
+  
+  const removeItems = (itemId) => {
+    itemsData.forEach(ele => { 
+      if (ele.id === itemId) {
+        itemsData.splice(itemsData.indexOf(x => x.id === itemId), 1)
+        if (itemsData.length === 0) {
+          closeModel();
+        }
+      }
+    });
+  }
 
   return (
     <List
@@ -33,7 +49,7 @@ export default function SelectedItem_Model() {
         </Button>
       }
       itemLayout="horizontal"
-      dataSource={data}
+      dataSource={itemsData}
       renderItem={(item) => (
         <List.Item>
           <span className="icons_List">
@@ -60,12 +76,12 @@ export default function SelectedItem_Model() {
                 </Col>
                 <Col span={6}>
                   <span className="icons_Close">
-                    <CloseOutlined />
+                    <CloseOutlined onClick={()=>removeItems(item.id)}/>
                   </span>
                 </Col>
               </Row>
             }
-            description="1499.00"
+            description={<span>LKR {item.price}</span>}
           />
         </List.Item>
       )}

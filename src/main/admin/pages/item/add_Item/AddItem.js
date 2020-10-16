@@ -226,9 +226,25 @@ function AddItem() {
                                             } else {
                                               //Rest of code here
                                               setLoadingSubmit(true);
+
+                                              var finalSalePrice =
+                                                Math.round(salePrice) -
+                                                  Math.round(discount) >
+                                                0
+                                                  ? Math.round(salePrice) -
+                                                    Math.round(discount)
+                                                  : 0;
+                                              var value =
+                                                finalSalePrice -
+                                                Math.round(downPayment);
+                                              var inst = returnInstallmentCount(
+                                                value
+                                              );
+
                                               var allItems = await db
                                                 .collection("item")
                                                 .get();
+
                                               if (
                                                 allItems.docs.some(
                                                   (ob) =>
@@ -239,7 +255,25 @@ function AddItem() {
                                                     ob.data().chassisNo ===
                                                       chassisNo.trim() &&
                                                     ob.data().color ===
-                                                      color.trim()
+                                                      color.trim() &&
+                                                    ob.data().cashPrice ===
+                                                      Math.round(cashPrice) &&
+                                                    ob.data().salePrice ===
+                                                      Math.round(
+                                                        finalSalePrice
+                                                      ) &&
+                                                    ob.data()
+                                                      .noOfInstallments ===
+                                                      Math.round(inst) &&
+                                                    ob.data()
+                                                      .amountPerInstallment ===
+                                                      Math.round(
+                                                        amountPerInstallment
+                                                      ) &&
+                                                    ob.data().downPayment ===
+                                                      Math.round(downPayment) &&
+                                                    ob.data().discount ===
+                                                      Math.round(discount)
                                                 )
                                               ) {
                                                 var newArray = allItems.filter(
@@ -251,7 +285,25 @@ function AddItem() {
                                                     ob.data().chassisNo ===
                                                       chassisNo.trim() &&
                                                     ob.data().color ===
-                                                      color.trim()
+                                                      color.trim() &&
+                                                    ob.data().cashPrice ===
+                                                      Math.round(cashPrice) &&
+                                                    ob.data().salePrice ===
+                                                      Math.round(
+                                                        finalSalePrice
+                                                      ) &&
+                                                    ob.data()
+                                                      .noOfInstallments ===
+                                                      Math.round(inst) &&
+                                                    ob.data()
+                                                      .amountPerInstallment ===
+                                                      Math.round(
+                                                        amountPerInstallment
+                                                      ) &&
+                                                    ob.data().downPayment ===
+                                                      Math.round(downPayment) &&
+                                                    ob.data().discount ===
+                                                      Math.round(discount)
                                                 );
                                                 await db
                                                   .collection("item")
@@ -277,19 +329,6 @@ function AddItem() {
                                                     );
                                                   });
                                               } else {
-                                                var finalSalePrice =
-                                                  Math.round(salePrice) -
-                                                    Math.round(discount) >
-                                                  0
-                                                    ? Math.round(salePrice) -
-                                                      Math.round(discount)
-                                                    : 0;
-                                                var value =
-                                                  finalSalePrice -
-                                                  Math.round(downPayment);
-                                                var inst = returnInstallmentCount(
-                                                  value
-                                                );
                                                 if (inst) {
                                                   let variable = {
                                                     itemName: itemName.trim(),

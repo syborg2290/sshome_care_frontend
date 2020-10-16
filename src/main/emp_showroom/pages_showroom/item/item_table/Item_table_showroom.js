@@ -488,8 +488,8 @@ export default function ItemTable() {
         className="btn_MakeInvoice"
         endIcon={<DescriptionIcon />}
         // onClick={onMakeInvoid}
-        onClick={selectedModal}
-        // onClick={customerInvoice}
+        // onClick={selectedModal}
+        onClick={customerInvoice}
       >
         {isLoaingToInvoice ? (
           <Spin spinning={isLoaingToInvoice} size="large" />

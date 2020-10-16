@@ -13,6 +13,7 @@
 .radio_btn {
   margin: auto !important;
   text-align: center !important;
+  float: right !important;
 }
 .btn_radio {
   font-size: 11px !important;
@@ -41,4 +42,9 @@
     margin: auto !important;
     font-size: 10px !important;
   }
+}
+
+.txt_invo {
+  float: right !important;
+  height: 10px !important;
 }

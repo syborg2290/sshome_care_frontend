@@ -226,59 +226,44 @@ function AddItem() {
                                             } else {
                                               //Rest of code here
                                               setLoadingSubmit(true);
-
-                                              var finalSalePrice =
-                                                Math.round(salePrice) -
-                                                  Math.round(discount) >
-                                                0
-                                                  ? Math.round(salePrice) -
-                                                    Math.round(discount)
-                                                  : 0;
-                                              var value =
-                                                finalSalePrice -
-                                                Math.round(downPayment);
-                                              var inst = returnInstallmentCount(
-                                                value
-                                              );
-                                              if (inst) {
-                                                let variable = {
-                                                  itemName: itemName,
-                                                  brand: brand,
-                                                  modelNo: modelNo,
-                                                  chassisNo: chassisNo,
-                                                  color: color,
-                                                  qty: Math.round(qty),
-                                                  cashPrice: Math.round(
-                                                    cashPrice
-                                                  ),
-                                                  salePrice: Math.round(
-                                                    finalSalePrice
-                                                  ),
-                                                  noOfInstallments: Math.round(
-                                                    inst
-                                                  ),
-                                                  amountPerInstallment: Math.round(
-                                                    amountPerInstallment
-                                                  ),
-                                                  downPayment: Math.round(
-                                                    downPayment
-                                                  ),
-                                                  guaranteePeriod: Math.round(
-                                                    guaranteePeriod
-                                                  ),
-                                                  discount: Math.round(
-                                                    discount
-                                                  ),
-                                                  description: description,
-                                                  cInvoiceNo: cInvoiceNo,
-                                                  GCardNo: GCardNo,
-                                                  guarantee: guarantee,
-                                                  timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                                                };
-
+                                              var allItems = await db
+                                                .collection("item")
+                                                .get();
+                                              if (
+                                                allItems.docs.some(
+                                                  (ob) =>
+                                                    ob.data().itemName ===
+                                                      itemName.trim() &&
+                                                    ob.data().brand ===
+                                                      brand.trim() &&
+                                                    ob.data().modelNo ===
+                                                      modelNo.trim() &&
+                                                    ob.data().color ===
+                                                      color.trim()
+                                                )
+                                              ) {
+                                                var newArray = allItems.filter(
+                                                  function (ob) {
+                                                    return (
+                                                      ob.data().itemName ===
+                                                        itemName.trim() &&
+                                                      ob.data().brand ===
+                                                        brand.trim() &&
+                                                      ob.data().modelNo ===
+                                                        modelNo.trim() &&
+                                                      ob.data().color ===
+                                                        color.trim()
+                                                    );
+                                                  }
+                                                );
                                                 await db
                                                   .collection("item")
-                                                  .add(variable)
+                                                  .doc(newArray.id)
+                                                  .update({
+                                                    qty:
+                                                      newArray.data().qty +
+                                                      Math.round(qty),
+                                                  })
                                                   .then(function (docRef) {
                                                     setLoadingSubmit(false);
                                                     valuesInitialState();
@@ -294,6 +279,75 @@ function AddItem() {
                                                       "Please try again"
                                                     );
                                                   });
+                                              } else {
+                                                var finalSalePrice =
+                                                  Math.round(salePrice) -
+                                                    Math.round(discount) >
+                                                  0
+                                                    ? Math.round(salePrice) -
+                                                      Math.round(discount)
+                                                    : 0;
+                                                var value =
+                                                  finalSalePrice -
+                                                  Math.round(downPayment);
+                                                var inst = returnInstallmentCount(
+                                                  value
+                                                );
+                                                if (inst) {
+                                                  let variable = {
+                                                    itemName: itemName.trim(),
+                                                    brand: brand.trim(),
+                                                    modelNo: modelNo.trim(),
+                                                    chassisNo: chassisNo.trim(),
+                                                    color: color.trim(),
+                                                    qty: Math.round(qty),
+                                                    cashPrice: Math.round(
+                                                      cashPrice
+                                                    ),
+                                                    salePrice: Math.round(
+                                                      finalSalePrice
+                                                    ),
+                                                    noOfInstallments: Math.round(
+                                                      inst
+                                                    ),
+                                                    amountPerInstallment: Math.round(
+                                                      amountPerInstallment
+                                                    ),
+                                                    downPayment: Math.round(
+                                                      downPayment
+                                                    ),
+                                                    guaranteePeriod: Math.round(
+                                                      guaranteePeriod
+                                                    ),
+                                                    discount: Math.round(
+                                                      discount
+                                                    ),
+                                                    description: description,
+                                                    cInvoiceNo: cInvoiceNo.trim(),
+                                                    GCardNo: GCardNo.trim(),
+                                                    guarantee: guarantee,
+                                                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                                                  };
+
+                                                  await db
+                                                    .collection("item")
+                                                    .add(variable)
+                                                    .then(function (docRef) {
+                                                      setLoadingSubmit(false);
+                                                      valuesInitialState();
+                                                      NotificationManager.success(
+                                                        "Item creation successfully!",
+                                                        "Done"
+                                                      );
+                                                    })
+                                                    .catch(function (error) {
+                                                      setLoadingSubmit(false);
+                                                      NotificationManager.warning(
+                                                        "Failed to make the item!",
+                                                        "Please try again"
+                                                      );
+                                                    });
+                                                }
                                               }
                                             }
                                           }
@@ -498,28 +552,24 @@ function AddItem() {
                   placeholder="17000.00"
                   value={salePrice}
                   onChange={(e) => {
-                   
-                      if (e.target.value.length === 0) {
+                    if (e.target.value.length === 0) {
+                      setNoOfInstallments(0);
+                    } else {
+                      if (e.target.value === downPayment) {
                         setNoOfInstallments(0);
                       } else {
-                        if (e.target.value === downPayment) {
+                        if (e.target.value === 0) {
                           setNoOfInstallments(0);
                         } else {
-                          if (e.target.value === 0) {
-                            setNoOfInstallments(0);
+                          if (downPayment > 0 && downPayment < e.target.value) {
+                            setInstallmentCount(e.target.value - downPayment);
                           } else {
-                            if (
-                              downPayment > 0 &&
-                              downPayment < e.target.value
-                            ) {
-                              setInstallmentCount(e.target.value - downPayment);
-                            } else {
-                              setNoOfInstallments(0);
-                            }
+                            setNoOfInstallments(0);
                           }
                         }
                       }
-                   
+                    }
+
                     setSalePrice(e.target.value);
                   }}
                 />
@@ -534,25 +584,24 @@ function AddItem() {
                   placeholder="5000.00"
                   value={downPayment}
                   onChange={(e) => {
-                   
-                      if (e.target.value.length === 0) {
+                    if (e.target.value.length === 0) {
+                      setNoOfInstallments(0);
+                    } else {
+                      if (e.target.value === salePrice) {
                         setNoOfInstallments(0);
                       } else {
-                        if (e.target.value === salePrice) {
+                        if (e.target.value === 0) {
                           setNoOfInstallments(0);
                         } else {
-                          if (e.target.value === 0) {
-                            setNoOfInstallments(0);
+                          if (e.target.value > 0) {
+                            setInstallmentCount(salePrice - e.target.value);
                           } else {
-                            if (e.target.value > 0) {
-                              setInstallmentCount(salePrice - e.target.value);
-                            } else {
-                              setNoOfInstallments(0);
-                            }
+                            setNoOfInstallments(0);
                           }
                         }
                       }
-                  
+                    }
+
                     setDownPayment(e.target.value);
                   }}
                 />

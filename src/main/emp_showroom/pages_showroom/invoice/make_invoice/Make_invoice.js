@@ -20,7 +20,6 @@ import Paper from "@material-ui/core/Paper";
 import { CloseOutlined } from "@ant-design/icons";
 import PlusOneIcon from "@material-ui/icons/PlusOne";
 import ExposureNeg1Icon from "@material-ui/icons/ExposureNeg1";
-import ClearIcon from "@material-ui/icons/Clear";
 import TvIcon from "@material-ui/icons/Tv";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 

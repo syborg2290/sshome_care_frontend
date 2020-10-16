@@ -540,10 +540,10 @@ export default function ItemTable() {
                     {" "}
                     <span className="colan">:</span>{" "}
                     {moment
-                      .unix(
+                      (
                         allTtemData[currentIndx] &&
                           allTtemData[currentIndx].data
-                          ? allTtemData[currentIndx].data.timestamp
+                          ? allTtemData[currentIndx].data.timestamp.seconds*1000
                           : " - "
                       )
                       .format("dddd, MMMM Do YYYY, h:mm:ss a")}

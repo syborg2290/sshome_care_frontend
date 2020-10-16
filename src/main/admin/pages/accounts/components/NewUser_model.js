@@ -30,18 +30,31 @@ export default function NewUsermodel({ newUserModal }) {
     if (userName !== "") {
       if (password !== "") {
         setLoadingSubmit(true);
-        let variable = {
-          username: userName.trim(),
-          password: password.trim(),
-          role: role,
-          lastlog: firebase.firestore.FieldValue.serverTimestamp(),
-          timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-        };
+        var allUsers = await db.collection("user").get();
 
-        await db.collection("user").add(variable);
-        setLoadingSubmit(false);
-        NotificationManager.success("User creation successfully!", "Done");
-        newUserModal();
+        if (
+          allUsers.docs.some(
+            (ob) =>
+              ob.data().username === userName.trim() &&
+              ob.data().password === password.trim()
+          )
+        ) {
+          setLoadingSubmit(false);
+          NotificationManager.info("User already exist!");
+        } else {
+          let variable = {
+            username: userName.trim(),
+            password: password.trim(),
+            role: role,
+            lastlog: firebase.firestore.FieldValue.serverTimestamp(),
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+          };
+
+          await db.collection("user").add(variable);
+          setLoadingSubmit(false);
+          NotificationManager.success("User creation successfully!", "Done");
+          newUserModal();
+        }
       }
     }
   };

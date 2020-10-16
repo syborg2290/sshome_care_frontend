@@ -36,17 +36,17 @@ export default function ItemTable() {
   const [currentIndx, setCurrentIndx] = useState(0);
   // eslint-disable-next-line
   var [selectedItems, setSelectedItems] = useState([]);
+  // eslint-disable-next-line
+  const [itemList, SetItemList] = useState([]);
   let history = useHistory();
 
   const showModal = () => {
     setVisible(true);
   };
 
-  const selectedModal = () => {
-    setSelectedItemtVisible(true);
-  };
   const selectedModalClose = () => {
     setSelectedItemtVisible(false);
+    // window.location.reload();
   };
 
   useEffect(() => {
@@ -105,32 +105,35 @@ export default function ItemTable() {
     // eslint-disable-next-line
   }, []);
 
+  const onMakeInvoid = () => {
+    if (selectedItems.length > 0) {
+      setLoaingToInvoice(true);
+
+      selectedItems.forEach((reItem) => {
+        itemList.push({
+          qty: 1,
+          item: reItem,
+          paymentWay: "PayandGo",
+        });
+      });
+      setLoaingToInvoice(false);
+
+      setSelectedItemtVisible(true);
+
+      // var moveWith = {
+      //   pathname: "/showroom/ui/makeInvoice",
+      //   search: "?query=abc",
+      //   state: { detail: itemList },
+      // };
+
+      // history.push(moveWith);
+    } else {
+      NotificationManager.info("Please select items");
+    }
+  };
   const customerInvoice = () => {
     history.push("/showroom/invoice/addCustomer");
   };
-
-  // const onMakeInvoid = () => {
-  //   if (selectedItems.length > 0) {
-  //     setLoaingToInvoice(true);
-  //     var itemList = [];
-  //     selectedItems.forEach((reItem) => {
-  //       itemList.push({
-  //         qty: 1,
-  //         item: reItem,
-  //       });
-  //     });
-
-  //     var moveWith = {
-  //       pathname: "/showroom/ui/makeInvoice",
-  //       search: "?query=abc",
-  //       state: { detail: itemList },
-  //     };
-  //     setLoaingToInvoice(false);
-  //     history.push(moveWith);
-  //   } else {
-  //     NotificationManager.info("Please select items");
-  //   }
-  // };
 
   // function getIndex(value, arr, prop) {
   //   for (var i = 0; i < arr.length; i++) {
@@ -230,7 +233,10 @@ export default function ItemTable() {
         <div className="table_selected_Model">
           <div className="model_selected_Main">
             <div className="model_selected_Detail">
-              <SelectedtModel />
+              <SelectedtModel
+                closeModel={selectedModalClose}
+                itemListProps={itemList}
+              />
             </div>
           </div>
         </div>
@@ -466,14 +472,11 @@ export default function ItemTable() {
                   <span className="load_Item">
                     {" "}
                     <span className="colan">:</span>{" "}
-                    {moment
-                      .unix(
-                        allTtemData[currentIndx] &&
-                          allTtemData[currentIndx].data
-                          ? allTtemData[currentIndx].data.timestamp
-                          : " - "
-                      )
-                      .format("dddd, MMMM Do YYYY, h:mm:ss a")}
+                    {moment(
+                      allTtemData[currentIndx] && allTtemData[currentIndx].data
+                        ? allTtemData[currentIndx].data.timestamp.seconds * 1000
+                        : " - "
+                    ).format("dddd, MMMM Do YYYY, h:mm:ss a")}
                   </span>
                 </Col>
               </Row>
@@ -487,9 +490,7 @@ export default function ItemTable() {
         color="primary"
         className="btn_MakeInvoice"
         endIcon={<DescriptionIcon />}
-        // onClick={onMakeInvoid}
-        // onClick={selectedModal}
-        onClick={customerInvoice}
+        onClick={onMakeInvoid}
       >
         {isLoaingToInvoice ? (
           <Spin spinning={isLoaingToInvoice} size="large" />
@@ -506,6 +507,7 @@ export default function ItemTable() {
             data={itemTableData}
             columns={columns}
             options={{
+              rowHover: true,
               selectableRows: true,
               customToolbarSelect: () => {},
               filterType: "textField",
@@ -518,7 +520,11 @@ export default function ItemTable() {
               onRowsSelect: (curRowSelected, allRowsSelected) => {
                 selectedItems = [];
                 allRowsSelected.forEach((single) => {
-                  selectedItems.push(allTtemData[single.dataIndex]);
+                  if (allTtemData[single.dataIndex].data.qty > 0) {
+                    selectedItems.push(allTtemData[single.dataIndex]);
+                  } else {
+                    NotificationManager.warning("Out Of Stock");
+                  }
                 });
 
                 // if (

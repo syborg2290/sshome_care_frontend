@@ -1,7 +1,7 @@
 import React from "react";
 import { List, Radio, Row, Col } from "antd";
 import { ShoppingCartOutlined, CloseOutlined } from "@ant-design/icons";
-import { Button } from "@material-ui/core";
+import { Button, TextField } from "@material-ui/core";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 
 // styles
@@ -42,10 +42,24 @@ export default function SelectedItem_Model() {
           <List.Item.Meta
             title={
               <Row>
-                <Col span={8}> {item.title}</Col>
-                <Col span={10}>
+                <Col span={7}> {item.title}</Col>
+                <Col span={3}>
+                  {" "}
+                  <TextField
+                    className="txt_Sitem"
+                    autoComplete="item"
+                    name="iitem_selected"
+                    variant="outlined"
+                    size="small"
+                    required
+                    fullWidth
+                    label="Qty"
+                    autoFocus
+                  />
+                </Col>
+                <Col span={12}>
                   <Radio.Group
-                    className="rattdio_btn"
+                    className="radio_btn"
                     defaultValue="a"
                     buttonStyle="solid"
                     size="small"
@@ -58,7 +72,7 @@ export default function SelectedItem_Model() {
                     </Radio.Button>
                   </Radio.Group>
                 </Col>
-                <Col span={6}>
+                <Col span={2}>
                   <span className="icons_Close">
                     <CloseOutlined />
                   </span>

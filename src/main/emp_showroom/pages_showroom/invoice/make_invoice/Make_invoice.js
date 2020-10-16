@@ -17,6 +17,7 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 
 // icon
+import { CloseOutlined } from "@ant-design/icons";
 import PlusOneIcon from "@material-ui/icons/PlusOne";
 import ExposureNeg1Icon from "@material-ui/icons/ExposureNeg1";
 import ClearIcon from "@material-ui/icons/Clear";
@@ -168,7 +169,7 @@ function Make_invoice() {
                           </span>
                           <ExposureNeg1Icon className="icon_invTbl" />
                           <span className="iconcls_invTblspan">
-                            <ClearIcon className="iconcls_invTbl" />
+                            <CloseOutlined className="iconcls_invTbl" />
                           </span>
                         </TableCell>
                       </TableRow>

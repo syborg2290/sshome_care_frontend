@@ -1,0 +1,25 @@
+.container_Cus {
+  background-color: white !important;
+  width: 100% !important;
+  height: 100% !important;
+  /* box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23); */
+  border-radius: 5px !important;
+}
+
+.main {
+  margin-top: 70px !important;
+}
+
+.form_cust {
+  width: 100% !important;
+  margin-top: 30px !important;
+  padding-bottom: 50px !important;
+}
+
+.txt_AddCustomer {
+  width: 40% !important;
+}
+
+.labels {
+  margin: auto !important;
+}

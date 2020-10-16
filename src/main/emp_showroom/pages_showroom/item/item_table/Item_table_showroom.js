@@ -105,28 +105,32 @@ export default function ItemTable() {
     // eslint-disable-next-line
   }, []);
 
-  const onMakeInvoid = () => {
-    if (selectedItems.length > 0) {
-      setLoaingToInvoice(true);
-      var itemList = [];
-      selectedItems.forEach((reItem) => {
-        itemList.push({
-          qty: 1,
-          item: reItem,
-        });
-      });
-
-      var moveWith = {
-        pathname: "/showroom/ui/makeInvoice",
-        search: "?query=abc",
-        state: { detail: itemList },
-      };
-      setLoaingToInvoice(false);
-      history.push(moveWith);
-    } else {
-      NotificationManager.info("Please select items");
-    }
+  const customerInvoice = () => {
+    history.push("/showroom/invoice/addCustomer");
   };
+
+  // const onMakeInvoid = () => {
+  //   if (selectedItems.length > 0) {
+  //     setLoaingToInvoice(true);
+  //     var itemList = [];
+  //     selectedItems.forEach((reItem) => {
+  //       itemList.push({
+  //         qty: 1,
+  //         item: reItem,
+  //       });
+  //     });
+
+  //     var moveWith = {
+  //       pathname: "/showroom/ui/makeInvoice",
+  //       search: "?query=abc",
+  //       state: { detail: itemList },
+  //     };
+  //     setLoaingToInvoice(false);
+  //     history.push(moveWith);
+  //   } else {
+  //     NotificationManager.info("Please select items");
+  //   }
+  // };
 
   // function getIndex(value, arr, prop) {
   //   for (var i = 0; i < arr.length; i++) {
@@ -485,6 +489,7 @@ export default function ItemTable() {
         endIcon={<DescriptionIcon />}
         // onClick={onMakeInvoid}
         onClick={selectedModal}
+        // onClick={customerInvoice}
       >
         {isLoaingToInvoice ? (
           <Spin spinning={isLoaingToInvoice} size="large" />

@@ -9,7 +9,6 @@ import Layoutshowroom from "../src/main/emp_showroom/Layout_showroom/Layout_show
 import Error from "./main/error/Error";
 import Login from "./main/login/Login";
 
-
 // context
 import { useUserState } from "./context/UserContext";
 
@@ -22,8 +21,14 @@ export default function App() {
     <HashRouter>
       <Switch>
         <Route exact path="/" render={() => <Redirect to="/login" />} />
-        <PrivateRoute path={roleMain==="admin"?"/admin":"/error"} component={Layout} />
-        <PrivateRoute path={roleMain==="Showroom"?"/showroom":"/error"} component={Layoutshowroom} />
+        <PrivateRoute
+          path={roleMain === "admin" ? "/admin" : "/error"}
+          component={Layout}
+        />
+        <PrivateRoute
+          path={roleMain === "Showroom" ? "/showroom" : "/error"}
+          component={Layoutshowroom}
+        />
         <PublicRoute path="/login" component={Login} />
         <Route component={Error} />
       </Switch>

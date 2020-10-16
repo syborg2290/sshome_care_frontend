@@ -9,3 +9,36 @@
   color: rgb(245, 67, 67) !important;
   float: right !important;
 }
+
+.radio_btn {
+  margin: auto !important;
+  text-align: center !important;
+}
+.btn_radio {
+  font-size: 11px !important;
+}
+
+.btn_ModelSelectedItem {
+  display: flex !important;
+  width: 20% !important;
+  border-radius: 6px !important;
+  float: right;
+}
+
+.model_List {
+  padding-bottom: 20px !important;
+}
+
+@media screen and (min-width: 280px) and (max-width: 315px) {
+  .btn_ModelSelectedItem {
+    margin: auto !important;
+    width: 100% !important;
+  }
+}
+
+@media screen and (min-width: 315px) and (max-width: 411px) {
+  .btn_ModelSelectedItem {
+    margin: auto !important;
+    font-size: 10px !important;
+  }
+}

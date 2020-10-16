@@ -37,7 +37,6 @@ export default function ItemTable() {
   var [selectedItems, setSelectedItems] = useState([]);
   // eslint-disable-next-line
   const [itemList, SetItemList] = useState([]);
-  
 
   const showModal = () => {
     setVisible(true);

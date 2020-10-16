@@ -237,24 +237,21 @@ function AddItem() {
                                                     ob.data().brand ===
                                                       brand.trim() &&
                                                     ob.data().chassisNo ===
-                                                        chassisNo.trim() &&
+                                                      chassisNo.trim() &&
                                                     ob.data().color ===
                                                       color.trim()
                                                 )
                                               ) {
                                                 var newArray = allItems.filter(
-                                                  function (ob) {
-                                                    return (
-                                                      ob.data().itemName ===
-                                                        itemName.trim() &&
-                                                      ob.data().brand ===
-                                                        brand.trim() &&
-                                                      ob.data().chassisNo ===
-                                                        chassisNo.trim() &&
-                                                      ob.data().color ===
-                                                        color.trim()
-                                                    );
-                                                  }
+                                                  (ob) =>
+                                                    ob.data().itemName ===
+                                                      itemName.trim() &&
+                                                    ob.data().brand ===
+                                                      brand.trim() &&
+                                                    ob.data().chassisNo ===
+                                                      chassisNo.trim() &&
+                                                    ob.data().color ===
+                                                      color.trim()
                                                 );
                                                 await db
                                                   .collection("item")

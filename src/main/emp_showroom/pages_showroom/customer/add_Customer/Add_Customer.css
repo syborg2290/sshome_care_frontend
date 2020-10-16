@@ -1,25 +1,73 @@
-.container_Cus {
-  background-color: white !important;
-  width: 100% !important;
-  height: 100% !important;
-  /* box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23); */
-  border-radius: 5px !important;
+.paper {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  margin-top: 20px !important;
 }
 
-.main {
+.form {
+  width: 100% !important;
+  margin-top: 30px !important;
+}
+
+.txt_nic {
+  width: 29% !important;
+}
+
+/* .avatar_uploader {
+  width: 100% !important;
+  background-color: greenyellow !important;
+} */
+
+.main_container {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.16), 0 1px 2px rgba(0, 0, 0, 0.23);
+  background-color: white;
+  padding-bottom: 50px;
+  border-radius: 6px;
+  overflow: hidden !important;
   margin-top: 70px !important;
 }
 
-.form_cust {
-  width: 100% !important;
-  margin-top: 30px !important;
-  padding-bottom: 50px !important;
+.trustee_container {
+  border-radius: 6px;
+  margin-top: 20px !important;
+  padding-top: 50px !important;
+  padding-bottom: 30px;
+  background-color: rgba(235, 230, 230, 0.521);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.16), 0 1px 2px rgba(0, 0, 0, 0.23);
 }
 
-.txt_AddCustomer {
-  width: 40% !important;
+.titles {
+  padding-top: 30px !important;
 }
 
-.labels {
+.trustee_title {
+  padding-top: 30px !important;
+}
+
+.titles_hr {
+  background-color: #222a44 !important;
+  height: 1px !important;
+}
+
+.txt_Labels {
   margin: auto !important;
+}
+
+.btn_MakeCustomer {
+  width: 15% !important;
+  float: right !important;
+  margin-top: 50px !important;
+}
+
+.btn_ClearCustomer {
+  float: right !important;
+}
+
+.btn_Cleartrustee {
+  float: right !important;
+}
+
+.hr {
+  margin-top: 60px !important;
 }

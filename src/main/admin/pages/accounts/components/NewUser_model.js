@@ -39,6 +39,7 @@ export default function NewUsermodel({ newUserModal }) {
               ob.data().password === password.trim()
           )
         ) {
+          setLoadingSubmit(false);
           NotificationManager.info("User already exist!");
         } else {
           let variable = {

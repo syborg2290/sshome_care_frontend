@@ -249,8 +249,8 @@ function AddItem() {
                                                         itemName.trim() &&
                                                       ob.data().brand ===
                                                         brand.trim() &&
-                                                      ob.data().modelNo ===
-                                                        modelNo.trim() &&
+                                                      ob.data().chassisNo ===
+                                                        chassisNo.trim() &&
                                                       ob.data().color ===
                                                         color.trim()
                                                     );

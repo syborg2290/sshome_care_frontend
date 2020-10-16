@@ -3,6 +3,7 @@ import { List, Radio, Row, Col, Divider, Spin } from "antd";
 import { ShoppingCartOutlined, CloseOutlined } from "@ant-design/icons";
 import { Button, TextField } from "@material-ui/core";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
+import { useHistory } from "react-router-dom";
 import {
   NotificationContainer,
   NotificationManager,
@@ -19,6 +20,7 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
   const [itemsData, setItemsData] = useState([]);
   const [inputs, setInputs] = useState({});
   const [paymentWay, setpaymentWay] = useState({});
+  let history = useHistory();
 
   useEffect(() => {
     var keepData = [];
@@ -91,9 +93,23 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
     if (nextData.some((ob) => ob.paymentWay === "PayandGo")) {
       setLoading(false);
       //sent to add customer
+      let moveWith = {
+        pathname: "/showroom/invoice/addCustomer",
+        search: "?query=abc",
+        state: { detail: nextData },
+      };
+
+      history.push(moveWith);
     } else {
       setLoading(false);
       //sent to direct invoice
+      let moveWith = {
+        pathname: "/showroom/ui/makeInvoice",
+        search: "?query=abc",
+        state: { detail: nextData },
+      };
+
+      history.push(moveWith);
     }
   };
 

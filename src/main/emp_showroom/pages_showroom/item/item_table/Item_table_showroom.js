@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Grid, Button } from "@material-ui/core";
 import { Spin, Modal } from "antd";
-import { useHistory } from "react-router-dom";
 import MUIDataTable from "mui-datatables";
 import { Row, Col } from "antd";
 import CurrencyFormat from "react-currency-format";
@@ -38,7 +37,6 @@ export default function ItemTable() {
   var [selectedItems, setSelectedItems] = useState([]);
   // eslint-disable-next-line
   const [itemList, SetItemList] = useState([]);
-  let history = useHistory();
 
   const showModal = () => {
     setVisible(true);
@@ -119,30 +117,10 @@ export default function ItemTable() {
       setLoaingToInvoice(false);
 
       setSelectedItemtVisible(true);
-
-      // var moveWith = {
-      //   pathname: "/showroom/ui/makeInvoice",
-      //   search: "?query=abc",
-      //   state: { detail: itemList },
-      // };
-
-      // history.push(moveWith);
     } else {
       NotificationManager.info("Please select items");
     }
   };
-  const customerInvoice = () => {
-    history.push("/showroom/invoice/addCustomer");
-  };
-
-  // function getIndex(value, arr, prop) {
-  //   for (var i = 0; i < arr.length; i++) {
-  //     if (arr[i][prop] === value) {
-  //       return i;
-  //     }
-  //   }
-  //   return -1; //to handle the case where the value doesn't exist
-  // }
 
   const columns = [
     {
@@ -526,26 +504,6 @@ export default function ItemTable() {
                     NotificationManager.warning("Out Of Stock");
                   }
                 });
-
-                // if (
-                //   !selectedItems.some(
-                //     (item) =>
-                //       item.id ===
-                //       allTtemData[curRowSelected[0].dataIndex].id
-                //   )
-                // ) {
-                //   selectedItems.push(allTtemData[curRowSelected[0].dataIndex]);
-                // } else {
-
-                //   var index = getIndex(
-                //     allTtemData[curRowSelected[0].dataIndex],
-                //     selectedItems,
-                //     "id"
-                //   );
-                //   if (index >= 0) {
-                //     selectedItems.splice(index, 1);
-                //   }
-                // }
               },
               selectableRowsHeader: false,
               onRowClick: (rowData, rowMeta) => {

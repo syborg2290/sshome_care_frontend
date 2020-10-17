@@ -62,13 +62,11 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
     }
   };
 
-  const removeItems = (itemId) => {
+  const removeItems = (i, itemId) => {
     itemsData.forEach((ele) => {
       if (ele.id === itemId) {
-        itemsData.splice(
-          itemsData.indexOf((x) => x.id === itemId),
-          1
-        );
+        itemsData.splice(i, 1);
+        setInputs({ ...inputs, [i]: 0 });
         if (itemsData.length === 0) {
           closeModel();
         }
@@ -115,8 +113,8 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
 
   const createInputs = (item) => {
     return Object.keys(inputs).map((i) => (
-      <div key={i}>
-        <List.Item id={i}>
+      <div >
+        <List.Item >
           <span className="icons_List">
             <ShoppingCartOutlined twoToneColor="#52c41a" />
           </span>
@@ -128,15 +126,17 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
                   {" "}
                   {
                     <TextField
+                      key={i}
+                      id={i}
                       className="txt_Sitem"
                       autoComplete="item"
                       name="iitem_selected"
                       variant="outlined"
                       size="small"
-                      key={i}
-                      id={i}
                       value={inputs[i]}
-                      onChange={(e) => handleChange(e.target.value, i, item.id)}
+                      onChange={(e) =>
+                        handleChange(e.target.value, e.target.i, item.id)
+                      }
                       required
                       fullWidth
                       label="Qty"
@@ -154,7 +154,7 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
                     onChange={(e) => {
                       setpaymentWay({
                         ...paymentWay,
-                        [e.target.id]: e.target.value,
+                        [i]: e.target.value,
                       });
                     }}
                   >
@@ -168,11 +168,7 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
                 </Col>
                 <Col span={2}>
                   <span className="icons_Close">
-                    <CloseOutlined
-                      onClick={() => {
-                        removeItems(i, item.id);
-                      }}
-                    />
+                    <CloseOutlined onClick={() => removeItems(i, item.id)} />
                   </span>
                 </Col>
               </Row>

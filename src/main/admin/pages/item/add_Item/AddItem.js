@@ -227,15 +227,8 @@ function AddItem() {
                                               //Rest of code here
                                               setLoadingSubmit(true);
 
-                                              var finalSalePrice =
-                                                Math.round(salePrice) -
-                                                  Math.round(discount) >
-                                                0
-                                                  ? Math.round(salePrice) -
-                                                    Math.round(discount)
-                                                  : 0;
                                               var value =
-                                                finalSalePrice -
+                                                Math.round(salePrice) -
                                                 Math.round(downPayment);
                                               var inst = returnInstallmentCount(
                                                 value
@@ -244,145 +237,149 @@ function AddItem() {
                                               var allItems = await db
                                                 .collection("item")
                                                 .get();
-
-                                              if (
-                                                allItems.docs.some(
-                                                  (ob) =>
-                                                    ob.data().itemName ===
-                                                      itemName.trim() &&
-                                                    ob.data().brand ===
-                                                      brand.trim() &&
-                                                    ob.data().chassisNo ===
-                                                      chassisNo.trim() &&
-                                                    ob.data().color ===
-                                                      color.trim() &&
-                                                    ob.data().cashPrice ===
-                                                      Math.round(cashPrice) &&
-                                                    ob.data().salePrice ===
-                                                      Math.round(
-                                                        finalSalePrice
-                                                      ) &&
-                                                    ob.data()
-                                                      .noOfInstallments ===
-                                                      Math.round(inst) &&
-                                                    ob.data()
-                                                      .amountPerInstallment ===
-                                                      Math.round(
+                                              if (allItems) {
+                                                if (
+                                                  allItems.docs.some(
+                                                    (ob) =>
+                                                      ob.data().itemName ===
+                                                        itemName.trim() &&
+                                                      ob.data().brand ===
+                                                        brand.trim() &&
+                                                      ob.data().chassisNo ===
+                                                        chassisNo.trim() &&
+                                                      ob.data().color ===
+                                                        color.trim() &&
+                                                      ob.data().cashPrice ===
+                                                        Math.round(cashPrice) &&
+                                                      ob.data().salePrice ===
+                                                        Math.round(salePrice) &&
+                                                      ob.data()
+                                                        .noOfInstallments ===
+                                                        Math.round(inst) &&
+                                                      ob.data()
+                                                        .amountPerInstallment ===
+                                                        Math.round(
+                                                          amountPerInstallment
+                                                        ) &&
+                                                      ob.data().downPayment ===
+                                                        Math.round(
+                                                          downPayment
+                                                        ) &&
+                                                      ob.data().discount ===
+                                                        Math.round(discount)
+                                                  )
+                                                ) {
+                                                  var newArray = allItems.docs.filter(
+                                                    (ob) =>
+                                                      ob.data().itemName ===
+                                                        itemName.trim() &&
+                                                      ob.data().brand ===
+                                                        brand.trim() &&
+                                                      ob.data().chassisNo ===
+                                                        chassisNo.trim() &&
+                                                      ob.data().color ===
+                                                        color.trim() &&
+                                                      ob.data().cashPrice ===
+                                                        Math.round(cashPrice) &&
+                                                      ob.data().salePrice ===
+                                                        Math.round(salePrice) &&
+                                                      ob.data()
+                                                        .noOfInstallments ===
+                                                        Math.round(inst) &&
+                                                      ob.data()
+                                                        .amountPerInstallment ===
+                                                        Math.round(
+                                                          amountPerInstallment
+                                                        ) &&
+                                                      ob.data().downPayment ===
+                                                        Math.round(
+                                                          downPayment
+                                                        ) &&
+                                                      ob.data().discount ===
+                                                        Math.round(discount)
+                                                  );
+                                                  if (newArray) {
+                                                    await db
+                                                      .collection("item")
+                                                      .doc(newArray[0].id)
+                                                      .update({
+                                                        qty:
+                                                          newArray[0].data()
+                                                            .qty +
+                                                          Math.round(qty),
+                                                      })
+                                                      .then(function (docRef) {
+                                                        setLoadingSubmit(false);
+                                                        valuesInitialState();
+                                                        NotificationManager.success(
+                                                          "Item creation successfully!",
+                                                          "Done"
+                                                        );
+                                                      })
+                                                      .catch(function (error) {
+                                                        setLoadingSubmit(false);
+                                                        NotificationManager.warning(
+                                                          "Failed to make the item!",
+                                                          "Please try again"
+                                                        );
+                                                      });
+                                                  }
+                                                } else {
+                                                  if (inst) {
+                                                    let variable = {
+                                                      itemName: itemName.trim(),
+                                                      brand: brand.trim(),
+                                                      modelNo: modelNo.trim(),
+                                                      chassisNo: chassisNo.trim(),
+                                                      color: color.trim(),
+                                                      qty: Math.round(qty),
+                                                      cashPrice: Math.round(
+                                                        cashPrice
+                                                      ),
+                                                      salePrice: Math.round(
+                                                        salePrice
+                                                      ),
+                                                      noOfInstallments: Math.round(
+                                                        inst
+                                                      ),
+                                                      amountPerInstallment: Math.round(
                                                         amountPerInstallment
-                                                      ) &&
-                                                    ob.data().downPayment ===
-                                                      Math.round(downPayment) &&
-                                                    ob.data().discount ===
-                                                      Math.round(discount)
-                                                )
-                                              ) {
-                                                var newArray = allItems.filter(
-                                                  (ob) =>
-                                                    ob.data().itemName ===
-                                                      itemName.trim() &&
-                                                    ob.data().brand ===
-                                                      brand.trim() &&
-                                                    ob.data().chassisNo ===
-                                                      chassisNo.trim() &&
-                                                    ob.data().color ===
-                                                      color.trim() &&
-                                                    ob.data().cashPrice ===
-                                                      Math.round(cashPrice) &&
-                                                    ob.data().salePrice ===
-                                                      Math.round(
-                                                        finalSalePrice
-                                                      ) &&
-                                                    ob.data()
-                                                      .noOfInstallments ===
-                                                      Math.round(inst) &&
-                                                    ob.data()
-                                                      .amountPerInstallment ===
-                                                      Math.round(
-                                                        amountPerInstallment
-                                                      ) &&
-                                                    ob.data().downPayment ===
-                                                      Math.round(downPayment) &&
-                                                    ob.data().discount ===
-                                                      Math.round(discount)
-                                                );
-                                                await db
-                                                  .collection("item")
-                                                  .doc(newArray.id)
-                                                  .update({
-                                                    qty:
-                                                      newArray.data().qty +
-                                                      Math.round(qty),
-                                                  })
-                                                  .then(function (docRef) {
-                                                    setLoadingSubmit(false);
-                                                    valuesInitialState();
-                                                    NotificationManager.success(
-                                                      "Item creation successfully!",
-                                                      "Done"
-                                                    );
-                                                  })
-                                                  .catch(function (error) {
-                                                    setLoadingSubmit(false);
-                                                    NotificationManager.warning(
-                                                      "Failed to make the item!",
-                                                      "Please try again"
-                                                    );
-                                                  });
-                                              } else {
-                                                if (inst) {
-                                                  let variable = {
-                                                    itemName: itemName.trim(),
-                                                    brand: brand.trim(),
-                                                    modelNo: modelNo.trim(),
-                                                    chassisNo: chassisNo.trim(),
-                                                    color: color.trim(),
-                                                    qty: Math.round(qty),
-                                                    cashPrice: Math.round(
-                                                      cashPrice
-                                                    ),
-                                                    salePrice: Math.round(
-                                                      finalSalePrice
-                                                    ),
-                                                    noOfInstallments: Math.round(
-                                                      inst
-                                                    ),
-                                                    amountPerInstallment: Math.round(
-                                                      amountPerInstallment
-                                                    ),
-                                                    downPayment: Math.round(
-                                                      downPayment
-                                                    ),
-                                                    guaranteePeriod: Math.round(
-                                                      guaranteePeriod
-                                                    ),
-                                                    discount: Math.round(
-                                                      discount
-                                                    ),
-                                                    description: description,
-                                                    cInvoiceNo: cInvoiceNo.trim(),
-                                                    GCardNo: GCardNo.trim(),
-                                                    guarantee: guarantee,
-                                                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                                                  };
+                                                      ),
+                                                      downPayment: Math.round(
+                                                        downPayment
+                                                      ),
+                                                      guaranteePeriod: Math.round(
+                                                        guaranteePeriod
+                                                      ),
+                                                      discount: Math.round(
+                                                        discount
+                                                      ),
+                                                      description: description,
+                                                      cInvoiceNo: cInvoiceNo.trim(),
+                                                      GCardNo: GCardNo.trim(),
+                                                      guarantee: guarantee,
+                                                      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                                                    };
 
-                                                  await db
-                                                    .collection("item")
-                                                    .add(variable)
-                                                    .then(function (docRef) {
-                                                      setLoadingSubmit(false);
-                                                      valuesInitialState();
-                                                      NotificationManager.success(
-                                                        "Item creation successfully!",
-                                                        "Done"
-                                                      );
-                                                    })
-                                                    .catch(function (error) {
-                                                      setLoadingSubmit(false);
-                                                      NotificationManager.warning(
-                                                        "Failed to make the item!",
-                                                        "Please try again"
-                                                      );
-                                                    });
+                                                    await db
+                                                      .collection("item")
+                                                      .add(variable)
+                                                      .then(function (docRef) {
+                                                        setLoadingSubmit(false);
+                                                        valuesInitialState();
+                                                        NotificationManager.success(
+                                                          "Item creation successfully!",
+                                                          "Done"
+                                                        );
+                                                      })
+                                                      .catch(function (error) {
+                                                        setLoadingSubmit(false);
+                                                        NotificationManager.warning(
+                                                          "Failed to make the item!",
+                                                          "Please try again"
+                                                        );
+                                                      });
+                                                  }
                                                 }
                                               }
                                             }

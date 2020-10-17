@@ -80,7 +80,6 @@ export default function Add_Customer() {
     setTrustee2Address1("");
     setTrustee2Address2("");
     setRoot("");
-    setRoot("");
   };
 
   const handleChange = (info) => {

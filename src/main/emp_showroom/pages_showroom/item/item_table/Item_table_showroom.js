@@ -44,7 +44,7 @@ export default function ItemTable() {
 
   const selectedModalClose = () => {
     setSelectedItemtVisible(false);
-    // window.location.reload();
+    window.location.reload();
   };
 
   useEffect(() => {

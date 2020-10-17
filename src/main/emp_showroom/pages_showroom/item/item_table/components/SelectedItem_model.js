@@ -86,40 +86,40 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
   const nextclick = () => {
     console.log(inputs);
     console.log(paymentWay);
-    // setLoading(true);
-    // var nextData = [];
-    // for (var i = 0; i < itemsData.length; i++) {
-    //   let obj = {
-    //     id: itemsData[i].id,
-    //     title: itemsData[i].title,
-    //     unitprice: itemsData[i].unitprice,
-    //     qty: inputs[i],
-    //     paymentWay: paymentWay[i],
-    //     item: itemsData[i].item,
-    //   };
-    //   nextData.push(obj);
-    // }
-    // if (nextData.some((ob) => ob.paymentWay === "PayandGo")) {
-    //   setLoading(false);
-    //   //sent to add customer
-    //   let moveWith = {
-    //     pathname: "/showroom/invoice/addCustomer",
-    //     search: "?query=abc",
-    //     state: { detail: nextData },
-    //   };
+    setLoading(true);
+    var nextData = [];
+    for (var i = 0; i < itemsData.length; i++) {
+      let obj = {
+        id: itemsData[i].id,
+        title: itemsData[i].title,
+        unitprice: itemsData[i].unitprice,
+        qty: inputs[i],
+        paymentWay: paymentWay[i],
+        item: itemsData[i].item,
+      };
+      nextData.push(obj);
+    }
+    if (nextData.some((ob) => ob.paymentWay === "PayandGo")) {
+      setLoading(false);
+      //sent to add customer
+      let moveWith = {
+        pathname: "/showroom/invoice/addCustomer",
+        search: "?query=abc",
+        state: { detail: nextData },
+      };
 
-    //   history.push(moveWith);
-    // } else {
-    //   setLoading(false);
-    //   //sent to direct invoice
-    //   let moveWith = {
-    //     pathname: "/showroom/ui/makeInvoice",
-    //     search: "?query=abc",
-    //     state: { detail: nextData },
-    //   };
+      history.push(moveWith);
+    } else {
+      setLoading(false);
+      //sent to direct invoice
+      let moveWith = {
+        pathname: "/showroom/ui/makeInvoice",
+        search: "?query=abc",
+        state: { detail: nextData },
+      };
 
-    //   history.push(moveWith);
-    // }
+      history.push(moveWith);
+    }
   };
 
   const createInputs = (item) => {

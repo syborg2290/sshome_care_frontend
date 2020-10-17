@@ -11,8 +11,6 @@ import {
 } from "react-notifications";
 import "react-notifications/lib/notifications.css";
 
-import { useHistory } from "react-router-dom";
-
 //components
 import SelectedtModel from "./components/SelectedItem_model";
 
@@ -39,8 +37,6 @@ export default function ItemTable() {
   var [selectedItems, setSelectedItems] = useState([]);
   // eslint-disable-next-line
   const [itemList, SetItemList] = useState([]);
-
-  let history = useHistory();
 
   const showModal = () => {
     setVisible(true);
@@ -107,28 +103,24 @@ export default function ItemTable() {
     // eslint-disable-next-line
   }, []);
 
-  const customerInvoice = () => {
-    history.push("/showroom/invoice/addCustomer");
+  const onMakeInvoid = () => {
+    if (selectedItems.length > 0) {
+      setLoaingToInvoice(true);
+
+      selectedItems.forEach((reItem) => {
+        itemList.push({
+          qty: 1,
+          item: reItem,
+          paymentWay: "PayandGo",
+        });
+      });
+      setLoaingToInvoice(false);
+
+      setSelectedItemtVisible(true);
+    } else {
+      NotificationManager.info("Please select items");
+    }
   };
-
-  // const onMakeInvoid = () => {
-  //   if (selectedItems.length > 0) {
-  //     setLoaingToInvoice(true);
-
-  //     selectedItems.forEach((reItem) => {
-  //       itemList.push({
-  //         qty: 1,
-  //         item: reItem,
-  //         paymentWay: "PayandGo",
-  //       });
-  //     });
-  //     setLoaingToInvoice(false);
-
-  //     setSelectedItemtVisible(true);
-  //   } else {
-  //     NotificationManager.info("Please select items");
-  //   }
-  // };
 
   const columns = [
     {
@@ -476,8 +468,7 @@ export default function ItemTable() {
         color="primary"
         className="btn_MakeInvoice"
         endIcon={<DescriptionIcon />}
-        // onClick={onMakeInvoid}
-        onClick={customerInvoice}
+        onClick={onMakeInvoid}
       >
         {isLoaingToInvoice ? (
           <Spin spinning={isLoaingToInvoice} size="large" />

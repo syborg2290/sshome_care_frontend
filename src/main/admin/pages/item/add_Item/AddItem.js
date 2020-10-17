@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Form, Radio, Input, Layout, Button, Spin } from "antd";
+import { Radio, Button, Spin } from "antd";
 import { TextField } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
@@ -16,9 +16,6 @@ import "react-notifications/lib/notifications.css";
 import "./Additem.css";
 
 import db from "../../../../../config/firebase.js";
-
-const { Content } = Layout;
-const { TextArea } = Input;
 
 function AddItem() {
   const [loadingSubmit, setLoadingSubmit] = useState(false);
@@ -639,7 +636,7 @@ function AddItem() {
                 className="txtt_nic"
                 autoComplete="cPrice"
                 name="cPrice"
-                InputProps={{ inputProps: { min: 0 } }}
+                InputProps={{ inputProps: { min: 1 } }}
                 type="number"
                 variant="outlined"
                 fullWidth

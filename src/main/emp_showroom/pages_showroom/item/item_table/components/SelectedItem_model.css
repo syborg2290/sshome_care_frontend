@@ -48,3 +48,19 @@
   float: right !important;
   height: 10px !important;
 }
+
+.txt_Sitem {
+  /* background-color: red !important; */
+}
+
+.paper {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  margin-top: 20px !important;
+}
+
+.form {
+  width: 100% !important;
+  margin-top: 30px !important;
+}

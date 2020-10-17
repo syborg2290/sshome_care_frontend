@@ -4,6 +4,10 @@ import { ShoppingCartOutlined, CloseOutlined } from "@ant-design/icons";
 import { Button, TextField } from "@material-ui/core";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import { useHistory } from "react-router-dom";
+
+import Grid from "@material-ui/core/Grid";
+import Container from "@material-ui/core/Container";
+
 import {
   NotificationContainer,
   NotificationManager,
@@ -32,7 +36,7 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
       keepDataQTY[i] = ele.qty;
       keepDataPaymentway[i] = ele.paymentWay;
       keepData.push({
-        i:i,
+        i: i,
         id: ele.item.id,
         title: ele.item.data.itemName,
         unitprice: ele.item.data.salePrice,
@@ -40,9 +44,9 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
         paymentWay: ele.paymentWay,
         item: ele.item.data,
       });
-       i = i + 1;
+      i = i + 1;
     });
-    
+
     setInputs(keepDataQTY);
     setpaymentWay(keepDataPaymentway);
     setItemsData(keepData);
@@ -123,73 +127,84 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
   };
 
   const createInputs = (item) => {
-    return itemsData.map((i) =>
-      (
-        <div key={i.i}>
-          <List.Item>
-            <span className="icons_List">
-              <ShoppingCartOutlined twoToneColor="#52c41a" />
-            </span>
-            <List.Item.Meta
-              title={
-                <Row>
-                  <Col span={7}> {item.title}</Col>
-                  <Col span={3}>
-                    {" "}
-                    {
-                      <TextField
-                        key={i.i}
-                        id={i.i}
-                        className="txt_Sitem"
-                        autoComplete="item"
-                        name="iitem_selected"
-                        variant="outlined"
-                        size="small"
-                        // value={inputs[i]}
-                        onChange={(e) => handleChange(e, item.id, i.i)}
-                        required
-                        fullWidth
-                        label="Qty"
-                        type="number"
-                        min={1}
-                      />
-                    }
-                  </Col>
-                  <Col span={12}>
-                    <Radio.Group
-                      className="radio_btn"
-                      defaultValue="PayandGo"
-                      buttonStyle="solid"
+    return itemsData.map((i) => (
+      <div key={i.i}>
+        <List.Item>
+          {/* <div className="paper"> */}
+          <Grid item xs={12} sm={1}>
+            {/* <span className="icons_List"> */}
+            <ShoppingCartOutlined twoToneColor="#52c41a" />
+            {/* </span> */}
+          </Grid>
+          <List.Item.Meta
+            title={
+              <Row>
+                <Grid item xs={12} sm={3}>
+                  {item.title}
+                </Grid>
+                {/* <Col span={7}> {item.title}</Col> */}
+                <Grid item xs={12} sm={2}>
+                  {/* <Col span= {3}> */}{" "}
+                  {
+                    <TextField
+                      key={i.i}
+                      id={i.i}
+                      className="txt_Sitem"
+                      autoComplete="item"
+                      name="iitem_selected"
+                      variant="outlined"
                       size="small"
-                      onChange={(e) => {
-                        setpaymentWay({
-                          ...paymentWay,
-                          [i.i]: e.target.value,
-                        });
-                      }}
-                    >
-                      <Radio.Button className="btn_radio" value="PayandGo">
-                        Pay and Go
-                      </Radio.Button>
-                      <Radio.Button className="btn_radio" value="FullPayment">
-                        Full Payment
-                      </Radio.Button>
-                    </Radio.Group>
-                  </Col>
-                  <Col span={2}>
-                    <span className="icons_Close">
-                      <CloseOutlined onClick={() => removeItems(i.i, item.id)} />
-                    </span>
-                  </Col>
-                </Row>
-              }
-              description={<span>LKR {item.unitprice}</span>}
-            />
-          </List.Item>
-          <Divider />
-        </div>
-      ) 
-    );
+                      InputProps={{ inputProps: { min: 2 } }}
+                      // value={inputs[i]}
+                      onChange={(e) => handleChange(e, item.id, i.i)}
+                      required
+                      fullWidth
+                      label="Qty"
+                      type="number"
+                      min={1}
+                    />
+                  }
+                  {/* </Col> */}
+                </Grid>
+                {/* <Col span={12}> */}
+                <Grid item xs={12} sm={5}>
+                  <Radio.Group
+                    className="radio_btn"
+                    defaultValue="PayandGo"
+                    buttonStyle="solid"
+                    size="small"
+                    onChange={(e) => {
+                      setpaymentWay({
+                        ...paymentWay,
+                        [i.i]: e.target.value,
+                      });
+                    }}
+                  >
+                    <Radio.Button className="btn_radio" value="PayandGo">
+                      Pay and Go
+                    </Radio.Button>
+                    <Radio.Button className="btn_radio" value="FullPayment">
+                      Full Payment
+                    </Radio.Button>
+                  </Radio.Group>
+                </Grid>
+                {/* </Col> */}
+                {/* <Col span={2}> */}
+                <Grid item xs={12} sm={1}>
+                  {/* <span className="icons_Close"> */}
+                  <CloseOutlined onClick={() => removeItems(i.i, item.id)} />
+                  {/* </span> */}
+                </Grid>
+                {/* </Col> */}
+              </Row>
+            }
+            description={<span>LKR {item.unitprice}</span>}
+          />
+          {/* </div> */}
+        </List.Item>
+        <Divider />
+      </div>
+    ));
   };
 
   return (

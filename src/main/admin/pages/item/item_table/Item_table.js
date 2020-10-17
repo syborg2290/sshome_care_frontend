@@ -282,7 +282,8 @@ export default function ItemTable() {
   return (
     <>
       <Modal
-        title="Confirm your action"
+        className="confo_model"
+        closable={null}
         visible={confirmVisible}
         cancelText="No"
         okText="Yes"
@@ -292,11 +293,11 @@ export default function ItemTable() {
           setConfirmVisible(false);
         }}
       >
-        <div style={{ display: "flex", flexDirection: "row" }}>
-          <HelpIcon style={{ color: "red", fontSize: "40" }} />
-          <h2 style={{ marginLeft: "20" }}>
+        <div className="confoModel_body">
+          <HelpIcon className="confo_Icon" />
+          <h3 className="txtConfoModel_body">
             Do you want to delete this item?{" "}
-          </h2>
+          </h3>
         </div>
       </Modal>
       <Modal
@@ -539,14 +540,11 @@ export default function ItemTable() {
                   <span className="load_Item">
                     {" "}
                     <span className="colan">:</span>{" "}
-                    {moment
-                      (
-                        allTtemData[currentIndx] &&
-                          allTtemData[currentIndx].data
-                          ? allTtemData[currentIndx].data.timestamp.seconds*1000
-                          : " - "
-                      )
-                      .format("dddd, MMMM Do YYYY, h:mm:ss a")}
+                    {moment(
+                      allTtemData[currentIndx] && allTtemData[currentIndx].data
+                        ? allTtemData[currentIndx].data.timestamp.seconds * 1000
+                        : " - "
+                    ).format("dddd, MMMM Do YYYY, h:mm:ss a")}
                   </span>
                 </Col>
               </Row>

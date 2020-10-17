@@ -283,7 +283,7 @@ function EditModel({
           <Form.Item label="* Cash price (LKR)">
             <Input
               type="number"
-              min={1}
+              min={0}
               allowClear
               placeholder=" 15000.00"
               value={cashPrice}
@@ -295,7 +295,7 @@ function EditModel({
           <Form.Item label="* Sale Price (LKR)">
             <Input
               type="number"
-              min={1}
+              min={0}
               allowClear
               placeholder="17000.00"
               value={salePrice}
@@ -307,7 +307,7 @@ function EditModel({
           <Form.Item label="* No Of Installments  ">
             <Input
               type="number"
-              min={1}
+              min={0}
               allowClear
               placeholder="20"
               value={noOfInstallments}
@@ -319,7 +319,7 @@ function EditModel({
           <Form.Item label="* Amount Per Installment  (LKR)">
             <Input
               type="number"
-              min={1}
+              min={0}
               allowClear
               placeholder="3000.00"
               value={amountPerInstallment}
@@ -337,7 +337,7 @@ function EditModel({
           <Form.Item label="* Guarantee Period">
             <Input
               type="number"
-              min={1}
+              min={0}
               allowClear
               placeholder="6"
               value={guaranteePeriod}
@@ -349,7 +349,7 @@ function EditModel({
           <Form.Item label="* Down Payment (LKR)">
             <Input
               type="number"
-              min={1}
+              min={0}
               allowClear
               placeholder="5000.00"
               value={downPayment}
@@ -362,7 +362,7 @@ function EditModel({
           <Form.Item label="Discount (LKR)">
             <Input
               type="number"
-              min={1}
+              min={0}
               allowClear
               placeholder="500.00"
               value={discount}

@@ -195,7 +195,8 @@ export default function Accounts() {
       </Grid>
 
       <Modal
-        title="Confirm your action"
+        className="aConfo_model"
+        closable={null}
         visible={confirmVisible}
         cancelText="No"
         okText="Yes"
@@ -205,11 +206,11 @@ export default function Accounts() {
           setConfirmVisible(false);
         }}
       >
-        <div style={{ display: "flex", flexDirection: "row" }}>
-          <HelpIcon style={{ color: "red", fontSize: "40" }} />
-          <h2 style={{ marginLeft: "20" }}>
+        <div className="aConfoModel_body">
+          <HelpIcon className="aConfo_Icon" />
+          <h3 className="atxtConfoModel_body">
             Do you want to delete this user?{" "}
-          </h2>
+          </h3>
         </div>
       </Modal>
 

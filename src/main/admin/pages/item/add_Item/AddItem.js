@@ -1,7 +1,12 @@
 import React, { useState } from "react";
 import { Form, Radio, Input, Layout, Button, Spin } from "antd";
+import { TextField } from "@material-ui/core";
+import Typography from "@material-ui/core/Typography";
+import Grid from "@material-ui/core/Grid";
+import Container from "@material-ui/core/Container";
 import firebase from "firebase";
 import "antd/dist/antd.css";
+
 import {
   NotificationContainer,
   NotificationManager,
@@ -488,250 +493,437 @@ function AddItem() {
   };
 
   return (
-    <div>
-      <Content style={{ margin: "24px 16px 0", backgroundColor: "#FFFFFF" }}>
-        <div className="site-layout-background">
-          <h2>Add New Item</h2>
-          <hr className="line"></hr>
-          <div className="xx">
-            <Form className="form">
-              <Form.Item label="* Item Name">
-                <Input
-                  required={true}
-                  allowClear
-                  placeholder="xx Device"
-                  value={itemName}
-                  onChange={(e) => {
-                    setItemName(e.target.value);
-                  }}
-                />
-              </Form.Item>
-              <Form.Item label="* Brand">
-                <Input
-                  required={true}
-                  allowClear
-                  placeholder="xx Brand "
-                  value={brand}
-                  onChange={(e) => {
-                    setBrand(e.target.value);
-                  }}
-                />
-              </Form.Item>
-              <Form.Item label="* Model no ">
-                <Input
-                  required={true}
-                  allowClear
-                  placeholder="xx 0091"
-                  value={modelNo}
-                  onChange={(e) => {
-                    setModelNo(e.target.value);
-                  }}
-                />
-              </Form.Item>
-              <Form.Item label="Chassis no ">
-                <Input
-                  required={true}
-                  allowClear
-                  placeholder="xx 95091"
-                  value={chassisNo}
-                  onChange={(e) => {
-                    setChassisNo(e.target.value);
-                  }}
-                />
-              </Form.Item>
-              <Form.Item label="* Color ">
-                <Input
-                  required={true}
-                  allowClear
-                  placeholder="xx pink"
-                  value={color}
-                  onChange={(e) => {
-                    setColor(e.target.value);
-                  }}
-                />
-              </Form.Item>
-              <Form.Item label="* Qty">
-                <Input
-                  required={true}
-                  type="number"
-                  min={1}
-                  allowClear
-                  placeholder="120 "
-                  value={qty}
-                  onChange={(e) => {
-                    setQty(e.target.value);
-                  }}
-                />
-              </Form.Item>
-              <Form.Item label="* Cash price (LKR)">
-                <Input
-                  required={true}
-                  type="number"
-                  min={1}
-                  allowClear
-                  placeholder=" 15000.00"
-                  value={cashPrice}
-                  onChange={(e) => {
-                    setCashPrice(e.target.value);
-                  }}
-                />
-              </Form.Item>
-              <Form.Item label="* Sale Price (LKR)">
-                <Input
-                  required={true}
-                  type="number"
-                  min={1}
-                  allowClear
-                  placeholder="17000.00"
-                  value={salePrice}
-                  onChange={(e) => {
-                    if (e.target.value.length === 0) {
+    <Container component="main" className="main_container">
+      <Typography className="titles" variant="h5" gutterBottom>
+        Add New Item
+      </Typography>
+      <Grid item xs={12} sm={2}>
+        <hr className="titles_hr" />
+      </Grid>
+      <div className="paper">
+        <form className="form" noValidate>
+          <Grid container spacing={2}>
+            <Grid className="txt_Labels" item xs={12} sm={2}>
+              * Item Name
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <TextField
+                className="txtt_nic"
+                autoComplete="iname"
+                name="iname"
+                variant="outlined"
+                required={true}
+                value={itemName}
+                fullWidth
+                id="iname"
+                onChange={(e) => {
+                  setItemName(e.target.value);
+                }}
+                label="Name of Item"
+                autoFocus
+                size="small"
+              />
+            </Grid>
+            <Grid className="txt_Labels" item xs={12} sm={2}>
+              * Brand
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <TextField
+                className="txtt_nic"
+                autoComplete="brand"
+                name="brand"
+                variant="outlined"
+                fullWidth
+                id="brand"
+                required={true}
+                value={brand}
+                onChange={(e) => {
+                  setBrand(e.target.value);
+                }}
+                label="Brand of Item"
+                autoFocus
+                size="small"
+              />
+            </Grid>
+            <Grid className="txt_Labels" item xs={12} sm={2}>
+              * Model no
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <TextField
+                className="txtt_nic"
+                autoComplete="modelNo"
+                name="modelNo"
+                variant="outlined"
+                fullWidth
+                id="modelNo"
+                required={true}
+                value={modelNo}
+                onChange={(e) => {
+                  setModelNo(e.target.value);
+                }}
+                label="xx 0091"
+                autoFocus
+                size="small"
+              />
+            </Grid>
+            <Grid className="txt_Labels" item xs={12} sm={2}>
+              * Chassis no
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <TextField
+                className="txtt_nic"
+                autoComplete="chassisNo"
+                name="chassisNo"
+                variant="outlined"
+                fullWidth
+                id="chassisNo"
+                required={true}
+                value={chassisNo}
+                onChange={(e) => {
+                  setChassisNo(e.target.value);
+                }}
+                label="xx 0091"
+                autoFocus
+                size="small"
+              />
+            </Grid>
+            <Grid className="txt_Labels" item xs={12} sm={2}>
+              * Color
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <TextField
+                className="txtt_nic"
+                autoComplete="color"
+                name="color"
+                variant="outlined"
+                fullWidth
+                id="color"
+                required={true}
+                value={color}
+                onChange={(e) => {
+                  setColor(e.target.value);
+                }}
+                label="color of Item"
+                autoFocus
+                size="small"
+              />
+            </Grid>
+            <Grid className="txt_Labels" item xs={12} sm={2}>
+              * Qty
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <TextField
+                className="txtt_nic"
+                autoComplete="qty"
+                name="qty"
+                InputProps={{ inputProps: { min: 1 } }}
+                type="number"
+                variant="outlined"
+                fullWidth
+                id="qty"
+                required={true}
+                value={qty}
+                onChange={(e) => {
+                  setQty(e.target.value);
+                }}
+                label="Item Qty"
+                autoFocus
+                size="small"
+              />
+            </Grid>
+            <Grid className="txt_Labels" item xs={12} sm={2}>
+              * Cash price (LKR)
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <TextField
+                className="txtt_nic"
+                autoComplete="cPrice"
+                name="cPrice"
+                InputProps={{ inputProps: { min: 0 } }}
+                type="number"
+                variant="outlined"
+                fullWidth
+                id="cPrice"
+                required={true}
+                value={cashPrice}
+                onChange={(e) => {
+                  setCashPrice(e.target.value);
+                }}
+                label="Cash Price of Item"
+                autoFocus
+                size="small"
+              />
+            </Grid>
+            <Grid className="txt_Labels" item xs={12} sm={2}>
+              * Sale Price (LKR)
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <TextField
+                className="txtt_nic"
+                autoComplete="sPrice"
+                name="sPrice"
+                type="number"
+                InputProps={{ inputProps: { min: 0 } }}
+                variant="outlined"
+                fullWidth
+                id="sPrice"
+                required={true}
+                value={salePrice}
+                onChange={(e) => {
+                  if (e.target.value.length === 0) {
+                    setNoOfInstallments(0);
+                  } else {
+                    if (e.target.value === downPayment) {
                       setNoOfInstallments(0);
                     } else {
-                      if (e.target.value === downPayment) {
+                      if (e.target.value === 0) {
                         setNoOfInstallments(0);
                       } else {
-                        if (e.target.value === 0) {
-                          setNoOfInstallments(0);
+                        if (downPayment > 0 && downPayment < e.target.value) {
+                          setInstallmentCount(e.target.value - downPayment);
                         } else {
-                          if (downPayment > 0 && downPayment < e.target.value) {
-                            setInstallmentCount(e.target.value - downPayment);
-                          } else {
-                            setNoOfInstallments(0);
-                          }
+                          setNoOfInstallments(0);
                         }
                       }
                     }
+                  }
 
-                    setSalePrice(e.target.value);
-                  }}
-                />
-              </Form.Item>
-              <Form.Item label="* Down Payment (LKR)">
-                <Input
-                  required={true}
-                  type="number"
-                  disabled={salePrice > 0 ? false : true}
-                  min={1}
-                  allowClear
-                  placeholder="5000.00"
-                  value={downPayment}
-                  onChange={(e) => {
-                    if (e.target.value.length === 0) {
+                  setSalePrice(e.target.value);
+                }}
+                label="sale Price"
+                autoFocus
+                size="small"
+              />
+            </Grid>
+            <Grid className="txt_Labels" item xs={12} sm={2}>
+              * Down Payment (LKR)
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <TextField
+                className="txtt_nic"
+                disabled={salePrice > 0 ? false : true}
+                autoComplete="dPayment"
+                name="dPayment"
+                InputProps={{ inputProps: { min: 0 } }}
+                type="number"
+                variant="outlined"
+                fullWidth
+                id="dPayment"
+                required={true}
+                value={downPayment}
+                onChange={(e) => {
+                  if (e.target.value.length === 0) {
+                    setNoOfInstallments(0);
+                  } else {
+                    if (e.target.value === salePrice) {
                       setNoOfInstallments(0);
                     } else {
-                      if (e.target.value === salePrice) {
+                      if (e.target.value === 0) {
                         setNoOfInstallments(0);
                       } else {
-                        if (e.target.value === 0) {
-                          setNoOfInstallments(0);
+                        if (e.target.value > 0) {
+                          setInstallmentCount(salePrice - e.target.value);
                         } else {
-                          if (e.target.value > 0) {
-                            setInstallmentCount(salePrice - e.target.value);
-                          } else {
-                            setNoOfInstallments(0);
-                          }
+                          setNoOfInstallments(0);
                         }
                       }
                     }
+                  }
 
-                    setDownPayment(e.target.value);
-                  }}
-                />
-              </Form.Item>
-              <Form.Item label="* No Of Installments">
-                <Input
-                  required={true}
-                  type="number"
-                  min={1}
-                  allowClear
-                  disabled={salePrice > 0 ? false : true}
-                  placeholder="20"
-                  value={noOfInstallments}
-                  onChange={(e) => {
-                    setNoOfInstallments(e.target.value);
-                  }}
-                />
-              </Form.Item>
-              <Form.Item label="* Amount Per Installment (LKR)">
-                <Input
-                  required={true}
-                  type="number"
-                  min={1}
-                  disabled={salePrice > 0 ? false : true}
-                  allowClear
-                  placeholder="3000.00"
-                  value={amountPerInstallment}
-                  onChange={(e) => {
-                    setAmountPerInstallment(e.target.value);
-                  }}
-                />
-              </Form.Item>
-              <Form.Item label="Guarantee Months / Years  ">
-                <Radio.Group onChange={radioOnChange} value={guarantee.value}>
-                  <Radio value={"Years"}>Years</Radio>
-                  <Radio value={"Months"}>Months</Radio>
-                </Radio.Group>
-              </Form.Item>
-              <Form.Item label="* Guarantee Period">
-                <Input
-                  required={true}
-                  type="number"
-                  min={1}
-                  allowClear
-                  placeholder="6"
-                  value={guaranteePeriod}
-                  onChange={(e) => {
-                    setGuaranteePeriod(e.target.value);
-                  }}
-                />
-              </Form.Item>
-              <Form.Item label="* Discount (LKR)">
-                <Input
-                  required={true}
-                  type="number"
-                  min={1}
-                  disabled={salePrice > 0 ? false : true}
-                  allowClear
-                  placeholder="500.00"
-                  value={discount}
-                  onChange={(e) => {
-                    var value = e.target.value;
-                    setDiscount(value);
-                  }}
-                />
-              </Form.Item>
-              <Form.Item label="Description ">
-                <TextArea
-                  placeholder="About Item"
-                  autoSize={{ minRows: 3, maxRows: 5 }}
-                  value={description}
-                  onChange={(e) => {
-                    setDescription(e.target.value);
-                  }}
-                />
-              </Form.Item>
-              <Form.Item label="Company Invoice No ">
-                <Input
-                  allowClear
-                  placeholder="In-6101"
-                  value={cInvoiceNo}
-                  onChange={(e) => {
-                    setCInvoiceNo(e.target.value);
-                  }}
-                />
-              </Form.Item>
-              <Form.Item label="Guarantee Card No  ">
-                <Input
-                  allowClear
-                  placeholder="00101"
-                  value={GCardNo}
-                  onChange={(e) => {
-                    setGCardNo(e.target.value);
-                  }}
-                />
-              </Form.Item>
-              {/* <Form.Item label="Upload Image  ">
+                  setDownPayment(e.target.value);
+                }}
+                label="Down payment"
+                autoFocus
+                size="small"
+              />
+            </Grid>
+            <Grid className="txt_Labels" item xs={12} sm={2}>
+              * No Of Installments
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <TextField
+                className="txtt_nic"
+                disabled={salePrice > 0 ? false : true}
+                autoComplete="nInstallments"
+                name="nInstallments"
+                type="number"
+                variant="outlined"
+                InputProps={{ inputProps: { min: 0 } }}
+                fullWidth
+                id="nInstallments"
+                required={true}
+                value={noOfInstallments}
+                onChange={(e) => {
+                  setNoOfInstallments(e.target.value);
+                }}
+                label="Installments"
+                autoFocus
+                size="small"
+              />
+            </Grid>
+            <Grid className="txt_Labels" item xs={12} sm={2}>
+              * Amount Per Installment (LKR)
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <TextField
+                className="txtt_nic"
+                autoComplete="aPerInstallments"
+                disabled={salePrice > 0 ? false : true}
+                name="aPerInstallments"
+                type="number"
+                variant="outlined"
+                InputProps={{ inputProps: { min: 0 } }}
+                fullWidth
+                id="aPerInstallments"
+                required={true}
+                value={amountPerInstallment}
+                onChange={(e) => {
+                  setAmountPerInstallment(e.target.value);
+                }}
+                label="Installments Amount"
+                autoFocus
+                size="small"
+              />
+            </Grid>
+            <Grid className="txt_Labels" item xs={12} sm={2}>
+              * Guarantee Months / Years
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <Radio.Group onChange={radioOnChange} value={guarantee.value}>
+                <Radio value={"Years"}>Years</Radio>
+                <Radio value={"Months"}>Months</Radio>
+              </Radio.Group>
+            </Grid>
+            <Grid className="txt_Labels" item xs={12} sm={2}>
+              * Guarantee Period
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <TextField
+                className="txtt_nic"
+                autoComplete="gPeriod"
+                name="gPeriod"
+                type="number"
+                variant="outlined"
+                InputProps={{ inputProps: { min: 0 } }}
+                fullWidth
+                id="gPeriod"
+                required={true}
+                value={guaranteePeriod}
+                onChange={(e) => {
+                  setGuaranteePeriod(e.target.value);
+                }}
+                label="Guarantee"
+                autoFocus
+                size="small"
+              />
+            </Grid>
+            <Grid className="txt_Labels" item xs={12} sm={2}>
+              * Discount (LKR)
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <TextField
+                className="txtt_nic"
+                disabled={salePrice > 0 ? false : true}
+                autoComplete="discount"
+                name="discount"
+                type="number"
+                InputProps={{ inputProps: { min: 0 } }}
+                variant="outlined"
+                fullWidth
+                id="discount"
+                required={true}
+                value={discount}
+                onChange={(e) => {
+                  var value = e.target.value;
+                  setDiscount(value);
+                }}
+                label="Discount"
+                autoFocus
+                size="small"
+              />
+            </Grid>
+            <Grid className="txt_Labels" item xs={12} sm={2}>
+              Description :
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                className="txt_rHofdfme"
+                autoComplete="description"
+                name="description"
+                variant="outlined"
+                multiline
+                rows={6}
+                fullWidth
+                id="description"
+                label="About Item"
+                autoFocus
+                size="small"
+                value={description}
+                onChange={(e) => {
+                  setDescription(e.target.value);
+                }}
+              />
+            </Grid>
+            <Grid className="txt_Labels" item xs={12} sm={4}></Grid>
+
+            <Grid className="txt_Labels" item xs={12} sm={2}>
+              * Company Invoice No
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <TextField
+                className="txtt_nic"
+                autoComplete="cInvoiceNo"
+                variant="outlined"
+                fullWidth
+                id="cInvoiceNo"
+                required={true}
+                value={cInvoiceNo}
+                onChange={(e) => {
+                  setCInvoiceNo(e.target.value);
+                }}
+                label="Compny Invoice"
+                autoFocus
+                size="small"
+              />
+            </Grid>
+
+            <Grid className="txt_Labels" item xs={12} sm={2}>
+              * Guarantee Card No
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <TextField
+                className="txtt_nic"
+                autoComplete="gCardNo"
+                name="gCardNo"
+                variant="outlined"
+                fullWidth
+                id="gCardNo"
+                required={true}
+                value={GCardNo}
+                onChange={(e) => {
+                  setGCardNo(e.target.value);
+                }}
+                label="Guarantee No"
+                autoFocus
+                size="small"
+              />
+            </Grid>
+            <Grid className="txt_Labels" item xs={12} sm={8}></Grid>
+            <Grid className="txt_Labels" item xs={12} sm={4}>
+              <Button
+                disabled={!loadingSubmit ? false : true}
+                className="btnAdd"
+                type="primary"
+                onClick={addItem}
+              >
+                {loadingSubmit ? (
+                  <Spin spinning={loadingSubmit} size="large" />
+                ) : (
+                  "Submit"
+                )}
+              </Button>
+            </Grid>
+            {/* <Form.Item label="Upload Image  ">
                 <input
                   type="file"
                   accept="image/*"
@@ -754,25 +946,11 @@ function AddItem() {
                   className="image"
                 />
               </Form.Item> */}
-
-              <Button
-                disabled={!loadingSubmit ? false : true}
-                className="btn"
-                type="primary"
-                onClick={addItem}
-              >
-                {loadingSubmit ? (
-                  <Spin spinning={loadingSubmit} size="large" />
-                ) : (
-                  "Submit"
-                )}
-              </Button>
-            </Form>
-          </div>
-          <NotificationContainer />
-        </div>
-      </Content>
-    </div>
+          </Grid>
+        </form>
+      </div>
+      <NotificationContainer />
+    </Container>
   );
 }
 

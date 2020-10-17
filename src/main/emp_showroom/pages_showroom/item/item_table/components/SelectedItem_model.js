@@ -24,14 +24,15 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
 
   useEffect(() => {
     var keepData = [];
-
+    var keepDataQTY = {};
+    var keepDataPaymentway = {};
+    var i = 0;
     itemListProps.forEach((ele) => {
-      setInputs({ ...inputs, [Object.keys(inputs).length]: ele.qty });
-      setpaymentWay({
-        ...paymentWay,
-        [Object.keys(paymentWay).length]: ele.paymentWay,
-      });
+      console.log(i);
+      keepDataQTY[i] = ele.qty;
+      keepDataPaymentway[i] = ele.paymentWay;
       keepData.push({
+        i:i,
         id: ele.item.id,
         title: ele.item.data.itemName,
         unitprice: ele.item.data.salePrice,
@@ -39,20 +40,28 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
         paymentWay: ele.paymentWay,
         item: ele.item.data,
       });
+       i = i + 1;
     });
-
+    
+    setInputs(keepDataQTY);
+    setpaymentWay(keepDataPaymentway);
     setItemsData(keepData);
     // eslint-disable-next-line
   }, [itemListProps]);
 
-  const handleChange = (qty, i, itemId) => {
+  const handleChange = (e, itemid, i) => {
     try {
+      const { value } = e.target;
       db.collection("item")
-        .doc(itemId)
+        .doc(itemid)
         .get()
         .then((doc) => {
-          if (doc.data().qty >= qty) {
-            setInputs({ ...inputs, [i]: qty });
+          console.log(doc.data());
+          if (doc.data().qty >= value) {
+            setInputs({
+              ...inputs,
+              [i]: value,
+            });
           } else {
             NotificationManager.warning("Out Of Stock");
           }
@@ -75,110 +84,112 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
   };
 
   const nextclick = () => {
-    setLoading(true);
-    var nextData = [];
-    for (var i = 0; i < itemsData.length; i++) {
-      var obj = {
-        id: itemsData[i].id,
-        title: itemsData[i].title,
-        unitprice: itemsData[i].unitprice,
-        qty: inputs[i],
-        paymentWay: paymentWay[i],
-        item: itemsData[i].item,
-      };
-      nextData.push(obj);
-    }
-    if (nextData.some((ob) => ob.paymentWay === "PayandGo")) {
-      setLoading(false);
-      //sent to add customer
-      let moveWith = {
-        pathname: "/showroom/invoice/addCustomer",
-        search: "?query=abc",
-        state: { detail: nextData },
-      };
+    console.log(inputs);
+    console.log(paymentWay);
+    // setLoading(true);
+    // var nextData = [];
+    // for (var i = 0; i < itemsData.length; i++) {
+    //   let obj = {
+    //     id: itemsData[i].id,
+    //     title: itemsData[i].title,
+    //     unitprice: itemsData[i].unitprice,
+    //     qty: inputs[i],
+    //     paymentWay: paymentWay[i],
+    //     item: itemsData[i].item,
+    //   };
+    //   nextData.push(obj);
+    // }
+    // if (nextData.some((ob) => ob.paymentWay === "PayandGo")) {
+    //   setLoading(false);
+    //   //sent to add customer
+    //   let moveWith = {
+    //     pathname: "/showroom/invoice/addCustomer",
+    //     search: "?query=abc",
+    //     state: { detail: nextData },
+    //   };
 
-      history.push(moveWith);
-    } else {
-      setLoading(false);
-      //sent to direct invoice
-      let moveWith = {
-        pathname: "/showroom/ui/makeInvoice",
-        search: "?query=abc",
-        state: { detail: nextData },
-      };
+    //   history.push(moveWith);
+    // } else {
+    //   setLoading(false);
+    //   //sent to direct invoice
+    //   let moveWith = {
+    //     pathname: "/showroom/ui/makeInvoice",
+    //     search: "?query=abc",
+    //     state: { detail: nextData },
+    //   };
 
-      history.push(moveWith);
-    }
+    //   history.push(moveWith);
+    // }
   };
 
   const createInputs = (item) => {
-    return Object.keys(inputs).map((i) => (
-      <div >
-        <List.Item >
-          <span className="icons_List">
-            <ShoppingCartOutlined twoToneColor="#52c41a" />
-          </span>
-          <List.Item.Meta
-            title={
-              <Row>
-                <Col span={7}> {item.title}</Col>
-                <Col span={3}>
-                  {" "}
-                  {
-                    <TextField
-                      key={i}
-                      id={i}
-                      className="txt_Sitem"
-                      autoComplete="item"
-                      name="iitem_selected"
-                      variant="outlined"
+    return itemsData.map((i) =>
+      (
+        <div key={i.i}>
+          <List.Item>
+            <span className="icons_List">
+              <ShoppingCartOutlined twoToneColor="#52c41a" />
+            </span>
+            <List.Item.Meta
+              title={
+                <Row>
+                  <Col span={7}> {item.title}</Col>
+                  <Col span={3}>
+                    {" "}
+                    {
+                      <TextField
+                        key={i.i}
+                        id={i.i}
+                        className="txt_Sitem"
+                        autoComplete="item"
+                        name="iitem_selected"
+                        variant="outlined"
+                        size="small"
+                        // value={inputs[i]}
+                        onChange={(e) => handleChange(e, item.id, i.i)}
+                        required
+                        fullWidth
+                        label="Qty"
+                        type="number"
+                        min={1}
+                      />
+                    }
+                  </Col>
+                  <Col span={12}>
+                    <Radio.Group
+                      className="radio_btn"
+                      defaultValue="PayandGo"
+                      buttonStyle="solid"
                       size="small"
-                      value={inputs[i]}
-                      onChange={(e) =>
-                        handleChange(e.target.value, e.target.i, item.id)
-                      }
-                      required
-                      fullWidth
-                      label="Qty"
-                      type="number"
-                      min={1}
-                    />
-                  }
-                </Col>
-                <Col span={12}>
-                  <Radio.Group
-                    className="radio_btn"
-                    defaultValue="PayandGo"
-                    buttonStyle="solid"
-                    size="small"
-                    onChange={(e) => {
-                      setpaymentWay({
-                        ...paymentWay,
-                        [i]: e.target.value,
-                      });
-                    }}
-                  >
-                    <Radio.Button className="btn_radio" value="PayandGo">
-                      Pay and Go
-                    </Radio.Button>
-                    <Radio.Button className="btn_radio" value="FullPayment">
-                      Full Payment
-                    </Radio.Button>
-                  </Radio.Group>
-                </Col>
-                <Col span={2}>
-                  <span className="icons_Close">
-                    <CloseOutlined onClick={() => removeItems(i, item.id)} />
-                  </span>
-                </Col>
-              </Row>
-            }
-            description={<span>LKR {item.unitprice}</span>}
-          />
-        </List.Item>
-        <Divider />
-      </div>
-    ));
+                      onChange={(e) => {
+                        setpaymentWay({
+                          ...paymentWay,
+                          [i.i]: e.target.value,
+                        });
+                      }}
+                    >
+                      <Radio.Button className="btn_radio" value="PayandGo">
+                        Pay and Go
+                      </Radio.Button>
+                      <Radio.Button className="btn_radio" value="FullPayment">
+                        Full Payment
+                      </Radio.Button>
+                    </Radio.Group>
+                  </Col>
+                  <Col span={2}>
+                    <span className="icons_Close">
+                      <CloseOutlined onClick={() => removeItems(i.i, item.id)} />
+                    </span>
+                  </Col>
+                </Row>
+              }
+              description={<span>LKR {item.unitprice}</span>}
+            />
+          </List.Item>
+          <Divider />
+        </div>
+      ) 
+    );
   };
 
   return (

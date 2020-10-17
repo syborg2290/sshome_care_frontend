@@ -70,35 +70,7 @@ function AddItem() {
     });
   };
 
-  // const onImageChange = (event) => {
-  //   if (event.target.files && event.target.files[0]) {
-  //     setImageFile(event.target.files[0]);
-  //     let reader = new FileReader();
-  //     reader.onload = (e) => {
-  //       setImageUrl(e.target.result);
-  //     };
-  //     reader.readAsDataURL(event.target.files[0]);
-  //   }
-  // };
-  // let imageDownloadUrl = "null";
-  //                   if (imageFile !== null) {
-  //                     const formData = new FormData();
-  //                     const options = {
-  //                       maxSizeMB: 1,
-  //                       maxWidthOrHeight: 1920,
-  //                       useWebWorker: true,
-  //                     };
-  //                     const compressedFile = await imageCompression(
-  //                       imageFile,
-  //                       options
-  //                     );
-  //                     formData.append("image", compressedFile);
-  //                     const configFile = {
-  //                       headers: {
-  //                         "content-type": "multipart/form-data",
-  //                       },
-  //                     };
-
+  
   const addItem = async (e) => {
     e.preventDefault();
 
@@ -922,29 +894,7 @@ function AddItem() {
                 )}
               </Button>
             </Grid>
-            {/* <Form.Item label="Upload Image  ">
-                <input
-                  type="file"
-                  accept="image/*"
-                  name=""
-                  onChange={onImageChange}
-                  className="image"
-                  id="item_image"
-                  hidden
-                />
-                <img
-                  alt="Item upload"
-                  onClick={() => {
-                    document.getElementById("item_image").click();
-                  }}
-                  src={
-                    imageUrl == null
-                      ? require("../../../../../assets/images_upload.png")
-                      : imageUrl
-                  }
-                  className="image"
-                />
-              </Form.Item> */}
+          
           </Grid>
         </form>
       </div>

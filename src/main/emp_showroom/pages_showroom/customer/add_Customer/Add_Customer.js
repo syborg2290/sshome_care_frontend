@@ -3,32 +3,17 @@ import { TextField, Button } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
-import { Upload, message } from "antd";
-import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import DoneIcon from "@material-ui/icons/Done";
 import ClearOutlinedIcon from "@material-ui/icons/ClearOutlined";
 import "./Add_Customer.css";
-
-function getBase64(img, callback) {
-  const reader = new FileReader();
-  reader.addEventListener("load", () => callback(reader.result));
-  reader.readAsDataURL(img);
-}
-
-function beforeUpload(file) {
-  const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
-  if (!isJpgOrPng) {
-    message.error("You can only upload JPG/PNG file!");
-  }
-  const isLt2M = file.size / 1024 / 1024 < 2;
-  if (!isLt2M) {
-    message.error("Image must smaller than 2MB!");
-  }
-  return isJpgOrPng && isLt2M;
-}
+import {
+  NotificationContainer,
+  NotificationManager,
+} from "react-notifications";
+import "react-notifications/lib/notifications.css";
 
 export default function Add_Customer() {
-  const [imageUrl, setImageUrl] = useState(null);
+  // eslint-disable-next-line
   const [loading, setLoading] = useState(false);
 
   const [nic, setNic] = useState("");
@@ -40,7 +25,8 @@ export default function Add_Customer() {
   const [mobile2, setMobile2] = useState("");
   const [root, setRoot] = useState("");
   // eslint-disable-next-line
-  const [image, setImage] = useState("");
+  const [imageFile, setImageFile] = useState(null);
+  const [imageUrl, setImageUrl] = useState(null);
 
   const [trustee1Nic, setTrustee1Nic] = useState("");
   const [trustee1Fname, setTrustee1Fname] = useState("");
@@ -58,7 +44,6 @@ export default function Add_Customer() {
   const [trustee2Mobile1, setTrustee2Mobile1] = useState("");
   const [trustee2Mobile2, setTrustee2Mobile2] = useState("");
 
-  
   // eslint-disable-next-line
   const valuesInitialState = () => {
     setNic("");
@@ -84,26 +69,74 @@ export default function Add_Customer() {
     setRoot("");
   };
 
-  const handleChange = (info) => {
-    if (info.file.status === "uploading") {
-      setLoading(true);
-      return;
-    }
-    if (info.file.status === "done") {
-      // Get this url from response in real world.
-      getBase64(info.file.originFileObj, (imageUrl) => {
-        setImageUrl(imageUrl);
-        setLoading(false);
-      });
+  const onImageChange = (event) => {
+    if (event.target.files && event.target.files[0]) {
+      setImageFile(event.target.files[0]);
+      let reader = new FileReader();
+      reader.onload = (e) => {
+        setImageUrl(e.target.result);
+      };
+      reader.readAsDataURL(event.target.files[0]);
     }
   };
 
-  const uploadButton = (
-    <div>
-      {loading ? <LoadingOutlined /> : <PlusOutlined />}
-      <div style={{ marginTop: 8 }}>Upload</div>
-    </div>
-  );
+  // let imageDownloadUrl = "null";
+  //                   if (imageFile !== null) {
+  //                     const formData = new FormData();
+  //                     const options = {
+  //                       maxSizeMB: 1,
+  //                       maxWidthOrHeight: 1920,
+  //                       useWebWorker: true,
+  //                     };
+  //                     const compressedFile = await imageCompression(
+  //                       imageFile,
+  //                       options
+  //                     );
+  //                     formData.append("image", compressedFile);
+  //                     const configFile = {
+  //                       headers: {
+  //                         "content-type": "multipart/form-data",
+  //                       },
+  //                     };
+
+  const submit = () => {
+    if (nic.length > 0) {
+      if (fname.length > 0) {
+        if (lname.length > 0) {
+          if (addres1.length > 0) {
+            if (mobile1.length > 0) {
+              //Rest of gurantees
+            } else {
+              NotificationManager.info(
+                "Customer contact number is required!",
+                "Remember validations"
+              );
+            }
+          } else {
+            NotificationManager.info(
+              "Customer address is required!",
+              "Remember validations"
+            );
+          }
+        } else {
+          NotificationManager.info(
+            "Customer last name is required!",
+            "Remember validations"
+          );
+        }
+      } else {
+        NotificationManager.info(
+          "Customer first name is required!",
+          "Remember validations"
+        );
+      }
+    } else {
+      NotificationManager.info(
+        "Customer nic is required!",
+        "Remember validations"
+      );
+    }
+  };
 
   return (
     <Container component="main" className="main_container">
@@ -124,12 +157,12 @@ export default function Add_Customer() {
               <TextField
                 value={nic}
                 className="txtt_nic"
-                autoComplete="fname"
-                name="firstName"
+                autoComplete="nic"
+                name="nic"
                 variant="outlined"
                 required
                 fullWidth
-                id="firstName"
+                id="nic"
                 label="NIC"
                 autoFocus
                 size="small"
@@ -145,6 +178,7 @@ export default function Add_Customer() {
             <Grid item xs={12} sm={3}>
               <TextField
                 value={fname}
+                disabled={nic.length === 0 ? true : false}
                 variant="outlined"
                 required
                 fullWidth
@@ -161,6 +195,7 @@ export default function Add_Customer() {
             <Grid item xs={12} sm={3}>
               <TextField
                 value={lname}
+                disabled={nic.length === 0 ? true : false}
                 variant="outlined"
                 required
                 fullWidth
@@ -181,6 +216,7 @@ export default function Add_Customer() {
             <Grid item xs={12} sm={10}>
               <TextField
                 value={addres1}
+                disabled={nic.length === 0 ? true : false}
                 variant="outlined"
                 required
                 fullWidth
@@ -200,6 +236,7 @@ export default function Add_Customer() {
             <Grid item xs={12} sm={10}>
               <TextField
                 value={addres2}
+                disabled={nic.length === 0 ? true : false}
                 variant="outlined"
                 fullWidth
                 id="address2"
@@ -213,11 +250,12 @@ export default function Add_Customer() {
               />
             </Grid>
             <Grid className="txt_Labels" item xs={12} sm={2}>
-              Mobile Number :
+              Contact Number :
             </Grid>
             <Grid item xs={12} sm={3}>
               <TextField
                 value={mobile1}
+                disabled={nic.length === 0 ? true : false}
                 className="txt_Number"
                 autoComplete="mNumber"
                 name="mNumber"
@@ -225,8 +263,7 @@ export default function Add_Customer() {
                 required
                 fullWidth
                 id="mNumber"
-                label="Mobile Number Home"
-                autoFocus
+                label="Contact Number 1"
                 size="small"
                 onChange={(e) => {
                   setMobile1(e.target.value);
@@ -236,14 +273,14 @@ export default function Add_Customer() {
             <Grid item xs={12} sm={3}>
               <TextField
                 value={mobile2}
+                disabled={nic.length === 0 ? true : false}
                 className="txt_Number"
                 autoComplete="mNumber"
                 name="mNumber"
                 variant="outlined"
                 fullWidth
                 id="mNumber"
-                label="Mobile Number Work"
-                autoFocus
+                label="Contact Number 2"
                 size="small"
                 onChange={(e) => {
                   setMobile2(e.target.value);
@@ -257,6 +294,7 @@ export default function Add_Customer() {
             <Grid item xs={12} sm={3}>
               <TextField
                 value={root}
+                disabled={nic.length === 0 ? true : false}
                 className="txt_rHome"
                 autoComplete="rHome"
                 name="rHome"
@@ -266,7 +304,6 @@ export default function Add_Customer() {
                 fullWidth
                 id="rHome"
                 label="Root to Home"
-                autoFocus
                 size="small"
                 onChange={(e) => {
                   setRoot(e.target.value);
@@ -277,22 +314,33 @@ export default function Add_Customer() {
               Image :
             </Grid>
             <Grid item xs={12} sm={6}>
-              <Upload
-                name="avatar"
-                value={image}
-                listType="picture-card"
-                className="avatar_uploader"
-                showUploadList={false}
-                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                beforeUpload={beforeUpload}
-                onChange={handleChange}
-              >
-                {imageUrl ? (
-                  <img src={imageUrl} alt="avatar" className="image" />
-                ) : (
-                  uploadButton
-                )}
-              </Upload>
+              <input
+                type="file"
+                disabled={nic.length === 0 ? true : false}
+                accept="image/*"
+                name=""
+                onChange={onImageChange}
+                className="image"
+                id="item_image"
+                hidden
+              />
+              <img
+                disabled={nic.length === 0 ? true : false}
+                alt="Item upload"
+                style={{
+                  borderRadius: "30px",
+                  height: "100px",
+                }}
+                onClick={() => {
+                  document.getElementById("item_image").click();
+                }}
+                src={
+                  imageUrl == null
+                    ? require("../../../../../assets/avatar.png")
+                    : imageUrl
+                }
+                className="image"
+              />
             </Grid>
             <Grid item xs={12} sm={5}></Grid>
           </Grid>
@@ -300,7 +348,18 @@ export default function Add_Customer() {
             variant="contained"
             color="primary"
             className="btn_ClearCustomer"
+            disabled={nic.length === 0 ? true : false}
             endIcon={<ClearOutlinedIcon />}
+            onClick={() => {
+              setNic("");
+              setFirstName("");
+              setLastName("");
+              setAddres1("");
+              setAddres2("");
+              setMobile1("");
+              setMobile2("");
+              setRoot("");
+            }}
           >
             Clear All
           </Button>
@@ -324,12 +383,12 @@ export default function Add_Customer() {
               <TextField
                 value={trustee1Nic}
                 className="txtt_nic"
-                autoComplete="fname"
-                name="firstName"
+                autoComplete="nic"
+                name="nic"
                 variant="outlined"
                 required
                 fullWidth
-                id="firstName"
+                id="nic"
                 label="NIC"
                 autoFocus
                 size="small"
@@ -345,6 +404,7 @@ export default function Add_Customer() {
             <Grid item xs={12} sm={3}>
               <TextField
                 value={trustee1Fname}
+                disabled={trustee1Nic.length === 0 ? true : false}
                 variant="outlined"
                 required
                 fullWidth
@@ -361,6 +421,7 @@ export default function Add_Customer() {
             <Grid item xs={12} sm={3}>
               <TextField
                 value={trustee1Lname}
+                disabled={trustee1Nic.length === 0 ? true : false}
                 variant="outlined"
                 required
                 fullWidth
@@ -381,13 +442,14 @@ export default function Add_Customer() {
             <Grid item xs={12} sm={10}>
               <TextField
                 value={trustee1Addres1}
+                disabled={trustee1Nic.length === 0 ? true : false}
                 variant="outlined"
                 required
                 fullWidth
-                id="email"
+                id="nicaddress"
                 label="NIC Address"
-                name="email"
-                autoComplete="email"
+                name="nicaddress"
+                autoComplete="nicaddress"
                 size="small"
                 onChange={(e) => {
                   setTrustee1Addres1(e.target.value);
@@ -400,6 +462,7 @@ export default function Add_Customer() {
             <Grid item xs={12} sm={10}>
               <TextField
                 value={trustee1Addres2}
+                disabled={trustee1Nic.length === 0 ? true : false}
                 variant="outlined"
                 fullWidth
                 id="email"
@@ -413,11 +476,12 @@ export default function Add_Customer() {
               />
             </Grid>
             <Grid className="txt_Labels" item xs={12} sm={2}>
-              Mobile Number :
+              Contact Number :
             </Grid>
             <Grid item xs={12} sm={3}>
               <TextField
                 value={trustee1Mobile1}
+                disabled={trustee1Nic.length === 0 ? true : false}
                 className="txt_Number"
                 autoComplete="mNumber"
                 name="mNumber"
@@ -425,7 +489,7 @@ export default function Add_Customer() {
                 required
                 fullWidth
                 id="mNumber"
-                label="Mobile Number Home"
+                label="Contact Number 1"
                 autoFocus
                 size="small"
                 onChange={(e) => {
@@ -436,13 +500,14 @@ export default function Add_Customer() {
             <Grid item xs={12} sm={3}>
               <TextField
                 value={trustee1Mobile2}
+                disabled={trustee1Nic.length === 0 ? true : false}
                 className="txt_Number"
                 autoComplete="mNumber"
                 name="mNumber"
                 variant="outlined"
                 fullWidth
                 id="mNumber"
-                label="Mobile Number work"
+                label="Contact Number 2"
                 autoFocus
                 size="small"
                 onChange={(e) => {
@@ -452,16 +517,7 @@ export default function Add_Customer() {
             </Grid>
             <Grid item xs={12} sm={4}></Grid>
           </Grid>
-          {/* <Grid item xs={12} sm={12}>
-            <Button
-              variant="contained"
-              color="primary"
-              className="btn_Cleartrustee"
-              endIcon={<ClearOutlinedIcon />}
-            >
-              Clear All
-            </Button>
-          </Grid> */}
+
           {/* 1st trustee form END */}
 
           {/* 2nd trustee form START */}
@@ -476,12 +532,12 @@ export default function Add_Customer() {
               <TextField
                 value={trustee2Nic}
                 className="txtt_nic"
-                autoComplete="fname"
-                name="firstName"
+                autoComplete="nic"
+                name="nic"
                 variant="outlined"
                 required
                 fullWidth
-                id="firstName"
+                id="nic"
                 label="NIC"
                 autoFocus
                 size="small"
@@ -497,6 +553,7 @@ export default function Add_Customer() {
             <Grid item xs={12} sm={3}>
               <TextField
                 value={trustee2Fname}
+                disabled={trustee2Nic.length === 0 ? true : false}
                 variant="outlined"
                 required
                 fullWidth
@@ -513,6 +570,7 @@ export default function Add_Customer() {
             <Grid item xs={12} sm={3}>
               <TextField
                 value={trustee2Lname}
+                disabled={trustee2Nic.length === 0 ? true : false}
                 variant="outlined"
                 required
                 fullWidth
@@ -533,13 +591,14 @@ export default function Add_Customer() {
             <Grid item xs={12} sm={10}>
               <TextField
                 value={trustee2Address1}
+                disabled={trustee2Nic.length === 0 ? true : false}
                 variant="outlined"
                 required
                 fullWidth
-                id="email"
+                id="nicaddress"
                 label="NIC Address"
-                name="email"
-                autoComplete="email"
+                name="nicaddress"
+                autoComplete="nicaddress"
                 size="small"
                 onChange={(e) => {
                   setTrustee2Address1(e.target.value);
@@ -552,6 +611,7 @@ export default function Add_Customer() {
             <Grid item xs={12} sm={10}>
               <TextField
                 value={trustee2Address2}
+                disabled={trustee2Nic.length === 0 ? true : false}
                 variant="outlined"
                 fullWidth
                 id="email"
@@ -565,11 +625,12 @@ export default function Add_Customer() {
               />
             </Grid>
             <Grid className="txt_Labels" item xs={12} sm={2}>
-              Mobile Number :
+              Contact Number :
             </Grid>
             <Grid item xs={12} sm={3}>
               <TextField
                 value={trustee2Mobile1}
+                disabled={trustee2Nic.length === 0 ? true : false}
                 className="txt_Number"
                 autoComplete="mNumber"
                 name="mNumber"
@@ -577,8 +638,7 @@ export default function Add_Customer() {
                 required
                 fullWidth
                 id="mNumber"
-                label="Mobile Number Home"
-                autoFocus
+                label="Contact Number 1"
                 size="small"
                 onChange={(e) => {
                   setTrustee2Mobile1(e.target.value);
@@ -588,14 +648,14 @@ export default function Add_Customer() {
             <Grid item xs={12} sm={3}>
               <TextField
                 value={trustee2Mobile2}
+                disabled={trustee2Nic.length === 0 ? true : false}
                 className="txt_Number"
                 autoComplete="mNumber"
                 name="mNumber"
                 variant="outlined"
                 fullWidth
                 id="mNumber"
-                label="Mobile Number work"
-                autoFocus
+                label="Contact Number 2"
                 size="small"
                 onChange={(e) => {
                   setTrustee2Mobile2(e.target.value);
@@ -603,16 +663,6 @@ export default function Add_Customer() {
               />
             </Grid>
             <Grid item xs={12} sm={4}></Grid>
-            {/* <Grid item xs={12} sm={12}>
-              <Button
-                variant="contained"
-                color="primary"
-                className="btn_Cleartrustee"
-                endIcon={<ClearOutlinedIcon />}
-              >
-                Clear All
-              </Button>
-            </Grid> */}
           </Grid>
 
           {/* 2nd trustee form END */}
@@ -621,11 +671,13 @@ export default function Add_Customer() {
             color="primary"
             className="btn_MakeCustomer"
             endIcon={<DoneIcon />}
+            onClick={submit}
           >
             Submit
           </Button>
         </form>
       </div>
+      <NotificationContainer />
     </Container>
   );
 }

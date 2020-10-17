@@ -56,11 +56,10 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
         .doc(itemid)
         .get()
         .then((doc) => {
-          console.log(doc.data());
-          if (doc.data().qty >= value) {
+          if (doc.data().qty >= value==null?1:value) {
             setInputs({
               ...inputs,
-              [i]: value,
+              [i]: value==null?1:value,
             });
           } else {
             NotificationManager.warning("Out Of Stock");
@@ -137,7 +136,8 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
           fullWidth
           label="Qty"
           type="number"
-         InputProps={{ inputProps: { min: 1 } }}
+          InputProps={{ inputProps: { min: 1 } }}
+          min={1}
         />
       </div>
     );

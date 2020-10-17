@@ -39,6 +39,7 @@ export default function Add_Customer() {
   const [mobile1, setMobile1] = useState("");
   const [mobile2, setMobile2] = useState("");
   const [root, setRoot] = useState("");
+  // eslint-disable-next-line
   const [image, setImage] = useState("");
 
   const [trustee1Nic, setTrustee1Nic] = useState("");
@@ -57,6 +58,8 @@ export default function Add_Customer() {
   const [trustee2Mobile1, setTrustee2Mobile1] = useState("");
   const [trustee2Mobile2, setTrustee2Mobile2] = useState("");
 
+  
+  // eslint-disable-next-line
   const valuesInitialState = () => {
     setNic("");
     setFirstName("");
@@ -78,7 +81,6 @@ export default function Add_Customer() {
     setTrustee2Lname("");
     setTrustee2Address1("");
     setTrustee2Address2("");
-    setRoot("");
     setRoot("");
   };
 

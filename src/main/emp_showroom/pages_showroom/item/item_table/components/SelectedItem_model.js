@@ -32,7 +32,7 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
       keepDataQTY[i] = ele.qty;
       keepDataPaymentway[i] = ele.paymentWay;
       keepData.push({
-        i:i,
+        i: i,
         id: ele.item.id,
         title: ele.item.data.itemName,
         unitprice: ele.item.data.salePrice,
@@ -40,9 +40,9 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
         paymentWay: ele.paymentWay,
         item: ele.item.data,
       });
-       i = i + 1;
+      i = i + 1;
     });
-    
+
     setInputs(keepDataQTY);
     setpaymentWay(keepDataPaymentway);
     setItemsData(keepData);
@@ -84,8 +84,6 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
   };
 
   const nextclick = () => {
-    console.log(inputs);
-    console.log(paymentWay);
     setLoading(true);
     var nextData = [];
     for (var i = 0; i < itemsData.length; i++) {
@@ -123,72 +121,25 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
   };
 
   const createInputs = (item) => {
-    return itemsData.map((i) =>
-      (
-        <div key={i.i}>
-          <List.Item>
-            <span className="icons_List">
-              <ShoppingCartOutlined twoToneColor="#52c41a" />
-            </span>
-            <List.Item.Meta
-              title={
-                <Row>
-                  <Col span={7}> {item.title}</Col>
-                  <Col span={3}>
-                    {" "}
-                    {
-                      <TextField
-                        key={i.i}
-                        id={i.i}
-                        className="txt_Sitem"
-                        autoComplete="item"
-                        name="iitem_selected"
-                        variant="outlined"
-                        size="small"
-                        // value={inputs[i]}
-                        onChange={(e) => handleChange(e, item.id, i.i)}
-                        required
-                        fullWidth
-                        label="Qty"
-                        type="number"
-                        min={1}
-                      />
-                    }
-                  </Col>
-                  <Col span={12}>
-                    <Radio.Group
-                      className="radio_btn"
-                      defaultValue="PayandGo"
-                      buttonStyle="solid"
-                      size="small"
-                      onChange={(e) => {
-                        setpaymentWay({
-                          ...paymentWay,
-                          [i.i]: e.target.value,
-                        });
-                      }}
-                    >
-                      <Radio.Button className="btn_radio" value="PayandGo">
-                        Pay and Go
-                      </Radio.Button>
-                      <Radio.Button className="btn_radio" value="FullPayment">
-                        Full Payment
-                      </Radio.Button>
-                    </Radio.Group>
-                  </Col>
-                  <Col span={2}>
-                    <span className="icons_Close">
-                      <CloseOutlined onClick={() => removeItems(i.i, item.id)} />
-                    </span>
-                  </Col>
-                </Row>
-              }
-              description={<span>LKR {item.unitprice}</span>}
-            />
-          </List.Item>
-          <Divider />
-        </div>
-      ) 
+    return (
+      <div>
+        <TextField
+          key={item.i}
+          id={item.i}
+          className="txt_Sitem"
+          autoComplete="item"
+          name="iitem_selected"
+          variant="outlined"
+          size="small"
+          value={inputs[item.i]}
+          onChange={(e) => handleChange(e, item.id, item.i)}
+          required
+          fullWidth
+          label="Qty"
+          type="number"
+         InputProps={{ inputProps: { min: 1 } }}
+        />
+      </div>
     );
   };
 
@@ -214,7 +165,53 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
       }
       itemLayout="horizontal"
       dataSource={itemsData}
-      renderItem={(item) => createInputs(item)}
+      renderItem={(item) => (
+        <div>
+          <List.Item>
+            <span className="icons_List">
+              <ShoppingCartOutlined twoToneColor="#52c41a" />
+            </span>
+            <List.Item.Meta
+              title={
+                <Row>
+                  <Col span={7}> {item.title}</Col>
+                  <Col span={3}> {createInputs(item)}</Col>
+                  <Col span={12}>
+                    <Radio.Group
+                      className="radio_btn"
+                      defaultValue="PayandGo"
+                      buttonStyle="solid"
+                      size="small"
+                      onChange={(e) => {
+                        setpaymentWay({
+                          ...paymentWay,
+                          [item.i]: e.target.value,
+                        });
+                      }}
+                    >
+                      <Radio.Button className="btn_radio" value="PayandGo">
+                        Pay and Go
+                      </Radio.Button>
+                      <Radio.Button className="btn_radio" value="FullPayment">
+                        Full Payment
+                      </Radio.Button>
+                    </Radio.Group>
+                  </Col>
+                  <Col span={2}>
+                    <span className="icons_Close">
+                      <CloseOutlined
+                        onClick={() => removeItems(item.i, item.id)}
+                      />
+                    </span>
+                  </Col>
+                </Row>
+              }
+              description={<span>LKR {item.unitprice}</span>}
+            />
+          </List.Item>
+          <Divider />
+        </div>
+      )}
     >
       <NotificationContainer />
     </List>

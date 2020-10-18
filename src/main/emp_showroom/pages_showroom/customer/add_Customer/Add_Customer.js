@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { TextField, Button } from "@material-ui/core";
-import { Spin, Modal } from "antd";
+import { Form, Modal, Spin } from "antd";
+import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
@@ -93,6 +94,8 @@ export default function Add_Customer() {
     setTrustee2Address1("");
     setTrustee2Address2("");
     setRoot("");
+    setImageFile(null);
+    setImageUrl(null);
   };
 
   const onImageChange = (event) => {
@@ -151,13 +154,13 @@ export default function Add_Customer() {
                     }
                   } else {
                     NotificationManager.info(
-                      "Trustee 1's last number is required!",
+                      "Trustee 1's last name is required!",
                       "Remember validations"
                     );
                   }
                 } else {
                   NotificationManager.info(
-                    "Trustee 1's first number is required!",
+                    "Trustee 1's first name is required!",
                     "Remember validations"
                   );
                 }
@@ -610,6 +613,8 @@ export default function Add_Customer() {
         footer={null}
         className="model_Loader"
         onCancel={null}
+        closable={null}
+        bodyStyle={null}
       >
         <div className="model_Loader_Model">
           <div className="model_Loader_Main">
@@ -619,6 +624,7 @@ export default function Add_Customer() {
           </div>
         </div>
       </Modal>
+
       <Container component="main" className="main_container">
         {/* <CssBaseline /> */}
         <Typography className="titles" variant="h5" gutterBottom>
@@ -652,7 +658,9 @@ export default function Add_Customer() {
                   }}
                 />
               </Grid>
-              <Grid item xs={12} sm={7}></Grid>
+              <Grid className="txt_Note" item xs={12} sm={7}>
+                # Press Enter key after filled the NIC
+              </Grid>
               <Grid className="txt_Labels" item xs={12} sm={2}>
                 Primary Contact :
               </Grid>
@@ -828,10 +836,10 @@ export default function Add_Customer() {
                     nic.length === 0 || !isValidatedCustomerNic ? true : false
                   }
                   alt="Item upload"
-                  style={{
-                    borderRadius: "30px",
-                    height: "100px",
-                  }}
+                  // style={{
+                  //   borderRadius: "30px",
+                  //   height: "100px",
+                  // }}
                   onClick={() => {
                     document.getElementById("item_image").click();
                   }}
@@ -843,8 +851,60 @@ export default function Add_Customer() {
                   className="image"
                 />
               </Grid>
-              <Grid item xs={12} sm={5}></Grid>
+              <Grid item xs={12} sm={6}></Grid>
             </Grid>
+            <Typography className="note_title" gutterBottom>
+              Add Family related NIC Numbers
+            </Typography>
+            <Grid item xs={12} sm={2}>
+              <hr className="titles_hr" />
+            </Grid>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={12}>
+                <Form name="dynamic_form" autoComplete="off">
+                  <Form.List name="users">
+                    {(fields, { add, remove }) => {
+                      return (
+                        <div>
+                          <Button
+                            className="reltion_add"
+                            onClick={() => {
+                              add();
+                            }}
+                          >
+                            Relations NIC
+                            <PlusOutlined className="reltion_addIcon" />
+                          </Button>
+                          {fields.map((field) => (
+                            <div>
+                              <TextField
+                                key={field.key}
+                                className="txt_relation"
+                                autoComplete="relation"
+                                name="relation"
+                                variant="outlined"
+                                fullWidth
+                                id="relation"
+                                label="Relations"
+                                size="small"
+                              />
+
+                              <MinusCircleOutlined
+                                className="rmov_icon"
+                                onClick={() => {
+                                  remove(field.name);
+                                }}
+                              />
+                            </div>
+                          ))}
+                        </div>
+                      );
+                    }}
+                  </Form.List>
+                </Form>
+              </Grid>
+            </Grid>
+
             <Button
               variant="contained"
               color="primary"
@@ -862,6 +922,8 @@ export default function Add_Customer() {
                 setMobile1("");
                 setMobile2("");
                 setRoot("");
+                setImageFile(null);
+                setImageUrl(null);
               }}
             >
               Clear All
@@ -901,7 +963,9 @@ export default function Add_Customer() {
                   }}
                 />
               </Grid>
-              <Grid item xs={12} sm={7}></Grid>
+              <Grid className="txt_Note" item xs={12} sm={7}>
+                # Press Enter key after filled the NIC
+              </Grid>
               <Grid className="txt_Labels" item xs={12} sm={2}>
                 Primary Contact :
               </Grid>
@@ -1077,7 +1141,9 @@ export default function Add_Customer() {
                   }}
                 />
               </Grid>
-              <Grid item xs={12} sm={7}></Grid>
+              <Grid className="txt_Note" item xs={12} sm={7}>
+                # Press Enter key after filled the NIC
+              </Grid>
               <Grid className="txt_Labels" item xs={12} sm={2}>
                 Primary Contact :
               </Grid>

@@ -201,27 +201,70 @@ export default function Add_Customer() {
 
   const customerNicValidation = (e) => {
     var enterKey = 13; //Key Code for Enter Key
-
+    var { value } = e.target;
     if (e.which === enterKey) {
       var result = nicValidation(e.target.value.trim());
 
       if (result) {
         loaderModalOpen();
         db.collection("customer")
-          .where("nic", "==", e.target.value.trim())
+          .where("nic", "==", value.trim())
           .get()
           .then((doc) => {
             if (doc.docs.length > 0) {
-              setFirstName(doc.docs[0].data().fname);
-              setLastName(doc.docs[0].data().lname);
-              setAddres1(doc.docs[0].data().address1);
-              setAddres2(doc.docs[0].data().address2);
-              setMobile1(doc.docs[0].data().mobile1);
-              setMobile2(doc.docs[0].data().mobile2);
-              setRoot(doc.docs[0].data().root);
-              setImageUrl(doc.docs[0].data().imgUrl);
-              setisValidatedCustomerNic(true);
-              loaderModalClose();
+              db.collection("blacklist")
+                .where("customer_id", "==", doc.docs[0].id)
+                .get()
+                .then((blackDoc) => {
+                  if (blackDoc.docs.length > 0) {
+                    setisValidatedCustomerNic(false);
+                    loaderModalClose();
+                    NotificationManager.warning(
+                      "Entered customer in the blacklist !",
+                      "Attention!"
+                    );
+                  } else {
+                    db.collection("arrears")
+                      .where("customer_id", "==", doc.docs[0].id)
+                      .get()
+                      .then((arrsDoc) => {
+                        if (arrsDoc.docs.length > 0) {
+                          setisValidatedCustomerNic(false);
+                          loaderModalClose();
+                          NotificationManager.warning(
+                            "Entered customer not payed and closed arrears as a customer !",
+                            "Can not proceed with this customer, until pay and close the previous arrears as a customer"
+                          );
+                        } else {
+                          db.collection("invoice")
+                            .where("status_of_payandgo", "==", "onGoing")
+                            .where("customer_id", "==", doc.docs[0].id)
+                            .get()
+                            .then((doc2) => {
+                              if (doc2.docs.length > 0) {
+                                setisValidatedCustomerNic(false);
+                                loaderModalClose();
+                                NotificationManager.warning(
+                                  "Entered customer already on status of 'pay an go' !",
+                                  "Please complete the previous 'pay and go'"
+                                );
+                              } else {
+                                setFirstName(doc.docs[0].data().fname);
+                                setLastName(doc.docs[0].data().lname);
+                                setAddres1(doc.docs[0].data().address1);
+                                setAddres2(doc.docs[0].data().address2);
+                                setMobile1(doc.docs[0].data().mobile1);
+                                setMobile2(doc.docs[0].data().mobile2);
+                                setRoot(doc.docs[0].data().root);
+                                setImageUrl(doc.docs[0].data().imgUrl);
+                                setisValidatedCustomerNic(true);
+                                loaderModalClose();
+                              }
+                            });
+                        }
+                      });
+                  }
+                });
             } else {
               setisValidatedCustomerNic(true);
               loaderModalClose();
@@ -239,28 +282,153 @@ export default function Add_Customer() {
 
   const trustee1NicValidation = (e) => {
     var enterKey = 13; //Key Code for Enter Key
+    var { value } = e.target;
     if (e.which === enterKey) {
       var result = nicValidation(e.target.value);
 
       if (result) {
         loaderModalOpen();
-        db.collection("trustee")
-          .where("nic", "==", e.target.value.trim())
+        db.collection("customer")
+          .where("nic", "==", value.trim())
           .get()
-          .then((doc) => {
-            if (doc.docs.length > 0) {
-              setTrustee1Fname(doc.docs[0].data().fname);
-              setTrustee1Lname(doc.docs[0].data().lname);
-              setTrustee1Addres1(doc.docs[0].data().address1);
-              setTrustee1Addres2(doc.docs[0].data().address2);
-              setTrustee1Mobile1(doc.docs[0].data().mobile1);
-              setTrustee1Mobile2(doc.docs[0].data().mobile2);
+          .then((docCust) => {
+            if (docCust.docs.length > 0) {
+              db.collection("blacklist")
+                .where("customer_id", "==", docCust.docs[0].id)
+                .get()
+                .then((blackDoc) => {
+                  if (blackDoc.docs.length > 0) {
+                    setisValidatedTrustee1Nic(false);
+                    loaderModalClose();
+                    NotificationManager.warning(
+                      "Entered trustee in the blacklist !",
+                      "Can not proceed with this trustee, please try with another trustee"
+                    );
+                  } else {
+                    db.collection("arrears")
+                      .where("customer_id", "==", docCust.docs[0].id)
+                      .get()
+                      .then((arrDoc) => {
+                        if (arrDoc.docs.length > 0) {
+                          setisValidatedTrustee1Nic(false);
+                          loaderModalClose();
+                          NotificationManager.warning(
+                            "Entered trustee not payed and closed arrears as a customer !",
+                            "Can not proceed with this trustee, until pay and close the previous arrears as a customer"
+                          );
+                        } else {
+                          db.collection("invoice")
+                            .where("status_of_payandgo", "==", "onGoing")
+                            .where("customer_id", "==", docCust.docs[0].id)
+                            .get()
+                            .then((custRe) => {
+                              if (custRe.docs.length > 0) {
+                                setisValidatedTrustee1Nic(false);
+                                loaderModalClose();
+                                NotificationManager.warning(
+                                  "Entered trustee already on status of 'pay an go' as a customer !",
+                                  "Can not proceed with this trustee, until complete the previous 'pay and go' as a customer"
+                                );
+                              } else {
+                                db.collection("trustee")
+                                  .where("nic", "==", value.trim())
+                                  .get()
+                                  .then((doc) => {
+                                    if (doc.docs.length > 0) {
+                                      db.collection("invoice")
+                                        .where(
+                                          "invoice_number",
+                                          "==",
+                                          doc.docs[0].data().invoice_number
+                                        )
+                                        .where(
+                                          "status_of_payandgo",
+                                          "==",
+                                          "onGoing"
+                                        )
+                                        .get()
+                                        .then((doc2) => {
+                                          if (doc2.docs.length > 0) {
+                                            setisValidatedTrustee1Nic(false);
+                                            loaderModalClose();
+                                            NotificationManager.warning(
+                                              "Entered trustee already on status of 'pay an go' as a trustee !",
+                                              "Can not proceed with this trustee, until complete the previous 'pay and go' as a trustee"
+                                            );
+                                          } else {
+                                            setTrustee1Fname(
+                                              doc.docs[0].data().fname
+                                            );
+                                            setTrustee1Lname(
+                                              doc.docs[0].data().lname
+                                            );
+                                            setTrustee1Addres1(
+                                              doc.docs[0].data().address1
+                                            );
+                                            setTrustee1Addres2(
+                                              doc.docs[0].data().address2
+                                            );
+                                            setTrustee1Mobile1(
+                                              doc.docs[0].data().mobile1
+                                            );
+                                            setTrustee1Mobile2(
+                                              doc.docs[0].data().mobile2
+                                            );
 
-              setisValidatedTrustee1Nic(true);
-              loaderModalClose();
+                                            setisValidatedTrustee1Nic(true);
+                                            loaderModalClose();
+                                          }
+                                        });
+                                    } else {
+                                      setisValidatedTrustee1Nic(true);
+                                      loaderModalClose();
+                                    }
+                                  });
+                              }
+                            });
+                        }
+                      });
+                  }
+                });
             } else {
-              setisValidatedTrustee1Nic(true);
-              loaderModalClose();
+              db.collection("trustee")
+                .where("nic", "==", value.trim())
+                .get()
+                .then((doc) => {
+                  if (doc.docs.length > 0) {
+                    db.collection("invoice")
+                      .where(
+                        "invoice_number",
+                        "==",
+                        doc.docs[0].data().invoice_number
+                      )
+                      .where("status_of_payandgo", "==", "onGoing")
+                      .get()
+                      .then((doc2) => {
+                        if (doc2.docs.length > 0) {
+                          setisValidatedTrustee1Nic(false);
+                          loaderModalClose();
+                          NotificationManager.warning(
+                            "Entered trustee already on status of 'pay an go' as a trustee !",
+                            "Can not proceed with this trustee, until complete the previous 'pay and go' as a trustee"
+                          );
+                        } else {
+                          setTrustee1Fname(doc.docs[0].data().fname);
+                          setTrustee1Lname(doc.docs[0].data().lname);
+                          setTrustee1Addres1(doc.docs[0].data().address1);
+                          setTrustee1Addres2(doc.docs[0].data().address2);
+                          setTrustee1Mobile1(doc.docs[0].data().mobile1);
+                          setTrustee1Mobile2(doc.docs[0].data().mobile2);
+
+                          setisValidatedTrustee1Nic(true);
+                          loaderModalClose();
+                        }
+                      });
+                  } else {
+                    setisValidatedTrustee1Nic(true);
+                    loaderModalClose();
+                  }
+                });
             }
           });
       } else {
@@ -275,28 +443,153 @@ export default function Add_Customer() {
 
   const trustee2NicValidation = (e) => {
     var enterKey = 13; //Key Code for Enter Key
+    var { value } = e.target;
     if (e.which === enterKey) {
       var result = nicValidation(e.target.value);
 
       if (result) {
         loaderModalOpen();
-        db.collection("trustee")
-          .where("nic", "==", e.target.value.trim())
+        db.collection("customer")
+          .where("nic", "==", value.trim())
           .get()
-          .then((doc) => {
-            if (doc.docs.length > 0) {
-              setTrustee2Fname(doc.docs[0].data().fname);
-              setTrustee2Lname(doc.docs[0].data().lname);
-              setTrustee2Address1(doc.docs[0].data().address1);
-              setTrustee2Address2(doc.docs[0].data().address2);
-              setTrustee2Mobile1(doc.docs[0].data().mobile1);
-              setTrustee2Mobile2(doc.docs[0].data().mobile2);
+          .then((docCust) => {
+            if (docCust.docs.length > 0) {
+              db.collection("blacklist")
+                .where("customer_id", "==", docCust.docs[0].id)
+                .get()
+                .then((blackDoc) => {
+                  if (blackDoc.docs.length > 0) {
+                    setisValidatedTrustee2Nic(false);
+                    loaderModalClose();
+                    NotificationManager.warning(
+                      "Entered trustee in the blacklist !",
+                      "Can not proceed with this trustee, please try with another trustee"
+                    );
+                  } else {
+                    db.collection("arrears")
+                      .where("customer_id", "==", docCust.docs[0].id)
+                      .get()
+                      .then((arrDoc) => {
+                        if (arrDoc.docs.length > 0) {
+                          setisValidatedTrustee2Nic(false);
+                          loaderModalClose();
+                          NotificationManager.warning(
+                            "Entered trustee not payed and closed arrears as a customer !",
+                            "Can not proceed with this trustee, until pay and close the previous arrears as a customer"
+                          );
+                        } else {
+                          db.collection("invoice")
+                            .where("status_of_payandgo", "==", "onGoing")
+                            .where("customer_id", "==", docCust.docs[0].id)
+                            .get()
+                            .then((custRe) => {
+                              if (custRe.docs.length > 0) {
+                                setisValidatedTrustee2Nic(false);
+                                loaderModalClose();
+                                NotificationManager.warning(
+                                  "Entered trustee already on status of 'pay an go' as a customer !",
+                                  "Can not proceed with this trustee, until complete the previous 'pay and go' as a customer"
+                                );
+                              } else {
+                                db.collection("trustee")
+                                  .where("nic", "==", value.trim())
+                                  .get()
+                                  .then((doc) => {
+                                    if (doc.docs.length > 0) {
+                                      db.collection("invoice")
+                                        .where(
+                                          "invoice_number",
+                                          "==",
+                                          doc.docs[0].data().invoice_number
+                                        )
+                                        .where(
+                                          "status_of_payandgo",
+                                          "==",
+                                          "onGoing"
+                                        )
+                                        .get()
+                                        .then((doc2) => {
+                                          if (doc2.docs.length > 0) {
+                                            setisValidatedTrustee2Nic(false);
+                                            loaderModalClose();
+                                            NotificationManager.warning(
+                                              "Entered trustee already on status of 'pay an go' as a trustee !",
+                                              "Can not proceed with this trustee, until complete the previous 'pay and go' as a trustee"
+                                            );
+                                          } else {
+                                            setTrustee2Fname(
+                                              doc.docs[0].data().fname
+                                            );
+                                            setTrustee2Lname(
+                                              doc.docs[0].data().lname
+                                            );
+                                            setTrustee2Address1(
+                                              doc.docs[0].data().address1
+                                            );
+                                            setTrustee2Address2(
+                                              doc.docs[0].data().address2
+                                            );
+                                            setTrustee2Mobile1(
+                                              doc.docs[0].data().mobile1
+                                            );
+                                            setTrustee2Mobile2(
+                                              doc.docs[0].data().mobile2
+                                            );
 
-              setisValidatedTrustee2Nic(true);
-              loaderModalClose();
+                                            setisValidatedTrustee2Nic(true);
+                                            loaderModalClose();
+                                          }
+                                        });
+                                    } else {
+                                      setisValidatedTrustee2Nic(true);
+                                      loaderModalClose();
+                                    }
+                                  });
+                              }
+                            });
+                        }
+                      });
+                  }
+                });
             } else {
-              setisValidatedTrustee2Nic(true);
-              loaderModalClose();
+              db.collection("trustee")
+                .where("nic", "==", value.trim())
+                .get()
+                .then((doc) => {
+                  if (doc.docs.length > 0) {
+                    db.collection("invoice")
+                      .where(
+                        "invoice_number",
+                        "==",
+                        doc.docs[0].data().invoice_number
+                      )
+                      .where("status_of_payandgo", "==", "onGoing")
+                      .get()
+                      .then((doc2) => {
+                        if (doc2.docs.length > 0) {
+                          setisValidatedTrustee2Nic(false);
+                          loaderModalClose();
+                          NotificationManager.warning(
+                            "Entered trustee already on status of 'pay an go' as a trustee !",
+                            "Can not proceed with this trustee, until complete the previous 'pay and go' as a trustee"
+                          );
+                        } else {
+                          setTrustee2Fname(doc.docs[0].data().fname);
+                          setTrustee2Lname(doc.docs[0].data().lname);
+                          setTrustee2Address1(doc.docs[0].data().address1);
+                          setTrustee2Address2(doc.docs[0].data().address2);
+                          setTrustee2Mobile1(doc.docs[0].data().mobile1);
+                          setTrustee2Mobile2(doc.docs[0].data().mobile2);
+
+                          setisValidatedTrustee2Nic(true);
+                          loaderModalClose();
+                        }
+                      });
+                  } else {
+                    setisValidatedTrustee2Nic(true);
+                    loaderModalClose();
+                  }
+                });
             }
           });
       } else {

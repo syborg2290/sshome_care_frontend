@@ -79,7 +79,6 @@ label {
 }
 
 .iconpls_invTbl {
-  background-color: rgb(8, 179, 45);
   border-radius: 6px;
 }
 
@@ -88,7 +87,6 @@ label {
 }
 
 .icon_invTbl {
-  background-color: rgb(224, 75, 49);
   border-radius: 6px;
 }
 
@@ -97,9 +95,8 @@ label {
 }
 
 .iconcls_invTbl {
-  background-color: red;
-  border-radius: 6px;
-  color: aliceblue;
+  color: rgb(255, 0, 0);
+  text-align: center !important;
 }
 
 .btn_addCustomer {
@@ -107,4 +104,9 @@ label {
   margin-bottom: 40px !important;
   width: 20% !important;
   float: right !important;
+}
+
+.table_all_Item {
+  width: 60% !important;
+  z-index: 500px !important;
 }

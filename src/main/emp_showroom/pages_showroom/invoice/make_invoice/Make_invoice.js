@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import "./Make_invoice.css";
 import Button from "@material-ui/core/Button";
@@ -19,14 +19,14 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 
 //components
-import ItemTable from "../components/Item_table";
+import ItemTable from "../components/Itemtable_Model";
 
 // icon
-import { CloseOutlined } from "@ant-design/icons";
-import PlusOneIcon from "@material-ui/icons/PlusOne";
-import ExposureNeg1Icon from "@material-ui/icons/ExposureNeg1";
 import TvIcon from "@material-ui/icons/Tv";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
+import AddBoxOutlinedIcon from "@material-ui/icons/AddBoxOutlined";
+import IndeterminateCheckBoxOutlinedIcon from "@material-ui/icons/IndeterminateCheckBoxOutlined";
+import CloseOutlinedIcon from "@material-ui/icons/CloseOutlined";
 
 const TAX_RATE = 0.07;
 
@@ -85,6 +85,7 @@ const invoiceTaxes = TAX_RATE * invoiceSubtotal;
 const invoiceTotal = invoiceTaxes + invoiceSubtotal;
 
 function Make_invoice() {
+  // eslint-disable-next-line
   const location = useLocation();
 
   const [itemtVisible, setItemtVisible] = useState(false);
@@ -99,12 +100,6 @@ function Make_invoice() {
   const itemTableModel = () => {
     setItemtVisible(true);
   };
-
-  useEffect(() => {
-    console.log(location.pathname); // result: '/secondpage'
-    console.log(location.search); // result: '?query=abc'
-    console.log(location.state ? location.state.detail : ""); // result: 'some_value'
-  }, [location]);
 
   return (
     <div className="main_In">
@@ -154,6 +149,7 @@ function Make_invoice() {
                 visible={itemtVisible}
                 footer={null}
                 className="table_all_Item"
+                // onOk={itemModalClose}
                 onCancel={itemModalClose}
               >
                 <div className="table_model_Model">
@@ -200,11 +196,11 @@ function Make_invoice() {
                         <TableCell align="right">888</TableCell>
                         <TableCell align="right">
                           <span className="iconpls_invTblspan">
-                            <PlusOneIcon className="iconpls_invTbl" />
+                            <AddBoxOutlinedIcon className="iconpls_invTbl" />
                           </span>
-                          <ExposureNeg1Icon className="icon_invTbl" />
+                          <IndeterminateCheckBoxOutlinedIcon className="icon_invTbl" />
                           <span className="iconcls_invTblspan">
-                            <CloseOutlined className="iconcls_invTbl" />
+                            <CloseOutlinedIcon className="iconcls_invTbl" />
                           </span>
                         </TableCell>
                       </TableRow>

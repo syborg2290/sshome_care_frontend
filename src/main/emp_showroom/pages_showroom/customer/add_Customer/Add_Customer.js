@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { TextField, Button } from "@material-ui/core";
-import { Form, Modal, Spin } from "antd";
+import { Modal, Spin } from "antd";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
@@ -17,6 +17,8 @@ import "react-notifications/lib/notifications.css";
 
 import { nicValidation } from "../../../../../config/validation.js";
 import db from "../../../../../config/firebase.js";
+
+import { useHistory } from "react-router-dom";
 
 export default function Add_Customer() {
   const location = useLocation();
@@ -57,6 +59,10 @@ export default function Add_Customer() {
 
   const [loaderModalOpenV, setloaderModalOpen] = useState(false);
 
+  const [inputsNic, setInputsNic] = useState({});
+
+  let history = useHistory();
+
   const loaderModalClose = () => {
     setloaderModalOpen(false);
   };
@@ -64,12 +70,6 @@ export default function Add_Customer() {
   const loaderModalOpen = () => {
     setloaderModalOpen(true);
   };
-
-  useEffect(() => {
-    console.log(location.pathname); // result: '/secondpage'
-    console.log(location.search); // result: '?query=abc'
-    console.log(location.state ? location.state.detail : ""); // result: 'some_value'
-  }, [location]);
 
   // eslint-disable-next-line
   const valuesInitialState = () => {
@@ -93,6 +93,8 @@ export default function Add_Customer() {
     setTrustee2Lname("");
     setTrustee2Address1("");
     setTrustee2Address2("");
+    setTrustee2Mobile1("");
+    setTrustee2Mobile2("");
     setRoot("");
     setImageFile(null);
     setImageUrl(null);
@@ -140,6 +142,44 @@ export default function Add_Customer() {
                     if (trustee1Addres1.length > 0) {
                       if (trustee1Mobile1.length > 0) {
                         //Rest of code
+
+                        var customerObj = {
+                          customerNic: nic.trim(),
+                          customerFname: fname.trim(),
+                          customerLname: lname.trim(),
+                          customerAddress1: addres1.trim(),
+                          customerAddress2: addres2.trim(),
+                          customerMobile1: mobile1.trim(),
+                          customerMobile2: mobile2.trim(),
+                          customerRelatedNic: inputsNic,
+                          customerImageUrl: imageUrl,
+                          customerImageFile: imageFile,
+                          trustee1Nic: trustee1Nic.trim(),
+                          trustee1Fname: trustee1Fname.trim(),
+                          trustee1Lname: trustee1Lname.trim(),
+                          trustee1Address1: trustee1Addres1.trim(),
+                          trustee1Address2: trustee1Addres2.trim(),
+                          trustee1Mobile1: trustee1Mobile1.trim(),
+                          trustee1Mobile2: trustee1Mobile2.trim(),
+                          trustee2Nic: trustee2Nic.trim(),
+                          trustee2Fname: trustee2Fname.trim(),
+                          trustee2Lname: trustee2Lname.trim(),
+                          trustee2Address1: trustee2Address1.trim(),
+                          trustee2Address2: trustee2Address2.trim(),
+                          trustee2Mobile1: trustee2Mobile1.trim(),
+                          trustee2Mobile2: trustee2Mobile2.trim(),
+                        };
+
+                        var passedObj = location.state.detail;
+                        passedObj.customer = customerObj;
+
+                        let moveWith = {
+                          pathname: "/showroom/ui/makeInvoice",
+                          search: "?query=abc",
+                          state: { detail: passedObj },
+                        };
+
+                        history.push(moveWith);
                       } else {
                         NotificationManager.info(
                           "Trustee 1's contact number is required!",
@@ -605,6 +645,13 @@ export default function Add_Customer() {
     }
   };
 
+  const addInput = () => {
+    setInputsNic({ ...inputsNic, [Object.keys(inputsNic).length]: "" });
+  };
+  const handleChangeAddNicInputs = (e) => {
+    setInputsNic({ ...inputsNic, [e.target.id]: e.target.value });
+  };
+
   return (
     <>
       <Modal
@@ -854,53 +901,44 @@ export default function Add_Customer() {
               <Grid item xs={12} sm={6}></Grid>
             </Grid>
             <Typography className="note_title" gutterBottom>
-              Add Family related NIC Numbers
+              Add Family related NIC numbers
             </Typography>
             <Grid item xs={12} sm={2}>
               <hr className="titles_hr" />
             </Grid>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={12}>
-                <Form name="dynamic_form">
-                  <Form.List name="users">
-                    {(fields, { add, remove }) => {
-                      return (
-                        <div>
-                          <Button
-                            className="reltion_add"
-                            onClick={() => {
-                              add();
-                            }}
-                          >
-                            Relations NIC
-                            <PlusOutlined className="reltion_addIcon" />
-                          </Button>
-                          {fields.map((field) => (
-                            <div>
-                              <TextField
-                                key={field.key}
-                                className="txt_relation"
-                                name="relation"
-                                variant="outlined"
-                                fullWidth
-                                id="relation"
-                                label="Relations"
-                                size="small"
-                              />
+                <div>
+                  <Button className="reltion_add" onClick={addInput}>
+                    Relation's NIC
+                    <PlusOutlined className="reltion_addIcon" />
+                  </Button>
+                  {Object.keys(inputsNic).map((i) => (
+                    <div key={i + 1}>
+                      <TextField
+                        key={i + 2}
+                        id={i.toString()}
+                        className="txt_relation"
+                        autoComplete="relation"
+                        name="relation"
+                        variant="outlined"
+                        fullWidth
+                        label="Relations"
+                        onChange={handleChangeAddNicInputs}
+                        size="small"
+                      />
 
-                              <MinusCircleOutlined
-                                className="rmov_icon"
-                                onClick={() => {
-                                  remove(field.name);
-                                }}
-                              />
-                            </div>
-                          ))}
-                        </div>
-                      );
-                    }}
-                  </Form.List>
-                </Form>
+                      <MinusCircleOutlined
+                        key={i + 3}
+                        className="rmov_icon"
+                        onClick={() => {
+                          delete inputsNic[i];
+                          setInputsNic({ ...inputsNic });
+                        }}
+                      />
+                    </div>
+                  ))}
+                </div>
               </Grid>
             </Grid>
 

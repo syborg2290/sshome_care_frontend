@@ -264,37 +264,10 @@
 
 @media screen and (min-width: 1280px) {
   .rmov_icon {
-    margin-right: 465px !important;
+    margin-right: 90px !important;
     margin-top: -40px !important;
   }
 }
-
-/* @media screen and (min-width: 1280px) {
-  .txt_relation {
-    width: 35% !important;
-  }
-}
-
-@media screen and (min-width: 280px) {
-  .reltion_add {
-    margin-bottom: 30px !important;
-  }
-}
-@media screen and (min-width: 280px) {
-  .txt_relation {
-    margin-left: 5px !important;
-    margin-top: 15px !important;
-    width: 100% !important;
-  }
-}
-
-@media screen and (min-width: 280px) {
-  .rmov_icon {
-    margin-top: -75px !important;
-    float: right !important;
-    margin-right: 10px !important;
-  }
-} */
 
 .txt_Note {
   margin: auto !important;

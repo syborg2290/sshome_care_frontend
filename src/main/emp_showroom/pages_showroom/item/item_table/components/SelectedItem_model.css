@@ -94,6 +94,12 @@
   }
 }
 
+@media screen and (min-width: 1024px) and (max-width: 1366px) {
+  .txt_Sitem {
+    width: 70px !important;
+  }
+}
+
 @media screen and (min-width: 366px) and (max-width: 570px) {
   .btn_radio {
     margin: auto !important;
@@ -175,9 +181,9 @@
   height: 10px !important;
 }
 
-.txt_Sitem {
-  /* background-color: red !important; */
-}
+/* .txt_Sitem {
+  width: 70px !important;
+} */
 
 .paper {
   display: flex !important;

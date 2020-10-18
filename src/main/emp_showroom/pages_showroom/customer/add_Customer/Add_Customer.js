@@ -601,27 +601,22 @@ export default function Add_Customer() {
               />
             </Grid>
             <Grid item xs={12} sm={4}></Grid>
-            {/* <Grid item xs={12} sm={12}>
-              <Button
-                variant="contained"
-                color="primary"
-                className="btn_Cleartrustee"
-                endIcon={<ClearOutlinedIcon />}
-              >
-                Clear All
-              </Button>
-            </Grid> */}
           </Grid>
 
           {/* 2nd trustee form END */}
-          <Button
-            variant="contained"
-            color="primary"
-            className="btn_MakeCustomer"
-            endIcon={<DoneIcon />}
-          >
-            Submit
-          </Button>
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={2}></Grid>
+            <Grid item xs={12} sm={10}>
+              <Button
+                variant="contained"
+                color="primary"
+                className="btn_MakeCustomer"
+                endIcon={<DoneIcon />}
+              >
+                Submit
+              </Button>
+            </Grid>
+          </Grid>
         </form>
       </div>
     </Container>

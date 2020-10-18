@@ -8,6 +8,8 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 
+import { Modal } from "antd";
+
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -15,6 +17,9 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
+
+//components
+import ItemTable from "../components/Item_table";
 
 // icon
 import { CloseOutlined } from "@ant-design/icons";
@@ -82,8 +87,18 @@ const invoiceTotal = invoiceTaxes + invoiceSubtotal;
 function Make_invoice() {
   const location = useLocation();
 
+  const [itemtVisible, setItemtVisible] = useState(false);
+
   // eslint-disable-next-line
   const [selectedItems, setSelectedItems] = useState([]);
+
+  const itemModalClose = () => {
+    setItemtVisible(false);
+  };
+
+  const itemTableModel = () => {
+    setItemtVisible(true);
+  };
 
   useEffect(() => {
     console.log(location.pathname); // result: '/secondpage'
@@ -124,12 +139,33 @@ function Make_invoice() {
                   fullWidth
                   variant="contained"
                   color="primary"
+                  onClick={itemTableModel}
                   className="btn_newItem"
                   endIcon={<TvIcon />}
                 >
                   Add more items
                 </Button>
               </Grid>
+
+              {/*More Item Model */}
+
+              <Modal
+                title="All Items"
+                visible={itemtVisible}
+                footer={null}
+                className="table_all_Item"
+                onCancel={itemModalClose}
+              >
+                <div className="table_model_Model">
+                  <div className="table_model_Main">
+                    <div className="table_model_Detail">
+                      <ItemTable />
+                    </div>
+                  </div>
+                </div>
+              </Modal>
+
+              {/*More Item Model */}
 
               <TableContainer className="tbl_Container" component={Paper}>
                 <Table className="table" aria-label="spanning table">

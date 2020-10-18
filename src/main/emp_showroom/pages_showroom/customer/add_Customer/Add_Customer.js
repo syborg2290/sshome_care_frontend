@@ -861,7 +861,7 @@ export default function Add_Customer() {
             </Grid>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={12}>
-                <Form name="dynamic_form" autoComplete="off">
+                <Form name="dynamic_form">
                   <Form.List name="users">
                     {(fields, { add, remove }) => {
                       return (
@@ -880,7 +880,6 @@ export default function Add_Customer() {
                               <TextField
                                 key={field.key}
                                 className="txt_relation"
-                                autoComplete="relation"
                                 name="relation"
                                 variant="outlined"
                                 fullWidth

@@ -43,7 +43,6 @@ export default function Add_Customer() {
   const [trustee2Address2, setTrustee2Address2] = useState("");
   const [trustee2Mobile1, setTrustee2Mobile1] = useState("");
   const [trustee2Mobile2, setTrustee2Mobile2] = useState("");
-
   // eslint-disable-next-line
   const valuesInitialState = () => {
     setNic("");
@@ -259,6 +258,7 @@ export default function Add_Customer() {
                 className="txt_Number"
                 autoComplete="mNumber"
                 name="mNumber"
+                type="number"
                 variant="outlined"
                 required
                 fullWidth
@@ -278,6 +278,7 @@ export default function Add_Customer() {
                 autoComplete="mNumber"
                 name="mNumber"
                 variant="outlined"
+                type="number"
                 fullWidth
                 id="mNumber"
                 label="Contact Number 2"
@@ -486,6 +487,7 @@ export default function Add_Customer() {
                 autoComplete="mNumber"
                 name="mNumber"
                 variant="outlined"
+                type="number"
                 required
                 fullWidth
                 id="mNumber"
@@ -504,6 +506,7 @@ export default function Add_Customer() {
                 className="txt_Number"
                 autoComplete="mNumber"
                 name="mNumber"
+                type="number"
                 variant="outlined"
                 fullWidth
                 id="mNumber"
@@ -634,6 +637,7 @@ export default function Add_Customer() {
                 className="txt_Number"
                 autoComplete="mNumber"
                 name="mNumber"
+                type="number"
                 variant="outlined"
                 required
                 fullWidth
@@ -652,6 +656,7 @@ export default function Add_Customer() {
                 className="txt_Number"
                 autoComplete="mNumber"
                 name="mNumber"
+                type="number"
                 variant="outlined"
                 fullWidth
                 id="mNumber"

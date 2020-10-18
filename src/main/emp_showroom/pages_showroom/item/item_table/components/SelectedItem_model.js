@@ -4,6 +4,7 @@ import { ShoppingCartOutlined, CloseOutlined } from "@ant-design/icons";
 import { Button, TextField } from "@material-ui/core";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import { useHistory } from "react-router-dom";
+
 import {
   NotificationContainer,
   NotificationManager,
@@ -28,7 +29,6 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
     var keepDataPaymentway = {};
     var i = 0;
     itemListProps.forEach((ele) => {
-      console.log(i);
       keepDataQTY[i] = ele.qty;
       keepDataPaymentway[i] = ele.paymentWay;
       keepData.push({
@@ -56,10 +56,10 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
         .doc(itemid)
         .get()
         .then((doc) => {
-          if (doc.data().qty >= value==null?1:value) {
+          if (doc.data().qty >= (value === "" ? 1 : value)) {
             setInputs({
               ...inputs,
-              [i]: value==null?1:value,
+              [i]: value === "" ? 1 : value,
             });
           } else {
             NotificationManager.warning("Out Of Stock");
@@ -121,10 +121,10 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
 
   const createInputs = (item) => {
     return (
-      <div>
+      <div className="selcted_model">
         <TextField
           key={item.i}
-          id={item.i}
+          id={item.i.toString()}
           className="txt_Sitem"
           autoComplete="item"
           name="iitem_selected"
@@ -166,7 +166,7 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
       itemLayout="horizontal"
       dataSource={itemsData}
       renderItem={(item) => (
-        <div>
+        <div className="selcted_model">
           <List.Item>
             <span className="icons_List">
               <ShoppingCartOutlined twoToneColor="#52c41a" />

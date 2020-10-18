@@ -44,7 +44,7 @@ export default function ItemTable() {
 
   const selectedModalClose = () => {
     setSelectedItemtVisible(false);
-     window.location.reload();
+    window.location.reload();
   };
 
   useEffect(() => {
@@ -102,8 +102,6 @@ export default function ItemTable() {
       });
     // eslint-disable-next-line
   }, []);
-
-  
 
   const onMakeInvoid = () => {
     if (selectedItems.length > 0) {

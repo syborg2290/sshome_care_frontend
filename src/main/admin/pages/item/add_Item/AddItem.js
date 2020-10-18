@@ -17,8 +17,6 @@ import "./Additem.css";
 
 import db from "../../../../../config/firebase.js";
 
-
-
 function AddItem() {
   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const [itemName, setItemName] = useState("");
@@ -610,7 +608,7 @@ function AddItem() {
                 className="txtt_nic"
                 autoComplete="cPrice"
                 name="cPrice"
-                InputProps={{ inputProps: { min: 0 } }}
+                InputProps={{ inputProps: { min: 1 } }}
                 type="number"
                 variant="outlined"
                 fullWidth

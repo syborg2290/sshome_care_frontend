@@ -30,7 +30,44 @@
   padding-bottom: 20px !important;
 }
 
-@media screen and (min-width: 280px) and (max-width: 315px) {
+@media screen and (min-width: 280px) and (max-width: 390px) {
+  .icons_List {
+    display: none !important;
+  }
+}
+
+@media screen and (min-width: 280px) and (max-width: 390px) {
+  .txt_Sitem {
+    width: 50px !important;
+    margin-left: 10px !important;
+  }
+}
+@media screen and (min-width: 280px) and (max-width: 390px) {
+  .icons_Close {
+    margin-top: -40px !important;
+  }
+}
+
+@media screen and (min-width: 280px) and (max-width: 390px) {
+  .selcted_model {
+    margin: auto !important;
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+}
+
+@media screen and (min-width: 280px) and (max-width: 390px) {
+  .btn_radio {
+    margin: auto !important;
+    width: 90% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    margin-left: 50px !important;
+  }
+}
+
+@media screen and (min-width: 280px) and (max-width: 390px) {
   .btn_ModelSelectedItem {
     margin: auto !important;
     width: 100% !important;
@@ -44,7 +81,112 @@
   }
 }
 
+@media screen and (min-width: 290px) and (max-width: 411px) {
+  .btn_ModelSelectedItem {
+    margin: auto !important;
+    font-size: 10px !important;
+  }
+}
+
+@media screen and (min-width: 366px) and (max-width: 570px) {
+  .txt_Sitem {
+    width: 50px !important;
+  }
+}
+
+@media screen and (min-width: 366px) and (max-width: 570px) {
+  .btn_radio {
+    margin: auto !important;
+    width: 70% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    margin-right: 50px !important;
+  }
+}
+
+@media screen and (min-width: 375px) and (max-width: 380px) {
+  .btn_radio {
+    margin: auto !important;
+    width: 70% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    margin-left: 60px !important;
+  }
+}
+
+@media screen and (min-width: 414px) and (max-width: 417px) {
+  .btn_radio {
+    margin: auto !important;
+    width: 80% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    margin-right: 40px !important;
+  }
+}
+
+@media screen and (min-width: 366px) and (max-width: 374px) {
+  .btn_radio {
+    margin: auto !important;
+    width: 80% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    margin-left: 40px !important;
+  }
+}
+
+@media screen and (min-width: 381px) and (max-width: 390px) {
+  .btn_radio {
+    margin: auto !important;
+    width: 80% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    margin-left: 40px !important;
+  }
+}
+
+@media screen and (min-width: 391px) and (max-width: 399px) {
+  .btn_radio {
+    margin: auto !important;
+    width: 80% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    margin-left: 40px !important;
+  }
+}
+
+@media screen and (min-width: 391px) and (max-width: 399px) {
+  .icons_Close {
+    margin-top: -40px !important;
+  }
+}
+
+@media screen and (min-width: 400px) and (max-width: 410px) {
+  .btn_radio {
+    margin: auto !important;
+    width: 90% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    margin-right: 20px !important;
+  }
+}
+
 .txt_invo {
   float: right !important;
   height: 10px !important;
+}
+
+.txt_Sitem {
+  /* background-color: red !important; */
+}
+
+.paper {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  margin-top: 20px !important;
+}
+
+.form {
+  width: 100% !important;
+  margin-top: 30px !important;
 }

@@ -93,6 +93,7 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
         qty: inputs[i],
         paymentWay: paymentWay[i],
         item: itemsData[i].item,
+        customer:null,
       };
       nextData.push(obj);
     }

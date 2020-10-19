@@ -112,7 +112,7 @@ function Make_invoice() {
     history.push("/showroom/invoice/printInvoice");
   };
   
-  const invoiceIntoDb = () => {
+  const invoiceIntoDb = async() => {
   
     if (tablerows.some((ob) => ob.customer !== null)) { 
       
@@ -133,7 +133,7 @@ function Make_invoice() {
        });
       
       
-      db.collection('invoice').add({
+     await db.collection('invoice').add({
         invoice_number: invoiceNumber,
         items: arrayItems,
         customer_id: null,

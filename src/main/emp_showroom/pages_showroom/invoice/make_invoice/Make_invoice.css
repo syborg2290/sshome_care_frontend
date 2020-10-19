@@ -123,3 +123,7 @@ label {
 .txt_dpayment {
   width: 90px !important;
 }
+
+.txt_description {
+  margin-top: 45px !important;
+}

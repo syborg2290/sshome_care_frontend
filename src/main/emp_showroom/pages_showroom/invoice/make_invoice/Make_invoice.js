@@ -341,7 +341,27 @@ function Make_invoice() {
                 </Table>
               </TableContainer>
             </Grid>
-
+            <Grid container spacing={2}>
+              <Grid className="txt_description" item xs={12} sm={2}>
+                Description :
+              </Grid>
+              <Grid item xs={12} sm={4}>
+                <TextField
+                  // value={description}
+                  className="txt_description"
+                  autoComplete="description"
+                  name="description"
+                  variant="outlined"
+                  multiline
+                  rows={3}
+                  fullWidth
+                  id="description"
+                  label="Description"
+                  size="small"
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}></Grid>
+            </Grid>
             {/*START Day Date Model */}
 
             <Modal

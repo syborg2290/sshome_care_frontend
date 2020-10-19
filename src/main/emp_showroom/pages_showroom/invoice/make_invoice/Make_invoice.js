@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useHistory } from "react-router-dom";
 import { Modal } from "antd";
 import "./Make_invoice.css";
 import Button from "@material-ui/core/Button";
@@ -16,46 +16,109 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 
+import {
+  NotificationContainer,
+  NotificationManager,
+} from "react-notifications";
+import "react-notifications/lib/notifications.css";
+
+import db from "../../../../../config/firebase.js";
+
 //components
-import ItemTable from "../components/Itemtable_Model";
 import DaydateModel from "../components/dayandDate/Day_date_model";
 
 // icon
-import TvIcon from "@material-ui/icons/Tv";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import CloseOutlinedIcon from "@material-ui/icons/CloseOutlined";
 
 function Make_invoice() {
   const location = useLocation();
-  const [itemtVisible, setItemtVisible] = useState(false);
   const [invoiceNumber, setInvoiceNumber] = useState("");
   const [dayDateVisible, setDayDateVisible] = useState(false);
   const [tablerows, setTableRows] = useState([]);
+  const [itemQty, setItemQty] = useState({});
+  const [itemDP, setItemDP] = useState({});
+  const [itemNOI, setItemNOI] = useState({});
+  const [itemAPI, setItemAPI] = useState({});
+  const [itemDiscount, setItemDiscount] = useState({});
+  const [totalDiscount, setTotalDiscount] = useState(0);
+  const [discription, setDiscription] = useState("");
 
-  // eslint-disable-next-line
-  const [selectedItems, setSelectedItems] = useState([]);
+  let history = useHistory();
 
   useEffect(() => {
     setInvoiceNumber("IN-" + Math.floor(Math.random() * 1000000000 + 1));
-    
-    location.state.detail.forEach((obj) => {
-      setTableRows([...tablerows, obj]);
-    });
+
+    if (location.state != null) {
+      var tableData = [];
+      var keepDataQTY = {};
+      var keepDataDP = {};
+      var keepDataNOI = {};
+      var keepDataAPI = {};
+      var keepDataDiscount = {};
+      location.state.detail.forEach((obj) => {
+        keepDataQTY[obj.i] = obj.qty;
+        keepDataDP[obj.i] =
+          obj.paymentWay === "PayandGo"
+            ? obj.item.downPayment
+            : obj.item.salePrice;
+        keepDataNOI[obj.i] =
+          obj.paymentWay === "PayandGo" ? obj.item.noOfInstallments : 0;
+        keepDataAPI[obj.i] =
+          obj.paymentWay === "PayandGo" ? obj.item.amountPerInstallment : 0;
+        keepDataDiscount[obj.i] = obj.item.discount;
+        tableData.push(obj);
+      });
+      setItemDiscount(keepDataDiscount);
+      setItemAPI(keepDataAPI);
+      setItemNOI(keepDataNOI);
+      setItemQty(keepDataQTY);
+      setItemDP(keepDataDP);
+      setTableRows(tableData);
+    }
     // eslint-disable-next-line
   }, []);
-
-  const itemModalClose = () => {
-    setItemtVisible(false);
-    setDayDateVisible(false);
-  };
-
-  const itemTableModel = () => {
-    setItemtVisible(true);
-  };
 
   // eslint-disable-next-line
   const dayDateModel = () => {
     setDayDateVisible(true);
+  };
+
+  // eslint-disable-next-line
+  const dayDateModelClose = () => {
+    setDayDateVisible(false);
+  };
+
+  const subTotalFunc = () => {
+    var subTotalValue = 0;
+    for (var a = 0; a < tablerows.length; a++) {
+      subTotalValue =
+        subTotalValue +
+        (itemDP[tablerows[a].i] - itemDiscount[tablerows[a].i]) *
+          itemQty[tablerows[a].i];
+    }
+    return subTotalValue;
+  };
+
+  const handleQTYChange = (e, itemid, row) => {
+    try {
+      const { value } = e.target;
+      db.collection("item")
+        .doc(itemid)
+        .get()
+        .then((doc) => {
+          if (doc.data().qty >= (value === "" ? 1 : value)) {
+            setItemQty({
+              ...itemQty,
+              [row.i]: value,
+            });
+          } else {
+            NotificationManager.warning("Out Of Stock");
+          }
+        });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -86,43 +149,9 @@ function Make_invoice() {
                   fullWidth
                   id="invoiceNo"
                   label="Invoice No"
-                  autoFocus
                 />
               </Grid>
-              <Grid item xs={5}>
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  onClick={itemTableModel}
-                  className="btn_newItem"
-                  endIcon={<TvIcon />}
-                >
-                  Add more items
-                </Button>
-              </Grid>
-
-              {/*More Item Model */}
-
-              <Modal
-                title="All Items"
-                visible={itemtVisible}
-                footer={null}
-                className="table_all_Item"
-                // onOk={itemModalClose}
-                onCancel={itemModalClose}
-              >
-                <div className="table_model_Model">
-                  <div className="table_model_Main">
-                    <div className="table_model_Detail">
-                      <ItemTable />
-                    </div>
-                  </div>
-                </div>
-              </Modal>
-
-              {/*More Item Model */}
+              <Grid item xs={5}></Grid>
 
               <TableContainer className="tbl_Container" component={Paper}>
                 <Table className="table" aria-label="spanning table">
@@ -158,98 +187,149 @@ function Make_invoice() {
                   </TableHead>
                   <TableBody>
                     {tablerows.map((row) => (
-                      <TableRow key={row.desc}>
-                        <TableCell>Gass Cooker</TableCell>
+                      <TableRow key={row.i}>
+                        <TableCell>{row.title}</TableCell>
                         <TableCell align="right">
                           <TextField
+                            key={row.i}
+                            id={row.i.toString()}
                             className="txt_qty"
-                            autoComplete="qty"
-                            name="qty"
                             variant="outlined"
                             size="small"
-                            required
                             InputProps={{ inputProps: { min: 1 } }}
                             type="number"
                             fullWidth
-                            id="qty"
-                            label="qty"
-                            autoFocus
+                            value={itemQty[row.i]}
+                            onChange={(e) => {
+                              if (e.target.value !== "") {
+                                handleQTYChange(e, row.id, row);
+                              }
+                            }}
                           />
                         </TableCell>
                         <TableCell align="right" colSpan={1}>
-                          P
+                          {row.paymentWay === "PayandGo" ? "P" : "F"}
                         </TableCell>
                         <TableCell align="right">
                           {" "}
                           <TextField
                             className="txt_dpayment"
-                            autoComplete="discount"
-                            name="discount"
                             variant="outlined"
                             size="small"
-                            required
                             InputProps={{ inputProps: { min: 0 } }}
                             type="number"
                             fullWidth
-                            id="discount"
-                            label="dpayment"
-                            autoFocus
+                            key={row.i}
+                            id={row.i.toString()}
+                            value={itemDP[row.i]}
+                            onChange={(e) => {
+                              setItemDP({ ...itemDP, [row.i]: e.target.value });
+                            }}
                           />
                         </TableCell>
                         <TableCell align="right">
                           {" "}
                           <TextField
                             className="txt_dpayment"
-                            autoComplete="noi"
-                            name="noi"
                             variant="outlined"
                             size="small"
-                            required
                             InputProps={{ inputProps: { min: 0 } }}
                             type="number"
                             fullWidth
-                            id="noi"
-                            label="NOI"
-                            autoFocus
+                            disabled={
+                              row.paymentWay === "PayandGo" ? false : true
+                            }
+                            key={row.i}
+                            id={row.i.toString()}
+                            value={itemNOI[row.i]}
+                            onChange={(e) => {
+                              setItemNOI({
+                                ...itemNOI,
+                                [row.i]: e.target.value,
+                              });
+                            }}
                           />
                         </TableCell>
                         <TableCell align="right">
                           {" "}
                           <TextField
                             className="txt_dpayment"
-                            autoComplete="api"
-                            name="api"
                             variant="outlined"
                             size="small"
                             InputProps={{ inputProps: { min: 0 } }}
-                            required
                             type="number"
                             fullWidth
-                            id="api"
-                            label="API"
-                            autoFocus
+                            key={row.i}
+                            disabled={
+                              row.paymentWay === "PayandGo" ? false : true
+                            }
+                            id={row.i.toString()}
+                            value={itemAPI[row.i]}
+                            onChange={(e) => {
+                              setItemAPI({
+                                ...itemAPI,
+                                [row.i]: e.target.value,
+                              });
+                            }}
                           />
                         </TableCell>
                         <TableCell align="right">
                           {" "}
                           <TextField
                             className="txt_dpayment"
-                            autoComplete="discount"
-                            name="discount"
                             variant="outlined"
                             size="small"
-                            required
                             InputProps={{ inputProps: { min: 0 } }}
                             type="number"
                             fullWidth
-                            id="discount"
-                            label="discount"
-                            autoFocus
+                            key={row.i}
+                            id={row.i.toString()}
+                            value={itemDiscount[row.i]}
+                            onChange={(e) => {
+                              if (e.target.value < itemDP[row.i]) {
+                                setItemDiscount({
+                                  ...itemDiscount,
+                                  [row.i]: e.target.value,
+                                });
+                              }
+                            }}
                           />
                         </TableCell>
-                        <TableCell align="right">50000.00</TableCell>
+                        <TableCell
+                          align="right"
+                          key={row.i}
+                          id={row.i.toString()}
+                        >
+                          {" "}
+                          {parseInt(itemDP[row.i] - itemDiscount[row.i]) *
+                            itemQty[row.i]}
+                        </TableCell>
                         <TableCell align="right">
-                          <CloseOutlinedIcon className="iconcls_invTbl" />
+                          <CloseOutlinedIcon
+                            className="iconcls_invTbl"
+                            onClick={(e) => {
+                              tablerows.forEach((itemRe) => {
+                                if (itemRe.i === row.i) {
+                                  // eslint-disable-next-line
+                                  let index = tablerows.findIndex((element) => {
+                                    if (element.i === row.i) {
+                                      return true;
+                                    }
+                                  });
+                                  tablerows.splice(index, 1);
+                                  setTableRows([...tablerows]);
+                                  if (tablerows.length === 0) {
+                                    history.push("/showroom/itemTable");
+                                  }
+                                  delete itemQty[row.i];
+                                  delete itemDP[row.i];
+                                  delete itemNOI[row.i];
+                                  delete itemAPI[row.i];
+                                  delete itemDiscount[row.i];
+                                }
+                              });
+                            }}
+                          />
                         </TableCell>
                       </TableRow>
                     ))}
@@ -257,10 +337,10 @@ function Make_invoice() {
                     <TableRow>
                       <TableCell rowSpan={4} />
                       <TableCell align="right" colSpan={5}>
-                        Subtotal
+                        Subtotal(LKR)
                       </TableCell>
                       <TableCell align="right" colSpan={2}>
-                        1200.00
+                        {subTotalFunc()}
                       </TableCell>
                     </TableRow>
                     <TableRow>
@@ -269,27 +349,28 @@ function Make_invoice() {
                       </TableCell>
                       <TableCell className="cel" align="right" colSpan={2}>
                         <TextField
-                          className="txt_discount"
-                          autoComplete="discount"
-                          name="discount"
+                          className="txt_distg"
                           variant="outlined"
                           size="small"
-                          required
                           type="number"
+                          InputProps={{ inputProps: { min: 0 } }}
                           fullWidth
-                          id="discount"
-                          label="dis"
-                          autoFocus
+                          value={totalDiscount}
+                          onChange={(e) => {
+                            if (e.target.value < subTotalFunc()) {
+                              setTotalDiscount(e.target.value);
+                            }
+                          }}
                         />
                       </TableCell>
                       {/* <TableCell align="right">555</TableCell> */}
                     </TableRow>
                     <TableRow>
                       <TableCell align="right" colSpan={5}>
-                        Total
+                        Total(LKR)
                       </TableCell>
                       <TableCell align="right" colSpan={2}>
-                        55000.00
+                        {subTotalFunc() - totalDiscount}
                       </TableCell>
                     </TableRow>
                   </TableBody>
@@ -313,6 +394,10 @@ function Make_invoice() {
                   id="description"
                   label="Description"
                   size="small"
+                  value={discription}
+                  onChange={(e) => {
+                    setDiscription(e.target.value.trim());
+                  }}
                 />
               </Grid>
               <Grid item xs={12} sm={6}></Grid>
@@ -325,7 +410,7 @@ function Make_invoice() {
               footer={null}
               className="table_all_Item"
               // onOk={itemModalClose}
-              onCancel={itemModalClose}
+              onCancel={dayDateModelClose}
             >
               <div className="table_model_Model">
                 <div className="table_model_Main">
@@ -352,6 +437,7 @@ function Make_invoice() {
           </form>
         </div>
         <Box mt={5}></Box>
+        <NotificationContainer />
       </Container>
     </div>
   );

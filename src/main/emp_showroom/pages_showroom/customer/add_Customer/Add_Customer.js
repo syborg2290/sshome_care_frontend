@@ -71,35 +71,7 @@ export default function Add_Customer() {
     setloaderModalOpen(true);
   };
 
-  // eslint-disable-next-line
-  const valuesInitialState = () => {
-    setNic("");
-    setFirstName("");
-    setLastName("");
-    setAddres1("");
-    setAddres2("");
-    setMobile1("");
-    setMobile2("");
-    setRoot("");
-    setTrustee1Nic("");
-    setTrustee1Fname("");
-    setTrustee1Lname("");
-    setTrustee1Addres1("");
-    setTrustee1Addres2("");
-    setTrustee1Mobile1("");
-    setTrustee1Mobile2("");
-    setTrustee2Nic("");
-    setTrustee2Fname("");
-    setTrustee2Lname("");
-    setTrustee2Address1("");
-    setTrustee2Address2("");
-    setTrustee2Mobile1("");
-    setTrustee2Mobile2("");
-    setRoot("");
-    setImageFile(null);
-    setImageUrl(null);
-  };
-
+  
   const onImageChange = (event) => {
     if (event.target.files && event.target.files[0]) {
       setImageFile(event.target.files[0]);

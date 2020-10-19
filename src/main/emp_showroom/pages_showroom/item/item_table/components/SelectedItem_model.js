@@ -1,17 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { List, Radio, Row, Col, Divider, Spin } from "antd";
 import { ShoppingCartOutlined, CloseOutlined } from "@ant-design/icons";
-import { Button, TextField } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import { useHistory } from "react-router-dom";
-
-import {
-  NotificationContainer,
-  NotificationManager,
-} from "react-notifications";
-import "react-notifications/lib/notifications.css";
-
-import db from "../../../../../../config/firebase.js";
 
 // styles
 import "./SelectedItem_model.css";
@@ -19,17 +11,14 @@ import "./SelectedItem_model.css";
 export default function SelectedItem_Model({ itemListProps, closeModel }) {
   const [isLoading, setLoading] = useState(false);
   const [itemsData, setItemsData] = useState([]);
-  const [inputs, setInputs] = useState({});
   const [paymentWay, setpaymentWay] = useState({});
   let history = useHistory();
 
   useEffect(() => {
     var keepData = [];
-    var keepDataQTY = {};
     var keepDataPaymentway = {};
     var i = 0;
     itemListProps.forEach((ele) => {
-      keepDataQTY[i] = ele.qty;
       keepDataPaymentway[i] = ele.paymentWay;
       keepData.push({
         i: i,
@@ -43,38 +32,16 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
       i = i + 1;
     });
 
-    setInputs(keepDataQTY);
     setpaymentWay(keepDataPaymentway);
     setItemsData(keepData);
     // eslint-disable-next-line
   }, [itemListProps]);
 
-  const handleChange = (e, itemid, i) => {
-    try {
-      const { value } = e.target;
-      db.collection("item")
-        .doc(itemid)
-        .get()
-        .then((doc) => {
-          if (doc.data().qty >= (value === "" ? 1 : value)) {
-            setInputs({
-              ...inputs,
-              [i]: value === "" ? 1 : value,
-            });
-          } else {
-            NotificationManager.warning("Out Of Stock");
-          }
-        });
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   const removeItems = (i, itemId) => {
     itemsData.forEach((ele) => {
       if (ele.id === itemId) {
         itemsData.splice(i, 1);
-        setInputs({ ...inputs, [i]: 0 });
+        setItemsData([...itemsData]);
         if (itemsData.length === 0) {
           closeModel();
         }
@@ -87,61 +54,40 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
     var nextData = [];
     for (var i = 0; i < itemsData.length; i++) {
       let obj = {
+        i: i,
         id: itemsData[i].id,
         title: itemsData[i].title,
         unitprice: itemsData[i].unitprice,
-        qty: inputs[i],
+        qty: itemsData[i].qty,
         paymentWay: paymentWay[i],
         item: itemsData[i].item,
-        customer:null,
+        customer: null,
       };
       nextData.push(obj);
     }
-    if (nextData.some((ob) => ob.paymentWay === "PayandGo")) {
-      setLoading(false);
-      //sent to add customer
-      let moveWith = {
-        pathname: "/showroom/invoice/addCustomer",
-        search: "?query=abc",
-        state: { detail: nextData },
-      };
+    if (nextData.length === itemsData.length) {
+      if (nextData.some((ob) => ob.paymentWay === "PayandGo")) {
+        setLoading(false);
+        //sent to add customer
+        let moveWith = {
+          pathname: "/showroom/invoice/addCustomer",
+          search: "?query=abc",
+          state: { detail: nextData },
+        };
 
-      history.push(moveWith);
-    } else {
-      setLoading(false);
-      //sent to direct invoice
-      let moveWith = {
-        pathname: "/showroom/ui/makeInvoice",
-        search: "?query=abc",
-        state: { detail: nextData },
-      };
+        history.push(moveWith);
+      } else {
+        setLoading(false);
+        //sent to direct invoice
+        let moveWith = {
+          pathname: "/showroom/ui/makeInvoice",
+          search: "?query=abc",
+          state: { detail: nextData },
+        };
 
-      history.push(moveWith);
+        history.push(moveWith);
+      }
     }
-  };
-
-  const createInputs = (item) => {
-    return (
-      <div className="selcted_model">
-        <TextField
-          key={item.i}
-          id={item.i.toString()}
-          className="txt_Sitem"
-          autoComplete="item"
-          name="iitem_selected"
-          variant="outlined"
-          size="small"
-          value={inputs[item.i]}
-          onChange={(e) => handleChange(e, item.id, item.i)}
-          required
-          fullWidth
-          label="Qty"
-          type="number"
-          InputProps={{ inputProps: { min: 1 } }}
-          min={1}
-        />
-      </div>
-    );
   };
 
   return (
@@ -176,7 +122,7 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
               title={
                 <Row>
                   <Col span={7}> {item.title}</Col>
-                  <Col span={3}> {createInputs(item)}</Col>
+                  <Col span={3}></Col>
                   <Col span={12}>
                     <Radio.Group
                       className="radio_btn"
@@ -213,8 +159,6 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
           <Divider />
         </div>
       )}
-    >
-      <NotificationContainer />
-    </List>
+    ></List>
   );
 }

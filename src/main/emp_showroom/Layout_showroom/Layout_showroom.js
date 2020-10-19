@@ -15,6 +15,7 @@ import CustomerTable from "../pages_showroom/customer/customer_table/Customer_ta
 import MakeInvoice from "../pages_showroom/invoice/make_invoice/Make_invoice";
 
 import InvoiceCustomer from "../pages_showroom/customer/add_Customer/Add_Customer";
+import PrintInvoice from "../pages_showroom/invoice/make_invoice/printInvoice/Print_invoice";
 
 function LayoutShowroom(props) {
   return (
@@ -27,6 +28,10 @@ function LayoutShowroom(props) {
           <Switch>
             <Route path="/showroom/itemTable" component={ItemTable} />
             <Route path="/showroom/ui/customer" component={CustomerTable} />
+            <Route
+              path="/showroom/invoice/printInvoice"
+              component={PrintInvoice}
+            />
             <Route path="/showroom/ui/makeInvoice" component={MakeInvoice} />
             <Route
               path="/showroom/invoice/addCustomer"

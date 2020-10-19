@@ -18,9 +18,10 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 
+import { useHistory } from "react-router-dom";
+
 //components
 import ItemTable from "../components/Itemtable_Model";
-import DaydateModel from "../components/dayandDate/Day_date_model";
 
 // icon
 import TvIcon from "@material-ui/icons/Tv";
@@ -88,23 +89,22 @@ function Make_invoice() {
   const location = useLocation();
 
   const [itemtVisible, setItemtVisible] = useState(false);
-  const [dayDateVisible, setDayDateVisible] = useState(false);
 
   // eslint-disable-next-line
   const [selectedItems, setSelectedItems] = useState([]);
 
   const itemModalClose = () => {
     setItemtVisible(false);
-    setDayDateVisible(false);
   };
 
   const itemTableModel = () => {
     setItemtVisible(true);
   };
 
-  // eslint-disable-next-line
-  const dayDateModel = () => {
-    setDayDateVisible(true);
+  let history = useHistory();
+
+  const printInvoice = () => {
+    history.push("/showroom/invoice/printInvoice");
   };
 
   return (
@@ -362,26 +362,6 @@ function Make_invoice() {
               </Grid>
               <Grid item xs={12} sm={6}></Grid>
             </Grid>
-            {/*START Day Date Model */}
-
-            <Modal
-              title="All Items"
-              visible={dayDateVisible}
-              footer={null}
-              className="table_all_Item"
-              // onOk={itemModalClose}
-              onCancel={itemModalClose}
-            >
-              <div className="table_model_Model">
-                <div className="table_model_Main">
-                  <div className="table_model_Detail">
-                    <DaydateModel />
-                  </div>
-                </div>
-              </div>
-            </Modal>
-
-            {/*END Day Date Model */}
 
             <Button
               type="submit"
@@ -390,6 +370,7 @@ function Make_invoice() {
               color="primary"
               className="btn_addCustomer"
               // onClick={dayDateModel}
+              onClick={printInvoice}
               endIcon={<ArrowForwardIcon />}
             >
               Next

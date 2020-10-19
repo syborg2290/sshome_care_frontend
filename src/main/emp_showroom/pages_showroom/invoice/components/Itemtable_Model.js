@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import MUIDataTable from "mui-datatables";
-import { Grid, Button } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import CurrencyFormat from "react-currency-format";
 // eslint-disable-next-line
 import { Spin, Modal } from "antd";
@@ -21,7 +21,6 @@ import "./Item_table.css";
 
 // icons
 import VisibilityIcon from "@material-ui/icons/Visibility";
-import AddOutlinedIcon from "@material-ui/icons/AddOutlined";
 
 import db from "../../../../../config/firebase.js";
 
@@ -170,15 +169,6 @@ export default function Itemtable_Model() {
   ];
   return (
     <>
-      <Button
-        variant="contained"
-        color="primary"
-        className="btn_Addnew"
-        endIcon={<AddOutlinedIcon />}
-      >
-        Add New
-      </Button>
-
       <Grid container spacing={4}>
         <Grid item xs={12}>
           <MUIDataTable

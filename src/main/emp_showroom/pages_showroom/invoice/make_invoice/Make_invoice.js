@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { Modal } from "antd";
 import "./Make_invoice.css";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
@@ -7,9 +8,6 @@ import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
-
-import { Modal } from "antd";
-
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -87,11 +85,14 @@ const invoiceTotal = invoiceTaxes + invoiceSubtotal;
 function Make_invoice() {
   // eslint-disable-next-line
   const location = useLocation();
-
   const [itemtVisible, setItemtVisible] = useState(false);
-
+  const [invoiceNumber, setInvoiceNumber] = useState("");
   // eslint-disable-next-line
   const [selectedItems, setSelectedItems] = useState([]);
+
+  useEffect(() => {
+    setInvoiceNumber("IN-" + Math.floor(Math.random() * 1000000000 + 1));
+  }, []);
 
   const itemModalClose = () => {
     setItemtVisible(false);
@@ -122,6 +123,10 @@ function Make_invoice() {
                   variant="outlined"
                   size="small"
                   required
+                  value={invoiceNumber}
+                  onChange={(e) => {
+                    setInvoiceNumber(e.target.value.trim());
+                  }}
                   fullWidth
                   id="invoiceNo"
                   label="Invoice No"

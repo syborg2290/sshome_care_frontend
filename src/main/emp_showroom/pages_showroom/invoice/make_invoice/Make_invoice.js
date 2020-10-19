@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import "./Make_invoice.css";
 import Button from "@material-ui/core/Button";
@@ -8,6 +8,8 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 
+import { Modal } from "antd";
+
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -16,12 +18,15 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 
+//components
+import ItemTable from "../components/Itemtable_Model";
+
 // icon
-import { CloseOutlined } from "@ant-design/icons";
-import PlusOneIcon from "@material-ui/icons/PlusOne";
-import ExposureNeg1Icon from "@material-ui/icons/ExposureNeg1";
 import TvIcon from "@material-ui/icons/Tv";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
+import AddBoxOutlinedIcon from "@material-ui/icons/AddBoxOutlined";
+import IndeterminateCheckBoxOutlinedIcon from "@material-ui/icons/IndeterminateCheckBoxOutlined";
+import CloseOutlinedIcon from "@material-ui/icons/CloseOutlined";
 
 const TAX_RATE = 0.07;
 
@@ -80,16 +85,21 @@ const invoiceTaxes = TAX_RATE * invoiceSubtotal;
 const invoiceTotal = invoiceTaxes + invoiceSubtotal;
 
 function Make_invoice() {
+  // eslint-disable-next-line
   const location = useLocation();
+
+  const [itemtVisible, setItemtVisible] = useState(false);
 
   // eslint-disable-next-line
   const [selectedItems, setSelectedItems] = useState([]);
 
-  useEffect(() => {
-    console.log(location.pathname); // result: '/secondpage'
-    console.log(location.search); // result: '?query=abc'
-    console.log(location.state ? location.state.detail : ""); // result: 'some_value'
-  }, [location]);
+  const itemModalClose = () => {
+    setItemtVisible(false);
+  };
+
+  const itemTableModel = () => {
+    setItemtVisible(true);
+  };
 
   return (
     <div className="main_In">
@@ -124,12 +134,34 @@ function Make_invoice() {
                   fullWidth
                   variant="contained"
                   color="primary"
+                  onClick={itemTableModel}
                   className="btn_newItem"
                   endIcon={<TvIcon />}
                 >
                   Add more items
                 </Button>
               </Grid>
+
+              {/*More Item Model */}
+
+              <Modal
+                title="All Items"
+                visible={itemtVisible}
+                footer={null}
+                className="table_all_Item"
+                // onOk={itemModalClose}
+                onCancel={itemModalClose}
+              >
+                <div className="table_model_Model">
+                  <div className="table_model_Main">
+                    <div className="table_model_Detail">
+                      <ItemTable />
+                    </div>
+                  </div>
+                </div>
+              </Modal>
+
+              {/*More Item Model */}
 
               <TableContainer className="tbl_Container" component={Paper}>
                 <Table className="table" aria-label="spanning table">
@@ -164,11 +196,11 @@ function Make_invoice() {
                         <TableCell align="right">888</TableCell>
                         <TableCell align="right">
                           <span className="iconpls_invTblspan">
-                            <PlusOneIcon className="iconpls_invTbl" />
+                            <AddBoxOutlinedIcon className="iconpls_invTbl" />
                           </span>
-                          <ExposureNeg1Icon className="icon_invTbl" />
+                          <IndeterminateCheckBoxOutlinedIcon className="icon_invTbl" />
                           <span className="iconcls_invTblspan">
-                            <CloseOutlined className="iconcls_invTbl" />
+                            <CloseOutlinedIcon className="iconcls_invTbl" />
                           </span>
                         </TableCell>
                       </TableRow>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { TextField, Button } from "@material-ui/core";
 import { Modal, Spin } from "antd";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
@@ -70,12 +70,6 @@ export default function Add_Customer() {
   const loaderModalOpen = () => {
     setloaderModalOpen(true);
   };
-
-  useEffect(() => {
-    console.log(location.pathname); // result: '/secondpage'
-    console.log(location.search); // result: '?query=abc'
-    console.log(location.state ? location.state.detail : ""); // result: 'some_value'
-  }, [location]);
 
   // eslint-disable-next-line
   const valuesInitialState = () => {
@@ -656,7 +650,6 @@ export default function Add_Customer() {
   };
   const handleChangeAddNicInputs = (e) => {
     setInputsNic({ ...inputsNic, [e.target.id]: e.target.value });
-    console.log(inputsNic);
   };
 
   return (

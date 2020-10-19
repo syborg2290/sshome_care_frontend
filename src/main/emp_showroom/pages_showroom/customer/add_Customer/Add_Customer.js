@@ -171,7 +171,13 @@ export default function Add_Customer() {
                         };
 
                         var passedObj = location.state.detail;
-                        passedObj.customer = customerObj;
+                        passedObj.forEach((obj) => {
+                          if (obj.paymentWay === "PayandGo") {
+                            obj.customer = customerObj;
+                          } else {
+                            obj.customer = null;
+                          }
+                        });
 
                         let moveWith = {
                           pathname: "/showroom/ui/makeInvoice",

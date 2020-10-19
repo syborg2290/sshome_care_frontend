@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useHistory } from "react-router-dom";
-import { Modal } from "antd";
 import "./Make_invoice.css";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
@@ -15,6 +14,7 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
+import firebase from "firebase";
 
 import {
   NotificationContainer,
@@ -24,9 +24,6 @@ import "react-notifications/lib/notifications.css";
 
 import db from "../../../../../config/firebase.js";
 
-//components
-import DaydateModel from "../components/dayandDate/Day_date_model";
-
 // icon
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import CloseOutlinedIcon from "@material-ui/icons/CloseOutlined";
@@ -34,7 +31,6 @@ import CloseOutlinedIcon from "@material-ui/icons/CloseOutlined";
 function Make_invoice() {
   const location = useLocation();
   const [invoiceNumber, setInvoiceNumber] = useState("");
-  const [dayDateVisible, setDayDateVisible] = useState(false);
   const [tablerows, setTableRows] = useState([]);
   const [itemQty, setItemQty] = useState({});
   const [itemDP, setItemDP] = useState({});
@@ -79,16 +75,7 @@ function Make_invoice() {
     // eslint-disable-next-line
   }, []);
 
-  // eslint-disable-next-line
-  const dayDateModel = () => {
-    setDayDateVisible(true);
-  };
-
-  // eslint-disable-next-line
-  const dayDateModelClose = () => {
-    setDayDateVisible(false);
-  };
-
+ 
   const subTotalFunc = () => {
     var subTotalValue = 0;
     for (var a = 0; a < tablerows.length; a++) {
@@ -119,7 +106,46 @@ function Make_invoice() {
     } catch (error) {
       console.error(error);
     }
+  }
+  
+  const printInvoice = () => {
+    history.push("/showroom/invoice/printInvoice");
   };
+  
+  const invoiceIntoDb = () => {
+  
+    if (tablerows.some((ob) => ob.customer !== null)) { 
+      
+    } else {
+      var arrayItems = [];
+      
+      tablerows.forEach((one) => {
+        var objItem = {
+          item_id: one.id,
+          qty: itemQty[one.i],
+           paymentWay:one.paymentWay,
+          downpayment: itemDP[one.i],
+          noOfInstallment: itemNOI[one.i],
+          amountPerInstallment: itemAPI[one.i],
+          discount: itemDiscount[one.i],
+        }
+        arrayItems.push(objItem);
+       });
+      
+      
+      db.collection('invoice').add({
+        invoice_number: invoiceNumber,
+        items: arrayItems,
+        customer_id: null,
+        installmentType: null,
+        installemtnDayDate: null,
+        discount: totalDiscount,
+        total: subTotalFunc() - totalDiscount,
+        status_of_payandgo: "Done",
+        date:firebase.firestore.FieldValue.serverTimestamp(),
+      });
+    }
+  }
 
   return (
     <div className="main_In">
@@ -402,26 +428,6 @@ function Make_invoice() {
               </Grid>
               <Grid item xs={12} sm={6}></Grid>
             </Grid>
-            {/*START Day Date Model */}
-
-            <Modal
-              title="All Items"
-              visible={dayDateVisible}
-              footer={null}
-              className="table_all_Item"
-              // onOk={itemModalClose}
-              onCancel={dayDateModelClose}
-            >
-              <div className="table_model_Model">
-                <div className="table_model_Main">
-                  <div className="table_model_Detail">
-                    <DaydateModel />
-                  </div>
-                </div>
-              </div>
-            </Modal>
-
-            {/*END Day Date Model */}
 
             <Button
               type="submit"
@@ -430,6 +436,7 @@ function Make_invoice() {
               color="primary"
               className="btn_addCustomer"
               // onClick={dayDateModel}
+              onClick={printInvoice}
               endIcon={<ArrowForwardIcon />}
             >
               Next

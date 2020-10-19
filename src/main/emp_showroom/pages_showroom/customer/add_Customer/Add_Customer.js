@@ -1323,5 +1323,8 @@ export default function Add_Customer() {
         <NotificationContainer />
       </Container>
     </>
-  );
+  )
+
 }
+
+

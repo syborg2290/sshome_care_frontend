@@ -70,6 +70,10 @@ label {
   width: 90px !important;
 }
 
+.txt_distg {
+  width: 120px !important;
+}
+
 .cel {
   width: 30px !important;
 }
@@ -126,4 +130,30 @@ label {
 
 .txt_description {
   margin-top: 45px !important;
+}
+
+.radio_dayDate {
+  margin-top: 40px !important;
+}
+
+.txt_day {
+  padding-top: 10px !important;
+  width: 70px !important;
+}
+
+.select {
+  padding-top: 20px !important;
+  width: 135x !important;
+}
+.select_label {
+  padding-top: 10px !important;
+  margin-left: 10px !important;
+}
+
+.confo_icon {
+  /* color: rgb(168, 19, 19) !important; */
+}
+
+.confo_title {
+  font-weight: 600 !important;
 }

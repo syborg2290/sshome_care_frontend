@@ -110,3 +110,16 @@ label {
   width: 60% !important;
   z-index: 500px !important;
 }
+
+.txt_qty {
+  width: 60px !important;
+}
+
+.txt_discount {
+  width: 60px !important;
+  font-size: 1px !important;
+}
+
+.txt_dpayment {
+  width: 90px !important;
+}

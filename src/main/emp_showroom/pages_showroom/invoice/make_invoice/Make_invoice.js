@@ -752,12 +752,12 @@ function Make_invoice() {
                     }
                   >
                     <Radio className="date" value={"Date"}>
-                      Date
+                      Monthly
                     </Radio>
 
                     <br />
                     <Radio className="day" value={"Day"}>
-                      Day
+                      Weekly
                     </Radio>
                   </Radio.Group>
                 </Grid>

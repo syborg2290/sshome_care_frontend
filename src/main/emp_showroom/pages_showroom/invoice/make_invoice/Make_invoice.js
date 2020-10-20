@@ -134,12 +134,12 @@ function Make_invoice() {
       okText: "Yes",
       cancelText: "No",
       async onOk() {
-        await invoiceIntoDb();
         var arrayPassingItems = [];
 
         tablerows.forEach((one) => {
           let objItem = {
             item_id: one.id,
+            item_name: one.title,
             qty: itemQty[one.i],
             paymentWay: one.paymentWay,
             downpayment: itemDP[one.i],
@@ -168,7 +168,7 @@ function Make_invoice() {
             search: "?query=abc",
             state: { detail: passingWithCustomerObj },
           };
-
+          // await invoiceIntoDb();
           history.push(moveWith);
         } else {
           let passingWithoutCustomerObj = {
@@ -187,36 +187,19 @@ function Make_invoice() {
             search: "?query=abc",
             state: { detail: passingWithoutCustomerObj },
           };
-
+          // await invoiceIntoDb();
           history.push(moveWith);
         }
       },
       async onCancel() {
-        await invoiceIntoDb();
+        // await invoiceIntoDb();
         history.push("/showroom/itemTable");
       },
     });
   };
 
-  // let imageDownloadUrl = "null";
-  //                   if (imageFile !== null) {
-  //                     const formData = new FormData();
-  //                     const options = {
-  //                       maxSizeMB: 1,
-  //                       maxWidthOrHeight: 1920,
-  //                       useWebWorker: true,
-  //                     };
-  //                     const compressedFile = await imageCompression(
-  //                       imageFile,
-  //                       options
-  //                     );
-  //                     formData.append("image", compressedFile);
-  //                     const configFile = {
-  //                       headers: {
-  //                         "content-type": "multipart/form-data",
-  //                       },
-  //                     };
-
+  
+  // eslint-disable-next-line
   const invoiceIntoDb = async () => {
     setLoadingSubmit(true);
     if (tablerows.some((ob) => ob.customer !== null)) {
@@ -306,9 +289,17 @@ function Make_invoice() {
                     }
 
                     tablerows.forEach(async (itemUDoc) => {
-                      await db.collection("item").doc(itemUDoc.id).update({
-                        qty: itemQty[itemUDoc.i],
-                      });
+                      let newArray = await await db
+                        .collection("item")
+                        .doc(itemUDoc.id)
+                        .get();
+
+                      await db
+                        .collection("item")
+                        .doc(itemUDoc.id)
+                        .update({
+                          qty: newArray.data().qty - itemQty[itemUDoc.i],
+                        });
                     });
                     setLoadingSubmit(false);
                   });
@@ -391,9 +382,17 @@ function Make_invoice() {
                 }
 
                 tablerows.forEach(async (itemUDoc) => {
-                  await db.collection("item").doc(itemUDoc.id).update({
-                    qty: itemQty[itemUDoc.i],
-                  });
+                  let newArray = await await db
+                    .collection("item")
+                    .doc(itemUDoc.id)
+                    .get();
+
+                  await db
+                    .collection("item")
+                    .doc(itemUDoc.id)
+                    .update({
+                      qty: newArray.data().qty - itemQty[itemUDoc.i],
+                    });
                 });
                 setLoadingSubmit(false);
               });
@@ -429,9 +428,14 @@ function Make_invoice() {
       });
 
       tablerows.forEach(async (itemUDoc) => {
-        await db.collection("item").doc(itemUDoc.id).update({
-          qty: itemQty[itemUDoc.i],
-        });
+        let newArray = await await db.collection("item").doc(itemUDoc.id).get();
+
+        await db
+          .collection("item")
+          .doc(itemUDoc.id)
+          .update({
+            qty: newArray.data().qty - itemQty[itemUDoc.i],
+          });
       });
       setLoadingSubmit(false);
     }
@@ -742,7 +746,7 @@ function Make_invoice() {
                     onChange={radioOnChange}
                     value={daysDate.value}
                     disabled={
-                      tablerows.some((ob) => ob.paymentWay !== "PayandGo")
+                      tablerows.some((ob) => ob.paymentWay === "PayandGo")
                         ? false
                         : true
                     }
@@ -763,7 +767,7 @@ function Make_invoice() {
                     variant="outlined"
                     size="small"
                     disabled={
-                      tablerows.some((ob) => ob.paymentWay !== "PayandGo") ||
+                      tablerows.some((ob) => ob.paymentWay === "PayandGo") ||
                       daysDate.value === "Date"
                         ? false
                         : true
@@ -790,7 +794,7 @@ function Make_invoice() {
                     <Select
                       value={days}
                       disabled={
-                        tablerows.some((ob) => ob.paymentWay !== "PayandGo") &&
+                        tablerows.some((ob) => ob.paymentWay === "PayandGo") &&
                         daysDate.value === "Day"
                           ? false
                           : true

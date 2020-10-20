@@ -3,6 +3,7 @@
   flex-direction: column !important;
   align-items: center !important;
   margin-top: 20px !important;
+  overflow: hidden !important;
 }
 
 .form {
@@ -60,10 +61,15 @@
 }
 
 .row_signature {
-  margin-top: 90px !important;
+  margin-top: 50px !important;
   float: right !important;
 }
 
 .txt_signature {
   margin-left: 30px !important;
+  margin-top: 10px !important;
+}
+
+.hr_installmentPrint {
+  margin-bottom: 50px !important;
 }

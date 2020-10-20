@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Radio,Spin } from "antd";
+import { Modal, Radio, Spin } from "antd";
 import { PrinterFilled } from "@ant-design/icons";
 import { useLocation, useHistory } from "react-router-dom";
 import Button from "@material-ui/core/Button";
@@ -131,14 +131,13 @@ function Make_invoice() {
       okText: "Yes",
       cancelText: "No",
 
-      
       async onOk() {
-       await invoiceIntoDb();
+        await invoiceIntoDb();
         history.push("/showroom/invoice/printInvoice");
       },
       async onCancel() {
         await invoiceIntoDb();
-         history.push("/showroom/itemTable");
+        history.push("/showroom/itemTable");
       },
     });
   };
@@ -152,10 +151,7 @@ function Make_invoice() {
       uploadTask.on(
         "state_changed",
         (snapshot) => {
-          // eslint-disable-next-line
-          const progressRe = Math.round(
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-          );
+          console.log(snapshot);
         },
         (error) => {
           NotificationManager.warning(error.message);
@@ -241,14 +237,13 @@ function Make_invoice() {
                           date: firebase.firestore.FieldValue.serverTimestamp(),
                         });
                       }
-                      
-                      tablerows.forEach(async(itemUDoc) => { 
+
+                      tablerows.forEach(async (itemUDoc) => {
                         await db.collection("item").doc(itemUDoc.id).update({
-                          qty:itemQty[itemUDoc.i]
+                          qty: itemQty[itemUDoc.i],
                         });
                       });
-                       setLoadingSubmit(false);
-                      
+                      setLoadingSubmit(false);
                     });
                 });
             });
@@ -282,13 +277,13 @@ function Make_invoice() {
         description: discription,
         date: firebase.firestore.FieldValue.serverTimestamp(),
       });
-      
-       tablerows.forEach(async(itemUDoc) => { 
-                        await db.collection("item").doc(itemUDoc.id).update({
-                          qty:itemQty[itemUDoc.i]
-                        });
-       });
-       setLoadingSubmit(false);
+
+      tablerows.forEach(async (itemUDoc) => {
+        await db.collection("item").doc(itemUDoc.id).update({
+          qty: itemQty[itemUDoc.i],
+        });
+      });
+      setLoadingSubmit(false);
     }
   };
 
@@ -404,12 +399,11 @@ function Make_invoice() {
                               value={itemDP[row.i]}
                               onChange={(e) => {
                                 if (e.target.value > itemDiscount[row.i]) {
-                                   setItemDP({
-                                  ...itemDP,
-                                  [row.i]: e.target.value,
-                                });
+                                  setItemDP({
+                                    ...itemDP,
+                                    [row.i]: e.target.value,
+                                  });
                                 }
-                               
                               }}
                             />
                           </TableCell>
@@ -610,14 +604,14 @@ function Make_invoice() {
                     className="txt_day"
                     variant="outlined"
                     size="small"
-                    disabled={daysDate.value==="Date"?false:true}
+                    disabled={daysDate.value === "Date" ? false : true}
                     placeholder="date"
                     type="number"
                     InputProps={{ inputProps: { min: 1, max: 31 } }}
                     fullWidth
                     value={dates}
                     onChange={(e) => {
-                      if (e.target.value <= 31 || e.target.value < 0  ) {
+                      if (e.target.value <= 31 || e.target.value < 0) {
                         setDates(e.target.value.trim());
                       }
                     }}
@@ -632,7 +626,7 @@ function Make_invoice() {
                     </InputLabel>
                     <Select
                       value={days}
-                      disabled={daysDate.value==="Day"?false:true}
+                      disabled={daysDate.value === "Day" ? false : true}
                       onChange={(e) => {
                         setDays(e.target.value);
                       }}
@@ -661,13 +655,12 @@ function Make_invoice() {
                 variant="contained"
                 color="primary"
                 className="btn_addCustomer"
-                disabled={loadingsubmit?true:false}
+                disabled={loadingsubmit ? true : false}
                 onClick={showConfirm}
                 // onClick={printInvoice}
                 endIcon={<ArrowForwardIcon />}
               >
-                {loadingsubmit? <Spin size="large" />:"Next"}
-                
+                {loadingsubmit ? <Spin size="large" /> : "Next"}
               </Button>
             </form>
           </div>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Radio,Spin } from "antd";
+import { Modal, Radio, Spin } from "antd";
 import { PrinterFilled } from "@ant-design/icons";
 import { useLocation, useHistory } from "react-router-dom";
 import Button from "@material-ui/core/Button";
@@ -128,20 +128,15 @@ function Make_invoice() {
     confirm({
       title: <h5 className="confo_title">Do you Want to Print an Invoice?</h5>,
       icon: <PrinterFilled className="confo_icon" />,
-<<<<<<< HEAD
       okText: "Yes",
       cancelText: "No",
-
-      onOk() {
-=======
       async onOk() {
-       await invoiceIntoDb();
->>>>>>> f8d897f6696cb17ae95330361c966aa18d2d601b
+        await invoiceIntoDb();
         history.push("/showroom/invoice/printInvoice");
       },
       async onCancel() {
         await invoiceIntoDb();
-         history.push("/showroom/itemTable");
+        history.push("/showroom/itemTable");
       },
     });
   };
@@ -244,14 +239,13 @@ function Make_invoice() {
                           date: firebase.firestore.FieldValue.serverTimestamp(),
                         });
                       }
-                      
-                      tablerows.forEach(async(itemUDoc) => { 
+
+                      tablerows.forEach(async (itemUDoc) => {
                         await db.collection("item").doc(itemUDoc.id).update({
-                          qty:itemQty[itemUDoc.i]
+                          qty: itemQty[itemUDoc.i],
                         });
                       });
-                       setLoadingSubmit(false);
-                      
+                      setLoadingSubmit(false);
                     });
                 });
             });
@@ -285,13 +279,13 @@ function Make_invoice() {
         description: discription,
         date: firebase.firestore.FieldValue.serverTimestamp(),
       });
-      
-       tablerows.forEach(async(itemUDoc) => { 
-                        await db.collection("item").doc(itemUDoc.id).update({
-                          qty:itemQty[itemUDoc.i]
-                        });
-       });
-       setLoadingSubmit(false);
+
+      tablerows.forEach(async (itemUDoc) => {
+        await db.collection("item").doc(itemUDoc.id).update({
+          qty: itemQty[itemUDoc.i],
+        });
+      });
+      setLoadingSubmit(false);
     }
   };
 
@@ -660,13 +654,12 @@ function Make_invoice() {
                 variant="contained"
                 color="primary"
                 className="btn_addCustomer"
-                disabled={loadingsubmit?true:false}
+                disabled={loadingsubmit ? true : false}
                 onClick={showConfirm}
                 // onClick={printInvoice}
                 endIcon={<ArrowForwardIcon />}
               >
-                {loadingsubmit? <Spin size="large" />:"Next"}
-                
+                {loadingsubmit ? <Spin size="large" /> : "Next"}
               </Button>
             </form>
           </div>

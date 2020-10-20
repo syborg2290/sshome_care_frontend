@@ -767,7 +767,7 @@ function Make_invoice() {
                     variant="outlined"
                     size="small"
                     disabled={
-                      tablerows.some((ob) => ob.paymentWay === "PayandGo") ||
+                      tablerows.some((ob) => ob.paymentWay === "PayandGo") &&
                       daysDate.value === "Date"
                         ? false
                         : true

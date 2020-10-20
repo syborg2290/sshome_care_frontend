@@ -54,6 +54,9 @@ function Make_invoice() {
   let history = useHistory();
 
   useEffect(() => {
+    // window.onU = (e) => {
+    //   history.push("/showroom/itemTable");
+    // };
     setInvoiceNumber("IN-" + Math.floor(Math.random() * 1000000000 + 1));
 
     if (location.state != null) {
@@ -132,7 +135,61 @@ function Make_invoice() {
       cancelText: "No",
       async onOk() {
         await invoiceIntoDb();
-        history.push("/showroom/invoice/printInvoice");
+        var arrayPassingItems = [];
+
+        tablerows.forEach((one) => {
+          let objItem = {
+            item_id: one.id,
+            qty: itemQty[one.i],
+            paymentWay: one.paymentWay,
+            downpayment: itemDP[one.i],
+            noOfInstallment: itemNOI[one.i],
+            amountPerInstallment: itemAPI[one.i],
+            discount: itemDiscount[one.i],
+          };
+          arrayPassingItems.push(objItem);
+        });
+
+        if (tablerows.some((ob) => ob.customer !== null)) {
+          let passingWithCustomerObj = {
+            invoice_number: invoiceNumber,
+            customerDetails: tablerows[0].customer,
+            installmentType: daysDate.value,
+            installemtnDayDate: daysDate.value === "Day" ? days : dates,
+            discount: totalDiscount,
+            subTotal: subTotalFunc(),
+            total: subTotalFunc() - totalDiscount,
+            discription: discription,
+            itemsList: arrayPassingItems,
+          };
+
+          let moveWith = {
+            pathname: "/showroom/invoice/printInvoice",
+            search: "?query=abc",
+            state: { detail: passingWithCustomerObj },
+          };
+
+          history.push(moveWith);
+        } else {
+          let passingWithoutCustomerObj = {
+            invoice_number: invoiceNumber,
+            customerDetails: null,
+            installmentType: null,
+            installemtnDayDate: null,
+            discount: totalDiscount,
+            subTotal: subTotalFunc(),
+            total: subTotalFunc() - totalDiscount,
+            discription: discription,
+            itemsList: arrayPassingItems,
+          };
+          let moveWith = {
+            pathname: "/showroom/invoice/printInvoice",
+            search: "?query=abc",
+            state: { detail: passingWithoutCustomerObj },
+          };
+
+          history.push(moveWith);
+        }
       },
       async onCancel() {
         await invoiceIntoDb();
@@ -140,6 +197,25 @@ function Make_invoice() {
       },
     });
   };
+
+  // let imageDownloadUrl = "null";
+  //                   if (imageFile !== null) {
+  //                     const formData = new FormData();
+  //                     const options = {
+  //                       maxSizeMB: 1,
+  //                       maxWidthOrHeight: 1920,
+  //                       useWebWorker: true,
+  //                     };
+  //                     const compressedFile = await imageCompression(
+  //                       imageFile,
+  //                       options
+  //                     );
+  //                     formData.append("image", compressedFile);
+  //                     const configFile = {
+  //                       headers: {
+  //                         "content-type": "multipart/form-data",
+  //                       },
+  //                     };
 
   const invoiceIntoDb = async () => {
     setLoadingSubmit(true);
@@ -193,7 +269,7 @@ function Make_invoice() {
                     installemtnDayDate: daysDate.value === "Day" ? days : dates,
                     discount: totalDiscount,
                     total: subTotalFunc() - totalDiscount,
-                    status_of_payandgo: "Done",
+                    status_of_payandgo: "onGoing",
                     description: discription,
                     date: firebase.firestore.FieldValue.serverTimestamp(),
                   })
@@ -662,7 +738,15 @@ function Make_invoice() {
                 <Grid className="xxx" item xs={12} sm={1}></Grid>
 
                 <Grid className="radio_dayDate" item xs={12} sm={1}>
-                  <Radio.Group onChange={radioOnChange} value={daysDate.value}>
+                  <Radio.Group
+                    onChange={radioOnChange}
+                    value={daysDate.value}
+                    disabled={
+                      tablerows.some((ob) => ob.paymentWay !== "PayandGo")
+                        ? false
+                        : true
+                    }
+                  >
                     <Radio className="date" value={"Date"}>
                       Date
                     </Radio>
@@ -678,7 +762,12 @@ function Make_invoice() {
                     className="txt_day"
                     variant="outlined"
                     size="small"
-                    disabled={daysDate.value === "Date" ? false : true}
+                    disabled={
+                      tablerows.some((ob) => ob.paymentWay !== "PayandGo") ||
+                      daysDate.value === "Date"
+                        ? false
+                        : true
+                    }
                     placeholder="date"
                     type="number"
                     InputProps={{ inputProps: { min: 1, max: 31 } }}
@@ -700,7 +789,12 @@ function Make_invoice() {
                     </InputLabel>
                     <Select
                       value={days}
-                      disabled={daysDate.value === "Day" ? false : true}
+                      disabled={
+                        tablerows.some((ob) => ob.paymentWay !== "PayandGo") &&
+                        daysDate.value === "Day"
+                          ? false
+                          : true
+                      }
                       onChange={(e) => {
                         setDays(e.target.value);
                       }}

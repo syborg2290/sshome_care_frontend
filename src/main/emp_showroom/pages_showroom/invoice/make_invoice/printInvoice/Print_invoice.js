@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import { Row, Col } from "antd";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
+import { useLocation } from "react-router-dom";
 
 import { useReactToPrint } from "react-to-print";
 import Button from "@material-ui/core/Button";
@@ -272,6 +273,8 @@ class PrintInvoiceClass extends React.Component {
 }
 
 export default function PrintInvoice() {
+  
+  const location = useLocation();
   const componentRef = useRef();
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
@@ -279,7 +282,7 @@ export default function PrintInvoice() {
 
   return (
     <div>
-      <PrintInvoiceClass ref={componentRef} />
+      <PrintInvoiceClass ref={componentRef} prop={location.state.detail}/>
       <Button fullWidth className="btn_print" onClick={handlePrint}>
         Print
       </Button>

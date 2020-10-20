@@ -142,6 +142,7 @@ function Make_invoice() {
         discount: totalDiscount,
         total: subTotalFunc() - totalDiscount,
         status_of_payandgo: "Done",
+        description:discription
         date:firebase.firestore.FieldValue.serverTimestamp(),
       });
     }

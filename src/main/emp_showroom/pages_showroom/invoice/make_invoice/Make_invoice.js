@@ -47,7 +47,7 @@ function Make_invoice() {
   const [days, setDays] = useState(new Date().getDay());
   const [dates, setDates] = useState(new Date().getDate());
   const [daysDate, setDaysDate] = useState({
-    value: "Day",
+    value: "Weekly",
   });
   const { confirm } = Modal;
 
@@ -155,7 +155,7 @@ function Make_invoice() {
             invoice_number: invoiceNumber,
             customerDetails: tablerows[0].customer,
             installmentType: daysDate.value,
-            installemtnDayDate: daysDate.value === "Day" ? days : dates,
+            installemtnDayDate: daysDate.value === "Weekly" ? days : dates,
             discount: totalDiscount,
             subTotal: subTotalFunc(),
             total: subTotalFunc() - totalDiscount,
@@ -249,7 +249,7 @@ function Make_invoice() {
                     items: arrayItems,
                     customer_id: cust.id,
                     installmentType: daysDate.value,
-                    installemtnDayDate: daysDate.value === "Day" ? days : dates,
+                    installemtnDayDate: daysDate.value === "Weekly" ? days : dates,
                     discount: totalDiscount,
                     total: subTotalFunc() - totalDiscount,
                     status_of_payandgo: "onGoing",
@@ -342,7 +342,7 @@ function Make_invoice() {
                 items: arrayItems,
                 customer_id: cust.id,
                 installmentType: daysDate.value,
-                installemtnDayDate: daysDate.value === "Day" ? days : dates,
+                installemtnDayDate: daysDate.value === "Weekly" ? days : dates,
                 discount: totalDiscount,
                 total: subTotalFunc() - totalDiscount,
                 status_of_payandgo: "Done",
@@ -751,12 +751,12 @@ function Make_invoice() {
                         : true
                     }
                   >
-                    <Radio className="date" value={"Date"}>
+                    <Radio className="date" value={"Monthly"}>
                       Monthly
                     </Radio>
 
                     <br />
-                    <Radio className="day" value={"Day"}>
+                    <Radio className="day" value={"Weekly"}>
                       Weekly
                     </Radio>
                   </Radio.Group>
@@ -768,7 +768,7 @@ function Make_invoice() {
                     size="small"
                     disabled={
                       tablerows.some((ob) => ob.paymentWay === "PayandGo") &&
-                      daysDate.value === "Date"
+                      daysDate.value === "Monthly"
                         ? false
                         : true
                     }
@@ -795,7 +795,7 @@ function Make_invoice() {
                       value={days}
                       disabled={
                         tablerows.some((ob) => ob.paymentWay === "PayandGo") &&
-                        daysDate.value === "Day"
+                        daysDate.value === "Monthly"
                           ? false
                           : true
                       }

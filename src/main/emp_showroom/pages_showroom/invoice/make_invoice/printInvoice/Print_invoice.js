@@ -316,30 +316,47 @@ class PrintInvoiceClass extends React.Component {
                     <hr />
                     <br />
                   </Col>
-                  <Col span={6}>Customer Name:</Col>
-                  <Col span={10}>{this.state.customer_name}</Col>
-                  <Col span={3}>NIC:</Col>
-                  <Col span={5}>{this.state.customer_nic}</Col>
+                  <Col className="installment_titls" span={6}>
+                    Customer Name
+                  </Col>
+                  <Col span={10}>:{this.state.customer_name}</Col>
+                  <Col className="installment_titls" span={2}>
+                    NIC:
+                  </Col>
+                  <Col span={6}>{this.state.customer_nic}</Col>
 
                   <Col className="hr_installmentPrint" span={24}></Col>
 
                   {this.state.cols.map((col) => (
                     <Row className="installmentPrint">
-                      <Col span={8}>Down Payment(LKR):</Col>
-                      <Col span={4}>{col.DPayment}</Col>
+                      <Col className="installment_titls" span={8}>
+                        Down Payment(LKR)
+                      </Col>
+                      <Col span={4}>:{col.DPayment}</Col>
                       <Col span={12}></Col>
-                      <Col span={4}>Item Name:</Col>
-                      <Col span={10}>{col.Itemname}</Col>
-                      <Col span={10}></Col>
-                      <Col span={4}>Installment Type:</Col>
-                      <Col span={4}>{col.IType}</Col>
-                      <Col span={16}></Col>
-                      <Col span={8}>Installment Cost(LKR):</Col>
-                      <Col span={6}>{col.ICost}</Col>
-                      <Col span={10}></Col>
-                      <Col span={8}>Installment Count:</Col>
-                      <Col span={6}>{col.ICount}</Col>
-                      <Col span={10}></Col>
+                      <Col className="installment_titls" span={8}>
+                        Item Name
+                      </Col>
+                      <Col span={4}>:{col.Itemname}</Col>
+                      <Col span={12}></Col>
+                      <Col className="installment_titls" span={8}>
+                        Installment Type
+                      </Col>
+                      <Col span={4}>
+                        {col.IType}
+                        <span>:/ abc</span>
+                      </Col>
+                      <Col span={12}></Col>
+                      <Col className="installment_titls" span={8}>
+                        Installment Cost(LKR)
+                      </Col>
+                      <Col span={4}>:{col.ICost}</Col>
+                      <Col span={12}></Col>
+                      <Col className="installment_titls" span={8}>
+                        Installment Count
+                      </Col>
+                      <Col span={4}>:{col.ICount}</Col>
+                      <Col span={12}></Col>
                       <Col span={24}>
                         <hr />
                       </Col>
@@ -383,7 +400,7 @@ export default function PrintInvoice() {
       },
       false
     );
-   
+
     window.history.pushState(
       { name: "browserBack" },
       "on browser back click",

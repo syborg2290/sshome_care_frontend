@@ -82,25 +82,7 @@ export default function Add_Customer() {
     }
   };
 
-  // let imageDownloadUrl = "null";
-  //                   if (imageFile !== null) {
-  //                     const formData = new FormData();
-  //                     const options = {
-  //                       maxSizeMB: 1,
-  //                       maxWidthOrHeight: 1920,
-  //                       useWebWorker: true,
-  //                     };
-  //                     const compressedFile = await imageCompression(
-  //                       imageFile,
-  //                       options
-  //                     );
-  //                     formData.append("image", compressedFile);
-  //                     const configFile = {
-  //                       headers: {
-  //                         "content-type": "multipart/form-data",
-  //                       },
-  //                     };
-
+  
   const submit = () => {
     if (nic.length > 0) {
       if (fname.length > 0) {
@@ -147,7 +129,7 @@ export default function Add_Customer() {
                           if (obj.paymentWay === "PayandGo") {
                             obj.customer = customerObj;
                           } else {
-                            obj.customer = null;
+                            obj.customer = customerObj;
                           }
                         });
 

@@ -59,6 +59,7 @@
 .btn_MakeCustomer {
   float: right !important;
   margin-top: 50px !important;
+  margin-bottom: 50px !important;
 }
 
 .btn_ClearCustomer {

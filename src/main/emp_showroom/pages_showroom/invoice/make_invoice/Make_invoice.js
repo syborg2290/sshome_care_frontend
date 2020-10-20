@@ -168,7 +168,7 @@ function Make_invoice() {
             search: "?query=abc",
             state: { detail: passingWithCustomerObj },
           };
-          // await invoiceIntoDb();
+          await invoiceIntoDb();
           history.push(moveWith);
         } else {
           let passingWithoutCustomerObj = {
@@ -187,18 +187,17 @@ function Make_invoice() {
             search: "?query=abc",
             state: { detail: passingWithoutCustomerObj },
           };
-          // await invoiceIntoDb();
+          await invoiceIntoDb();
           history.push(moveWith);
         }
       },
       async onCancel() {
-        // await invoiceIntoDb();
+        await invoiceIntoDb();
         history.push("/showroom/itemTable");
       },
     });
   };
 
-  
   // eslint-disable-next-line
   const invoiceIntoDb = async () => {
     setLoadingSubmit(true);
@@ -221,6 +220,7 @@ function Make_invoice() {
                 address2: tablerows[0].customer.customerAddress2,
                 root: tablerows[0].customer.customerRootToHome,
                 nic: tablerows[0].customer.customerNic,
+                relations_nics: tablerows[0].customer.customerRelatedNics,
                 mobile1: tablerows[0].customer.customerMobile1,
                 mobile2: tablerows[0].customer.customerMobile2,
                 photo: url,
@@ -249,7 +249,8 @@ function Make_invoice() {
                     items: arrayItems,
                     customer_id: cust.id,
                     installmentType: daysDate.value,
-                    installemtnDayDate: daysDate.value === "Weekly" ? days : dates,
+                    installemtnDayDate:
+                      daysDate.value === "Weekly" ? days : dates,
                     discount: totalDiscount,
                     total: subTotalFunc() - totalDiscount,
                     status_of_payandgo: "onGoing",
@@ -314,6 +315,7 @@ function Make_invoice() {
             address2: tablerows[0].customer.customerAddress2,
             root: tablerows[0].customer.customerRootToHome,
             nic: tablerows[0].customer.customerNic,
+            relations_nics: tablerows[0].customer.customerRelatedNics,
             mobile1: tablerows[0].customer.customerMobile1,
             mobile2: tablerows[0].customer.customerMobile2,
             photo: null,
@@ -796,7 +798,6 @@ function Make_invoice() {
                       value={days}
                       disabled={
                         tablerows.some((ob) => ob.paymentWay === "PayandGo")
-                        
                           ? false
                           : true
                       }
@@ -804,7 +805,6 @@ function Make_invoice() {
                         if (daysDate.value === "Weekly") {
                           setDays(e.target.value);
                         }
-                        
                       }}
                       native
                       variant="outlined"

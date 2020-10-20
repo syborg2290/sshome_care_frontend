@@ -105,7 +105,7 @@ export default function Add_Customer() {
                           customerRootToHome: root.trim(),
                           customerMobile1: mobile1.trim(),
                           customerMobile2: mobile2.trim(),
-                          customerRelatedNic: inputsNic,
+                          customerRelatedNics: inputsNic,
                           customerImageUrl: imageUrl,
                           customerImageFile: imageFile,
                           trustee1Nic: trustee1Nic.trim(),

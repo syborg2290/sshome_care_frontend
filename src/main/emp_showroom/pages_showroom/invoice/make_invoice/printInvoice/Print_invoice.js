@@ -343,8 +343,8 @@ class PrintInvoiceClass extends React.Component {
                         Installment Type
                       </Col>
                       <Col span={4}>
-                        {col.IType}
-                        <span>:/ abc</span>
+                        :{col.IType}
+                        <span>/ abc</span>
                       </Col>
                       <Col span={12}></Col>
                       <Col className="installment_titls" span={8}>

@@ -198,7 +198,6 @@ function Make_invoice() {
     });
   };
 
-  
   // eslint-disable-next-line
   const invoiceIntoDb = async () => {
     setLoadingSubmit(true);
@@ -249,7 +248,8 @@ function Make_invoice() {
                     items: arrayItems,
                     customer_id: cust.id,
                     installmentType: daysDate.value,
-                    installemtnDayDate: daysDate.value === "Weekly" ? days : dates,
+                    installemtnDayDate:
+                      daysDate.value === "Weekly" ? days : dates,
                     discount: totalDiscount,
                     total: subTotalFunc() - totalDiscount,
                     status_of_payandgo: "onGoing",
@@ -767,7 +767,7 @@ function Make_invoice() {
                     variant="outlined"
                     size="small"
                     disabled={
-                      tablerows.some((ob) => ob.paymentWay === "PayandGo") &&
+                      tablerows.some((ob) => ob.paymentWay === "PayandGo") ||
                       daysDate.value === "Monthly"
                         ? false
                         : true
@@ -794,7 +794,7 @@ function Make_invoice() {
                     <Select
                       value={days}
                       disabled={
-                        tablerows.some((ob) => ob.paymentWay === "PayandGo") &&
+                        tablerows.some((ob) => ob.paymentWay === "PayandGo") ||
                         daysDate.value === "Monthly"
                           ? false
                           : true

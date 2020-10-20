@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Radio } from "antd";
+import { Modal, Radio,Spin } from "antd";
 import { PrinterFilled } from "@ant-design/icons";
 import { useLocation, useHistory } from "react-router-dom";
 import Button from "@material-ui/core/Button";
@@ -15,6 +15,7 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
+import firebase from "firebase";
 import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
@@ -25,7 +26,7 @@ import {
 } from "react-notifications";
 import "react-notifications/lib/notifications.css";
 
-import db from "../../../../../config/firebase.js";
+import db, { storage } from "../../../../../config/firebase.js";
 import "./Make_invoice.css";
 // icon
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
@@ -33,6 +34,7 @@ import CloseOutlinedIcon from "@material-ui/icons/CloseOutlined";
 
 function Make_invoice() {
   const location = useLocation();
+  const [loadingsubmit, setLoadingSubmit] = useState(false);
   const [invoiceNumber, setInvoiceNumber] = useState("");
   const [tablerows, setTableRows] = useState([]);
   const [itemQty, setItemQty] = useState({});
@@ -42,17 +44,11 @@ function Make_invoice() {
   const [itemDiscount, setItemDiscount] = useState({});
   const [totalDiscount, setTotalDiscount] = useState(0);
   const [discription, setDiscription] = useState("");
-  const [days, setDays] = useState("");
-  const [dates, setDates] = useState("");
+  const [days, setDays] = useState(new Date().getDay());
+  const [dates, setDates] = useState(new Date().getDate());
   const [daysDate, setDaysDate] = useState({
     value: "Day",
   });
-  const radioOnChange = (e) => {
-    setDaysDate({
-      value: e.target.value,
-    });
-  };
-
   const { confirm } = Modal;
 
   let history = useHistory();
@@ -90,6 +86,12 @@ function Make_invoice() {
     // eslint-disable-next-line
   }, []);
 
+  const radioOnChange = (e) => {
+    setDaysDate({
+      value: e.target.value,
+    });
+  };
+
   const subTotalFunc = () => {
     var subTotalValue = 0;
     for (var a = 0; a < tablerows.length; a++) {
@@ -122,22 +124,175 @@ function Make_invoice() {
     }
   };
 
-  // const printInvoice = () => {
-  //   history.push("/showroom/invoice/printInvoice");
-  // };
-
   const showConfirm = () => {
     confirm({
       title: <h5 className="confo_title">Do you Want to Print an Invoice?</h5>,
       icon: <PrinterFilled className="confo_icon" />,
+<<<<<<< HEAD
       okText: "Yes",
       cancelText: "No",
 
       onOk() {
+=======
+      async onOk() {
+       await invoiceIntoDb();
+>>>>>>> f8d897f6696cb17ae95330361c966aa18d2d601b
         history.push("/showroom/invoice/printInvoice");
       },
-      onCancel() {},
+      async onCancel() {
+        await invoiceIntoDb();
+         history.push("/showroom/itemTable");
+      },
     });
+  };
+
+  const invoiceIntoDb = async () => {
+    setLoadingSubmit(true);
+    if (tablerows.some((ob) => ob.customer !== null)) {
+      const uploadTask = await storage
+        .ref(`images/${tablerows[0].customer.customerImageFile.name}`)
+        .put(tablerows[0].customer.customerImageFile);
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          // eslint-disable-next-line
+          const progressRe = Math.round(
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          );
+        },
+        (error) => {
+          NotificationManager.warning(error.message);
+        },
+        () => {
+          storage
+            .ref("images")
+            .child(tablerows[0].customer.customerImageFile.name)
+            .getDownloadURL()
+            .then((url) => {
+              db.collection("customer")
+                .add({
+                  fname: tablerows[0].customer.customerFname,
+                  lname: tablerows[0].customer.customerLname,
+                  address1: tablerows[0].customer.customerAddress1,
+                  address2: tablerows[0].customer.customerAddress2,
+                  root: tablerows[0].customer.customerRootToHome,
+                  nic: tablerows[0].customer.customerNic,
+                  mobile1: tablerows[0].customer.customerMobile1,
+                  mobile2: tablerows[0].customer.customerMobile2,
+                  photo: url,
+                  status: "normal",
+                  date: firebase.firestore.FieldValue.serverTimestamp(),
+                })
+                .then((cust) => {
+                  let arrayItems = [];
+
+                  tablerows.forEach((one) => {
+                    let objItem = {
+                      item_id: one.id,
+                      qty: itemQty[one.i],
+                      paymentWay: one.paymentWay,
+                      downpayment: itemDP[one.i],
+                      noOfInstallment: itemNOI[one.i],
+                      amountPerInstallment: itemAPI[one.i],
+                      discount: itemDiscount[one.i],
+                    };
+                    arrayItems.push(objItem);
+                  });
+
+                  db.collection("invoice")
+                    .add({
+                      invoice_number: invoiceNumber,
+                      items: arrayItems,
+                      customer_id: cust.id,
+                      installmentType: daysDate.value,
+                      installemtnDayDate:
+                        daysDate.value === "Day" ? days : dates,
+                      discount: totalDiscount,
+                      total: subTotalFunc() - totalDiscount,
+                      status_of_payandgo: "Done",
+                      description: discription,
+                      date: firebase.firestore.FieldValue.serverTimestamp(),
+                    })
+                    .then((invDoc) => {
+                      db.collection("trustee").add({
+                        fname: tablerows[0].customer.trustee1Fname,
+                        lname: tablerows[0].customer.trustee1Lname,
+                        nic: tablerows[0].customer.trustee1Nic,
+                        address1: tablerows[0].customer.trustee1Address1,
+                        address2: tablerows[0].customer.trustee1Address2,
+                        mobile1: tablerows[0].customer.trustee1Mobile1,
+                        mobile2: tablerows[0].customer.trustee1Mobile2,
+                        invoice_number: invoiceNumber,
+                        date: firebase.firestore.FieldValue.serverTimestamp(),
+                      });
+                      if (
+                        tablerows[0].customer.trustee2Nic &&
+                        tablerows[0].customer.trustee2Fname &&
+                        tablerows[0].customer.trustee2Lname &&
+                        tablerows[0].customer.trustee2Address1 &&
+                        tablerows[0].customer.trustee2Mobile1
+                      ) {
+                        db.collection("trustee").add({
+                          fname: tablerows[0].customer.trustee2Fname,
+                          lname: tablerows[0].customer.trustee2Lname,
+                          nic: tablerows[0].customer.trustee2Nic,
+                          address1: tablerows[0].customer.trustee2Address1,
+                          address2: tablerows[0].customer.trustee2Address2,
+                          mobile1: tablerows[0].customer.trustee2Mobile1,
+                          mobile2: tablerows[0].customer.trustee2Mobile2,
+                          invoice_number: invoiceNumber,
+                          date: firebase.firestore.FieldValue.serverTimestamp(),
+                        });
+                      }
+                      
+                      tablerows.forEach(async(itemUDoc) => { 
+                        await db.collection("item").doc(itemUDoc.id).update({
+                          qty:itemQty[itemUDoc.i]
+                        });
+                      });
+                       setLoadingSubmit(false);
+                      
+                    });
+                });
+            });
+        }
+      );
+    } else {
+      let arrayItems = [];
+
+      tablerows.forEach((one) => {
+        let objItem = {
+          item_id: one.id,
+          qty: itemQty[one.i],
+          paymentWay: one.paymentWay,
+          downpayment: itemDP[one.i],
+          noOfInstallment: itemNOI[one.i],
+          amountPerInstallment: itemAPI[one.i],
+          discount: itemDiscount[one.i],
+        };
+        arrayItems.push(objItem);
+      });
+
+      await db.collection("invoice").add({
+        invoice_number: invoiceNumber,
+        items: arrayItems,
+        customer_id: null,
+        installmentType: null,
+        installemtnDayDate: null,
+        discount: totalDiscount,
+        total: subTotalFunc() - totalDiscount,
+        status_of_payandgo: "Done",
+        description: discription,
+        date: firebase.firestore.FieldValue.serverTimestamp(),
+      });
+      
+       tablerows.forEach(async(itemUDoc) => { 
+                        await db.collection("item").doc(itemUDoc.id).update({
+                          qty:itemQty[itemUDoc.i]
+                        });
+       });
+       setLoadingSubmit(false);
+    }
   };
 
   return (
@@ -341,8 +496,8 @@ function Make_invoice() {
                               onClick={(e) => {
                                 tablerows.forEach((itemRe) => {
                                   if (itemRe.i === row.i) {
-                                    // eslint-disable-next-line
                                     let index = tablerows.findIndex(
+                                      // eslint-disable-next-line
                                       (element) => {
                                         if (element.i === row.i) {
                                           return true;
@@ -457,11 +612,13 @@ function Make_invoice() {
                     size="small"
                     placeholder="date"
                     type="number"
-                    InputProps={{ inputProps: { min: 0, max: 31 } }}
+                    InputProps={{ inputProps: { min: 1, max: 31 } }}
                     fullWidth
-                    value={days}
+                    value={dates}
                     onChange={(e) => {
-                      setDays(e.target.value.trim());
+                      if (dates < 0 && dates <= 31) {
+                        setDates(e.target.value.trim());
+                      }
                     }}
                   />
                   <br />
@@ -473,26 +630,26 @@ function Make_invoice() {
                       Days
                     </InputLabel>
                     <Select
-                      value={dates}
+                      value={days}
                       onChange={(e) => {
-                        setDates(e.target.value.trim());
+                        setDays(e.target.value);
                       }}
                       native
                       variant="outlined"
-                      label="Age"
+                      label="day"
                       inputProps={{
-                        name: "age",
-                        id: "outlined-age-native-simple",
+                        name: "day",
+                        id: "outlined-day-native-simple",
                       }}
                     >
                       <option aria-label="None" value="" />
-                      <option value={10}>Monday</option>
-                      <option value={20}>Tuesday</option>
-                      <option value={30}>Wednesday</option>
-                      <option value={30}>Thursday</option>
-                      <option value={30}>Friday</option>
-                      <option value={30}>Saturday</option>
-                      <option value={30}>Sunday</option>
+                      <option value={0}>Monday</option>
+                      <option value={1}>Tuesday</option>
+                      <option value={3}>Wednesday</option>
+                      <option value={4}>Thursday</option>
+                      <option value={5}>Friday</option>
+                      <option value={6}>Saturday</option>
+                      <option value={7}>Sunday</option>
                     </Select>
                   </FormControl>
                 </Grid>
@@ -503,11 +660,13 @@ function Make_invoice() {
                 variant="contained"
                 color="primary"
                 className="btn_addCustomer"
+                disabled={loadingsubmit?true:false}
                 onClick={showConfirm}
                 // onClick={printInvoice}
                 endIcon={<ArrowForwardIcon />}
               >
-                Next
+                {loadingsubmit? <Spin size="large" />:"Next"}
+                
               </Button>
             </form>
           </div>

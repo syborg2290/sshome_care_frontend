@@ -120,6 +120,7 @@ export default function Add_Customer() {
                           customerLname: lname.trim(),
                           customerAddress1: addres1.trim(),
                           customerAddress2: addres2.trim(),
+                          customerRootToHome: root.trim(),
                           customerMobile1: mobile1.trim(),
                           customerMobile2: mobile2.trim(),
                           customerRelatedNic: inputsNic,

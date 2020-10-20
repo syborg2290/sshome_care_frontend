@@ -346,7 +346,26 @@ class PrintInvoiceClass extends React.Component {
                       </Col>
                       <Col span={4}>
                         :{col.IType}
-                        <span>/ {this.state.dayOrDate}</span>
+                        <span>
+                          /
+                          {col.IType === "Weekly"
+                            ? this.state.dayOrDate === 1
+                              ? "Monday"
+                              : this.state.dayOrDate === 2
+                              ? "Tuesday"
+                              : this.state.dayOrDate === 3
+                              ? "Wednesday"
+                              : this.state.dayOrDate === 4
+                              ? "Thursday"
+                              : this.state.dayOrDate === 5
+                              ? "Friday"
+                              : this.state.dayOrDate === 6
+                              ? "Saturday"
+                              : this.state.dayOrDate === 0
+                              ? "Sunday"
+                              : ""
+                            : this.state.dayOrDate}
+                        </span>
                       </Col>
                       <Col span={12}></Col>
                       <Col className="installment_titls" span={8}>

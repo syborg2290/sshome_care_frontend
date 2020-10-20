@@ -168,7 +168,8 @@ function Make_invoice() {
             search: "?query=abc",
             state: { detail: passingWithCustomerObj },
           };
-          // await invoiceIntoDb();
+          await invoiceIntoDb();
+          let isMounted = true; // note this flag denote mount status
           history.push(moveWith);
         } else {
           let passingWithoutCustomerObj = {
@@ -187,12 +188,14 @@ function Make_invoice() {
             search: "?query=abc",
             state: { detail: passingWithoutCustomerObj },
           };
-          // await invoiceIntoDb();
+          await invoiceIntoDb();
+          let isMounted = true; // note this flag denote mount status
           history.push(moveWith);
         }
       },
       async onCancel() {
-        // await invoiceIntoDb();
+        await invoiceIntoDb();
+        let isMounted = true; // note this flag denote mount status
         history.push("/showroom/itemTable");
       },
     });
@@ -220,6 +223,7 @@ function Make_invoice() {
                 address2: tablerows[0].customer.customerAddress2,
                 root: tablerows[0].customer.customerRootToHome,
                 nic: tablerows[0].customer.customerNic,
+                relations_nics: tablerows[0].customer.customerRelatedNics,
                 mobile1: tablerows[0].customer.customerMobile1,
                 mobile2: tablerows[0].customer.customerMobile2,
                 photo: url,
@@ -314,6 +318,7 @@ function Make_invoice() {
             address2: tablerows[0].customer.customerAddress2,
             root: tablerows[0].customer.customerRootToHome,
             nic: tablerows[0].customer.customerNic,
+            relations_nics: tablerows[0].customer.customerRelatedNics,
             mobile1: tablerows[0].customer.customerMobile1,
             mobile2: tablerows[0].customer.customerMobile2,
             photo: null,

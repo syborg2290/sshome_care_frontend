@@ -129,16 +129,20 @@ label {
 }
 
 .txt_description {
-  margin-top: 45px !important;
+  margin-top: 15px !important;
 }
 
 .radio_dayDate {
+  margin-top: 5px !important;
+}
+
+.day {
   margin-top: 40px !important;
 }
 
 .txt_day {
-  padding-top: 10px !important;
-  width: 70px !important;
+  padding-top: 2px !important;
+  width: 75px !important;
 }
 
 .select {
@@ -155,5 +159,11 @@ label {
 }
 
 .confo_title {
+  font-weight: 600 !important;
+}
+
+.txt_ip_setting {
+  float: right !important;
+  margin-top: 20px !important;
   font-weight: 600 !important;
 }

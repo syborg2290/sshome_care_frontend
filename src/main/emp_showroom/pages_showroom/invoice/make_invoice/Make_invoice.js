@@ -130,6 +130,9 @@ function Make_invoice() {
     confirm({
       title: <h5 className="confo_title">Do you Want to Print an Invoice?</h5>,
       icon: <PrinterFilled className="confo_icon" />,
+      okText: "Yes",
+      cancelText: "No",
+
       onOk() {
         history.push("/showroom/invoice/printInvoice");
       },
@@ -375,7 +378,7 @@ function Make_invoice() {
                       </TableRow>
                       <TableRow>
                         <TableCell align="right" colSpan={5}>
-                          Discount
+                          Discount(LKR)
                         </TableCell>
                         <TableCell className="cel" align="right" colSpan={2}>
                           <TextField
@@ -408,6 +411,10 @@ function Make_invoice() {
                 </TableContainer>
               </Grid>
               <Grid container spacing={2}>
+                <Grid className="" item xs={12} sm={7}></Grid>
+                <Grid className="txt_ip_setting" item xs={12} sm={5}>
+                  Choose Installment Repayment Plan:
+                </Grid>
                 <Grid className="txt_description" item xs={12} sm={2}>
                   Description :
                 </Grid>
@@ -430,13 +437,16 @@ function Make_invoice() {
                   />
                 </Grid>
                 <Grid className="xxx" item xs={12} sm={1}></Grid>
-                <Grid className="radio_dayDate" item xs={12} sm={2}>
+
+                <Grid className="radio_dayDate" item xs={12} sm={1}>
                   <Radio.Group onChange={radioOnChange} value={daysDate.value}>
-                    <Radio className="day" value={"Day"}>
-                      Day
-                    </Radio>
                     <Radio className="date" value={"Date"}>
                       Date
+                    </Radio>
+
+                    <br />
+                    <Radio className="day" value={"Day"}>
+                      Day
                     </Radio>
                   </Radio.Group>
                 </Grid>
@@ -445,7 +455,7 @@ function Make_invoice() {
                     className="txt_day"
                     variant="outlined"
                     size="small"
-                    placeholder="days"
+                    placeholder="date"
                     type="number"
                     InputProps={{ inputProps: { min: 0, max: 31 } }}
                     fullWidth
@@ -460,7 +470,7 @@ function Make_invoice() {
                       className="select_label"
                       id="demo-controlled-open-select-label"
                     >
-                      Date
+                      Days
                     </InputLabel>
                     <Select
                       value={dates}

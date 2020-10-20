@@ -767,8 +767,7 @@ function Make_invoice() {
                     variant="outlined"
                     size="small"
                     disabled={
-                      tablerows.some((ob) => ob.paymentWay === "PayandGo") &&
-                      daysDate.value === "Monthly"
+                      tablerows.some((ob) => ob.paymentWay === "PayandGo")
                         ? false
                         : true
                     }
@@ -778,8 +777,10 @@ function Make_invoice() {
                     fullWidth
                     value={dates}
                     onChange={(e) => {
-                      if (e.target.value <= 31 || e.target.value < 0) {
-                        setDates(e.target.value.trim());
+                      if (daysDate.value === "Monthly") {
+                        if (e.target.value <= 31 || e.target.value < 0) {
+                          setDates(e.target.value.trim());
+                        }
                       }
                     }}
                   />
@@ -794,13 +795,16 @@ function Make_invoice() {
                     <Select
                       value={days}
                       disabled={
-                        tablerows.some((ob) => ob.paymentWay === "PayandGo") &&
-                        daysDate.value === "Monthly"
+                        tablerows.some((ob) => ob.paymentWay === "PayandGo")
+                        
                           ? false
                           : true
                       }
                       onChange={(e) => {
-                        setDays(e.target.value);
+                        if (daysDate.value === "Weekly") {
+                          setDays(e.target.value);
+                        }
+                        
                       }}
                       native
                       variant="outlined"

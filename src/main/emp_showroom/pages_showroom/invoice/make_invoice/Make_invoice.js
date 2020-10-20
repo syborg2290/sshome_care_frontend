@@ -400,10 +400,12 @@ function Make_invoice() {
                               id={row.i.toString()}
                               value={itemDP[row.i]}
                               onChange={(e) => {
-                                setItemDP({
-                                  ...itemDP,
-                                  [row.i]: e.target.value,
-                                });
+                                if (e.target.value > itemDiscount[row.i]) {
+                                  setItemDP({
+                                    ...itemDP,
+                                    [row.i]: e.target.value,
+                                  });
+                                }
                               }}
                             />
                           </TableCell>
@@ -604,13 +606,14 @@ function Make_invoice() {
                     className="txt_day"
                     variant="outlined"
                     size="small"
+                    disabled={daysDate.value === "Date" ? false : true}
                     placeholder="date"
                     type="number"
                     InputProps={{ inputProps: { min: 1, max: 31 } }}
                     fullWidth
                     value={dates}
                     onChange={(e) => {
-                      if (dates < 0 && dates <= 31) {
+                      if (e.target.value <= 31 || e.target.value < 0) {
                         setDates(e.target.value.trim());
                       }
                     }}
@@ -625,6 +628,7 @@ function Make_invoice() {
                     </InputLabel>
                     <Select
                       value={days}
+                      disabled={daysDate.value === "Day" ? false : true}
                       onChange={(e) => {
                         setDays(e.target.value);
                       }}
@@ -636,14 +640,13 @@ function Make_invoice() {
                         id: "outlined-day-native-simple",
                       }}
                     >
-                      <option aria-label="None" value="" />
-                      <option value={0}>Monday</option>
-                      <option value={1}>Tuesday</option>
+                      <option value={1}>Monday</option>
+                      <option value={2}>Tuesday</option>
                       <option value={3}>Wednesday</option>
                       <option value={4}>Thursday</option>
                       <option value={5}>Friday</option>
                       <option value={6}>Saturday</option>
-                      <option value={7}>Sunday</option>
+                      <option value={0}>Sunday</option>
                     </Select>
                   </FormControl>
                 </Grid>

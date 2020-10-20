@@ -1,59 +1,36 @@
-import React, { useState, useEffect } from "react";
-// eslint-disable-next-line
-import { Grid  } from "@material-ui/core";
+import React, { useState } from "react";
+import { Grid } from "@material-ui/core";
 import { Spin, Modal } from "antd";
 import MUIDataTable from "mui-datatables";
 
 // icons
 import VisibilityIcon from "@material-ui/icons/Visibility";
+import HistoryIcon from "@material-ui/icons/History";
+
+// components
+import CustomerDetails from "./components/customerDetailsModel/CustomerDetailsModel";
+import CustomerHistory from "./components/customerHistoryModel/CustomerHistoryModel";
 
 // styles
 import "./Customer_table_showroom.css";
 
-import db from "../../../../../config/firebase.js";
-
 export default function ItemTable() {
-  const [customerTableData, setCustomerTableData] = useState([]);
   // eslint-disable-next-line
-  const [allCustomerData, setAllCustomerData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [visible, setVisible] = useState(false);
+
+  const [visible, setVisible] = useState(false); // customer table models
+  const [history, setHistory] = useState(false); // customer table models
+
   // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
-  // let socket = socketIOClient(RealtimeServerApi);
 
   const showModal = () => {
     setVisible(true);
   };
 
-  useEffect(() => {
-    db.collection("customer")
-      .orderBy("timestamp", "desc")
-      .onSnapshot((snapshot) => {
-        var newData = [];
-        var customermData = [];
-        snapshot.docs.forEach((element) => {
-          customermData.push({
-            id: element.id,
-            data: element.data(),
-          });
-
-          newData.push([
-            element.data().img,
-            element.data().customerName,
-            element.data().nic,
-            element.data().address,
-            element.data().mobileNo,
-            <div className="table_icon">
-              <VisibilityIcon className="icon_Visible" onClick={showModal} />
-            </div>,
-          ]);
-        });
-        setCustomerTableData(newData);
-        setAllCustomerData(customermData);
-        setIsLoading(false);
-      });
-  }, []);
+  const showModalHistory = () => {
+    setHistory(true);
+  };
 
   const columns = [
     {
@@ -66,7 +43,16 @@ export default function ItemTable() {
       },
     },
     {
-      name: "Customer Name",
+      name: "FirstName",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "LastName",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -83,8 +69,9 @@ export default function ItemTable() {
         }),
       },
     },
+
     {
-      name: "Address",
+      name: "Mobile",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -93,25 +80,7 @@ export default function ItemTable() {
       },
     },
     {
-      name: "MODEL NO",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
-    {
-      name: "STATUS",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
-    {
-      name: "ACTION",
+      name: "Action",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -121,27 +90,92 @@ export default function ItemTable() {
     },
   ];
 
+  const customerTableData = [
+    {
+      IMG: (
+        <img
+          alt="Empty data"
+          className="avatar_data"
+          src={require("../../../../../assets/avatar.png")}
+        />
+      ),
+      FirstName: "Kasun",
+      LastName: "Thaksala",
+      NIC: "232323454v",
+      Mobile: "858689",
+      Action: (
+        <div>
+          <VisibilityIcon onClick={showModal} />
+          <span className="icon_Edit">
+            <HistoryIcon onClick={showModalHistory} />
+          </span>
+        </div>
+      ),
+    },
+    {
+      IMG: (
+        <img
+          alt="Empty data"
+          className="avatar_data"
+          src={require("../../../../../assets/avatar.png")}
+        />
+      ),
+      FirstName: "Janith",
+      LastName: "Kavishka",
+      NIC: "123456789v",
+      Mobile: "754845375",
+      Action: (
+        <div>
+          <VisibilityIcon onClick={showModal} />
+          <span className="icon_Edit">
+            <HistoryIcon />
+          </span>
+        </div>
+      ),
+    },
+  ];
+
   return (
     <>
+      {/*Start customer Details models */}
+
       <Modal
         visible={visible}
+        className="customer_Model"
         footer={null}
-        className="model_Item"
         onCancel={() => {
           setVisible(false);
         }}
       >
-        <div className="table_Model">
-          <div className="model_Main">
-
-            <div className="model_Detail">
-              <p>BRAND</p>
-              <p>QTY</p>
-              <p>COLOR</p>
+        <div className="customer_Model">
+          <div className="customer_Model_Main">
+            <div className="customer_Modell_Detail">
+              <CustomerDetails />
             </div>
           </div>
         </div>
       </Modal>
+
+      {/*End customer Details models */}
+
+      {/*Start customer History models */}
+      <Modal
+        visible={history}
+        className="customer_History"
+        footer={null}
+        onCancel={() => {
+          setHistory(false);
+        }}
+      >
+        <div className="customer_Model_History">
+          <div className="customer_Model_History_Main">
+            <div className="customer_Modell_History_Detail">
+              <CustomerHistory />
+            </div>
+          </div>
+        </div>
+      </Modal>
+      {/*End customer History models */}
 
       <Grid container spacing={4}>
         <Grid item xs={12}>

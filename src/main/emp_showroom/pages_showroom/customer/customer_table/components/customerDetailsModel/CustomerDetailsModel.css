@@ -1,0 +1,31 @@
+.avatar_customer {
+  width: 100px;
+  height: 100px;
+  margin: auto !important;
+}
+
+.name {
+  margin: auto !important;
+}
+.name_title {
+  margin: auto !important;
+  font-weight: 800 !important;
+}
+
+.customer_details {
+  font-weight: 800 !important;
+  margin-top: 15px !important;
+  color: rgb(10, 2, 31);
+}
+
+.space_col {
+  margin-top: 30px !important;
+}
+.customer {
+  margin-top: 15px !important;
+}
+
+.title {
+  font-weight: 600 !important;
+  margin-top: -20px !important;
+}

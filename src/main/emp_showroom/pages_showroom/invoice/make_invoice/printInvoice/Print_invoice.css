@@ -73,3 +73,7 @@
 .hr_installmentPrint {
   margin-bottom: 50px !important;
 }
+
+.installment_titls {
+  font-weight: 600 !important;
+}

@@ -37,6 +37,7 @@ class PrintInvoiceClass extends React.Component {
     subTotal: 0,
     customer_nic: "",
     customer_name: "",
+    dayOrDate: "",
   };
 
   constructor(props) {
@@ -44,6 +45,7 @@ class PrintInvoiceClass extends React.Component {
 
     this.state.invoice_number = this.props.prop?.invoice_number;
     this.state.total = this.props.prop?.total;
+    this.state.dayOrDate = this.props.prop?.installemtnDayDate;
     this.state.discount = this.props.prop?.discount;
     this.state.subTotal = this.props.prop?.subTotal;
     this.state.customer_nic = this.props.prop?.customerDetails?.customerNic;
@@ -344,7 +346,7 @@ class PrintInvoiceClass extends React.Component {
                       </Col>
                       <Col span={4}>
                         :{col.IType}
-                        <span>/ abc</span>
+                        <span>/ {this.state.dayOrDate}</span>
                       </Col>
                       <Col span={12}></Col>
                       <Col className="installment_titls" span={8}>

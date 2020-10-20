@@ -71,7 +71,6 @@ export default function Add_Customer() {
     setloaderModalOpen(true);
   };
 
-  
   const onImageChange = (event) => {
     if (event.target.files && event.target.files[0]) {
       setImageFile(event.target.files[0]);
@@ -121,6 +120,7 @@ export default function Add_Customer() {
                           customerLname: lname.trim(),
                           customerAddress1: addres1.trim(),
                           customerAddress2: addres2.trim(),
+                          customerRootToHome: root.trim(),
                           customerMobile1: mobile1.trim(),
                           customerMobile2: mobile2.trim(),
                           customerRelatedNic: inputsNic,
@@ -1323,8 +1323,5 @@ export default function Add_Customer() {
         <NotificationContainer />
       </Container>
     </>
-  )
-
+  );
 }
-
-

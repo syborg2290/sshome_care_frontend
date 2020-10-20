@@ -15,6 +15,24 @@ import Paper from "@material-ui/core/Paper";
 
 import "./Print_invoice.css";
 
+function createRow(Item, Qty, DP, Discount, Sum) {
+  return { Item, Qty, DP, Discount, Sum };
+}
+
+const rows = [
+  createRow(55, 100, 115, 220, 404, 595),
+  createRow(55, 100, 115, 220, 404, 595),
+];
+
+function createCol(DPayment, Itemname, IType, ICost, ICount) {
+  return { DPayment, Itemname, IType, ICost, ICount };
+}
+
+const cols = [
+  createCol(100, "gass", "saturdat", 1000, 6),
+  createCol(60, "fan", 25, 500, 3),
+];
+
 class PrintInvoiceClass extends React.Component {
   render() {
     return (
@@ -88,13 +106,15 @@ class PrintInvoiceClass extends React.Component {
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        <TableRow>
-                          <TableCell>Cooker</TableCell>
-                          <TableCell align="right">123</TableCell>
-                          <TableCell align="right">123</TableCell>
-                          <TableCell align="right">123</TableCell>
-                          <TableCell align="right">50000.00</TableCell>
-                        </TableRow>
+                        {rows.map((row) => (
+                          <TableRow key={row.Item}>
+                            <TableCell>{row.Item}</TableCell>
+                            <TableCell align="right">{row.Qty}</TableCell>
+                            <TableCell align="right">{row.DP}</TableCell>
+                            <TableCell align="right">{row.Discount}</TableCell>
+                            <TableCell align="right">{row.Sum}</TableCell>
+                          </TableRow>
+                        ))}
 
                         <TableRow>
                           <TableCell rowSpan={4} />
@@ -144,6 +164,8 @@ class PrintInvoiceClass extends React.Component {
 
         <br />
 
+        {/* installment detail */}
+
         <Container component="main" className="mainPrint_container">
           <Typography className="company_title" variant="h5" gutterBottom>
             SS HOME CARE CITY
@@ -186,75 +208,37 @@ class PrintInvoiceClass extends React.Component {
                   <hr />
                   <br />
                 </Col>
-                <Col span={24}>
-                  <TableContainer className="tbl_Containers" component={Paper}>
-                    <Table className="tables" aria-label="spanning table">
-                      <TableHead>
-                        <TableRow>
-                          <TableCell className="tbl_Cell">Item</TableCell>
-                          <TableCell className="tbl_Cell" colSpan={1}>
-                            Qty
-                          </TableCell>
+                <Col span={6}>Customer Name:</Col>
+                <Col span={10}>Piyal Pradeep</Col>
+                <Col span={3}>NIC:</Col>
+                <Col span={5}>8946453723V</Col>
 
-                          <TableCell
-                            className="tbl_Cell"
-                            align="right"
-                            colSpan={1}
-                          >
-                            DP(LKR)
-                          </TableCell>
+                <Col className="hr_installmentPrint" span={24}></Col>
 
-                          <TableCell className="tbl_Cell" align="right">
-                            Discount(LKR)
-                          </TableCell>
-                          <TableCell className="tbl_Cell" align="right">
-                            Sum(LKR)
-                          </TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        <TableRow>
-                          <TableCell>Cooker</TableCell>
-                          <TableCell align="right">123</TableCell>
-                          <TableCell align="right">123</TableCell>
-                          <TableCell align="right">123</TableCell>
-                          <TableCell align="right">50000.00</TableCell>
-                        </TableRow>
-
-                        <TableRow>
-                          <TableCell rowSpan={4} />
-                          <TableCell align="right" colSpan={3}>
-                            Subtotal
-                          </TableCell>
-                          <TableCell align="right" colSpan={2}>
-                            1200.00
-                          </TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell align="right" colSpan={3}>
-                            Discount
-                          </TableCell>
-                          <TableCell className="cel" align="right" colSpan={2}>
-                            123
-                          </TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell
-                            className="cell_total"
-                            align="right"
-                            colSpan={3}
-                          >
-                            Total
-                          </TableCell>
-                          <TableCell align="right" colSpan={2}>
-                            55000.00
-                          </TableCell>
-                        </TableRow>
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
-                </Col>
+                {cols.map((col) => (
+                  <Row className="installmentPrint">
+                    <Col span={8}>Down Payment(LKR):</Col>
+                    <Col span={4}>{col.DPayment}</Col>
+                    <Col span={12}></Col>
+                    <Col span={4}>Item Name:</Col>
+                    <Col span={10}>{col.Itemname}</Col>
+                    <Col span={10}></Col>
+                    <Col span={4}>Installment Type:</Col>
+                    <Col span={4}>{col.IType}</Col>
+                    <Col span={16}></Col>
+                    <Col span={8}>Installment Cost(LKR):</Col>
+                    <Col span={6}>{col.ICost}</Col>
+                    <Col span={10}></Col>
+                    <Col span={8}>Installment Count:</Col>
+                    <Col span={6}>{col.ICount}</Col>
+                    <Col span={10}></Col>
+                    <Col span={24}>
+                      <hr />
+                    </Col>
+                  </Row>
+                ))}
               </Row>
+
               <br />
               <Row className="row_signature">
                 <Col className="lbl_signature" span={4}>

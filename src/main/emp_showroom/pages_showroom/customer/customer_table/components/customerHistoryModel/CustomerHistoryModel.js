@@ -63,15 +63,6 @@ export default function CustomerHistoryModel() {
         }),
       },
     },
-    {
-      name: "Action",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
   ];
   
   useEffect(() => {
@@ -85,14 +76,6 @@ export default function CustomerHistoryModel() {
       Amount: "3000.00",
       Delayed: "50",
       Balance: "6000.00",
-      Action: (
-        <div>
-          <VisibilityIcon />
-          <span className="icon_Edit">
-            <HistoryIcon />
-          </span>
-        </div>
-      ),
     },
     {
       InvoiceNo: "67632-IN",
@@ -100,14 +83,6 @@ export default function CustomerHistoryModel() {
       Amount: "200.00",
       Delayed: "15",
       Balance: "5500.00",
-      Action: (
-        <div>
-          <VisibilityIcon />
-          <span className="icon_Edit">
-            <HistoryIcon />
-          </span>
-        </div>
-      ),
     },
   ];
 

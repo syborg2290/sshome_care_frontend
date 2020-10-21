@@ -16,6 +16,7 @@ import "./Invoice_history.css";
 // icons
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import HistoryIcon from "@material-ui/icons/History";
+import AttachMoneyOutlinedIcon from "@material-ui/icons/AttachMoneyOutlined";
 
 function TabPanel(props) {
   const { children, value, index } = props;
@@ -63,9 +64,11 @@ export default function Invoice_history() {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
-  const columns = [
+  //START pay And Go Columns
+
+  const payAndGoColumns = [
     {
-      name: "IMG",
+      name: "InvoiceNo",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -74,7 +77,7 @@ export default function Invoice_history() {
       },
     },
     {
-      name: "FirstName",
+      name: "Date",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -83,7 +86,7 @@ export default function Invoice_history() {
       },
     },
     {
-      name: "LastName",
+      name: "Amount",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -92,7 +95,7 @@ export default function Invoice_history() {
       },
     },
     {
-      name: "NIC",
+      name: "Delayed",
       options: {
         filter: false,
         setCellHeaderProps: (value) => ({
@@ -102,7 +105,7 @@ export default function Invoice_history() {
     },
 
     {
-      name: "Mobile",
+      name: "Balance",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -115,7 +118,11 @@ export default function Invoice_history() {
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+          style: {
+            fontSize: "15px",
+            color: "black",
+            fontWeight: "600",
+          },
         }),
       },
     },
@@ -123,14 +130,17 @@ export default function Invoice_history() {
 
   const customerTableData = [
     {
-      IMG: "232323454v",
-      FirstName: "Kasun",
-      LastName: "Thaksala",
-      NIC: "232323454v",
-      Mobile: "858689",
+      InvoiceNo: "232323454v",
+      Date: "Kasun",
+      Amount: "Thaksala",
+      Delayed: "232323454v",
+      Balance: "858689",
       Action: (
         <div>
-          <VisibilityIcon />
+          <AttachMoneyOutlinedIcon className="icon_pay" />
+          <span className="icon_visibl">
+            <VisibilityIcon />
+          </span>
           <span className="icon_Edit">
             <HistoryIcon />
           </span>
@@ -139,9 +149,103 @@ export default function Invoice_history() {
     },
   ];
 
+  //END  pay And Go Columns
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  //START Full Payment Colomns
+
+  const fullPaymentColumns = [
+    {
+      name: "InvoiceNo",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "ItemName",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "ModelNo",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "Qty",
+      options: {
+        filter: false,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+
+    {
+      name: "DownPayment",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "Date",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "Action",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: {
+            fontSize: "15px",
+            color: "black",
+            fontWeight: "600",
+          },
+        }),
+      },
+    },
+  ];
+
+  const fullPaymentTableData = [
+    {
+      InvoiceNo: "4532-JH",
+      ItemName: "Kasun",
+      ModelNo: "Thaksala",
+      Qty: "232323454v",
+      DownPayment: "858689",
+      Date: "2020.09.28",
+      Action: (
+        <div>
+          <VisibilityIcon />
+        </div>
+      ),
+    },
+  ];
+
+  //START Full Payment Colomns
+
   return (
     <div component="main" className="main_container">
       <AppBar className="appBar" position="static">
@@ -159,9 +263,9 @@ export default function Invoice_history() {
           <Grid item xs={12}>
             <MUIDataTable
               title={<span className="title_Span"></span>}
-              className="customer_table"
+              className="payAndgo_table"
               data={customerTableData}
-              columns={columns}
+              columns={payAndGoColumns}
               options={{
                 selectableRows: false,
                 customToolbarSelect: () => {},
@@ -197,7 +301,46 @@ export default function Invoice_history() {
         </Grid>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        Full Payment
+        <Grid container spacing={4}>
+          <Grid item xs={12}>
+            <MUIDataTable
+              title={<span className="title_Span"></span>}
+              className="fullPayment_table"
+              data={fullPaymentTableData}
+              columns={fullPaymentColumns}
+              options={{
+                selectableRows: false,
+                customToolbarSelect: () => {},
+                filterType: "checkbox",
+                download: false,
+                print: false,
+                searchPlaceholder: "Search using any column names",
+                elevation: 4,
+                sort: true,
+                onRowClick: (rowData, rowMeta) => {
+                  setCurrentIndx(rowMeta.rowIndex);
+                },
+                textLabels: {
+                  body: {
+                    noMatch: isLoading ? (
+                      <Spin
+                        className="tblSpinner"
+                        size="large"
+                        spinning="true"
+                      />
+                    ) : (
+                      <img
+                        alt="Empty data"
+                        className="empty_data"
+                        src={require("../../../../assets/empty.png")}
+                      />
+                    ),
+                  },
+                },
+              }}
+            />
+          </Grid>
+        </Grid>
       </TabPanel>
     </div>
   );

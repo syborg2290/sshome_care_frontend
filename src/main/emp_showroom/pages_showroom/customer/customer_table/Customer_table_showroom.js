@@ -184,7 +184,10 @@ export default function ItemTable() {
         <div className="customer_Model_History">
           <div className="customer_Model_History_Main">
             <div className="customer_Modell_History_Detail">
-              <CustomerHistory />
+              <CustomerHistory
+                customerId={customerAllData[currentIndx]?.id}
+                key={customerAllData[currentIndx]?.id}
+              />
             </div>
           </div>
         </div>
@@ -196,9 +199,29 @@ export default function ItemTable() {
           <MUIDataTable
             title={<span className="title_Span">ALL CUSTOMERS</span>}
             className="customer_table"
+            sty
             data={customerTableData}
             columns={columns}
             options={{
+              setRowProps: (row, rowIndex) => {
+                if (customerAllData[rowIndex]?.data?.status === "normal") {
+                  return {
+                    style: { backgroundColor: "#EFFBF5" },
+                  };
+                }
+                
+                 if (customerAllData[rowIndex]?.data?.status === "arrears") {
+                  return {
+                    style: { backgroundColor: "#F5F6CE" },
+                  };
+                }
+                
+                 if (customerAllData[rowIndex]?.data?.status === "blacklist") {
+                  return {
+                    style: { backgroundColor: "#F6CECE" },
+                  };
+                }
+              },
               selectableRows: false,
               customToolbarSelect: () => {},
               filterType: "checkbox",

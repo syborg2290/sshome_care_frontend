@@ -68,7 +68,6 @@ function AddItem() {
     });
   };
 
-  
   const addItem = async (e) => {
     e.preventDefault();
 
@@ -793,18 +792,15 @@ function AddItem() {
               <TextField
                 className="txtt_nic"
                 disabled={salePrice > 0 ? false : true}
-                autoComplete="discount"
-                name="discount"
                 type="number"
                 InputProps={{ inputProps: { min: 0 } }}
                 variant="outlined"
                 fullWidth
-                id="discount"
-                required={true}
                 value={discount}
                 onChange={(e) => {
-                  var value = e.target.value;
-                  setDiscount(value);
+                  if (e.target.value < salePrice) {
+                    setDiscount(e.target.value);
+                  }
                 }}
                 label="Discount"
                 autoFocus
@@ -892,7 +888,6 @@ function AddItem() {
                 )}
               </Button>
             </Grid>
-          
           </Grid>
         </form>
       </div>

@@ -367,7 +367,9 @@ function EditModel({
               placeholder="500.00"
               value={discount}
               onChange={(e) => {
-                setDiscount(e.target.value);
+                if (e.target.value < salePrice) {
+                  setDiscount(e.target.value);
+                }
               }}
             />
           </Form.Item>

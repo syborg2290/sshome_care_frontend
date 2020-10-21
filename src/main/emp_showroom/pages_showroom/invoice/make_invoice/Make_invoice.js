@@ -169,7 +169,7 @@ function Make_invoice() {
             state: { detail: passingWithCustomerObj },
           };
           await invoiceIntoDb();
-          let isMounted = true; // note this flag denote mount status
+
           history.push(moveWith);
         } else {
           let passingWithoutCustomerObj = {
@@ -189,13 +189,13 @@ function Make_invoice() {
             state: { detail: passingWithoutCustomerObj },
           };
           await invoiceIntoDb();
-          let isMounted = true; // note this flag denote mount status
+
           history.push(moveWith);
         }
       },
       async onCancel() {
         await invoiceIntoDb();
-        let isMounted = true; // note this flag denote mount status
+
         history.push("/showroom/itemTable");
       },
     });

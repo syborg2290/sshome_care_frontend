@@ -366,8 +366,6 @@ class PrintInvoiceClass extends React.Component {
                               : ""
                             : this.state.dayOrDate}
                         </span>
-                        :{col.IType}
-                        <span>/ {this.state.dayOrDate}</span>
                       </Col>
                       <Col span={12}></Col>
                       <Col className="installment_titls" span={8}>

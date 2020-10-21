@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import MUIDataTable from "mui-datatables";
 import { Grid } from "@material-ui/core";
-import { Spin, Modal } from "antd";
+import { Spin } from "antd";
 // icons
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import HistoryIcon from "@material-ui/icons/History";
@@ -13,19 +13,8 @@ export default function CustomerHistoryModel() {
   // eslint-disable-next-line
   const [isLoading, setIsLoading] = useState(true);
 
-  const [visible, setVisible] = useState(false); // customer table models
-  const [history, setHistory] = useState(false); // customer table models
-
   // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
-
-  const showModal = () => {
-    setVisible(true);
-  };
-
-  const showModalHistory = () => {
-    setHistory(true);
-  };
 
   const columns = [
     {
@@ -94,9 +83,9 @@ export default function CustomerHistoryModel() {
       Balance: "6000.00",
       Action: (
         <div>
-          <VisibilityIcon onClick={showModal} />
+          <VisibilityIcon />
           <span className="icon_Edit">
-            <HistoryIcon onClick={showModalHistory} />
+            <HistoryIcon />
           </span>
         </div>
       ),
@@ -109,9 +98,9 @@ export default function CustomerHistoryModel() {
       Balance: "5500.00",
       Action: (
         <div>
-          <VisibilityIcon onClick={showModal} />
+          <VisibilityIcon />
           <span className="icon_Edit">
-            <HistoryIcon onClick={showModalHistory} />
+            <HistoryIcon />
           </span>
         </div>
       ),

@@ -17,7 +17,6 @@ import "./Customer_table_showroom.css";
 export default function ItemTable() {
   // eslint-disable-next-line
   const [isLoading, setIsLoading] = useState(true);
-
   const [visible, setVisible] = useState(false); // customer table models
   const [history, setHistory] = useState(false); // customer table models
 

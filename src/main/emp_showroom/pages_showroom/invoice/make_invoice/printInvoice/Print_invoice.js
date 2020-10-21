@@ -319,9 +319,9 @@ class PrintInvoiceClass extends React.Component {
                     <br />
                   </Col>
                   <Col className="installment_titls" span={6}>
-                    Customer Name
+                    Customer Name:
                   </Col>
-                  <Col span={10}>:{this.state.customer_name}</Col>
+                  <Col span={10}>{this.state.customer_name}</Col>
                   <Col className="installment_titls" span={2}>
                     NIC:
                   </Col>
@@ -330,7 +330,7 @@ class PrintInvoiceClass extends React.Component {
                   <Col className="hr_installmentPrint" span={24}></Col>
 
                   {this.state.cols.map((col) => (
-                    <Row className="installmentPrint">
+                    <Row key={col.Itemname} className="installmentPrint">
                       <Col className="installment_titls" span={8}>
                         Down Payment(LKR)
                       </Col>
@@ -345,9 +345,9 @@ class PrintInvoiceClass extends React.Component {
                         Installment Type
                       </Col>
                       <Col span={4}>
-                        {col.IType}
+                        :{col.IType}
                         <span>
-                          :/{" "}
+                          /
                           {col.IType === "Weekly"
                             ? this.state.dayOrDate === 1
                               ? "Monday"

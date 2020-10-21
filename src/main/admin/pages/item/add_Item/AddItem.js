@@ -68,7 +68,6 @@ function AddItem() {
     });
   };
 
-  
   const addItem = async (e) => {
     e.preventDefault();
 
@@ -278,9 +277,10 @@ function AddItem() {
                                                       .doc(newArray[0].id)
                                                       .update({
                                                         qty:
-                                                          Math.round(newArray[0].data()
-                                                            .qty) +
-                                                          Math.round(qty),
+                                                          Math.round(
+                                                            newArray[0].data()
+                                                              .qty
+                                                          ) + Math.round(qty),
                                                       })
                                                       .then(function (docRef) {
                                                         setLoadingSubmit(false);
@@ -793,18 +793,13 @@ function AddItem() {
               <TextField
                 className="txtt_nic"
                 disabled={salePrice > 0 ? false : true}
-                autoComplete="discount"
-                name="discount"
                 type="number"
                 InputProps={{ inputProps: { min: 0 } }}
                 variant="outlined"
                 fullWidth
-                id="discount"
-                required={true}
                 value={discount}
                 onChange={(e) => {
-                  var value = e.target.value;
-                  setDiscount(value);
+                  setDiscount(e.target.value);
                 }}
                 label="Discount"
                 autoFocus
@@ -892,7 +887,6 @@ function AddItem() {
                 )}
               </Button>
             </Grid>
-          
           </Grid>
         </form>
       </div>

@@ -10,7 +10,6 @@ export default function customerDetailsModel() {
       <Col className="space_col" span={12}>
         <Typography className="title" gutterBottom>
           Customer Details
-          <hr />
         </Typography>
       </Col>
       <Col className="space_col" span={12}></Col>

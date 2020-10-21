@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Grid } from "@material-ui/core";
 import { Spin, Modal } from "antd";
 import MUIDataTable from "mui-datatables";
+
+import db from "../../../../../config/firebase.js";
 
 // icons
 import VisibilityIcon from "@material-ui/icons/Visibility";
@@ -22,6 +24,8 @@ export default function ItemTable() {
 
   // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
+  const [customerTableData, setCustomerTableData] = useState([]);
+  const [customerAllData, setCustomerAllData] = useState([]);
 
   const showModal = () => {
     setVisible(true);
@@ -70,7 +74,7 @@ export default function ItemTable() {
     },
 
     {
-      name: "Mobile",
+      name: "Telephone",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -89,50 +93,48 @@ export default function ItemTable() {
     },
   ];
 
-  const customerTableData = [
-    {
-      IMG: (
-        <img
-          alt="Empty data"
-          className="avatar_data"
-          src={require("../../../../../assets/avatar.png")}
-        />
-      ),
-      FirstName: "Kasun",
-      LastName: "Thaksala",
-      NIC: "232323454v",
-      Mobile: "858689",
-      Action: (
-        <div>
-          <VisibilityIcon onClick={showModal} />
-          <span className="icon_Edit">
-            <HistoryIcon onClick={showModalHistory} />
-          </span>
-        </div>
-      ),
-    },
-    {
-      IMG: (
-        <img
-          alt="Empty data"
-          className="avatar_data"
-          src={require("../../../../../assets/avatar.png")}
-        />
-      ),
-      FirstName: "Janith",
-      LastName: "Kavishka",
-      NIC: "123456789v",
-      Mobile: "754845375",
-      Action: (
-        <div>
-          <VisibilityIcon onClick={showModal} />
-          <span className="icon_Edit">
-            <HistoryIcon />
-          </span>
-        </div>
-      ),
-    },
-  ];
+  useEffect(() => {
+    db.collection("customer")
+      .get()
+      .then((custDoc) => {
+        let rawData = [];
+        let rawAllData = [];
+        custDoc.docs.forEach((siDoc) => {
+          rawAllData.push({
+            id: siDoc.id,
+            data: siDoc.data(),
+          });
+          rawData.push({
+            IMG: (
+              <img
+                alt="Empty data"
+                className="avatar_data"
+                src={
+                  siDoc.data().photo !== null
+                    ? siDoc.data().photo
+                    : require("../../../../../assets/avatar.png")
+                }
+              />
+            ),
+            FirstName: siDoc.data().fname,
+            LastName: siDoc.data().lname,
+            NIC: siDoc.data().nic,
+            Telephone: siDoc.data().mobile1,
+            Action: (
+              <div>
+                <VisibilityIcon onClick={showModal} />
+                <span className="icon_Edit">
+                  <HistoryIcon onClick={showModalHistory} />
+                </span>
+              </div>
+            ),
+          });
+        });
+        setCustomerTableData(rawData);
+        setCustomerAllData(rawAllData);
+        setIsLoading(false);
+      });
+  }, []);
 
   return (
     <>
@@ -149,7 +151,20 @@ export default function ItemTable() {
         <div className="customer_Model">
           <div className="customer_Model_Main">
             <div className="customer_Modell_Detail">
-              <CustomerDetails />
+              <CustomerDetails
+                fname={customerAllData[currentIndx]?.data.fname}
+                lname={customerAllData[currentIndx]?.data.lname}
+                photo={customerAllData[currentIndx]?.data.photo}
+                address1={customerAllData[currentIndx]?.data.address1}
+                address2={customerAllData[currentIndx]?.data.address2}
+                nic={customerAllData[currentIndx]?.data.nic}
+                mobile1={customerAllData[currentIndx]?.data.mobile1}
+                mobile2={customerAllData[currentIndx]?.data.mobile2}
+                root={customerAllData[currentIndx]?.data.root}
+                status={customerAllData[currentIndx]?.data.status}
+                createdAt={customerAllData[currentIndx]?.data.date}
+                key={customerAllData[currentIndx]?.id}
+              />
             </div>
           </div>
         </div>

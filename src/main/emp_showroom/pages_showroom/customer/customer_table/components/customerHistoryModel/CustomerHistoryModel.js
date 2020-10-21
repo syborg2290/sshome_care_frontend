@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import MUIDataTable from "mui-datatables";
 import { Grid } from "@material-ui/core";
 import { Spin } from "antd";
@@ -73,6 +73,10 @@ export default function CustomerHistoryModel() {
       },
     },
   ];
+  
+  useEffect(() => {
+  
+  }, [])
 
   const customerTableData = [
     {

@@ -4,9 +4,9 @@ import { Grid } from "@material-ui/core";
 import { Spin } from "antd";
 
 // styles
-import "./CustomerHistoryModel.css";
+import "./History_Model.css";
 
-export default function CustomerHistoryModel() {
+export default function History_Model() {
   // eslint-disable-next-line
   const [isLoading, setIsLoading] = useState(true);
 
@@ -81,7 +81,7 @@ export default function CustomerHistoryModel() {
 
   return (
     <div>
-      <Grid container spacing={4}>
+      <Grid container spacing={4} className="mains_container">
         <Grid item xs={12}>
           <MUIDataTable
             title={<span className="title_Span">Installment History</span>}

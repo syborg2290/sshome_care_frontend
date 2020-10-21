@@ -128,7 +128,7 @@ export default function ItemTable() {
         <div>
           <VisibilityIcon onClick={showModal} />
           <span className="icon_Edit">
-            <HistoryIcon />
+            <HistoryIcon onClick={showModalHistory} />
           </span>
         </div>
       ),

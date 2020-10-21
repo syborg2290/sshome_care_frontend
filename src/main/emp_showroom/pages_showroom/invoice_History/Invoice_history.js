@@ -5,10 +5,15 @@ import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
-import { Spin } from "antd";
+import { Spin, Modal } from "antd";
 import MUIDataTable from "mui-datatables";
+
+// components
+import UpdateInstallment from "../invoice_History/components/PayAndGoModel/UpdateModel/Update_Model";
+import InstallmentHistory from "../invoice_History/components/PayAndGoModel/HistoryModel/History_Model";
+import InstallmentView from "../invoice_History/components/PayAndGoModel/ViewModel/View_Model";
+import InstallmentFullPayment from "../invoice_History/components/FullPaymentModel/Full_Payment_Model";
 
 // styles
 import "./Invoice_history.css";
@@ -19,7 +24,7 @@ import HistoryIcon from "@material-ui/icons/History";
 import AttachMoneyOutlinedIcon from "@material-ui/icons/AttachMoneyOutlined";
 
 function TabPanel(props) {
-  const { children, value, index } = props;
+  const { children, value, index, ...other } = props;
 
   return (
     <div
@@ -27,10 +32,11 @@ function TabPanel(props) {
       hidden={value !== index}
       id={`simple-tabpanel-${index}`}
       aria-labelledby={`simple-tab-${index}`}
+      {...other}
     >
       {value === index && (
         <Box p={3}>
-          <Typography>{children}</Typography>
+          <div>{children}</div>
         </Box>
       )}
     </div>
@@ -64,8 +70,32 @@ export default function Invoice_history() {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
-  //START pay And Go Columns
+  const [installmentUpdate, setInstallmentUpdate] = useState(false); //  table models
+  const [installmentvisible, setInstallmentVisible] = useState(false); //  table models
+  const [installmentHistory, setInstallmentHistory] = useState(false); //  table models
+  const [installmentFullPayment, setInstallmentFullPayment] = useState(false); //  table models
 
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
+  const showModalUpdate = () => {
+    setInstallmentUpdate(true);
+  };
+
+  const showModalHistory = () => {
+    setInstallmentHistory(true);
+  };
+
+  const showInstallmentView = () => {
+    setInstallmentVisible(true);
+  };
+
+  const showInstallmentFullPayment = () => {
+    setInstallmentFullPayment(true);
+  };
+
+  //START pay And Go Columns
   const payAndGoColumns = [
     {
       name: "InvoiceNo",
@@ -86,7 +116,7 @@ export default function Invoice_history() {
       },
     },
     {
-      name: "Amount",
+      name: "Discount",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -95,7 +125,7 @@ export default function Invoice_history() {
       },
     },
     {
-      name: "Delayed",
+      name: "Total",
       options: {
         filter: false,
         setCellHeaderProps: (value) => ({
@@ -105,7 +135,7 @@ export default function Invoice_history() {
     },
 
     {
-      name: "Balance",
+      name: "Status",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -132,17 +162,20 @@ export default function Invoice_history() {
     {
       InvoiceNo: "232323454v",
       Date: "Kasun",
-      Amount: "Thaksala",
-      Delayed: "232323454v",
-      Balance: "858689",
+      Discount: "Thaksala",
+      Total: "232323454v",
+      Status: "858689",
       Action: (
         <div>
-          <AttachMoneyOutlinedIcon className="icon_pay" />
+          <AttachMoneyOutlinedIcon
+            className="icon_pay"
+            onClick={showModalUpdate}
+          />
           <span className="icon_visibl">
-            <VisibilityIcon />
+            <HistoryIcon onClick={showModalHistory} />
           </span>
           <span className="icon_Edit">
-            <HistoryIcon />
+            <VisibilityIcon onClick={showInstallmentView} />
           </span>
         </div>
       ),
@@ -150,10 +183,6 @@ export default function Invoice_history() {
   ];
 
   //END  pay And Go Columns
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
 
   //START Full Payment Colomns
 
@@ -238,7 +267,7 @@ export default function Invoice_history() {
       Date: "2020.09.28",
       Action: (
         <div>
-          <VisibilityIcon />
+          <VisibilityIcon onClick={showInstallmentFullPayment} />
         </div>
       ),
     },
@@ -247,101 +276,176 @@ export default function Invoice_history() {
   //START Full Payment Colomns
 
   return (
-    <div component="main" className="main_container">
-      <AppBar className="appBar" position="static">
-        <Tabs
-          classes={{ indicator: classes.indicator }}
-          value={value}
-          onChange={handleChange}
-        >
-          <Tab className="tabs" label=" Pay & Go" {...a11yProps(0)} />
-          <Tab className="tabs" label="Full Payment" {...a11yProps(1)} />
-        </Tabs>
-      </AppBar>
-      <TabPanel value={value} index={0}>
-        <Grid container spacing={4}>
-          <Grid item xs={12}>
-            <MUIDataTable
-              title={<span className="title_Span"></span>}
-              className="payAndgo_table"
-              data={customerTableData}
-              columns={payAndGoColumns}
-              options={{
-                selectableRows: false,
-                customToolbarSelect: () => {},
-                filterType: "checkbox",
-                download: false,
-                print: false,
-                searchPlaceholder: "Search using any column names",
-                elevation: 4,
-                sort: true,
-                onRowClick: (rowData, rowMeta) => {
-                  setCurrentIndx(rowMeta.rowIndex);
-                },
-                textLabels: {
-                  body: {
-                    noMatch: isLoading ? (
-                      <Spin
-                        className="tblSpinner"
-                        size="large"
-                        spinning="true"
-                      />
-                    ) : (
-                      <img
-                        alt="Empty data"
-                        className="empty_data"
-                        src={require("../../../../assets/empty.png")}
-                      />
-                    ),
+    <>
+      {/*Start Installment Model Update */}
+      <Modal
+        visible={installmentUpdate}
+        className="update_Installment_Model"
+        footer={null}
+        onCancel={() => {
+          setInstallmentUpdate(false);
+        }}
+      >
+        <div className="Installment_Model">
+          <div className="Installment_Model_Main">
+            <div className="Installment_Model_Detail">
+              <UpdateInstallment />
+            </div>
+          </div>
+        </div>
+      </Modal>
+      {/*End Installment Model Update */}
+
+      {/*Start Installment Model History */}
+      <Modal
+        visible={installmentHistory}
+        className="update_Installment_Model"
+        footer={null}
+        onCancel={() => {
+          setInstallmentHistory(false);
+        }}
+      >
+        <div className="Installment_Model">
+          <div className="Installment_Model_Main">
+            <div className="Installment_Model_Detail">
+              <InstallmentHistory />
+            </div>
+          </div>
+        </div>
+      </Modal>
+      {/*End Installment Model History */}
+      {/*Start Installment Model View */}
+      <Modal
+        visible={installmentvisible}
+        className="update_Installment_Model"
+        footer={null}
+        onCancel={() => {
+          setInstallmentVisible(false);
+        }}
+      >
+        <div className="Installment_Model">
+          <div className="Installment_Model_Main">
+            <div className="Installment_Model_Detail">
+              <InstallmentView />
+            </div>
+          </div>
+        </div>
+      </Modal>
+      {/*End Installment Model View */}
+      {/*Start Installment Model Full Payment */}
+      <Modal
+        visible={installmentFullPayment}
+        className="FullPayment_Installment_Model"
+        footer={null}
+        onCancel={() => {
+          setInstallmentFullPayment(false);
+        }}
+      >
+        <div className="FullPayment_Installment_Model">
+          <div className="FullPayment_Installment_Model_Main">
+            <div className="FullPayment_Installment_Model_Detail">
+              <InstallmentFullPayment />
+            </div>
+          </div>
+        </div>
+      </Modal>
+      {/*End Installment Model Full Payment */}
+      <div component="main" className="main_container">
+        <AppBar className="appBar" position="static">
+          <Tabs
+            classes={{ indicator: classes.indicator }}
+            value={value}
+            onChange={handleChange}
+          >
+            <Tab className="tabs" label=" Pay & Go" {...a11yProps(0)} />
+            <Tab className="tabs" label="Full Payment" {...a11yProps(1)} />
+          </Tabs>
+        </AppBar>
+        <TabPanel value={value} index={0}>
+          <Grid container spacing={4}>
+            <Grid item xs={12}>
+              <MUIDataTable
+                title={<span className="title_Span"></span>}
+                className="payAndgo_table"
+                data={customerTableData}
+                columns={payAndGoColumns}
+                options={{
+                  selectableRows: false,
+                  customToolbarSelect: () => {},
+                  filterType: "checkbox",
+                  download: false,
+                  print: false,
+                  searchPlaceholder: "Search using any column names",
+                  elevation: 4,
+                  sort: true,
+                  onRowClick: (rowData, rowMeta) => {
+                    setCurrentIndx(rowMeta.rowIndex);
                   },
-                },
-              }}
-            />
-          </Grid>
-        </Grid>
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        <Grid container spacing={4}>
-          <Grid item xs={12}>
-            <MUIDataTable
-              title={<span className="title_Span"></span>}
-              className="fullPayment_table"
-              data={fullPaymentTableData}
-              columns={fullPaymentColumns}
-              options={{
-                selectableRows: false,
-                customToolbarSelect: () => {},
-                filterType: "checkbox",
-                download: false,
-                print: false,
-                searchPlaceholder: "Search using any column names",
-                elevation: 4,
-                sort: true,
-                onRowClick: (rowData, rowMeta) => {
-                  setCurrentIndx(rowMeta.rowIndex);
-                },
-                textLabels: {
-                  body: {
-                    noMatch: isLoading ? (
-                      <Spin
-                        className="tblSpinner"
-                        size="large"
-                        spinning="true"
-                      />
-                    ) : (
-                      <img
-                        alt="Empty data"
-                        className="empty_data"
-                        src={require("../../../../assets/empty.png")}
-                      />
-                    ),
+                  textLabels: {
+                    body: {
+                      noMatch: isLoading ? (
+                        <Spin
+                          className="tblSpinner"
+                          size="large"
+                          spinning="true"
+                        />
+                      ) : (
+                        <img
+                          alt="Empty data"
+                          className="empty_data"
+                          src={require("../../../../assets/empty.png")}
+                        />
+                      ),
+                    },
                   },
-                },
-              }}
-            />
+                }}
+              />
+            </Grid>
           </Grid>
-        </Grid>
-      </TabPanel>
-    </div>
+        </TabPanel>
+        <TabPanel value={value} index={1}>
+          <Grid container spacing={4}>
+            <Grid item xs={12}>
+              <MUIDataTable
+                title={<span className="title_Span"></span>}
+                className="fullPayment_table"
+                data={fullPaymentTableData}
+                columns={fullPaymentColumns}
+                options={{
+                  selectableRows: false,
+                  customToolbarSelect: () => {},
+                  filterType: "checkbox",
+                  download: false,
+                  print: false,
+                  searchPlaceholder: "Search using any column names",
+                  elevation: 4,
+                  sort: true,
+                  onRowClick: (rowData, rowMeta) => {
+                    setCurrentIndx(rowMeta.rowIndex);
+                  },
+                  textLabels: {
+                    body: {
+                      noMatch: isLoading ? (
+                        <Spin
+                          className="tblSpinner"
+                          size="large"
+                          spinning="true"
+                        />
+                      ) : (
+                        <img
+                          alt="Empty data"
+                          className="empty_data"
+                          src={require("../../../../assets/empty.png")}
+                        />
+                      ),
+                    },
+                  },
+                }}
+              />
+            </Grid>
+          </Grid>
+        </TabPanel>
+      </div>
+    </>
   );
 }

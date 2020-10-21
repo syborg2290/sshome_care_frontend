@@ -128,77 +128,85 @@ function Make_invoice() {
   };
 
   const showConfirm = () => {
-    confirm({
-      title: <h5 className="confo_title">Do you Want to Print an Invoice?</h5>,
-      icon: <PrinterFilled className="confo_icon" />,
-      okText: "Yes",
-      cancelText: "No",
-      async onOk() {
-        var arrayPassingItems = [];
+    if (subTotalFunc() - totalDiscount < 0) {
+      NotificationManager.warning(
+        "Issue with your calculations Pleace check again (May be Included minus values ! )"
+      );
+    } else {
+      confirm({
+        title: (
+          <h5 className="confo_title">Do you Want to Print an Invoice?</h5>
+        ),
+        icon: <PrinterFilled className="confo_icon" />,
+        okText: "Yes",
+        cancelText: "No",
+        async onOk() {
+          var arrayPassingItems = [];
 
-        tablerows.forEach((one) => {
-          let objItem = {
-            item_id: one.id,
-            item_name: one.title,
-            qty: itemQty[one.i],
-            paymentWay: one.paymentWay,
-            downpayment: itemDP[one.i],
-            noOfInstallment: itemNOI[one.i],
-            amountPerInstallment: itemAPI[one.i],
-            discount: itemDiscount[one.i],
-          };
-          arrayPassingItems.push(objItem);
-        });
+          tablerows.forEach((one) => {
+            let objItem = {
+              item_id: one.id,
+              item_name: one.title,
+              qty: itemQty[one.i],
+              paymentWay: one.paymentWay,
+              downpayment: itemDP[one.i],
+              noOfInstallment: itemNOI[one.i],
+              amountPerInstallment: itemAPI[one.i],
+              discount: itemDiscount[one.i],
+            };
+            arrayPassingItems.push(objItem);
+          });
 
-        if (tablerows.some((ob) => ob.customer !== null)) {
-          let passingWithCustomerObj = {
-            invoice_number: invoiceNumber,
-            customerDetails: tablerows[0].customer,
-            installmentType: daysDate.value,
-            installemtnDayDate: daysDate.value === "Weekly" ? days : dates,
-            discount: totalDiscount,
-            subTotal: subTotalFunc(),
-            total: subTotalFunc() - totalDiscount,
-            discription: discription,
-            itemsList: arrayPassingItems,
-          };
+          if (tablerows.some((ob) => ob.customer !== null)) {
+            let passingWithCustomerObj = {
+              invoice_number: invoiceNumber,
+              customerDetails: tablerows[0].customer,
+              installmentType: daysDate.value,
+              installemtnDayDate: daysDate.value === "Weekly" ? days : dates,
+              discount: totalDiscount,
+              subTotal: subTotalFunc(),
+              total: subTotalFunc() - totalDiscount,
+              discription: discription,
+              itemsList: arrayPassingItems,
+            };
 
-          let moveWith = {
-            pathname: "/showroom/invoice/printInvoice",
-            search: "?query=abc",
-            state: { detail: passingWithCustomerObj },
-          };
+            let moveWith = {
+              pathname: "/showroom/invoice/printInvoice",
+              search: "?query=abc",
+              state: { detail: passingWithCustomerObj },
+            };
+            await invoiceIntoDb();
+
+            history.push(moveWith);
+          } else {
+            let passingWithoutCustomerObj = {
+              invoice_number: invoiceNumber,
+              customerDetails: null,
+              installmentType: null,
+              installemtnDayDate: null,
+              discount: totalDiscount,
+              subTotal: subTotalFunc(),
+              total: subTotalFunc() - totalDiscount,
+              discription: discription,
+              itemsList: arrayPassingItems,
+            };
+            let moveWith = {
+              pathname: "/showroom/invoice/printInvoice",
+              search: "?query=abc",
+              state: { detail: passingWithoutCustomerObj },
+            };
+            await invoiceIntoDb();
+
+            history.push(moveWith);
+          }
+        },
+        async onCancel() {
           await invoiceIntoDb();
 
-          history.push(moveWith);
-        } else {
-          let passingWithoutCustomerObj = {
-            invoice_number: invoiceNumber,
-            customerDetails: null,
-            installmentType: null,
-            installemtnDayDate: null,
-            discount: totalDiscount,
-            subTotal: subTotalFunc(),
-            total: subTotalFunc() - totalDiscount,
-            discription: discription,
-            itemsList: arrayPassingItems,
-          };
-          let moveWith = {
-            pathname: "/showroom/invoice/printInvoice",
-            search: "?query=abc",
-            state: { detail: passingWithoutCustomerObj },
-          };
-          await invoiceIntoDb();
-
-          history.push(moveWith);
-        }
-      },
-      async onCancel() {
-        await invoiceIntoDb();
-
-        history.push("/showroom/itemTable");
-      },
-    });
+          history.push("/showroom/itemTable");
+        },
+      });
+    }
   };
 
   // eslint-disable-next-line
@@ -560,12 +568,10 @@ function Make_invoice() {
                               id={row.i.toString()}
                               value={itemDP[row.i]}
                               onChange={(e) => {
-                                if (e.target.value > itemDiscount[row.i]) {
-                                  setItemDP({
-                                    ...itemDP,
-                                    [row.i]: e.target.value,
-                                  });
-                                }
+                                setItemDP({
+                                  ...itemDP,
+                                  [row.i]: e.target.value,
+                                });
                               }}
                             />
                           </TableCell>

@@ -277,9 +277,10 @@ function AddItem() {
                                                       .doc(newArray[0].id)
                                                       .update({
                                                         qty:
-                                                          Math.round(newArray[0].data()
-                                                            .qty) +
-                                                          Math.round(qty),
+                                                          Math.round(
+                                                            newArray[0].data()
+                                                              .qty
+                                                          ) + Math.round(qty),
                                                       })
                                                       .then(function (docRef) {
                                                         setLoadingSubmit(false);
@@ -798,9 +799,7 @@ function AddItem() {
                 fullWidth
                 value={discount}
                 onChange={(e) => {
-                  if (e.target.value < salePrice) {
-                    setDiscount(e.target.value);
-                  }
+                  setDiscount(e.target.value);
                 }}
                 label="Discount"
                 autoFocus

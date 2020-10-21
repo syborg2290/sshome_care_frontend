@@ -360,7 +360,7 @@ function Make_invoice() {
                 installemtnDayDate: daysDate.value === "Weekly" ? days : dates,
                 discount: totalDiscount,
                 total: subTotalFunc() - totalDiscount,
-                status_of_payandgo: "Done",
+                status_of_payandgo: "onGoing",
                 description: discription,
                 date: firebase.firestore.FieldValue.serverTimestamp(),
               })

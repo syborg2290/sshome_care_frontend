@@ -151,45 +151,50 @@ function EditModel({
                                             } else {
                                               //Rest of code here
                                               setLoadingSubmit(true);
-
-                                              let variable = {
-                                                itemName: itemName,
-                                                brand: brand,
-                                                modelNo: modelNo,
-                                                chassisNo: chassisNo,
-                                                color: color,
-                                                qty: qty,
-                                                cashPrice: cashPrice,
-                                                salePrice: salePrice,
-                                                noOfInstallments: noOfInstallments,
-                                                amountPerInstallment: amountPerInstallment,
-                                                downPayment: downPayment,
-                                                guaranteePeriod: guaranteePeriod,
-                                                discount: discount,
-                                                description: description,
-                                                cInvoiceNo: cInvoiceNo,
-                                                GCardNo: GCardNo,
-                                                guarantee: guarantee,
-                                              };
-
-                                              await db
-                                                .collection("item")
+                                              db.collection("item")
                                                 .doc(docId)
-                                                .update(variable)
-                                                .then(function (docRef) {
-                                                  setLoadingSubmit(false);
-                                                  NotificationManager.success(
-                                                    "Item updated!",
-                                                    "Done"
-                                                  );
-                                                  editModalClose();
-                                                })
-                                                .catch(function (error) {
-                                                  setLoadingSubmit(false);
-                                                  NotificationManager.warning(
-                                                    "Failed to update the item!",
-                                                    "Please try again"
-                                                  );
+                                                .get()
+                                                .then((docRe) => {
+                                                  let variable = {
+                                                    itemName: itemName,
+                                                    brand: brand,
+                                                    modelNo: modelNo,
+                                                    chassisNo: chassisNo,
+                                                    color: color,
+                                                    qty:
+                                                      docRe.data().qty +
+                                                      Math.round(qty),
+                                                    cashPrice: cashPrice,
+                                                    salePrice: salePrice,
+                                                    noOfInstallments: noOfInstallments,
+                                                    amountPerInstallment: amountPerInstallment,
+                                                    downPayment: downPayment,
+                                                    guaranteePeriod: guaranteePeriod,
+                                                    discount: discount,
+                                                    description: description,
+                                                    cInvoiceNo: cInvoiceNo,
+                                                    GCardNo: GCardNo,
+                                                    guarantee: guarantee,
+                                                  };
+
+                                                  db.collection("item")
+                                                    .doc(docId)
+                                                    .update(variable)
+                                                    .then(function (docRef) {
+                                                      setLoadingSubmit(false);
+                                                      NotificationManager.success(
+                                                        "Item updated!",
+                                                        "Done"
+                                                      );
+                                                      editModalClose();
+                                                    })
+                                                    .catch(function (error) {
+                                                      setLoadingSubmit(false);
+                                                      NotificationManager.warning(
+                                                        "Failed to update the item!",
+                                                        "Please try again"
+                                                      );
+                                                    });
                                                 });
                                             }
                                           }

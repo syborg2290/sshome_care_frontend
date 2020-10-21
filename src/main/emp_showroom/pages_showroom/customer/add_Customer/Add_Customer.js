@@ -82,7 +82,6 @@ export default function Add_Customer() {
     }
   };
 
-  
   const submit = () => {
     if (nic.length > 0) {
       if (fname.length > 0) {
@@ -202,7 +201,68 @@ export default function Add_Customer() {
     }
   };
 
-  const customerNicValidation = (e) => {
+  const customerRelationsNicValidations = async (nic) => {
+    let isInOnGoingRelation = false;
+
+    db.collection("invoice")
+      .where("status_of_payandgo", "==", "onGoing")
+      .get()
+      .then((inDoc) => {
+        inDoc.docs.forEach((inEachDoc) => {
+          db.collection("customer")
+            .doc(inEachDoc.data().customer_id)
+            .get()
+            .then((cusDoc) => {
+              for (
+                var s = 0;
+                s < Object.keys(cusDoc.data().relations_nics).length;
+                s++
+              ) {
+                if (cusDoc.data().relations_nics[s] === nic) {
+                  isInOnGoingRelation = true;
+                }
+              }
+            });
+        });
+      });
+    db.collection("customer")
+      .where("status", "==", "arrears")
+      .get()
+      .then((custArr) => {
+        custArr.docs.forEach((inEachDoc) => {
+          for (
+            var q = 0;
+            q < Object.keys(inEachDoc.data().relations_nics).length;
+            q++
+          ) {
+            if (inEachDoc.data().relations_nics[q] === nic) {
+              isInOnGoingRelation = true;
+            }
+          }
+        });
+      });
+
+    db.collection("customer")
+      .where("status", "==", "blacklist")
+      .get()
+      .then((custArr) => {
+        custArr.docs.forEach((inEachDoc) => {
+          for (
+            var n = 0;
+            n < Object.keys(inEachDoc.data().relations_nics).length;
+            n++
+          ) {
+            if (inEachDoc.data().relations_nics[n] === nic) {
+              isInOnGoingRelation = true;
+            }
+          }
+        });
+      });
+
+    return isInOnGoingRelation;
+  };
+
+  const customerNicValidation = async (e) => {
     var enterKey = 13; //Key Code for Enter Key
     var { value } = e.target;
     if (e.which === enterKey) {
@@ -210,69 +270,83 @@ export default function Add_Customer() {
 
       if (result) {
         loaderModalOpen();
-        db.collection("customer")
-          .where("nic", "==", value.trim())
-          .get()
-          .then((doc) => {
-            if (doc.docs.length > 0) {
-              db.collection("blacklist")
-                .where("customer_id", "==", doc.docs[0].id)
-                .get()
-                .then((blackDoc) => {
-                  if (blackDoc.docs.length > 0) {
-                    setisValidatedCustomerNic(false);
-                    loaderModalClose();
-                    NotificationManager.warning(
-                      "Entered customer in the blacklist !",
-                      "Attention!"
-                    );
-                  } else {
-                    db.collection("arrears")
-                      .where("customer_id", "==", doc.docs[0].id)
-                      .get()
-                      .then((arrsDoc) => {
-                        if (arrsDoc.docs.length > 0) {
-                          setisValidatedCustomerNic(false);
-                          loaderModalClose();
-                          NotificationManager.warning(
-                            "Entered customer not payed and closed arrears as a customer !",
-                            "Can not proceed with this customer, until pay and close the previous arrears as a customer"
-                          );
-                        } else {
-                          db.collection("invoice")
-                            .where("status_of_payandgo", "==", "onGoing")
-                            .where("customer_id", "==", doc.docs[0].id)
-                            .get()
-                            .then((doc2) => {
-                              if (doc2.docs.length > 0) {
-                                setisValidatedCustomerNic(false);
-                                loaderModalClose();
-                                NotificationManager.warning(
-                                  "Entered customer already on status of 'pay an go' !",
-                                  "Please complete the previous 'pay and go'"
-                                );
-                              } else {
-                                setFirstName(doc.docs[0].data().fname);
-                                setLastName(doc.docs[0].data().lname);
-                                setAddres1(doc.docs[0].data().address1);
-                                setAddres2(doc.docs[0].data().address2);
-                                setMobile1(doc.docs[0].data().mobile1);
-                                setMobile2(doc.docs[0].data().mobile2);
-                                setRoot(doc.docs[0].data().root);
-                                setImageUrl(doc.docs[0].data().imgUrl);
-                                setisValidatedCustomerNic(true);
-                                loaderModalClose();
-                              }
-                            });
-                        }
-                      });
-                  }
-                });
-            } else {
-              setisValidatedCustomerNic(true);
-              loaderModalClose();
-            }
-          });
+
+        let customerRelationsCheck = await customerRelationsNicValidations(
+          value.trim()
+        );
+
+        if (customerRelationsCheck) {
+          setisValidatedCustomerNic(false);
+          loaderModalClose();
+          NotificationManager.warning(
+            "Entered customer's related one person or multiple persons in the ongoing status or blacklist!",
+            "Attention!"
+          );
+        } else {
+          db.collection("customer")
+            .where("nic", "==", value.trim())
+            .get()
+            .then((doc) => {
+              if (doc.docs.length > 0) {
+                db.collection("blacklist")
+                  .where("customer_id", "==", doc.docs[0].id)
+                  .get()
+                  .then((blackDoc) => {
+                    if (blackDoc.docs.length > 0) {
+                      setisValidatedCustomerNic(false);
+                      loaderModalClose();
+                      NotificationManager.warning(
+                        "Entered customer in the blacklist !",
+                        "Attention!"
+                      );
+                    } else {
+                      db.collection("arrears")
+                        .where("customer_id", "==", doc.docs[0].id)
+                        .get()
+                        .then((arrsDoc) => {
+                          if (arrsDoc.docs.length > 0) {
+                            setisValidatedCustomerNic(false);
+                            loaderModalClose();
+                            NotificationManager.warning(
+                              "Entered customer not payed and closed arrears as a customer !",
+                              "Can not proceed with this customer, until pay and close the previous arrears as a customer"
+                            );
+                          } else {
+                            db.collection("invoice")
+                              .where("status_of_payandgo", "==", "onGoing")
+                              .where("customer_id", "==", doc.docs[0].id)
+                              .get()
+                              .then((doc2) => {
+                                if (doc2.docs.length > 0) {
+                                  setisValidatedCustomerNic(false);
+                                  loaderModalClose();
+                                  NotificationManager.warning(
+                                    "Entered customer already on status of 'pay an go' !",
+                                    "Please complete the previous 'pay and go'"
+                                  );
+                                } else {
+                                  setFirstName(doc.docs[0].data().fname);
+                                  setLastName(doc.docs[0].data().lname);
+                                  setAddres1(doc.docs[0].data().address1);
+                                  setAddres2(doc.docs[0].data().address2);
+                                  setMobile1(doc.docs[0].data().mobile1);
+                                  setMobile2(doc.docs[0].data().mobile2);
+                                  setRoot(doc.docs[0].data().root);
+                                  setImageUrl(doc.docs[0].data().imgUrl);
+                                  setisValidatedCustomerNic(true);
+                                  loaderModalClose();
+                                }
+                              });
+                          }
+                        });
+                    }
+                  });
+              } else {
+                setisValidatedCustomerNic(true);
+                loaderModalClose();
+              }
+            });
+        }
       } else {
         setisValidatedCustomerNic(false);
         NotificationManager.warning(

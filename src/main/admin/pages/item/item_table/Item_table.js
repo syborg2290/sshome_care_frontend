@@ -677,7 +677,6 @@ export default function ItemTable() {
             columns={columns}
             options={{
               selectableRows: false,
-
               customToolbarSelect: () => {},
               filterType: "textField",
               download: false,

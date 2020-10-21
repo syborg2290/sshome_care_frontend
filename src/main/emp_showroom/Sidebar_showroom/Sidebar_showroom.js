@@ -45,7 +45,7 @@ const structure = [
   {
     id: 11,
     label: "Invoice",
-    link: "",
+    link: "/showroom/ui/invoiceHistory",
     icon: <LibraryIcon className="icons" />,
   },
 

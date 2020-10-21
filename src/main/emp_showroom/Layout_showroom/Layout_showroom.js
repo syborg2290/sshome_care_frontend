@@ -13,6 +13,7 @@ import Sidebar from "../Sidebar_showroom/Sidebar_showroom";
 import ItemTable from "../pages_showroom/item/item_table/Item_table_showroom";
 import CustomerTable from "../pages_showroom/customer/customer_table/Customer_table_showroom";
 import MakeInvoice from "../pages_showroom/invoice/make_invoice/Make_invoice";
+import InvoiceHistory from "../pages_showroom/invoice_History/Invoice_history";
 
 import InvoiceCustomer from "../pages_showroom/customer/add_Customer/Add_Customer";
 import PrintInvoice from "../pages_showroom/invoice/make_invoice/printInvoice/Print_invoice";
@@ -28,6 +29,10 @@ function LayoutShowroom(props) {
           <Switch>
             <Route path="/showroom/itemTable" component={ItemTable} />
             <Route path="/showroom/ui/customer" component={CustomerTable} />
+            <Route
+              path="/showroom/ui/invoiceHistory"
+              component={InvoiceHistory}
+            />
             <Route
               path="/showroom/invoice/printInvoice"
               component={PrintInvoice}

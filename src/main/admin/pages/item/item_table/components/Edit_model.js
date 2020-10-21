@@ -162,8 +162,9 @@ function EditModel({
                                                     chassisNo: chassisNo,
                                                     color: color,
                                                     qty:
-                                                      docRe.data().qty +
-                                                      Math.round(qty),
+                                                      Math.round(
+                                                        docRe.data().qty
+                                                      ) + Math.round(qty),
                                                     cashPrice: cashPrice,
                                                     salePrice: salePrice,
                                                     noOfInstallments: noOfInstallments,

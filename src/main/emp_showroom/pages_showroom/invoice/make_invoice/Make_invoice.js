@@ -113,7 +113,7 @@ function Make_invoice() {
         .doc(itemid)
         .get()
         .then((doc) => {
-          if (doc.data().qty >= (value === "" ? 1 : value)) {
+          if (Math.round(doc.data().qty) >= (value === "" ? 1 : value)) {
             setItemQty({
               ...itemQty,
               [row.i]: value,
@@ -302,7 +302,9 @@ function Make_invoice() {
                         .collection("item")
                         .doc(itemUDoc.id)
                         .update({
-                          qty: newArray.data().qty - itemQty[itemUDoc.i],
+                          qty:
+                            Math.round(newArray.data().qty) -
+                            itemQty[itemUDoc.i],
                         });
                     });
                     setLoadingSubmit(false);
@@ -396,7 +398,8 @@ function Make_invoice() {
                     .collection("item")
                     .doc(itemUDoc.id)
                     .update({
-                      qty: newArray.data().qty - itemQty[itemUDoc.i],
+                      qty:
+                        Math.round(newArray.data().qty) - itemQty[itemUDoc.i],
                     });
                 });
                 setLoadingSubmit(false);
@@ -439,7 +442,7 @@ function Make_invoice() {
           .collection("item")
           .doc(itemUDoc.id)
           .update({
-            qty: newArray.data().qty - itemQty[itemUDoc.i],
+            qty: Math.round(newArray.data().qty) - itemQty[itemUDoc.i],
           });
       });
       setLoadingSubmit(false);

@@ -22,8 +22,6 @@ import { useHistory } from "react-router-dom";
 
 export default function Add_Customer() {
   const location = useLocation();
-  // eslint-disable-next-line
-  const [loading, setLoading] = useState(false);
 
   const [nic, setNic] = useState("");
   const [fname, setFirstName] = useState("");
@@ -58,7 +56,6 @@ export default function Add_Customer() {
   const [isValidatedTrustee2Nic, setisValidatedTrustee2Nic] = useState(false);
 
   const [loaderModalOpenV, setloaderModalOpen] = useState(false);
-
   const [inputsNic, setInputsNic] = useState({});
 
   let history = useHistory();
@@ -201,67 +198,6 @@ export default function Add_Customer() {
     }
   };
 
-  const customerRelationsNicValidations = async (nic) => {
-    let isInOnGoingRelation = false;
-
-    db.collection("invoice")
-      .where("status_of_payandgo", "==", "onGoing")
-      .get()
-      .then((inDoc) => {
-        inDoc.docs.forEach((inEachDoc) => {
-          db.collection("customer")
-            .doc(inEachDoc.data().customer_id)
-            .get()
-            .then((cusDoc) => {
-              for (
-                var s = 0;
-                s < Object.keys(cusDoc.data().relations_nics).length;
-                s++
-              ) {
-                if (cusDoc.data().relations_nics[s] === nic) {
-                  isInOnGoingRelation = true;
-                }
-              }
-            });
-        });
-      });
-    db.collection("customer")
-      .where("status", "==", "arrears")
-      .get()
-      .then((custArr) => {
-        custArr.docs.forEach((inEachDoc) => {
-          for (
-            var q = 0;
-            q < Object.keys(inEachDoc.data().relations_nics).length;
-            q++
-          ) {
-            if (inEachDoc.data().relations_nics[q] === nic) {
-              isInOnGoingRelation = true;
-            }
-          }
-        });
-      });
-
-    db.collection("customer")
-      .where("status", "==", "blacklist")
-      .get()
-      .then((custArr) => {
-        custArr.docs.forEach((inEachDoc) => {
-          for (
-            var n = 0;
-            n < Object.keys(inEachDoc.data().relations_nics).length;
-            n++
-          ) {
-            if (inEachDoc.data().relations_nics[n] === nic) {
-              isInOnGoingRelation = true;
-            }
-          }
-        });
-      });
-
-    return isInOnGoingRelation;
-  };
-
   const customerNicValidation = async (e) => {
     var enterKey = 13; //Key Code for Enter Key
     var { value } = e.target;
@@ -271,15 +207,74 @@ export default function Add_Customer() {
       if (result) {
         loaderModalOpen();
 
-        let customerRelationsCheck = await customerRelationsNicValidations(
-          value.trim()
-        );
+        var relationsValidations = false;
 
-        if (customerRelationsCheck) {
+        await db
+          .collection("invoice")
+          .where("status_of_payandgo", "==", "onGoing")
+          .get()
+          .then((inDoc) => {
+            inDoc.docs.forEach((inEachDoc) => {
+              db.collection("customer")
+                .doc(inEachDoc.data().customer_id)
+                .get()
+                .then((cusDoc) => {
+                  for (
+                    var s = 0;
+                    s < Object.keys(cusDoc.data().relations_nics).length;
+                    s++
+                  ) {
+                    if (cusDoc.data().relations_nics[s] === nic) {
+                      relationsValidations = true;
+                      break;
+                    }
+                  }
+                });
+            });
+          });
+        await db
+          .collection("customer")
+          .where("status", "==", "arrears")
+          .get()
+          .then((custArr) => {
+            custArr.docs.forEach((inEachDoc) => {
+              for (
+                var q = 0;
+                q < Object.keys(inEachDoc.data().relations_nics).length;
+                q++
+              ) {
+                if (inEachDoc.data().relations_nics[q] === nic) {
+                  relationsValidations = true;
+                  break;
+                }
+              }
+            });
+          });
+
+        await db
+          .collection("customer")
+          .where("status", "==", "blacklist")
+          .get()
+          .then((custArr) => {
+            custArr.docs.forEach((inEachDoc) => {
+              for (
+                var n = 0;
+                n < Object.keys(inEachDoc.data().relations_nics).length;
+                n++
+              ) {
+                if (inEachDoc.data().relations_nics[n] === nic) {
+                  relationsValidations = true;
+                  break;
+                }
+              }
+            });
+          });
+
+        if (relationsValidations) {
           setisValidatedCustomerNic(false);
           loaderModalClose();
           NotificationManager.warning(
-            "Entered customer's related one person or multiple persons in the ongoing status or blacklist!",
+            "Entered customer have some relations with ongoing 'pay and go' list!",
             "Attention!"
           );
         } else {
@@ -1026,7 +1021,6 @@ export default function Add_Customer() {
                   fullWidth
                   id="nic"
                   label="NIC"
-                  autoFocus
                   size="small"
                   onKeyUp={trustee1NicValidation}
                   onChange={(e) => {
@@ -1150,7 +1144,6 @@ export default function Add_Customer() {
                   fullWidth
                   id="mNumber"
                   label="Contact Number 1"
-                  autoFocus
                   size="small"
                   onChange={(e) => {
                     setTrustee1Mobile1(e.target.value);
@@ -1173,7 +1166,6 @@ export default function Add_Customer() {
                   fullWidth
                   id="mNumber"
                   label="Contact Number 2"
-                  autoFocus
                   size="small"
                   onChange={(e) => {
                     setTrustee1Mobile2(e.target.value);
@@ -1204,7 +1196,6 @@ export default function Add_Customer() {
                   fullWidth
                   id="nic"
                   label="NIC"
-                  autoFocus
                   size="small"
                   onKeyUp={trustee2NicValidation}
                   onChange={(e) => {

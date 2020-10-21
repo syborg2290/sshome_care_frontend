@@ -151,14 +151,16 @@ function EditModel({
                                             } else {
                                               //Rest of code here
                                               setLoadingSubmit(true);
-
-                                              let variable = {
+                                              db.collection("item").doc(docId).get().then((docRe) => {
+                                                  
+                                                
+                                                let variable = {
                                                 itemName: itemName,
                                                 brand: brand,
                                                 modelNo: modelNo,
                                                 chassisNo: chassisNo,
                                                 color: color,
-                                                qty: qty,
+                                                qty:docRe.data().qty+ Math.round(qty),
                                                 cashPrice: cashPrice,
                                                 salePrice: salePrice,
                                                 noOfInstallments: noOfInstallments,
@@ -191,6 +193,12 @@ function EditModel({
                                                     "Please try again"
                                                   );
                                                 });
+                                                
+                                                
+                                                
+                                                });
+
+                                              
                                             }
                                           }
                                         }

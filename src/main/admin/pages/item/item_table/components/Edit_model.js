@@ -152,15 +152,13 @@ function EditModel({
                                               //Rest of code here
                                               setLoadingSubmit(true);
                                               db.collection("item").doc(docId).get().then((docRe) => {
-                                                  
-                                                
-                                                let variable = {
+                                              let variable = {
                                                 itemName: itemName,
                                                 brand: brand,
                                                 modelNo: modelNo,
                                                 chassisNo: chassisNo,
                                                 color: color,
-                                                qty:docRe.data().qty+ Math.round(qty),
+                                                qty:Math.round(docRe.data().qty)+ Math.round(qty),
                                                 cashPrice: cashPrice,
                                                 salePrice: salePrice,
                                                 noOfInstallments: noOfInstallments,

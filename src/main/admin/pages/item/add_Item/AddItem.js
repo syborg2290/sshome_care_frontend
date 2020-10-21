@@ -278,8 +278,8 @@ function AddItem() {
                                                       .doc(newArray[0].id)
                                                       .update({
                                                         qty:
-                                                          newArray[0].data()
-                                                            .qty +
+                                                          Math.round(newArray[0].data()
+                                                            .qty) +
                                                           Math.round(qty),
                                                       })
                                                       .then(function (docRef) {

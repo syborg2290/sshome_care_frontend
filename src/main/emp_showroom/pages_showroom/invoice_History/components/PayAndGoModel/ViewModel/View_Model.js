@@ -1,6 +1,6 @@
 import React from "react";
 import { Grid, Container, Typography } from "@material-ui/core";
-
+import CurrencyFormat from "react-currency-format";
 // styles
 import "./View_Model.css";
 
@@ -194,7 +194,14 @@ export default function View_Model() {
               :
             </Grid>
             <Grid item xs={12} sm={8}>
-              <p>50000.00</p>
+              (
+              <CurrencyFormat
+                value={5000}
+                displayType={"text"}
+                thousandSeparator={true}
+                prefix={" "}
+              />
+              ),
             </Grid>
             <Grid className="lbl_topis" item xs={12} sm={3}>
               Color

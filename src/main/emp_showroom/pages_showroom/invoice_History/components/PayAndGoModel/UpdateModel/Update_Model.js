@@ -1,5 +1,13 @@
 import React from "react";
-import { TextField, Grid, Container, Typography } from "@material-ui/core";
+import {
+  TextField,
+  Grid,
+  Container,
+  Typography,
+  Button,
+} from "@material-ui/core";
+import CurrencyFormat from "react-currency-format";
+
 // styles
 import "./Update_Model.css";
 
@@ -54,13 +62,20 @@ export default function Update_Model() {
               <p>2</p>
             </Grid>
             <Grid className="lbl_topi" item xs={12} sm={4}>
-              Balance(LKR)
+              Payed Amount(LKR)
             </Grid>
             <Grid item xs={12} sm={2}>
               :
             </Grid>
             <Grid item xs={12} sm={6}>
-              <p>50000.00</p>
+              (
+              <CurrencyFormat
+                value={2000}
+                displayType={"text"}
+                thousandSeparator={true}
+                prefix={" "}
+              />
+              ),
             </Grid>
 
             <Grid className="lbl_topi" item xs={12} sm={4}>
@@ -100,6 +115,18 @@ export default function Update_Model() {
             </Grid>
             <Grid item xs={12} sm={6}>
               <p>14 Days Delayd</p>
+            </Grid>
+          </Grid>
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={9}></Grid>
+            <Grid item xs={12} sm={3}>
+              <Button
+                variant="contained"
+                color="primary"
+                className="btn_update"
+              >
+                Done
+              </Button>
             </Grid>
           </Grid>
         </form>

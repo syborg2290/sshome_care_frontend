@@ -69,7 +69,9 @@ export default function Invoice_history() {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
   const [payangoTableData, setpayangoTableData] = useState([]);
+  const [payangoAllData, setpayangoAllData] = useState([]);
   const [fullPaymentTableData, setFullPaymentTableData] = useState([]);
+  const [fullPaymentAllData, setFullPaymentAllData] = useState([]);
 
   const [installmentUpdate, setInstallmentUpdate] = useState(false); //  table models
   const [installmentvisible, setInstallmentVisible] = useState(false); //  table models
@@ -138,19 +140,6 @@ export default function Invoice_history() {
         filter: true,
         setCellHeaderProps: (value) => ({
           style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
-    {
-      name: "",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: {
-            fontSize: "15px",
-            color: "black",
-            fontWeight: "600",
-          },
         }),
       },
     },
@@ -228,7 +217,12 @@ export default function Invoice_history() {
       .get()
       .then((cust) => {
         var rawData = [];
+        var rawAllData = [];
         cust.docs.forEach((siDoc) => {
+          rawAllData.push({
+            id: siDoc.id,
+            data: siDoc.data(),
+          });
           rawData.push({
             InvoiceNo: siDoc.data().invoice_number,
             Date: moment(siDoc.data().date.toDate()).format(
@@ -254,39 +248,43 @@ export default function Invoice_history() {
               siDoc.data().status_of_payandgo === "onGoing" ? (
                 <span
                   style={{
-                    color: "white",
-                    backgroundColor: "#09b66d",
+                    color: "black",
+                    backgroundColor: "#e6e600",
                     padding: "6px",
                     borderRadius: "20px",
-                    width: "100%",
+                    font: "10px",
                   }}
                 >
-                  {siDoc.data().status_of_payandgo}
+                  Ongoing
                 </span>
               ) : (
                 <span
                   style={{
-                    color: "black",
-                    backgroundColor: "yellow",
+                    color: "white",
+                    backgroundColor: " #009900",
                     padding: "6px",
                     borderRadius: "20px",
                     width: "100%",
                   }}
                 >
-                  {siDoc.data().status_of_payandgo}
+                  Done
                 </span>
               ),
             Action: (
               <div>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  size="small"
-                  className="btn_pay"
-                  onClick={showModalUpdate}
-                >
-                  Update
-                </Button>
+                {siDoc.data().status_of_payandgo === "onGoing" ? (
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                    className="btn_pay"
+                    onClick={showModalUpdate}
+                  >
+                    Update
+                  </Button>
+                ) : (
+                  ""
+                )}
                 <span className="icon_visibl">
                   <HistoryIcon onClick={showModalHistory} />
                 </span>
@@ -297,7 +295,7 @@ export default function Invoice_history() {
             ),
           });
         });
-
+        setpayangoAllData(rawAllData);
         setpayangoTableData(rawData);
       });
 
@@ -306,7 +304,12 @@ export default function Invoice_history() {
       .get()
       .then((cust) => {
         var rawDataFull = [];
+        var rawAllDataFull = [];
         cust.docs.forEach((siDoc) => {
+          rawAllDataFull.push({
+            id: siDoc.id,
+            data: siDoc.data(),
+          });
           rawDataFull.push({
             InvoiceNo: siDoc.data().invoice_number,
             Date: moment(siDoc.data().date.toDate()).format(
@@ -340,6 +343,7 @@ export default function Invoice_history() {
           });
         });
         setIsLoading(false);
+        setFullPaymentAllData(rawAllDataFull);
         setFullPaymentTableData(rawDataFull);
       });
   }, []);

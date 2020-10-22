@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import MUIDataTable from "mui-datatables";
 import { Grid } from "@material-ui/core";
 import { Spin } from "antd";
+import CurrencyFormat from "react-currency-format";
 
 // styles
 import "./History_Model.css";
@@ -66,16 +67,23 @@ export default function History_Model() {
     {
       InvoiceNo: "34532-IN",
       Date: "2020.08.05",
-      Amount: "3000.00",
-      Delayed: "50",
-      Balance: "6000.00",
-    },
-    {
-      InvoiceNo: "67632-IN",
-      Date: "2020.08.05",
-      Amount: "200.00",
+      Amount: (
+        <CurrencyFormat
+          value={3000}
+          displayType={"text"}
+          thousandSeparator={true}
+          prefix={" "}
+        />
+      ),
       Delayed: "15",
-      Balance: "5500.00",
+      Balance: (
+        <CurrencyFormat
+          value={5000}
+          displayType={"text"}
+          thousandSeparator={true}
+          prefix={" "}
+        />
+      ),
     },
   ];
 

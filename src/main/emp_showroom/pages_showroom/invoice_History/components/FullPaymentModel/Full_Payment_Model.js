@@ -1,7 +1,7 @@
 import React from "react";
 import { Grid, Container, Typography } from "@material-ui/core";
 
-export default function Full_Payment_Model() {
+export default function Full_Payment_Model({item_name,sale_price,qty,color,model_no,gurantee_period,}) {
   return (
     <Container component="main" className="conctainers_main">
       <Typography className="titls" variant="h5" gutterBottom>

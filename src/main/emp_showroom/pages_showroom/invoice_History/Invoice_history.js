@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import { Spin, Modal } from "antd";
 import MUIDataTable from "mui-datatables";
+import moment from "moment";
+import CurrencyFormat from "react-currency-format";
 import { Button, Box, Tab, Tabs, AppBar, Grid } from "@material-ui/core";
+
+import db from "../../../../config/firebase.js";
 
 // components
 import UpdateInstallment from "../invoice_History/components/PayAndGoModel/UpdateModel/Update_Model";
@@ -64,6 +68,8 @@ export default function Invoice_history() {
   const [currentIndx, setCurrentIndx] = useState(0);
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
+  const [payangoTableData, setpayangoTableData] = useState([]);
+  const [fullPaymentTableData, setFullPaymentTableData] = useState([]);
 
   const [installmentUpdate, setInstallmentUpdate] = useState(false); //  table models
   const [installmentvisible, setInstallmentVisible] = useState(false); //  table models
@@ -86,10 +92,6 @@ export default function Invoice_history() {
     setInstallmentVisible(true);
   };
 
-  const showInstallmentFullPayment = () => {
-    setInstallmentFullPayment(true);
-  };
-
   //START pay And Go Columns
   const payAndGoColumns = [
     {
@@ -110,6 +112,7 @@ export default function Invoice_history() {
         }),
       },
     },
+
     {
       name: "Discount",
       options: {
@@ -120,7 +123,7 @@ export default function Invoice_history() {
       },
     },
     {
-      name: "Total",
+      name: "Paid",
       options: {
         filter: false,
         setCellHeaderProps: (value) => ({
@@ -139,19 +142,6 @@ export default function Invoice_history() {
       },
     },
     {
-      name: "",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: {
-            fontSize: "15px",
-            color: "black",
-            fontWeight: "600",
-          },
-        }),
-      },
-    },
-    {
       name: "Action",
       options: {
         filter: true,
@@ -166,70 +156,9 @@ export default function Invoice_history() {
     },
   ];
 
-  const customerTableData = [
-    {
-      InvoiceNo: "232323454v",
-      Date: "Kasun",
-      Discount: "Thaksala",
-      Total: "232323454v",
-      Status: "858689",
-      Action: (
-        <div className="actions">
-          <Button
-            variant="contained"
-            color="primary"
-            size="small"
-            className="btn_pay"
-            onClick={showModalUpdate}
-          >
-            Update
-          </Button>
-          <span className="icon_history">
-            <HistoryIcon onClick={showModalHistory} />
-          </span>
-          <span className="icon_visibl">
-            <VisibilityIcon onClick={showInstallmentView} />
-          </span>
-        </div>
-      ),
-    },
-  ];
-
-  //END  pay And Go Columns
-
-  //START Full Payment Colomns
-
   const fullPaymentColumns = [
     {
       name: "InvoiceNo",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
-    {
-      name: "ItemName",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
-    {
-      name: "ModelNo",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
-
-    {
-      name: "DownPayment",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -246,6 +175,25 @@ export default function Invoice_history() {
         }),
       },
     },
+
+    {
+      name: "Discount",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "Paid",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
     {
       name: "Action",
       options: {
@@ -261,20 +209,125 @@ export default function Invoice_history() {
     },
   ];
 
-  const fullPaymentTableData = [
-    {
-      InvoiceNo: "4532-JH",
-      ItemName: "Kasun",
-      ModelNo: "Thaksala",
-      DownPayment: "858689",
-      Date: "2020.09.28",
-      Action: (
-        <div>
-          <VisibilityIcon onClick={showInstallmentFullPayment} />
-        </div>
-      ),
-    },
-  ];
+  useEffect(() => {
+    db.collection("invoice")
+      .where("customer_id", "!=", null)
+      .get()
+      .then((cust) => {
+        var rawData = [];
+        cust.docs.forEach((siDoc) => {
+          rawData.push({
+            InvoiceNo: siDoc.data().invoice_number,
+            Date: moment(siDoc.data().date.toDate()).format(
+              "dddd, MMMM Do YYYY"
+            ),
+            Discount: (
+              <CurrencyFormat
+                value={siDoc.data().discount}
+                displayType={"text"}
+                thousandSeparator={true}
+                prefix={" "}
+              />
+            ),
+            Paid: (
+              <CurrencyFormat
+                value={siDoc.data().total}
+                displayType={"text"}
+                thousandSeparator={true}
+                prefix={" "}
+              />
+            ),
+            Status:
+              siDoc.data().status_of_payandgo === "onGoing" ? (
+                <span
+                  style={{
+                    color: "black",
+                    backgroundColor: "#e6e600",
+                    padding: "6px",
+                    borderRadius: "20px",
+                    font: "10px",
+                  }}
+                >
+                  Ongoing
+                </span>
+              ) : (
+                <span
+                  style={{
+                    color: "white",
+                    backgroundColor: " #009900",
+                    padding: "6px",
+                    borderRadius: "20px",
+                    width: "100%",
+                  }}
+                >
+                  Done
+                </span>
+              ),
+            Action: (
+              <div>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  size="small"
+                  className="btn_pay"
+                  onClick={showModalUpdate}
+                >
+                  Update
+                </Button>
+                <span className="icon_visibl">
+                  <HistoryIcon onClick={showModalHistory} />
+                </span>
+                <span className="icon_Edit">
+                  <VisibilityIcon onClick={showInstallmentView} />
+                </span>
+              </div>
+            ),
+          });
+        });
+
+        setpayangoTableData(rawData);
+      });
+
+    db.collection("invoice")
+      .where("customer_id", "==", null)
+      .get()
+      .then((cust) => {
+        var rawDataFull = [];
+        cust.docs.forEach((siDoc) => {
+          rawDataFull.push({
+            InvoiceNo: siDoc.data().invoice_number,
+            Date: moment(siDoc.data().date.toDate()).format(
+              "dddd, MMMM Do YYYY"
+            ),
+            Discount: (
+              <CurrencyFormat
+                value={siDoc.data().discount}
+                displayType={"text"}
+                thousandSeparator={true}
+                prefix={" "}
+              />
+            ),
+            Paid: (
+              <CurrencyFormat
+                value={siDoc.data().total}
+                displayType={"text"}
+                thousandSeparator={true}
+                prefix={" "}
+              />
+            ),
+            Action: (
+              <div>
+                <span className="icon_visibl">
+                  <HistoryIcon onClick={showModalHistory} />
+                </span>
+              </div>
+            ),
+          });
+        });
+        setIsLoading(false);
+        setFullPaymentTableData(rawDataFull);
+      });
+  }, []);
 
   //START Full Payment Colomns
 
@@ -370,7 +423,7 @@ export default function Invoice_history() {
               <MUIDataTable
                 title={<span className="title_Span"></span>}
                 className="payAndgo_table"
-                data={customerTableData}
+                data={payangoTableData}
                 columns={payAndGoColumns}
                 options={{
                   selectableRows: false,

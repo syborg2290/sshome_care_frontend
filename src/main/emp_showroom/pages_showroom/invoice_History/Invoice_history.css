@@ -25,7 +25,22 @@
   margin-top: 40px !important;
 }
 
-.update_Installment_Model {
+.history_Installment_Model {
   width: 60% !important;
-  height: auto !important;
+}
+
+/* .view_Installment_Model {
+ overflow: scroll !important; 
+} */
+
+.btn_pay {
+  border-radius: 10px !important;
+  font-size: 10px !important;
+  margin: auto !important;
+}
+
+.icon_visibl {
+}
+
+.icon_Edit {
 }

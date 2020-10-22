@@ -113,57 +113,64 @@ export default function View_Model() {
             </Grid>
             <Grid item xs={12} sm={6}>
               <hr className="hr_topiSub" />
+              <br />
             </Grid>
             <Grid item xs={12} sm={6}></Grid>
-            {dataList.map((si) => {
-              return (
-                <div >
-                  <Grid className="lbl_topis" item xs={12} sm={3}>
-                    Full Name
-                  </Grid>
-                  <Grid item xs={12} sm={1}>
-                    :
-                  </Grid>
-                  <Grid item xs={12} sm={3}>
-                    <p>{si.fname}</p>
-                  </Grid>
-                  <Grid item xs={12} sm={5}>
-                    <p>{si.lname}</p>
-                  </Grid>
+          </Grid>
+          {dataList.map((si) => {
+            return (
+              <Grid container spacing={2}>
+                <Grid className="lbl_topis" item xs={12} sm={3}>
+                  Full Name
+                </Grid>
+                <Grid item xs={12} sm={1}>
+                  :
+                </Grid>
+                <Grid item xs={12} sm={3}>
+                  <p>{si.fname}</p>
+                </Grid>
+                <Grid item xs={12} sm={5}>
+                  <p>{si.lname}</p>
+                </Grid>
 
-                  <Grid className="lbl_topis" item xs={12} sm={3}>
-                    NIC
-                  </Grid>
-                  <Grid item xs={12} sm={1}>
-                    :
-                  </Grid>
-                  <Grid item xs={12} sm={8}>
-                    <p>{si.nic}</p>
-                  </Grid>
+                <Grid className="lbl_topis" item xs={12} sm={3}>
+                  NIC
+                </Grid>
+                <Grid item xs={12} sm={1}>
+                  :
+                </Grid>
+                <Grid item xs={12} sm={8}>
+                  <p>{si.nic}</p>
+                </Grid>
 
-                  <Grid className="lbl_topis" item xs={12} sm={3}>
-                    Address
-                  </Grid>
-                  <Grid item xs={12} sm={1}>
-                    :
-                  </Grid>
-                  <Grid item xs={12} sm={8}>
-                    <p>{si.address}</p>
-                  </Grid>
+                <Grid className="lbl_topis" item xs={12} sm={3}>
+                  Address
+                </Grid>
+                <Grid item xs={12} sm={1}>
+                  :
+                </Grid>
+                <Grid item xs={12} sm={8}>
+                  <p>{si.address}</p>
+                </Grid>
 
-                  <Grid className="lbl_topis" item xs={12} sm={3}>
-                    Tele.
-                  </Grid>
-                  <Grid item xs={12} sm={1}>
-                    :
-                  </Grid>
-                  <Grid item xs={12} sm={8}>
-                    <p>{si.mobile}</p>
-                  </Grid>
-                </div>
-              );
-            })}
-            ;
+                <Grid className="lbl_topis" item xs={12} sm={3}>
+                  Tele.
+                </Grid>
+                <Grid item xs={12} sm={1}>
+                  :
+                </Grid>
+                <Grid item xs={12} sm={8}>
+                  <p>{si.mobile}</p>
+                </Grid>
+                <Grid item xs={12} sm={12}>
+                  <hr />
+                  <br />
+                </Grid>
+              </Grid>
+            );
+          })}
+
+          <Grid container spacing={2}>
             <Grid className="lbl_topiSub" item xs={12} sm={12}>
               Item
             </Grid>

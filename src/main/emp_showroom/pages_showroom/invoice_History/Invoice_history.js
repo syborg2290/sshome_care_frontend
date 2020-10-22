@@ -142,6 +142,19 @@ export default function Invoice_history() {
       },
     },
     {
+      name: "",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: {
+            fontSize: "15px",
+            color: "black",
+            fontWeight: "600",
+          },
+        }),
+      },
+    },
+    {
       name: "Action",
       options: {
         filter: true,
@@ -318,7 +331,9 @@ export default function Invoice_history() {
             Action: (
               <div>
                 <span className="icon_visibl">
-                  <HistoryIcon onClick={showModalHistory} />
+                  <VisibilityIcon
+                    onClick={() => setInstallmentFullPayment(true)}
+                  />
                 </span>
               </div>
             ),

@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  TextField,
-  Grid,
-  Container,
-  Typography,
-} from "@material-ui/core";
+import { TextField, Grid, Container, Typography } from "@material-ui/core";
 // styles
 import "./Update_Model.css";
 
@@ -38,7 +33,9 @@ export default function Update_Model() {
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
-                autoComplete="nic"
+                type="number"
+                InputProps={{ inputProps: { min: 0 } }}
+                autoComplete="amount"
                 variant="outlined"
                 required
                 fullWidth
@@ -84,7 +81,9 @@ export default function Update_Model() {
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
-                autoComplete="nic"
+                type="number"
+                autoComplete="delayed"
+                InputProps={{ inputProps: { min: 0 } }}
                 variant="outlined"
                 required
                 fullWidth

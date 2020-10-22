@@ -1,9 +1,5 @@
 import React from "react";
-import {
-  Grid,
-  Container,
-  Typography,
-} from "@material-ui/core";
+import { Grid, Container, Typography } from "@material-ui/core";
 
 export default function Full_Payment_Model() {
   return (

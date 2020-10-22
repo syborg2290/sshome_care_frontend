@@ -207,7 +207,7 @@ export default function ItemTable() {
         title="Selected Items"
         visible={selectedItemtVisible}
         footer={null}
-        className="model_selected Item"
+        className="model_selected_Item"
         onCancel={selectedModalClose}
       >
         <div className="table_selected_Model">

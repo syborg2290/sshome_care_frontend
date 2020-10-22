@@ -7,6 +7,8 @@ import { useHistory } from "react-router-dom";
 
 // styles
 import "./SelectedItem_model.css";
+// eslint-disable-next-line
+import style from "react-syntax-highlighter/dist/esm/styles/hljs/agate";
 
 export default function SelectedItem_Model({ itemListProps, closeModel }) {
   const [isLoading, setLoading] = useState(false);
@@ -59,7 +61,7 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
         title: itemsData[i].title,
         unitprice: itemsData[i].unitprice,
         qty: itemsData[i].qty,
-        paymentWay: paymentWay[i],
+        paymentWay: itemsData.length === 0 ? paymentWay[i] : "FullPayment",
         item: itemsData[i].item,
         customer: null,
       };
@@ -121,30 +123,34 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
             <List.Item.Meta
               title={
                 <Row>
-                  <Col span={7}> {item.title}</Col>
-                  <Col span={3}></Col>
+                  <Col span={5}> {item.title}</Col>
+                  <Col span={2}></Col>
                   <Col span={12}>
-                    <Radio.Group
-                      className="radio_btn"
-                      defaultValue="PayandGo"
-                      buttonStyle="solid"
-                      size="small"
-                      onChange={(e) => {
-                        setpaymentWay({
-                          ...paymentWay,
-                          [item.i]: e.target.value,
-                        });
-                      }}
-                    >
-                      <Radio.Button className="btn_radio" value="PayandGo">
-                        Pay and Go
-                      </Radio.Button>
-                      <Radio.Button className="btn_radio" value="FullPayment">
-                        Full Payment
-                      </Radio.Button>
-                    </Radio.Group>
+                    {itemsData.length === 1 ? (
+                      <Radio.Group
+                        className="radio_btn"
+                        defaultValue="PayandGo"
+                        buttonStyle="solid"
+                        size="small"
+                        onChange={(e) => {
+                          setpaymentWay({
+                            ...paymentWay,
+                            [item.i]: e.target.value,
+                          });
+                        }}
+                      >
+                        <Radio.Button className="btn_radio" value="PayandGo">
+                          Pay and Go
+                        </Radio.Button>
+                        <Radio.Button className="btn_radio" value="FullPayment">
+                          Full Payment
+                        </Radio.Button>
+                      </Radio.Group>
+                    ) : (
+                      ""
+                    )}
                   </Col>
-                  <Col span={2}>
+                  <Col span={5}>
                     <span className="icons_Close">
                       <CloseOutlined
                         onClick={() => removeItems(item.i, item.id)}

@@ -1,11 +1,5 @@
-import React, { useState } from "react";
-import {
-  TextField,
-  Button,
-  Grid,
-  Container,
-  Typography,
-} from "@material-ui/core";
+import React from "react";
+import { Grid, Container, Typography } from "@material-ui/core";
 import CurrencyFormat from "react-currency-format";
 
 export default function Full_Payment_Model() {
@@ -28,21 +22,6 @@ export default function Full_Payment_Model() {
             </Grid>
             <Grid item xs={12} sm={7}>
               <p>Gass Cooker</p>
-            </Grid>
-
-            <Grid className="lbl_topis" item xs={12} sm={4}>
-              Sale Price(LKR)
-            </Grid>
-            <Grid item xs={12} sm={1}>
-              :
-            </Grid>
-            <Grid item xs={12} sm={7}>
-              <CurrencyFormat
-                value={3500}
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={" "}
-              />
             </Grid>
 
             <Grid className="lbl_topis" item xs={12} sm={4}>

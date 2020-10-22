@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import MUIDataTable from "mui-datatables";
 import { Grid } from "@material-ui/core";
 import { Spin } from "antd";
@@ -6,10 +6,12 @@ import CurrencyFormat from "react-currency-format";
 
 // styles
 import "./CustomerHistoryModel.css";
+import db from "../../../../../../../config/firebase";
 
-export default function CustomerHistoryModel() {
+export default function CustomerHistoryModel({ customerId }) {
   // eslint-disable-next-line
   const [isLoading, setIsLoading] = useState(true);
+  const [installmentsTableData, setInstallmentsTableData] = useState([]);
 
   // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
@@ -63,29 +65,48 @@ export default function CustomerHistoryModel() {
     },
   ];
 
-  const customerTableData = [
-    {
-      InvoiceNo: "34532-IN",
-      Date: "2020.08.05",
-      Amount: (
-        <CurrencyFormat
-          value={5000}
-          displayType={"text"}
-          thousandSeparator={true}
-          prefix={" "}
-        />
-      ),
-      Delayed: "50",
-      Balance: (
-        <CurrencyFormat
-          value={2000}
-          displayType={"text"}
-          thousandSeparator={true}
-          prefix={" "}
-        />
-      ),
-    },
-  ];
+  useEffect(() => {
+    db.collection("invoice")
+      .where("customer_id", "==", customerId)
+      .get()
+      .then((allInvoices) => {
+        allInvoices.docs.forEach((docReIn) => {
+          db.collection("installment")
+            .where("invoice_number", "==", docReIn.data().invoice_number)
+            .get()
+            .then((instReDoc) => {
+              var instRawData = [];
+              instReDoc.docs.forEach((insRe) => {
+                instRawData.push({
+                  InvoiceNo: insRe.data().invoice_number,
+                  Date: insRe.data().date,
+                  Amount: <CurrencyFormat
+                        value={ insRe.data().amount}
+                        displayType={"text"}
+                        thousandSeparator={true}
+                        prefix={" "}
+                      />,
+                  Delayed:  <CurrencyFormat
+                        value={insRe.data().delayed}
+                        displayType={"text"}
+                        thousandSeparator={true}
+                        prefix={" "}
+                      />,
+                  Balance: <CurrencyFormat
+                        value={insRe.data().balance}
+                        displayType={"text"}
+                        thousandSeparator={true}
+                        prefix={" "}
+                      /> ,
+                });
+              });
+              setInstallmentsTableData(instRawData);
+              setIsLoading(false);
+            });
+        });
+      });
+    
+  }, [customerId]);
 
   return (
     <div>
@@ -94,7 +115,7 @@ export default function CustomerHistoryModel() {
           <MUIDataTable
             title={<span className="title_Span">Installment History</span>}
             className="installment_table"
-            data={customerTableData}
+            data={installmentsTableData}
             columns={columns}
             options={{
               selectableRows: false,

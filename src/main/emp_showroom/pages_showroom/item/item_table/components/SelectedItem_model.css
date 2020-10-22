@@ -5,9 +5,14 @@
 }
 
 .icons_Close {
-  font-size: 15px !important;
-  color: rgb(245, 67, 67) !important;
+  font-size: 13px !important;
+  font-weight: 900 !important;
+  color: rgb(255, 255, 255) !important;
   float: right !important;
+  background-color: rgb(253, 80, 80) !important;
+  border-radius: 9px !important;
+  width: 25px !important;
+  text-align: center !important;
 }
 
 .radio_btn {
@@ -160,9 +165,15 @@
   }
 }
 
-@media screen and (min-width: 391px) and (max-width: 399px) {
+@media screen and (min-width: 280px) and (max-width: 299px) {
   .icons_Close {
-    margin-top: -40px !important;
+    margin-top: 20px !important;
+  }
+}
+
+@media screen and (min-width: 300px) and (max-width: 600px) {
+  .icons_Close {
+    margin-top: 20px !important;
   }
 }
 

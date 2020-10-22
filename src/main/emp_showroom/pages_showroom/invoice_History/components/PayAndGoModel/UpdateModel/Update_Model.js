@@ -7,11 +7,34 @@ import {
   Button,
 } from "@material-ui/core";
 import CurrencyFormat from "react-currency-format";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
+import { useHistory } from "react-router-dom";
+import { Modal } from "antd";
 
 // styles
 import "./Update_Model.css";
 
 export default function Update_Model() {
+  const { confirm } = Modal;
+
+  let history = useHistory();
+
+  const showConfirm = () => {
+    confirm({
+      title: "Do you Want to Print a Recipt?",
+      icon: <ExclamationCircleOutlined />,
+
+      onOk() {
+        history.push(
+          "/showroom/invoice_history/payAndGo/updateModel/PrintReceipt"
+        );
+      },
+      onCancel() {
+        console.log("No");
+      },
+    });
+  };
+
   return (
     <Container component="main" className="conctainefr_main">
       <Typography className="titleffs" variant="h5" gutterBottom>
@@ -122,6 +145,7 @@ export default function Update_Model() {
                 variant="contained"
                 color="primary"
                 className="btn_update"
+                onClick={showConfirm}
               >
                 Done
               </Button>

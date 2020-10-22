@@ -17,6 +17,7 @@ import InvoiceHistory from "../pages_showroom/invoice_History/Invoice_history";
 
 import InvoiceCustomer from "../pages_showroom/customer/add_Customer/Add_Customer";
 import PrintInvoice from "../pages_showroom/invoice/make_invoice/printInvoice/Print_invoice";
+import PrintReceipt from "../pages_showroom/invoice_History/components/PayAndGoModel/UpdateModel/Make_Recipt/Recipt";
 
 function LayoutShowroom(props) {
   return (
@@ -36,6 +37,10 @@ function LayoutShowroom(props) {
             <Route
               path="/showroom/invoice/printInvoice"
               component={PrintInvoice}
+            />
+            <Route
+              path="/showroom/invoice_history/payAndGo/updateModel/PrintReceipt"
+              component={PrintReceipt}
             />
             <Route path="/showroom/ui/makeInvoice" component={MakeInvoice} />
             <Route

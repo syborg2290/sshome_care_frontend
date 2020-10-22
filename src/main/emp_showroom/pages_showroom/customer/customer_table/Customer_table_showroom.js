@@ -209,14 +209,14 @@ export default function ItemTable() {
                     style: { backgroundColor: "#EFFBF5" },
                   };
                 }
-
-                if (customerAllData[rowIndex]?.data?.status === "arrears") {
+                
+                 if (customerAllData[rowIndex]?.data?.status === "arrears") {
                   return {
                     style: { backgroundColor: "#F5F6CE" },
                   };
                 }
-
-                if (customerAllData[rowIndex]?.data?.status === "blacklist") {
+                
+                 if (customerAllData[rowIndex]?.data?.status === "blacklist") {
                   return {
                     style: { backgroundColor: "#F6CECE" },
                   };

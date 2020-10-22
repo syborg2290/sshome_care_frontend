@@ -87,7 +87,7 @@ export default function customerDetailsModel({
         :
       </Col>
       <Col className="customer" span={14}>
-        {mobile2 !== "" ? mobile2 : "-"}
+        {mobile2 !=="" ?mobile2:"-"}
       </Col>
 
       <Col className="customer_details" span={8}>
@@ -107,7 +107,7 @@ export default function customerDetailsModel({
         :
       </Col>
       <Col className="customer" span={14}>
-        {address2 !== "" ? address2 : "-"}
+        {address2 !==""?address2:"-"}
       </Col>
 
       <Col className="customer_details" span={8}>

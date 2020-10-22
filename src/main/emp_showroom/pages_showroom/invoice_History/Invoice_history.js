@@ -1,13 +1,9 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { Grid } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import AppBar from "@material-ui/core/AppBar";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import Box from "@material-ui/core/Box";
 import { Spin, Modal } from "antd";
 import MUIDataTable from "mui-datatables";
+import { Button, Box, Tab, Tabs, AppBar, Grid } from "@material-ui/core";
 
 // components
 import UpdateInstallment from "../invoice_History/components/PayAndGoModel/UpdateModel/Update_Model";
@@ -21,7 +17,6 @@ import "./Invoice_history.css";
 // icons
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import HistoryIcon from "@material-ui/icons/History";
-import AttachMoneyOutlinedIcon from "@material-ui/icons/AttachMoneyOutlined";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -145,10 +140,13 @@ export default function Invoice_history() {
     },
     {
       name: "Action",
+
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
           style: {
+            width: "10px",
+            margin: "auto",
             fontSize: "15px",
             color: "black",
             fontWeight: "600",
@@ -167,10 +165,15 @@ export default function Invoice_history() {
       Status: "858689",
       Action: (
         <div>
-          <AttachMoneyOutlinedIcon
-            className="icon_pay"
+          <Button
+            variant="contained"
+            color="primary"
+            size="small"
+            className="btn_pay"
             onClick={showModalUpdate}
-          />
+          >
+            Update
+          </Button>
           <span className="icon_visibl">
             <HistoryIcon onClick={showModalHistory} />
           </span>
@@ -209,15 +212,6 @@ export default function Invoice_history() {
       name: "ModelNo",
       options: {
         filter: true,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
-    {
-      name: "Qty",
-      options: {
-        filter: false,
         setCellHeaderProps: (value) => ({
           style: { fontSize: "15px", color: "black", fontWeight: "600" },
         }),
@@ -262,7 +256,6 @@ export default function Invoice_history() {
       InvoiceNo: "4532-JH",
       ItemName: "Kasun",
       ModelNo: "Thaksala",
-      Qty: "232323454v",
       DownPayment: "858689",
       Date: "2020.09.28",
       Action: (
@@ -286,9 +279,9 @@ export default function Invoice_history() {
           setInstallmentUpdate(false);
         }}
       >
-        <div className="Installment_Model">
-          <div className="Installment_Model_Main">
-            <div className="Installment_Model_Detail">
+        <div className="update_Installment_Model">
+          <div className="update_Installment_Model_Main">
+            <div className="update_Installment_Model_Detail">
               <UpdateInstallment />
             </div>
           </div>
@@ -299,7 +292,7 @@ export default function Invoice_history() {
       {/*Start Installment Model History */}
       <Modal
         visible={installmentHistory}
-        className="update_Installment_Model"
+        className="history_Installment_Model"
         footer={null}
         onCancel={() => {
           setInstallmentHistory(false);
@@ -317,7 +310,7 @@ export default function Invoice_history() {
       {/*Start Installment Model View */}
       <Modal
         visible={installmentvisible}
-        className="update_Installment_Model"
+        className="view_Installment_Model"
         footer={null}
         onCancel={() => {
           setInstallmentVisible(false);

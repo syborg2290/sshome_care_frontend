@@ -8,8 +8,10 @@
 .form {
   width: 100% !important;
   margin-top: 30px !important;
+  margin-bottom: -100px !important;
 }
 
-.container_main {
-  margin-bottom: 100px !important;
+.lbl_topi {
+  font-weight: 600 !important;
+  color: #222a44 !important;
 }

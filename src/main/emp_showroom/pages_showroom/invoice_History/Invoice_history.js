@@ -141,13 +141,10 @@ export default function Invoice_history() {
     },
     {
       name: "Action",
-
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
           style: {
-            width: "10px",
-            margin: "auto",
             fontSize: "15px",
             color: "black",
             fontWeight: "600",
@@ -366,7 +363,7 @@ export default function Invoice_history() {
                 options={{
                   selectableRows: false,
                   customToolbarSelect: () => {},
-                  filterType: "checkbox",
+                  filterType: "textField",
                   download: false,
                   print: false,
                   searchPlaceholder: "Search using any column names",
@@ -408,7 +405,7 @@ export default function Invoice_history() {
                 options={{
                   selectableRows: false,
                   customToolbarSelect: () => {},
-                  filterType: "checkbox",
+                  filterType: "textField",
                   download: false,
                   print: false,
                   searchPlaceholder: "Search using any column names",

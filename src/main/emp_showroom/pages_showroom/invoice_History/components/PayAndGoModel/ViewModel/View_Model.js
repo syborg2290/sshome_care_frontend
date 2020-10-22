@@ -5,15 +5,13 @@ import { Grid, Container, Typography } from "@material-ui/core";
 import "./View_Model.css";
 
 export default function View_Model() {
-  const data = [
-    {
-      fname: "Jilat",
-      lname: "Kasun",
-      nic: "232323454v",
-      address: "No.156 kurudugaha hatahakma Galle",
-      mobile: "07838689",
-    },
-  ];
+  const data = {
+    fname: "Jilat",
+    lname: "Kasun",
+    nic: "232323454v",
+    address: "No.156 kurudugaha hatahakma Galle",
+    mobile: "07838689",
+  };
 
   return (
     <Container component="main" className="conctainers_main">
@@ -203,7 +201,7 @@ export default function View_Model() {
               <p>934-UER</p>
             </Grid>
             <Grid className="lbl_topis" item xs={12} sm={3}>
-              Warrenty Period
+              Guarantee Period
             </Grid>
             <Grid item xs={12} sm={1}>
               :

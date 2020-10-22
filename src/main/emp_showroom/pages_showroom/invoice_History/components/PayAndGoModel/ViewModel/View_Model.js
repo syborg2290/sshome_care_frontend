@@ -5,13 +5,22 @@ import { Grid, Container, Typography } from "@material-ui/core";
 import "./View_Model.css";
 
 export default function View_Model() {
-  const data = {
-    fname: "Jilat",
-    lname: "Kasun",
-    nic: "232323454v",
-    address: "No.156 kurudugaha hatahakma Galle",
-    mobile: "07838689",
-  };
+  const dataList = [
+    {
+      fname: "Jilat",
+      lname: "Kasun",
+      nic: "232323454v",
+      address: "No.156 kurudugaha hatahakma Galle",
+      mobile: "07838689",
+    },
+    {
+      fname: "Jilat",
+      lname: "Kasun",
+      nic: "232323454v",
+      address: "No.156 kurudugaha hatahakma Galle",
+      mobile: "07838689",
+    },
+  ];
 
   return (
     <Container component="main" className="conctainers_main">
@@ -72,7 +81,6 @@ export default function View_Model() {
             <Grid item xs={12} sm={5}>
               <p>Kavishka</p>
             </Grid>
-
             <Grid className="lbl_topis" item xs={12} sm={3}>
               NIC
             </Grid>
@@ -82,7 +90,6 @@ export default function View_Model() {
             <Grid item xs={12} sm={8}>
               <p>98746534256v</p>
             </Grid>
-
             <Grid className="lbl_topis" item xs={12} sm={3}>
               Address
             </Grid>
@@ -92,7 +99,6 @@ export default function View_Model() {
             <Grid item xs={12} sm={8}>
               <p>No.53 Kurunduwatta China FriendShip Village Galle</p>
             </Grid>
-
             <Grid className="lbl_topis" item xs={12} sm={3}>
               Tele.
             </Grid>
@@ -105,55 +111,66 @@ export default function View_Model() {
             <Grid className="lbl_topiSub" item xs={12} sm={12}>
               Trustee
             </Grid>
-
             <Grid item xs={12} sm={6}>
               <hr className="hr_topiSub" />
+              <br />
             </Grid>
             <Grid item xs={12} sm={6}></Grid>
+          </Grid>
+          {dataList.map((si) => {
+            return (
+              <Grid container spacing={2}>
+                <Grid className="lbl_topis" item xs={12} sm={3}>
+                  Full Name
+                </Grid>
+                <Grid item xs={12} sm={1}>
+                  :
+                </Grid>
+                <Grid item xs={12} sm={3}>
+                  <p>{si.fname}</p>
+                </Grid>
+                <Grid item xs={12} sm={5}>
+                  <p>{si.lname}</p>
+                </Grid>
 
-            <Grid className="lbl_topis" item xs={12} sm={3}>
-              Full Name
-            </Grid>
-            <Grid item xs={12} sm={1}>
-              :
-            </Grid>
-            <Grid item xs={12} sm={3}>
-              <p>{data.fname}</p>
-            </Grid>
-            <Grid item xs={12} sm={5}>
-              <p>{data.lname}</p>
-            </Grid>
+                <Grid className="lbl_topis" item xs={12} sm={3}>
+                  NIC
+                </Grid>
+                <Grid item xs={12} sm={1}>
+                  :
+                </Grid>
+                <Grid item xs={12} sm={8}>
+                  <p>{si.nic}</p>
+                </Grid>
 
-            <Grid className="lbl_topis" item xs={12} sm={3}>
-              NIC
-            </Grid>
-            <Grid item xs={12} sm={1}>
-              :
-            </Grid>
-            <Grid item xs={12} sm={8}>
-              <p>{data.nic}</p>
-            </Grid>
+                <Grid className="lbl_topis" item xs={12} sm={3}>
+                  Address
+                </Grid>
+                <Grid item xs={12} sm={1}>
+                  :
+                </Grid>
+                <Grid item xs={12} sm={8}>
+                  <p>{si.address}</p>
+                </Grid>
 
-            <Grid className="lbl_topis" item xs={12} sm={3}>
-              Address
-            </Grid>
-            <Grid item xs={12} sm={1}>
-              :
-            </Grid>
-            <Grid item xs={12} sm={8}>
-              <p>{data.address}</p>
-            </Grid>
+                <Grid className="lbl_topis" item xs={12} sm={3}>
+                  Tele.
+                </Grid>
+                <Grid item xs={12} sm={1}>
+                  :
+                </Grid>
+                <Grid item xs={12} sm={8}>
+                  <p>{si.mobile}</p>
+                </Grid>
+                <Grid item xs={12} sm={12}>
+                  <hr />
+                  <br />
+                </Grid>
+              </Grid>
+            );
+          })}
 
-            <Grid className="lbl_topis" item xs={12} sm={3}>
-              Tele.
-            </Grid>
-            <Grid item xs={12} sm={1}>
-              :
-            </Grid>
-            <Grid item xs={12} sm={8}>
-              <p>{data.mobile}</p>
-            </Grid>
-
+          <Grid container spacing={2}>
             <Grid className="lbl_topiSub" item xs={12} sm={12}>
               Item
             </Grid>
@@ -170,7 +187,6 @@ export default function View_Model() {
             <Grid item xs={12} sm={8}>
               <p>Gass Cooker</p>
             </Grid>
-
             <Grid className="lbl_topis" item xs={12} sm={3}>
               Sale Price(LKR)
             </Grid>
@@ -180,7 +196,6 @@ export default function View_Model() {
             <Grid item xs={12} sm={8}>
               <p>50000.00</p>
             </Grid>
-
             <Grid className="lbl_topis" item xs={12} sm={3}>
               Color
             </Grid>
@@ -190,7 +205,6 @@ export default function View_Model() {
             <Grid item xs={12} sm={8}>
               <p>Black</p>
             </Grid>
-
             <Grid className="lbl_topis" item xs={12} sm={3}>
               Model No.
             </Grid>

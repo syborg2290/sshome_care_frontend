@@ -17,7 +17,6 @@ import "./Invoice_history.css";
 // icons
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import HistoryIcon from "@material-ui/icons/History";
-import PaymentSharpIcon from "@material-ui/icons/AttachMoneyOutlined";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -140,6 +139,19 @@ export default function Invoice_history() {
       },
     },
     {
+      name: "",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: {
+            fontSize: "15px",
+            color: "black",
+            fontWeight: "600",
+          },
+        }),
+      },
+    },
+    {
       name: "Action",
       options: {
         filter: true,
@@ -162,7 +174,7 @@ export default function Invoice_history() {
       Total: "232323454v",
       Status: "858689",
       Action: (
-        <div>
+        <div className="actions">
           <Button
             variant="contained"
             color="primary"
@@ -172,10 +184,10 @@ export default function Invoice_history() {
           >
             Update
           </Button>
-          <span className="icon_visibl">
+          <span className="icon_history">
             <HistoryIcon onClick={showModalHistory} />
           </span>
-          <span className="icon_Edit">
+          <span className="icon_visibl">
             <VisibilityIcon onClick={showInstallmentView} />
           </span>
         </div>

@@ -170,7 +170,6 @@ export default function customerDetailsModel({
         :
       </Col>
       <Col className="customer" span={14}>
-        {/* {moment(createdAt.format("dddd, MMMM Do YYYY, h:mm:ss a"))} */}
         {moment(createdAt.toDate()).format("dddd, MMMM Do YYYY, h:mm:ss a")}
       </Col>
     </Row>

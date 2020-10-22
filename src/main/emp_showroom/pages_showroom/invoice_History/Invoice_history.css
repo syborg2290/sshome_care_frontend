@@ -32,11 +32,18 @@
 .btn_pay {
   border-radius: 10px !important;
   font-size: 10px !important;
-  margin-right: 10px !important;
+  margin-right: 8px !important;
+  margin-top: -8px !important;
 }
 
 .icon_visibl {
 }
 
-.icon_Edit {
+/* .actions {
+  margin-left: 100px !important;
+} */
+
+.icon_history {
+  padding-left: 8px !important;
+  padding-right: 8px !important;
 }

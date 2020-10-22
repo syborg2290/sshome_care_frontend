@@ -87,7 +87,7 @@ export default function customerDetailsModel({
         :
       </Col>
       <Col className="customer" span={14}>
-        {mobile2 !=="" ?mobile2:"-"}
+        {mobile2 !== "" ? mobile2 : "-"}
       </Col>
 
       <Col className="customer_details" span={8}>
@@ -107,7 +107,7 @@ export default function customerDetailsModel({
         :
       </Col>
       <Col className="customer" span={14}>
-        {address2 !==""?address2:"-"}
+        {address2 !== "" ? address2 : "-"}
       </Col>
 
       <Col className="customer_details" span={8}>
@@ -117,7 +117,7 @@ export default function customerDetailsModel({
         :
       </Col>
       <Col className="customer" span={14}>
-        {root !==""?root:"-"}
+        {root !== "" ? root : "-"}
       </Col>
 
       <Col className="customer_details" span={8}>
@@ -127,26 +127,40 @@ export default function customerDetailsModel({
         :
       </Col>
       <Col className="customer" span={14}>
-        {status === "normal" ? <span style={{
-          color: "white",
-          backgroundColor: "#09b66d",
-          padding: "6px",
-          borderRadius:"20px"
-        }}>{status}</span> : status === "arrears" ? <span
-        style={{
-          color: "black",
-          backgroundColor: "#ffd84d",
-          padding: "6px",
-          borderRadius:"20px"
-        }}
-          >{status}</span> : <span
-          style={{
-          color: "white",
-          backgroundColor: "#ff5c33",
-          padding: "6px",
-          borderRadius:"20px"
-        }}
-            >{status}</span>}
+        {status === "normal" ? (
+          <span
+            style={{
+              color: "white",
+              backgroundColor: "#09b66d",
+              padding: "6px",
+              borderRadius: "20px",
+            }}
+          >
+            {status}
+          </span>
+        ) : status === "arrears" ? (
+          <span
+            style={{
+              color: "black",
+              backgroundColor: "#ffd84d",
+              padding: "6px",
+              borderRadius: "20px",
+            }}
+          >
+            {status}
+          </span>
+        ) : (
+          <span
+            style={{
+              color: "white",
+              backgroundColor: "#ff5c33",
+              padding: "6px",
+              borderRadius: "20px",
+            }}
+          >
+            {status}
+          </span>
+        )}
       </Col>
 
       <Col className="customer_details" span={8}>
@@ -156,6 +170,7 @@ export default function customerDetailsModel({
         :
       </Col>
       <Col className="customer" span={14}>
+        {/* {moment(createdAt.format("dddd, MMMM Do YYYY, h:mm:ss a"))} */}
         {moment(createdAt.toDate()).format("dddd, MMMM Do YYYY, h:mm:ss a")}
       </Col>
     </Row>

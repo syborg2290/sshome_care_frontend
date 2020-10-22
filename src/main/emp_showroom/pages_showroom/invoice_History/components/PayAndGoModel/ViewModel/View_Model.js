@@ -208,7 +208,7 @@ export default function View_Model() {
               <p>934-UER</p>
             </Grid>
             <Grid className="lbl_topis" item xs={12} sm={3}>
-              Warrenty Period
+              Guarantee Period
             </Grid>
             <Grid item xs={12} sm={1}>
               :

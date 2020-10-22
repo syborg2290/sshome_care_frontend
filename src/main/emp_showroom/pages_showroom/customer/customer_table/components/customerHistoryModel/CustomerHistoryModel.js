@@ -120,7 +120,7 @@ export default function CustomerHistoryModel({ customerId }) {
             options={{
               selectableRows: false,
               customToolbarSelect: () => {},
-              filterType: "checkbox",
+              filterType: "textField",
               download: false,
               print: false,
               searchPlaceholder: "Search using any column names",

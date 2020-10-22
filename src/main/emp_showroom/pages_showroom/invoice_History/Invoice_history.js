@@ -92,6 +92,10 @@ export default function Invoice_history() {
     setInstallmentVisible(true);
   };
 
+  const showInstallmentFullPayment = () => {
+    setInstallmentFullPayment(true);
+  };
+
   //START pay And Go Columns
   const payAndGoColumns = [
     {
@@ -155,7 +159,9 @@ export default function Invoice_history() {
       },
     },
   ];
+  //END pay And Go Columns
 
+  //START Full Payment Columns
   const fullPaymentColumns = [
     {
       name: "InvoiceNo",
@@ -208,6 +214,10 @@ export default function Invoice_history() {
       },
     },
   ];
+
+  //END Full Payment Columns
+
+  //START pay And Go Rows
 
   useEffect(() => {
     db.collection("invoice")
@@ -287,7 +297,9 @@ export default function Invoice_history() {
 
         setpayangoTableData(rawData);
       });
+    //End pay And Go Rows
 
+    //START Full Payment Rows
     db.collection("invoice")
       .where("customer_id", "==", null)
       .get()
@@ -318,7 +330,7 @@ export default function Invoice_history() {
             Action: (
               <div>
                 <span className="icon_visibl">
-                  <HistoryIcon onClick={showModalHistory} />
+                  <HistoryIcon onClick={showInstallmentFullPayment} />
                 </span>
               </div>
             ),
@@ -329,7 +341,7 @@ export default function Invoice_history() {
       });
   }, []);
 
-  //START Full Payment Colomns
+  //End Full Payment Rows
 
   return (
     <>
@@ -388,6 +400,7 @@ export default function Invoice_history() {
         </div>
       </Modal>
       {/*End Installment Model View */}
+
       {/*Start Installment Model Full Payment */}
       <Modal
         visible={installmentFullPayment}

@@ -68,14 +68,12 @@ export default function Update_Model() {
               :
             </Grid>
             <Grid item xs={12} sm={6}>
-              (
               <CurrencyFormat
                 value={2000}
                 displayType={"text"}
                 thousandSeparator={true}
                 prefix={" "}
               />
-              ),
             </Grid>
 
             <Grid className="lbl_topi" item xs={12} sm={4}>

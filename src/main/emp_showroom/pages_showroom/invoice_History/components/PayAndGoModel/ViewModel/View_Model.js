@@ -178,56 +178,68 @@ export default function View_Model() {
               <hr className="hr_topiSub" />
             </Grid>
             <Grid item xs={12} sm={6}></Grid>
-            <Grid className="lbl_topis" item xs={12} sm={3}>
+            <Grid className="lbl_topis" item xs={12} sm={4}>
               Item Name
             </Grid>
             <Grid item xs={12} sm={1}>
               :
             </Grid>
-            <Grid item xs={12} sm={8}>
+            <Grid item xs={12} sm={7}>
               <p>Gass Cooker</p>
             </Grid>
-            <Grid className="lbl_topis" item xs={12} sm={3}>
-              Sale Price(LKR)
+            <Grid className="lbl_topis" item xs={12} sm={4}>
+              Down Payment(LKR)
             </Grid>
             <Grid item xs={12} sm={1}>
               :
             </Grid>
-            <Grid item xs={12} sm={8}>
-              (
+            <Grid item xs={12} sm={7}>
               <CurrencyFormat
                 value={5000}
                 displayType={"text"}
                 thousandSeparator={true}
                 prefix={" "}
               />
-              ),
             </Grid>
-            <Grid className="lbl_topis" item xs={12} sm={3}>
+            <Grid className="lbl_topis" item xs={12} sm={4}>
+              Discount(LKR)
+            </Grid>
+            <Grid item xs={12} sm={1}>
+              :
+            </Grid>
+            <Grid item xs={12} sm={7}>
+              <CurrencyFormat
+                value={600}
+                displayType={"text"}
+                thousandSeparator={true}
+                prefix={" "}
+              />
+            </Grid>
+            <Grid className="lbl_topis" item xs={12} sm={4}>
               Color
             </Grid>
             <Grid item xs={12} sm={1}>
               :
             </Grid>
-            <Grid item xs={12} sm={8}>
+            <Grid item xs={12} sm={7}>
               <p>Black</p>
             </Grid>
-            <Grid className="lbl_topis" item xs={12} sm={3}>
+            <Grid className="lbl_topis" item xs={12} sm={4}>
               Model No.
             </Grid>
             <Grid item xs={12} sm={1}>
               :
             </Grid>
-            <Grid item xs={12} sm={8}>
+            <Grid item xs={12} sm={7}>
               <p>934-UER</p>
             </Grid>
-            <Grid className="lbl_topis" item xs={12} sm={3}>
+            <Grid className="lbl_topis" item xs={12} sm={4}>
               Guarantee Period
             </Grid>
             <Grid item xs={12} sm={1}>
               :
             </Grid>
-            <Grid item xs={12} sm={8}>
+            <Grid item xs={12} sm={7}>
               <p>10 Years</p>
             </Grid>
           </Grid>

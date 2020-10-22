@@ -85,6 +85,10 @@ export default function Invoice_history() {
   const showModalUpdate = () => {
     setInstallmentUpdate(true);
   };
+  
+  const closeModalUpdate = () => {
+    setInstallmentUpdate(false);
+  };
 
   const showModalHistory = () => {
     setInstallmentHistory(true);
@@ -92,6 +96,10 @@ export default function Invoice_history() {
 
   const showInstallmentView = () => {
     setInstallmentVisible(true);
+  };
+
+  const showInstallmentFullPayment = () => {
+    setInstallmentFullPayment(true);
   };
 
   //START pay And Go Columns
@@ -157,7 +165,9 @@ export default function Invoice_history() {
       },
     },
   ];
+  //END pay And Go Columns
 
+  //START Full Payment Columns
   const fullPaymentColumns = [
     {
       name: "InvoiceNo",
@@ -210,6 +220,10 @@ export default function Invoice_history() {
       },
     },
   ];
+
+  //END Full Payment Columns
+
+  //START pay And Go Rows
 
   useEffect(() => {
     db.collection("invoice")
@@ -298,7 +312,9 @@ export default function Invoice_history() {
         setpayangoAllData(rawAllData);
         setpayangoTableData(rawData);
       });
+    //End pay And Go Rows
 
+    //START Full Payment Rows
     db.collection("invoice")
       .where("customer_id", "==", null)
       .get()
@@ -334,9 +350,7 @@ export default function Invoice_history() {
             Action: (
               <div>
                 <span className="icon_visibl">
-                  <VisibilityIcon
-                    onClick={() => setInstallmentFullPayment(true)}
-                  />
+                  <VisibilityIcon onClick={showInstallmentFullPayment} />
                 </span>
               </div>
             ),
@@ -348,7 +362,7 @@ export default function Invoice_history() {
       });
   }, []);
 
-  //START Full Payment Colomns
+  //End Full Payment Rows
 
   return (
     <>
@@ -364,7 +378,13 @@ export default function Invoice_history() {
         <div className="update_Installment_Model">
           <div className="update_Installment_Model_Main">
             <div className="update_Installment_Model_Detail">
-              <UpdateInstallment />
+              <UpdateInstallment
+                invoice_no={payangoAllData[currentIndx]?.data?.invoice_number}
+                item_id={payangoAllData[currentIndx]?.data?.items[0].item_id}
+                instAmountProp={payangoAllData[currentIndx]?.data?.items[0].amountPerInstallment}
+                instCount={payangoAllData[currentIndx]?.data?.items[0].noOfInstallment}
+                closeModal={closeModalUpdate}
+              />
             </div>
           </div>
         </div>
@@ -383,7 +403,9 @@ export default function Invoice_history() {
         <div className="Installment_Model">
           <div className="Installment_Model_Main">
             <div className="Installment_Model_Detail">
-              <InstallmentHistory />
+              <InstallmentHistory
+                invoice_no={payangoAllData[currentIndx]?.data?.invoice_number}
+              />
             </div>
           </div>
         </div>
@@ -401,12 +423,17 @@ export default function Invoice_history() {
         <div className="Installment_Model">
           <div className="Installment_Model_Main">
             <div className="Installment_Model_Detail">
-              <InstallmentView />
+              <InstallmentView
+                key={payangoAllData[currentIndx]?.id}
+                data={payangoAllData[currentIndx]?.data}
+                items_list_props={payangoAllData[currentIndx]?.data?.items}
+              />
             </div>
           </div>
         </div>
       </Modal>
       {/*End Installment Model View */}
+
       {/*Start Installment Model Full Payment */}
       <Modal
         visible={installmentFullPayment}
@@ -419,7 +446,10 @@ export default function Invoice_history() {
         <div className="FullPayment_Installment_Model">
           <div className="FullPayment_Installment_Model_Main">
             <div className="FullPayment_Installment_Model_Detail">
-              <InstallmentFullPayment />
+              <InstallmentFullPayment
+                key={fullPaymentAllData[currentIndx]?.id}
+                items_list_props={fullPaymentAllData[currentIndx]?.data?.items}
+              />
             </div>
           </div>
         </div>

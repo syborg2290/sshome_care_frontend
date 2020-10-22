@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   TextField,
   Grid,
@@ -7,11 +7,89 @@ import {
   Button,
 } from "@material-ui/core";
 import CurrencyFormat from "react-currency-format";
+import firebase from "firebase";
+import moment from "moment";
+import {
+  NotificationContainer,
+  NotificationManager,
+} from "react-notifications";
+import "react-notifications/lib/notifications.css";
+
+import db from "../../../../../../../config/firebase.js";
 
 // styles
 import "./Update_Model.css";
 
-export default function Update_Model() {
+export default function Update_Model({
+  invoice_no,
+  item_id,
+  instAmountProp,
+  instCount,
+  closeModal,
+}) {
+  const [installments, setInstallments] = useState([]);
+  const [delayedDays, setDelayedDays] = useState(0);
+  const [delayedCharges, setDelayedCharges] = useState(0);
+
+  useEffect(() => {
+    db.collection("installment")
+      .where("invoice_number", "==", invoice_no)
+      .get()
+      .then((instReDoc) => {
+        instReDoc.docs.forEach((each) => {
+          setInstallments((old) => [...old, each.data()]);
+        });
+      });
+
+    if (installments.length === 0) {
+      db.collection("invoice")
+        .where("invoice_number", "==", invoice_no)
+        .get()
+        .then((inReDoc) => {
+          setDelayedDays(
+            (new Date().getTime() -
+              new Date(inReDoc.docs[0].data().date.seconds * 1000).getTime()) /
+              (1000 * 3600 * 24)
+          );
+        });
+    } else {
+      setDelayedDays(
+        (new Date().getTime() -
+          new Date(installments[0].date.seconds * 1000).getTime()) /
+          (1000 * 3600 * 24)
+      );
+    }
+
+    setDelayedCharges(99 * Math.round(delayedDays / 7));
+
+    // eslint-disable-next-line
+  }, [invoice_no]);
+
+  const updateInstallment = async() => {
+   await db.collection("installment").add({
+      invoice_number: invoice_no,
+      amount: Math.round(instAmountProp),
+      delayed: delayedCharges === "" ? 0 : Math.round(delayedCharges),
+      balance:
+        Math.round(instAmountProp) *
+        (Math.round(instCount) - Math.round(installments.length)),
+      date: firebase.firestore.FieldValue.serverTimestamp(),
+    });
+
+    if (Math.round(instCount) - Math.round(installments.length) === 1) {
+     await db.collection("invoice")
+        .where("invoice_number", "==", invoice_no)
+        .get()
+        .then((reIn) => {
+          db.collection("invoice").doc(reIn.docs[0].id).update({
+            status_of_payandgo: "Done",
+          });
+        });
+    }
+    closeModal();
+    NotificationManager.success("Installment updated ! )");
+  };
+
   return (
     <Container component="main" className="conctainefr_main">
       <Typography className="titleffs" variant="h5" gutterBottom>
@@ -30,7 +108,7 @@ export default function Update_Model() {
               :
             </Grid>
             <Grid item xs={12} sm={6}>
-              <p>8548-UYE</p>
+              <p>{invoice_no}</p>
             </Grid>
 
             <Grid className="lbl_topi" item xs={12} sm={4}>
@@ -40,15 +118,11 @@ export default function Update_Model() {
               :
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField
-                type="number"
-                InputProps={{ inputProps: { min: 0 } }}
-                autoComplete="amount"
-                variant="outlined"
-                required
-                fullWidth
-                label="Amount"
-                size="small"
+              <CurrencyFormat
+                value={Math.round(instAmountProp)}
+                displayType={"text"}
+                thousandSeparator={true}
+                prefix={" "}
               />
             </Grid>
 
@@ -59,23 +133,24 @@ export default function Update_Model() {
               :
             </Grid>
             <Grid item xs={12} sm={6}>
-              <p>2</p>
+              <p>{Math.round(instCount) - Math.round(installments.length)}</p>
             </Grid>
             <Grid className="lbl_topi" item xs={12} sm={4}>
-              Payed Amount(LKR)
+              Paid Amount(LKR)
             </Grid>
             <Grid item xs={12} sm={2}>
               :
             </Grid>
             <Grid item xs={12} sm={6}>
-              (
               <CurrencyFormat
-                value={2000}
+                value={
+                  Math.round(instAmountProp) *
+                  Math.round(Math.round(installments.length))
+                }
                 displayType={"text"}
                 thousandSeparator={true}
                 prefix={" "}
               />
-              ),
             </Grid>
 
             <Grid className="lbl_topi" item xs={12} sm={4}>
@@ -85,7 +160,12 @@ export default function Update_Model() {
               :
             </Grid>
             <Grid item xs={12} sm={6}>
-              <p>2020.06.07</p>
+              <p>
+                {" "}
+                {moment(firebase.firestore.FieldValue.serverTimestamp()).format(
+                  "dddd, MMMM Do YYYY, h:mm:ss a"
+                )}
+              </p>
             </Grid>
 
             <Grid className="lbl_topi" item xs={12} sm={4}>
@@ -104,6 +184,10 @@ export default function Update_Model() {
                 fullWidth
                 label="Delayed"
                 size="small"
+                value={delayedCharges}
+                onChange={(e) => {
+                  setDelayedCharges(e.target.value.trim());
+                }}
               />
             </Grid>
 
@@ -114,7 +198,7 @@ export default function Update_Model() {
               :
             </Grid>
             <Grid item xs={12} sm={6}>
-              <p>14 Days Delayd</p>
+              <p>{Math.round(delayedDays)} days delayed !</p>
             </Grid>
           </Grid>
           <Grid container spacing={2}>
@@ -124,6 +208,7 @@ export default function Update_Model() {
                 variant="contained"
                 color="primary"
                 className="btn_update"
+                onClick={updateInstallment}
               >
                 Done
               </Button>
@@ -131,6 +216,7 @@ export default function Update_Model() {
           </Grid>
         </form>
       </div>
+      <NotificationContainer />
     </Container>
   );
 }

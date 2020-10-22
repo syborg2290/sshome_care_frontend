@@ -3,6 +3,7 @@ import MUIDataTable from "mui-datatables";
 import { Grid } from "@material-ui/core";
 import { Spin } from "antd";
 import CurrencyFormat from "react-currency-format";
+import moment from "moment";
 
 // styles
 import "./CustomerHistoryModel.css";
@@ -79,7 +80,9 @@ export default function CustomerHistoryModel({ customerId }) {
               instReDoc.docs.forEach((insRe) => {
                 instRawData.push({
                   InvoiceNo: insRe.data().invoice_number,
-                  Date: insRe.data().date,
+                  Date:moment(insRe.data().date.toDate()).format(
+              "dddd, MMMM Do YYYY"
+            ), 
                   Amount: <CurrencyFormat
                         value={ insRe.data().amount}
                         displayType={"text"}

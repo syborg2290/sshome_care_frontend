@@ -2,23 +2,26 @@ import React, { useState, useEffect } from "react";
 import { Modal, Radio, Spin } from "antd";
 import { PrinterFilled } from "@ant-design/icons";
 import { useLocation, useHistory } from "react-router-dom";
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
-import Box from "@material-ui/core/Box";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
-import Container from "@material-ui/core/Container";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import Paper from "@material-ui/core/Paper";
+import {
+  Button,
+  TextField,
+  Box,
+  Grid,
+  Typography,
+  Container,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  InputLabel,
+  FormControl,
+  Select,
+} from "@material-ui/core";
+
 import firebase from "firebase";
-import InputLabel from "@material-ui/core/InputLabel";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
 
 import {
   NotificationContainer,
@@ -396,7 +399,7 @@ function Make_invoice() {
                       date: firebase.firestore.FieldValue.serverTimestamp(),
                     })
                     .then((invDoc) => {
-                      if (tablerows[0].customer.trustee1Id !==null) {
+                      if (tablerows[0].customer.trustee1Id !== null) {
                         db.collection("trustee")
                           .doc(tablerows[0].customer.trustee1Id)
                           .update({

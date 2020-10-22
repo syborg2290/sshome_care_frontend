@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import MUIDataTable from "mui-datatables";
 import { Grid } from "@material-ui/core";
 import { Spin } from "antd";
+import CurrencyFormat from "react-currency-format";
 
 // styles
 import "./CustomerHistoryModel.css";
@@ -79,9 +80,24 @@ export default function CustomerHistoryModel({ customerId }) {
                 instRawData.push({
                   InvoiceNo: insRe.data().invoice_number,
                   Date: insRe.data().date,
-                  Amount: insRe.data().amount,
-                  Delayed: insRe.data().delayed,
-                  Balance: insRe.data().balance,
+                  Amount: <CurrencyFormat
+                        value={ insRe.data().amount}
+                        displayType={"text"}
+                        thousandSeparator={true}
+                        prefix={" "}
+                      />,
+                  Delayed:  <CurrencyFormat
+                        value={insRe.data().delayed}
+                        displayType={"text"}
+                        thousandSeparator={true}
+                        prefix={" "}
+                      />,
+                  Balance: <CurrencyFormat
+                        value={insRe.data().balance}
+                        displayType={"text"}
+                        thousandSeparator={true}
+                        prefix={" "}
+                      /> ,
                 });
               });
               setInstallmentsTableData(instRawData);

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   TextField,
   Grid,
@@ -7,6 +7,15 @@ import {
   Button,
 } from "@material-ui/core";
 import CurrencyFormat from "react-currency-format";
+import firebase from "firebase";
+import moment from "moment";
+import {
+  NotificationContainer,
+  NotificationManager,
+} from "react-notifications";
+import "react-notifications/lib/notifications.css";
+
+import db from "../../../../../../../config/firebase.js";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { useHistory } from "react-router-dom";
 import { Modal } from "antd";
@@ -14,23 +23,123 @@ import { Modal } from "antd";
 // styles
 import "./Update_Model.css";
 
-export default function Update_Model() {
+export default function Update_Model({
+  invoice_no,
+  instAmountProp,
+  instCount,
+  customer_id,
+  closeModal,
+}) {
+  const [installments, setInstallments] = useState([]);
+  const [delayedDays, setDelayedDays] = useState(0);
+  const [delayedCharges, setDelayedCharges] = useState(0);
+  const [updatingInstallmentCount, setUpdatingInstallmentCount] = useState(1);
+  const [customer, setCustomer] = useState({});
+
   const { confirm } = Modal;
 
   let history = useHistory();
 
-  const showConfirm = () => {
+  useEffect(() => {
+    db.collection("customer")
+      .doc(customer_id)
+      .get()
+      .then((custDocRe) => {
+        setCustomer(custDocRe.data());
+      });
+
+    db.collection("installment")
+      .where("invoice_number", "==", invoice_no)
+      .get()
+      .then((instReDoc) => {
+        instReDoc.docs.forEach((each) => {
+          setInstallments((old) => [...old, each.data()]);
+        });
+      });
+
+    if (installments.length === 0) {
+      db.collection("invoice")
+        .where("invoice_number", "==", invoice_no)
+        .get()
+        .then((inReDoc) => {
+          setDelayedDays(
+            (new Date().getTime() -
+              new Date(inReDoc.docs[0].data().date.seconds * 1000).getTime()) /
+              (1000 * 3600 * 24)
+          );
+        });
+    } else {
+      setDelayedDays(
+        (new Date().getTime() -
+          new Date(installments[0].date.seconds * 1000).getTime()) /
+          (1000 * 3600 * 24)
+      );
+    }
+
+    setDelayedCharges(99 * Math.round(delayedDays / 7));
+
+    // eslint-disable-next-line
+  }, [invoice_no]);
+
+  const updateInstallment = async () => {
+    for (var i = 0; i < updatingInstallmentCount; i++) {
+      await db.collection("installment").add({
+        invoice_number: invoice_no,
+        amount: Math.round(instAmountProp),
+        delayed: delayedCharges === "" ? 0 : Math.round(delayedCharges),
+        balance:
+          Math.round(instAmountProp) *
+          (Math.round(instCount) - 1),
+        date: firebase.firestore.FieldValue.serverTimestamp(),
+      });
+    }
+
+    if (
+      Math.round(instCount) -
+        Math.round(installments.length) * updatingInstallmentCount ===
+      1
+    ) {
+      await db
+        .collection("invoice")
+        .where("invoice_number", "==", invoice_no)
+        .get()
+        .then((reIn) => {
+          db.collection("invoice").doc(reIn.docs[0].id).update({
+            status_of_payandgo: "Done",
+          });
+        });
+    }
+    closeModal();
+    NotificationManager.success("Installment updated ! )");
+  };
+
+  const showConfirm = async () => {
     confirm({
       title: "Do you Want to Print a Recipt?",
       icon: <ExclamationCircleOutlined />,
 
-      onOk() {
-        history.push(
-          "/showroom/invoice_history/payAndGo/updateModel/PrintReceipt"
-        );
+      async onOk() {
+        await updateInstallment();
+        let passingWithCustomerObj = {
+          invoice_number: invoice_no,
+          customerDetails: customer,
+          total:
+            Math.round(instAmountProp) * updatingInstallmentCount +
+            Math.round(delayedCharges),
+          delayedCharges: Math.round(delayedCharges),
+        };
+
+        let moveWith = {
+          pathname:
+            "/showroom/invoice_history/payAndGo/updateModel/PrintReceipt",
+          search: "?query=abc",
+          state: { detail: passingWithCustomerObj },
+        };
+        history.push(moveWith);
       },
-      onCancel() {
-        console.log("No");
+      async onCancel() {
+        await updateInstallment();
+        // history.push("/showroom/ui/invoiceHistory");
       },
     });
   };
@@ -53,7 +162,7 @@ export default function Update_Model() {
               :
             </Grid>
             <Grid item xs={12} sm={6}>
-              <p>8548-UYE</p>
+              <p>{invoice_no}</p>
             </Grid>
 
             <Grid className="lbl_topi" item xs={12} sm={4}>
@@ -63,15 +172,11 @@ export default function Update_Model() {
               :
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField
-                type="number"
-                InputProps={{ inputProps: { min: 0 } }}
-                autoComplete="amount"
-                variant="outlined"
-                required
-                fullWidth
-                label="Amount"
-                size="small"
+              <CurrencyFormat
+                value={Math.round(instAmountProp) * updatingInstallmentCount}
+                displayType={"text"}
+                thousandSeparator={true}
+                prefix={" "}
               />
             </Grid>
             <Grid className="lbl_topi" item xs={12} sm={4}>
@@ -89,6 +194,16 @@ export default function Update_Model() {
                 fullWidth
                 label="Count"
                 size="small"
+                value={updatingInstallmentCount}
+                onChange={(e) => {
+                  if (
+                    Math.round(instCount) -
+                      Math.round(installments.length) >= e.target.value 
+                    
+                  ) {
+                    setUpdatingInstallmentCount(e.target.value);
+                  }
+                }}
               />
             </Grid>
             <Grid item xs={12} sm={3}></Grid>
@@ -99,18 +214,21 @@ export default function Update_Model() {
               :
             </Grid>
             <Grid item xs={12} sm={6}>
-              <p>2</p>
+              <p>{Math.round(instCount) - Math.round(installments.length)}</p>
             </Grid>
 
             <Grid className="lbl_topi" item xs={12} sm={4}>
-              Payed Amount(LKR)
+              Paid Amount(LKR)
             </Grid>
             <Grid item xs={12} sm={2}>
               :
             </Grid>
             <Grid item xs={12} sm={6}>
               <CurrencyFormat
-                value={2000}
+                value={
+                  Math.round(instAmountProp) *
+                  Math.round(Math.round(installments.length))
+                }
                 displayType={"text"}
                 thousandSeparator={true}
                 prefix={" "}
@@ -124,7 +242,12 @@ export default function Update_Model() {
               :
             </Grid>
             <Grid item xs={12} sm={6}>
-              <p>2020.06.07</p>
+              <p>
+                {" "}
+                {moment(firebase.firestore.FieldValue.serverTimestamp()).format(
+                  "dddd, MMMM Do YYYY, h:mm:ss a"
+                )}
+              </p>
             </Grid>
 
             <Grid className="lbl_topi" item xs={12} sm={4}>
@@ -143,6 +266,10 @@ export default function Update_Model() {
                 fullWidth
                 label="Delayed"
                 size="small"
+                value={delayedCharges}
+                onChange={(e) => {
+                  setDelayedCharges(e.target.value.trim());
+                }}
               />
             </Grid>
 
@@ -153,7 +280,7 @@ export default function Update_Model() {
               :
             </Grid>
             <Grid item xs={12} sm={6}>
-              <p>14 Days Delayd</p>
+              <p>{Math.round(delayedDays)} days delayed !</p>
             </Grid>
             <Grid item xs={12} sm={12}>
               <hr />
@@ -166,7 +293,10 @@ export default function Update_Model() {
             </Grid>
             <Grid item xs={12} sm={6}>
               <CurrencyFormat
-                value={3500}
+                value={
+                  Math.round(instAmountProp) * updatingInstallmentCount +
+                  Math.round(delayedCharges)
+                }
                 displayType={"text"}
                 thousandSeparator={true}
                 prefix={" "}
@@ -188,6 +318,7 @@ export default function Update_Model() {
           </Grid>
         </form>
       </div>
+      <NotificationContainer />
     </Container>
   );
 }

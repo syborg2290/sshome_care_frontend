@@ -3,6 +3,7 @@ import MUIDataTable from "mui-datatables";
 import { Grid } from "@material-ui/core";
 import { Spin } from "antd";
 import CurrencyFormat from "react-currency-format";
+import moment from "moment";
 
 // styles
 import "./CustomerHistoryModel.css";
@@ -79,25 +80,33 @@ export default function CustomerHistoryModel({ customerId }) {
               instReDoc.docs.forEach((insRe) => {
                 instRawData.push({
                   InvoiceNo: insRe.data().invoice_number,
-                  Date: insRe.data().date,
-                  Amount: <CurrencyFormat
-                        value={ insRe.data().amount}
-                        displayType={"text"}
-                        thousandSeparator={true}
-                        prefix={" "}
-                      />,
-                  Delayed:  <CurrencyFormat
-                        value={insRe.data().delayed}
-                        displayType={"text"}
-                        thousandSeparator={true}
-                        prefix={" "}
-                      />,
-                  Balance: <CurrencyFormat
-                        value={insRe.data().balance}
-                        displayType={"text"}
-                        thousandSeparator={true}
-                        prefix={" "}
-                      /> ,
+                  Date: moment(insRe.data().date.toDate()).format(
+                    "dddd, MMMM Do YYYY"
+                  ),
+                  Amount: (
+                    <CurrencyFormat
+                      value={insRe.data().amount}
+                      displayType={"text"}
+                      thousandSeparator={true}
+                      prefix={" "}
+                    />
+                  ),
+                  Delayed: (
+                    <CurrencyFormat
+                      value={insRe.data().delayed}
+                      displayType={"text"}
+                      thousandSeparator={true}
+                      prefix={" "}
+                    />
+                  ),
+                  Balance: (
+                    <CurrencyFormat
+                      value={insRe.data().balance}
+                      displayType={"text"}
+                      thousandSeparator={true}
+                      prefix={" "}
+                    />
+                  ),
                 });
               });
               setInstallmentsTableData(instRawData);
@@ -105,7 +114,6 @@ export default function CustomerHistoryModel({ customerId }) {
             });
         });
       });
-    
   }, [customerId]);
 
   return (

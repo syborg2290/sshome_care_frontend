@@ -26,21 +26,30 @@ import "./Update_Model.css";
 
 export default function Update_Model({
   invoice_no,
-  item_id,
   instAmountProp,
   instCount,
+  customer_id,
   closeModal,
 }) {
   const [installments, setInstallments] = useState([]);
   const [delayedDays, setDelayedDays] = useState(0);
   const [delayedCharges, setDelayedCharges] = useState(0);
   const [updatingInstallmentCount, setUpdatingInstallmentCount] = useState(1);
+  const [customer, setCustomer] = useState({});
 
   const { confirm } = Modal;
 
   let history = useHistory();
 
   useEffect(() => {
+    
+    db.collection("customer")
+      .doc(customer_id)
+      .get()
+      .then((custDocRe) => {
+       setCustomer(custDocRe.data())
+      });
+    
     db.collection("installment")
       .where("invoice_number", "==", invoice_no)
       .get()
@@ -112,9 +121,21 @@ export default function Update_Model({
       icon: <ExclamationCircleOutlined />,
 
       onOk() {
-       await updateInstallment();
+        await updateInstallment();
+         let passingWithCustomerObj = {
+              invoice_number: invoiceNumber,
+              customerDetails: customer,
+           total: Math.round(instAmountProp) * updateInstallment + Math.round(delayedCharges),
+              delayedCharges:Math.round(delayedCharges),
+            };
+
+            let moveWith = {
+              pathname: "/showroom/invoice_history/payAndGo/updateModel/PrintReceipt",
+              search: "?query=abc",
+              state: { detail: passingWithCustomerObj },
+            };
         history.push(
-          "/showroom/invoice_history/payAndGo/updateModel/PrintReceipt"
+          moveWith
         );
       },
       onCancel() {

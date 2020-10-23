@@ -11,6 +11,8 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Button from "@material-ui/core/Button";
+import firebase from "firebase";
+import moment from "moment";
 
 import "./Recipt.css";
 
@@ -18,20 +20,39 @@ function createData(description, delayed, amount) {
   return { description, delayed, amount };
 }
 
-const rows = [
-  createData(
-    "Installment Payment",
-    15,
-    <CurrencyFormat
-      value={1500}
-      displayType={"text"}
-      thousandSeparator={true}
-      prefix={" "}
-    />
-  ),
-];
-
 class Recipt extends React.Component {
+  state = {
+    invoice_number: "",
+    rows: [],
+    total: 0,
+    delayed: 0,
+    customer_nic: "",
+    customer_name: "",
+  };
+
+  constructor(props) {
+    super(props);
+    this.state.invoice_number = this.props.prop?.invoice_number;
+    this.state.total = this.props.prop?.total;
+    this.state.delayed = this.props.prop?.delayedCharges;
+    this.state.customer_nic = this.props.prop?.customerDetails?.nic;
+    this.state.customer_name =
+      this.props.prop?.customerDetails?.fname +
+      " " +
+      this.props.prop?.customerDetails?.lname;
+
+    createData(
+      "Installment Payment",
+      this.state.delayed,
+      <CurrencyFormat
+        value={this.state.total}
+        displayType={"text"}
+        thousandSeparator={true}
+        prefix={" "}
+      />
+    );
+  }
+
   render() {
     return (
       <div>
@@ -50,35 +71,37 @@ class Recipt extends React.Component {
                   Invoice No.
                 </Col>
                 <Col className="tiles_details" span={8}>
-                  983-3JFDF
+                  {this.state.invoice_number}
                 </Col>
                 <Col className="tiles" span={4}>
                   Date
                 </Col>
                 <Col className="tiles_details" span={6}>
-                  2020.09.01
+                  {moment(
+                    firebase.firestore.FieldValue.serverTimestamp()
+                  ).format("dddd, MMMM Do YYYY, h:mm:ss a")}
                 </Col>
                 <Col className="tiles" span={6}>
                   Customer Name
                 </Col>
                 <Col className="tiles_details" span={4}>
-                  D.G.Janith
+                  {this.state.customer_name}
                 </Col>
                 <Col className="tiles_details" span={14}>
-                  Kavishka
+                  <p></p>
                 </Col>
                 <Col className="tiles" span={6}>
                   NIC No.
                 </Col>
                 <Col className="tiles_details" span={18}>
-                  324543456V
+                  {this.state.customer_nic}
                 </Col>
                 <Col className="tiles_sum" span={12}>
                   Recived with thanks a sum of Rs.
                 </Col>
                 <Col className="tiles_details_sum" span={12}>
                   <CurrencyFormat
-                    value={1900}
+                    value={this.state.total}
                     displayType={"text"}
                     thousandSeparator={true}
                     prefix={" "}
@@ -129,16 +152,39 @@ class Recipt extends React.Component {
 
 export default function Example() {
   const componentRef = useRef();
-   const location = useLocation();
+  const location = useLocation();
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
-  
-    const history = useHistory();
+
+  const history = useHistory();
+
+  useEffect(() => {
+    window.addEventListener(
+      "popstate",
+      (event) => {
+        if (event.state) {
+          history.push("/showroom/ui/invoiceHistory");
+        }
+      },
+      false
+    );
+
+    window.history.pushState(
+      { name: "browserBack" },
+      "on browser back click",
+      window.location.href
+    );
+    window.history.pushState(
+      { name: "browserBack" },
+      "on browser back click",
+      window.location.href
+    );
+  }, [history]);
 
   return (
     <div>
-      <Recipt ref={componentRef} prop={location.state?.detail}/>
+      <Recipt ref={componentRef} prop={location.state?.detail} />
 
       <Button className="print_btn" onClick={handlePrint}>
         Print

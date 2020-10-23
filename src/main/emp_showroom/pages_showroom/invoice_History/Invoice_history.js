@@ -85,7 +85,7 @@ export default function Invoice_history() {
   const showModalUpdate = () => {
     setInstallmentUpdate(true);
   };
-  
+
   const closeModalUpdate = () => {
     setInstallmentUpdate(false);
   };
@@ -380,9 +380,14 @@ export default function Invoice_history() {
             <div className="update_Installment_Model_Detail">
               <UpdateInstallment
                 invoice_no={payangoAllData[currentIndx]?.data?.invoice_number}
-                item_id={payangoAllData[currentIndx]?.data?.items[0].item_id}
-                instAmountProp={payangoAllData[currentIndx]?.data?.items[0].amountPerInstallment}
-                instCount={payangoAllData[currentIndx]?.data?.items[0].noOfInstallment}
+                instAmountProp={
+                  payangoAllData[currentIndx]?.data?.items[0]
+                    .amountPerInstallment
+                }
+                instCount={
+                  payangoAllData[currentIndx]?.data?.items[0].noOfInstallment
+                }
+                customer_id={payangoAllData[currentIndx]?.data?.customer_id}
                 closeModal={closeModalUpdate}
               />
             </div>

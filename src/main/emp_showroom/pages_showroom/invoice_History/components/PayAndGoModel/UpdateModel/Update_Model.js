@@ -30,6 +30,7 @@ export default function Update_Model({
   const [installments, setInstallments] = useState([]);
   const [delayedDays, setDelayedDays] = useState(0);
   const [delayedCharges, setDelayedCharges] = useState(0);
+  const [updatingInstallmentCount, setUpdatingInstallmentCount] = useState(1);
 
   useEffect(() => {
     db.collection("installment")
@@ -65,8 +66,9 @@ export default function Update_Model({
     // eslint-disable-next-line
   }, [invoice_no]);
 
-  const updateInstallment = async() => {
-   await db.collection("installment").add({
+  const updateInstallment = async () => {
+    for (var i = 0; i < updatingInstallmentCount; i++){
+        await db.collection("installment").add({
       invoice_number: invoice_no,
       amount: Math.round(instAmountProp),
       delayed: delayedCharges === "" ? 0 : Math.round(delayedCharges),
@@ -75,8 +77,9 @@ export default function Update_Model({
         (Math.round(instCount) - Math.round(installments.length)),
       date: firebase.firestore.FieldValue.serverTimestamp(),
     });
-
-    if (Math.round(instCount) - Math.round(installments.length) === 1) {
+    }
+ 
+    if (Math.round(instCount) - (Math.round(installments.length)*updatingInstallmentCount) === 1) {
      await db.collection("invoice")
         .where("invoice_number", "==", invoice_no)
         .get()
@@ -119,7 +122,7 @@ export default function Update_Model({
             </Grid>
             <Grid item xs={12} sm={6}>
               <CurrencyFormat
-                value={Math.round(instAmountProp)}
+                value={Math.round(instAmountProp) * updatingInstallmentCount}
                 displayType={"text"}
                 thousandSeparator={true}
                 prefix={" "}

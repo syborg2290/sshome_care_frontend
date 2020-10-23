@@ -126,7 +126,7 @@ export default function Add_Customer() {
                           trustee2Mobile2: trustee2Mobile2.trim(),
                         };
 
-                        var passedObj = location.state.detail;
+                        var passedObj = location.state?.detail;
                         passedObj.forEach((obj) => {
                           if (obj.paymentWay === "PayandGo") {
                             obj.customer = customerObj;

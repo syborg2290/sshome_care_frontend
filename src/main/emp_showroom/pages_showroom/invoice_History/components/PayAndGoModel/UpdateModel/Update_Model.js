@@ -92,13 +92,11 @@ export default function Update_Model({
       });
     }
 
-   
     if (
       Math.round(instCount) -
-        Math.round(updatingInstallmentCount) ===
+        (updatingInstallmentCount + installments.length) ===
       0
     ) {
-    
       await db
         .collection("invoice")
         .where("invoice_number", "==", invoice_no)
@@ -139,7 +137,6 @@ export default function Update_Model({
         await updateInstallment();
         closeModal();
         NotificationManager.success("Installment updated ! )");
-       
       },
     });
   };

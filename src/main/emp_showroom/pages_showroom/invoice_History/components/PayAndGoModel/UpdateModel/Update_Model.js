@@ -9,11 +9,6 @@ import {
 import CurrencyFormat from "react-currency-format";
 import firebase from "firebase";
 import moment from "moment";
-import {
-  NotificationContainer,
-  NotificationManager,
-} from "react-notifications";
-import "react-notifications/lib/notifications.css";
 
 import db from "../../../../../../../config/firebase.js";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
@@ -91,10 +86,10 @@ export default function Update_Model({
         date: firebase.firestore.FieldValue.serverTimestamp(),
       });
     }
-
+    
     if (
       Math.round(instCount) -
-        (updatingInstallmentCount + installments.length) ===
+        (updatingInstallmentCount + installments.length)<=
       0
     ) {
       await db
@@ -135,8 +130,7 @@ export default function Update_Model({
       },
       async onCancel() {
         await updateInstallment();
-        closeModal();
-        NotificationManager.success("Installment updated ! )");
+        window.location.reload();
       },
     });
   };
@@ -317,7 +311,6 @@ export default function Update_Model({
           </Grid>
         </form>
       </div>
-      <NotificationContainer />
     </Container>
   );
 }

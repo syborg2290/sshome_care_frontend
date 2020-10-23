@@ -68,10 +68,10 @@ class Recipt extends React.Component {
                   Kavishka
                 </Col>
                 <Col className="tiles" span={6}>
-                  Mobile No.
+                  NIC No.
                 </Col>
                 <Col className="tiles_details" span={18}>
-                  983-3JFDF
+                  324543456V
                 </Col>
                 <Col className="tiles_sum" span={12}>
                   Recived with thanks a sum of Rs.

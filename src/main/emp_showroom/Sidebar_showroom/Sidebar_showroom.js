@@ -53,7 +53,7 @@ const structure = [
   {
     id: 10,
     label: "Arreas",
-    link: "",
+    link: "/showroom/ui/arreas",
     icon: <MoneyOffIcon className="icons" />,
   },
   { id: 6, label: "Repairs", link: "", icon: <BuildIcon className="icons" /> },

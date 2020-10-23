@@ -95,8 +95,8 @@ export default function ItemTable() {
 
   useEffect(() => {
     db.collection("customer")
-      .get()
-      .then((custDoc) => {
+      .orderBy("date", "desc")
+      .onSnapshot((custDoc) => {
         let rawData = [];
         let rawAllData = [];
         custDoc.docs.forEach((siDoc) => {

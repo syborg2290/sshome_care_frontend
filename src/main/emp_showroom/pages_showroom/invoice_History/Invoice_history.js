@@ -69,7 +69,9 @@ export default function Invoice_history() {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
   const [payangoTableData, setpayangoTableData] = useState([]);
+  const [payangoAllData, setpayangoAllData] = useState([]);
   const [fullPaymentTableData, setFullPaymentTableData] = useState([]);
+  const [fullPaymentAllData, setFullPaymentAllData] = useState([]);
 
   const [installmentUpdate, setInstallmentUpdate] = useState(false); //  table models
   const [installmentvisible, setInstallmentVisible] = useState(false); //  table models
@@ -82,6 +84,10 @@ export default function Invoice_history() {
 
   const showModalUpdate = () => {
     setInstallmentUpdate(true);
+  };
+  
+  const closeModalUpdate = () => {
+    setInstallmentUpdate(false);
   };
 
   const showModalHistory = () => {
@@ -225,7 +231,12 @@ export default function Invoice_history() {
       .get()
       .then((cust) => {
         var rawData = [];
+        var rawAllData = [];
         cust.docs.forEach((siDoc) => {
+          rawAllData.push({
+            id: siDoc.id,
+            data: siDoc.data(),
+          });
           rawData.push({
             InvoiceNo: siDoc.data().invoice_number,
             Date: moment(siDoc.data().date.toDate()).format(
@@ -275,15 +286,19 @@ export default function Invoice_history() {
               ),
             Action: (
               <div>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  size="small"
-                  className="btn_pay"
-                  onClick={showModalUpdate}
-                >
-                  Update
-                </Button>
+                {siDoc.data().status_of_payandgo === "onGoing" ? (
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                    className="btn_pay"
+                    onClick={showModalUpdate}
+                  >
+                    Update
+                  </Button>
+                ) : (
+                  ""
+                )}
                 <span className="icon_visibl">
                   <HistoryIcon onClick={showModalHistory} />
                 </span>
@@ -294,7 +309,7 @@ export default function Invoice_history() {
             ),
           });
         });
-
+        setpayangoAllData(rawAllData);
         setpayangoTableData(rawData);
       });
     //End pay And Go Rows
@@ -305,7 +320,12 @@ export default function Invoice_history() {
       .get()
       .then((cust) => {
         var rawDataFull = [];
+        var rawAllDataFull = [];
         cust.docs.forEach((siDoc) => {
+          rawAllDataFull.push({
+            id: siDoc.id,
+            data: siDoc.data(),
+          });
           rawDataFull.push({
             InvoiceNo: siDoc.data().invoice_number,
             Date: moment(siDoc.data().date.toDate()).format(
@@ -330,13 +350,14 @@ export default function Invoice_history() {
             Action: (
               <div>
                 <span className="icon_visibl">
-                  <HistoryIcon onClick={showInstallmentFullPayment} />
+                  <VisibilityIcon onClick={showInstallmentFullPayment} />
                 </span>
               </div>
             ),
           });
         });
         setIsLoading(false);
+        setFullPaymentAllData(rawAllDataFull);
         setFullPaymentTableData(rawDataFull);
       });
   }, []);
@@ -357,7 +378,13 @@ export default function Invoice_history() {
         <div className="update_Installment_Model">
           <div className="update_Installment_Model_Main">
             <div className="update_Installment_Model_Detail">
-              <UpdateInstallment />
+              <UpdateInstallment
+                invoice_no={payangoAllData[currentIndx]?.data?.invoice_number}
+                item_id={payangoAllData[currentIndx]?.data?.items[0].item_id}
+                instAmountProp={payangoAllData[currentIndx]?.data?.items[0].amountPerInstallment}
+                instCount={payangoAllData[currentIndx]?.data?.items[0].noOfInstallment}
+                closeModal={closeModalUpdate}
+              />
             </div>
           </div>
         </div>
@@ -376,7 +403,9 @@ export default function Invoice_history() {
         <div className="Installment_Model">
           <div className="Installment_Model_Main">
             <div className="Installment_Model_Detail">
-              <InstallmentHistory />
+              <InstallmentHistory
+                invoice_no={payangoAllData[currentIndx]?.data?.invoice_number}
+              />
             </div>
           </div>
         </div>
@@ -394,7 +423,11 @@ export default function Invoice_history() {
         <div className="Installment_Model">
           <div className="Installment_Model_Main">
             <div className="Installment_Model_Detail">
-              <InstallmentView />
+              <InstallmentView
+                key={payangoAllData[currentIndx]?.id}
+                data={payangoAllData[currentIndx]?.data}
+                items_list_props={payangoAllData[currentIndx]?.data?.items}
+              />
             </div>
           </div>
         </div>
@@ -413,7 +446,10 @@ export default function Invoice_history() {
         <div className="FullPayment_Installment_Model">
           <div className="FullPayment_Installment_Model_Main">
             <div className="FullPayment_Installment_Model_Detail">
-              <InstallmentFullPayment />
+              <InstallmentFullPayment
+                key={fullPaymentAllData[currentIndx]?.id}
+                items_list_props={fullPaymentAllData[currentIndx]?.data?.items}
+              />
             </div>
           </div>
         </div>

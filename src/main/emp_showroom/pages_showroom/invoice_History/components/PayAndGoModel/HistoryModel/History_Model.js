@@ -1,18 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import MUIDataTable from "mui-datatables";
 import { Grid } from "@material-ui/core";
 import { Spin } from "antd";
 import CurrencyFormat from "react-currency-format";
+import moment from "moment";
+
+import db from "../../../../../../../config/firebase.js";
 
 // styles
 import "./History_Model.css";
 
-export default function History_Model() {
+export default function History_Model({ invoice_no }) {
   // eslint-disable-next-line
   const [isLoading, setIsLoading] = useState(true);
 
   // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
+
+  const [installments, setInstallments] = useState([]);
 
   const columns = [
     {
@@ -63,29 +68,49 @@ export default function History_Model() {
     },
   ];
 
-  const customerTableData = [
-    {
-      InvoiceNo: "34532-IN",
-      Date: "2020.08.05",
-      Amount: (
-        <CurrencyFormat
-          value={3000}
-          displayType={"text"}
-          thousandSeparator={true}
-          prefix={" "}
-        />
-      ),
-      Delayed: "15",
-      Balance: (
-        <CurrencyFormat
-          value={5000}
-          displayType={"text"}
-          thousandSeparator={true}
-          prefix={" "}
-        />
-      ),
-    },
-  ];
+  useEffect(() => {
+    db.collection("installment")
+      .where("invoice_number", "==", invoice_no)
+      .get()
+      .then((instReDoc) => {
+        instReDoc.docs.forEach((each) => {
+          setInstallments((old) => [
+            ...old,
+            {
+              InvoiceNo: invoice_no,
+              Date: moment(each.data().date.toDate()).format(
+                "dddd, MMMM Do YYYY"
+              ),
+              Amount: (
+                <CurrencyFormat
+                  value={each.data().amount}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+              Delayed: (
+                <CurrencyFormat
+                  value={each.data().delayed}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+              Balance: (
+                <CurrencyFormat
+                  value={each.data().balance}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+            },
+          ]);
+        });
+      });
+    setIsLoading(false);
+  }, [invoice_no]);
 
   return (
     <div>
@@ -94,7 +119,7 @@ export default function History_Model() {
           <MUIDataTable
             title={<span className="title_Span">Installment History</span>}
             className="installment_table"
-            data={customerTableData}
+            data={installments}
             columns={columns}
             options={{
               selectableRows: false,

@@ -74,7 +74,24 @@ export default function Update_Model() {
                 size="small"
               />
             </Grid>
-
+            <Grid className="lbl_topi" item xs={12} sm={4}>
+              Updating Installment Count
+            </Grid>
+            <Grid item xs={12} sm={2}>
+              :
+            </Grid>
+            <Grid item xs={12} sm={3}>
+              <TextField
+                type="number"
+                InputProps={{ inputProps: { min: 1 } }}
+                variant="outlined"
+                required
+                fullWidth
+                label="Count"
+                size="small"
+              />
+            </Grid>
+            <Grid item xs={12} sm={3}></Grid>
             <Grid className="lbl_topi" item xs={12} sm={4}>
               Due Installment Count
             </Grid>
@@ -84,6 +101,7 @@ export default function Update_Model() {
             <Grid item xs={12} sm={6}>
               <p>2</p>
             </Grid>
+
             <Grid className="lbl_topi" item xs={12} sm={4}>
               Payed Amount(LKR)
             </Grid>

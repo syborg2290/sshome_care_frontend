@@ -69,7 +69,7 @@ export default function App() {
             <Redirect
               to={{
                 pathname:
-                  role === "admin" ? "/admin/dashboard" : "/showroom/itemTable",
+                  role === "admin" ? "/admin/dashboard" : "/showroom/dashboard",
               }}
             />
           ) : (

@@ -2,13 +2,16 @@ import React, { useState, useEffect } from "react";
 import { Drawer, IconButton, List } from "@material-ui/core";
 import {
   Tv as TvIcon,
+  Dashboard as DashboardIcon,
   Group as GroupIcon,
   MoneyOff as MoneyOffIcon,
   Build as BuildIcon,
   PersonAddDisabled as PersonAddDisabledIcon,
   LibraryBooks as LibraryIcon,
   ArrowBack as ArrowBackIcon,
+  EventBusy as EventBusyIcon,
 } from "@material-ui/icons";
+
 import { useTheme } from "@material-ui/styles";
 import { withRouter } from "react-router-dom";
 import classNames from "classnames";
@@ -30,8 +33,15 @@ import {
 const structure = [
   {
     id: 0,
+    label: "Dashboard",
+    link: "/showroom/dashboard",
+    icon: <DashboardIcon className="icons" />,
+  },
+
+  {
+    id: 1,
     label: "Items",
-    link: "/showroom/itemTable",
+    link: "/showroom/ui/itemTable",
     icon: <TvIcon className="icons" />,
   },
 
@@ -56,14 +66,25 @@ const structure = [
     link: "/showroom/ui/arreas",
     icon: <MoneyOffIcon className="icons" />,
   },
-  { id: 6, label: "Repairs", link: "", icon: <BuildIcon className="icons" /> },
+  {
+    id: 6,
+    label: "Repairs",
+    link: "/showroom/ui/repairs",
+    icon: <BuildIcon className="icons" />,
+  },
   {
     id: 9,
     label: "Black list",
-    link: "",
+    link: "/showroom/ui/blackList",
     icon: <PersonAddDisabledIcon className="icons" />,
   },
   { id: 2, type: "divider" },
+  {
+    id: 12,
+    label: "Seized Item",
+    link: "/showroom/ui/seized",
+    icon: <EventBusyIcon className="icons" />,
+  },
 ];
 
 function Sidebar({ location }) {

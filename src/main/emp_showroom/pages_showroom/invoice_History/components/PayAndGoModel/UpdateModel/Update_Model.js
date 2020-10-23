@@ -45,8 +45,7 @@ export default function Update_Model({
 
     db.collection("installment")
       .where("invoice_number", "==", invoice_no)
-      .get()
-      .then((instReDoc) => {
+      .onSnapshot((instReDoc) => {
         instReDoc.docs.forEach((each) => {
           setInstallments((old) => [...old, each.data()]);
         });
@@ -82,14 +81,15 @@ export default function Update_Model({
         invoice_number: invoice_no,
         amount: Math.round(instAmountProp),
         delayed: delayedCharges === "" ? 0 : Math.round(delayedCharges),
-        balance: Math.round(instAmountProp) * (Math.round(instCount) - i),
+        balance:
+          Math.round(instAmountProp) * (Math.round(installments.length) - i),
         date: firebase.firestore.FieldValue.serverTimestamp(),
       });
     }
-    
+
     if (
       Math.round(instCount) -
-        (updatingInstallmentCount + installments.length)<=
+        (updatingInstallmentCount + installments.length) <=
       0
     ) {
       await db

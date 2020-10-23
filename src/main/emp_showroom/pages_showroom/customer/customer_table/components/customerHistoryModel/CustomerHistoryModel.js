@@ -80,9 +80,13 @@ export default function CustomerHistoryModel({ customerId }) {
               instReDoc.docs.forEach((insRe) => {
                 instRawData.push({
                   InvoiceNo: insRe.data().invoice_number,
+<<<<<<< HEAD
                   Date:moment(insRe.data().date.toDate()).format(
               "dddd, MMMM Do YYYY"
             ), 
+=======
+                  Date: insRe.data().date,
+>>>>>>> 0ac513a42d947f0f20610b9259c8029b5f7da99b
                   Amount: <CurrencyFormat
                         value={ insRe.data().amount}
                         displayType={"text"}

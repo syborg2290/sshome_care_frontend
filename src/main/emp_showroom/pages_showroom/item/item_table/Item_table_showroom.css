@@ -525,3 +525,25 @@
 .colan {
   padding-right: 10px !important;
 }
+
+.model_selected_Item {
+  width: 30% !important;
+}
+
+@media screen and (min-width: 280px) and (max-width: 299px) {
+  .model_selected_Item {
+    width: 100% !important;
+  }
+}
+
+@media screen and (min-width: 300px) and (max-width: 600px) {
+  .model_selected_Item {
+    width: 100% !important;
+  }
+}
+
+@media screen and (min-width: 601px) and (max-width: 1000px) {
+  .model_selected_Item {
+    width: 50% !important;
+  }
+}

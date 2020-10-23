@@ -16,6 +16,10 @@ import {
 import "react-notifications/lib/notifications.css";
 
 import db from "../../../../../../../config/firebase.js";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
+import { useHistory } from "react-router-dom";
+import { Modal } from "antd";
+import { useLocation, useHistory } from "react-router-dom";
 
 // styles
 import "./Update_Model.css";
@@ -31,6 +35,10 @@ export default function Update_Model({
   const [delayedDays, setDelayedDays] = useState(0);
   const [delayedCharges, setDelayedCharges] = useState(0);
   const [updatingInstallmentCount, setUpdatingInstallmentCount] = useState(1);
+
+  const { confirm } = Modal;
+
+  let history = useHistory();
 
   useEffect(() => {
     db.collection("installment")
@@ -67,20 +75,25 @@ export default function Update_Model({
   }, [invoice_no]);
 
   const updateInstallment = async () => {
-    for (var i = 0; i < updatingInstallmentCount; i++){
-        await db.collection("installment").add({
-      invoice_number: invoice_no,
-      amount: Math.round(instAmountProp),
-      delayed: delayedCharges === "" ? 0 : Math.round(delayedCharges),
-      balance:
-        Math.round(instAmountProp) *
-        (Math.round(instCount) - Math.round(installments.length)),
-      date: firebase.firestore.FieldValue.serverTimestamp(),
-    });
+    for (var i = 0; i < updatingInstallmentCount; i++) {
+      await db.collection("installment").add({
+        invoice_number: invoice_no,
+        amount: Math.round(instAmountProp),
+        delayed: delayedCharges === "" ? 0 : Math.round(delayedCharges),
+        balance:
+          Math.round(instAmountProp) *
+          (Math.round(instCount) - Math.round(installments.length)),
+        date: firebase.firestore.FieldValue.serverTimestamp(),
+      });
     }
- 
-    if (Math.round(instCount) - (Math.round(installments.length)*updatingInstallmentCount) === 1) {
-     await db.collection("invoice")
+
+    if (
+      Math.round(instCount) -
+        Math.round(installments.length) * updatingInstallmentCount ===
+      1
+    ) {
+      await db
+        .collection("invoice")
         .where("invoice_number", "==", invoice_no)
         .get()
         .then((reIn) => {
@@ -91,6 +104,23 @@ export default function Update_Model({
     }
     closeModal();
     NotificationManager.success("Installment updated ! )");
+  };
+
+  const showConfirm = async() => {
+    confirm({
+      title: "Do you Want to Print a Recipt?",
+      icon: <ExclamationCircleOutlined />,
+
+      onOk() {
+       await updateInstallment();
+        history.push(
+          "/showroom/invoice_history/payAndGo/updateModel/PrintReceipt"
+        );
+      },
+      onCancel() {
+         await updateInstallment();
+      },
+    });
   };
 
   return (
@@ -128,7 +158,34 @@ export default function Update_Model({
                 prefix={" "}
               />
             </Grid>
-
+            <Grid className="lbl_topi" item xs={12} sm={4}>
+              Updating Installment Count
+            </Grid>
+            <Grid item xs={12} sm={2}>
+              :
+            </Grid>
+            <Grid item xs={12} sm={3}>
+              <TextField
+                type="number"
+                InputProps={{ inputProps: { min: 1 } }}
+                variant="outlined"
+                required
+                fullWidth
+                label="Count"
+                size="small"
+                value={updatingInstallmentCount}
+                onChange={(e) => {
+                  if (
+                    Math.round(instCount) -
+                      Math.round(installments.length) * e.target.value >=
+                    1
+                  ) {
+                    setUpdatingInstallmentCount(e.target.value);
+                  }
+                }}
+              />
+            </Grid>
+            <Grid item xs={12} sm={3}></Grid>
             <Grid className="lbl_topi" item xs={12} sm={4}>
               Due Installment Count
             </Grid>
@@ -138,6 +195,7 @@ export default function Update_Model({
             <Grid item xs={12} sm={6}>
               <p>{Math.round(instCount) - Math.round(installments.length)}</p>
             </Grid>
+
             <Grid className="lbl_topi" item xs={12} sm={4}>
               Paid Amount(LKR)
             </Grid>

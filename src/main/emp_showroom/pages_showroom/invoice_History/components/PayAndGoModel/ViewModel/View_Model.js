@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import React, { useEffect, useState } from "react";
+=======
+import React from "react";
+>>>>>>> 0ac513a42d947f0f20610b9259c8029b5f7da99b
 import { Grid, Container, Typography } from "@material-ui/core";
 import CurrencyFormat from "react-currency-format";
 import { Spin } from "antd";

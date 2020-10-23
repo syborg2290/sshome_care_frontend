@@ -61,7 +61,7 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
         title: itemsData[i].title,
         unitprice: itemsData[i].unitprice,
         qty: itemsData[i].qty,
-        paymentWay: itemsData.length === 0 ? paymentWay[i] : "FullPayment",
+        paymentWay: itemsData.length === 1 ? paymentWay[i] : "FullPayment",
         item: itemsData[i].item,
         customer: null,
       };

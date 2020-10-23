@@ -96,8 +96,8 @@ export default function Update_Model({
 
     if (
       Math.round(instCount) -
-        Math.round(installments.length) * updatingInstallmentCount ===
-      1
+        Math.round(installments.length) + updatingInstallmentCount ===
+      0
     ) {
       await db
         .collection("invoice")

@@ -9,11 +9,6 @@ import {
 import CurrencyFormat from "react-currency-format";
 import firebase from "firebase";
 import moment from "moment";
-import {
-  NotificationContainer,
-  NotificationManager,
-} from "react-notifications";
-import "react-notifications/lib/notifications.css";
 
 import db from "../../../../../../../config/firebase.js";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
@@ -82,23 +77,18 @@ export default function Update_Model({
   }, [invoice_no]);
 
   const updateInstallment = async () => {
-    for (var i = 0; i < updatingInstallmentCount; i++) {
+    for (var i = 1; i <= Math.round(updatingInstallmentCount); i++) {
       await db.collection("installment").add({
         invoice_number: invoice_no,
         amount: Math.round(instAmountProp),
         delayed: delayedCharges === "" ? 0 : Math.round(delayedCharges),
-        balance:
-          Math.round(instAmountProp) *
-          (Math.round(instCount) - 1),
+        balance: Math.round(instAmountProp) * (Math.round(instCount) - i),
         date: firebase.firestore.FieldValue.serverTimestamp(),
       });
     }
 
-    if (
-      Math.round(instCount) -
-        Math.round(installments.length) * updatingInstallmentCount ===
-      1
-    ) {
+    if (Math.round(instCount) - Math.round(updatingInstallmentCount) === 0) {
+      console.log("done");
       await db
         .collection("invoice")
         .where("invoice_number", "==", invoice_no)
@@ -109,8 +99,6 @@ export default function Update_Model({
           });
         });
     }
-    closeModal();
-    NotificationManager.success("Installment updated ! )");
   };
 
   const showConfirm = async () => {
@@ -124,7 +112,7 @@ export default function Update_Model({
           invoice_number: invoice_no,
           customerDetails: customer,
           total:
-            Math.round(instAmountProp) * updatingInstallmentCount +
+            Math.round(instAmountProp) * Math.round(updatingInstallmentCount) +
             Math.round(delayedCharges),
           delayedCharges: Math.round(delayedCharges),
         };
@@ -139,7 +127,7 @@ export default function Update_Model({
       },
       async onCancel() {
         await updateInstallment();
-        // history.push("/showroom/ui/invoiceHistory");
+        history.push("/showroom/ui/invoiceHistory");
       },
     });
   };
@@ -173,7 +161,10 @@ export default function Update_Model({
             </Grid>
             <Grid item xs={12} sm={6}>
               <CurrencyFormat
-                value={Math.round(instAmountProp) * updatingInstallmentCount}
+                value={
+                  Math.round(instAmountProp) *
+                  Math.round(updatingInstallmentCount)
+                }
                 displayType={"text"}
                 thousandSeparator={true}
                 prefix={" "}
@@ -197,9 +188,8 @@ export default function Update_Model({
                 value={updatingInstallmentCount}
                 onChange={(e) => {
                   if (
-                    Math.round(instCount) -
-                      Math.round(installments.length) >= e.target.value 
-                    
+                    Math.round(instCount) - Math.round(installments.length) >=
+                    e.target.value
                   ) {
                     setUpdatingInstallmentCount(e.target.value);
                   }
@@ -318,7 +308,6 @@ export default function Update_Model({
           </Grid>
         </form>
       </div>
-      <NotificationContainer />
     </Container>
   );
 }

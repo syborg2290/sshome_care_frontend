@@ -59,7 +59,7 @@ export default function Add_Customer() {
   const [inputsNic, setInputsNic] = useState({});
   const [customerId, setCustomerId] = useState(null);
   const [trustee1Id, setTrustee1Id] = useState(null);
-   const [trustee2Id, setTrustee2Id] = useState(null);
+  const [trustee2Id, setTrustee2Id] = useState(null);
 
   let history = useHistory();
 
@@ -98,7 +98,7 @@ export default function Add_Customer() {
                         var customerObj = {
                           customerId: customerId,
                           trustee1Id: trustee1Id,
-                          trustee2Id:trustee2Id,
+                          trustee2Id: trustee2Id,
                           customerNic: nic.trim(),
                           customerFname: fname.trim(),
                           customerLname: lname.trim(),
@@ -126,7 +126,7 @@ export default function Add_Customer() {
                           trustee2Mobile2: trustee2Mobile2.trim(),
                         };
 
-                        var passedObj = location.state.detail;
+                        var passedObj = location.state?.detail;
                         passedObj.forEach((obj) => {
                           if (obj.paymentWay === "PayandGo") {
                             obj.customer = customerObj;
@@ -493,7 +493,7 @@ export default function Add_Customer() {
                             "Can not proceed with this trustee, until complete the previous 'pay and go' as a trustee"
                           );
                         } else {
-                           setTrustee1Id(doc.docs[0].id);
+                          setTrustee1Id(doc.docs[0].id);
                           setTrustee1Fname(doc.docs[0].data().fname);
                           setTrustee1Lname(doc.docs[0].data().lname);
                           setTrustee1Addres1(doc.docs[0].data().address1);
@@ -656,7 +656,7 @@ export default function Add_Customer() {
                             "Can not proceed with this trustee, until complete the previous 'pay and go' as a trustee"
                           );
                         } else {
-                           setTrustee2Id(doc.docs[0].id);
+                          setTrustee2Id(doc.docs[0].id);
                           setTrustee2Fname(doc.docs[0].data().fname);
                           setTrustee2Lname(doc.docs[0].data().lname);
                           setTrustee2Address1(doc.docs[0].data().address1);

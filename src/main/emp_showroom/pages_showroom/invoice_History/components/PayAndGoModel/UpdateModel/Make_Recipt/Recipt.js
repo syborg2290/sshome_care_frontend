@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef,useEffect } from "react";
 import { Row, Col } from "antd";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
@@ -13,6 +13,7 @@ import TableRow from "@material-ui/core/TableRow";
 import Button from "@material-ui/core/Button";
 import firebase from "firebase";
 import moment from "moment";
+import {useLocation,useHistory } from 'react-router-dom';
 
 import "./Recipt.css";
 
@@ -43,9 +44,9 @@ class Recipt extends React.Component {
 
     createData(
       "Installment Payment",
-      this.state.delayed,
+      this.props.prop?.delayedCharges,
       <CurrencyFormat
-        value={this.state.total}
+        value={this.props.prop?.total}
         displayType={"text"}
         thousandSeparator={true}
         prefix={" "}
@@ -128,7 +129,7 @@ class Recipt extends React.Component {
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {rows.map((row) => (
+                        {this.state.rows.map((row) => (
                           <TableRow key={row.description}>
                             <TableCell component="th" scope="row">
                               {row.description}

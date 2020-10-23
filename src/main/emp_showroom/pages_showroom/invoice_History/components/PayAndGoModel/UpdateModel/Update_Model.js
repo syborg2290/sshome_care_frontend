@@ -19,7 +19,6 @@ import db from "../../../../../../../config/firebase.js";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { useHistory } from "react-router-dom";
 import { Modal } from "antd";
-import { useLocation, useHistory } from "react-router-dom";
 
 // styles
 import "./Update_Model.css";
@@ -42,14 +41,13 @@ export default function Update_Model({
   let history = useHistory();
 
   useEffect(() => {
-    
     db.collection("customer")
       .doc(customer_id)
       .get()
       .then((custDocRe) => {
-       setCustomer(custDocRe.data())
+        setCustomer(custDocRe.data());
       });
-    
+
     db.collection("installment")
       .where("invoice_number", "==", invoice_no)
       .get()
@@ -115,31 +113,33 @@ export default function Update_Model({
     NotificationManager.success("Installment updated ! )");
   };
 
-  const showConfirm = async() => {
+  const showConfirm = async () => {
     confirm({
       title: "Do you Want to Print a Recipt?",
       icon: <ExclamationCircleOutlined />,
 
-      onOk() {
+      async onOk() {
         await updateInstallment();
-         let passingWithCustomerObj = {
-              invoice_number: invoiceNumber,
-              customerDetails: customer,
-           total: Math.round(instAmountProp) * updateInstallment + Math.round(delayedCharges),
-              delayedCharges:Math.round(delayedCharges),
-            };
+        let passingWithCustomerObj = {
+          invoice_number: invoice_no,
+          customerDetails: customer,
+          total:
+            Math.round(instAmountProp) * updatingInstallmentCount +
+            Math.round(delayedCharges),
+          delayedCharges: Math.round(delayedCharges),
+        };
 
-            let moveWith = {
-              pathname: "/showroom/invoice_history/payAndGo/updateModel/PrintReceipt",
-              search: "?query=abc",
-              state: { detail: passingWithCustomerObj },
-            };
-        history.push(
-          moveWith
-        );
+        let moveWith = {
+          pathname:
+            "/showroom/invoice_history/payAndGo/updateModel/PrintReceipt",
+          search: "?query=abc",
+          state: { detail: passingWithCustomerObj },
+        };
+        history.push(moveWith);
       },
-      onCancel() {
-         await updateInstallment();
+      async onCancel() {
+        await updateInstallment();
+        // history.push("/showroom/ui/invoiceHistory");
       },
     });
   };
@@ -198,8 +198,8 @@ export default function Update_Model({
                 onChange={(e) => {
                   if (
                     Math.round(instCount) -
-                      Math.round(installments.length) * e.target.value >=
-                    1
+                      Math.round(installments.length) >= e.target.value 
+                    
                   ) {
                     setUpdatingInstallmentCount(e.target.value);
                   }
@@ -293,7 +293,10 @@ export default function Update_Model({
             </Grid>
             <Grid item xs={12} sm={6}>
               <CurrencyFormat
-                value={3500}
+                value={
+                  Math.round(instAmountProp) * updatingInstallmentCount +
+                  Math.round(delayedCharges)
+                }
                 displayType={"text"}
                 thousandSeparator={true}
                 prefix={" "}
@@ -307,7 +310,7 @@ export default function Update_Model({
                 variant="contained"
                 color="primary"
                 className="btn_update"
-                onClick={updateInstallment}
+                onClick={showConfirm}
               >
                 Done
               </Button>

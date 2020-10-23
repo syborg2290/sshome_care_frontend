@@ -80,31 +80,33 @@ export default function CustomerHistoryModel({ customerId }) {
               instReDoc.docs.forEach((insRe) => {
                 instRawData.push({
                   InvoiceNo: insRe.data().invoice_number,
-<<<<<<< HEAD
-                  Date:moment(insRe.data().date.toDate()).format(
-              "dddd, MMMM Do YYYY"
-            ), 
-=======
-                  Date: insRe.data().date,
->>>>>>> 0ac513a42d947f0f20610b9259c8029b5f7da99b
-                  Amount: <CurrencyFormat
-                        value={ insRe.data().amount}
-                        displayType={"text"}
-                        thousandSeparator={true}
-                        prefix={" "}
-                      />,
-                  Delayed:  <CurrencyFormat
-                        value={insRe.data().delayed}
-                        displayType={"text"}
-                        thousandSeparator={true}
-                        prefix={" "}
-                      />,
-                  Balance: <CurrencyFormat
-                        value={insRe.data().balance}
-                        displayType={"text"}
-                        thousandSeparator={true}
-                        prefix={" "}
-                      /> ,
+                  Date: moment(insRe.data().date.toDate()).format(
+                    "dddd, MMMM Do YYYY"
+                  ),
+                  Amount: (
+                    <CurrencyFormat
+                      value={insRe.data().amount}
+                      displayType={"text"}
+                      thousandSeparator={true}
+                      prefix={" "}
+                    />
+                  ),
+                  Delayed: (
+                    <CurrencyFormat
+                      value={insRe.data().delayed}
+                      displayType={"text"}
+                      thousandSeparator={true}
+                      prefix={" "}
+                    />
+                  ),
+                  Balance: (
+                    <CurrencyFormat
+                      value={insRe.data().balance}
+                      displayType={"text"}
+                      thousandSeparator={true}
+                      prefix={" "}
+                    />
+                  ),
                 });
               });
               setInstallmentsTableData(instRawData);
@@ -112,7 +114,6 @@ export default function CustomerHistoryModel({ customerId }) {
             });
         });
       });
-    
   }, [customerId]);
 
   return (

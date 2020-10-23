@@ -409,6 +409,7 @@ export default function Invoice_history() {
           <div className="Installment_Model_Main">
             <div className="Installment_Model_Detail">
               <InstallmentHistory
+                key={payangoAllData[currentIndx]?.data?.invoice_number}
                 invoice_no={payangoAllData[currentIndx]?.data?.invoice_number}
               />
             </div>

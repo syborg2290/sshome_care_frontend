@@ -123,17 +123,10 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
             <List.Item.Meta
               title={
                 <Row>
-<<<<<<< HEAD
-                  <Col span={7}> {item.title}</Col>
-                  <Col span={3}></Col>
-                  {itemsData.length === 1 ? (
-                    <Col span={12}>
-=======
                   <Col span={5}> {item.title}</Col>
                   <Col span={2}></Col>
                   <Col span={12}>
                     {itemsData.length === 1 ? (
->>>>>>> 0ac513a42d947f0f20610b9259c8029b5f7da99b
                       <Radio.Group
                         className="radio_btn"
                         defaultValue="PayandGo"
@@ -153,19 +146,11 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
                           Full Payment
                         </Radio.Button>
                       </Radio.Group>
-<<<<<<< HEAD
-                    </Col>
-                  ) : (
-                    ""
-                  )}
-                  <Col span={2}>
-=======
                     ) : (
                       ""
                     )}
                   </Col>
                   <Col span={5}>
->>>>>>> 0ac513a42d947f0f20610b9259c8029b5f7da99b
                     <span className="icons_Close">
                       <CloseOutlined
                         onClick={() => removeItems(item.i, item.id)}

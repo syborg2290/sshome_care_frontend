@@ -228,8 +228,7 @@ export default function Invoice_history() {
   useEffect(() => {
     db.collection("invoice")
       .where("customer_id", "!=", null)
-      .get()
-      .then((cust) => {
+      .onSnapshot((cust) => {
         var rawData = [];
         var rawAllData = [];
         cust.docs.forEach((siDoc) => {
@@ -317,8 +316,7 @@ export default function Invoice_history() {
     //START Full Payment Rows
     db.collection("invoice")
       .where("customer_id", "==", null)
-      .get()
-      .then((cust) => {
+      .onSnapshot((cust) => {
         var rawDataFull = [];
         var rawAllDataFull = [];
         cust.docs.forEach((siDoc) => {

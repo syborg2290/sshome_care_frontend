@@ -96,10 +96,10 @@ class Recipt extends React.Component {
                 <Col className="tiles_details" span={18}>
                   {this.state.customer_nic}
                 </Col>
-                <Col className="tiles_sum" span={12}>
-                  Recived with thanks a sum of Rs.
+                <Col className="tiles_sum" span={14}>
+                  Recived with thanks a sum of Rs.(LKR)
                 </Col>
-                <Col className="tiles_details_sum" span={12}>
+                <Col className="tiles_details_sum" span={10}>
                   <CurrencyFormat
                     value={this.state.total}
                     displayType={"text"}

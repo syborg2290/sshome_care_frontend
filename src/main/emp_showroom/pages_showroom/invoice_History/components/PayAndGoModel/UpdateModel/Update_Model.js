@@ -282,6 +282,23 @@ export default function Update_Model({
             <Grid item xs={12} sm={6}>
               <p>{Math.round(delayedDays)} days delayed !</p>
             </Grid>
+            <Grid item xs={12} sm={12}>
+              <hr />
+            </Grid>
+            <Grid className="lbl_topi" item xs={12} sm={4}>
+              Total(LKR)
+            </Grid>
+            <Grid item xs={12} sm={2}>
+              :
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <CurrencyFormat
+                value={3500}
+                displayType={"text"}
+                thousandSeparator={true}
+                prefix={" "}
+              />
+            </Grid>
           </Grid>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={9}></Grid>

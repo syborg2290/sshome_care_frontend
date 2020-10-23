@@ -83,7 +83,7 @@ export default function Update_Model({
         delayed: delayedCharges === "" ? 0 : Math.round(delayedCharges),
         balance:
           Math.round(instAmountProp) *
-          (Math.round(instCount) - Math.round(installments.length)),
+          (Math.round(instCount) - Math.round(installments.length + 1)),
         date: firebase.firestore.FieldValue.serverTimestamp(),
       });
     }

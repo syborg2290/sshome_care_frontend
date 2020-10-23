@@ -73,7 +73,17 @@ export default function History_Model({ invoice_no }) {
       .where("invoice_number", "==", invoice_no)
       .get()
       .then((instReDoc) => {
-        instReDoc.docs.forEach((each) => {
+        
+        var reArray = instReDoc.docs;
+        reArray.sort((a, b) => {
+          if (a.data().balance > b.data().balance) {
+            return -1;
+          } else {
+            return 1;
+          }
+        })
+        
+        reArray.forEach((each) => {
           setInstallments((old) => [
             ...old,
             {
@@ -110,6 +120,7 @@ export default function History_Model({ invoice_no }) {
         });
       });
     setIsLoading(false);
+   
   }, [invoice_no]);
 
   return (

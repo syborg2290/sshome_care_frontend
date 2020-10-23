@@ -77,18 +77,21 @@ export default function Update_Model({
 
   const updateInstallment = async () => {
     for (var i = 0; i < Math.round(updatingInstallmentCount); i++) {
-      await db.collection("installment").where("invoice_number", "==", invoice_no).get().then((reInst) => { 
-        await db.collection("installment").add({
-        invoice_number: invoice_no,
-        amount: Math.round(instAmountProp),
-        delayed: delayedCharges === "" ? 0 : Math.round(delayedCharges),
-        balance:
-          Math.round(instAmountProp) *
-          (Math.round(instCount) - reInst.docs.length),
-        date: firebase.firestore.FieldValue.serverTimestamp(),
-      });
-      });
-      
+      await db
+        .collection("installment")
+        .where("invoice_number", "==", invoice_no)
+        .get()
+        .then(async (reInst) => {
+          await db.collection("installment").add({
+            invoice_number: invoice_no,
+            amount: Math.round(instAmountProp),
+            delayed: delayedCharges === "" ? 0 : Math.round(delayedCharges),
+            balance:
+              Math.round(instAmountProp) *
+              (Math.round(instCount) - (reInst.docs.length+1)),
+            date: firebase.firestore.FieldValue.serverTimestamp(),
+          });
+        });
     }
 
     if (

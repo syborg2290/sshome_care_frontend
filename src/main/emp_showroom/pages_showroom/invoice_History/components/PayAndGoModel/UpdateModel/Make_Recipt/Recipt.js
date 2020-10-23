@@ -42,7 +42,7 @@ class Recipt extends React.Component {
       " " +
       this.props.prop?.customerDetails?.lname;
 
-    createData(
+    this.state.rows.push(createData(
       "Installment Payment",
       this.props.prop?.delayedCharges,
       <CurrencyFormat
@@ -51,6 +51,7 @@ class Recipt extends React.Component {
         thousandSeparator={true}
         prefix={" "}
       />
+    )
     );
   }
 

@@ -93,18 +93,18 @@ class PrintInvoiceClass extends React.Component {
   render() {
     return (
       <div>
-        <Container component="main" className="mainPrint_container">
+        <Container component="main" className="mainsPrint_container">
           <Typography className="company_title" variant="h5" gutterBottom>
             SS HOME CARE CITY
           </Typography>
 
           <Typography className="company_sub__title" variant="h5" gutterBottom>
-            Dealers In All Kind of Electtic & Electronic Items
+            Dealers In Alsl Kind of Electtic & Electronic Items
             <hr />
           </Typography>
 
-          <div className="paper">
-            <form className="form" noValidate>
+          <div className="papers">
+            <form className="forms" noValidate>
               <Row>
                 <Col span={4}>Invoice No:</Col>
                 <Col className="invo_number" span={20}>
@@ -266,7 +266,7 @@ class PrintInvoiceClass extends React.Component {
         {this.state.cols.length === 0 ? (
           ""
         ) : (
-          <Container component="main" className="mainPrint_container">
+          <Container component="main" className="mainsPrint_container">
             <Typography className="company_title" variant="h5" gutterBottom>
               SS HOME CARE CITY
             </Typography>
@@ -280,8 +280,8 @@ class PrintInvoiceClass extends React.Component {
               <hr />
             </Typography>
 
-            <div className="paper">
-              <form className="form" noValidate>
+            <div className="papers">
+              <form className="forms" noValidate>
                 <Row>
                   <Col span={4}>Invoice No:</Col>
                   <Col className="invo_number" span={20}>

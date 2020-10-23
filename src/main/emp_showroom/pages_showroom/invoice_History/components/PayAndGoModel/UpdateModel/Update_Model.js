@@ -82,14 +82,15 @@ export default function Update_Model({
         invoice_number: invoice_no,
         amount: Math.round(instAmountProp),
         delayed: delayedCharges === "" ? 0 : Math.round(delayedCharges),
-        balance: Math.round(instAmountProp) * (Math.round(instCount) - i),
+        balance:
+          Math.round(instAmountProp) * (Math.round(installments.length) - 1),
         date: firebase.firestore.FieldValue.serverTimestamp(),
       });
     }
-    
+
     if (
       Math.round(instCount) -
-        (updatingInstallmentCount + installments.length)<=
+        (updatingInstallmentCount + installments.length) <=
       0
     ) {
       await db

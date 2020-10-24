@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import MUIDataTable from "mui-datatables";
-import { Grid } from "@material-ui/core";
+import { Grid, Button } from "@material-ui/core";
 // eslint-disable-next-line
 import { Spin, Modal } from "antd";
 // eslint-disable-next-line
@@ -8,7 +8,11 @@ import CurrencyFormat from "react-currency-format";
 
 // icons
 import VisibilityIcon from "@material-ui/icons/Visibility";
-import HistoryIcon from "@material-ui/icons/History";
+import AddIcon from "@material-ui/icons/Add";
+
+// components
+import SeizedViewModel from "../seized_items/seized_Model/view_Model/View_Model";
+import SeizedAddModel from "../seized_items/seized_Model/addNew_Model/Add_Model";
 
 // styles
 import "./Seized_item.css";
@@ -18,6 +22,17 @@ export default function Seized_item() {
   const [isLoading, setIsLoading] = useState(true);
   // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
+
+  const [seizedViewModel, setSeizedViewModel] = useState(false); //  table models
+  const [seizedAddModel, setSeizedAddModel] = useState(false); //  table models
+
+  const showModalView = () => {
+    setSeizedViewModel(true);
+  };
+
+  const showModalAdd = () => {
+    setSeizedAddModel(true);
+  };
 
   //START pay And Go Columns
   const repairTableColomns = [
@@ -102,10 +117,7 @@ export default function Seized_item() {
       Date: "test",
       Action: (
         <div>
-          <VisibilityIcon />
-          <span className="icon_Edit">
-            <HistoryIcon />
-          </span>
+          <VisibilityIcon onClick={showModalView} />
         </div>
       ),
     },
@@ -113,31 +125,61 @@ export default function Seized_item() {
 
   return (
     <>
-      {/*Start customer Details models */}
+      {/*Start Seized Details models */}
 
-      {/* <Modal
-        visible={visibleCustomer}
+      <Modal
+        visible={seizedViewModel}
         className="customer_Model"
         footer={null}
         onCancel={() => {
-          setVisibleCustomer(false);
+          setSeizedViewModel(false);
         }}
       >
         <div className="customer_Model">
           <div className="customer_Model_Main">
             <div className="customer_Modell_Detail">
-              <BlackListCustomers />
+              <SeizedViewModel />
             </div>
           </div>
         </div>
-      </Modal> */}
+      </Modal>
 
       {/*END customer Details models */}
+
+      {/*Start Add Seized Model  */}
+      <Modal
+        visible={seizedAddModel}
+        className="seized_Add_Model"
+        footer={null}
+        onCancel={() => {
+          setSeizedAddModel(false);
+        }}
+      >
+        <div className="seized_Model">
+          <div className="seized_Add_Model_Main">
+            <div className="seized_Add_Model_Detail">
+              <SeizedAddModel />
+            </div>
+          </div>
+        </div>
+      </Modal>
+
+      {/*END Add repairs Model */}
+
+      <Button
+        variant="contained"
+        color="primary"
+        className="btn_AddnewSeized"
+        endIcon={<AddIcon />}
+        onClick={showModalAdd}
+      >
+        Add New
+      </Button>
 
       <Grid container spacing={4}>
         <Grid item xs={12}>
           <MUIDataTable
-            title={<span className="title_Span_seized">Seized Item</span>}
+            title={<span className="title_Span_seized">SEIZED ITEMS</span>}
             className="seized_Table"
             data={repairTableData}
             columns={repairTableColomns}

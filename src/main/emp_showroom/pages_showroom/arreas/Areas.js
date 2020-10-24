@@ -49,7 +49,7 @@ export default function Areas() {
         }),
       },
     },
-     {
+    {
       name: "NIC",
       options: {
         filter: true,
@@ -117,41 +117,43 @@ export default function Areas() {
           id: eachRe.id,
           data: eachRe.data(),
         });
-        db.collection("customer").doc(eachRe.data().customer_id).get().then((reCustomer) => { 
-          rawData.push({
-          InvoiceNo: eachRe.data().invoice_number,
-          NIC:reCustomer.data().nic,
-          Delayed_Days: eachRe.data().delayed_days,
-          Delayed_Charges: (
-            <CurrencyFormat
-              value={eachRe.data().delayed_charges}
-              displayType={"text"}
-              thousandSeparator={true}
-              prefix={" "}
-            />
-          ),
-          Date: moment(eachRe.data()?.date?.toDate()).format(
-            "dddd, MMMM Do YYYY"
-          ),
-          Action: (
-            <div>
-              <Button
-                variant="contained"
-                color="primary"
-                size="small"
-                className="btnpay"
-                onClick={showModalArreasUpdate}
-              >
-                Update
-              </Button>
-              <span className="icon_hist">
-                <HistoryIcon onClick={showModalArresHistory} />
-              </span>
-            </div>
-          ),
-        });
-        });
-        
+        db.collection("customer")
+          .doc(eachRe.data().customer_id)
+          .get()
+          .then((reCustomer) => {
+            rawData.push({
+              InvoiceNo: eachRe.data().invoice_number,
+              NIC: reCustomer.data().nic,
+              Delayed_Days: eachRe.data().delayed_days,
+              Delayed_Charges: (
+                <CurrencyFormat
+                  value={eachRe.data().delayed_charges}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+              Date: moment(eachRe.data()?.date?.toDate()).format(
+                "dddd, MMMM Do YYYY"
+              ),
+              Action: (
+                <div>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                    className="btnpay"
+                    onClick={showModalArreasUpdate}
+                  >
+                    Update
+                  </Button>
+                  <span className="icon_hist">
+                    <HistoryIcon onClick={showModalArresHistory} />
+                  </span>
+                </div>
+              ),
+            });
+          });
       });
       setArreasTableData(rawData);
       setArreasAllData(rawAllData);

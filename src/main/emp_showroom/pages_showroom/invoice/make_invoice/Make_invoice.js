@@ -262,6 +262,7 @@ function Make_invoice() {
                       invoice_number: invoiceNumber,
                       items: arrayItems,
                       customer_id: cust.id,
+                      nic: tablerows[0].customer.customerNic,
                       installmentType: daysDate.value,
                       installemtnDayDate:
                         daysDate.value === "Weekly" ? days : dates,
@@ -389,6 +390,7 @@ function Make_invoice() {
                       invoice_number: invoiceNumber,
                       items: arrayItems,
                       customer_id: cust.id,
+                      nic: tablerows[0].customer.customerNic,
                       installmentType: daysDate.value,
                       installemtnDayDate:
                         daysDate.value === "Weekly" ? days : dates,
@@ -518,6 +520,7 @@ function Make_invoice() {
                   invoice_number: invoiceNumber,
                   items: arrayItems,
                   customer_id: cust.id,
+                  nic: tablerows[0].customer.customerNic,
                   installmentType: daysDate.value,
                   installemtnDayDate:
                     daysDate.value === "Weekly" ? days : dates,
@@ -644,6 +647,7 @@ function Make_invoice() {
                   invoice_number: invoiceNumber,
                   items: arrayItems,
                   customer_id: cust.id,
+                  nic: tablerows[0].customer.customerNic,
                   installmentType: daysDate.value,
                   installemtnDayDate:
                     daysDate.value === "Weekly" ? days : dates,

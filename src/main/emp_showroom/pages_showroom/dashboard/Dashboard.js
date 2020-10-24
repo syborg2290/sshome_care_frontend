@@ -10,7 +10,7 @@ export default function Dashboard() {
   useEffect(() => {
     db.collection("invoice")
       .where("status_of_payandgo", "==", "onGoing")
-      .onSnapshot((onSnap) => {
+      .get().then((onSnap) => {
         onSnap.docs.forEach((eachRe) => {
           checkInstallmentsStatus(eachRe);
         });
@@ -36,7 +36,7 @@ export default function Dashboard() {
       (new Date().getTime() -
         new Date(eachRe.data()?.date?.seconds * 1000).getTime()) /
       (1000 * 3600 * 24);
-
+    console.log(daysCountInitial);
     if (eachRe.data().installmentType === "Monthly") {
       if (30 - daysCountInitial >= 0) {
         // setDelayedDays(0);

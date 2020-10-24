@@ -14,9 +14,8 @@ export default function Dashboard() {
         onSnap.docs.forEach((eachRe) => {
           db.collection("installment")
             .where("invoice_number", "==", eachRe.data().invoice_number)
-            .get()
-            .then((instReDoc) => {
-              if (instReDoc.docs.length === 0) {
+            .onSnapshot((instReDoc) => {
+              if (instReDoc.docs.length <= 0) {
                 intialStateOfArreasCheck(eachRe);
               } else {
                 afterStateOfArreasCheck(instReDoc, eachRe);
@@ -31,6 +30,7 @@ export default function Dashboard() {
       (new Date().getTime() -
         new Date(eachRe.data()?.date?.seconds * 1000).getTime()) /
       (1000 * 3600 * 24);
+    
 
     if (eachRe.data().installmentType === "Monthly") {
       if (30 - daysCountInitial >= 0) {

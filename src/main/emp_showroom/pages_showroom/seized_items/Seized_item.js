@@ -31,7 +31,7 @@ export default function Seized_item() {
       },
     },
     {
-      name: "FirstName",
+      name: "Model_No",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -40,7 +40,7 @@ export default function Seized_item() {
       },
     },
     {
-      name: "LastName",
+      name: "Item_Name",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -62,7 +62,7 @@ export default function Seized_item() {
       },
     },
     {
-      name: "Telephone",
+      name: "Date",
       options: {
         filter: false,
         setCellHeaderProps: (value) => ({
@@ -96,10 +96,10 @@ export default function Seized_item() {
   const repairTableData = [
     {
       InvoiceNo: "3476-JDJCF",
-      FirstName: "test",
-      LastName: "test",
+      Model_No: "test",
+      Item_Name: "test",
       NIC: "test",
-      Telephone: "test",
+      Date: "test",
       Action: (
         <div>
           <VisibilityIcon />

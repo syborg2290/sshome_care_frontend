@@ -10,7 +10,8 @@ export default function Dashboard() {
   useEffect(() => {
     db.collection("invoice")
       .where("status_of_payandgo", "==", "onGoing")
-      .get().then((onSnap) => {
+      .get()
+      .then((onSnap) => {
         onSnap.docs.forEach((eachRe) => {
           checkInstallmentsStatus(eachRe);
         });
@@ -36,7 +37,6 @@ export default function Dashboard() {
       (new Date().getTime() -
         new Date(eachRe.data()?.date?.seconds * 1000).getTime()) /
       (1000 * 3600 * 24);
-    console.log(daysCountInitial);
     if (eachRe.data().installmentType === "Monthly") {
       if (30 - daysCountInitial >= 0) {
         // setDelayedDays(0);
@@ -50,7 +50,7 @@ export default function Dashboard() {
                 .doc(reArreas.docs[0].id)
                 .update({
                   delayed_days: Math.round(daysCountInitial) - 30,
-                  delayed_charges: 99 * Math.round((daysCountInitial - 30) / 7),
+                  delayed_charges: 99 * (Math.round(daysCountInitial - 30) / 7),
                 });
             } else {
               db.collection("arrears").add({
@@ -58,7 +58,7 @@ export default function Dashboard() {
                 customer_id: eachRe.data().customer_id,
                 nic: eachRe.data().nic,
                 delayed_days: Math.round(daysCountInitial) - 30,
-                delayed_charges: 99 * Math.round((daysCountInitial - 30) / 7),
+                delayed_charges: 99 * (Math.round(daysCountInitial - 30) / 7),
                 date: firebase.firestore.FieldValue.serverTimestamp(),
               });
             }
@@ -77,7 +77,7 @@ export default function Dashboard() {
                 .doc(reArreas.docs[0].id)
                 .update({
                   delayed_days: Math.round(daysCountInitial) - 7,
-                  delayed_charges: 99 * Math.round((daysCountInitial - 7) / 7),
+                  delayed_charges: 99 * (Math.round(daysCountInitial - 7) / 7),
                 });
             } else {
               db.collection("arrears").add({
@@ -85,7 +85,7 @@ export default function Dashboard() {
                 customer_id: eachRe.data().customer_id,
                 nic: eachRe.data().nic,
                 delayed_days: Math.round(daysCountInitial) - 7,
-                delayed_charges: 99 * Math.round((daysCountInitial - 7) / 7),
+                delayed_charges: 99 * (Math.round(daysCountInitial - 7) / 7),
                 date: firebase.firestore.FieldValue.serverTimestamp(),
               });
             }
@@ -123,14 +123,14 @@ export default function Dashboard() {
             .doc(statusMonth.docs[0].id)
             .update({
               delayed_days: daysCount - 30,
-              delayed_charges: 99 * Math.round((daysCount - 30) / 7),
+              delayed_charges: 99 * (Math.round(daysCount - 30) / 7),
             });
         } else {
           db.collection("arrears").add({
             invoice_number: eachRe.data().invoice_number,
             customer_id: eachRe.data().customer_id,
             delayed_days: Math.round(daysCount) - 30,
-            delayed_charges: 99 * Math.round((daysCount - 30) / 7),
+            delayed_charges: 99 * (Math.round(daysCount - 30) / 7),
             date: firebase.firestore.FieldValue.serverTimestamp(),
           });
         }
@@ -149,14 +149,14 @@ export default function Dashboard() {
             .doc(statusWeek.docs[0].id)
             .update({
               delayed_days: Math.round(daysCount) - 7,
-              delayed_charges: 99 * Math.round((daysCount - 7) / 7),
+              delayed_charges: 99 * (Math.round(daysCount - 7) / 7),
             });
         } else {
           db.collection("arrears").add({
             invoice_number: eachRe.data().invoice_number,
             customer_id: eachRe.data().customer_id,
             delayed_days: Math.round(daysCount) - 7,
-            delayed_charges: 99 * Math.round((daysCount - 7) / 7),
+            delayed_charges: 99 * (Math.round(daysCount - 7) / 7),
             date: firebase.firestore.FieldValue.serverTimestamp(),
           });
         }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import MUIDataTable from "mui-datatables";
 import { Grid } from "@material-ui/core";
 import { Spin } from "antd";
@@ -12,12 +12,14 @@ import db from "../../../../../config/firebase.js";
 // styles
 import "./Arreas_History.css";
 
-export default function Arreas_History() {
-  // eslint-disable-next-line
+export default function Arreas_History({ invoice_no }) {
+ // eslint-disable-next-line
   const [isLoading, setIsLoading] = useState(true);
 
   // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
+
+  const [installments, setInstallments] = useState([]);
 
   const columns = [
     {
@@ -67,15 +69,62 @@ export default function Arreas_History() {
       },
     },
   ];
-  const installments = [
-    {
-      InvoiceNo: "test",
-      Date: "test",
-      Amount: "test",
-      Delayed: "test",
-      Balance: "test",
-    },
-  ];
+
+  useEffect(() => {
+    db.collection("installment")
+      .where("invoice_number", "==", invoice_no)
+      .get()
+      .then((instReDoc) => {
+        
+        var reArray = instReDoc.docs;
+        reArray.sort((a, b) => {
+          if (a.data().balance > b.data().balance) {
+            return -1;
+          } else {
+            return 1;
+          }
+        })
+        
+        reArray.forEach((each) => {
+          setInstallments((old) => [
+            ...old,
+            {
+              InvoiceNo: invoice_no,
+              Date: moment(each.data().date.toDate()).format(
+                "dddd, MMMM Do YYYY"
+              ),
+              Amount: (
+                <CurrencyFormat
+                  value={each.data().amount}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+              Delayed: (
+                <CurrencyFormat
+                  value={each.data().delayed}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+              Balance: (
+                <CurrencyFormat
+                  value={each.data().balance}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+            },
+          ]);
+        });
+      });
+    setIsLoading(false);
+   
+  }, [invoice_no]);
+
   return (
     <div>
       <Grid container spacing={4} className="mains_container">

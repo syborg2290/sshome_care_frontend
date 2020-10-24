@@ -194,7 +194,10 @@ export default function Areas() {
         <div className="arreas_History">
           <div className="arreas_History_Model_Main">
             <div className="arreas_History_Modell_Detail">
-              <ArreasHistory />
+              <ArreasHistory
+                key={arreasAllData[currentIndx]?.id}
+                invoice_no={arreasAllData[currentIndx]?.data?.invoice_number}
+              />
             </div>
           </div>
         </div>

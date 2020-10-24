@@ -1,3 +1,9 @@
-.fff {
-  margin-top: 80px !important;
+.title_Span_dashboard {
+  font-weight: 700;
+  font-size: large;
+  color: #34314c;
+}
+
+.dashboard_Table {
+  margin-top: 75px !important;
 }

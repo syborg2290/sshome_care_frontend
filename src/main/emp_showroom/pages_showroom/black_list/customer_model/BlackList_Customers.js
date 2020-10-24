@@ -1,6 +1,7 @@
 import React from "react";
 import { Row, Col } from "antd";
 import Typography from "@material-ui/core/Typography";
+// eslint-disable-next-line
 import moment from "moment";
 
 // styles

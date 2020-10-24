@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import {
   TextField,
   Grid,
@@ -6,10 +6,8 @@ import {
   Typography,
   Button,
 } from "@material-ui/core";
-import CurrencyFormat from "react-currency-format";
-import firebase from "firebase";
-import moment from "moment";
 
+// eslint-disable-next-line
 import db from "../../../../../config/firebase.js";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { useHistory } from "react-router-dom";
@@ -24,12 +22,12 @@ export default function Repair_model() {
 
   const showConfirm = () => {
     confirm({
-      title: "Do you Want to delete these items?",
+      title: "Do you Want to ptint a Receipt?",
       icon: <ExclamationCircleOutlined />,
       content: "Some descriptions",
       onOk() {
         history.push(
-          "/repairs/repairs_Model/repair_update_Recipt/Repair_recipt"
+          "/showroom/repairs/repairs_Model/repair_update_Recipt/Repair_recipt"
         );
       },
       onCancel() {

@@ -3,7 +3,7 @@ import React from "react";
 import { Route, Switch, Redirect, withRouter } from "react-router-dom";
 
 // styles
-import "./Layout_showroom.css";
+import "./Assistant_Layout.css";
 
 // components
 import Header from "../assistant_Header/Assistant_Header";
@@ -22,8 +22,7 @@ function LayoutShowroom(props) {
         <div className="content">
           <div className="fakeToolbar" />
           <Switch>
-            <Route path="/showroom/dashboard" component={Dashboard} />
-            {/* <Route path="/showroom/ui/itemTable" component={ItemTable} /> */}
+            <Route path="/assistant/dashboard" component={Dashboard} />
           </Switch>
         </div>
       </>

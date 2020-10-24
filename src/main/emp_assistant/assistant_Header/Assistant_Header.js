@@ -12,7 +12,7 @@ import useStyles from "./styles";
 import "./Assistant_Header.css";
 
 // components
-import { Typography } from "../Wrappers/Wrappers";
+import { Typography } from "../assistant_Wrappers/Wrappers";
 
 // context
 import {

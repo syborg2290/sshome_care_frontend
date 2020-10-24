@@ -49,6 +49,15 @@ export default function Areas() {
         }),
       },
     },
+     {
+      name: "NIC",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
     {
       name: "Delayed_Days",
       options: {
@@ -108,8 +117,10 @@ export default function Areas() {
           id: eachRe.id,
           data: eachRe.data(),
         });
-        rawData.push({
+        db.collection("customer").doc(eachRe.data().customer_id).get().then((reCustomer) => { 
+          rawData.push({
           InvoiceNo: eachRe.data().invoice_number,
+          NIC:reCustomer.data().nic,
           Delayed_Days: eachRe.data().delayed_days,
           Delayed_Charges: (
             <CurrencyFormat
@@ -139,6 +150,8 @@ export default function Areas() {
             </div>
           ),
         });
+        });
+        
       });
       setArreasTableData(rawData);
       setArreasAllData(rawAllData);

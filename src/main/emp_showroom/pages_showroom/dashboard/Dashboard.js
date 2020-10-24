@@ -51,6 +51,7 @@ export default function Dashboard() {
               db.collection("arrears").add({
                 invoice_number: eachRe.data().invoice_number,
                 customer_id: eachRe.data().customer_id,
+                nic:eachRe.data().nic,
                 delayed_days: Math.round(daysCountInitial) - 30,
                 delayed_charges: 99 * Math.round((daysCountInitial - 30) / 7),
                 date: firebase.firestore.FieldValue.serverTimestamp(),
@@ -77,6 +78,7 @@ export default function Dashboard() {
               db.collection("arrears").add({
                 invoice_number: eachRe.data().invoice_number,
                 customer_id: eachRe.data().customer_id,
+                 nic:eachRe.data().nic,
                 delayed_days: Math.round(daysCountInitial) - 7,
                 delayed_charges: 99 * Math.round((daysCountInitial - 7) / 7),
                 date: firebase.firestore.FieldValue.serverTimestamp(),

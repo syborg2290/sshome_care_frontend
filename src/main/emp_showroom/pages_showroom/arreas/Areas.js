@@ -27,6 +27,7 @@ export default function Areas() {
   const [arreasUpdate, setArreasUpdate] = useState(false); //  table models
   const [arresHistory, setArresHistory] = useState(false); //  table models
   const [arreasTableData, setArreasTableData] = useState([]);
+  // eslint-disable-next-line
   const [arreasAllData, setArreasAllData] = useState([]);
 
   const showModalArreasUpdate = () => {
@@ -41,6 +42,15 @@ export default function Areas() {
   const arreasTableColomns = [
     {
       name: "InvoiceNo",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+     {
+      name: "NIC",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -107,8 +117,10 @@ export default function Areas() {
           id: eachRe.id,
           data: eachRe.data(),
         });
-        rawData.push({
+        db.collection("customer").doc(eachRe.data().customer_id).get().then((reCustomer) => { 
+          rawData.push({
           InvoiceNo: eachRe.data().invoice_number,
+          NIC:reCustomer.data().nic,
           Delayed_Days: eachRe.data().delayed_days,
           Delayed_Charges: (
             <CurrencyFormat
@@ -138,6 +150,8 @@ export default function Areas() {
             </div>
           ),
         });
+        });
+        
       });
       setArreasTableData(rawData);
       setArreasAllData(rawAllData);

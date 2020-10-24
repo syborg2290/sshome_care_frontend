@@ -20,12 +20,12 @@ export default function Repair_model() {
 
   const showConfirm = () => {
     confirm({
-      title: "Do you Want to delete these items?",
+      title: "Do you Want to ptint a Receipt?",
       icon: <ExclamationCircleOutlined />,
       content: "Some descriptions",
       onOk() {
         history.push(
-          "/repairs/repairs_Model/repair_update_Recipt/Repair_recipt"
+          "/showroom/repairs/repairs_Model/repair_update_Recipt/Repair_recipt"
         );
       },
       onCancel() {

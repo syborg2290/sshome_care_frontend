@@ -7,7 +7,6 @@ import {
   Button,
 } from "@material-ui/core";
 import CurrencyFormat from "react-currency-format";
-
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { useHistory } from "react-router-dom";
 import { Modal } from "antd";

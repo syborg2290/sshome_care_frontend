@@ -206,7 +206,7 @@ function Make_invoice() {
         async onCancel() {
           await invoiceIntoDb();
 
-          history.push("/showroom/itemTable");
+          history.push("/showroom/ui/itemTable");
         },
       });
     }

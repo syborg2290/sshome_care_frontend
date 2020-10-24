@@ -3,7 +3,6 @@ import {
   Grid,
   Container,
   Typography,
-  Button,
 } from "@material-ui/core";
 
 // styles
@@ -48,20 +47,6 @@ export default function Repair_View() {
             </Grid>
             <Grid item xs={12} sm={6}>
               <p>About Reason</p>
-            </Grid>
-          </Grid>
-
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={9}></Grid>
-            <Grid item xs={12} sm={3}>
-              <Button
-                variant="contained"
-                color="primary"
-                className="btn_update"
-                // onClick={showConfirm}
-              >
-                Done
-              </Button>
             </Grid>
           </Grid>
         </form>

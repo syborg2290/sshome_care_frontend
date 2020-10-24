@@ -19,9 +19,9 @@ import "./Black_List.css";
 export default function Black_List() {
   // eslint-disable-next-line
   const [isLoading, setIsLoading] = useState(true);
-
   // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
+
   const [visibleCustomer, setVisibleCustomer] = useState(false); // customer table models
   const [customerhistory, setCustomerhistory] = useState(false); // customer table models
 
@@ -176,7 +176,7 @@ export default function Black_List() {
             options={{
               selectableRows: false,
               customToolbarSelect: () => {},
-              filterType: "checkbox",
+              filterType: "textfield",
               download: false,
               print: false,
               searchPlaceholder: "Search using any column names",

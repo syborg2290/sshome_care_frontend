@@ -416,7 +416,7 @@ export default function PrintInvoice() {
       "popstate",
       (event) => {
         if (event.state) {
-          history.push("/showroom/itemTable");
+          history.push("/showroom/ui/itemTable");
         }
       },
       false

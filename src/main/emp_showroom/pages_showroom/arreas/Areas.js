@@ -200,7 +200,7 @@ export default function Areas() {
             options={{
               selectableRows: false,
               customToolbarSelect: () => {},
-              filterType: "checkbox",
+              filterType: "textfield",
               download: false,
               print: false,
               searchPlaceholder: "Search using any column names",

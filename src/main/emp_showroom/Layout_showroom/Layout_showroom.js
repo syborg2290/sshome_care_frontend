@@ -55,7 +55,7 @@ function LayoutShowroom(props) {
               component={ArriesReceipt}
             />
             <Route
-              path="/repairs/repairs_Model/repair_update_Recipt/Repair_recipt"
+              path="/showroom/repairs/repairs_Model/repair_update_Recipt/Repair_recipt"
               component={RepairReceipt}
             />
             <Route path="/showroom/ui/makeInvoice" component={MakeInvoice} />

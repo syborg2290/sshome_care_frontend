@@ -326,7 +326,7 @@ export default function Invoice_history() {
           });
           rawDataFull.push({
             InvoiceNo: siDoc.data().invoice_number,
-            Date: moment(siDoc.data().date.toDate()).format(
+            Date: moment(siDoc.data()?.date?.toDate()).format(
               "dddd, MMMM Do YYYY"
             ),
             Discount: (

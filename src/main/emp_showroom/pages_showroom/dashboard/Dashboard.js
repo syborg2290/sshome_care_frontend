@@ -1,175 +1,173 @@
-import React, { useState } from "react";
-import MUIDataTable from "mui-datatables";
-import { Grid } from "@material-ui/core";
-// eslint-disable-next-line
-import { Spin, Modal } from "antd";
-// eslint-disable-next-line
-import CurrencyFormat from "react-currency-format";
+import React, { useEffect } from "react";
 
-// icons
-import VisibilityIcon from "@material-ui/icons/Visibility";
-import HistoryIcon from "@material-ui/icons/History";
+import firebase from "firebase";
+import db from "../../../../config/firebase.js";
 
 // styles
 import "./Dashboard.css";
 
 export default function Dashboard() {
-  // eslint-disable-next-line
-  const [isLoading, setIsLoading] = useState(true);
-  // eslint-disable-next-line
-  const [currentIndx, setCurrentIndx] = useState(0);
+  useEffect(() => {
+    db.collection("invoice")
+      .where("status_of_payandgo", "==", "onGoing")
+      .onSnapshot((onSnap) => {
+        onSnap.docs.forEach((eachRe) => {
+          db.collection("installment")
+            .where("invoice_number", "==", eachRe.data().invoice_number)
+            .get()
+            .then((instReDoc) => {
+              instReDoc.docs.forEach((eachInst) => {
+                if (instReDoc.docs.length === 0) {
+                  let daysCountInitial =
+                    (new Date().getTime() -
+                      new Date(eachRe.data().date.seconds * 1000).getTime()) /
+                    (1000 * 3600 * 24);
+                  if (eachRe.data().installmentType === "Monthly") {
+                    if (30 - daysCountInitial >= 0) {
+                      // setDelayedDays(0);
+                    } else {
+                      db.collection("arrears")
+                        .where(
+                          "invoice_number",
+                          "==",
+                          eachRe.data().invoice_number
+                        )
+                        .get()
+                        .then((reArreas) => {
+                          if (reArreas.docs.length > 0) {
+                            db.collection("arrears")
+                              .doc(reArreas.docs[0].id)
+                              .update({
+                                delayed_days: daysCountInitial - 30,
+                                delayed_charges:
+                                  99 * Math.round((daysCountInitial - 30) / 7),
+                              });
+                          } else {
+                            db.collection("arrears").add({
+                              invoice_number: eachRe.data().invoice_number,
+                              customer_id: eachRe.data().customer_id,
+                              delayed_days: daysCountInitial - 30,
+                              delayed_charges:
+                                99 * Math.round((daysCountInitial - 30) / 7),
+                              date: firebase.firestore.FieldValue.serverTimestamp(),
+                            });
+                          }
+                        });
+                    }
+                  } else {
+                    if (7 - daysCountInitial >= 0) {
+                      // setDelayedDays(0);
+                    } else {
+                      db.collection("arrears")
+                        .where(
+                          "invoice_number",
+                          "==",
+                          eachRe.data().invoice_number
+                        )
+                        .get()
+                        .then((reArreas) => {
+                          if (reArreas.docs.length > 0) {
+                            db.collection("arrears")
+                              .doc(reArreas.docs[0].id)
+                              .update({
+                                delayed_days: daysCountInitial - 7,
+                                delayed_charges:
+                                  99 * Math.round((daysCountInitial - 7) / 7),
+                              });
+                          } else {
+                            db.collection("arrears").add({
+                              invoice_number: eachRe.data().invoice_number,
+                              customer_id: eachRe.data().customer_id,
+                              delayed_days: daysCountInitial - 7,
+                              delayed_charges:
+                                99 * Math.round((daysCountInitial - 7) / 7),
+                              date: firebase.firestore.FieldValue.serverTimestamp(),
+                            });
+                          }
+                        });
+                    }
+                  }
+                } else {
+                  let daysCount =
+                    (new Date().getTime() -
+                      new Date(
+                        instReDoc.docs[instReDoc.docs.length - 1]?.date
+                          ?.seconds * 1000
+                      ).getTime()) /
+                    (1000 * 3600 * 24);
+                  if (eachRe.data().installmentType === "Monthly") {
+                    if (30 - daysCount >= 0) {
+                      // setDelayedDays(0);
+                    } else {
+                      db.collection("arrears")
+                        .where(
+                          "invoice_number",
+                          "==",
+                          eachRe.data().invoice_number
+                        )
+                        .get()
+                        .then((reArreas) => {
+                          if (reArreas.docs.length > 0) {
+                            console.log(daysCount);
+                            console.log(daysCount - 30);
+                            db.collection("arrears")
+                              .doc(reArreas.docs[0].id)
+                              .update({
+                                delayed_days: daysCount - 30,
+                                delayed_charges:
+                                  99 * Math.round((daysCount - 30) / 7),
+                              });
+                          } else {
+                            db.collection("arrears").add({
+                              invoice_number: eachRe.data().invoice_number,
+                              customer_id: eachRe.data().customer_id,
+                              delayed_days: daysCount - 30,
+                              delayed_charges:
+                                99 * Math.round((daysCount - 30) / 7),
+                              date: firebase.firestore.FieldValue.serverTimestamp(),
+                            });
+                          }
+                        });
+                    }
+                  } else {
+                    if (7 - daysCount >= 0) {
+                      // setDelayedDays(0);
+                    } else {
+                      db.collection("arrears")
+                        .where(
+                          "invoice_number",
+                          "==",
+                          eachRe.data().invoice_number
+                        )
+                        .get()
+                        .then((reArreas) => {
+                          if (reArreas.docs.length > 0) {
+                            db.collection("arrears")
+                              .doc(reArreas.docs[0].id)
+                              .update({
+                                delayed_days: daysCount - 7,
+                                delayed_charges:
+                                  99 * Math.round((daysCount - 7) / 7),
+                              });
+                          } else {
+                            db.collection("arrears").add({
+                              invoice_number: eachRe.data().invoice_number,
+                              customer_id: eachRe.data().customer_id,
+                              delayed_days: daysCount - 7,
+                              delayed_charges:
+                                99 * Math.round((daysCount - 7) / 7),
+                              date: firebase.firestore.FieldValue.serverTimestamp(),
+                            });
+                          }
+                        });
+                    }
+                  }
+                }
+              });
+            });
+        });
+      });
+  }, []);
 
-  //START pay And Go Columns
-  const repairTableColomns = [
-    {
-      name: "InvoiceNo",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
-    {
-      name: "FirstName",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
-    {
-      name: "LastName",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
-    {
-      name: "NIC",
-      options: {
-        filter: false,
-        setCellHeaderProps: (value) => ({
-          style: {
-            fontSize: "15px",
-            color: "black",
-            fontWeight: "600",
-          },
-        }),
-      },
-    },
-    {
-      name: "Telephone",
-      options: {
-        filter: false,
-        setCellHeaderProps: (value) => ({
-          style: {
-            fontSize: "15px",
-            color: "black",
-            fontWeight: "600",
-          },
-        }),
-      },
-    },
-
-    {
-      name: "Action",
-
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: {
-            width: "150px",
-            margin: "auto",
-            fontSize: "15px",
-            color: "black",
-            fontWeight: "600",
-          },
-        }),
-      },
-    },
-  ];
-
-  const repairTableData = [
-    {
-      InvoiceNo: "3476-JDJCF",
-      FirstName: "test",
-      LastName: "test",
-      NIC: "test",
-      Telephone: "test",
-      Action: (
-        <div>
-          <VisibilityIcon />
-          <span className="icon_Edit">
-            <HistoryIcon />
-          </span>
-        </div>
-      ),
-    },
-  ];
-
-  return (
-    <>
-      {/*Start customer Details models */}
-
-      {/* <Modal
-        visible={visibleCustomer}
-        className="customer_Model"
-        footer={null}
-        onCancel={() => {
-          setVisibleCustomer(false);
-        }}
-      >
-        <div className="customer_Model">
-          <div className="customer_Model_Main">
-            <div className="customer_Modell_Detail">
-              <BlackListCustomers />
-            </div>
-          </div>
-        </div>
-      </Modal> */}
-
-      {/*END customer Details models */}
-
-      <Grid container spacing={4}>
-        <Grid item xs={12}>
-          <MUIDataTable
-            title={<span className="title_Span_dashboard">DASHBOARD</span>}
-            className="dashboard_Table"
-            data={repairTableData}
-            columns={repairTableColomns}
-            options={{
-              selectableRows: false,
-              customToolbarSelect: () => {},
-              filterType: "checkbox",
-              download: false,
-              print: false,
-              searchPlaceholder: "Search using any column names",
-              elevation: 4,
-              sort: true,
-              onRowClick: (rowData, rowMeta) => {
-                setCurrentIndx(rowMeta.rowIndex);
-              },
-              textLabels: {
-                body: {
-                  noMatch: isLoading ? (
-                    <Spin className="tblSpinner" size="large" spinning="true" />
-                  ) : (
-                    <img
-                      alt="Empty data"
-                      className="empty_data"
-                      src={require("../../../../assets/empty.png")}
-                    />
-                  ),
-                },
-              },
-            }}
-          />
-        </Grid>
-      </Grid>
-    </>
-  );
+  return <div className="fff">DASHBOARD</div>;
 }

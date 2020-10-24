@@ -7,13 +7,6 @@ import {
   Button,
 } from "@material-ui/core";
 import CurrencyFormat from "react-currency-format";
-// eslint-disable-next-line
-import firebase from "firebase";
-// eslint-disable-next-line
-import moment from "moment";
-
-// eslint-disable-next-line
-import db from "../../../../../config/firebase.js";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { useHistory } from "react-router-dom";
 import { Modal } from "antd";

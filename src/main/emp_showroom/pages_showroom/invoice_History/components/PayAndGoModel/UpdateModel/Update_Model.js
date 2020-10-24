@@ -51,24 +51,50 @@ export default function Update_Model({
         });
       });
 
-    if (installments.length === 0) {
-      db.collection("invoice")
-        .where("invoice_number", "==", invoice_no)
-        .get()
-        .then((inReDoc) => {
-          setDelayedDays(
+    db.collection("invoice")
+      .where("invoice_number", "==", invoice_no)
+      .get()
+      .then((inReDoc) => {
+        if (installments.length === 0) {
+          let daysCountInitial =
             (new Date().getTime() -
               new Date(inReDoc.docs[0].data().date.seconds * 1000).getTime()) /
-              (1000 * 3600 * 24)
-          );
-        });
-    } else {
-      setDelayedDays(
-        (new Date().getTime() -
-          new Date(installments[0].date.seconds * 1000).getTime()) /
-          (1000 * 3600 * 24)
-      );
-    }
+            (1000 * 3600 * 24);
+          if (inReDoc.docs[0].data().installmentType === "Monthly") {
+            if (30 - daysCountInitial >= 0) {
+              setDelayedDays(0);
+            } else {
+              setDelayedDays(daysCountInitial - 30);
+            }
+          } else {
+            if (7 - daysCountInitial >= 0) {
+              setDelayedDays(0);
+            } else {
+              setDelayedDays(daysCountInitial - 7);
+            }
+          }
+        } else {
+          let daysCount =
+            (new Date().getTime() -
+              new Date(
+                installments[installments.length - 1].date.seconds * 1000
+              ).getTime()) /
+            (1000 * 3600 * 24);
+          if (inReDoc.docs[0].data().installmentType === "Monthly") {
+            if (30 - daysCount >= 0) {
+              setDelayedDays(0);
+            } else {
+              setDelayedDays(daysCount - 30);
+            }
+          } else {
+            if (7 - daysCount >= 0) {
+              setDelayedDays(0);
+            } else {
+              setDelayedDays(daysCount - 7);
+            }
+          }
+        }
+      });
 
     setDelayedCharges(99 * Math.round(delayedDays / 7));
 

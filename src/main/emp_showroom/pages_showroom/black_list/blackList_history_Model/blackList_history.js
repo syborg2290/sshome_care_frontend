@@ -3,8 +3,6 @@ import MUIDataTable from "mui-datatables";
 import { Grid } from "@material-ui/core";
 import { Spin } from "antd";
 import CurrencyFormat from "react-currency-format";
-// eslint-disable-next-line
-import moment from "moment";
 
 //styles
 import "./blackList_history.css";

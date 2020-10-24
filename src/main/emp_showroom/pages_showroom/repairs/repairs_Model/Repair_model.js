@@ -7,8 +7,6 @@ import {
   Button,
 } from "@material-ui/core";
 
-// eslint-disable-next-line
-import db from "../../../../../config/firebase.js";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { useHistory } from "react-router-dom";
 import { Modal } from "antd";

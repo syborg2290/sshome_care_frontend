@@ -55,7 +55,7 @@ export default function Update_Model({
       .where("invoice_number", "==", invoice_no)
       .get()
       .then((inReDoc) => {
-        if (installments.length  === 0) {
+        if (installments.length === 0) {
           let daysCountInitial =
             (new Date().getTime() -
               new Date(inReDoc.docs[0].data().date.seconds * 1000).getTime()) /
@@ -65,12 +65,14 @@ export default function Update_Model({
               setDelayedDays(0);
             } else {
               setDelayedDays(daysCountInitial - 30);
+              setDelayedCharges(99 * ((Math.round(daysCountInitial) - 30) / 7));
             }
           } else {
             if (7 - daysCountInitial >= 0) {
               setDelayedDays(0);
             } else {
               setDelayedDays(daysCountInitial - 7);
+              setDelayedCharges(99 * ((Math.round(daysCountInitial) - 7) / 7));
             }
           }
         } else {
@@ -85,44 +87,57 @@ export default function Update_Model({
               setDelayedDays(0);
             } else {
               setDelayedDays(daysCount - 30);
+              setDelayedCharges(99 * ((Math.round(daysCount) - 30) / 7));
             }
           } else {
             if (7 - daysCount >= 0) {
               setDelayedDays(0);
             } else {
               setDelayedDays(daysCount - 7);
+              setDelayedCharges(99 * ((Math.round(daysCount) - 7) / 7));
             }
           }
         }
       });
 
-    setDelayedCharges(99 * Math.round(delayedDays / 7));
-
     // eslint-disable-next-line
   }, [invoice_no]);
 
   const updateInstallment = async () => {
-    for (var i = 0; i < Math.round(updatingInstallmentCount); i++) {
+    var j = 0;
+    for (
+      var i = 0;
+      i < Math.round(delayedDays / 7) + Math.round(updatingInstallmentCount);
+      i++
+    ) {
       await db
         .collection("installment")
         .where("invoice_number", "==", invoice_no)
         .get()
+        // eslint-disable-next-line
         .then(async (reInst) => {
           await db.collection("installment").add({
             invoice_number: invoice_no,
             amount: Math.round(instAmountProp),
-            delayed: delayedCharges === "" ? 0 : Math.round(delayedCharges),
+            delayed:
+              delayedCharges === ""
+                ? 0
+                : j === 0
+                ? Math.round(delayedCharges)
+                : 0,
             balance:
               Math.round(instAmountProp) *
               (Math.round(instCount) - (reInst.docs.length + 1)),
             date: firebase.firestore.FieldValue.serverTimestamp(),
           });
         });
+      j++;
     }
 
     if (
       Math.round(instCount) -
-        (updatingInstallmentCount + installments.length) <=
+        (updatingInstallmentCount +
+          (installments.length + Math.round(delayedDays / 7))) <=
       0
     ) {
       await db
@@ -133,6 +148,16 @@ export default function Update_Model({
           db.collection("invoice").doc(reIn.docs[0].id).update({
             status_of_payandgo: "Done",
           });
+        });
+
+      await db
+        .collection("arrears")
+        .where("invoice_number", "==", invoice_no)
+        .get()
+        .then(async (arrRe) => {
+          if (arrRe.docs.length > 0) {
+            await db.collection("arrears").doc(arrRe.docs[0].id).delete();
+          }
         });
     }
   };
@@ -224,7 +249,10 @@ export default function Update_Model({
                 value={updatingInstallmentCount}
                 onChange={(e) => {
                   if (
-                    Math.round(instCount) - Math.round(installments.length) >=
+                    Math.round(instCount) -
+                      (delayedDays > 7
+                        ? installments.length + Math.round(delayedDays / 7)
+                        : installments.length) >=
                     e.target.value
                   ) {
                     setUpdatingInstallmentCount(e.target.value);
@@ -240,7 +268,13 @@ export default function Update_Model({
               :
             </Grid>
             <Grid item xs={12} sm={6}>
-              <p>{Math.round(instCount) - Math.round(installments.length)}</p>
+              <p>
+                {Math.round(instCount) -
+                  (delayedDays > 7
+                    ? Math.round(delayedDays / 7) +
+                      Math.round(installments.length)
+                    : Math.round(installments.length))}
+              </p>
             </Grid>
 
             <Grid className="lbl_topi" item xs={12} sm={4}>
@@ -292,7 +326,7 @@ export default function Update_Model({
                 fullWidth
                 label="Delayed"
                 size="small"
-                value={delayedCharges}
+                value={Math.round(delayedCharges)}
                 onChange={(e) => {
                   setDelayedCharges(e.target.value.trim());
                 }}
@@ -306,7 +340,18 @@ export default function Update_Model({
               :
             </Grid>
             <Grid item xs={12} sm={6}>
-              <p>{Math.round(delayedDays)} days delayed !</p>
+              {delayedDays / 7 > 0 ? (
+                <p
+                  style={{
+                    color: "red",
+                    fontWeight: "bold",
+                  }}
+                >
+                  {Math.round(delayedDays)} days delayed !
+                </p>
+              ) : (
+                <p>{Math.round(delayedDays)} days delayed !</p>
+              )}
             </Grid>
             <Grid item xs={12} sm={12}>
               <hr />
@@ -318,15 +363,53 @@ export default function Update_Model({
               :
             </Grid>
             <Grid item xs={12} sm={6}>
-              <CurrencyFormat
-                value={
-                  Math.round(instAmountProp) * updatingInstallmentCount +
-                  Math.round(delayedCharges)
-                }
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={" "}
-              />
+              <div
+                style={{
+                  fontWeight: "bold",
+                  fontSize: "20px",
+                }}
+              >
+                <CurrencyFormat
+                  value={
+                    (delayedDays > 7
+                      ? Math.round(instAmountProp) * Math.round(delayedDays / 7)
+                      : Math.round(instAmountProp)) *
+                      updatingInstallmentCount +
+                    Math.round(delayedCharges)
+                  }
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" Rs. "}
+                />
+                /=
+              </div>
+              <div
+                style={{
+                  fontWeight: "bold",
+                  fontSize: "15px",
+                  color: "grey",
+                }}
+              >
+                (
+                {delayedDays > 7
+                  ? "  " +
+                    Math.round(instAmountProp) +
+                    " X " +
+                    Math.round(delayedDays / 7) +
+                    " X " +
+                    updatingInstallmentCount +
+                    " + " +
+                    Math.round(delayedCharges) +
+                    " "
+                  : "  " +
+                    Math.round(instAmountProp) +
+                    " X " +
+                    (updatingInstallmentCount +
+                      " + " +
+                      Math.round(delayedCharges)) +
+                    " "}
+                )
+              </div>
             </Grid>
           </Grid>
           <Grid container spacing={2}>

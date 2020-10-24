@@ -73,6 +73,14 @@ function loginUser(
       if (role === "admin") {
         history.push("/admin/dashboard");
       }
+
+      if (role === "assistant") {
+        history.push("/assistant/dashboard");
+      }
+
+      if (role === "Showroom") {
+        history.push("/showroom/dashboard");
+      }
     }, 2000);
   } else {
     dispatch({ type: "LOGIN_FAILURE" });

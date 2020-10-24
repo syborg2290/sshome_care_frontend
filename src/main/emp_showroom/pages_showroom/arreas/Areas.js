@@ -173,7 +173,11 @@ export default function Areas() {
         <div className="arreas_Model">
           <div className="arreas_update_Model_Main">
             <div className="arreas_update_Modell_Detail">
-              <UpdateArreas />
+              <UpdateArreas
+                key={arreasAllData[currentIndx]?.id}
+                invoice_no={arreasAllData[currentIndx]?.data?.invoice_number}
+                nic={arreasAllData[currentIndx]?.data?.nic}
+              />
             </div>
           </div>
         </div>

@@ -4,6 +4,7 @@ import { HashRouter, Route, Switch, Redirect } from "react-router-dom";
 // components
 import Layout from "../src/main/admin/Layout/Layout";
 import Layoutshowroom from "../src/main/emp_showroom/Layout_showroom/Layout_showroom";
+import LayoutAssistant from "../src/main/emp_assistant/assistant_Layout/Assistant_Layout";
 
 // pages
 import Error from "./main/error/Error";
@@ -28,6 +29,11 @@ export default function App() {
         <PrivateRoute
           path={roleMain === "Showroom" ? "/showroom" : "/error"}
           component={Layoutshowroom}
+        />
+
+        <PrivateRoute
+          path={roleMain === "assistant" ? "/assistant" : "/error"}
+          component={LayoutAssistant}
         />
         <PublicRoute path="/login" component={Login} />
         <Route component={Error} />
@@ -69,7 +75,11 @@ export default function App() {
             <Redirect
               to={{
                 pathname:
-                  role === "admin" ? "/admin/dashboard" : "/showroom/dashboard",
+                  role === "admin"
+                    ? "/admin/dashboard"
+                    : role === "assistant"
+                    ? "/assistant/dashboard"
+                    : "/showroom/dashboard",
               }}
             />
           ) : (

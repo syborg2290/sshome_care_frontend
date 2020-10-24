@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   TextField,
   Grid,
@@ -7,6 +7,10 @@ import {
   Button,
 } from "@material-ui/core";
 import CurrencyFormat from "react-currency-format";
+import firebase from "firebase";
+import moment from "moment";
+
+import db from "../../../../../config/firebase.js";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { useHistory } from "react-router-dom";
 import { Modal } from "antd";
@@ -14,20 +18,179 @@ import { Modal } from "antd";
 // styles
 import "./Arreas_update.css";
 
-export default function Arreas_update() {
+export default function Arreas_update({ invoice_no, nic }) {
+  const [installments, setInstallments] = useState([]);
+  const [delayedDays, setDelayedDays] = useState(0);
+  const [delayedCharges, setDelayedCharges] = useState(0);
+  const [updatingInstallmentCount, setUpdatingInstallmentCount] = useState(1);
+  const [customer, setCustomer] = useState({});
+  const [instCount, setInstCount] = useState(0);
+  const [instAmountProp, setInstAmountProp] = useState(0);
+
   const { confirm } = Modal;
+
   let history = useHistory();
 
-  const showConfirm = () => {
+  useEffect(() => {
+    db.collection("customer")
+      .where("nic", "==", nic)
+      .get()
+      .then((th) => {
+        db.collection("customer")
+          .doc(th.docs[0].id)
+          .get()
+          .then((custDocRe) => {
+            setCustomer(custDocRe.data());
+          });
+      });
+
+    db.collection("installment")
+      .where("invoice_number", "==", invoice_no)
+      .onSnapshot((instReDoc) => {
+        instReDoc.docs.forEach((each) => {
+          setInstallments((old) => [...old, each.data()]);
+        });
+      });
+
+    db.collection("invoice")
+      .where("invoice_number", "==", invoice_no)
+      .get()
+      .then((inReDoc) => {
+        setInstCount(inReDoc.docs[0].data().items[0].noOfInstallment);
+        setInstAmountProp(inReDoc.docs[0].data().items[0].amountPerInstallment);
+        if (installments.length === 0) {
+          let daysCountInitial =
+            (new Date().getTime() -
+              new Date(inReDoc.docs[0].data().date.seconds * 1000).getTime()) /
+            (1000 * 3600 * 24);
+          if (inReDoc.docs[0].data().installmentType === "Monthly") {
+            if (30 - daysCountInitial >= 0) {
+              setDelayedDays(0);
+            } else {
+              setDelayedDays(daysCountInitial - 30);
+              setDelayedCharges(99 * ((Math.round(daysCountInitial) - 30) / 7));
+            }
+          } else {
+            if (7 - daysCountInitial >= 0) {
+              setDelayedDays(0);
+            } else {
+              setDelayedDays(daysCountInitial - 7);
+              setDelayedCharges(99 * ((Math.round(daysCountInitial) - 7) / 7));
+            }
+          }
+        } else {
+          let daysCount =
+            (new Date().getTime() -
+              new Date(
+                installments[installments.length - 1].date.seconds * 1000
+              ).getTime()) /
+            (1000 * 3600 * 24);
+          if (inReDoc.docs[0].data().installmentType === "Monthly") {
+            if (30 - daysCount >= 0) {
+              setDelayedDays(0);
+            } else {
+              setDelayedDays(daysCount - 30);
+              setDelayedCharges(99 * ((Math.round(daysCount) - 30) / 7));
+            }
+          } else {
+            if (7 - daysCount >= 0) {
+              setDelayedDays(0);
+            } else {
+              setDelayedDays(daysCount - 7);
+              setDelayedCharges(99 * ((Math.round(daysCount) - 7) / 7));
+            }
+          }
+        }
+      });
+
+    // eslint-disable-next-line
+  }, [invoice_no]);
+
+  const updateInstallment = async () => {
+    var j = 0;
+    for (
+      var i = 0;
+      i < Math.round(delayedDays / 7) + Math.round(updatingInstallmentCount);
+      i++
+    ) {
+      await db
+        .collection("installment")
+        .where("invoice_number", "==", invoice_no)
+        .get()
+        // eslint-disable-next-line
+        .then(async (reInst) => {
+          await db.collection("installment").add({
+            invoice_number: invoice_no,
+            amount: Math.round(instAmountProp),
+            delayed:
+              delayedCharges === ""
+                ? 0
+                : j === 0
+                ? Math.round(delayedCharges)
+                : 0,
+            balance:
+              Math.round(instAmountProp) *
+              (Math.round(instCount) - (reInst.docs.length + 1)),
+            date: firebase.firestore.FieldValue.serverTimestamp(),
+          });
+        });
+      j++;
+    }
+
+    if (
+      Math.round(instCount) -
+        (updatingInstallmentCount +
+          (installments.length + Math.round(delayedDays / 7))) <=
+      0
+    ) {
+      await db
+        .collection("invoice")
+        .where("invoice_number", "==", invoice_no)
+        .get()
+        .then((reIn) => {
+          db.collection("invoice").doc(reIn.docs[0].id).update({
+            status_of_payandgo: "Done",
+          });
+        });
+
+      await db
+        .collection("arrears")
+        .where("invoice_number", "==", invoice_no)
+        .get()
+        .then(async (arrRe) => {
+          if (arrRe.docs.length > 0) {
+            await db.collection("arrears").doc(arrRe.docs[0].id).delete();
+          }
+        });
+    }
+  };
+
+  const showConfirm = async () => {
     confirm({
-      title: "Do you Want to delete these items?",
+      title: "Do you Want to Print a Recipt?",
       icon: <ExclamationCircleOutlined />,
-      content: "Some descriptions",
-      onOk() {
-        history.push("/showroom/arreas/arreasUpdateModel/ArreasReceipt");
+
+      async onOk() {
+        await updateInstallment();
+        let passingWithCustomerObj = {
+          invoice_number: invoice_no,
+          customerDetails: customer,
+          total:
+            Math.round(instAmountProp) * Math.round(updatingInstallmentCount) +
+            Math.round(delayedCharges),
+          delayedCharges: Math.round(delayedCharges),
+        };
+
+        let moveWith = {
+          pathname: "/showroom/arreas/arreasUpdateModel/ArreasReceipt",
+          search: "?query=abc",
+          state: { detail: passingWithCustomerObj },
+        };
+        history.push(moveWith);
       },
-      onCancel() {
-        console.log("Cancel");
+      async onCancel() {
+        await updateInstallment();
+        window.location.reload();
       },
     });
   };
@@ -50,7 +213,7 @@ export default function Arreas_update() {
               :
             </Grid>
             <Grid item xs={12} sm={6}>
-              <p>yy</p>
+              <p>{invoice_no}</p>
             </Grid>
 
             <Grid className="lbl_topi" item xs={12} sm={4}>
@@ -61,7 +224,10 @@ export default function Arreas_update() {
             </Grid>
             <Grid item xs={12} sm={6}>
               <CurrencyFormat
-                value={555}
+                value={
+                  Math.round(instAmountProp) *
+                  Math.round(updatingInstallmentCount)
+                }
                 displayType={"text"}
                 thousandSeparator={true}
                 prefix={" "}
@@ -82,6 +248,18 @@ export default function Arreas_update() {
                 fullWidth
                 label="Count"
                 size="small"
+                value={updatingInstallmentCount}
+                onChange={(e) => {
+                  if (
+                    Math.round(instCount) -
+                      (delayedDays > 7
+                        ? installments.length + Math.round(delayedDays / 7)
+                        : installments.length) >=
+                    e.target.value
+                  ) {
+                    setUpdatingInstallmentCount(e.target.value);
+                  }
+                }}
               />
             </Grid>
             <Grid item xs={12} sm={3}></Grid>
@@ -92,7 +270,13 @@ export default function Arreas_update() {
               :
             </Grid>
             <Grid item xs={12} sm={6}>
-              <p>fdf</p>
+              <p>
+                {Math.round(instCount) -
+                  (delayedDays > 7
+                    ? Math.round(delayedDays / 7) +
+                      Math.round(installments.length)
+                    : Math.round(installments.length))}
+              </p>
             </Grid>
 
             <Grid className="lbl_topi" item xs={12} sm={4}>
@@ -103,7 +287,10 @@ export default function Arreas_update() {
             </Grid>
             <Grid item xs={12} sm={6}>
               <CurrencyFormat
-                value={555}
+                value={
+                  Math.round(instAmountProp) *
+                  Math.round(Math.round(installments.length))
+                }
                 displayType={"text"}
                 thousandSeparator={true}
                 prefix={" "}
@@ -117,7 +304,12 @@ export default function Arreas_update() {
               :
             </Grid>
             <Grid item xs={12} sm={6}>
-              <p>454</p>
+              <p>
+                {" "}
+                {moment(firebase.firestore.FieldValue.serverTimestamp()).format(
+                  "dddd, MMMM Do YYYY, h:mm:ss a"
+                )}
+              </p>
             </Grid>
 
             <Grid className="lbl_topi" item xs={12} sm={4}>
@@ -136,6 +328,10 @@ export default function Arreas_update() {
                 fullWidth
                 label="Delayed"
                 size="small"
+                value={Math.round(delayedCharges)}
+                onChange={(e) => {
+                  setDelayedCharges(e.target.value.trim());
+                }}
               />
             </Grid>
 
@@ -146,7 +342,18 @@ export default function Arreas_update() {
               :
             </Grid>
             <Grid item xs={12} sm={6}>
-              <p> days delayed !</p>
+              {delayedDays / 7 > 0 ? (
+                <p
+                  style={{
+                    color: "red",
+                    fontWeight: "bold",
+                  }}
+                >
+                  {Math.round(delayedDays)} days delayed !
+                </p>
+              ) : (
+                <p>{Math.round(delayedDays)} days delayed !</p>
+              )}
             </Grid>
             <Grid item xs={12} sm={12}>
               <hr />
@@ -158,12 +365,53 @@ export default function Arreas_update() {
               :
             </Grid>
             <Grid item xs={12} sm={6}>
-              <CurrencyFormat
-                value={45455}
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={" "}
-              />
+              <div
+                style={{
+                  fontWeight: "bold",
+                  fontSize: "20px",
+                }}
+              >
+                <CurrencyFormat
+                  value={
+                    (delayedDays > 7
+                      ? Math.round(instAmountProp) * Math.round(delayedDays / 7)
+                      : Math.round(instAmountProp)) *
+                      updatingInstallmentCount +
+                    Math.round(delayedCharges)
+                  }
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" Rs. "}
+                />
+                /=
+              </div>
+              <div
+                style={{
+                  fontWeight: "bold",
+                  fontSize: "15px",
+                  color: "grey",
+                }}
+              >
+                (
+                {delayedDays > 7
+                  ? "  " +
+                    Math.round(instAmountProp) +
+                    " X " +
+                    Math.round(delayedDays / 7) +
+                    " X " +
+                    updatingInstallmentCount +
+                    " + " +
+                    Math.round(delayedCharges) +
+                    " "
+                  : "  " +
+                    Math.round(instAmountProp) +
+                    " X " +
+                    (updatingInstallmentCount +
+                      " + " +
+                      Math.round(delayedCharges)) +
+                    " "}
+                )
+              </div>
             </Grid>
           </Grid>
           <Grid container spacing={2}>

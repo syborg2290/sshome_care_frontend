@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import MUIDataTable from "mui-datatables";
 import { Grid, Button } from "@material-ui/core";
 import { Spin, Modal } from "antd";
 // eslint-disable-next-line
 import CurrencyFormat from "react-currency-format";
+import moment from "moment";
+
+import db from "../../../../config/firebase.js";
 
 // components
 import UpdateArreas from "../arreas/arreas_update_Model/Arreas_update";
@@ -23,6 +26,8 @@ export default function Areas() {
   const [currentIndx, setCurrentIndx] = useState(0);
   const [arreasUpdate, setArreasUpdate] = useState(false); //  table models
   const [arresHistory, setArresHistory] = useState(false); //  table models
+  const [arreasTableData, setArreasTableData] = useState([]);
+  const [arreasAllData, setArreasAllData] = useState([]);
 
   const showModalArreasUpdate = () => {
     setArreasUpdate(true);
@@ -93,30 +98,53 @@ export default function Areas() {
     },
   ];
 
-  const arreasTableData = [
-    {
-      InvoiceNo: "test",
-      Delayed_Days: "test",
-      Delayed_Charges: "test",
-      Date: "test",
-      Action: (
-        <div>
-          <Button
-            variant="contained"
-            color="primary"
-            size="small"
-            className="btnpay"
-            onClick={showModalArreasUpdate}
-          >
-            Update
-          </Button>
-          <span className="icon_hist">
-            <HistoryIcon onClick={showModalArresHistory} />
-          </span>
-        </div>
-      ),
-    },
-  ];
+  useEffect(() => {
+    db.collection("arrears").onSnapshot((onSnap) => {
+      var rawData = [];
+      var rawAllData = [];
+      onSnap.docs.forEach((eachRe) => {
+        rawAllData.push({
+          id: eachRe.id,
+          data: eachRe.data(),
+        });
+        rawData.push({
+          InvoiceNo: eachRe.data().invoice_number,
+          Delayed_Days: eachRe.data().delayed_days,
+          Delayed_Charges: (
+            <CurrencyFormat
+              value={eachRe.data().delayed_charges}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={" "}
+            />
+          ),
+          Date: moment(eachRe.data()?.date?.toDate()).format(
+            "dddd, MMMM Do YYYY"
+          ),
+          Action: (
+            <div>
+              <Button
+                variant="contained"
+                color="primary"
+                size="small"
+                className="btnpay"
+                onClick={showModalArreasUpdate}
+              >
+                Update
+              </Button>
+              <span className="icon_hist">
+                <HistoryIcon onClick={showModalArresHistory} />
+              </span>
+            </div>
+          ),
+        });
+      });
+      setArreasTableData(rawData);
+      setArreasAllData(rawAllData);
+    });
+
+    setIsLoading(false);
+  }, []);
 
   return (
     <div>

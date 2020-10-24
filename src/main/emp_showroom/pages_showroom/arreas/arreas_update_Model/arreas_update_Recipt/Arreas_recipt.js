@@ -21,7 +21,7 @@ function createData(description, delayed, amount) {
   return { description, delayed, amount };
 }
 
-class Arreas_recipt extends React.Component {
+class ArreasRecipt extends React.Component {
   state = {
     invoice_number: "",
     rows: [],
@@ -187,7 +187,7 @@ export default function Example() {
 
   return (
     <div>
-      <Arreas_recipt ref={componentRef} prop={location.state?.detail} />
+      <ArreasRecipt ref={componentRef} prop={location.state?.detail} />
 
       <Button className="print_btn" onClick={handlePrint}>
         Print

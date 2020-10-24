@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import {
   TextField,
   Grid,
@@ -7,10 +7,7 @@ import {
   Button,
 } from "@material-ui/core";
 import CurrencyFormat from "react-currency-format";
-import firebase from "firebase";
-import moment from "moment";
 
-import db from "../../../../../config/firebase.js";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { useHistory } from "react-router-dom";
 import { Modal } from "antd";

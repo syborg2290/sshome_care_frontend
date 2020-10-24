@@ -17,10 +17,8 @@ import { useLocation, useHistory } from "react-router-dom";
 
 import "./Repair_recipt.css";
 
-function createData(description, delayed, amount) {
-  return { description, delayed, amount };
-}
-class Repair_recipt extends React.Component {
+
+class RepairRecipt extends React.Component {
   render() {
     return (
       <div>
@@ -152,7 +150,7 @@ export default function Example() {
 
   return (
     <div>
-      <Repair_recipt ref={componentRef} prop={location.state?.detail} />
+      <RepairRecipt ref={componentRef} prop={location.state?.detail} />
 
       <Button className="print_btn" onClick={handlePrint}>
         Print

@@ -28,10 +28,10 @@ export default function View_Model({ items_list_props, data }) {
         reTrustee.docs.forEach((reTr) => {
           if (
             reTr.data().fname &&
-            (reTr.data().lname &&
-              reTr.data().nic &&
-              reTr.data().address1 &&
-              reTr.data().mobile1)
+            reTr.data().lname &&
+            reTr.data().nic &&
+            reTr.data().address1 &&
+            reTr.data().mobile1
           ) {
             setTrustees((old) => [
               ...old,
@@ -106,7 +106,23 @@ export default function View_Model({ items_list_props, data }) {
                   :
                 </Grid>
                 <Grid item xs={12} sm={8}>
-                  {data.installemtnDayDate}
+                  {data.installmentType === "Weekly"
+                    ? data.installemtnDayDate === 1
+                      ? "Monday"
+                      : data.installemtnDayDate === 2
+                      ? "Tuesday"
+                      : data.installemtnDayDate === 3
+                      ? "Wednesday"
+                      : data.installemtnDayDate === 4
+                      ? "Thursday"
+                      : data.installemtnDayDate === 5
+                      ? "Friday"
+                      : data.installemtnDayDate === 6
+                      ? "Saturday"
+                      : data.installemtnDayDate === 0
+                      ? "Sunday"
+                      : ""
+                    : data.installemtnDayDate}
                 </Grid>
                 <Grid className="lbl_topis" item xs={12} sm={3}>
                   Qty
@@ -132,7 +148,9 @@ export default function View_Model({ items_list_props, data }) {
                 :
               </Grid>
               <Grid item xs={12} sm={3}>
-                <p>{customer.fname} {customer.lname}</p>
+                <p>
+                  {customer.fname} {customer.lname}
+                </p>
               </Grid>
               <Grid item xs={12} sm={3}>
                 <p></p>
@@ -183,7 +201,9 @@ export default function View_Model({ items_list_props, data }) {
                     :
                   </Grid>
                   <Grid item xs={12} sm={3}>
-                    <p>{si.fname} {si.lname}</p>
+                    <p>
+                      {si.fname} {si.lname}
+                    </p>
                   </Grid>
 
                   <Grid item xs={12} sm={3}>

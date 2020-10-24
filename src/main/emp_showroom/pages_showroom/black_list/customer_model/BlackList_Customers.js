@@ -1,7 +1,6 @@
 import React from "react";
 import { Row, Col } from "antd";
 import Typography from "@material-ui/core/Typography";
-import moment from "moment";
 
 // styles
 import "./BlackList_Customers.css";

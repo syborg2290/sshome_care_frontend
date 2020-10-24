@@ -29,7 +29,7 @@ export default function Dashboard() {
   const intialStateOfArreasCheck = async (eachRe) => {
     let daysCountInitial =
       (new Date().getTime() -
-        new Date(eachRe.data().date.seconds * 1000).getTime()) /
+        new Date(eachRe.data()?.date?.seconds * 1000).getTime()) /
       (1000 * 3600 * 24);
 
     if (eachRe.data().installmentType === "Monthly") {

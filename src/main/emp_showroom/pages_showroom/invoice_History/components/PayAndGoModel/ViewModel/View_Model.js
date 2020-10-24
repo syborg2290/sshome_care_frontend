@@ -107,19 +107,19 @@ export default function View_Model({ items_list_props, data }) {
                 </Grid>
                 <Grid item xs={12} sm={8}>
                   {data.installmentType === "Weekly"
-                    ? data.installemtnDayDate === 1
+                    ? parseInt(data.installemtnDayDate) === 1
                       ? "Monday"
-                      : data.installemtnDayDate === 2
+                      : parseInt(data.installemtnDayDate) === 2
                       ? "Tuesday"
-                      : data.installemtnDayDate === 3
+                      : parseInt(data.installemtnDayDate) === 3
                       ? "Wednesday"
-                      : data.installemtnDayDate === 4
+                      : parseInt(data.installemtnDayDate) === 4
                       ? "Thursday"
-                      : data.installemtnDayDate === 5
+                      : parseInt(data.installemtnDayDate) === 5
                       ? "Friday"
-                      : data.installemtnDayDate === 6
+                      : parseInt(data.installemtnDayDate) === 6
                       ? "Saturday"
-                      : data.installemtnDayDate === 0
+                      : parseInt(data.installemtnDayDate) === 0
                       ? "Sunday"
                       : ""
                     : data.installemtnDayDate}

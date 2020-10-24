@@ -12,25 +12,30 @@ export default function Dashboard() {
       .where("status_of_payandgo", "==", "onGoing")
       .onSnapshot((onSnap) => {
         onSnap.docs.forEach((eachRe) => {
-          db.collection("installment")
-            .where("invoice_number", "==", eachRe.data().invoice_number)
-            .onSnapshot((instReDoc) => {
-              if (instReDoc.docs.length <= 0) {
-                intialStateOfArreasCheck(eachRe);
-              } else {
-                afterStateOfArreasCheck(instReDoc, eachRe);
-              }
-            });
+          checkInstallmentsStatus(eachRe);
         });
       });
+    // eslint-disable-next-line
   }, []);
+
+  const checkInstallmentsStatus = async (eachRe) => {
+    const installmentStatus = await db
+      .collection("installment")
+      .where("invoice_number", "==", eachRe.data().invoice_number)
+      .get();
+
+    if (installmentStatus.docs.length === 0) {
+      intialStateOfArreasCheck(eachRe);
+    } else {
+      afterStateOfArreasCheck(installmentStatus, eachRe);
+    }
+  };
 
   const intialStateOfArreasCheck = async (eachRe) => {
     let daysCountInitial =
       (new Date().getTime() -
         new Date(eachRe.data()?.date?.seconds * 1000).getTime()) /
       (1000 * 3600 * 24);
-    
 
     if (eachRe.data().installmentType === "Monthly") {
       if (30 - daysCountInitial >= 0) {
@@ -51,7 +56,7 @@ export default function Dashboard() {
               db.collection("arrears").add({
                 invoice_number: eachRe.data().invoice_number,
                 customer_id: eachRe.data().customer_id,
-                nic:eachRe.data().nic,
+                nic: eachRe.data().nic,
                 delayed_days: Math.round(daysCountInitial) - 30,
                 delayed_charges: 99 * Math.round((daysCountInitial - 30) / 7),
                 date: firebase.firestore.FieldValue.serverTimestamp(),
@@ -78,7 +83,7 @@ export default function Dashboard() {
               db.collection("arrears").add({
                 invoice_number: eachRe.data().invoice_number,
                 customer_id: eachRe.data().customer_id,
-                 nic:eachRe.data().nic,
+                nic: eachRe.data().nic,
                 delayed_days: Math.round(daysCountInitial) - 7,
                 delayed_charges: 99 * Math.round((daysCountInitial - 7) / 7),
                 date: firebase.firestore.FieldValue.serverTimestamp(),

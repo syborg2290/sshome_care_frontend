@@ -55,7 +55,7 @@ export default function Update_Model({
       .where("invoice_number", "==", invoice_no)
       .get()
       .then((inReDoc) => {
-        if (installments.length === 0) {
+        if (installments.length  === 0) {
           let daysCountInitial =
             (new Date().getTime() -
               new Date(inReDoc.docs[0].data().date.seconds * 1000).getTime()) /

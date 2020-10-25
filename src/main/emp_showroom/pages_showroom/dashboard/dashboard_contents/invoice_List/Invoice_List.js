@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-
+import { makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
 
 // styles
@@ -45,7 +45,14 @@ function a11yProps(index) {
   };
 }
 
+const useStyles = makeStyles((theme) => ({
+  indicator: {
+    backgroundColor: "#222A44",
+  },
+}));
+
 export default function Invoice_List() {
+  const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
@@ -57,6 +64,7 @@ export default function Invoice_List() {
       <AppBar className="List_appBar" position="static">
         <Tabs
           value={value}
+          classes={{ indicator: classes.indicator }}
           onChange={handleChange}
           aria-label="simple tabs example"
         >

@@ -6,8 +6,8 @@ import Grid from "@material-ui/core/Grid";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
-// eslint-disable-next-line
-import { Spin, Modal } from "antd";
+import { Spin } from "antd";
+import CurrencyFormat from "react-currency-format";
 
 //components
 import ArreasTable from "../dashboard/dashboard_contents/arreas_Table/Arreas_Table";
@@ -191,7 +191,7 @@ export default function Dashboard() {
   };
 
   //START pay And Go Columns
-  const repairTableColomns = [
+  const dashboarColomns = [
     {
       name: "InvoiceNo",
       options: {
@@ -202,7 +202,7 @@ export default function Dashboard() {
       },
     },
     {
-      name: "FirstName",
+      name: "Date",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -211,7 +211,7 @@ export default function Dashboard() {
       },
     },
     {
-      name: "LastName",
+      name: "Amount",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -233,7 +233,21 @@ export default function Dashboard() {
       },
     },
     {
-      name: "Telephone",
+      name: "Delayed",
+      options: {
+        filter: false,
+        setCellHeaderProps: (value) => ({
+          style: {
+            fontSize: "15px",
+            color: "black",
+            fontWeight: "600",
+          },
+        }),
+      },
+    },
+
+    {
+      name: "Balance",
       options: {
         filter: false,
         setCellHeaderProps: (value) => ({
@@ -264,13 +278,28 @@ export default function Dashboard() {
     },
   ];
 
-  const repairTableData = [
+  const dashboardData = [
     {
       InvoiceNo: "3476-JDJCF",
-      FirstName: "test",
-      LastName: "test",
+      Date: "test",
+      Amount: (
+        <CurrencyFormat
+          value={5000}
+          displayType={"text"}
+          thousandSeparator={true}
+          prefix={" "}
+        />
+      ),
       NIC: "test",
-      Telephone: "test",
+      Delayed: "test",
+      Balance: (
+        <CurrencyFormat
+          value={5000}
+          displayType={"text"}
+          thousandSeparator={true}
+          prefix={" "}
+        />
+      ),
       Action: (
         <div>
           <VisibilityIcon />
@@ -362,11 +391,11 @@ export default function Dashboard() {
         <Grid item xs={12}>
           <MUIDataTable
             title={
-              <span className="title_Span_blackList">TODAT INSATALLMENT</span>
+              <span className="title_Span_blackList">TODAY INSATALLMENT</span>
             }
             className="blackList_Table"
-            data={repairTableData}
-            columns={repairTableColomns}
+            data={dashboardData}
+            columns={dashboarColomns}
             options={{
               selectableRows: false,
               customToolbarSelect: () => {},
@@ -397,18 +426,28 @@ export default function Dashboard() {
         </Grid>
       </Grid>
 
+      {/*START Arreas Table */}
+
       <Grid container spacing={4}>
         <Grid item xs={12}>
           <ArreasTable />
         </Grid>
       </Grid>
+      {/* END Arreas Table */}
+
+      {/*START BlockListPrnding Table */}
 
       <Grid container spacing={4}>
         <Grid item xs={12}>
           <PendingList />
         </Grid>
       </Grid>
+      {/*END BlockListPrnding Table */}
+
       <br />
+
+      {/*START Invoices  Table */}
+
       <Typography className="today_invoices" variant="h4" component="h6">
         Today Invoices
       </Typography>
@@ -417,6 +456,7 @@ export default function Dashboard() {
           <InvoiceList />
         </Grid>
       </Grid>
+      {/*END Invoices  Table */}
     </Container>
   );
 }

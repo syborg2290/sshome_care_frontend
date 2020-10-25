@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import MUIDataTable from "mui-datatables";
 import { Spin } from "antd";
+import CurrencyFormat from "react-currency-format";
 
 //icone
 import VisibilityIcon from "@material-ui/icons/Visibility";
@@ -27,7 +28,7 @@ export default function Full_Payment() {
       },
     },
     {
-      name: "FirstName",
+      name: "Date",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -36,7 +37,7 @@ export default function Full_Payment() {
       },
     },
     {
-      name: "LastName",
+      name: "Discount",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -45,20 +46,7 @@ export default function Full_Payment() {
       },
     },
     {
-      name: "NIC",
-      options: {
-        filter: false,
-        setCellHeaderProps: (value) => ({
-          style: {
-            fontSize: "15px",
-            color: "black",
-            fontWeight: "600",
-          },
-        }),
-      },
-    },
-    {
-      name: "Telephone",
+      name: "Paid",
       options: {
         filter: false,
         setCellHeaderProps: (value) => ({
@@ -92,10 +80,16 @@ export default function Full_Payment() {
   const fullPayTableData = [
     {
       InvoiceNo: "3476-JDJCF",
-      FirstName: "test",
-      LastName: "test",
-      NIC: "test",
-      Telephone: "test",
+      Date: "test",
+      Discount: "test",
+      Paid: (
+        <CurrencyFormat
+          value={8000}
+          displayType={"text"}
+          thousandSeparator={true}
+          prefix={" "}
+        />
+      ),
       Action: (
         <div>
           <VisibilityIcon />

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import MUIDataTable from "mui-datatables";
-// eslint-disable-next-line
-import { Spin, Modal } from "antd";
+import { Spin } from "antd";
 
 // styles
 import "./Pending_List.css";

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import MUIDataTable from "mui-datatables";
 import { Spin } from "antd";
-
+import CurrencyFormat from "react-currency-format";
 // styles
 import "./PayAnd_Go.css";
 
@@ -27,16 +27,7 @@ export default function PayAnd_Go() {
       },
     },
     {
-      name: "FirstName",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
-    {
-      name: "LastName",
+      name: "Date",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -46,6 +37,15 @@ export default function PayAnd_Go() {
     },
     {
       name: "NIC",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "Discount",
       options: {
         filter: false,
         setCellHeaderProps: (value) => ({
@@ -58,7 +58,21 @@ export default function PayAnd_Go() {
       },
     },
     {
-      name: "Telephone",
+      name: "Paid",
+      options: {
+        filter: false,
+        setCellHeaderProps: (value) => ({
+          style: {
+            fontSize: "15px",
+            color: "black",
+            fontWeight: "600",
+          },
+        }),
+      },
+    },
+
+    {
+      name: "Status",
       options: {
         filter: false,
         setCellHeaderProps: (value) => ({
@@ -92,10 +106,18 @@ export default function PayAnd_Go() {
   const payGoTableData = [
     {
       InvoiceNo: "3476-JDJCF",
-      FirstName: "test",
-      LastName: "test",
-      NIC: "test",
-      Telephone: "test",
+      Date: "test",
+      NIC: "74837483v",
+      Discount: "test",
+      Paid: (
+        <CurrencyFormat
+          value={5000}
+          displayType={"text"}
+          thousandSeparator={true}
+          prefix={" "}
+        />
+      ),
+      Status: "OnGoing",
       Action: (
         <div>
           <VisibilityIcon />

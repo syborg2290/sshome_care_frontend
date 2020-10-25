@@ -142,7 +142,7 @@ export default function View_Model({invoice_num,seized_date}) {
             <Grid item xs={12} sm={2}>
               :
             </Grid>
-            <Grid class="totls" item xs={12} sm={3}>
+            <Grid className="totls" item xs={12} sm={3}>
               <p>1600</p>
             </Grid>
             <Grid className="lbl_topi" item xs={12} sm={7}>
@@ -151,7 +151,7 @@ export default function View_Model({invoice_num,seized_date}) {
             <Grid item xs={12} sm={2}>
               :
             </Grid>
-            <Grid class="totls" item xs={12} sm={3}>
+            <Grid className="totls" item xs={12} sm={3}>
               <p>100</p>
             </Grid>
           </Grid>

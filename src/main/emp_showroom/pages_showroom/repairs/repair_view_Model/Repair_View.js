@@ -6,7 +6,13 @@ import moment from "moment";
 // styles
 import "./Repair_View.css";
 
-export default function Repair_View({invoice_number,description}) {
+export default function Repair_View({
+  invoice_number,
+  description,
+  cust_Name,
+  mobile_1,
+  mobile_2,
+}) {
   return (
     <Container component="main" className="conctainefr_main">
       <Typography className="titleffs" variant="h5" gutterBottom>
@@ -27,6 +33,28 @@ export default function Repair_View({invoice_number,description}) {
             <Grid item xs={12} sm={6}>
               <p>{invoice_number}</p>
             </Grid>
+            <Grid className="lbl_topi" item xs={12} sm={4}>
+              Customer Name
+            </Grid>
+            <Grid item xs={12} sm={2}>
+              :
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <p>{cust_Name}</p>
+            </Grid>
+            <Grid className="lbl_topi" item xs={12} sm={4}>
+              Tele
+            </Grid>
+            <Grid item xs={12} sm={2}>
+              :
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <p>{mobile_1}</p>
+            </Grid>
+            <Grid className="lbl_topi" item xs={12} sm={6}></Grid>
+            <Grid item xs={12} sm={6}>
+              <p>{mobile_2}</p>
+            </Grid>
 
             <Grid className="lbl_topi" item xs={12} sm={4}>
               Date
@@ -35,9 +63,12 @@ export default function Repair_View({invoice_number,description}) {
               :
             </Grid>
             <Grid item xs={12} sm={6}>
-              <p> {moment(firebase.firestore.FieldValue.serverTimestamp()).format(
+              <p>
+                {" "}
+                {moment(firebase.firestore.FieldValue.serverTimestamp()).format(
                   "dddd, MMMM Do YYYY, h:mm:ss a"
-                )}</p>
+                )}
+              </p>
             </Grid>
             <Grid className="lbl_topi" item xs={12} sm={4}>
               Description

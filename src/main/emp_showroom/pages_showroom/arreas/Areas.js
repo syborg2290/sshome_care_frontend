@@ -121,7 +121,7 @@ export default function Areas() {
         rawData.push({
           InvoiceNo: eachRe.data().invoice_number,
           NIC: eachRe.data().nic,
-          Delayed_Days: eachRe.data().delayed_days,
+          Delayed_Days: Math.round(eachRe.data().delayed_days),
           Delayed_Charges: (
             <CurrencyFormat
               value={Math.round(eachRe.data().delayed_charges)}

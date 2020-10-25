@@ -73,7 +73,9 @@ export default function Update_Model({
                 } else {
                   setDelayedDays(daysCountInitial - 30);
                   setDelayedCharges(
-                    99 * ((Math.round(daysCountInitial) - 30) / 7)
+                    daysCountInitial - 30 <= 7
+                      ? 0
+                      : 99 * Math.round((daysCountInitial - 30) / 7)
                   );
                 }
               } else {
@@ -82,7 +84,9 @@ export default function Update_Model({
                 } else {
                   setDelayedDays(daysCountInitial - 7);
                   setDelayedCharges(
-                    99 * ((Math.round(daysCountInitial) - 7) / 7)
+                    daysCountInitial - 7 <= 7
+                      ? 0
+                      : 99 * Math.round((daysCountInitial - 7) / 7)
                   );
                 }
               }
@@ -100,14 +104,22 @@ export default function Update_Model({
                   setDelayedDays(0);
                 } else {
                   setDelayedDays(daysCount - 30);
-                  setDelayedCharges(99 * ((Math.round(daysCount) - 30) / 7));
+                  setDelayedCharges(
+                    daysCount - 30 <= 7
+                      ? 0
+                      : 99 * Math.round((daysCount - 30) / 7)
+                  );
                 }
               } else {
                 if (7 - daysCount >= 0) {
                   setDelayedDays(0);
                 } else {
                   setDelayedDays(daysCount - 7);
-                  setDelayedCharges(99 * ((Math.round(daysCount) - 7) / 7));
+                  setDelayedCharges(
+                    daysCount - 7 <= 7
+                      ? 0
+                      : 99 * Math.round((daysCount - 7) / 7)
+                  );
                 }
               }
             }

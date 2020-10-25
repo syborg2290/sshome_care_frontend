@@ -20,6 +20,7 @@ import "./Arreas_update.css";
 
 export default function Arreas_update({ invoice_no, nic }) {
   const [installments, setInstallments] = useState([]);
+  const [allInstallment, setAllInstallment] = useState(0);
   const [delayedDays, setDelayedDays] = useState(0);
   const [delayedCharges, setDelayedCharges] = useState(0);
   const [updatingInstallmentCount, setUpdatingInstallmentCount] = useState(1);
@@ -46,7 +47,8 @@ export default function Arreas_update({ invoice_no, nic }) {
 
     db.collection("installment")
       .where("invoice_number", "==", invoice_no)
-      .get().then((instReDoc) => {
+      .get()
+      .then((instReDoc) => {
         instReDoc.docs.forEach((each) => {
           setInstallments((old) => [...old, each.data()]);
         });
@@ -73,11 +75,14 @@ export default function Arreas_update({ invoice_no, nic }) {
                 if (30 - daysCountInitial >= 0) {
                   setDelayedDays(0);
                 } else {
-                  setDelayedDays(daysCountInitial - 30);
+                  setDelayedDays(daysCountInitial - 31);
+                  if (daysCountInitial / 31 > 0) {
+                    setAllInstallment((daysCountInitial / 31).toFixed());
+                  }
                   setDelayedCharges(
-                    daysCountInitial - 30 <= 7
+                    daysCountInitial - 31 <= 7
                       ? 0
-                      : 99 * Math.round((daysCountInitial - 30) / 7)
+                      : 99 * Math.round((daysCountInitial - 31) / 7)
                   );
                 }
               } else {
@@ -85,6 +90,9 @@ export default function Arreas_update({ invoice_no, nic }) {
                   setDelayedDays(0);
                 } else {
                   setDelayedDays(daysCountInitial - 7);
+                  if (daysCountInitial / 7 > 0) {
+                    setAllInstallment((daysCountInitial / 7).toFixed());
+                  }
                   setDelayedCharges(
                     daysCountInitial - 7 <= 7
                       ? 0
@@ -104,11 +112,14 @@ export default function Arreas_update({ invoice_no, nic }) {
                 if (30 - daysCount >= 0) {
                   setDelayedDays(0);
                 } else {
-                  setDelayedDays(daysCount - 30);
+                  setDelayedDays(daysCount - 31);
+                  if (daysCount / 31 > 0) {
+                    setAllInstallment((daysCount / 31).toFixed());
+                  }
                   setDelayedCharges(
-                    daysCount - 30 <= 7
+                    daysCount - 31 <= 7
                       ? 0
-                      : 99 * Math.round((daysCount - 30) / 7)
+                      : 99 * Math.round((daysCount - 31) / 7)
                   );
                 }
               } else {
@@ -116,6 +127,9 @@ export default function Arreas_update({ invoice_no, nic }) {
                   setDelayedDays(0);
                 } else {
                   setDelayedDays(daysCount - 7);
+                  if (daysCount / 7 > 0) {
+                    setAllInstallment((daysCount / 7).toFixed());
+                  }
                   setDelayedCharges(
                     daysCount - 7 <= 7
                       ? 0
@@ -134,7 +148,7 @@ export default function Arreas_update({ invoice_no, nic }) {
     var j = 0;
     for (
       var i = 0;
-      i < Math.round(delayedDays / 7) + Math.round(updatingInstallmentCount);
+      i < allInstallment + Math.round(updatingInstallmentCount);
       i++
     ) {
       await db
@@ -163,8 +177,7 @@ export default function Arreas_update({ invoice_no, nic }) {
 
     if (
       Math.round(instCount) -
-        (updatingInstallmentCount +
-          (installments.length + Math.round(delayedDays / 7))) <=
+        (updatingInstallmentCount + (installments.length + allInstallment)) <=
       0
     ) {
       await db
@@ -280,7 +293,7 @@ export default function Arreas_update({ invoice_no, nic }) {
                   if (
                     Math.round(instCount) -
                       (delayedDays > 7
-                        ? installments.length + Math.round(delayedDays / 7)
+                        ? installments.length + allInstallment
                         : installments.length) >=
                     e.target.value
                   ) {
@@ -423,11 +436,11 @@ export default function Arreas_update({ invoice_no, nic }) {
                 {delayedDays > 7
                   ? "  " +
                     Math.round(instAmountProp) +
-                    " X " +
-                    Math.round(delayedDays / 7) +
-                    " X " +
-                    updatingInstallmentCount +
+                    " X (" +
+                    allInstallment +
                     " + " +
+                    updatingInstallmentCount +
+                    ") + " +
                     Math.round(delayedCharges) +
                     " "
                   : "  " +

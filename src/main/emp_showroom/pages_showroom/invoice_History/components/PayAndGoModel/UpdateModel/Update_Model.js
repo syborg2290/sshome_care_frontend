@@ -73,15 +73,15 @@ export default function Update_Model({
                 if (30 - daysCountInitial >= 0) {
                   setDelayedDays(0);
                 } else {
-                  setDelayedDays(daysCountInitial - 30);
-                  if (daysCountInitial / 30 > 0) {
-                    setAllInstallment(Math.round(daysCountInitial / 30));
+                  setDelayedDays(daysCountInitial - 31);
+                  if (daysCountInitial / 31 > 0) {
+                    setAllInstallment((daysCountInitial / 31).toFixed());
                   }
 
                   setDelayedCharges(
-                    daysCountInitial - 30 <= 7
+                    daysCountInitial - 31 <= 7
                       ? 0
-                      : 99 * Math.round((daysCountInitial - 30) / 7)
+                      : 99 * Math.round((daysCountInitial - 31) / 7)
                   );
                 }
               } else {
@@ -90,7 +90,7 @@ export default function Update_Model({
                 } else {
                   setDelayedDays(daysCountInitial - 7);
                   if (daysCountInitial / 7 > 0) {
-                    setAllInstallment(Math.round(daysCountInitial / 7));
+                    setAllInstallment((daysCountInitial / 7).toFixed());
                   }
                   setDelayedCharges(
                     daysCountInitial - 7 <= 7
@@ -112,14 +112,14 @@ export default function Update_Model({
                 if (30 - daysCount >= 0) {
                   setDelayedDays(0);
                 } else {
-                  setDelayedDays(daysCount - 30);
-                  if (daysCount / 30 > 0) {
-                    setAllInstallment(Math.round(daysCount / 30));
+                  setDelayedDays(daysCount - 31);
+                  if (daysCount / 31 > 0) {
+                    setAllInstallment((daysCount / 31).toFixed());
                   }
                   setDelayedCharges(
-                    daysCount - 30 <= 7
+                    daysCount - 31 <= 7
                       ? 0
-                      : 99 * Math.round((daysCount - 30) / 7)
+                      : 99 * Math.round((daysCount - 31) / 7)
                   );
                 }
               } else {
@@ -128,7 +128,7 @@ export default function Update_Model({
                 } else {
                   setDelayedDays(daysCount - 7);
                   if (daysCount / 7 > 0) {
-                    setAllInstallment(Math.round(daysCount / 7));
+                    setAllInstallment((daysCount / 7).toFixed());
                   }
                   setDelayedCharges(
                     daysCount - 7 <= 7
@@ -212,7 +212,8 @@ export default function Update_Model({
           invoice_number: invoice_no,
           customerDetails: customer,
           total:
-            Math.round(instAmountProp) * Math.round(updatingInstallmentCount) +
+            Math.round(instAmountProp) *
+              (allInstallment + Math.round(updatingInstallmentCount)) +
             Math.round(delayedCharges),
           delayedCharges: Math.round(delayedCharges),
         };
@@ -433,11 +434,11 @@ export default function Update_Model({
                 {delayedDays > 7
                   ? "  " +
                     Math.round(instAmountProp) +
-                    " X " +
-                    Math.round(delayedDays / 7) +
-                    " X " +
-                    updatingInstallmentCount +
+                    " X (" +
+                    allInstallment +
                     " + " +
+                    updatingInstallmentCount +
+                    ") + " +
                     Math.round(delayedCharges) +
                     " "
                   : "  " +

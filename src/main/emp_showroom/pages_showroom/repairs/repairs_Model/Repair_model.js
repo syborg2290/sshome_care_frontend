@@ -127,7 +127,7 @@ export default function Repair_model({ closeModel }) {
                     ) {
                       setLoading(false);
                       showConfirm(
-                        reThen.docs[0].data().nic,
+                        reInvo.data().nic,
                         itRe.data().itemName
                       );
                     } else {
@@ -141,7 +141,7 @@ export default function Repair_model({ closeModel }) {
                     ) {
                       setLoading(false);
                       showConfirm(
-                        reThen.docs[0].data().nic,
+                        reInvo.data().nic,
                         itRe.data().itemName
                       );
                     } else {

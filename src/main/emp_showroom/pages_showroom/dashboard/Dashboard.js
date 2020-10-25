@@ -128,13 +128,6 @@ export default function Dashboard() {
         ).getTime()) /
       (1000 * 3600 * 24);
 
-    // let daysCount =
-    //   (new Date(
-    //     instReDoc.docs[instReDoc.docs.length - 1].data()?.date?.seconds * 1000
-    //   ).getTime() -
-    //     new Date().getTime()) /
-    //   (1000 * 3600 * 24);
-
     if (eachRe.data().installmentType === "Monthly") {
       if (30 - daysCount >= 0) {
         // setDelayedDays(0);
@@ -155,6 +148,7 @@ export default function Dashboard() {
           db.collection("arrears").add({
             invoice_number: eachRe.data().invoice_number,
             customer_id: eachRe.data().customer_id,
+            nic: eachRe.data().nic,
             delayed_days: Math.round(daysCount) - 30,
             delayed_charges: 99 * (Math.round(daysCount - 30) / 7),
             date: firebase.firestore.FieldValue.serverTimestamp(),
@@ -181,6 +175,7 @@ export default function Dashboard() {
           db.collection("arrears").add({
             invoice_number: eachRe.data().invoice_number,
             customer_id: eachRe.data().customer_id,
+            nic: eachRe.data().nic,
             delayed_days: Math.round(daysCount) - 7,
             delayed_charges: 99 * (Math.round(daysCount - 7) / 7),
             date: firebase.firestore.FieldValue.serverTimestamp(),

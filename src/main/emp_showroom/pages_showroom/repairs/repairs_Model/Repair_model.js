@@ -115,7 +115,7 @@ export default function Repair_model({ closeModel }) {
                   let daysCountInitial =
                     (new Date().getTime() -
                       new Date(
-                        reThen.data()?.date?.seconds * 1000
+                        reThen.docs.data()?.date?.seconds * 1000
                       ).getTime()) /
                     (1000 * 3600 * 24);
 

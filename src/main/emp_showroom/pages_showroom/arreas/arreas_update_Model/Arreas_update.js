@@ -28,7 +28,7 @@ export default function Arreas_update({ invoice_no, nic }) {
   const [customer, setCustomer] = useState({});
   const [instCount, setInstCount] = useState(0);
   const [instAmountProp, setInstAmountProp] = useState(0);
-  const [currentStatus, setCurrentStatus] = useState();
+  const [currentStatus, setCurrentStatus] = useState("a");
 
   const { confirm } = Modal;
 
@@ -282,17 +282,29 @@ export default function Arreas_update({ invoice_no, nic }) {
             <Grid className="lbl_topi_radio" item xs={12} sm={2}>
               :
             </Grid>
-            <Grid className="lbl_topi_radio" item xs={12} sm={6}>
-              <Radio.Group
-                value={currentStatus}
-                onChange={(e) => setCurrentStatus(e.target.value)}
-                defaultValue="a"
-                buttonStyle="solid"
-              >
-                <Radio.Button value="a">Include</Radio.Button>
-                <Radio.Button value="b">Not Include</Radio.Button>
-              </Radio.Group>
-            </Grid>
+             {delayedDays > 0 ? (
+              <Grid className="lbl_topi_radio" item xs={12} sm={6}>
+                <Radio.Group
+                  value={currentStatus}
+                  onChange={(e) => {
+                    if (e.target.value === "b") {
+                      setUpdatingInstallmentCount(0);
+                      setCurrentStatus("b");
+                    } else {
+                      setUpdatingInstallmentCount(1);
+                      setCurrentStatus("a");
+                    }
+                  }}
+                  defaultValue="a"
+                  buttonStyle="solid"
+                >
+                  <Radio.Button value="a">Include</Radio.Button>
+                  <Radio.Button value="b">Not Include</Radio.Button>
+                </Radio.Group>
+              </Grid>
+            ) : (
+              ""
+            )}
 
             <Grid className="lbl_topi" item xs={12} sm={4}>
               Updating Installment Count
@@ -306,6 +318,7 @@ export default function Arreas_update({ invoice_no, nic }) {
                 InputProps={{ inputProps: { min: 1 } }}
                 variant="outlined"
                 required
+                 disabled={currentStatus === "a" ? false : true}
                 fullWidth
                 label="Count"
                 size="small"

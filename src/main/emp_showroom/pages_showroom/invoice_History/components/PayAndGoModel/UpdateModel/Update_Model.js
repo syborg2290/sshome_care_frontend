@@ -32,7 +32,7 @@ export default function Update_Model({
   const [delayedCharges, setDelayedCharges] = useState(0);
   const [updatingInstallmentCount, setUpdatingInstallmentCount] = useState(1);
   const [customer, setCustomer] = useState({});
-  const [currentStatus, setCurrentStatus] = useState();
+  const [currentStatus, setCurrentStatus] = useState("a");
 
   const { confirm } = Modal;
 
@@ -280,17 +280,29 @@ export default function Update_Model({
             <Grid className="lbl_topi_radio" item xs={12} sm={2}>
               :
             </Grid>
-            <Grid className="lbl_topi_radio" item xs={12} sm={6}>
-              <Radio.Group
-                value={currentStatus}
-                onChange={(e) => setCurrentStatus(e.target.value)}
-                defaultValue="a"
-                buttonStyle="solid"
-              >
-                <Radio.Button value="a">Include</Radio.Button>
-                <Radio.Button value="b">Not Include</Radio.Button>
-              </Radio.Group>
-            </Grid>
+            {delayedDays > 0 ? (
+              <Grid className="lbl_topi_radio" item xs={12} sm={6}>
+                <Radio.Group
+                  value={currentStatus}
+                  onChange={(e) => {
+                    if (e.target.value === "b") {
+                      setUpdatingInstallmentCount(0);
+                      setCurrentStatus("b");
+                    } else {
+                      setUpdatingInstallmentCount(1);
+                      setCurrentStatus("a");
+                    }
+                  }}
+                  defaultValue="a"
+                  buttonStyle="solid"
+                >
+                  <Radio.Button value="a">Include</Radio.Button>
+                  <Radio.Button value="b">Not Include</Radio.Button>
+                </Radio.Group>
+              </Grid>
+            ) : (
+              ""
+            )}
 
             <Grid className="lbl_topi" item xs={12} sm={4}>
               Updating Installment Count
@@ -305,6 +317,7 @@ export default function Update_Model({
                 variant="outlined"
                 required
                 fullWidth
+                disabled={currentStatus === "a" ? false : true}
                 label="Count"
                 size="small"
                 value={updatingInstallmentCount}

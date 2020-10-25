@@ -30,7 +30,7 @@ export default function Repair_model({ closeModel }) {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const showConfirm = (nic, item_name) => {
+  const showConfirm = (item_name) => {
     confirm({
       title: "Do you want to print a receipt?",
       icon: <ExclamationCircleOutlined />,

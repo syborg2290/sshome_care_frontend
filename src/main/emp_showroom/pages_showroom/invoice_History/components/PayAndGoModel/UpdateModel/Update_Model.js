@@ -345,7 +345,7 @@ export default function Update_Model({
               <p>
                 {Math.round(instCount) -
                   (delayedDays > 7
-                    ? Math.round(delayedDays / 7) +
+                    ? allInstallment +
                       Math.round(installments.length)
                     : Math.round(installments.length))}
               </p>

@@ -347,7 +347,7 @@ export default function Arreas_update({ invoice_no, nic }) {
               <p>
                 {Math.round(instCount) -
                   (delayedDays > 7
-                    ? Math.round(delayedDays / 7) +
+                    ? allInstallment +
                       Math.round(installments.length)
                     : Math.round(installments.length))}
               </p>

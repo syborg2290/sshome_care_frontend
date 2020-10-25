@@ -108,7 +108,7 @@ export default function Repair_model({ closeModel }) {
                             itRe.data().guaranteePeriod
                           ) {
                             setLoading(false);
-                            showConfirm(reThen.nic, itRe.data().itemName);
+                            showConfirm(reThen.docs[0].data().nic, itRe.data().itemName);
                           } else {
                             setLoading(false);
                             setError("Your garuntee period is expired!");
@@ -119,7 +119,7 @@ export default function Repair_model({ closeModel }) {
                             itRe.data().guaranteePeriod
                           ) {
                             setLoading(false);
-                            showConfirm(reThen.nic, itRe.data().itemName);
+                            showConfirm(reThen.docs[0].data().nic, itRe.data().itemName);
                           } else {
                             setLoading(false);
                             setError("Item garuntee period is expired!");

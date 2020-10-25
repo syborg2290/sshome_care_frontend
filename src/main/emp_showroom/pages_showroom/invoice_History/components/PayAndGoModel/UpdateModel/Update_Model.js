@@ -264,10 +264,7 @@ export default function Update_Model({
             </Grid>
             <Grid item xs={12} sm={6}>
               <CurrencyFormat
-                value={
-                  Math.round(instAmountProp) *
-                  Math.round(updatingInstallmentCount)
-                }
+                value={Math.round(instAmountProp)}
                 displayType={"text"}
                 thousandSeparator={true}
                 prefix={" "}
@@ -343,11 +340,9 @@ export default function Update_Model({
             </Grid>
             <Grid item xs={12} sm={6}>
               <p>
-                {Math.round(instCount) -
-                  (delayedDays > 7
-                    ? allInstallment +
-                      Math.round(installments.length)
-                    : Math.round(installments.length))}
+                {instCount -
+                  (installments.length +
+                    updatingInstallmentCount)}
               </p>
             </Grid>
 

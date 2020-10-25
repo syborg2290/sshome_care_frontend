@@ -266,10 +266,7 @@ export default function Arreas_update({ invoice_no, nic }) {
             </Grid>
             <Grid item xs={12} sm={6}>
               <CurrencyFormat
-                value={
-                  Math.round(instAmountProp) *
-                  Math.round(updatingInstallmentCount)
-                }
+                value={Math.round(instAmountProp)}
                 displayType={"text"}
                 thousandSeparator={true}
                 prefix={" "}
@@ -282,7 +279,7 @@ export default function Arreas_update({ invoice_no, nic }) {
             <Grid className="lbl_topi_radio" item xs={12} sm={2}>
               :
             </Grid>
-             {delayedDays > 0 ? (
+            {delayedDays > 0 ? (
               <Grid className="lbl_topi_radio" item xs={12} sm={6}>
                 <Radio.Group
                   value={currentStatus}
@@ -318,7 +315,7 @@ export default function Arreas_update({ invoice_no, nic }) {
                 InputProps={{ inputProps: { min: 1 } }}
                 variant="outlined"
                 required
-                 disabled={currentStatus === "a" ? false : true}
+                disabled={currentStatus === "a" ? false : true}
                 fullWidth
                 label="Count"
                 size="small"
@@ -345,11 +342,9 @@ export default function Arreas_update({ invoice_no, nic }) {
             </Grid>
             <Grid item xs={12} sm={6}>
               <p>
-                {Math.round(instCount) -
-                  (delayedDays > 7
-                    ? allInstallment +
-                      Math.round(installments.length)
-                    : Math.round(installments.length))}
+                 {instCount -
+                  (installments.length +
+                    updatingInstallmentCount)}
               </p>
             </Grid>
 

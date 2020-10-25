@@ -223,8 +223,8 @@ export default function Repairs() {
             <div className="Repairt_Model_Detail_update">
               <RepairUpdateModel
                 key={repairAllData[currentIndx]?.id}
-                invoice_number={repairAllData[currentIndx]?.data()?.invoice_no}
-                statusProp={repairAllData[currentIndx]?.data()?.status}
+                invoice_number={repairAllData[currentIndx]?.data?.invoice_no}
+                statusProp={repairAllData[currentIndx]?.data?.status}
                 docId={repairAllData[currentIndx]?.id}
                 closeModel={cancelModalUpdateRepair}
               />
@@ -249,8 +249,8 @@ export default function Repairs() {
             <div className="Repairt_Model_Detail_update">
               <RepairViewModel
                 key={repairAllData[currentIndx]?.id}
-                description={repairAllData[currentIndx]?.data()?.description}
-                invoice_number={repairAllData[currentIndx]?.data()?.invoice_no}
+                description={repairAllData[currentIndx]?.data?.description}
+                invoice_number={repairAllData[currentIndx]?.data?.invoice_no}
               />
             </div>
           </div>

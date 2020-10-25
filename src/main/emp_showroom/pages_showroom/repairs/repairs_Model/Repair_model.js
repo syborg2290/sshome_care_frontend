@@ -89,7 +89,7 @@ export default function Repair_model({ closeModel }) {
             .get()
             .then((reThen) => {
               if (reThen.docs.length > 0) {
-                reThen.items.forEach((reI) => {
+                reThen.docs[0].data().items.forEach((reI) => {
                   db.collection("item")
                     .doc(reI.item_id)
                     .get()
@@ -231,7 +231,7 @@ export default function Repair_model({ closeModel }) {
               </p>
             </Grid>
           </Grid>
-          <p className="name_Msg">{error.length > 0 ? error : ""}!</p>
+          <p className="name_Msg">{error.length > 0 ? error : ""}</p>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={9}></Grid>
             <Grid item xs={12} sm={3}>

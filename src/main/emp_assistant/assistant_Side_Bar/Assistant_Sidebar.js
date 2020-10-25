@@ -34,28 +34,28 @@ const structure = [
   {
     id: 0,
     label: "Dashboard",
-    link: "/showroom/dashboard",
+    link: "/assistant/dashboard",
     icon: <DashboardIcon className="icons" />,
   },
 
   {
     id: 1,
     label: "Items",
-    link: "/showroom/ui/itemTable",
+    link: "/assistant/ui/Item",
     icon: <TvIcon className="icons" />,
   },
 
   {
     id: 4,
     label: "Customers",
-    link: "/showroom/ui/customer",
+    link: "/assistant/ui/Customer",
     icon: <GroupIcon className="icons" />,
   },
 
   {
     id: 11,
     label: "Invoice",
-    link: "/showroom/ui/invoiceHistory",
+    link: "/assistant/ui/Invoice",
     icon: <LibraryIcon className="icons" />,
   },
 
@@ -63,26 +63,26 @@ const structure = [
   {
     id: 10,
     label: "Arreas",
-    link: "/showroom/ui/arreas",
+    link: "/assistant/ui/arries",
     icon: <MoneyOffIcon className="icons" />,
   },
   {
     id: 6,
     label: "Repairs",
-    link: "/showroom/ui/repairs",
+    link: "/assistant/ui/Repair",
     icon: <BuildIcon className="icons" />,
   },
   {
     id: 9,
     label: "Black list",
-    link: "/showroom/ui/blackList",
+    link: "/assistant/ui/BlackList",
     icon: <PersonAddDisabledIcon className="icons" />,
   },
   { id: 2, type: "divider" },
   {
     id: 12,
     label: "Seized Item",
-    link: "/showroom/ui/seized",
+    link: "/assistant/ui/SeizedItems",
     icon: <EventBusyIcon className="icons" />,
   },
 ];

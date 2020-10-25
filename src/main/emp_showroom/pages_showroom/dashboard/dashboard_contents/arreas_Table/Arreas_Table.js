@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import MUIDataTable from "mui-datatables";
-// eslint-disable-next-line
 import { Spin } from "antd";
+import CurrencyFormat from "react-currency-format";
 
 // styles
 import "./Arreas_Table.css";
@@ -29,25 +29,25 @@ export default function Arreas_Table() {
       },
     },
     {
-      name: "FirstName",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
-    {
-      name: "LastName",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
-    {
       name: "NIC",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "Delayed_Days",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "Delayed_Charges",
       options: {
         filter: false,
         setCellHeaderProps: (value) => ({
@@ -60,7 +60,7 @@ export default function Arreas_Table() {
       },
     },
     {
-      name: "Telephone",
+      name: "Date",
       options: {
         filter: false,
         setCellHeaderProps: (value) => ({
@@ -94,10 +94,17 @@ export default function Arreas_Table() {
   const arreasTableData = [
     {
       InvoiceNo: "3476-JDJCF",
-      FirstName: "test",
-      LastName: "test",
       NIC: "test",
-      Telephone: "test",
+      Delayed_Days: "test",
+      Delayed_Charges: (
+        <CurrencyFormat
+          value={5000}
+          displayType={"text"}
+          thousandSeparator={true}
+          prefix={" "}
+        />
+      ),
+      Date: "test",
       Action: (
         <div>
           <VisibilityIcon />

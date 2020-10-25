@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   TextField,
   Grid,
@@ -9,29 +9,135 @@ import {
 
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { useHistory } from "react-router-dom";
-import { Modal } from "antd";
+import { Modal, Spin } from "antd";
+import firebase from "firebase";
+import moment from "moment";
+import db from "../../../../../config/firebase.js";
 
 // styles
 import "./Repair_model.css";
 
-export default function Repair_model() {
+export default function Repair_model({ closeModel }) {
   const { confirm } = Modal;
   let history = useHistory();
+  const [invoice, setInvoice] = useState("");
+  const [model_no, setModel_no] = useState("");
+  const [description, setDescription] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const showConfirm = () => {
+  const showConfirm = (nic, item_name) => {
     confirm({
-      title: "Do you Want to ptint a Receipt?",
+      title: "Do you want to print a receipt?",
       icon: <ExclamationCircleOutlined />,
       content: "Some descriptions",
       onOk() {
-        history.push(
-          "/showroom/repairs/repairs_Model/repair_update_Recipt/Repair_recipt"
-        );
+        db.collection("repair")
+          .add({
+            invoice_no: invoice.trim(),
+            model_no: model_no.trim(),
+            nic: nic,
+            item_name: item_name,
+            status: "accepted",
+            description: description.trim(),
+            date: firebase.firestore.FieldValue.serverTimestamp(),
+          })
+          .then(() => {
+            var passingWithCustomerObj = {
+              invoice_no: invoice.trim(),
+              model_no: model_no.trim(),
+              nic: nic,
+              item_name: item_name,
+            };
+            let moveWith = {
+              pathname:
+                "/showroom/repairs/repairs_Model/repair_update_Recipt/Repair_recipt",
+              search: "?query=abc",
+              state: { detail: passingWithCustomerObj },
+            };
+            history.push(moveWith);
+          });
       },
       onCancel() {
-        console.log("Cancel");
+        db.collection("repair")
+          .add({
+            invoice_no: invoice.trim(),
+            model_no: model_no.trim(),
+            nic: nic,
+            item_name: item_name,
+            status: "accepted",
+            description: description.trim(),
+            date: firebase.firestore.FieldValue.serverTimestamp(),
+          })
+          .then(() => {
+            closeModel();
+          });
       },
     });
+  };
+
+  const addRepair = async () => {
+    setLoading(true);
+    db.collection("repair")
+      .where("invoice_number", "==", invoice.trim())
+      .where("status", "==", "back_to_customer")
+      .get()
+      .then((checkre) => {
+        if (checkre.docs.length === 0) {
+          db.collection("invoice")
+            .where("invoice_number", "==", invoice.trim())
+            .get()
+            .then((reThen) => {
+              if (reThen.docs.length > 0) {
+                reThen.items.forEach((reI) => {
+                  db.collection("item")
+                    .doc(reI.item_id)
+                    .get()
+                    .then((itRe) => {
+                      if (itRe.data().modelNo === model_no.trim()) {
+                        let daysCountInitial =
+                          (new Date().getTime() -
+                            new Date(
+                              itRe.data()?.timestamp?.seconds * 1000
+                            ).getTime()) /
+                          (1000 * 3600 * 24);
+
+                        if (itRe.data().guarantee === "Months") {
+                          if (
+                            Math.round(daysCountInitial / 30) >=
+                            itRe.data().guaranteePeriod
+                          ) {
+                            setLoading(false);
+                            showConfirm(reThen.nic, itRe.data().itemName);
+                          } else {
+                            setLoading(false);
+                            setError("Your garuntee period is expired!");
+                          }
+                        } else {
+                          if (
+                            Math.round(daysCountInitial / 365) >=
+                            itRe.data().guaranteePeriod
+                          ) {
+                            setLoading(false);
+                            showConfirm(reThen.nic, itRe.data().itemName);
+                          } else {
+                            setLoading(false);
+                            setError("Your garuntee period is expired!");
+                          }
+                        }
+                      }
+                    });
+                });
+              } else {
+                setLoading(false);
+                setError("Invoice number you entered is not found!");
+              }
+            });
+        } else {
+          setLoading(false);
+          setError("Invoice number you entered is already in the list!");
+        }
+      });
   };
 
   return (
@@ -59,6 +165,10 @@ export default function Repair_model() {
                 fullWidth
                 label="Invoice No"
                 size="small"
+                value={invoice}
+                onChange={(e) => {
+                  setInvoice(e.target.value);
+                }}
               />
             </Grid>
 
@@ -76,11 +186,15 @@ export default function Repair_model() {
                 fullWidth
                 label="Model No"
                 size="small"
+                value={model_no}
+                onChange={(e) => {
+                  setModel_no(e.target.value);
+                }}
               />
             </Grid>
 
             <Grid className="lbl_topi" item xs={12} sm={4}>
-              Reason
+              Description
             </Grid>
             <Grid item xs={12} sm={2}>
               :
@@ -93,8 +207,12 @@ export default function Repair_model() {
                 multiline
                 rowsMax={5}
                 fullWidth
-                label="Reason"
+                label="Description"
                 size="small"
+                value={description}
+                onChange={(e) => {
+                  setDescription(e.target.value);
+                }}
               />
             </Grid>
 
@@ -105,10 +223,15 @@ export default function Repair_model() {
               :
             </Grid>
             <Grid item xs={12} sm={6}>
-              <p>2020.09.27</p>
+              <p>
+                {" "}
+                {moment(firebase.firestore.FieldValue.serverTimestamp()).format(
+                  "dddd, MMMM Do YYYY, h:mm:ss a"
+                )}
+              </p>
             </Grid>
           </Grid>
-
+          <p className="name_Msg">{error.length > 0 ? error : ""}!</p>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={9}></Grid>
             <Grid item xs={12} sm={3}>
@@ -116,9 +239,14 @@ export default function Repair_model() {
                 variant="contained"
                 color="primary"
                 className="btn_update"
-                onClick={showConfirm}
+                onClick={addRepair}
+                disabled={
+                  loading || invoice.length === 0 || model_no.length === 0
+                    ? true
+                    : false
+                }
               >
-                Done
+                {loading ? <Spin /> : "Done"}
               </Button>
             </Grid>
           </Grid>

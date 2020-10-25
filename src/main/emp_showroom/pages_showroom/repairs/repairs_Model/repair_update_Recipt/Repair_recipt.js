@@ -11,6 +11,21 @@ import { useLocation, useHistory } from "react-router-dom";
 import "./Repair_recipt.css";
 
 class RepairRecipt extends React.Component {
+  state = {
+    invoice_number: "",
+    model_number: "",
+    customer_nic: "",
+    item_name: "",
+  };
+
+  constructor(props) {
+    super(props);
+    this.state.invoice_number = this.props.prop?.invoice_no;
+    this.state.model_number = this.props.prop?.model_no;
+    this.state.customer_nic = this.props.prop?.nic;
+    this.state.item_name = this.props.prop?.item_name;
+  }
+
   render() {
     return (
       <div>
@@ -37,7 +52,7 @@ class RepairRecipt extends React.Component {
                   Invoice No.
                 </Col>
                 <Col className="tiles_details_repair" span={6}>
-                  TEWCV-565
+                  {this.state.invoice_number}
                 </Col>
                 <Col className="tiles_repair" span={6}>
                   Accepted Date
@@ -51,19 +66,19 @@ class RepairRecipt extends React.Component {
                   Model No.
                 </Col>
                 <Col className="tiles_details_repair" span={18}>
-                  232-FD
+                  {this.state.model_number}
                 </Col>
                 <Col className="tiles_repair" span={6}>
                   Item Name
                 </Col>
                 <Col className="tiles_details_repair" span={18}>
-                  Gass Cooker
+                  {this.state.item_name}
                 </Col>
                 <Col className="tiles_repair" span={6}>
                   NIC No.
                 </Col>
                 <Col className="tiles_details_repair" span={18}>
-                  434325435V
+                  {this.state.nic}
                 </Col>
                 <Col className="tiles_details_repairSpace" span={24}></Col>
                 <Col className="tiles_Signature_repair" span={18}></Col>

@@ -167,7 +167,7 @@ export default function Arreas_update({ invoice_no, nic }) {
 
   const showConfirm = async () => {
     confirm({
-      title: "Do you Want to Print a Recipt?",
+      title: "Do you want to print a recipt?",
       icon: <ExclamationCircleOutlined />,
 
       async onOk() {
@@ -176,7 +176,10 @@ export default function Arreas_update({ invoice_no, nic }) {
           invoice_number: invoice_no,
           customerDetails: customer,
           total:
-            Math.round(instAmountProp) * Math.round(updatingInstallmentCount) +
+            (delayedDays > 7
+              ? Math.round(instAmountProp) * Math.round(delayedDays / 7)
+              : Math.round(instAmountProp)) *
+              updatingInstallmentCount +
             Math.round(delayedCharges),
           delayedCharges: Math.round(delayedCharges),
         };

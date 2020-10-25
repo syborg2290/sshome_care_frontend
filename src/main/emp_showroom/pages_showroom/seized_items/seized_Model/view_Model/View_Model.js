@@ -4,7 +4,7 @@ import { Grid, Container, Typography } from "@material-ui/core";
 // styles
 import "./View_Model.css";
 
-export default function View_Model() {
+export default function View_Model({invoice_num,seized_date}) {
   return (
     <Container component="main" className="conctainefr_main">
       <Typography className="titleffs" variant="h5" gutterBottom>
@@ -23,7 +23,7 @@ export default function View_Model() {
               :
             </Grid>
             <Grid item xs={12} sm={6}>
-              <p>4637-4FK</p>
+              <p>{invoice_num}</p>
             </Grid>
 
             <Grid className="lbl_topi" item xs={12} sm={4}>
@@ -33,7 +33,7 @@ export default function View_Model() {
               :
             </Grid>
             <Grid item xs={12} sm={6}>
-              <p>2020.09.27</p>
+              <p>{seized_date}</p>
             </Grid>
             <Grid item xs={12} sm={12}>
               <hr />

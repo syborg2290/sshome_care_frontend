@@ -1,10 +1,12 @@
 import React from "react";
 import { Grid, Container, Typography } from "@material-ui/core";
+import firebase from "firebase";
+import moment from "moment";
 
 // styles
 import "./Repair_View.css";
 
-export default function Repair_View() {
+export default function Repair_View({invoice_number,description}) {
   return (
     <Container component="main" className="conctainefr_main">
       <Typography className="titleffs" variant="h5" gutterBottom>
@@ -23,7 +25,7 @@ export default function Repair_View() {
               :
             </Grid>
             <Grid item xs={12} sm={6}>
-              <p>4637-4FK</p>
+              <p>{invoice_number}</p>
             </Grid>
 
             <Grid className="lbl_topi" item xs={12} sm={4}>
@@ -33,16 +35,18 @@ export default function Repair_View() {
               :
             </Grid>
             <Grid item xs={12} sm={6}>
-              <p>2020.09.27</p>
+              <p> {moment(firebase.firestore.FieldValue.serverTimestamp()).format(
+                  "dddd, MMMM Do YYYY, h:mm:ss a"
+                )}</p>
             </Grid>
             <Grid className="lbl_topi" item xs={12} sm={4}>
-              Reason
+              Description
             </Grid>
             <Grid item xs={12} sm={2}>
               :
             </Grid>
             <Grid item xs={12} sm={6}>
-              <p>About Reason</p>
+              <p>{description}</p>
             </Grid>
           </Grid>
         </form>

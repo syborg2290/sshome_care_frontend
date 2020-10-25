@@ -79,28 +79,6 @@ export default function Repair_model({ closeModel }) {
   const addRepair = async () => {
     setLoading(true);
 
-    // var checkStatus = await db
-    //   .collection("repair")
-    //   .where("invoice_number", "==", invoice.trim())
-    //   .where("model_no", "==", model_no.trim())
-    //   .where("status", "!=", "accepted")
-    //   .get();
-
-    // var checkStatus2 = await db
-    //   .collection("repair")
-    //   .where("invoice_number", "==", invoice.trim())
-    //   .where("model_no", "==", model_no.trim())
-    //   .where("status", "!=", "return_to_company")
-
-    //   .get();
-
-    // var checkStatus3 = await db
-    //   .collection("repair")
-    //   .where("invoice_number", "==", invoice.trim())
-    //   .where("model_no", "==", model_no.trim())
-    //   .where("status", "!=", "return_from_company")
-    //   .get();
-
     db.collection("invoice")
       .where("invoice_number", "==", invoice.trim())
       .get()
@@ -127,12 +105,11 @@ export default function Repair_model({ closeModel }) {
                     ) {
                       setLoading(false);
                       showConfirm(
-                        reInvo.data().nic,
                         itRe.data().itemName
                       );
                     } else {
                       setLoading(false);
-                      setError("Your garuntee period is expired!");
+                      setError("Item garuntee period is expired!");
                     }
                   } else {
                     if (
@@ -141,7 +118,6 @@ export default function Repair_model({ closeModel }) {
                     ) {
                       setLoading(false);
                       showConfirm(
-                        reInvo.data().nic,
                         itRe.data().itemName
                       );
                     } else {

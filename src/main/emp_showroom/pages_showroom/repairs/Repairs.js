@@ -253,6 +253,9 @@ export default function Repairs() {
                 key={repairAllData[currentIndx]?.id}
                 description={repairAllData[currentIndx]?.data?.description}
                 invoice_number={repairAllData[currentIndx]?.data?.invoice_no}
+                cust_Name={repairAllData[currentIndx]?.data?.cust_name}
+                mobile_1={repairAllData[currentIndx]?.data?.mobil_no1}
+                mobile_2={repairAllData[currentIndx]?.data?.mobil_no2}
               />
             </div>
           </div>

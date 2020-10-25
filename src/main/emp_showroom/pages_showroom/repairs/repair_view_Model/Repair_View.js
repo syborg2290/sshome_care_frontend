@@ -53,7 +53,7 @@ export default function Repair_View({
             </Grid>
             <Grid className="lbl_topi" item xs={12} sm={6}></Grid>
             <Grid item xs={12} sm={6}>
-              <p>{mobile_2}</p>
+              <p>{mobile_2===""?" - ":mobile_2}</p>
             </Grid>
 
             <Grid className="lbl_topi" item xs={12} sm={4}>

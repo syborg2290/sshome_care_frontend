@@ -45,7 +45,7 @@ export default function Update_Model({
 
     db.collection("installment")
       .where("invoice_number", "==", invoice_no)
-      .onSnapshot((instReDoc) => {
+      .get().then((instReDoc) => {
         instReDoc.docs.forEach((each) => {
           setInstallments((old) => [...old, each.data()]);
         });
@@ -158,7 +158,9 @@ export default function Update_Model({
         });
       j++;
     }
-
+    console.log(Math.round(instCount) -
+      (updatingInstallmentCount +
+        (installments.length + Math.round(delayedDays / 7))));
     if (
       Math.round(instCount) -
         (updatingInstallmentCount +

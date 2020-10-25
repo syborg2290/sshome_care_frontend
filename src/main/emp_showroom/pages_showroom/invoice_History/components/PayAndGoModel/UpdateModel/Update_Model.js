@@ -55,51 +55,64 @@ export default function Update_Model({
       .where("invoice_number", "==", invoice_no)
       .get()
       .then((inReDoc) => {
-        if (installments.length === 0) {
-          let daysCountInitial =
-            (new Date().getTime() -
-              new Date(inReDoc.docs[0].data().date.seconds * 1000).getTime()) /
-            (1000 * 3600 * 24);
-          if (inReDoc.docs[0].data().installmentType === "Monthly") {
-            if (30 - daysCountInitial >= 0) {
-              setDelayedDays(0);
-            } else {
-              setDelayedDays(daysCountInitial - 30);
-              setDelayedCharges(99 * ((Math.round(daysCountInitial) - 30) / 7));
-            }
-          } else {
-            if (7 - daysCountInitial >= 0) {
-              setDelayedDays(0);
-            } else {
-              setDelayedDays(daysCountInitial - 7);
-              setDelayedCharges(99 * ((Math.round(daysCountInitial) - 7) / 7));
-            }
-          }
-        } else {
-          let daysCount =
-            (new Date().getTime() -
-              new Date(
-                installments[installments.length - 1].date.seconds * 1000
-              ).getTime()) /
-            (1000 * 3600 * 24);
-          if (inReDoc.docs[0].data().installmentType === "Monthly") {
-            if (30 - daysCount >= 0) {
-              setDelayedDays(0);
-            } else {
-              setDelayedDays(daysCount - 30);
-              setDelayedCharges(99 * ((Math.round(daysCount) - 30) / 7));
-            }
-          } else {
-            if (7 - daysCount >= 0) {
-              setDelayedDays(0);
-            } else {
-              setDelayedDays(daysCount - 7);
-              setDelayedCharges(99 * ((Math.round(daysCount) - 7) / 7));
-            }
-          }
-        }
-      });
+        db.collection("installment")
+          .where("invoice_number", "==", invoice_no)
+          .get()
+          .then((instReDoc) => {
+            if (instReDoc.docs.length === 0) {
+              let daysCountInitial =
+                (new Date().getTime() -
+                  new Date(
+                    inReDoc.docs[0].data().date.seconds * 1000
+                  ).getTime()) /
+                (1000 * 3600 * 24);
 
+              if (inReDoc.docs[0].data().installmentType === "Monthly") {
+                if (30 - daysCountInitial >= 0) {
+                  setDelayedDays(0);
+                } else {
+                  setDelayedDays(daysCountInitial - 30);
+                  setDelayedCharges(
+                    99 * ((Math.round(daysCountInitial) - 30) / 7)
+                  );
+                }
+              } else {
+                if (7 - daysCountInitial >= 0) {
+                  setDelayedDays(0);
+                } else {
+                  setDelayedDays(daysCountInitial - 7);
+                  setDelayedCharges(
+                    99 * ((Math.round(daysCountInitial) - 7) / 7)
+                  );
+                }
+              }
+            } else {
+              let daysCount =
+                (new Date().getTime() -
+                  new Date(
+                    instReDoc.docs[instReDoc.docs.length - 1].data()?.date
+                      ?.seconds * 1000
+                  ).getTime()) /
+                (1000 * 3600 * 24);
+
+              if (inReDoc.docs[0].data().installmentType === "Monthly") {
+                if (30 - daysCount >= 0) {
+                  setDelayedDays(0);
+                } else {
+                  setDelayedDays(daysCount - 30);
+                  setDelayedCharges(99 * ((Math.round(daysCount) - 30) / 7));
+                }
+              } else {
+                if (7 - daysCount >= 0) {
+                  setDelayedDays(0);
+                } else {
+                  setDelayedDays(daysCount - 7);
+                  setDelayedCharges(99 * ((Math.round(daysCount) - 7) / 7));
+                }
+              }
+            }
+          });
+      });
     // eslint-disable-next-line
   }, [invoice_no]);
 

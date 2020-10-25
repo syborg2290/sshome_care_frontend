@@ -124,7 +124,7 @@ export default function Areas() {
           Delayed_Days: eachRe.data().delayed_days,
           Delayed_Charges: (
             <CurrencyFormat
-              value={eachRe.data().delayed_charges}
+              value={Math.round(eachRe.data().delayed_charges)}
               displayType={"text"}
               thousandSeparator={true}
               prefix={" "}

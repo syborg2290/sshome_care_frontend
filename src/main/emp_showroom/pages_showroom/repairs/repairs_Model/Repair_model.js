@@ -107,56 +107,50 @@ export default function Repair_model({ closeModel }) {
         if (reThen.docs.length > 0) {
           reThen.docs.forEach((reInvo) => {
             reInvo.data().items.forEach((reI) => {
-            db.collection("item")
-              .doc(reI.item_id)
-              .get()
-              .then((itRe) => {
-                if (itRe.data().modelNo === model_no.trim()) {
-                  let daysCountInitial =
-                    (new Date().getTime() -
-                      new Date(
-                        reInvo.data()?.date?.seconds * 1000
-                      ).getTime()) /
-                    (1000 * 3600 * 24);
+              db.collection("item")
+                .doc(reI.item_id)
+                .get()
+                .then((itRe) => {
+                  if (itRe.data().modelNo === model_no.trim()) {
+                    let daysCountInitial =
+                      (new Date().getTime() -
+                        new Date(
+                          reInvo.data()?.date?.seconds * 1000
+                        ).getTime()) /
+                      (1000 * 3600 * 24);
 
-                  if (itRe.data().guarantee.value === "Months") {
-                    if (
-                      Math.round(daysCountInitial / 30) <=
-                      itRe.data().guaranteePeriod
-                    ) {
-                      setLoading(false);
-                      showConfirm(
-                        reInvo.data().nic,
-                        itRe.data().itemName
-                      );
+                    if (itRe.data().guarantee.value === "Months") {
+                      if (
+                        Math.round(daysCountInitial / 30) <=
+                        itRe.data().guaranteePeriod
+                      ) {
+                        setLoading(false);
+                        showConfirm(reInvo.data().nic, itRe.data().itemName);
+                      } else {
+                        setLoading(false);
+                        setError("Your garuntee period is expired!");
+                      }
                     } else {
-                      setLoading(false);
-                      setError("Your garuntee period is expired!");
+                      if (
+                        Math.round(daysCountInitial / 365) <=
+                        itRe.data().guaranteePeriod
+                      ) {
+                        setLoading(false);
+                        showConfirm(reInvo.data().nic, itRe.data().itemName);
+                      } else {
+                        setLoading(false);
+                        setError("Item garuntee period is expired!");
+                      }
                     }
                   } else {
-                    if (
-                      Math.round(daysCountInitial / 365) <=
-                      itRe.data().guaranteePeriod
-                    ) {
-                      setLoading(false);
-                      showConfirm(
-                        reInvo.data().nic,
-                        itRe.data().itemName
-                      );
-                    } else {
-                      setLoading(false);
-                      setError("Item garuntee period is expired!");
-                    }
+                    setLoading(false);
+                    setError(
+                      "Model number you entered is not match with invoice number!"
+                    );
                   }
-                } else {
-                  setLoading(false);
-                  setError(
-                    "Model number you entered is not match with invoice number!"
-                  );
-                }
-              });
+                });
+            });
           });
-          })
         } else {
           setLoading(false);
           setError("Invoice number you entered is not found!");
@@ -216,6 +210,80 @@ export default function Repair_model({ closeModel }) {
                 }}
               />
             </Grid>
+            <Grid className="lbl_topi" item xs={12} sm={4}>
+              Customer Name
+            </Grid>
+            <Grid item xs={12} sm={2}>
+              :
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                autoComplete="name"
+                variant="outlined"
+                required
+                fullWidth
+                label="Full Name"
+                size="small"
+                // value={cust_name}
+                // onChange={(e) => {
+                //   setModel_no(e.target.value);
+                // }}
+              />
+            </Grid>
+            <Grid className="lbl_topi" item xs={12} sm={4}>
+              NIC
+            </Grid>
+            <Grid item xs={12} sm={2}>
+              :
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                autoComplete="nic"
+                variant="outlined"
+                required
+                fullWidth
+                label="NIC"
+                size="small"
+                // value={nic}
+                // onChange={(e) => {
+                //   setModel_no(e.target.value);
+                // }}
+              />
+            </Grid>
+            <Grid className="lbl_topi" item xs={12} sm={4}>
+              Tele
+            </Grid>
+            <Grid item xs={12} sm={2}>
+              :
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                autoComplete="mobile"
+                variant="outlined"
+                required
+                fullWidth
+                label="Mobil 1"
+                size="small"
+                // value={mobil_no1}
+                // onChange={(e) => {
+                //   setModel_no(e.target.value);
+                // }}
+              />
+            </Grid>
+            <Grid className="lbl_topi" item xs={12} sm={6}></Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                autoComplete="mobil_no"
+                variant="outlined"
+                fullWidth
+                label="Mobil 2"
+                size="small"
+                // value={mobil_no2}
+                // onChange={(e) => {
+                //   setModel_no(e.target.value);
+                // }}
+              />
+            </Grid>
 
             <Grid className="lbl_topi" item xs={12} sm={4}>
               Description
@@ -225,9 +293,8 @@ export default function Repair_model({ closeModel }) {
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
-                autoComplete="ino"
+                autoComplete="discription"
                 variant="outlined"
-                required
                 multiline
                 rowsMax={5}
                 fullWidth

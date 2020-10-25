@@ -78,7 +78,7 @@ class RepairRecipt extends React.Component {
                   NIC No.
                 </Col>
                 <Col className="tiles_details_repair" span={18}>
-                  {this.state.nic}
+                  {this.state.customer_nic}
                 </Col>
                 <Col className="tiles_details_repairSpace" span={24}></Col>
                 <Col className="tiles_Signature_repair" span={18}></Col>

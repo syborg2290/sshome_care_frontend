@@ -40,15 +40,22 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
   }, [itemListProps]);
 
   const removeItems = (i, itemId) => {
-    itemsData.forEach((ele) => {
-      if (ele.id === itemId) {
-        itemsData.splice(i, 1);
-        setItemsData([...itemsData]);
-        if (itemsData.length === 0) {
-          closeModel();
-        }
-      }
-    });
+    // itemsData.forEach((ele) => {
+    //   if (ele.id === itemId) {
+    //     itemsData.splice(i, 1);
+    //     setItemsData([...itemsData]);
+    //     if (itemsData.length === 0) {
+    //       closeModel();
+    //     }
+    //   }
+    // });
+    var itemsDataLength = itemsData.length;
+    itemsData.splice(i, 1);
+    itemsDataLength = itemsDataLength - 1;
+    setItemsData([...itemsData]);
+    if (itemsDataLength === 0) {
+      closeModel();
+    }
   };
 
   const nextclick = () => {

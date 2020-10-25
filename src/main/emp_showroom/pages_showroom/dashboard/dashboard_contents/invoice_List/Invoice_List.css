@@ -1,0 +1,9 @@
+.mainRoot {
+  flex-grow: 1 !important;
+  margin-top: 40px !important;
+}
+
+.List_appBar {
+  background-color: white !important;
+  color: black !important;
+}

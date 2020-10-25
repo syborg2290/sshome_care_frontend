@@ -5,5 +5,13 @@
 }
 
 .seized_Table {
-  margin-top: 75px !important;
+  margin-top: 35px !important;
+}
+
+.btn_AddnewSeized {
+  margin-top: 80px !important;
+  float: right;
+  border-radius: 10px;
+  height: 40px;
+  text-align: center;
 }

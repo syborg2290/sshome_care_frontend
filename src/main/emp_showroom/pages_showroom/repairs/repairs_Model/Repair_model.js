@@ -30,7 +30,6 @@ export default function Repair_model({ closeModel }) {
     confirm({
       title: "Do you want to print a receipt?",
       icon: <ExclamationCircleOutlined />,
-      content: "Some descriptions",
       onOk() {
         db.collection("repair")
           .add({
@@ -87,7 +86,6 @@ export default function Repair_model({ closeModel }) {
       .where("status", "==", "return_to_company")
       .where("status", "==", "return_from_company")
       .get();
-
 
     if (checkStatus.docs.length === 0) {
       db.collection("invoice")
@@ -152,7 +150,9 @@ export default function Repair_model({ closeModel }) {
         });
     } else {
       setLoading(false);
-      setError("Item with invoice number that you entered is already in the list!");
+      setError(
+        "Item with invoice number that you entered is already in the list!"
+      );
     }
   };
 

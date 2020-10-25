@@ -46,7 +46,7 @@ export default function Arreas_update({ invoice_no, nic }) {
 
     db.collection("installment")
       .where("invoice_number", "==", invoice_no)
-      .onSnapshot((instReDoc) => {
+      .get().then((instReDoc) => {
         instReDoc.docs.forEach((each) => {
           setInstallments((old) => [...old, each.data()]);
         });

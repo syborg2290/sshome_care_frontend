@@ -40,15 +40,7 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
   }, [itemListProps]);
 
   const removeItems = (i, itemId) => {
-    // itemsData.forEach((ele) => {
-    //   if (ele.id === itemId) {
-    //     itemsData.splice(i, 1);
-    //     setItemsData([...itemsData]);
-    //     if (itemsData.length === 0) {
-    //       closeModel();
-    //     }
-    //   }
-    // });
+    
     var itemsDataLength = itemsData.length;
     let index=itemsData.indexOf(re => re.id === itemId)
     itemsData.splice(index, 1);

@@ -147,7 +147,25 @@ export default function Repairs() {
           ModalNo: re.data().model_no,
           Item_Name: re.data().item_name,
           NIC: re.data().nic,
-          STATUS: <span className="statusRepir">{re.data().status}</span>,
+          STATUS: (
+            <span
+              style={{
+                color: "black",
+                backgroundColor: "#e6e600",
+                padding: "6px",
+                borderRadius: "20px",
+                font: "10px",
+              }}
+            >
+              {re.data().status === "accepted"
+                ? "Accepted"
+                : re.data().status === "return_to_company"
+                ? "Returned"
+                : re.data().status === "return_from_company"
+                ? "Issued from company"
+                : "Delivered"}
+            </span>
+          ),
           Date: moment(re.data()?.date?.toDate()).format("dddd, MMMM Do YYYY"),
           Action: (
             <div>

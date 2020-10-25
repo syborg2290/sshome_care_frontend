@@ -93,7 +93,11 @@ export default function Repairs() {
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+          style: {
+            fontSize: "15px",
+            color: "black",
+            fontWeight: "600",
+          },
         }),
       },
     },
@@ -148,15 +152,7 @@ export default function Repairs() {
           Item_Name: re.data().item_name,
           NIC: re.data().nic,
           STATUS: (
-            <span
-              style={{
-                color: "black",
-                backgroundColor: "#e6e600",
-                padding: "6px",
-                borderRadius: "20px",
-                font: "10px",
-              }}
-            >
+            <span className="statusRepir">
               {re.data().status === "accepted"
                 ? "Accepted"
                 : re.data().status === "return_to_company"

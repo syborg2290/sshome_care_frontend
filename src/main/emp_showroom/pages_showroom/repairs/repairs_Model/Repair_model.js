@@ -104,7 +104,7 @@ export default function Repair_model({ closeModel }) {
 
                         if (itRe.data().guarantee.value === "Months") {
                           if (
-                            Math.round(daysCountInitial / 30) >=
+                            Math.round(daysCountInitial / 30) <=
                             itRe.data().guaranteePeriod
                           ) {
                             setLoading(false);
@@ -115,7 +115,7 @@ export default function Repair_model({ closeModel }) {
                           }
                         } else {
                           if (
-                            Math.round(daysCountInitial / 365) >=
+                            Math.round(daysCountInitial / 365) <=
                             itRe.data().guaranteePeriod
                           ) {
                             setLoading(false);

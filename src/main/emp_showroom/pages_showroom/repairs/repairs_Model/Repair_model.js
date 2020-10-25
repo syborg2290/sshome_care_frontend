@@ -125,6 +125,11 @@ export default function Repair_model({ closeModel }) {
                             setError("Your garuntee period is expired!");
                           }
                         }
+                      } else {
+                        setLoading(false);
+                        setError(
+                          "Model number you entered is not match with invoice number!"
+                        );
                       }
                     });
                 });

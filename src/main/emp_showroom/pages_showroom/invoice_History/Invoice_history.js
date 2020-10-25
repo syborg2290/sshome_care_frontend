@@ -231,7 +231,6 @@ export default function Invoice_history() {
     },
   ];
 
-
   //END Full Payment Columns
 
   //START pay And Go Rows
@@ -321,84 +320,6 @@ export default function Invoice_history() {
               </div>
             ),
           });
-
-          // db.collection("customer")
-          //   .doc(siDoc.data().customer_id)
-          //   .get()
-          //   .then((reCustomer) => {
-          //     rawData.push({
-          //       InvoiceNo: siDoc.data().invoice_number,
-          //       Date: moment(siDoc.data()?.date?.toDate()).format(
-          //         "dddd, MMMM Do YYYY"
-          //       ),
-          //       NIC: reCustomer.data().nic,
-          //       Discount: (
-          //         <CurrencyFormat
-          //           value={siDoc.data().discount}
-          //           displayType={"text"}
-          //           thousandSeparator={true}
-          //           prefix={" "}
-          //         />
-          //       ),
-          //       Paid: (
-          //         <CurrencyFormat
-          //           value={siDoc.data().total}
-          //           displayType={"text"}
-          //           thousandSeparator={true}
-          //           prefix={" "}
-          //         />
-          //       ),
-          //       Status:
-          //         siDoc.data().status_of_payandgo === "onGoing" ? (
-          //           <span
-          //             style={{
-          //               color: "black",
-          //               backgroundColor: "#e6e600",
-          //               padding: "6px",
-          //               borderRadius: "20px",
-          //               font: "10px",
-          //             }}
-          //           >
-          //             Ongoing
-          //           </span>
-          //         ) : (
-          //           <span
-          //             style={{
-          //               color: "white",
-          //               backgroundColor: " #009900",
-          //               padding: "6px",
-          //               borderRadius: "20px",
-          //               width: "100%",
-          //             }}
-          //           >
-          //             Done
-          //           </span>
-          //         ),
-          //       Action: (
-          //         <div>
-          //           {siDoc.data().status_of_payandgo === "onGoing" ? (
-          //             <Button
-          //               variant="contained"
-          //               color="primary"
-          //               size="small"
-          //               className="btn_pay"
-          //               onClick={showModalUpdate}
-          //             >
-          //               Update
-          //             </Button>
-          //           ) : (
-          //             ""
-          //           )}
-          //           <span className="icon_visibl">
-          //             <HistoryIcon onClick={showModalHistory} />
-          //           </span>
-          //           <span className="icon_Edit">
-          //             <VisibilityIcon onClick={showInstallmentView} />
-          //           </span>
-          //         </div>
-          //       ),
-          //     });
-          //   });
         });
         setpayangoAllData(rawAllData);
         setpayangoTableData(rawData);

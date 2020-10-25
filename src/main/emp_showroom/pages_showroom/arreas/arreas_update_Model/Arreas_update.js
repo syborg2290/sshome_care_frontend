@@ -167,7 +167,7 @@ export default function Arreas_update({ invoice_no, nic }) {
 
   const showConfirm = async () => {
     confirm({
-      title: "Do you Want to Print a Recipt?",
+      title: "Do you want to print a recipt?",
       icon: <ExclamationCircleOutlined />,
 
       async onOk() {

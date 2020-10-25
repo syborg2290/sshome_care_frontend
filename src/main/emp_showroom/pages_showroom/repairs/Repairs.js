@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import MUIDataTable from "mui-datatables";
 import { Grid, Button } from "@material-ui/core";
 import { Spin, Modal } from "antd";
-// eslint-disable-next-line
-import CurrencyFormat from "react-currency-format";
+import moment from "moment";
+
+import db from "../../../../config/firebase.js";
 
 // components
 import RepairModel from "../repairs/repairs_Model/Repair_model";
@@ -31,8 +32,17 @@ export default function Repairs() {
   const showModalRepair = () => {
     setrepairModel(true);
   };
+
+  const cancelModalRepair = () => {
+    setrepairModel(false);
+  };
+
   const showModalUpdateRepair = () => {
     setRepairUpdateModel(true);
+  };
+
+  const cancelModalUpdateRepair = () => {
+    setRepairUpdateModel(false);
   };
 
   const showModalViewRepair = () => {
@@ -79,6 +89,16 @@ export default function Repairs() {
     },
 
     {
+      name: "STATUS",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+
+    {
       name: "Date",
       options: {
         filter: false,
@@ -110,34 +130,63 @@ export default function Repairs() {
     },
   ];
 
-  const repairTableData = [
-    {
-      InvoiceNo: "test",
-      ModalNo: "test",
-      Item_Name: "test",
-      NIC: "test",
-      Date: "test",
-      Action: (
-        <div>
-          <Button
-            variant="contained"
-            color="primary"
-            size="small"
-            className="btnupdate"
-            onClick={showModalUpdateRepair}
-          >
-            Update
-          </Button>
-          <span>
-            <VisibilityIcon
-              onClick={showModalViewRepair}
-              className="icon_views"
-            />
-          </span>
-        </div>
-      ),
-    },
-  ];
+  const [repairTableData, setRepairTableData] = useState([]);
+  const [repairAllData, setRepairAllData] = useState([]);
+
+  useEffect(() => {
+    db.collection("repair").onSnapshot((snap) => {
+      var rawData = [];
+      var allRawData = [];
+      snap.docs.forEach((re) => {
+        allRawData.push({
+          id: re.id,
+          data: re.data(),
+        });
+        rawData.push({
+          InvoiceNo: re.data().invoice_no,
+          ModalNo: re.data().model_no,
+          Item_Name: re.data().item_name,
+          NIC: re.data().nic,
+          STATUS: (
+            <span
+              style={{
+                color: "black",
+                backgroundColor: "#e6e600",
+                padding: "6px",
+                borderRadius: "20px",
+                font: "10px",
+              }}
+            >
+              {re.data().status}
+            </span>
+          ),
+          Date: moment(re.data()?.date?.toDate()).format("dddd, MMMM Do YYYY"),
+          Action: (
+            <div>
+              <Button
+                variant="contained"
+                color="primary"
+                size="small"
+                className="btnupdate"
+                onClick={showModalUpdateRepair}
+              >
+                Update
+              </Button>
+              <span>
+                <VisibilityIcon
+                  onClick={showModalViewRepair}
+                  className="icon_views"
+                />
+              </span>
+            </div>
+          ),
+        });
+      });
+      setRepairTableData(rawData);
+      setRepairAllData(allRawData);
+      setIsLoading(false);
+    });
+  }, []);
 
   return (
     <>
@@ -153,7 +202,7 @@ export default function Repairs() {
         <div className="Repairt_Model">
           <div className="Repairt_Model_Main">
             <div className="Repairt_Model_Detail">
-              <RepairModel />
+              <RepairModel closeModel={cancelModalRepair} />
             </div>
           </div>
         </div>
@@ -172,7 +221,13 @@ export default function Repairs() {
         <div className="Repairt_Model_update">
           <div className="Repairt_Model_Main_update">
             <div className="Repairt_Model_Detail_update">
-              <RepairUpdateModel />
+              <RepairUpdateModel
+                key={repairAllData[currentIndx]?.id}
+                invoice_number={repairAllData[currentIndx]?.data()?.invoice_no}
+                statusProp={repairAllData[currentIndx]?.data()?.status}
+                docId={repairAllData[currentIndx]?.id}
+                closeModel={cancelModalUpdateRepair}
+              />
             </div>
           </div>
         </div>
@@ -192,7 +247,11 @@ export default function Repairs() {
         <div className="Repairt_Model_update">
           <div className="Repairt_Model_Main_update">
             <div className="Repairt_Model_Detail_update">
-              <RepairViewModel />
+              <RepairViewModel
+                key={repairAllData[currentIndx]?.id}
+                description={repairAllData[currentIndx]?.data()?.description}
+                invoice_number={repairAllData[currentIndx]?.data()?.invoice_no}
+              />
             </div>
           </div>
         </div>

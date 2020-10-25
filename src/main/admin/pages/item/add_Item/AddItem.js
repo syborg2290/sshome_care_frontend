@@ -831,7 +831,7 @@ function AddItem() {
             <Grid className="txt_Labels" item xs={12} sm={4}></Grid>
 
             <Grid className="txt_Labels" item xs={12} sm={2}>
-              * Company Invoice No
+               Company Invoice No
             </Grid>
             <Grid item xs={12} sm={4}>
               <TextField
@@ -840,7 +840,6 @@ function AddItem() {
                 variant="outlined"
                 fullWidth
                 id="cInvoiceNo"
-                required={true}
                 value={cInvoiceNo}
                 onChange={(e) => {
                   setCInvoiceNo(e.target.value);
@@ -852,7 +851,7 @@ function AddItem() {
             </Grid>
 
             <Grid className="txt_Labels" item xs={12} sm={2}>
-              * Guarantee Card No
+               Guarantee Card No
             </Grid>
             <Grid item xs={12} sm={4}>
               <TextField
@@ -862,7 +861,6 @@ function AddItem() {
                 variant="outlined"
                 fullWidth
                 id="gCardNo"
-                required={true}
                 value={GCardNo}
                 onChange={(e) => {
                   setGCardNo(e.target.value);

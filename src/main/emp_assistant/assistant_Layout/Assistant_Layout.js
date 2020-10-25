@@ -15,13 +15,13 @@ import AddItem from "../assistant_Pages/item/add_Item/Add_Item";
 import Dashboard from "../assistant_Pages/dashboard/Dashboard";
 import Arries from "../assistant_Pages/arreas/Arries";
 import BlackList from "../assistant_Pages/black_list/Black_List";
-import Customer from "../assistant_Pages/customer/Customer";
+import Customer from "../assistant_Pages/customer/customer_table/Customer_table_assistant";
 import Invoice from "../assistant_Pages/invoice/Invoice";
 import Item from "../assistant_Pages/item/Item";
 import Repair from "../assistant_Pages/repairs/Repair";
 import SeizedItems from "../assistant_Pages/seized_items/Seized_items";
 
-function LayoutShowroom(props) {
+function LayoutAssistant(props) {
   return (
     <div className="root">
       <>
@@ -48,4 +48,4 @@ function LayoutShowroom(props) {
   );
 }
 
-export default withRouter(LayoutShowroom);
+export default withRouter(LayoutAssistant);

@@ -300,7 +300,7 @@ export default function Repair_model({ closeModel }) {
               <p>
                 {" "}
                 {moment(firebase.firestore.FieldValue.serverTimestamp()).format(
-                  "dddd, MMMM Do YYYY, h:mm:ss a"
+                  "dddd, MMMM Do YYYY"
                 )}
               </p>
             </Grid>

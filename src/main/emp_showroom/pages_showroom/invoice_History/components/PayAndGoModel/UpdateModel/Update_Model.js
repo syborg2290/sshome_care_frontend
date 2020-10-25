@@ -27,6 +27,7 @@ export default function Update_Model({
 }) {
   const [installments, setInstallments] = useState([]);
   const [delayedDays, setDelayedDays] = useState(0);
+   const [allInstallment, setAllInstallment] = useState(0);
   const [delayedCharges, setDelayedCharges] = useState(0);
   const [updatingInstallmentCount, setUpdatingInstallmentCount] = useState(1);
   const [customer, setCustomer] = useState({});
@@ -72,6 +73,7 @@ export default function Update_Model({
                   setDelayedDays(0);
                 } else {
                   setDelayedDays(daysCountInitial - 30);
+                  setAllInstallment(Math.round(daysCountInitial / 30));
                   setDelayedCharges(
                     daysCountInitial - 30 <= 7
                       ? 0
@@ -83,6 +85,7 @@ export default function Update_Model({
                   setDelayedDays(0);
                 } else {
                   setDelayedDays(daysCountInitial - 7);
+                  setAllInstallment(Math.round(daysCountInitial / 7));
                   setDelayedCharges(
                     daysCountInitial - 7 <= 7
                       ? 0
@@ -104,6 +107,7 @@ export default function Update_Model({
                   setDelayedDays(0);
                 } else {
                   setDelayedDays(daysCount - 30);
+                   setAllInstallment(Math.round(daysCount / 30));
                   setDelayedCharges(
                     daysCount - 30 <= 7
                       ? 0
@@ -115,6 +119,7 @@ export default function Update_Model({
                   setDelayedDays(0);
                 } else {
                   setDelayedDays(daysCount - 7);
+                   setAllInstallment(Math.round(daysCount / 7));
                   setDelayedCharges(
                     daysCount - 7 <= 7
                       ? 0
@@ -132,7 +137,7 @@ export default function Update_Model({
     var j = 0;
     for (
       var i = 0;
-      i < Math.round(delayedDays / 7) + Math.round(updatingInstallmentCount);
+      i <allInstallment + Math.round(updatingInstallmentCount);
       i++
     ) {
       await db
@@ -158,13 +163,11 @@ export default function Update_Model({
         });
       j++;
     }
-    console.log(Math.round(instCount) -
-      (updatingInstallmentCount +
-        (installments.length + Math.round(delayedDays / 7))));
+   
     if (
       Math.round(instCount) -
         (updatingInstallmentCount +
-          (installments.length + Math.round(delayedDays / 7))) <=
+          (installments.length + allInstallment)) <=
       0
     ) {
       await db
@@ -278,7 +281,7 @@ export default function Update_Model({
                   if (
                     Math.round(instCount) -
                       (delayedDays > 7
-                        ? installments.length + Math.round(delayedDays / 7)
+                        ? installments.length + allInstallment
                         : installments.length) >=
                     e.target.value
                   ) {

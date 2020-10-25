@@ -157,7 +157,13 @@ export default function Repairs() {
                 font: "10px",
               }}
             >
-              {re.data().status}
+              {re.data().status === "accepted"
+                ? "Accepted"
+                : re.data().status === "return_to_company"
+                ? "Returned"
+                : re.data().status === "return_from_company"
+                ? "Issued from company"
+                : "Delivered"}
             </span>
           ),
           Date: moment(re.data()?.date?.toDate()).format("dddd, MMMM Do YYYY"),

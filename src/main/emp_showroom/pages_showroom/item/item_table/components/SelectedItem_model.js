@@ -50,9 +50,10 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
     //   }
     // });
     var itemsDataLength = itemsData.length;
-    itemsData.splice(i, 1);
-    itemsDataLength = itemsDataLength - 1;
+    let index=itemsData.indexOf(re => re.id === itemId)
+    itemsData.splice(index, 1);
     setItemsData([...itemsData]);
+    itemsDataLength = itemsDataLength - 1;
     if (itemsDataLength === 0) {
       closeModel();
     }
@@ -142,7 +143,7 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
                         onChange={(e) => {
                           setpaymentWay({
                             ...paymentWay,
-                            [item.i]: e.target.value,
+                            [item.id]: e.target.value,
                           });
                         }}
                       >

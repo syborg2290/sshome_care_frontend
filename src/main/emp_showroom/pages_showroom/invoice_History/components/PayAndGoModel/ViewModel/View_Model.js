@@ -330,7 +330,6 @@ export default function View_Model({ items_list_props, data }) {
                 </Grid>
               );
             })}
-            ;
           </form>
         </div>
       )}

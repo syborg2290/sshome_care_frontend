@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import MUIDataTable from "mui-datatables";
 import { Grid, Button } from "@material-ui/core";
 // eslint-disable-next-line
 import { Spin, Modal } from "antd";
-// eslint-disable-next-line
-import CurrencyFormat from "react-currency-format";
+
+import db from "../../../../config/firebase.js";
 
 // icons
 import VisibilityIcon from "@material-ui/icons/Visibility";
@@ -34,8 +34,12 @@ export default function Seized_item() {
     setSeizedAddModel(true);
   };
 
+  const cancelModalAdd = () => {
+    setSeizedAddModel(false);
+  };
+
   //START pay And Go Columns
-  const repairTableColomns = [
+  const seizedTableColomns = [
     {
       name: "InvoiceNo",
       options: {
@@ -77,7 +81,7 @@ export default function Seized_item() {
       },
     },
     {
-      name: "Date",
+      name: "Sized_date",
       options: {
         filter: false,
         setCellHeaderProps: (value) => ({
@@ -108,20 +112,37 @@ export default function Seized_item() {
     },
   ];
 
-  const repairTableData = [
-    {
-      InvoiceNo: "3476-JDJCF",
-      Model_No: "test",
-      Item_Name: "test",
-      NIC: "test",
-      Date: "test",
-      Action: (
-        <div>
-          <VisibilityIcon onClick={showModalView} />
-        </div>
-      ),
-    },
-  ];
+  const [seizedTableData, setSeizedTableData] = useState([]);
+  const [seizedAllData, setSeizedAllData] = useState([]);
+
+  useEffect(() => {
+    var rowData = [];
+    var rowAllData = [];
+    db.collection("seized").onSnapshot((snap) => {
+      snap.docs.forEach((RESnap) => {
+        rowAllData.push({
+          id: RESnap.id,
+          data: RESnap.data(),
+        });
+
+        rowData.push({
+          InvoiceNo: RESnap.date().invoice_number,
+          Model_No: snap.date().model_no,
+          Item_Name: snap.date().item_name,
+          NIC: snap.date().nic,
+          Sized_date: snap.date().date,
+          Action: (
+            <div>
+              <VisibilityIcon onClick={showModalView} />
+            </div>
+          ),
+        });
+      });
+      setSeizedTableData(rowData);
+      setSeizedAllData(rowAllData);
+      setIsLoading(false);
+    });
+  }, []);
 
   return (
     <>
@@ -138,7 +159,7 @@ export default function Seized_item() {
         <div className="customer_Model">
           <div className="customer_Model_Main">
             <div className="customer_Modell_Detail">
-              <SeizedViewModel />
+              <SeizedViewModel key={seizedAllData[currentIndx]?.id}/>
             </div>
           </div>
         </div>
@@ -158,7 +179,7 @@ export default function Seized_item() {
         <div className="seized_Model">
           <div className="seized_Add_Model_Main">
             <div className="seized_Add_Model_Detail">
-              <SeizedAddModel />
+              <SeizedAddModel closeModel={cancelModalAdd} />
             </div>
           </div>
         </div>
@@ -181,8 +202,8 @@ export default function Seized_item() {
           <MUIDataTable
             title={<span className="title_Span_seized">SEIZED ITEMS</span>}
             className="seized_Table"
-            data={repairTableData}
-            columns={repairTableColomns}
+            data={seizedTableData}
+            columns={seizedTableColomns}
             options={{
               selectableRows: false,
               customToolbarSelect: () => {},

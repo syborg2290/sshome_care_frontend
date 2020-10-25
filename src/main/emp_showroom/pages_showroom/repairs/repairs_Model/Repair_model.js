@@ -43,9 +43,19 @@ export default function Repair_model({ closeModel }) {
             date: firebase.firestore.FieldValue.serverTimestamp(),
           })
           .then(() => {
-            history.push(
-              "/showroom/repairs/repairs_Model/repair_update_Recipt/Repair_recipt"
-            );
+            var passingWithCustomerObj = {
+              invoice_no: invoice.trim(),
+              model_no: model_no.trim(),
+              nic: nic,
+              item_name: item_name,
+            };
+            let moveWith = {
+              pathname:
+                "/showroom/repairs/repairs_Model/repair_update_Recipt/Repair_recipt",
+              search: "?query=abc",
+              state: { detail: passingWithCustomerObj },
+            };
+            history.push(moveWith);
           });
       },
       onCancel() {
@@ -68,53 +78,64 @@ export default function Repair_model({ closeModel }) {
 
   const addRepair = async () => {
     setLoading(true);
-    db.collection("invoice")
+    db.collection("repair")
       .where("invoice_number", "==", invoice.trim())
+      .where("status", "==", "back_to_customer")
       .get()
-      .then((reThen) => {
-        if (reThen.docs.length > 0) {
-          reThen.items.forEach((reI) => {
-            db.collection("item")
-              .doc(reI.item_id)
-              .get()
-              .then((itRe) => {
-                if (itRe.data().modelNo === model_no.trim()) {
-                  let daysCountInitial =
-                    (new Date().getTime() -
-                      new Date(
-                        itRe.data()?.timestamp?.seconds * 1000
-                      ).getTime()) /
-                    (1000 * 3600 * 24);
+      .then((checkre) => {
+        if (checkre.docs.length === 0) {
+          db.collection("invoice")
+            .where("invoice_number", "==", invoice.trim())
+            .get()
+            .then((reThen) => {
+              if (reThen.docs.length > 0) {
+                reThen.items.forEach((reI) => {
+                  db.collection("item")
+                    .doc(reI.item_id)
+                    .get()
+                    .then((itRe) => {
+                      if (itRe.data().modelNo === model_no.trim()) {
+                        let daysCountInitial =
+                          (new Date().getTime() -
+                            new Date(
+                              itRe.data()?.timestamp?.seconds * 1000
+                            ).getTime()) /
+                          (1000 * 3600 * 24);
 
-                  if (itRe.data().guarantee === "Months") {
-                    if (
-                      Math.round(daysCountInitial / 30) >=
-                      itRe.data().guaranteePeriod
-                    ) {
-                      setLoading(false);
-                      showConfirm(reThen.nic, itRe.data().itemName);
-                    } else {
-                      setLoading(false);
-                      setError("Your garuntee period is expired!");
-                    }
-                  } else {
-                    if (
-                      Math.round(daysCountInitial / 365) >=
-                      itRe.data().guaranteePeriod
-                    ) {
-                      setLoading(false);
-                      showConfirm(reThen.nic, itRe.data().itemName);
-                    } else {
-                      setLoading(false);
-                      setError("Your garuntee period is expired!");
-                    }
-                  }
-                }
-              });
-          });
+                        if (itRe.data().guarantee === "Months") {
+                          if (
+                            Math.round(daysCountInitial / 30) >=
+                            itRe.data().guaranteePeriod
+                          ) {
+                            setLoading(false);
+                            showConfirm(reThen.nic, itRe.data().itemName);
+                          } else {
+                            setLoading(false);
+                            setError("Your garuntee period is expired!");
+                          }
+                        } else {
+                          if (
+                            Math.round(daysCountInitial / 365) >=
+                            itRe.data().guaranteePeriod
+                          ) {
+                            setLoading(false);
+                            showConfirm(reThen.nic, itRe.data().itemName);
+                          } else {
+                            setLoading(false);
+                            setError("Your garuntee period is expired!");
+                          }
+                        }
+                      }
+                    });
+                });
+              } else {
+                setLoading(false);
+                setError("Invoice number you entered is not found!");
+              }
+            });
         } else {
           setLoading(false);
-          setError("Invoice number you entered is not found!");
+          setError("Invoice number you entered is already in the list!");
         }
       });
   };

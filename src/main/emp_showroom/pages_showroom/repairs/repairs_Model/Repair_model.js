@@ -80,10 +80,13 @@ export default function Repair_model({ closeModel }) {
     setLoading(true);
     db.collection("repair")
       .where("invoice_number", "==", invoice.trim())
-      .where("status", "==", "back_to_customer")
       .get()
-      .then((checkre) => {
-        if (checkre.docs.length === 0) {
+      .then(async (checkre) => {
+        var checkStatus = await db
+          .collection("repair")
+          .where("status", "==", "back_to_customer")
+          .get();
+        if (checkre.docs.length === 0 || checkStatus.docs.length >= 0) {
           db.collection("invoice")
             .where("invoice_number", "==", invoice.trim())
             .get()
@@ -108,7 +111,10 @@ export default function Repair_model({ closeModel }) {
                             itRe.data().guaranteePeriod
                           ) {
                             setLoading(false);
-                            showConfirm(reThen.docs[0].data().nic, itRe.data().itemName);
+                            showConfirm(
+                              reThen.docs[0].data().nic,
+                              itRe.data().itemName
+                            );
                           } else {
                             setLoading(false);
                             setError("Your garuntee period is expired!");
@@ -119,7 +125,10 @@ export default function Repair_model({ closeModel }) {
                             itRe.data().guaranteePeriod
                           ) {
                             setLoading(false);
-                            showConfirm(reThen.docs[0].data().nic, itRe.data().itemName);
+                            showConfirm(
+                              reThen.docs[0].data().nic,
+                              itRe.data().itemName
+                            );
                           } else {
                             setLoading(false);
                             setError("Item garuntee period is expired!");

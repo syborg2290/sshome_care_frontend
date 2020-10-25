@@ -30,7 +30,7 @@ export default function Add_Model({ closeModel }) {
       .where("invoice_number", "==", invoice.trim())
       .get()
       .then((reSeizedCheck) => {
-        if (reSeizedCheck.docs.length === 0) {
+        if (reSeizedCheck.docs.length <= 0) {
           db.collection("invoice")
             .where("invoice_number", "==", invoice.trim())
             .get()

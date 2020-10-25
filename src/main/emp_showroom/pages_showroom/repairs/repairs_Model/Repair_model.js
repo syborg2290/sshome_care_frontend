@@ -102,7 +102,7 @@ export default function Repair_model({ closeModel }) {
                             ).getTime()) /
                           (1000 * 3600 * 24);
 
-                        if (itRe.data().guarantee === "Months") {
+                        if (itRe.data().guarantee.value === "Months") {
                           if (
                             Math.round(daysCountInitial / 30) >=
                             itRe.data().guaranteePeriod
@@ -122,7 +122,7 @@ export default function Repair_model({ closeModel }) {
                             showConfirm(reThen.nic, itRe.data().itemName);
                           } else {
                             setLoading(false);
-                            setError("Your garuntee period is expired!");
+                            setError("Item garuntee period is expired!");
                           }
                         }
                       } else {

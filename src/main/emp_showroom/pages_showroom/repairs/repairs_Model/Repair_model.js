@@ -105,7 +105,8 @@ export default function Repair_model({ closeModel }) {
       .get()
       .then((reThen) => {
         if (reThen.docs.length > 0) {
-          reThen.docs[0].data().items.forEach((reI) => {
+          reThen.docs.forEach((reInvo) => {
+            reInvo.data().items.forEach((reI) => {
             db.collection("item")
               .doc(reI.item_id)
               .get()
@@ -114,7 +115,7 @@ export default function Repair_model({ closeModel }) {
                   let daysCountInitial =
                     (new Date().getTime() -
                       new Date(
-                        reThen.docs.data()?.date?.seconds * 1000
+                        reInvo.data()?.date?.seconds * 1000
                       ).getTime()) /
                     (1000 * 3600 * 24);
 
@@ -155,6 +156,7 @@ export default function Repair_model({ closeModel }) {
                 }
               });
           });
+          })
         } else {
           setLoading(false);
           setError("Invoice number you entered is not found!");

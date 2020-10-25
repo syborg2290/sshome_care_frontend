@@ -41,8 +41,12 @@ const structure = [
   {
     id: 1,
     label: "Items",
-    link: "/assistant/ui/Item",
+    link: "/assistant/ui/ItemTable",
     icon: <TvIcon className="icons" />,
+    children: [
+      { label: "Item Table", link: "/assistant/ui/ItemTable" },
+      { label: "Add Item", link: "/assistant/ui/AddItem" },
+    ],
   },
 
   {

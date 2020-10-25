@@ -1,0 +1,84 @@
+.paper_repair {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  margin-top: 20px !important;
+  overflow: hidden !important;
+}
+
+.form_repair {
+  width: 100% !important;
+  margin-top: 30px !important;
+}
+
+.mainPrint_container_repair {
+  margin-top: 70px !important;
+  padding-top: 15px !important;
+  width: 595px !important;
+  height: 442px !important;
+  background-color: rgb(255, 255, 255) !important;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+
+.company_title_repair {
+  text-align: center !important;
+  font-weight: 700 !important;
+  font-family: "Times New Roman", Times, serif !important;
+  margin-top: 20px !important;
+}
+
+.company_sub__title_repair {
+  text-align: center !important;
+  font-size: smaller !important;
+}
+
+.tiles_repair {
+  font-weight: 560 !important;
+  padding-top: 8px !important;
+}
+
+.tiles_sum_repair {
+  font-weight: 800 !important;
+  margin-top: 20px !important;
+  font-family: Georgia, "Times New Roman", Times, serif !important;
+  font-style: italic !important;
+}
+
+.tiles_details_repair {
+  padding-top: 8px !important;
+}
+
+.tiles_details_sum_repair {
+  margin-top: 20px !important;
+}
+
+.tiles_settlement_repair {
+  font-family: Georgia, "Times New Roman", Times, serif !important;
+  font-style: italic !important;
+  margin-top: 30px !important;
+  text-align: center !important;
+}
+
+.settlement_details_repair {
+  margin-top: 30px !important;
+  font-family: Georgia, "Times New Roman", Times, serif !important;
+  font-style: italic !important;
+}
+
+.print_btn_repair {
+  background-color: rgb(8, 8, 126) !important;
+  float: right !important;
+  margin-top: 35px !important;
+  color: aliceblue !important;
+  border-radius: 8px !important;
+  width: 20% !important;
+}
+
+.tiles_details_repairSpace {
+  margin-top: 20px !important;
+}
+
+.tiles_Signature_repair {
+  margin: auto !important;
+  text-align: center !important;
+}

@@ -8,6 +8,8 @@ import "./Assistant_Layout.css";
 // components
 import Header from "../assistant_Header/Assistant_Header";
 import Sidebar from "../assistant_Side_Bar/Assistant_Sidebar";
+import ItemTable from "../assistant_Pages/item/assistant_item_table/Item_table_assistant";
+import AddItem from "../assistant_Pages/item/add_Item/Add_Item";
 
 // pages
 import Dashboard from "../assistant_Pages/dashboard/Dashboard";
@@ -36,6 +38,9 @@ function LayoutShowroom(props) {
             <Route path="/assistant/ui/Repair" component={Repair} />
             <Route path="/assistant/ui/BlackList" component={BlackList} />
             <Route path="/assistant/ui/SeizedItems" component={SeizedItems} />
+            {/* components */}
+            <Route path="/assistant/ui/ItemTable" component={ItemTable} />
+            <Route path="/assistant/ui/AddItem" component={AddItem} />
           </Switch>
         </div>
       </>

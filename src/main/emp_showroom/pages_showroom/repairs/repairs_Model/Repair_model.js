@@ -22,6 +22,10 @@ export default function Repair_model({ closeModel }) {
   let history = useHistory();
   const [invoice, setInvoice] = useState("");
   const [model_no, setModel_no] = useState("");
+  const [cust_name, setCust_name] = useState("");
+  const [nic, setNic] = useState("");
+  const [mobil_no1, setMobil_no1] = useState("");
+  const [mobil_no2, setMobil_no2] = useState("");
   const [description, setDescription] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -224,10 +228,10 @@ export default function Repair_model({ closeModel }) {
                 fullWidth
                 label="Full Name"
                 size="small"
-                // value={cust_name}
-                // onChange={(e) => {
-                //   setModel_no(e.target.value);
-                // }}
+                value={cust_name}
+                onChange={(e) => {
+                  setCust_name(e.target.value);
+                }}
               />
             </Grid>
             <Grid className="lbl_topi" item xs={12} sm={4}>
@@ -244,10 +248,10 @@ export default function Repair_model({ closeModel }) {
                 fullWidth
                 label="NIC"
                 size="small"
-                // value={nic}
-                // onChange={(e) => {
-                //   setModel_no(e.target.value);
-                // }}
+                value={nic}
+                onChange={(e) => {
+                  setNic(e.target.value);
+                }}
               />
             </Grid>
             <Grid className="lbl_topi" item xs={12} sm={4}>
@@ -264,10 +268,10 @@ export default function Repair_model({ closeModel }) {
                 fullWidth
                 label="Mobil 1"
                 size="small"
-                // value={mobil_no1}
-                // onChange={(e) => {
-                //   setModel_no(e.target.value);
-                // }}
+                value={mobil_no1}
+                onChange={(e) => {
+                  setMobil_no1(e.target.value);
+                }}
               />
             </Grid>
             <Grid className="lbl_topi" item xs={12} sm={6}></Grid>
@@ -278,10 +282,10 @@ export default function Repair_model({ closeModel }) {
                 fullWidth
                 label="Mobil 2"
                 size="small"
-                // value={mobil_no2}
-                // onChange={(e) => {
-                //   setModel_no(e.target.value);
-                // }}
+                value={mobil_no2}
+                onChange={(e) => {
+                  setMobil_no2(e.target.value);
+                }}
               />
             </Grid>
 

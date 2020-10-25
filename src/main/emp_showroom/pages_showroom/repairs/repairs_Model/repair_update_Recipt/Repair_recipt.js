@@ -84,7 +84,7 @@ class RepairRecipt extends React.Component {
                 <Col className="tiles_Signature_repair" span={18}></Col>
 
                 <Col className="tiles_Signature_repair" span={6}>
-                  <sapn> ....................</sapn>
+                  <span> ....................</span>
                   <br />
                   Signature
                 </Col>

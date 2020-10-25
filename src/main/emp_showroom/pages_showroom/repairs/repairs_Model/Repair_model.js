@@ -79,81 +79,88 @@ export default function Repair_model({ closeModel }) {
   const addRepair = async () => {
     setLoading(true);
 
-    var checkStatus = await db
-      .collection("repair")
+    // var checkStatus = await db
+    //   .collection("repair")
+    //   .where("invoice_number", "==", invoice.trim())
+    //   .where("model_no", "==", model_no.trim())
+    //   .where("status", "!=", "accepted")
+    //   .get();
+
+    // var checkStatus2 = await db
+    //   .collection("repair")
+    //   .where("invoice_number", "==", invoice.trim())
+    //   .where("model_no", "==", model_no.trim())
+    //   .where("status", "!=", "return_to_company")
+
+    //   .get();
+
+    // var checkStatus3 = await db
+    //   .collection("repair")
+    //   .where("invoice_number", "==", invoice.trim())
+    //   .where("model_no", "==", model_no.trim())
+    //   .where("status", "!=", "return_from_company")
+    //   .get();
+
+    db.collection("invoice")
       .where("invoice_number", "==", invoice.trim())
-      .where("model_no", "==", model_no.trim())
-      .where("status", "==", "accepted")
-      .where("status", "==", "return_to_company")
-      .where("status", "==", "return_from_company")
-      .get();
+      .get()
+      .then((reThen) => {
+        if (reThen.docs.length > 0) {
+          reThen.docs[0].data().items.forEach((reI) => {
+            db.collection("item")
+              .doc(reI.item_id)
+              .get()
+              .then((itRe) => {
+                if (itRe.data().modelNo === model_no.trim()) {
+                  let daysCountInitial =
+                    (new Date().getTime() -
+                      new Date(
+                        itRe.data()?.timestamp?.seconds * 1000
+                      ).getTime()) /
+                    (1000 * 3600 * 24);
 
-
-    if (checkStatus.docs.length === 0) {
-      db.collection("invoice")
-        .where("invoice_number", "==", invoice.trim())
-        .get()
-        .then((reThen) => {
-          if (reThen.docs.length > 0) {
-            reThen.docs[0].data().items.forEach((reI) => {
-              db.collection("item")
-                .doc(reI.item_id)
-                .get()
-                .then((itRe) => {
-                  if (itRe.data().modelNo === model_no.trim()) {
-                    let daysCountInitial =
-                      (new Date().getTime() -
-                        new Date(
-                          itRe.data()?.timestamp?.seconds * 1000
-                        ).getTime()) /
-                      (1000 * 3600 * 24);
-
-                    if (itRe.data().guarantee.value === "Months") {
-                      if (
-                        Math.round(daysCountInitial / 30) <=
-                        itRe.data().guaranteePeriod
-                      ) {
-                        setLoading(false);
-                        showConfirm(
-                          reThen.docs[0].data().nic,
-                          itRe.data().itemName
-                        );
-                      } else {
-                        setLoading(false);
-                        setError("Your garuntee period is expired!");
-                      }
+                  if (itRe.data().guarantee.value === "Months") {
+                    if (
+                      Math.round(daysCountInitial / 30) <=
+                      itRe.data().guaranteePeriod
+                    ) {
+                      setLoading(false);
+                      showConfirm(
+                        reThen.docs[0].data().nic,
+                        itRe.data().itemName
+                      );
                     } else {
-                      if (
-                        Math.round(daysCountInitial / 365) <=
-                        itRe.data().guaranteePeriod
-                      ) {
-                        setLoading(false);
-                        showConfirm(
-                          reThen.docs[0].data().nic,
-                          itRe.data().itemName
-                        );
-                      } else {
-                        setLoading(false);
-                        setError("Item garuntee period is expired!");
-                      }
+                      setLoading(false);
+                      setError("Your garuntee period is expired!");
                     }
                   } else {
-                    setLoading(false);
-                    setError(
-                      "Model number you entered is not match with invoice number!"
-                    );
+                    if (
+                      Math.round(daysCountInitial / 365) <=
+                      itRe.data().guaranteePeriod
+                    ) {
+                      setLoading(false);
+                      showConfirm(
+                        reThen.docs[0].data().nic,
+                        itRe.data().itemName
+                      );
+                    } else {
+                      setLoading(false);
+                      setError("Item garuntee period is expired!");
+                    }
                   }
-                });
-            });
-          } else {
-            setLoading(false);
-            setError("Invoice number you entered is not found!");
-          }
-        });
-    } else {
-      setLoading(false);
-      setError("Item with invoice number that you entered is already in the list!");
-    }
+                } else {
+                  setLoading(false);
+                  setError(
+                    "Model number you entered is not match with invoice number!"
+                  );
+                }
+              });
+          });
+        } else {
+          setLoading(false);
+          setError("Invoice number you entered is not found!");
+        }
+      });
   };
 
   return (

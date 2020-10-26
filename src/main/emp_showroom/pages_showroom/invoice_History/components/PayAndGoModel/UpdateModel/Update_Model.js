@@ -180,7 +180,7 @@ export default function Update_Model({
 
     if (
       instCount -
-        (updatingInstallmentCount + (installments.length + allInstallment)) <=
+        (updatingInstallmentCount + installments.length + allInstallment) ===
       0
     ) {
       await db
@@ -233,6 +233,7 @@ export default function Update_Model({
       async onCancel() {
         await updateInstallment();
         closeModal();
+        window.location.reload();
       },
     });
   };
@@ -336,7 +337,6 @@ export default function Update_Model({
                       instCount - (allInstallment + installments.length) >=
                       e.target.value
                     ) {
-                     
                       setUpdatingInstallmentCount(e.target.value);
                     }
                   }}
@@ -351,9 +351,9 @@ export default function Update_Model({
               </Grid>
               <Grid item xs={12} sm={6}>
                 <p>
-                  {(instCount -
-                    (installments.length +
-                      allInstallment))-updatingInstallmentCount}
+                  {instCount -
+                    (installments.length + allInstallment) -
+                    updatingInstallmentCount}
                 </p>
               </Grid>
 

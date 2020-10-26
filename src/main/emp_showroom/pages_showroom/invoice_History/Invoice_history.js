@@ -514,11 +514,7 @@ export default function Invoice_history() {
                           spinning="true"
                         />
                       ) : (
-                        <img
-                          alt="Empty data"
-                          className="empty_data"
-                          src={require("../../../../assets/empty.png")}
-                        />
+                        ""
                       ),
                     },
                   },
@@ -556,11 +552,7 @@ export default function Invoice_history() {
                           spinning="true"
                         />
                       ) : (
-                        <img
-                          alt="Empty data"
-                          className="empty_data"
-                          src={require("../../../../assets/empty.png")}
-                        />
+                        ""
                       ),
                     },
                   },

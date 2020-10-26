@@ -179,9 +179,8 @@ export default function Update_Model({
     }
 
     if (
-      Math.round(instCount) -
-        (updatingInstallmentCount +
-          (installments.length + delayedDays > 0 ? allInstallment : 0)) <=
+      instCount -
+        (updatingInstallmentCount + (installments.length + allInstallment)) <=
       0
     ) {
       await db

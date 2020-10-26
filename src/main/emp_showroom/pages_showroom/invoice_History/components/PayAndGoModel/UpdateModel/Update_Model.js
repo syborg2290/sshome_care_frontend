@@ -271,12 +271,20 @@ export default function Update_Model({
               />
             </Grid>
 
-            <Grid className="lbl_topi_radio" item xs={12} sm={4}>
-              Current Installment
-            </Grid>
-            <Grid className="lbl_topi_radio" item xs={12} sm={2}>
-              :
-            </Grid>
+            {delayedDays > 0 ? (
+              <Grid className="lbl_topi_radio" item xs={12} sm={4}>
+                Current Installment
+              </Grid>
+            ) : (
+              <Grid className="lbl_topi_radio" item xs={12} sm={4}></Grid>
+            )}
+            {delayedDays > 0 ? (
+              <Grid className="lbl_topi_radio" item xs={12} sm={2}>
+                :
+              </Grid>
+            ) : (
+              <Grid className="lbl_topi_radio" item xs={12} sm={2}></Grid>
+            )}
             {delayedDays > 0 ? (
               <Grid className="lbl_topi_radio" item xs={12} sm={6}>
                 <Radio.Group
@@ -298,7 +306,7 @@ export default function Update_Model({
                 </Radio.Group>
               </Grid>
             ) : (
-              ""
+              <Grid className="lbl_topi_radio" item xs={12} sm={4}></Grid>
             )}
 
             <Grid className="lbl_topi" item xs={12} sm={4}>

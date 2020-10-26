@@ -76,7 +76,7 @@ export default function Update_Model({
                 } else {
                   setDelayedDays(daysCountInitial - 31);
                   if (daysCountInitial / 31 > 0) {
-                    setAllInstallment(daysCountInitial / 31);
+                    setAllInstallment((daysCountInitial - 7) / 31);
                   }
 
                   setDelayedCharges(
@@ -115,7 +115,7 @@ export default function Update_Model({
                 } else {
                   setDelayedDays(daysCount - 31);
                   if (daysCount / 31 > 0) {
-                    setAllInstallment(daysCount / 31);
+                    setAllInstallment((daysCount - 7) / 31);
                   }
                   setDelayedCharges(
                     daysCount - 31 <= 7

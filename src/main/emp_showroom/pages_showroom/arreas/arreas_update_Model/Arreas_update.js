@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Radio,Spin } from "antd";
+import { Radio, Spin } from "antd";
 import {
   TextField,
   Grid,
@@ -29,7 +29,7 @@ export default function Arreas_update({ invoice_no, nic }) {
   const [instCount, setInstCount] = useState(0);
   const [instAmountProp, setInstAmountProp] = useState(0);
   const [currentStatus, setCurrentStatus] = useState("a");
-     const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   const { confirm } = Modal;
 
@@ -142,7 +142,7 @@ export default function Arreas_update({ invoice_no, nic }) {
               }
             }
           });
-         setIsLoading(false);
+        setIsLoading(false);
       });
 
     // eslint-disable-next-line
@@ -247,271 +247,274 @@ export default function Arreas_update({ invoice_no, nic }) {
       <Grid item xs={12} sm={12}>
         <hr className="titl_hr" />
       </Grid>
-      {isLoading ? <Spin /> : <div className="paper">
-        <form className="form" noValidate>
-          <Grid container spacing={2}>
-            <Grid className="lbl_topi" item xs={12} sm={4}>
-              Invoice No
-            </Grid>
-            <Grid item xs={12} sm={2}>
-              :
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <p>{invoice_no}</p>
-            </Grid>
-
-            <Grid className="lbl_topi" item xs={12} sm={4}>
-              Amount of Installment(LKR)
-            </Grid>
-            <Grid item xs={12} sm={2}>
-              :
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <CurrencyFormat
-                value={Math.round(instAmountProp)}
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={" "}
-              />
-            </Grid>
-
-           
-            {delayedDays > 0 ? (
-              <Grid className="lbl_topi_radio" item xs={12} sm={4}>
-                Current Installment
+      {isLoading ? (
+        <Spin className="spinner_arreas" />
+      ) : (
+        <div className="paper">
+          <form className="form" noValidate>
+            <Grid container spacing={2}>
+              <Grid className="lbl_topi" item xs={12} sm={4}>
+                Invoice No
               </Grid>
-            ) : (
-                <Grid className="lbl_topi_radio_not" item xs={12} sm={4}></Grid>
-              )}
-            {delayedDays > 0 ? (
-              <Grid className="lbl_topi_radio" item xs={12} sm={2}>
+              <Grid item xs={12} sm={2}>
                 :
               </Grid>
-            ) : (
+              <Grid item xs={12} sm={6}>
+                <p>{invoice_no}</p>
+              </Grid>
+
+              <Grid className="lbl_topi" item xs={12} sm={4}>
+                Amount of Installment(LKR)
+              </Grid>
+              <Grid item xs={12} sm={2}>
+                :
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <CurrencyFormat
+                  value={Math.round(instAmountProp)}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              </Grid>
+
+              {delayedDays > 0 ? (
+                <Grid className="lbl_topi_radio" item xs={12} sm={4}>
+                  Current Installment
+                </Grid>
+              ) : (
+                <Grid className="lbl_topi_radio_not" item xs={12} sm={4}></Grid>
+              )}
+              {delayedDays > 0 ? (
+                <Grid className="lbl_topi_radio" item xs={12} sm={2}>
+                  :
+                </Grid>
+              ) : (
                 <Grid className="lbl_topi_radio_not" item xs={12} sm={2}></Grid>
               )}
-            {delayedDays > 0 ? (
-              <Grid className="lbl_topi_radio" item xs={12} sm={6}>
-                <Radio.Group
-                  value={currentStatus}
-                  onChange={(e) => {
-                    if (e.target.value === "b") {
-                      setUpdatingInstallmentCount(0);
-                      setCurrentStatus("b");
-                    } else {
-                      setUpdatingInstallmentCount(1);
-                      setCurrentStatus("a");
-                    }
-                  }}
-                  defaultValue="a"
-                  buttonStyle="solid"
-                >
-                  <Radio.Button value="a">Include</Radio.Button>
-                  <Radio.Button value="b">Not Include</Radio.Button>
-                </Radio.Group>
-              </Grid>
-            ) : (
+              {delayedDays > 0 ? (
+                <Grid className="lbl_topi_radio" item xs={12} sm={6}>
+                  <Radio.Group
+                    value={currentStatus}
+                    onChange={(e) => {
+                      if (e.target.value === "b") {
+                        setUpdatingInstallmentCount(0);
+                        setCurrentStatus("b");
+                      } else {
+                        setUpdatingInstallmentCount(1);
+                        setCurrentStatus("a");
+                      }
+                    }}
+                    defaultValue="a"
+                    buttonStyle="solid"
+                  >
+                    <Radio.Button value="a">Include</Radio.Button>
+                    <Radio.Button value="b">Not Include</Radio.Button>
+                  </Radio.Group>
+                </Grid>
+              ) : (
                 <Grid className="lbl_topi_radio_not" item xs={12} sm={4}></Grid>
               )}
 
-            <Grid className="lbl_topi" item xs={12} sm={4}>
-              Updating Installment Count
-            </Grid>
-            <Grid item xs={12} sm={2}>
-              :
-            </Grid>
-            <Grid item xs={12} sm={3}>
-              <TextField
-                type="number"
-                InputProps={{ inputProps: { min: 1 } }}
-                variant="outlined"
-                required
-                disabled={currentStatus === "a" ? false : true}
-                fullWidth
-                label="Count"
-                size="small"
-                value={updatingInstallmentCount}
-                onChange={(e) => {
-                  if (
-                    Math.round(instCount) -
-                    (delayedDays > 7
-                      ? installments.length +
-                      allInstallment +
-                      updatingInstallmentCount
-                      : installments.length + updatingInstallmentCount) >=
-                    e.target.value
-                  ) {
-                    setUpdatingInstallmentCount(e.target.value);
-                  }
-                }}
-              />
-            </Grid>
-            <Grid item xs={12} sm={3}></Grid>
-            <Grid className="lbl_topi" item xs={12} sm={4}>
-              Due Installment Count
-            </Grid>
-            <Grid item xs={12} sm={2}>
-              :
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <p>
-                {instCount -
-                  (installments.length + updatingInstallmentCount) -
-                  allInstallment}
-              </p>
-            </Grid>
-
-            <Grid className="lbl_topi" item xs={12} sm={4}>
-              Paid Amount(LKR)
-            </Grid>
-            <Grid item xs={12} sm={2}>
-              :
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <CurrencyFormat
-                value={
-                  Math.round(instAmountProp) *
-                  Math.round(Math.round(installments.length))
-                }
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={" "}
-              />
-            </Grid>
-
-            <Grid className="lbl_topi" item xs={12} sm={4}>
-              Date
-            </Grid>
-            <Grid item xs={12} sm={2}>
-              :
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <p>
-                {" "}
-                {moment(firebase.firestore.FieldValue.serverTimestamp()).format(
-                  "dddd, MMMM Do YYYY, h:mm:ss a"
-                )}
-              </p>
-            </Grid>
-
-            <Grid className="lbl_topi" item xs={12} sm={4}>
-              Delayed Charges(LKR)
-            </Grid>
-            <Grid item xs={12} sm={2}>
-              :
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                type="number"
-                autoComplete="delayed"
-                InputProps={{ inputProps: { min: 0 } }}
-                variant="outlined"
-                required
-                fullWidth
-                label="Delayed"
-                size="small"
-                value={Math.round(delayedCharges)}
-                onChange={(e) => {
-                  setDelayedCharges(e.target.value.trim());
-                }}
-              />
-            </Grid>
-
-            <Grid className="lbl_topi" item xs={12} sm={4}>
-              Delayed Days
-            </Grid>
-            <Grid item xs={12} sm={2}>
-              :
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              {delayedDays / 7 > 0 ? (
-                <p
-                  style={{
-                    color: "red",
-                    fontWeight: "bold",
+              <Grid className="lbl_topi" item xs={12} sm={4}>
+                Updating Installment Count
+              </Grid>
+              <Grid item xs={12} sm={2}>
+                :
+              </Grid>
+              <Grid item xs={12} sm={3}>
+                <TextField
+                  type="number"
+                  InputProps={{ inputProps: { min: 1 } }}
+                  variant="outlined"
+                  required
+                  disabled={currentStatus === "a" ? false : true}
+                  fullWidth
+                  label="Count"
+                  size="small"
+                  value={updatingInstallmentCount}
+                  onChange={(e) => {
+                    if (
+                      Math.round(instCount) -
+                        (delayedDays > 7
+                          ? installments.length +
+                            allInstallment +
+                            updatingInstallmentCount
+                          : installments.length + updatingInstallmentCount) >=
+                      e.target.value
+                    ) {
+                      setUpdatingInstallmentCount(e.target.value);
+                    }
                   }}
-                >
-                  {Math.round(delayedDays)} days delayed !
+                />
+              </Grid>
+              <Grid item xs={12} sm={3}></Grid>
+              <Grid className="lbl_topi" item xs={12} sm={4}>
+                Due Installment Count
+              </Grid>
+              <Grid item xs={12} sm={2}>
+                :
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <p>
+                  {instCount -
+                    (installments.length + updatingInstallmentCount) -
+                    allInstallment}
                 </p>
-              ) : (
-                  <p>{Math.round(delayedDays)} days delayed !</p>
-                )}
-            </Grid>
-            <Grid item xs={12} sm={12}>
-              <hr />
-            </Grid>
-            <Grid className="lbl_topi" item xs={12} sm={4}>
-              Total(LKR)
-            </Grid>
-            <Grid item xs={12} sm={2}>
-              :
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <div
-                style={{
-                  fontWeight: "bold",
-                  fontSize: "20px",
-                }}
-              >
+              </Grid>
+
+              <Grid className="lbl_topi" item xs={12} sm={4}>
+                Paid Amount(LKR)
+              </Grid>
+              <Grid item xs={12} sm={2}>
+                :
+              </Grid>
+              <Grid item xs={12} sm={6}>
                 <CurrencyFormat
                   value={
-                    (delayedDays > 7
-                      ? Math.round(instAmountProp) * Math.round(delayedDays / 7)
-                      : Math.round(instAmountProp)) *
-                    updatingInstallmentCount +
-                    Math.round(delayedCharges)
+                    Math.round(instAmountProp) *
+                    Math.round(Math.round(installments.length))
                   }
                   displayType={"text"}
                   thousandSeparator={true}
-                  prefix={" Rs. "}
+                  prefix={" "}
                 />
-                /=
-              </div>
-              <div
-                style={{
-                  fontWeight: "bold",
-                  fontSize: "15px",
-                  color: "grey",
-                }}
-              >
-                (
-                {delayedDays > 7
-                  ? "  " +
-                  Math.round(instAmountProp) +
-                  " X (" +
-                  allInstallment +
-                  " + " +
-                  updatingInstallmentCount +
-                  ") + " +
-                  Math.round(delayedCharges) +
-                  " "
-                  : "  " +
-                  Math.round(instAmountProp) +
-                  " X " +
-                  (updatingInstallmentCount +
-                    " + " +
-                    Math.round(delayedCharges)) +
-                  " "}
-                )
-              </div>
+              </Grid>
+
+              <Grid className="lbl_topi" item xs={12} sm={4}>
+                Date
+              </Grid>
+              <Grid item xs={12} sm={2}>
+                :
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <p>
+                  {" "}
+                  {moment(
+                    firebase.firestore.FieldValue.serverTimestamp()
+                  ).format("dddd, MMMM Do YYYY, h:mm:ss a")}
+                </p>
+              </Grid>
+
+              <Grid className="lbl_topi" item xs={12} sm={4}>
+                Delayed Charges(LKR)
+              </Grid>
+              <Grid item xs={12} sm={2}>
+                :
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  type="number"
+                  autoComplete="delayed"
+                  InputProps={{ inputProps: { min: 0 } }}
+                  variant="outlined"
+                  required
+                  fullWidth
+                  label="Delayed"
+                  size="small"
+                  value={Math.round(delayedCharges)}
+                  onChange={(e) => {
+                    setDelayedCharges(e.target.value.trim());
+                  }}
+                />
+              </Grid>
+
+              <Grid className="lbl_topi" item xs={12} sm={4}>
+                Delayed Days
+              </Grid>
+              <Grid item xs={12} sm={2}>
+                :
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                {delayedDays / 7 > 0 ? (
+                  <p
+                    style={{
+                      color: "red",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {Math.round(delayedDays)} days delayed !
+                  </p>
+                ) : (
+                  <p>{Math.round(delayedDays)} days delayed !</p>
+                )}
+              </Grid>
+              <Grid item xs={12} sm={12}>
+                <hr />
+              </Grid>
+              <Grid className="lbl_topi" item xs={12} sm={4}>
+                Total(LKR)
+              </Grid>
+              <Grid item xs={12} sm={2}>
+                :
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <div
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: "20px",
+                  }}
+                >
+                  <CurrencyFormat
+                    value={
+                      (delayedDays > 7
+                        ? Math.round(instAmountProp) *
+                          Math.round(delayedDays / 7)
+                        : Math.round(instAmountProp)) *
+                        updatingInstallmentCount +
+                      Math.round(delayedCharges)
+                    }
+                    displayType={"text"}
+                    thousandSeparator={true}
+                    prefix={" Rs. "}
+                  />
+                  /=
+                </div>
+                <div
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: "15px",
+                    color: "grey",
+                  }}
+                >
+                  (
+                  {delayedDays > 7
+                    ? "  " +
+                      Math.round(instAmountProp) +
+                      " X (" +
+                      allInstallment +
+                      " + " +
+                      updatingInstallmentCount +
+                      ") + " +
+                      Math.round(delayedCharges) +
+                      " "
+                    : "  " +
+                      Math.round(instAmountProp) +
+                      " X " +
+                      (updatingInstallmentCount +
+                        " + " +
+                        Math.round(delayedCharges)) +
+                      " "}
+                  )
+                </div>
+              </Grid>
             </Grid>
-          </Grid>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={9}></Grid>
-            <Grid item xs={12} sm={3}>
-              <Button
-                variant="contained"
-                color="primary"
-                className="btn_update"
-                onClick={showConfirm}
-              >
-                Done
-              </Button>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={9}></Grid>
+              <Grid item xs={12} sm={3}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  className="btn_update"
+                  onClick={showConfirm}
+                >
+                  Done
+                </Button>
+              </Grid>
             </Grid>
-          </Grid>
-        </form>
-      </div>}
-      
+          </form>
+        </div>
+      )}
     </Container>
   );
 }

@@ -27,7 +27,14 @@
   padding-bottom: 10px !important;
 }
 
-.lbl_topi_radio_not{
+.lbl_topi_radio_not {
   padding-top: 0px !important;
   padding-bottom: 0px !important;
+}
+
+.spinner {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  margin-top: 20px !important;
 }

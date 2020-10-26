@@ -276,14 +276,14 @@ export default function Update_Model({
                 Current Installment
               </Grid>
             ) : (
-              <Grid className="lbl_topi_radio" item xs={12} sm={4}></Grid>
+              <Grid className="lbl_topi_radio_not" item xs={12} sm={4}></Grid>
             )}
             {delayedDays > 0 ? (
               <Grid className="lbl_topi_radio" item xs={12} sm={2}>
                 :
               </Grid>
             ) : (
-              <Grid className="lbl_topi_radio" item xs={12} sm={2}></Grid>
+              <Grid className="lbl_topi_radio_not" item xs={12} sm={2}></Grid>
             )}
             {delayedDays > 0 ? (
               <Grid className="invoHisty_radio" item xs={12} sm={6}>
@@ -306,7 +306,7 @@ export default function Update_Model({
                 </Radio.Group>
               </Grid>
             ) : (
-              <Grid className="lbl_topi_radio" item xs={12} sm={4}></Grid>
+              <Grid className="lbl_topi_radio_not" item xs={12} sm={4}></Grid>
             )}
 
             <Grid className="lbl_topi" item xs={12} sm={4}>
@@ -330,8 +330,10 @@ export default function Update_Model({
                   if (
                     Math.round(instCount) -
                       (delayedDays > 7
-                        ? installments.length + allInstallment
-                        : installments.length) >=
+                        ? installments.length +
+                          allInstallment +
+                          updatingInstallmentCount
+                        : installments.length + updatingInstallmentCount) >=
                     e.target.value
                   ) {
                     setUpdatingInstallmentCount(e.target.value);

@@ -330,8 +330,10 @@ export default function Update_Model({
                   if (
                     Math.round(instCount) -
                       (delayedDays > 7
-                        ? installments.length + allInstallment
-                        : installments.length) >=
+                        ? installments.length +
+                          allInstallment +
+                          updatingInstallmentCount
+                        : installments.length + updatingInstallmentCount) >=
                     e.target.value
                   ) {
                     setUpdatingInstallmentCount(e.target.value);

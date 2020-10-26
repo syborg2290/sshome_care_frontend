@@ -117,11 +117,7 @@ export default function blackList_history() {
                   noMatch: isLoading ? (
                     <Spin className="tblSpinner" size="large" spinning="true" />
                   ) : (
-                    <img
-                      alt="Empty data"
-                      className="empty_data"
-                      src={require("../../../../../assets/empty.png")}
-                    />
+                    ""
                   ),
                 },
               },

@@ -391,7 +391,7 @@ export default function Invoice_history() {
           <div className="update_Installment_Model_Main">
             <div className="update_Installment_Model_Detail">
               <UpdateInstallment
-                 key={payangoAllData[currentIndx]?.id}
+                key={payangoAllData[currentIndx]?.id}
                 invoice_no={payangoAllData[currentIndx]?.data?.invoice_number}
                 instAmountProp={
                   payangoAllData[currentIndx]?.data?.items[0]
@@ -514,11 +514,7 @@ export default function Invoice_history() {
                           spinning="true"
                         />
                       ) : (
-                        <img
-                          alt="Empty data"
-                          className="empty_data"
-                          src={require("../../../../assets/empty.png")}
-                        />
+                        ""
                       ),
                     },
                   },
@@ -556,11 +552,7 @@ export default function Invoice_history() {
                           spinning="true"
                         />
                       ) : (
-                        <img
-                          alt="Empty data"
-                          className="empty_data"
-                          src={require("../../../../assets/empty.png")}
-                        />
+                        ""
                       ),
                     },
                   },

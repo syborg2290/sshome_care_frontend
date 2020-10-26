@@ -159,7 +159,7 @@ export default function Seized_item() {
         <div className="customer_Model">
           <div className="customer_Model_Main">
             <div className="customer_Modell_Detail">
-              <SeizedViewModel key={seizedAllData[currentIndx]?.id}/>
+              <SeizedViewModel key={seizedAllData[currentIndx]?.id} />
             </div>
           </div>
         </div>
@@ -221,11 +221,7 @@ export default function Seized_item() {
                   noMatch: isLoading ? (
                     <Spin className="tblSpinner" size="large" spinning="true" />
                   ) : (
-                    <img
-                      alt="Empty data"
-                      className="empty_data"
-                      src={require("../../../../assets/empty.png")}
-                    />
+                    ""
                   ),
                 },
               },

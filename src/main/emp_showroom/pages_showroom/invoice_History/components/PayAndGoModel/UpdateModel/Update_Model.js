@@ -209,15 +209,11 @@ export default function Update_Model({
 
       async onOk() {
         await updateInstallment();
-        let totalRe =
-          Math.round(
-            instAmountProp * (allInstallment + updatingInstallmentCount)
-          ) + Math.round(delayedCharges);
 
         let passingWithCustomerObj = {
           invoice_number: invoice_no,
           customerDetails: customer,
-          total: totalRe,
+          total: totalPlusRed(),
 
           delayedCharges: Math.round(delayedCharges),
         };
@@ -243,6 +239,14 @@ export default function Update_Model({
     let againallPlusss = allPlusss + Math.round(allInstallment);
     let rest = instCount - againallPlusss;
     return rest;
+  };
+
+  const totalPlusRed = () => {
+    let allPlusss = Math.round(updatingInstallmentCount);
+    let againallPlusss = allPlusss + Math.round(allInstallment);
+    let rest = instAmountProp * againallPlusss;
+    let finalTot = rest + delayedCharges;
+    return finalTot;
   };
 
   return (
@@ -454,12 +458,7 @@ export default function Update_Model({
                   }}
                 >
                   <CurrencyFormat
-                    value={
-                      Math.round(
-                        instAmountProp *
-                          (allInstallment + updatingInstallmentCount)
-                      ) + Math.round(delayedCharges)
-                    }
+                    value={totalPlusRed()}
                     displayType={"text"}
                     thousandSeparator={true}
                     prefix={" Rs. "}

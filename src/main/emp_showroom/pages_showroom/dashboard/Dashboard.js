@@ -79,7 +79,7 @@ export default function Dashboard() {
                   delayed_charges:
                     daysCountInitial - 31 <= 7
                       ? 0
-                      : 99 * (Math.round(daysCountInitial - 31) / 7),
+                      : 99 * Math.round((daysCountInitial - 31) / 7),
                 });
             } else {
               db.collection("arrears").add({
@@ -90,7 +90,7 @@ export default function Dashboard() {
                 delayed_charges:
                   daysCountInitial - 31 <= 7
                     ? 0
-                    : 99 * (Math.round(daysCountInitial - 31) / 7),
+                    : 99 * Math.round((daysCountInitial - 31) / 7),
                 date: firebase.firestore.FieldValue.serverTimestamp(),
               });
             }

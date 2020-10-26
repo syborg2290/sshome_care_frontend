@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Radio } from "antd";
+import { Radio, Spin } from "antd";
 import {
   TextField,
   Grid,
@@ -33,6 +33,7 @@ export default function Update_Model({
   const [updatingInstallmentCount, setUpdatingInstallmentCount] = useState(1);
   const [customer, setCustomer] = useState({});
   const [currentStatus, setCurrentStatus] = useState("a");
+   const [isLoading, setIsLoading] = useState(true);
 
   const { confirm } = Modal;
 
@@ -141,6 +142,7 @@ export default function Update_Model({
               }
             }
           });
+        setIsLoading(false);
       });
     // eslint-disable-next-line
   }, [invoice_no]);
@@ -243,8 +245,9 @@ export default function Update_Model({
       <Grid item xs={12} sm={12}>
         <hr className="titl_hr" />
       </Grid>
-      <div className="paper">
+      {isLoading?<Spin/> :<div className="paper">
         <form className="form" noValidate>
+          
           <Grid container spacing={2}>
             <Grid className="lbl_topi" item xs={12} sm={4}>
               Invoice No
@@ -276,15 +279,15 @@ export default function Update_Model({
                 Current Installment
               </Grid>
             ) : (
-              <Grid className="lbl_topi_radio_not" item xs={12} sm={4}></Grid>
-            )}
+                <Grid className="lbl_topi_radio_not" item xs={12} sm={4}></Grid>
+              )}
             {delayedDays > 0 ? (
               <Grid className="lbl_topi_radio" item xs={12} sm={2}>
                 :
               </Grid>
             ) : (
-              <Grid className="lbl_topi_radio_not" item xs={12} sm={2}></Grid>
-            )}
+                <Grid className="lbl_topi_radio_not" item xs={12} sm={2}></Grid>
+              )}
             {delayedDays > 0 ? (
               <Grid className="lbl_topi_radio" item xs={12} sm={6}>
                 <Radio.Group
@@ -306,8 +309,8 @@ export default function Update_Model({
                 </Radio.Group>
               </Grid>
             ) : (
-              <Grid className="lbl_topi_radio_not" item xs={12} sm={4}></Grid>
-            )}
+                <Grid className="lbl_topi_radio_not" item xs={12} sm={4}></Grid>
+              )}
 
             <Grid className="lbl_topi" item xs={12} sm={4}>
               Updating Installment Count
@@ -329,11 +332,11 @@ export default function Update_Model({
                 onChange={(e) => {
                   if (
                     Math.round(instCount) -
-                      (delayedDays > 7
-                        ? installments.length +
-                          allInstallment +
-                          updatingInstallmentCount
-                        : installments.length + updatingInstallmentCount) >=
+                    (delayedDays > 7
+                      ? installments.length +
+                      allInstallment +
+                      updatingInstallmentCount
+                      : installments.length + updatingInstallmentCount) >=
                     e.target.value
                   ) {
                     setUpdatingInstallmentCount(e.target.value);
@@ -429,8 +432,8 @@ export default function Update_Model({
                   {Math.round(delayedDays)} days delayed !
                 </p>
               ) : (
-                <p>{Math.round(delayedDays)} days delayed !</p>
-              )}
+                  <p>{Math.round(delayedDays)} days delayed !</p>
+                )}
             </Grid>
             <Grid item xs={12} sm={12}>
               <hr />
@@ -453,7 +456,7 @@ export default function Update_Model({
                     (delayedDays > 7
                       ? Math.round(instAmountProp) * Math.round(delayedDays / 7)
                       : Math.round(instAmountProp)) *
-                      updatingInstallmentCount +
+                    updatingInstallmentCount +
                     Math.round(delayedCharges)
                   }
                   displayType={"text"}
@@ -472,21 +475,21 @@ export default function Update_Model({
                 (
                 {delayedDays > 7
                   ? "  " +
-                    Math.round(instAmountProp) +
-                    " X (" +
-                    allInstallment +
-                    " + " +
-                    updatingInstallmentCount +
-                    ") + " +
-                    Math.round(delayedCharges) +
-                    " "
+                  Math.round(instAmountProp) +
+                  " X (" +
+                  allInstallment +
+                  " + " +
+                  updatingInstallmentCount +
+                  ") + " +
+                  Math.round(delayedCharges) +
+                  " "
                   : "  " +
-                    Math.round(instAmountProp) +
-                    " X " +
-                    (updatingInstallmentCount +
-                      " + " +
-                      Math.round(delayedCharges)) +
-                    " "}
+                  Math.round(instAmountProp) +
+                  " X " +
+                  (updatingInstallmentCount +
+                    " + " +
+                    Math.round(delayedCharges)) +
+                  " "}
                 )
               </div>
             </Grid>
@@ -505,7 +508,7 @@ export default function Update_Model({
             </Grid>
           </Grid>
         </form>
-      </div>
+      </div>}
     </Container>
   );
 }

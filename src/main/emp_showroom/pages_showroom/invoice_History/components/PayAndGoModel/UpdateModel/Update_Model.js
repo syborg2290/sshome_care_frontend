@@ -177,12 +177,11 @@ export default function Update_Model({
         });
       j++;
     }
-
-    if (
-      instCount -
-        (updatingInstallmentCount + installments.length + allInstallment) ===
-      0
-    ) {
+    let allPlus =
+      Math.round(updatingInstallmentCount) +
+      installments.length +
+      allInstallment;
+    if (instCount - allPlus <= 0) {
       await db
         .collection("invoice")
         .where("invoice_number", "==", invoice_no)

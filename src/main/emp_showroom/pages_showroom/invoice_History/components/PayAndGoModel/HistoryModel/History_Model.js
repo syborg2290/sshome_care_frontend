@@ -71,8 +71,7 @@ export default function History_Model({ invoice_no }) {
   useEffect(() => {
     db.collection("installment")
       .where("invoice_number", "==", invoice_no)
-      .get()
-      .then((instReDoc) => {
+      .get().then((instReDoc) => {
         var reArray = instReDoc.docs;
         reArray.sort((a, b) => {
           if (a.data().balance > b.data().balance) {
@@ -87,7 +86,7 @@ export default function History_Model({ invoice_no }) {
             ...old,
             {
               InvoiceNo: invoice_no,
-              Date: moment(each.data().date.toDate()).format(
+              Date: moment(each.data()?.date?.toDate()).format(
                 "dddd, MMMM Do YYYY"
               ),
               Amount: (

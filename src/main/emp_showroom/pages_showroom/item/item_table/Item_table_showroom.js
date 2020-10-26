@@ -237,6 +237,7 @@ export default function ItemTable() {
         className="model_Item_Showroom"
         onCancel={() => {
           setVisible(false);
+          window.location.reload();
         }}
       >
         <div className="table_Model_Showroom">

@@ -13,36 +13,31 @@ import style from "react-syntax-highlighter/dist/esm/styles/hljs/agate";
 export default function SelectedItem_Model({ itemListProps, closeModel }) {
   const [isLoading, setLoading] = useState(false);
   const [itemsData, setItemsData] = useState([]);
-  const [paymentWay, setpaymentWay] = useState({});
+  const [paymentWay, setpaymentWay] = useState("PayandGo");
   let history = useHistory();
 
   useEffect(() => {
     var keepData = [];
-    var keepDataPaymentway = {};
     var i = 0;
     itemListProps.forEach((ele) => {
-      keepDataPaymentway[i] = ele.paymentWay;
       keepData.push({
         i: i,
         id: ele.item.id,
         title: ele.item.data.itemName,
         unitprice: ele.item.data.salePrice,
         qty: ele.qty,
-        paymentWay: ele.paymentWay,
         item: ele.item.data,
       });
       i = i + 1;
     });
 
-    setpaymentWay(keepDataPaymentway);
     setItemsData(keepData);
     // eslint-disable-next-line
   }, [itemListProps]);
 
   const removeItems = (i, itemId) => {
-    
     var itemsDataLength = itemsData.length;
-    let index=itemsData.indexOf(re => re.id === itemId)
+    let index = itemsData.indexOf((re) => re.id === itemId);
     itemsData.splice(index, 1);
     setItemsData([...itemsData]);
     itemsDataLength = itemsDataLength - 1;
@@ -54,6 +49,7 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
   const nextclick = () => {
     setLoading(true);
     var nextData = [];
+  
     for (var i = 0; i < itemsData.length; i++) {
       let obj = {
         i: i,
@@ -61,14 +57,26 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
         title: itemsData[i].title,
         unitprice: itemsData[i].unitprice,
         qty: itemsData[i].qty,
-        paymentWay: itemsData.length === 1 ? paymentWay[i] : "FullPayment",
+        paymentWay: itemsData.length === 1 ? paymentWay : "FullPayment",
         item: itemsData[i].item,
         customer: null,
       };
       nextData.push(obj);
     }
     if (nextData.length === itemsData.length) {
-      if (nextData.some((ob) => ob.paymentWay === "PayandGo")) {
+      
+      if (itemsData.length > 1) {
+         setLoading(false);
+        //sent to direct invoice
+        let moveWith = {
+          pathname: "/showroom/ui/makeInvoice",
+          search: "?query=abc",
+          state: { detail: nextData },
+        };
+
+        history.push(moveWith);
+      } else {
+        if (paymentWay === "PayandGo") {
         setLoading(false);
         //sent to add customer
         let moveWith = {
@@ -89,6 +97,8 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
 
         history.push(moveWith);
       }
+      }
+      
     }
   };
 
@@ -133,10 +143,7 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
                         buttonStyle="solid"
                         size="small"
                         onChange={(e) => {
-                          setpaymentWay({
-                            ...paymentWay,
-                            [item.id]: e.target.value,
-                          });
+                          setpaymentWay(e.target.value);
                         }}
                       >
                         <Radio.Button className="btn_radio" value="PayandGo">

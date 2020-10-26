@@ -341,8 +341,8 @@ export default function Update_Model({
             <Grid item xs={12} sm={6}>
               <p>
                 {instCount -
-                  (installments.length +
-                    updatingInstallmentCount)}
+                  (installments.length + updatingInstallmentCount) -
+                  allInstallment}
               </p>
             </Grid>
 

@@ -342,9 +342,9 @@ export default function Arreas_update({ invoice_no, nic }) {
             </Grid>
             <Grid item xs={12} sm={6}>
               <p>
-                 {instCount -
-                  (installments.length +
-                    updatingInstallmentCount)}
+                {instCount -
+                  (installments.length + updatingInstallmentCount) -
+                  allInstallment}
               </p>
             </Grid>
 

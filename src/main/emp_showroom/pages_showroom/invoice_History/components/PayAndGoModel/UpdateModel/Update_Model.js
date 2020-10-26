@@ -150,7 +150,7 @@ export default function Update_Model({
     let plussForLoop = allInstallment + Math.round(updatingInstallmentCount);
     for (
       var i = 0;
-      i < plussForLoop;
+      i <= plussForLoop;
       i++
     ) {
       await db

@@ -20,15 +20,17 @@ import { Modal } from "antd";
 import "./Arreas_update.css";
 
 export default function Arreas_update({ invoice_no, nic, close }) {
-  const [installments, setInstallments] = useState([]);
-  const [allInstallment, setAllInstallment] = useState(0);
+ 
+
+  const [installments, setInstallments] = useState(0);
   const [delayedDays, setDelayedDays] = useState(0);
+  const [allInstallment, setAllInstallment] = useState(0);
   const [delayedCharges, setDelayedCharges] = useState(0);
   const [updatingInstallmentCount, setUpdatingInstallmentCount] = useState(1);
   const [customer, setCustomer] = useState({});
+  const [currentStatus, setCurrentStatus] = useState("a");
   const [instCount, setInstCount] = useState(0);
   const [instAmountProp, setInstAmountProp] = useState(0);
-  const [currentStatus, setCurrentStatus] = useState("a");
   const [isLoading, setIsLoading] = useState(true);
 
   const { confirm } = Modal;
@@ -40,21 +42,21 @@ export default function Arreas_update({ invoice_no, nic, close }) {
       .where("nic", "==", nic)
       .get()
       .then((th) => {
-        db.collection("customer")
-          .doc(th.docs[0].id)
-          .get()
-          .then((custDocRe) => {
-            setCustomer(custDocRe.data());
-          });
+        if (th.docs.length > 0) {
+          db.collection("customer")
+            .doc(th.docs[0]?.id)
+            .get()
+            .then((custDocRe) => {
+              setCustomer(custDocRe.data());
+            });
+        }
       });
 
     db.collection("installment")
       .where("invoice_number", "==", invoice_no)
       .get()
       .then((instReDoc) => {
-        instReDoc.docs.forEach((each) => {
-          setInstallments((old) => [...old, each.data()]);
-        });
+        setInstallments(instReDoc.docs.length);
       });
 
     db.collection("invoice")
@@ -74,14 +76,16 @@ export default function Arreas_update({ invoice_no, nic, close }) {
                     inReDoc.docs[0].data().date.seconds * 1000
                   ).getTime()) /
                 (1000 * 3600 * 24);
+
               if (inReDoc.docs[0].data().installmentType === "Monthly") {
                 if (30 - daysCountInitial >= 0) {
                   setDelayedDays(0);
                 } else {
                   setDelayedDays(daysCountInitial - 31);
                   if (daysCountInitial / 31 > 0) {
-                    setAllInstallment((daysCountInitial / 31).toFixed());
+                    setAllInstallment((daysCountInitial - 7) / 31);
                   }
+
                   setDelayedCharges(
                     daysCountInitial - 31 <= 7
                       ? 0
@@ -94,7 +98,7 @@ export default function Arreas_update({ invoice_no, nic, close }) {
                 } else {
                   setDelayedDays(daysCountInitial - 7);
                   if (daysCountInitial / 7 > 0) {
-                    setAllInstallment((daysCountInitial / 7).toFixed());
+                    setAllInstallment(Math.round((daysCountInitial - 7) / 7));
                   }
                   setDelayedCharges(
                     daysCountInitial - 7 <= 7
@@ -111,13 +115,14 @@ export default function Arreas_update({ invoice_no, nic, close }) {
                       ?.seconds * 1000
                   ).getTime()) /
                 (1000 * 3600 * 24);
+
               if (inReDoc.docs[0].data().installmentType === "Monthly") {
                 if (30 - daysCount >= 0) {
                   setDelayedDays(0);
                 } else {
                   setDelayedDays(daysCount - 31);
                   if (daysCount / 31 > 0) {
-                    setAllInstallment((daysCount / 31).toFixed());
+                    setAllInstallment((daysCount - 7) / 31);
                   }
                   setDelayedCharges(
                     daysCount - 31 <= 7
@@ -131,7 +136,7 @@ export default function Arreas_update({ invoice_no, nic, close }) {
                 } else {
                   setDelayedDays(daysCount - 7);
                   if (daysCount / 7 > 0) {
-                    setAllInstallment((daysCount / 7).toFixed());
+                    setAllInstallment(Math.round((daysCount - 7) / 7));
                   }
                   setDelayedCharges(
                     daysCount - 7 <= 7
@@ -144,13 +149,14 @@ export default function Arreas_update({ invoice_no, nic, close }) {
           });
         setIsLoading(false);
       });
-
     // eslint-disable-next-line
   }, [invoice_no]);
 
   const updateInstallment = async () => {
     var j = 0;
-    for (var i = 0; i <= allInstallment + updatingInstallmentCount; i++) {
+    let plussForLoop = allInstallment + Math.round(updatingInstallmentCount);
+
+    for (var i = 1; i <= plussForLoop; i++) {
       await db
         .collection("installment")
         .where("invoice_number", "==", invoice_no)
@@ -175,10 +181,20 @@ export default function Arreas_update({ invoice_no, nic, close }) {
       j++;
     }
 
+    if (allInstallment > 0) {
+      await db
+        .collection("arrears")
+        .where("invoice_number", "==", invoice_no)
+        .get()
+        .then(async (arrRe) => {
+          if (arrRe.docs.length > 0) {
+            await db.collection("arrears").doc(arrRe.docs[0].id).delete();
+          }
+        });
+    }
+
     let allPlus =
-      Math.round(updatingInstallmentCount) +
-      installments.length +
-      allInstallment;
+      Math.round(updatingInstallmentCount) + installments + allInstallment;
 
     if (instCount - allPlus <= 0) {
       await db
@@ -190,40 +206,28 @@ export default function Arreas_update({ invoice_no, nic, close }) {
             status_of_payandgo: "Done",
           });
         });
-
-      await db
-        .collection("arrears")
-        .where("invoice_number", "==", invoice_no)
-        .get()
-        .then(async (arrRe) => {
-          if (arrRe.docs.length > 0) {
-            await db.collection("arrears").doc(arrRe.docs[0].id).delete();
-          }
-        });
     }
   };
 
   const showConfirm = async () => {
     confirm({
-      title: "Do you want to print a recipt?",
+      title: "Do you Want to Print a Recipt?",
       icon: <ExclamationCircleOutlined />,
 
       async onOk() {
         await updateInstallment();
+
         let passingWithCustomerObj = {
           invoice_number: invoice_no,
           customerDetails: customer,
-          total:
-            (delayedDays > 7
-              ? Math.round(instAmountProp) * Math.round(delayedDays / 7)
-              : Math.round(instAmountProp)) *
-              updatingInstallmentCount +
-            Math.round(delayedCharges),
+          total: totalPlusRed(),
+
           delayedCharges: Math.round(delayedCharges),
         };
 
         let moveWith = {
-          pathname: "/showroom/arreas/arreasUpdateModel/ArreasReceipt",
+          pathname:
+            "/showroom/invoice_history/payAndGo/updateModel/PrintReceipt",
           search: "?query=abc",
           state: { detail: passingWithCustomerObj },
         };
@@ -237,6 +241,21 @@ export default function Arreas_update({ invoice_no, nic, close }) {
     });
   };
 
+  const dueInstallmentsCount = () => {
+    let allPlusss = Math.round(updatingInstallmentCount) + installments;
+    let againallPlusss = allPlusss + Math.round(allInstallment);
+    let rest = instCount - againallPlusss;
+    return rest;
+  };
+
+  const totalPlusRed = () => {
+    let allPlusss = Math.round(updatingInstallmentCount);
+    let againallPlusss = allPlusss + Math.round(allInstallment);
+    let rest = instAmountProp * againallPlusss;
+    let finalTot = rest + delayedCharges;
+    return finalTot;
+  };
+
   return (
     <Container component="main" className="conctainefr_main">
       <Typography className="titleffs" variant="h5" gutterBottom>
@@ -246,7 +265,7 @@ export default function Arreas_update({ invoice_no, nic, close }) {
         <hr className="titl_hr" />
       </Grid>
       {isLoading ? (
-        <Spin className="spinner_arreas" />
+        <Spin className="spinner" />
       ) : (
         <div className="paper">
           <form className="form" noValidate>
@@ -276,22 +295,22 @@ export default function Arreas_update({ invoice_no, nic, close }) {
                 />
               </Grid>
 
-              {delayedDays > 0 ? (
+              {delayedDays > 7 ? (
                 <Grid className="lbl_topi_radio" item xs={12} sm={4}>
                   Current Installment
                 </Grid>
               ) : (
                 <Grid className="lbl_topi_radio_not" item xs={12} sm={4}></Grid>
               )}
-              {delayedDays > 0 ? (
+              {delayedDays > 7 ? (
                 <Grid className="lbl_topi_radio" item xs={12} sm={2}>
                   :
                 </Grid>
               ) : (
                 <Grid className="lbl_topi_radio_not" item xs={12} sm={2}></Grid>
               )}
-              {delayedDays > 0 ? (
-                <Grid className="lbl_topi_radio" item xs={12} sm={6}>
+              {delayedDays > 7 ? (
+                <Grid className="invoHisty_radio" item xs={12} sm={6}>
                   <Radio.Group
                     value={currentStatus}
                     onChange={(e) => {
@@ -326,14 +345,14 @@ export default function Arreas_update({ invoice_no, nic, close }) {
                   InputProps={{ inputProps: { min: 1 } }}
                   variant="outlined"
                   required
-                  disabled={currentStatus === "a" ? false : true}
                   fullWidth
+                  disabled={currentStatus === "a" ? false : true}
                   label="Count"
                   size="small"
                   value={updatingInstallmentCount}
                   onChange={(e) => {
                     if (
-                      instCount - (allInstallment + installments.length) >=
+                      instCount - (allInstallment + installments) >=
                       e.target.value
                     ) {
                       setUpdatingInstallmentCount(e.target.value);
@@ -349,11 +368,7 @@ export default function Arreas_update({ invoice_no, nic, close }) {
                 :
               </Grid>
               <Grid item xs={12} sm={6}>
-                <p>
-                  {instCount -
-                    (installments.length + allInstallment) -
-                    updatingInstallmentCount}
-                </p>
+                <p>{dueInstallmentsCount()}</p>
               </Grid>
 
               <Grid className="lbl_topi" item xs={12} sm={4}>
@@ -366,7 +381,7 @@ export default function Arreas_update({ invoice_no, nic, close }) {
                 <CurrencyFormat
                   value={
                     Math.round(instAmountProp) *
-                    Math.round(Math.round(installments.length))
+                    Math.round(Math.round(installments))
                   }
                   displayType={"text"}
                   thousandSeparator={true}
@@ -399,7 +414,6 @@ export default function Arreas_update({ invoice_no, nic, close }) {
                 <TextField
                   type="number"
                   autoComplete="delayed"
-                  InputProps={{ inputProps: { min: 0 } }}
                   variant="outlined"
                   required
                   fullWidth
@@ -407,7 +421,9 @@ export default function Arreas_update({ invoice_no, nic, close }) {
                   size="small"
                   value={Math.round(delayedCharges)}
                   onChange={(e) => {
-                    setDelayedCharges(e.target.value.trim());
+                    if (e.target.value >= 0) {
+                      setDelayedCharges(e.target.value.trim());
+                    }
                   }}
                 />
               </Grid>
@@ -449,14 +465,7 @@ export default function Arreas_update({ invoice_no, nic, close }) {
                   }}
                 >
                   <CurrencyFormat
-                    value={
-                      (delayedDays > 7
-                        ? Math.round(instAmountProp) *
-                          Math.round(delayedDays / 7)
-                        : Math.round(instAmountProp)) *
-                        updatingInstallmentCount +
-                      Math.round(delayedCharges)
-                    }
+                    value={totalPlusRed()}
                     displayType={"text"}
                     thousandSeparator={true}
                     prefix={" Rs. "}
@@ -475,7 +484,7 @@ export default function Arreas_update({ invoice_no, nic, close }) {
                     ? "  " +
                       Math.round(instAmountProp) +
                       " X (" +
-                      allInstallment +
+                      Math.round(allInstallment) +
                       " + " +
                       updatingInstallmentCount +
                       ") + " +
@@ -498,6 +507,7 @@ export default function Arreas_update({ invoice_no, nic, close }) {
                 <Button
                   variant="contained"
                   color="primary"
+                  disabled={totalPlusRed() > 0 ? false : true}
                   className="btn_update"
                   onClick={showConfirm}
                 >

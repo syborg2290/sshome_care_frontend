@@ -334,13 +334,9 @@ export default function Arreas_update({ invoice_no, nic }) {
                   size="small"
                   value={updatingInstallmentCount}
                   onChange={(e) => {
-                    if (
+                     if (
                       Math.round(instCount) -
-                        (delayedDays > 7
-                          ? installments.length +
-                            allInstallment +
-                            updatingInstallmentCount
-                          : installments.length + updatingInstallmentCount) >=
+                        (allInstallment + installments.length +updatingInstallmentCount) >=
                       e.target.value
                     ) {
                       setUpdatingInstallmentCount(e.target.value);
@@ -357,9 +353,7 @@ export default function Arreas_update({ invoice_no, nic }) {
               </Grid>
               <Grid item xs={12} sm={6}>
                 <p>
-                  {instCount -
-                    (installments.length + updatingInstallmentCount) -
-                    allInstallment}
+                 {instCount - (installments.length + updatingInstallmentCount)}
                 </p>
               </Grid>
 

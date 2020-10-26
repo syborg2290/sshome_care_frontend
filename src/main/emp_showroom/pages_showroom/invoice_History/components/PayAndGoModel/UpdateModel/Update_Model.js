@@ -334,11 +334,7 @@ export default function Update_Model({
                   onChange={(e) => {
                     if (
                       Math.round(instCount) -
-                        (delayedDays > 7
-                          ? installments.length +
-                            allInstallment +
-                            updatingInstallmentCount
-                          : installments.length + updatingInstallmentCount) >=
+                        (allInstallment + installments.length +updatingInstallmentCount) >=
                       e.target.value
                     ) {
                       setUpdatingInstallmentCount(e.target.value);
@@ -355,9 +351,7 @@ export default function Update_Model({
               </Grid>
               <Grid item xs={12} sm={6}>
                 <p>
-                  {instCount -
-                    (installments.length + updatingInstallmentCount) -
-                    allInstallment}
+                  {instCount - (installments.length + updatingInstallmentCount)}
                 </p>
               </Grid>
 

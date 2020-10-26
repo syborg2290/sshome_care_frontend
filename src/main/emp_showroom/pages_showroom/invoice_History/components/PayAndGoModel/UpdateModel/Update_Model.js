@@ -333,10 +333,10 @@ export default function Update_Model({
                   value={updatingInstallmentCount}
                   onChange={(e) => {
                     if (
-                      Math.round(instCount) -
-                        (allInstallment + installments.length) >=
+                      instCount - (allInstallment + installments.length) >=
                       e.target.value
                     ) {
+                     
                       setUpdatingInstallmentCount(e.target.value);
                     }
                   }}
@@ -351,7 +351,9 @@ export default function Update_Model({
               </Grid>
               <Grid item xs={12} sm={6}>
                 <p>
-                  {instCount - (installments.length + updatingInstallmentCount)}
+                  {(instCount -
+                    (installments.length +
+                      allInstallment))-updatingInstallmentCount}
                 </p>
               </Grid>
 

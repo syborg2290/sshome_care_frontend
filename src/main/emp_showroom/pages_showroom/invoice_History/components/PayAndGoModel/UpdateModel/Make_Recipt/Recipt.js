@@ -46,7 +46,7 @@ class Recipt extends React.Component {
       "Installment Payment",
       this.props.prop?.delayedCharges,
       <CurrencyFormat
-        value={Math.round(this.props.prop?.total)}
+        value={this.props.prop?.total}
         displayType={"text"}
         thousandSeparator={true}
         prefix={" "}
@@ -103,7 +103,7 @@ class Recipt extends React.Component {
                 </Col>
                 <Col className="tiles_details_sum" span={10}>
                   <CurrencyFormat
-                    value={Math.round(this.state.total)}
+                    value={this.state.total}
                     displayType={"text"}
                     thousandSeparator={true}
                     prefix={" "}

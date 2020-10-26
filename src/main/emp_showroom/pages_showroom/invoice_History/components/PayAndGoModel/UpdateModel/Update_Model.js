@@ -209,13 +209,16 @@ export default function Update_Model({
 
       async onOk() {
         await updateInstallment();
+        let totalRe =
+          Math.round(
+            instAmountProp * (allInstallment + updatingInstallmentCount)
+          ) + Math.round(delayedCharges);
+
         let passingWithCustomerObj = {
           invoice_number: invoice_no,
           customerDetails: customer,
-          total:
-            Math.round(instAmountProp) *
-              (allInstallment + Math.round(updatingInstallmentCount)) +
-            Math.round(delayedCharges),
+          total: totalRe,
+
           delayedCharges: Math.round(delayedCharges),
         };
 
@@ -451,12 +454,10 @@ export default function Update_Model({
                 >
                   <CurrencyFormat
                     value={
-                      (delayedDays > 7
-                        ? Math.round(instAmountProp) *
-                          Math.round(delayedDays / 7)
-                        : Math.round(instAmountProp)) *
-                        updatingInstallmentCount +
-                      Math.round(delayedCharges)
+                      Math.round(
+                        instAmountProp *
+                          (allInstallment + updatingInstallmentCount)
+                      ) + Math.round(delayedCharges)
                     }
                     displayType={"text"}
                     thousandSeparator={true}

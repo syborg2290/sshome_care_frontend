@@ -125,8 +125,13 @@ export default function Full_Payment_Model({ items_list_props }) {
                   </Grid>
                   <Grid item xs={12} sm={7}>
                     <p>
-                      {eachItem.gurantee_period.toString()+" "+eachItem.gurantee_type.value.toString()}
+                      {eachItem.gurantee_period.toString() +
+                        " " +
+                        eachItem.gurantee_type.value.toString()}
                     </p>
+                  </Grid>
+                  <Grid className="lbl_topis" item xs={12} sm={12}>
+                    <hr />
                   </Grid>
                 </Grid>
               </form>

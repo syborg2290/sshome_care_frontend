@@ -67,67 +67,71 @@ export default function Dashboard() {
       if (31 - daysCountInitial >= 0) {
         // setDelayedDays(0);
       } else {
-        db.collection("arrears")
-          .where("invoice_number", "==", eachRe.data().invoice_number)
-          .get()
-          .then((reArreas) => {
-            if (reArreas.docs.length > 0) {
-              db.collection("arrears")
-                .doc(reArreas.docs[0].id)
-                .update({
+        if (daysCountInitial - 31 > 7) {
+          db.collection("arrears")
+            .where("invoice_number", "==", eachRe.data().invoice_number)
+            .get()
+            .then((reArreas) => {
+              if (reArreas.docs.length > 0) {
+                db.collection("arrears")
+                  .doc(reArreas.docs[0].id)
+                  .update({
+                    delayed_days: Math.round(daysCountInitial) - 31,
+                    delayed_charges:
+                      daysCountInitial - 31 <= 7
+                        ? 0
+                        : 99 * Math.round((daysCountInitial - 31) / 7),
+                  });
+              } else {
+                db.collection("arrears").add({
+                  invoice_number: eachRe.data().invoice_number,
+                  customer_id: eachRe.data().customer_id,
+                  nic: eachRe.data().nic,
                   delayed_days: Math.round(daysCountInitial) - 31,
                   delayed_charges:
                     daysCountInitial - 31 <= 7
                       ? 0
                       : 99 * Math.round((daysCountInitial - 31) / 7),
+                  date: firebase.firestore.FieldValue.serverTimestamp(),
                 });
-            } else {
-              db.collection("arrears").add({
-                invoice_number: eachRe.data().invoice_number,
-                customer_id: eachRe.data().customer_id,
-                nic: eachRe.data().nic,
-                delayed_days: Math.round(daysCountInitial) - 31,
-                delayed_charges:
-                  daysCountInitial - 31 <= 7
-                    ? 0
-                    : 99 * Math.round((daysCountInitial - 31) / 7),
-                date: firebase.firestore.FieldValue.serverTimestamp(),
-              });
-            }
-          });
+              }
+            });
+        }
       }
     } else {
       if (7 - daysCountInitial >= 0) {
         // setDelayedDays(0);
       } else {
-        db.collection("arrears")
-          .where("invoice_number", "==", eachRe.data().invoice_number)
-          .get()
-          .then((reArreas) => {
-            if (reArreas.docs.length > 0) {
-              db.collection("arrears")
-                .doc(reArreas.docs[0].id)
-                .update({
+        if (daysCountInitial - 7 > 7) {
+          db.collection("arrears")
+            .where("invoice_number", "==", eachRe.data().invoice_number)
+            .get()
+            .then((reArreas) => {
+              if (reArreas.docs.length > 0) {
+                db.collection("arrears")
+                  .doc(reArreas.docs[0].id)
+                  .update({
+                    delayed_days: Math.round(daysCountInitial) - 7,
+                    delayed_charges:
+                      daysCountInitial - 7 <= 7
+                        ? 0
+                        : 99 * Math.round((daysCountInitial - 7) / 7),
+                  });
+              } else {
+                db.collection("arrears").add({
+                  invoice_number: eachRe.data().invoice_number,
+                  customer_id: eachRe.data().customer_id,
+                  nic: eachRe.data().nic,
                   delayed_days: Math.round(daysCountInitial) - 7,
                   delayed_charges:
                     daysCountInitial - 7 <= 7
                       ? 0
                       : 99 * Math.round((daysCountInitial - 7) / 7),
+                  date: firebase.firestore.FieldValue.serverTimestamp(),
                 });
-            } else {
-              db.collection("arrears").add({
-                invoice_number: eachRe.data().invoice_number,
-                customer_id: eachRe.data().customer_id,
-                nic: eachRe.data().nic,
-                delayed_days: Math.round(daysCountInitial) - 7,
-                delayed_charges:
-                  daysCountInitial - 7 <= 7
-                    ? 0
-                    : 99 * Math.round((daysCountInitial - 7) / 7),
-                date: firebase.firestore.FieldValue.serverTimestamp(),
-              });
-            }
-          });
+              }
+            });
+        }
       }
     }
   };
@@ -144,58 +148,64 @@ export default function Dashboard() {
       if (31 - daysCount >= 0) {
         // setDelayedDays(0);
       } else {
-        let statusMonth = await db
-          .collection("arrears")
-          .where("invoice_number", "==", eachRe.data().invoice_number)
-          .get();
+        if (daysCount - 31 > 7) {
+          let statusMonth = await db
+            .collection("arrears")
+            .where("invoice_number", "==", eachRe.data().invoice_number)
+            .get();
 
-        if (statusMonth.docs.length > 0) {
-          db.collection("arrears")
-            .doc(statusMonth.docs[0].id)
-            .update({
-              delayed_days: daysCount - 31,
+          if (statusMonth.docs.length > 0) {
+            db.collection("arrears")
+              .doc(statusMonth.docs[0].id)
+              .update({
+                delayed_days: daysCount - 31,
+                delayed_charges:
+                  daysCount - 31 <= 7
+                    ? 0
+                    : 99 * Math.round((daysCount - 31) / 7),
+              });
+          } else {
+            db.collection("arrears").add({
+              invoice_number: eachRe.data().invoice_number,
+              customer_id: eachRe.data().customer_id,
+              nic: eachRe.data().nic,
+              delayed_days: Math.round(daysCount) - 31,
               delayed_charges:
                 daysCount - 31 <= 7 ? 0 : 99 * Math.round((daysCount - 31) / 7),
+              date: firebase.firestore.FieldValue.serverTimestamp(),
             });
-        } else {
-          db.collection("arrears").add({
-            invoice_number: eachRe.data().invoice_number,
-            customer_id: eachRe.data().customer_id,
-            nic: eachRe.data().nic,
-            delayed_days: Math.round(daysCount) - 31,
-            delayed_charges:
-              daysCount - 31 <= 7 ? 0 : 99 * Math.round((daysCount - 31) / 7),
-            date: firebase.firestore.FieldValue.serverTimestamp(),
-          });
+          }
         }
       }
     } else {
       if (7 - daysCount >= 0) {
         // setDelayedDays(0);
       } else {
-        let statusWeek = await db
-          .collection("arrears")
-          .where("invoice_number", "==", eachRe.data().invoice_number)
-          .get();
+        if (daysCount - 7 > 7) {
+          let statusWeek = await db
+            .collection("arrears")
+            .where("invoice_number", "==", eachRe.data().invoice_number)
+            .get();
 
-        if (statusWeek.docs.length > 0) {
-          db.collection("arrears")
-            .doc(statusWeek.docs[0].id)
-            .update({
+          if (statusWeek.docs.length > 0) {
+            db.collection("arrears")
+              .doc(statusWeek.docs[0].id)
+              .update({
+                delayed_days: Math.round(daysCount) - 7,
+                delayed_charges:
+                  daysCount - 7 <= 7 ? 0 : 99 * Math.round((daysCount - 7) / 7),
+              });
+          } else {
+            db.collection("arrears").add({
+              invoice_number: eachRe.data().invoice_number,
+              customer_id: eachRe.data().customer_id,
+              nic: eachRe.data().nic,
               delayed_days: Math.round(daysCount) - 7,
               delayed_charges:
                 daysCount - 7 <= 7 ? 0 : 99 * Math.round((daysCount - 7) / 7),
+              date: firebase.firestore.FieldValue.serverTimestamp(),
             });
-        } else {
-          db.collection("arrears").add({
-            invoice_number: eachRe.data().invoice_number,
-            customer_id: eachRe.data().customer_id,
-            nic: eachRe.data().nic,
-            delayed_days: Math.round(daysCount) - 7,
-            delayed_charges:
-              daysCount - 7 <= 7 ? 0 : 99 * Math.round((daysCount - 7) / 7),
-            date: firebase.firestore.FieldValue.serverTimestamp(),
-          });
+          }
         }
       }
     }

@@ -150,11 +150,7 @@ export default function Arreas_update({ invoice_no, nic }) {
 
   const updateInstallment = async () => {
     var j = 0;
-    for (
-      var i = 0;
-      i <= allInstallment + updatingInstallmentCount;
-      i++
-    ) {
+    for (var i = 0; i <= allInstallment + updatingInstallmentCount; i++) {
       await db
         .collection("installment")
         .where("invoice_number", "==", invoice_no)
@@ -334,9 +330,9 @@ export default function Arreas_update({ invoice_no, nic }) {
                   size="small"
                   value={updatingInstallmentCount}
                   onChange={(e) => {
-                     if (
+                    if (
                       Math.round(instCount) -
-                        (allInstallment + installments.length +updatingInstallmentCount) >=
+                        (allInstallment + installments.length) >=
                       e.target.value
                     ) {
                       setUpdatingInstallmentCount(e.target.value);
@@ -353,7 +349,7 @@ export default function Arreas_update({ invoice_no, nic }) {
               </Grid>
               <Grid item xs={12} sm={6}>
                 <p>
-                 {instCount - (installments.length + updatingInstallmentCount)}
+                  {instCount - (installments.length + updatingInstallmentCount)}
                 </p>
               </Grid>
 

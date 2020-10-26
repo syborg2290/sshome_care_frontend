@@ -334,7 +334,7 @@ export default function Update_Model({
                   onChange={(e) => {
                     if (
                       Math.round(instCount) -
-                        (allInstallment + installments.length +updatingInstallmentCount) >=
+                        (allInstallment + installments.length) >=
                       e.target.value
                     ) {
                       setUpdatingInstallmentCount(e.target.value);

@@ -148,7 +148,8 @@ export default function Update_Model({
   const updateInstallment = async () => {
     var j = 0;
     let plussForLoop = allInstallment + Math.round(updatingInstallmentCount);
-    for (var i = 1; i < plussForLoop; i++) {
+   
+    for (var i = 1; i <= plussForLoop; i++) {
       await db
         .collection("installment")
         .where("invoice_number", "==", invoice_no)
@@ -172,20 +173,21 @@ export default function Update_Model({
         });
       j++;
     }
+    
+     if (allInstallment > 0) {
+        await db
+          .collection("arrears")
+          .where("invoice_number", "==", invoice_no)
+          .get()
+          .then(async (arrRe) => {
+            if (arrRe.docs.length > 0) {
+              await db.collection("arrears").doc(arrRe.docs[0].id).delete();
+            }
+          });
+      }
+
     let allPlus =
       Math.round(updatingInstallmentCount) + installments + allInstallment;
-
-    if (installments > 0) {
-      await db
-        .collection("arrears")
-        .where("invoice_number", "==", invoice_no)
-        .get()
-        .then(async (arrRe) => {
-          if (arrRe.docs.length > 0) {
-            await db.collection("arrears").doc(arrRe.docs[0].id).delete();
-          }
-        });
-    }
 
     if (instCount - allPlus <= 0) {
       await db
@@ -228,7 +230,7 @@ export default function Update_Model({
       async onCancel() {
         await updateInstallment();
         closeModal();
-        window.location.reload();
+        // window.location.reload();
       },
     });
   };

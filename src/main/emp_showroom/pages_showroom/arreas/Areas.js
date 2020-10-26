@@ -33,6 +33,11 @@ export default function Areas() {
   const showModalArreasUpdate = () => {
     setArreasUpdate(true);
   };
+  
+  
+  const cancelModalArreasUpdate = () => {
+    setArreasUpdate(false);
+  };
 
   const showModalArresHistory = () => {
     setArresHistory(true);
@@ -177,6 +182,7 @@ export default function Areas() {
                 key={arreasAllData[currentIndx]?.id}
                 invoice_no={arreasAllData[currentIndx]?.data?.invoice_number}
                 nic={arreasAllData[currentIndx]?.data?.nic}
+                close={cancelModalArreasUpdate}
               />
             </div>
           </div>

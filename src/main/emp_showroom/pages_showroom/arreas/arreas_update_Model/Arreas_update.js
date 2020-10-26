@@ -176,7 +176,7 @@ export default function Arreas_update({ invoice_no, nic }) {
     }
 
     if (
-      instCount -
+       instCount -
         (updatingInstallmentCount + (installments.length + allInstallment)) <=
       0
     ) {

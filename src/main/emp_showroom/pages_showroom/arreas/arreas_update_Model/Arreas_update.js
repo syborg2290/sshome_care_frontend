@@ -152,7 +152,7 @@ export default function Arreas_update({ invoice_no, nic }) {
     var j = 0;
     for (
       var i = 0;
-      i < allInstallment + Math.round(updatingInstallmentCount);
+      i <= allInstallment + updatingInstallmentCount;
       i++
     ) {
       await db

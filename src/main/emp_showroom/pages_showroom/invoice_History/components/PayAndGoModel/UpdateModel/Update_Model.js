@@ -26,7 +26,7 @@ export default function Update_Model({
   customer_id,
   closeModal,
 }) {
-  const [installments, setInstallments] = useState([]);
+  const [installments, setInstallments] = useState(0);
   const [delayedDays, setDelayedDays] = useState(0);
   const [allInstallment, setAllInstallment] = useState(0);
   const [delayedCharges, setDelayedCharges] = useState(0);
@@ -51,9 +51,7 @@ export default function Update_Model({
       .where("invoice_number", "==", invoice_no)
       .get()
       .then((instReDoc) => {
-        instReDoc.docs.forEach((each) => {
-          setInstallments((old) => [...old, each.data()]);
-        });
+        setInstallments(instReDoc.docs.length);
       });
 
     db.collection("invoice")
@@ -78,7 +76,7 @@ export default function Update_Model({
                 } else {
                   setDelayedDays(daysCountInitial - 31);
                   if (daysCountInitial / 31 > 0) {
-                    setAllInstallment((daysCountInitial / 31).toFixed());
+                    setAllInstallment(daysCountInitial / 31);
                   }
 
                   setDelayedCharges(
@@ -93,7 +91,7 @@ export default function Update_Model({
                 } else {
                   setDelayedDays(daysCountInitial - 7);
                   if (daysCountInitial / 7 > 0) {
-                    setAllInstallment((daysCountInitial / 7).toFixed());
+                    setAllInstallment(daysCountInitial / 7);
                   }
                   setDelayedCharges(
                     daysCountInitial - 7 <= 7
@@ -117,7 +115,7 @@ export default function Update_Model({
                 } else {
                   setDelayedDays(daysCount - 31);
                   if (daysCount / 31 > 0) {
-                    setAllInstallment((daysCount / 31).toFixed());
+                    setAllInstallment(daysCount / 31);
                   }
                   setDelayedCharges(
                     daysCount - 31 <= 7
@@ -131,7 +129,7 @@ export default function Update_Model({
                 } else {
                   setDelayedDays(daysCount - 7);
                   if (daysCount / 7 > 0) {
-                    setAllInstallment((daysCount / 7).toFixed());
+                    setAllInstallment(daysCount / 7);
                   }
                   setDelayedCharges(
                     daysCount - 7 <= 7
@@ -178,9 +176,7 @@ export default function Update_Model({
       j++;
     }
     let allPlus =
-      Math.round(updatingInstallmentCount) +
-      installments.length +
-      allInstallment;
+      Math.round(updatingInstallmentCount) + installments + allInstallment;
     if (instCount - allPlus <= 0) {
       await db
         .collection("invoice")
@@ -235,6 +231,13 @@ export default function Update_Model({
         window.location.reload();
       },
     });
+  };
+
+  const dueInstallmentsCount = () => {
+    let allPlusss = Math.round(updatingInstallmentCount) + installments;
+    let againallPlusss = allPlusss + Math.round(allInstallment);
+    let rest = instCount - againallPlusss;
+    return rest;
   };
 
   return (
@@ -333,7 +336,7 @@ export default function Update_Model({
                   value={updatingInstallmentCount}
                   onChange={(e) => {
                     if (
-                      instCount - (allInstallment + installments.length) >=
+                      instCount - (allInstallment + installments) >=
                       e.target.value
                     ) {
                       setUpdatingInstallmentCount(e.target.value);
@@ -349,11 +352,7 @@ export default function Update_Model({
                 :
               </Grid>
               <Grid item xs={12} sm={6}>
-                <p>
-                  {instCount -
-                    (installments.length + allInstallment) -
-                    updatingInstallmentCount}
-                </p>
+                <p>{dueInstallmentsCount()}</p>
               </Grid>
 
               <Grid className="lbl_topi" item xs={12} sm={4}>
@@ -366,7 +365,7 @@ export default function Update_Model({
                 <CurrencyFormat
                   value={
                     Math.round(instAmountProp) *
-                    Math.round(Math.round(installments.length))
+                    Math.round(Math.round(installments))
                   }
                   displayType={"text"}
                   thousandSeparator={true}

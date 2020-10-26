@@ -19,7 +19,7 @@ import { Modal } from "antd";
 // styles
 import "./Arreas_update.css";
 
-export default function Arreas_update({ invoice_no, nic,close }) {
+export default function Arreas_update({ invoice_no, nic, close }) {
   const [installments, setInstallments] = useState([]);
   const [allInstallment, setAllInstallment] = useState(0);
   const [delayedDays, setDelayedDays] = useState(0);
@@ -175,11 +175,12 @@ export default function Arreas_update({ invoice_no, nic,close }) {
       j++;
     }
 
-    if (
-       instCount -
-        (updatingInstallmentCount + (installments.length + allInstallment)) ===
-      0
-    ) {
+    let allPlus =
+      Math.round(updatingInstallmentCount) +
+      installments.length +
+      allInstallment;
+
+    if (instCount - allPlus <= 0) {
       await db
         .collection("invoice")
         .where("invoice_number", "==", invoice_no)
@@ -335,7 +336,6 @@ export default function Arreas_update({ invoice_no, nic,close }) {
                       instCount - (allInstallment + installments.length) >=
                       e.target.value
                     ) {
-                     
                       setUpdatingInstallmentCount(e.target.value);
                     }
                   }}
@@ -350,9 +350,9 @@ export default function Arreas_update({ invoice_no, nic,close }) {
               </Grid>
               <Grid item xs={12} sm={6}>
                 <p>
-                 {(instCount -
-                    (installments.length +
-                      allInstallment))-updatingInstallmentCount}
+                  {instCount -
+                    (installments.length + allInstallment) -
+                    updatingInstallmentCount}
                 </p>
               </Grid>
 

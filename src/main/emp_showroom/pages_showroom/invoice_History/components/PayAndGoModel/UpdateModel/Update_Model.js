@@ -414,8 +414,8 @@ export default function Update_Model({
                   size="small"
                   value={Math.round(delayedCharges)}
                   onChange={(e) => {
-                    if (e.target.value >= 0) {
-                      setDelayedCharges(e.target.value.trim());
+                    if (Math.round(e.target.value) >= 0) {
+                      setDelayedCharges(Math.round(e.target.value));
                     }
                   }}
                 />

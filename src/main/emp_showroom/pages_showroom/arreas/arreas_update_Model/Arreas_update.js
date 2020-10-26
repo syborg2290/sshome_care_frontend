@@ -176,8 +176,9 @@ export default function Arreas_update({ invoice_no, nic }) {
     }
 
     if (
-      Math.round(instCount) -
-        (updatingInstallmentCount + (installments.length + allInstallment)) <=
+     Math.round(instCount) -
+        (updatingInstallmentCount +
+          (installments.length + delayedDays > 0 ? allInstallment : 0)) <=
       0
     ) {
       await db

@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import MUIDataTable from "mui-datatables";
 import { Grid } from "@material-ui/core";
 import { Spin } from "antd";
@@ -13,7 +13,7 @@ import db from "../../../../../config/firebase.js";
 import "./Arreas_History.css";
 
 export default function Arreas_History({ invoice_no }) {
- // eslint-disable-next-line
+  // eslint-disable-next-line
   const [isLoading, setIsLoading] = useState(true);
 
   // eslint-disable-next-line
@@ -75,7 +75,6 @@ export default function Arreas_History({ invoice_no }) {
       .where("invoice_number", "==", invoice_no)
       .get()
       .then((instReDoc) => {
-        
         var reArray = instReDoc.docs;
         reArray.sort((a, b) => {
           if (a.data().balance > b.data().balance) {
@@ -83,8 +82,8 @@ export default function Arreas_History({ invoice_no }) {
           } else {
             return 1;
           }
-        })
-        
+        });
+
         reArray.forEach((each) => {
           setInstallments((old) => [
             ...old,
@@ -122,7 +121,6 @@ export default function Arreas_History({ invoice_no }) {
         });
       });
     setIsLoading(false);
-   
   }, [invoice_no]);
 
   return (
@@ -151,11 +149,7 @@ export default function Arreas_History({ invoice_no }) {
                   noMatch: isLoading ? (
                     <Spin className="tblSpinner" size="large" spinning="true" />
                   ) : (
-                    <img
-                      alt="Empty data"
-                      className="empty_data"
-                      src={require("../../../../../assets/empty.png")}
-                    />
+                    ""
                   ),
                 },
               },

@@ -33,8 +33,7 @@ export default function Areas() {
   const showModalArreasUpdate = () => {
     setArreasUpdate(true);
   };
-  
-  
+
   const cancelModalArreasUpdate = () => {
     setArreasUpdate(false);
   };
@@ -239,11 +238,7 @@ export default function Areas() {
                   noMatch: isLoading ? (
                     <Spin className="tblSpinner" size="large" spinning="true" />
                   ) : (
-                    <img
-                      alt="Empty data"
-                      className="empty_data"
-                      src={require("../../../../assets/empty.png")}
-                    />
+                    ""
                   ),
                 },
               },

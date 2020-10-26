@@ -403,7 +403,6 @@ export default function Update_Model({
                 <TextField
                   type="number"
                   autoComplete="delayed"
-                  InputProps={{ inputProps: { min: 0 } }}
                   variant="outlined"
                   required
                   fullWidth
@@ -411,7 +410,9 @@ export default function Update_Model({
                   size="small"
                   value={Math.round(delayedCharges)}
                   onChange={(e) => {
-                    setDelayedCharges(e.target.value.trim());
+                    if (e.target.value >= 0) {
+                      setDelayedCharges(e.target.value.trim());
+                    }
                   }}
                 />
               </Grid>

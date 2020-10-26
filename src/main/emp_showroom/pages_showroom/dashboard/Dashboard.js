@@ -64,7 +64,7 @@ export default function Dashboard() {
         new Date(eachRe.data()?.date?.seconds * 1000).getTime()) /
       (1000 * 3600 * 24);
     if (eachRe.data().installmentType === "Monthly") {
-      if (30 - daysCountInitial >= 0) {
+      if (31 - daysCountInitial >= 0) {
         // setDelayedDays(0);
       } else {
         db.collection("arrears")
@@ -75,22 +75,22 @@ export default function Dashboard() {
               db.collection("arrears")
                 .doc(reArreas.docs[0].id)
                 .update({
-                  delayed_days: Math.round(daysCountInitial) - 30,
+                  delayed_days: Math.round(daysCountInitial) - 31,
                   delayed_charges:
-                    daysCountInitial - 30 <= 7
+                    daysCountInitial - 31 <= 7
                       ? 0
-                      : 99 * (Math.round(daysCountInitial - 30) / 7),
+                      : 99 * (Math.round(daysCountInitial - 31) / 7),
                 });
             } else {
               db.collection("arrears").add({
                 invoice_number: eachRe.data().invoice_number,
                 customer_id: eachRe.data().customer_id,
                 nic: eachRe.data().nic,
-                delayed_days: Math.round(daysCountInitial) - 30,
+                delayed_days: Math.round(daysCountInitial) - 31,
                 delayed_charges:
-                  daysCountInitial - 30 <= 7
+                  daysCountInitial - 31 <= 7
                     ? 0
-                    : 99 * (Math.round(daysCountInitial - 30) / 7),
+                    : 99 * (Math.round(daysCountInitial - 31) / 7),
                 date: firebase.firestore.FieldValue.serverTimestamp(),
               });
             }
@@ -112,7 +112,7 @@ export default function Dashboard() {
                   delayed_charges:
                     daysCountInitial - 7 <= 7
                       ? 0
-                      : 99 * (Math.round(daysCountInitial - 7) / 7),
+                      : 99 * Math.round((daysCountInitial - 7) / 7),
                 });
             } else {
               db.collection("arrears").add({
@@ -123,7 +123,7 @@ export default function Dashboard() {
                 delayed_charges:
                   daysCountInitial - 7 <= 7
                     ? 0
-                    : 99 * (Math.round(daysCountInitial - 7) / 7),
+                    : 99 * Math.round((daysCountInitial - 7) / 7),
                 date: firebase.firestore.FieldValue.serverTimestamp(),
               });
             }
@@ -141,7 +141,7 @@ export default function Dashboard() {
       (1000 * 3600 * 24);
 
     if (eachRe.data().installmentType === "Monthly") {
-      if (30 - daysCount >= 0) {
+      if (31 - daysCount >= 0) {
         // setDelayedDays(0);
       } else {
         let statusMonth = await db
@@ -153,18 +153,18 @@ export default function Dashboard() {
           db.collection("arrears")
             .doc(statusMonth.docs[0].id)
             .update({
-              delayed_days: daysCount - 30,
+              delayed_days: daysCount - 31,
               delayed_charges:
-                daysCount - 30 <= 7 ? 0 : 99 * Math.round((daysCount - 30) / 7),
+                daysCount - 31 <= 7 ? 0 : 99 * Math.round((daysCount - 31) / 7),
             });
         } else {
           db.collection("arrears").add({
             invoice_number: eachRe.data().invoice_number,
             customer_id: eachRe.data().customer_id,
             nic: eachRe.data().nic,
-            delayed_days: Math.round(daysCount) - 30,
+            delayed_days: Math.round(daysCount) - 31,
             delayed_charges:
-              daysCount - 30 <= 7 ? 0 : 99 * Math.round((daysCount - 30) / 7),
+              daysCount - 31 <= 7 ? 0 : 99 * Math.round((daysCount - 31) / 7),
             date: firebase.firestore.FieldValue.serverTimestamp(),
           });
         }

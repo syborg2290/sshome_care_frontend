@@ -91,7 +91,7 @@ export default function Update_Model({
                 } else {
                   setDelayedDays(daysCountInitial - 7);
                   if (daysCountInitial / 7 > 0) {
-                    setAllInstallment(daysCountInitial / 7);
+                    setAllInstallment(Math.round((daysCountInitial - 7) / 7));
                   }
                   setDelayedCharges(
                     daysCountInitial - 7 <= 7
@@ -129,7 +129,7 @@ export default function Update_Model({
                 } else {
                   setDelayedDays(daysCount - 7);
                   if (daysCount / 7 > 0) {
-                    setAllInstallment(daysCount / 7);
+                    setAllInstallment(Math.round((daysCount - 7) / 7));
                   }
                   setDelayedCharges(
                     daysCount - 7 <= 7
@@ -148,7 +148,7 @@ export default function Update_Model({
   const updateInstallment = async () => {
     var j = 0;
     let plussForLoop = allInstallment + Math.round(updatingInstallmentCount);
-   
+
     for (var i = 1; i <= plussForLoop; i++) {
       await db
         .collection("installment")
@@ -173,18 +173,18 @@ export default function Update_Model({
         });
       j++;
     }
-    
-     if (allInstallment > 0) {
-        await db
-          .collection("arrears")
-          .where("invoice_number", "==", invoice_no)
-          .get()
-          .then(async (arrRe) => {
-            if (arrRe.docs.length > 0) {
-              await db.collection("arrears").doc(arrRe.docs[0].id).delete();
-            }
-          });
-      }
+
+    if (allInstallment > 0) {
+      await db
+        .collection("arrears")
+        .where("invoice_number", "==", invoice_no)
+        .get()
+        .then(async (arrRe) => {
+          if (arrRe.docs.length > 0) {
+            await db.collection("arrears").doc(arrRe.docs[0].id).delete();
+          }
+        });
+    }
 
     let allPlus =
       Math.round(updatingInstallmentCount) + installments + allInstallment;
@@ -230,7 +230,7 @@ export default function Update_Model({
       async onCancel() {
         await updateInstallment();
         closeModal();
-        // window.location.reload();
+        window.location.reload();
       },
     });
   };

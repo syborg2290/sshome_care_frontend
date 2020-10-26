@@ -127,13 +127,8 @@ export default function Add_Customer() {
                         };
 
                         var passedObj = location.state?.detail;
-                        passedObj.forEach((obj) => {
-                          if (obj.paymentWay === "PayandGo") {
-                            obj.customer = customerObj;
-                          } else {
-                            obj.customer = customerObj;
-                          }
-                        });
+
+                        passedObj[0].customer = customerObj;
 
                         let moveWith = {
                           pathname: "/showroom/ui/makeInvoice",

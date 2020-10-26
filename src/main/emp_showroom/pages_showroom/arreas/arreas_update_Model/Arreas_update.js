@@ -421,8 +421,8 @@ export default function Arreas_update({ invoice_no, nic, close }) {
                   size="small"
                   value={Math.round(delayedCharges)}
                   onChange={(e) => {
-                    if (e.target.value >= 0) {
-                      setDelayedCharges(e.target.value.trim());
+                    if (Math.round(e.target.value) >= 0) {
+                      setDelayedCharges(Math.round(e.target.value));
                     }
                   }}
                 />
@@ -435,7 +435,7 @@ export default function Arreas_update({ invoice_no, nic, close }) {
                 :
               </Grid>
               <Grid item xs={12} sm={6}>
-                {delayedDays / 7 > 0 ? (
+                {delayedDays / 7 > 7 ? (
                   <p
                     style={{
                       color: "red",
@@ -480,7 +480,7 @@ export default function Arreas_update({ invoice_no, nic, close }) {
                   }}
                 >
                   (
-                  {delayedDays > 7
+                  {delayedDays > 0
                     ? "  " +
                       Math.round(instAmountProp) +
                       " X (" +

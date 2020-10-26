@@ -37,7 +37,7 @@ export default function ItemTable() {
   const [currentIndx, setCurrentIndx] = useState(0);
   // eslint-disable-next-line
   var [selectedItems, setSelectedItems] = useState([]);
-  var [selectedItemsCount, setSelectedItemsCount] = useState(0);
+
   // eslint-disable-next-line
   const [itemList, SetItemList] = useState([]);
 
@@ -238,10 +238,7 @@ export default function ItemTable() {
         className="model_Item_Showroom"
         onCancel={() => {
           setVisible(false);
-          if (selectedItems > 0) {
-            window.location.reload();
-          }
-          
+          window.location.reload();
         }}
       >
         <div className="table_Model_Showroom">
@@ -503,7 +500,6 @@ export default function ItemTable() {
               sort: true,
 
               onRowsSelect: (curRowSelected, allRowsSelected) => {
-                setSelectedItemsCount(selectedItemsCount + 1);
                 selectedItems = [];
                 allRowsSelected.forEach((single) => {
                   if (allTtemData[single.dataIndex].data.qty > 0) {

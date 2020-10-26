@@ -147,9 +147,10 @@ export default function Update_Model({
 
   const updateInstallment = async () => {
     var j = 0;
+    let plussForLoop = allInstallment + Math.round(updatingInstallmentCount);
     for (
       var i = 0;
-      i < allInstallment + Math.round(updatingInstallmentCount);
+      i < plussForLoop;
       i++
     ) {
       await db
@@ -474,7 +475,7 @@ export default function Update_Model({
                     ? "  " +
                       Math.round(instAmountProp) +
                       " X (" +
-                      allInstallment +
+                      Math.round(allInstallment) +
                       " + " +
                       updatingInstallmentCount +
                       ") + " +

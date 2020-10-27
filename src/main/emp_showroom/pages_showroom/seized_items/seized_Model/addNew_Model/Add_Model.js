@@ -53,6 +53,7 @@ export default function Add_Model({ closeModel }) {
                         .then((_) => {
                           setLoading(false);
                           closeModel();
+                          window.location.reload();
                         });
                     });
                 });

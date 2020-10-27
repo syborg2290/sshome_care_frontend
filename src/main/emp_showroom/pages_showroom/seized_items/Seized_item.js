@@ -118,7 +118,7 @@ export default function Seized_item() {
   useEffect(() => {
     var rowData = [];
     var rowAllData = [];
-    db.collection("seized").onSnapshot((snap) => {
+    db.collection("seized").get().then((snap) => {
       snap.docs.forEach((RESnap) => {
         rowAllData.push({
           id: RESnap.id,

@@ -6,7 +6,6 @@ import Grid from "@material-ui/core/Grid";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
-import { Spin } from "antd";
 import CurrencyFormat from "react-currency-format";
 
 //components
@@ -29,9 +28,9 @@ import "./Dashboard.css";
 
 export default function Dashboard() {
   // eslint-disable-next-line
-  const [isLoading, setIsLoading] = useState(true);
-  // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
+
+  const [dueInstallmentsDueToday, setDueInstallmentsDueToday] = useState([]);
 
   useEffect(() => {
     db.collection("invoice")
@@ -66,6 +65,45 @@ export default function Dashboard() {
     if (eachRe.data().installmentType === "Monthly") {
       if (31 - daysCountInitial >= 0) {
         // setDelayedDays(0);
+        if (31 - daysCountInitial === 0) {
+          setDueInstallmentsDueToday((old) => [
+            ...old,
+            {
+              InvoiceNo: eachRe.data()?.invoice_number,
+              InstallmentType: eachRe.data()?.installmentType,
+              Day_Date: eachRe.data()?.installemtnDayDate,
+              Amount: (
+                <CurrencyFormat
+                  value={eachRe.data()?.items[0]?.amountPerInstallment}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+
+              NIC: eachRe.data()?.nic,
+              Balance: (
+                <CurrencyFormat
+                  value={
+                    eachRe.data()?.items[0]?.noOfInstallment *
+                    eachRe.data()?.items[0]?.amountPerInstallment
+                  }
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+              Action: (
+                <div>
+                  <VisibilityIcon />
+                  <span className="icon_Edit">
+                    <HistoryIcon />
+                  </span>
+                </div>
+              ),
+            },
+          ]);
+        }
       } else {
         if (daysCountInitial - 31 > 7) {
           db.collection("arrears")
@@ -101,6 +139,45 @@ export default function Dashboard() {
     } else {
       if (7 - daysCountInitial >= 0) {
         // setDelayedDays(0);
+        if (7 - daysCountInitial === 0) {
+          setDueInstallmentsDueToday((old) => [
+            ...old,
+            {
+              InvoiceNo: eachRe.data()?.invoice_number,
+              InstallmentType: eachRe.data()?.installmentType,
+              Day_Date: eachRe.data()?.installemtnDayDate,
+              Amount: (
+                <CurrencyFormat
+                  value={eachRe.data()?.items[0]?.amountPerInstallment}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+
+              NIC: eachRe.data()?.nic,
+              Balance: (
+                <CurrencyFormat
+                  value={
+                    eachRe.data()?.items[0]?.noOfInstallment *
+                    eachRe.data()?.items[0]?.amountPerInstallment
+                  }
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+              Action: (
+                <div>
+                  <VisibilityIcon />
+                  <span className="icon_Edit">
+                    <HistoryIcon />
+                  </span>
+                </div>
+              ),
+            },
+          ]);
+        }
       } else {
         if (daysCountInitial - 7 > 7) {
           db.collection("arrears")
@@ -147,6 +224,48 @@ export default function Dashboard() {
     if (eachRe.data().installmentType === "Monthly") {
       if (31 - daysCount >= 0) {
         // setDelayedDays(0);
+
+        if (31 - daysCount === 0) {
+          setDueInstallmentsDueToday((old) => [
+            ...old,
+            {
+              InvoiceNo: eachRe.data()?.invoice_number,
+              InstallmentType: eachRe.data()?.installmentType,
+              Day_Date: eachRe.data()?.installemtnDayDate,
+              Amount: (
+                <CurrencyFormat
+                  value={eachRe.data()?.items[0]?.amountPerInstallment}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+
+              NIC: eachRe.data()?.nic,
+              Balance: (
+                <CurrencyFormat
+                  value={
+                    eachRe.data()?.items[0]?.noOfInstallment *
+                      eachRe.data()?.items[0]?.amountPerInstallment -
+                    eachRe.data()?.items[0]?.amountPerInstallment *
+                      instReDoc.docs.length
+                  }
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+              Action: (
+                <div>
+                  <VisibilityIcon />
+                  <span className="icon_Edit">
+                    <HistoryIcon />
+                  </span>
+                </div>
+              ),
+            },
+          ]);
+        }
       } else {
         if (daysCount - 31 > 7) {
           let statusMonth = await db
@@ -180,6 +299,48 @@ export default function Dashboard() {
     } else {
       if (7 - daysCount >= 0) {
         // setDelayedDays(0);
+
+        if (7 - daysCount === 0) {
+          setDueInstallmentsDueToday((old) => [
+            ...old,
+            {
+              InvoiceNo: eachRe.data()?.invoice_number,
+              InstallmentType: eachRe.data()?.installmentType,
+              Day_Date: eachRe.data()?.installemtnDayDate,
+              Amount: (
+                <CurrencyFormat
+                  value={eachRe.data()?.items[0]?.amountPerInstallment}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+
+              NIC: eachRe.data()?.nic,
+              Balance: (
+                <CurrencyFormat
+                  value={
+                    eachRe.data()?.items[0]?.noOfInstallment *
+                      eachRe.data()?.items[0]?.amountPerInstallment -
+                    eachRe.data()?.items[0]?.amountPerInstallment *
+                      instReDoc.docs.length
+                  }
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+              Action: (
+                <div>
+                  <VisibilityIcon />
+                  <span className="icon_Edit">
+                    <HistoryIcon />
+                  </span>
+                </div>
+              ),
+            },
+          ]);
+        }
       } else {
         if (daysCount - 7 > 7) {
           let statusWeek = await db
@@ -223,7 +384,7 @@ export default function Dashboard() {
       },
     },
     {
-      name: "Date",
+      name: "InstallmentType",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -231,6 +392,16 @@ export default function Dashboard() {
         }),
       },
     },
+    {
+      name: " Day_Date",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+
     {
       name: "Amount",
       options: {
@@ -242,19 +413,6 @@ export default function Dashboard() {
     },
     {
       name: "NIC",
-      options: {
-        filter: false,
-        setCellHeaderProps: (value) => ({
-          style: {
-            fontSize: "15px",
-            color: "black",
-            fontWeight: "600",
-          },
-        }),
-      },
-    },
-    {
-      name: "Delayed",
       options: {
         filter: false,
         setCellHeaderProps: (value) => ({
@@ -296,39 +454,6 @@ export default function Dashboard() {
           },
         }),
       },
-    },
-  ];
-
-  const dashboardData = [
-    {
-      InvoiceNo: "3476-JDJCF",
-      Date: "test",
-      Amount: (
-        <CurrencyFormat
-          value={5000}
-          displayType={"text"}
-          thousandSeparator={true}
-          prefix={" "}
-        />
-      ),
-      NIC: "test",
-      Delayed: "test",
-      Balance: (
-        <CurrencyFormat
-          value={5000}
-          displayType={"text"}
-          thousandSeparator={true}
-          prefix={" "}
-        />
-      ),
-      Action: (
-        <div>
-          <VisibilityIcon />
-          <span className="icon_Edit">
-            <HistoryIcon />
-          </span>
-        </div>
-      ),
     },
   ];
 
@@ -412,10 +537,12 @@ export default function Dashboard() {
         <Grid item xs={12}>
           <MUIDataTable
             title={
-              <span className="title_Span_blackList">TODAY INSATALLMENT</span>
+              <span className="title_Span_blackList">
+                Due installments of the day
+              </span>
             }
             className="blackList_Table"
-            data={dashboardData}
+            data={dueInstallmentsDueToday}
             columns={dashboarColomns}
             options={{
               selectableRows: false,
@@ -429,15 +556,7 @@ export default function Dashboard() {
               onRowClick: (rowData, rowMeta) => {
                 setCurrentIndx(rowMeta.rowIndex);
               },
-              textLabels: {
-                body: {
-                  noMatch: isLoading ? (
-                    <Spin className="tblSpinner" size="large" spinning="true" />
-                  ) : (
-                    ""
-                  ),
-                },
-              },
+              
             }}
           />
         </Grid>
@@ -466,7 +585,7 @@ export default function Dashboard() {
       {/*START Invoices  Table */}
 
       <Typography className="today_invoices" variant="h4" component="h6">
-        Today Invoices
+        Invoices of issued in today
       </Typography>
       <Grid container spacing={4}>
         <Grid item xs={12}>

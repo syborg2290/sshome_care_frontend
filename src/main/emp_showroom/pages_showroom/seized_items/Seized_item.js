@@ -159,7 +159,11 @@ export default function Seized_item() {
         <div className="customer_Model">
           <div className="customer_Model_Main">
             <div className="customer_Modell_Detail">
-              <SeizedViewModel key={seizedAllData[currentIndx]?.id} />
+              <SeizedViewModel key={seizedAllData[currentIndx]?.id}
+                invoice_num={seizedAllData[currentIndx]?.data?.invoice_number}
+                nic={seizedAllData[currentIndx]?.data?.nic}
+                seized_date={seizedAllData[currentIndx]?.data?.date}
+              />
             </div>
           </div>
         </div>

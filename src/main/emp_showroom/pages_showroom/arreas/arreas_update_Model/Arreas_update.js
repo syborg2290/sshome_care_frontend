@@ -435,7 +435,7 @@ export default function Arreas_update({ invoice_no, nic, close }) {
                 :
               </Grid>
               <Grid item xs={12} sm={6}>
-                {delayedDays / 7 > 7 ? (
+                {delayedDays > 7 ? (
                   <p
                     style={{
                       color: "red",

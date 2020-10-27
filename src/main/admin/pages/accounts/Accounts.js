@@ -168,7 +168,7 @@ export default function Accounts() {
               selectableRows: false,
               customToolbarSelect: () => {},
               onRowClick: (rowData, rowMeta) => {
-                setCurrentIndx(rowMeta.rowIndex);
+                setCurrentIndx(rowMeta.dataIndex);
               },
               textLabels: {
                 body: {

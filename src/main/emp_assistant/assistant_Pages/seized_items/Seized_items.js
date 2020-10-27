@@ -193,7 +193,7 @@ export default function Seized_items() {
               elevation: 4,
               sort: true,
               onRowClick: (rowData, rowMeta) => {
-                setCurrentIndx(rowMeta.rowIndex);
+                setCurrentIndx(rowMeta.dataIndex);
               },
               textLabels: {
                 body: {

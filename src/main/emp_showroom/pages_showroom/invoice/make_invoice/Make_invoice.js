@@ -22,6 +22,7 @@ import {
 } from "@material-ui/core";
 
 import firebase from "firebase";
+import CurrencyFormat from "react-currency-format";
 
 import {
   NotificationContainer,
@@ -974,8 +975,15 @@ function Make_invoice() {
                             id={row.i.toString()}
                           >
                             {" "}
-                            {parseInt(itemDP[row.i] - itemDiscount[row.i]) *
-                              itemQty[row.i]}
+                            <CurrencyFormat
+                              value={
+                                parseInt(itemDP[row.i] - itemDiscount[row.i]) *
+                                itemQty[row.i]
+                              }
+                              displayType={"text"}
+                              thousandSeparator={true}
+                              prefix={" Rs. "}
+                            />
                           </TableCell>
                           <TableCell align="right">
                             <CloseOutlinedIcon
@@ -994,7 +1002,7 @@ function Make_invoice() {
                                     tablerows.splice(index, 1);
                                     setTableRows([...tablerows]);
                                     if (tablerows.length === 0) {
-                                      history.push("/showroom/itemTable");
+                                      history.push("/showroom/ui/itemTable");
                                     }
                                     delete itemQty[row.i];
                                     delete itemDP[row.i];
@@ -1015,7 +1023,12 @@ function Make_invoice() {
                           Subtotal(LKR)
                         </TableCell>
                         <TableCell align="right" colSpan={2}>
-                          {subTotalFunc()}
+                          <CurrencyFormat
+                            value={subTotalFunc()}
+                            displayType={"text"}
+                            thousandSeparator={true}
+                            prefix={" Rs. "}
+                          />
                         </TableCell>
                       </TableRow>
                       <TableRow>
@@ -1045,7 +1058,12 @@ function Make_invoice() {
                           Total(LKR)
                         </TableCell>
                         <TableCell align="right" colSpan={2}>
-                          {subTotalFunc() - totalDiscount}
+                          <CurrencyFormat
+                            value={subTotalFunc() - totalDiscount}
+                            displayType={"text"}
+                            thousandSeparator={true}
+                            prefix={" Rs. "}
+                          />
                         </TableCell>
                       </TableRow>
                     </TableBody>

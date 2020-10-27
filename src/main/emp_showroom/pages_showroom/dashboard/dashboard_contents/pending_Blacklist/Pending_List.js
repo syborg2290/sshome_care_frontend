@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import MUIDataTable from "mui-datatables";
-import { Spin } from "antd";
+
+import db from "../../../../../../config/firebase.js";
 
 // styles
 import "./Pending_List.css";
@@ -10,7 +11,7 @@ import "./Pending_List.css";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import HistoryIcon from "@material-ui/icons/History";
 
-export default function View_Model() {
+export default function View_Model({ pendingBlackList }) {
   // eslint-disable-next-line
   const [isLoading, setIsLoading] = useState(true);
   // eslint-disable-next-line
@@ -90,31 +91,48 @@ export default function View_Model() {
     },
   ];
 
-  const blockTableData = [
-    {
-      InvoiceNo: "3476-JDJCF",
-      FirstName: "test",
-      LastName: "test",
-      NIC: "test",
-      Telephone: "test",
-      Action: (
-        <div>
-          <VisibilityIcon />
-          <span className="icon_Edit">
-            <HistoryIcon />
-          </span>
-        </div>
-      ),
-    },
-  ];
+  const [pendingList, setPendingList] = useState([]);
+
+  useEffect(() => {
+    var rawTableData = [];
+    pendingBlackList.forEach((each) => {
+      db.collection("customer")
+        .where("nic", "==", each.nic)
+        .get()
+        .then((reThen) => {
+          rawTableData.push({
+            InvoiceNo: each.invoice_number,
+            FirstName: reThen.fname,
+            LastName: reThen.lname,
+            NIC: each.nic,
+            Telephone: reThen.mobile1,
+            Action: (
+              <div>
+                <VisibilityIcon />
+                <span className="icon_Edit">
+                  <HistoryIcon />
+                </span>
+              </div>
+            ),
+          });
+        });
+    });
+
+    setPendingList(rawTableData);
+  }, [pendingBlackList]);
 
   return (
     <MUIDataTable
-      title={<span className="title_Span_blackList">PENDING BLOCK LIST</span>}
+      title={<span className="title_Span_blackList">Pending black list</span>}
       className="blackList_Table"
-      data={blockTableData}
+      data={pendingList}
       columns={blockTableColomns}
       options={{
+        setRowProps: (row, rowIndex) => {
+          return {
+            style: { backgroundColor: "#F6CECE" },
+          };
+        },
         selectableRows: false,
         customToolbarSelect: () => {},
         filterType: "textfield",
@@ -125,15 +143,6 @@ export default function View_Model() {
         sort: true,
         onRowClick: (rowData, rowMeta) => {
           setCurrentIndx(rowMeta.dataIndex);
-        },
-        textLabels: {
-          body: {
-            noMatch: isLoading ? (
-              <Spin className="tblSpinner" size="large" spinning="true" />
-            ) : (
-              ""
-            ),
-          },
         },
       }}
     />

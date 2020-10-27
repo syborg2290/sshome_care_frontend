@@ -115,65 +115,7 @@ export default function Item_table_assistant() {
     // eslint-disable-next-line
   }, []);
 
-  // useEffect(() => {
-  //   socket.on("messageFromServer", (data) => {
-  //     var newData = [];
-  //     if (itemTableData.length < 1) {
-  //       data.forEach((element) => {
-  //         allTtemData.push(element);
-
-  //         newData.push([
-  //           <img
-  //             alt="img"
-  //             className="Item_img"
-  //             src={
-  //               element["photo"] !== "null"
-  //                 ? element["photo"]
-  //                 : require("../../../../../assets/empty_item.png")
-  //             }
-  //           />,
-  //           element["item_name"],
-  //           element["brand"],
-  //           element["qty"],
-  //           element["color"],
-  //           element["model_no"],
-  //           <CurrencyFormat
-  //             value={element["sale_price"]}
-  //             displayType={"text"}
-  //             thousandSeparator={true}
-  //             prefix={" "}
-  //           />,
-  //           <div
-  //             color="secondary"
-  //             size="small"
-  //             className={
-  //               element["qty"] !== 0
-  //                 ? element["qty"] >= 3
-  //                   ? "px-2"
-  //                   : "px-3"
-  //                 : "px-4"
-  //             }
-  //             variant="contained"
-  //           >
-  //             {element["qty"] !== 0
-  //               ? element["qty"] >= 3
-  //                 ? "Available"
-  //                 : "Low Stock"
-  //               : "Out Of Stock"}
-  //           </div>,
-  //           <div className="table_icon">
-  //             <VisibilityIcon onClick={showModal} />,
-  //             <span className="icon_Edit">
-  //               <EditIcon onClick={editModal} />
-  //             </span>
-  //           </div>,
-  //         ]);
-  //       });
-  //       setItemTableData(newData);
-  //     }
-  //   });
-  //   // eslint-disable-next-line
-  // }, [itemTableData]);
+  
 
   const showDeleteItemsConfirm = async () => {
     await db
@@ -681,7 +623,7 @@ export default function Item_table_assistant() {
               elevation: 4,
               sort: true,
               onRowClick: (rowData, rowMeta) => {
-                setCurrentIndx(rowMeta.rowIndex);
+                setCurrentIndx(rowMeta.dataIndex);
               },
               textLabels: {
                 body: {

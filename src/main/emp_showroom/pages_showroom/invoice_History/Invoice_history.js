@@ -507,7 +507,7 @@ export default function Invoice_history() {
                   elevation: 4,
                   sort: true,
                   onRowClick: (rowData, rowMeta) => {
-                    setCurrentIndx(rowMeta.rowIndex);
+                    setCurrentIndx(rowMeta.dataIndex);
                   },
                   textLabels: {
                     body: {
@@ -545,7 +545,7 @@ export default function Invoice_history() {
                   elevation: 4,
                   sort: true,
                   onRowClick: (rowData, rowMeta) => {
-                    setCurrentIndx(rowMeta.rowIndex);
+                    setCurrentIndx(rowMeta.dataIndex);
                   },
                   textLabels: {
                     body: {

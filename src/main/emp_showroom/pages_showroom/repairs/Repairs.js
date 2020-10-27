@@ -291,7 +291,7 @@ export default function Repairs() {
               elevation: 4,
               sort: true,
               onRowClick: (rowData, rowMeta) => {
-                setCurrentIndx(rowMeta.rowIndex);
+                setCurrentIndx(rowMeta.dataIndex);
               },
               textLabels: {
                 body: {

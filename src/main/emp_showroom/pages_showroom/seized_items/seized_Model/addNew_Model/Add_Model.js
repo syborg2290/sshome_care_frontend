@@ -46,7 +46,7 @@ export default function Add_Model({ closeModel }) {
                           invoice_number: invoice.trim(),
                           model_no: itRe.data().modelNo,
                           item_name: itRe.data().itemName,
-                          nic: reThen.nic,
+                          nic: reThen.docs[0].data().nic,
                           date: date,
                           addedDate: firebase.firestore.FieldValue.serverTimestamp(),
                         })

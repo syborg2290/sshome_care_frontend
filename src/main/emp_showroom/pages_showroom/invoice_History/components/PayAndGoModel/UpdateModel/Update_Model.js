@@ -428,7 +428,7 @@ export default function Update_Model({
                 :
               </Grid>
               <Grid item xs={12} sm={6}>
-                {delayedDays / 7 > 7 ? (
+                {delayedDays > 7 ? (
                   <p
                     style={{
                       color: "red",

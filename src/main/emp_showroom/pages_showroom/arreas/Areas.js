@@ -217,7 +217,7 @@ export default function Areas() {
       <Grid container spacing={4}>
         <Grid item xs={12}>
           <MUIDataTable
-            title={<span className="title_Span_arries">ARRIES LIST</span>}
+            title={<span className="title_Span_arries">ARREAS LIST</span>}
             className="arreas_Table"
             data={arreasTableData}
             columns={arreasTableColomns}

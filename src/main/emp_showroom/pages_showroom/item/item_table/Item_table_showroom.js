@@ -511,7 +511,7 @@ export default function ItemTable() {
               },
               selectableRowsHeader: false,
               onRowClick: (rowData, rowMeta) => {
-                setCurrentIndx(rowMeta.rowIndex);
+                setCurrentIndx(rowMeta.dataIndex);
               },
               textLabels: {
                 body: {

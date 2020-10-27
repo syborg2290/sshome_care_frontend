@@ -518,7 +518,7 @@ export default function Invoice_List() {
                   elevation: 4,
                   sort: true,
                   onRowClick: (rowData, rowMeta) => {
-                    setCurrentIndx(rowMeta.rowIndex);
+                    setCurrentIndx(rowMeta.dataIndex);
                   },
                 }}
               />
@@ -543,7 +543,7 @@ export default function Invoice_List() {
                   elevation: 4,
                   sort: true,
                   onRowClick: (rowData, rowMeta) => {
-                    setCurrentIndx(rowMeta.rowIndex);
+                    setCurrentIndx(rowMeta.dataIndex);
                   },
                 }}
               />

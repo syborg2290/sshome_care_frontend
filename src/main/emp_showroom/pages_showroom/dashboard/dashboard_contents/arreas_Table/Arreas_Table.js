@@ -237,7 +237,7 @@ export default function Arreas_Table() {
               elevation: 4,
               sort: true,
               onRowClick: (rowData, rowMeta) => {
-                setCurrentIndx(rowMeta.rowIndex);
+                setCurrentIndx(rowMeta.dataIndex);
               },
             }}
           />

@@ -224,7 +224,7 @@ export default function Areas() {
             options={{
               setRowProps: (row, rowIndex) => {
                 return {
-                  style: { backgroundColor: "#F6CECE" },
+                  style: { backgroundColor: "#F5F6CE" },
                 };
               },
               selectableRows: false,

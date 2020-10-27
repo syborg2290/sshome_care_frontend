@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import MUIDataTable from "mui-datatables";
 import { Grid, Button } from "@material-ui/core";
 import { Modal } from "antd";
@@ -216,11 +216,18 @@ export default function Arreas_Table() {
       <Grid container spacing={4}>
         <Grid item xs={12}>
           <MUIDataTable
-            title={<span className="title_Span_arries">Current arreas list</span>}
+            title={
+              <span className="title_Span_arries">Current arreas list</span>
+            }
             className="arreas_Table"
             data={arreasTableData}
             columns={arreasTableColomns}
             options={{
+              setRowProps: (row, rowIndex) => {
+                return {
+                  style: { backgroundColor: "#F6CECE" },
+                };
+              },
               selectableRows: false,
               customToolbarSelect: () => {},
               filterType: "textfield",
@@ -232,7 +239,6 @@ export default function Arreas_Table() {
               onRowClick: (rowData, rowMeta) => {
                 setCurrentIndx(rowMeta.rowIndex);
               },
-             
             }}
           />
         </Grid>

@@ -316,7 +316,16 @@ export default function Arreas_update({ invoice_no, nic, close }) {
 
   const totalPlusRed = () => {
     let allPlusss = Math.round(updatingInstallmentCount);
-    let againallPlusss = allPlusss + Math.round(allInstallment);
+    let countAllPrevInstallments =
+      (allInstallment < 0 || allInstallment) < 1
+        ? 0
+        : (allInstallment < 1 || allInstallment) < 2
+        ? 1
+        : (allInstallment < 2 || allInstallment) < 3
+        ? 2
+        : allInstallment;
+
+    let againallPlusss = allPlusss + countAllPrevInstallments;
     let rest = instAmountProp * againallPlusss;
     let finalTot = rest + delayedCharges;
     return finalTot;
@@ -550,7 +559,13 @@ export default function Arreas_update({ invoice_no, nic, close }) {
                     ? "  " +
                       Math.round(instAmountProp) +
                       " X (" +
-                      Math.round(allInstallment) +
+                      (allInstallment < 0 || allInstallment < 1
+                        ? 0
+                        : allInstallment < 1 || allInstallment < 2
+                        ? 1
+                        : allInstallment < 2 || allInstallment < 3
+                        ? 2
+                        : allInstallment) +
                       " + " +
                       updatingInstallmentCount +
                       ") + " +

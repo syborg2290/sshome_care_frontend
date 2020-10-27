@@ -38,8 +38,8 @@ export default function View_Model({ invoice_num, seized_date, nic }) {
         if (inst.docs.length > 0) {
           inst.docs.forEach((docRe) => {
             let plus = docRe.data()?.amount;
-            let now = totalInstallmentsPaid;
-            setTotalInstallmentsPaid(plus + now);
+            let now = plus*inst.docs.length;
+            setTotalInstallmentsPaid(now);
           });
         }
       });

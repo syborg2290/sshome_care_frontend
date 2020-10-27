@@ -52,7 +52,7 @@ export default function View_Model({ invoice_num, seized_date, nic }) {
           setDownPayment(reInvoice.docs[0]?.data()?.items[0]?.downpayment);
         }
       });
-     // eslint-disable-next-line
+    // eslint-disable-next-line
   }, []);
 
   return (
@@ -115,7 +115,7 @@ export default function View_Model({ invoice_num, seized_date, nic }) {
               <p>{nic}</p>
             </Grid>
             <Grid className="lbl_topi" item xs={12} sm={4}>
-              Address
+              Address 1
             </Grid>
             <Grid item xs={12} sm={2}>
               :
@@ -123,18 +123,30 @@ export default function View_Model({ invoice_num, seized_date, nic }) {
             <Grid item xs={12} sm={6}>
               <p>{address1}</p>
             </Grid>
-
+            <Grid className="lbl_topi" item xs={12} sm={4}>
+              {" "}
+              Address 2
+            </Grid>
+            <Grid item xs={12} sm={2}>
+              :
+            </Grid>
             <Grid item xs={12} sm={6}>
               <p>{address2 === "" ? "-" : address2}</p>
             </Grid>
             <Grid className="lbl_topi" item xs={12} sm={4}>
-              Tele.
+              Tele 1.
             </Grid>
             <Grid item xs={12} sm={2}>
               :
             </Grid>
             <Grid item xs={12} sm={6}>
               <p>{tele1}</p>
+            </Grid>
+            <Grid className="lbl_topi" item xs={12} sm={4}>
+              Tele 2.
+            </Grid>
+            <Grid item xs={12} sm={2}>
+              :
             </Grid>
             <Grid item xs={12} sm={6}>
               <p>{tele2 === "" ? " - " : tele2}</p>

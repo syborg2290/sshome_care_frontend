@@ -113,7 +113,7 @@ export default function Add_Model({ closeModel }) {
               </Space>
             </Grid>
           </Grid>
-          <p className="name_Msg">{error.length > 0 ? error : ""}!</p>
+          <p className="name_Msg">{error.length > 0 ? error : ""}</p>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={9}></Grid>
             <Grid item xs={12} sm={3}>

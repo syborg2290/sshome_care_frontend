@@ -7,7 +7,7 @@ import CurrencyFormat from "react-currency-format";
 
 // components
 import BlackListCustomers from "../black_list/customer_model/BlackList_Customers";
-import BlackListHistory from "../black_list/blackList_history_Model/blackList_history";
+import BlackListHistory from "./histry_model/History_Model";
 
 // icons
 import VisibilityIcon from "@material-ui/icons/Visibility";

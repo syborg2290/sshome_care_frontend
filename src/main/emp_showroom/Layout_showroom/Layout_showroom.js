@@ -63,6 +63,7 @@ function LayoutShowroom(props) {
               path="/showroom/invoice/addCustomer"
               component={InvoiceCustomer}
             />
+
             <Route path="/showroom/ui/arreas" component={Arreas} />
             <Route path="/showroom/ui/repairs" component={Repairs} />
             <Route path="/showroom/ui/blackList" component={BlackList} />

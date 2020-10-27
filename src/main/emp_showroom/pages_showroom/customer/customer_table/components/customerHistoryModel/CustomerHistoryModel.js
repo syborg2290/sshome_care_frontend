@@ -157,6 +157,7 @@ export default function CustomerHistoryModel({ customerId }) {
             });
         });
       });
+    // eslint-disable-next-line
   }, [customerId]);
 
   return (

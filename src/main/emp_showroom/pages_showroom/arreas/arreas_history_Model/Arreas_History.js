@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import MUIDataTable from "mui-datatables";
 import { Grid } from "@material-ui/core";
-import { Spin } from "antd";
+
 // eslint-disable-next-line
 import CurrencyFormat from "react-currency-format";
 // eslint-disable-next-line
@@ -143,15 +143,6 @@ export default function Arreas_History({ invoice_no }) {
               sort: true,
               onRowClick: (rowData, rowMeta) => {
                 setCurrentIndx(rowMeta.rowIndex);
-              },
-              textLabels: {
-                body: {
-                  noMatch: isLoading ? (
-                    <Spin className="tblSpinner" size="large" spinning="true" />
-                  ) : (
-                    ""
-                  ),
-                },
               },
             }}
           />

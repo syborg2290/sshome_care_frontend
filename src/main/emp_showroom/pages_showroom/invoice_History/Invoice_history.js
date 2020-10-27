@@ -21,6 +21,7 @@ import "./Invoice_history.css";
 // icons
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import HistoryIcon from "@material-ui/icons/History";
+import PrintRoundedIcon from "@material-ui/icons/PrintRounded";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -316,6 +317,9 @@ export default function Invoice_history() {
                 </span>
                 <span className="icon_Edit">
                   <VisibilityIcon onClick={showInstallmentView} />
+                </span>
+                <span className="icon_print">
+                  <PrintRoundedIcon />
                 </span>
               </div>
             ),

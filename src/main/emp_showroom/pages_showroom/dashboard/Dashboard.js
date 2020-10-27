@@ -120,6 +120,24 @@ export default function Dashboard() {
                         ? 0
                         : (daysCountInitial - 31) / 7 < 2
                         ? 99
+                        : (daysCountInitial - 31) / 7 > 2 &&
+                          (daysCountInitial - 31) / 7 < 3
+                        ? 198
+                        : (daysCountInitial - 31) / 7 > 3 &&
+                          (daysCountInitial - 31) / 7 < 4
+                        ? 297
+                        : (daysCountInitial - 31) / 7 > 4 &&
+                          (daysCountInitial - 31) / 7 < 5
+                        ? 396
+                        : (daysCountInitial - 31) / 7 > 5 &&
+                          (daysCountInitial - 31) / 7 < 6
+                        ? 495
+                        : (daysCountInitial - 31) / 7 > 6 &&
+                          (daysCountInitial - 31) / 7 < 7
+                        ? 594
+                        : (daysCountInitial - 31) / 7 > 7 &&
+                          (daysCountInitial - 31) / 7 < 8
+                        ? 693
                         : 99 * Math.round((daysCountInitial - 31) / 7),
                   });
               } else {
@@ -128,12 +146,30 @@ export default function Dashboard() {
                   customer_id: eachRe.data().customer_id,
                   nic: eachRe.data().nic,
                   delayed_days: Math.round(daysCountInitial) - 31,
-                  delayed_charges:
-                    daysCountInitial - 31 <= 7
-                      ? 0
-                      : (daysCountInitial - 31) / 7 < 2
-                      ? 99
-                      : 99 * Math.round((daysCountInitial - 31) / 7),
+                   delayed_charges:
+                      daysCountInitial - 31 <= 7
+                        ? 0
+                        : (daysCountInitial - 31) / 7 < 2
+                        ? 99
+                        : (daysCountInitial - 31) / 7 > 2 &&
+                          (daysCountInitial - 31) / 7 < 3
+                        ? 198
+                        : (daysCountInitial - 31) / 7 > 3 &&
+                          (daysCountInitial - 31) / 7 < 4
+                        ? 297
+                        : (daysCountInitial - 31) / 7 > 4 &&
+                          (daysCountInitial - 31) / 7 < 5
+                        ? 396
+                        : (daysCountInitial - 31) / 7 > 5 &&
+                          (daysCountInitial - 31) / 7 < 6
+                        ? 495
+                        : (daysCountInitial - 31) / 7 > 6 &&
+                          (daysCountInitial - 31) / 7 < 7
+                        ? 594
+                        : (daysCountInitial - 31) / 7 > 7 &&
+                          (daysCountInitial - 31) / 7 < 8
+                        ? 693
+                        : 99 * Math.round((daysCountInitial - 31) / 7),
                   date: firebase.firestore.FieldValue.serverTimestamp(),
                 });
               }
@@ -198,6 +234,24 @@ export default function Dashboard() {
                         ? 0
                         : (daysCountInitial - 7) / 7 < 2
                         ? 99
+                        : (daysCountInitial - 7) / 7 > 2 &&
+                          (daysCountInitial - 7) / 7 < 3
+                        ? 198
+                        : (daysCountInitial - 7) / 7 > 3 &&
+                          (daysCountInitial - 7) / 7 < 4
+                        ? 297
+                        : (daysCountInitial - 7) / 7 > 4 &&
+                          (daysCountInitial - 7) / 7 < 5
+                        ? 396
+                        : (daysCountInitial - 7) / 7 > 5 &&
+                          (daysCountInitial - 7) / 7 < 6
+                        ? 495
+                        : (daysCountInitial - 7) / 7 > 6 &&
+                          (daysCountInitial - 7) / 7 < 7
+                        ? 594
+                        : (daysCountInitial - 7) / 7 > 7 &&
+                          (daysCountInitial - 7) / 7 < 8
+                        ? 693
                         : 99 * Math.round((daysCountInitial - 7) / 7),
                   });
               } else {
@@ -207,11 +261,29 @@ export default function Dashboard() {
                   nic: eachRe.data().nic,
                   delayed_days: Math.round(daysCountInitial) - 7,
                   delayed_charges:
-                    daysCountInitial - 7 <= 7
-                      ? 0
-                      : (daysCountInitial - 7) / 7 < 2
-                      ? 99
-                      : 99 * Math.round((daysCountInitial - 7) / 7),
+                      daysCountInitial - 7 <= 7
+                        ? 0
+                        : (daysCountInitial - 7) / 7 < 2
+                        ? 99
+                        : (daysCountInitial - 7) / 7 > 2 &&
+                          (daysCountInitial - 7) / 7 < 3
+                        ? 198
+                        : (daysCountInitial - 7) / 7 > 3 &&
+                          (daysCountInitial - 7) / 7 < 4
+                        ? 297
+                        : (daysCountInitial - 7) / 7 > 4 &&
+                          (daysCountInitial - 7) / 7 < 5
+                        ? 396
+                        : (daysCountInitial - 7) / 7 > 5 &&
+                          (daysCountInitial - 7) / 7 < 6
+                        ? 495
+                        : (daysCountInitial - 7) / 7 > 6 &&
+                          (daysCountInitial - 7) / 7 < 7
+                        ? 594
+                        : (daysCountInitial - 7) / 7 > 7 &&
+                          (daysCountInitial - 7) / 7 < 8
+                        ? 693
+                        : 99 * Math.round((daysCountInitial - 7) / 7),
                   date: firebase.firestore.FieldValue.serverTimestamp(),
                 });
               }
@@ -287,11 +359,29 @@ export default function Dashboard() {
               .update({
                 delayed_days: daysCount - 31,
                 delayed_charges:
-                  daysCount - 31 <= 7
-                    ? 0
-                    : (daysCount - 31) / 7 < 2
-                    ? 99
-                    : 99 * Math.round((daysCount - 31) / 7),
+                      daysCount - 31 <= 7
+                        ? 0
+                        : (daysCount - 31) / 7 < 2
+                        ? 99
+                        : (daysCount - 31) / 7 > 2 &&
+                          (daysCount - 31) / 7 < 3
+                        ? 198
+                        : (daysCount - 31) / 7 > 3 &&
+                          (daysCount - 31) / 7 < 4
+                        ? 297
+                        : (daysCount - 31) / 7 > 4 &&
+                          (daysCount - 31) / 7 < 5
+                        ? 396
+                        : (daysCount - 31) / 7 > 5 &&
+                          (daysCount - 31) / 7 < 6
+                        ? 495
+                        : (daysCount - 31) / 7 > 6 &&
+                          (daysCount - 31) / 7 < 7
+                        ? 594
+                        : (daysCount - 31) / 7 > 7 &&
+                          (daysCount - 31) / 7 < 8
+                        ? 693
+                        : 99 * Math.round((daysCount - 31) / 7),
               });
           } else {
             db.collection("arrears").add({
@@ -299,12 +389,30 @@ export default function Dashboard() {
               customer_id: eachRe.data().customer_id,
               nic: eachRe.data().nic,
               delayed_days: Math.round(daysCount) - 31,
-              delayed_charges:
-                daysCount - 31 <= 7
-                  ? 0
-                  : (daysCount - 31) / 7 < 2
-                  ? 99
-                  : 99 * Math.round((daysCount - 31) / 7),
+               delayed_charges:
+                      daysCount - 31 <= 7
+                        ? 0
+                        : (daysCount - 31) / 7 < 2
+                        ? 99
+                        : (daysCount - 31) / 7 > 2 &&
+                          (daysCount - 31) / 7 < 3
+                        ? 198
+                        : (daysCount - 31) / 7 > 3 &&
+                          (daysCount - 31) / 7 < 4
+                        ? 297
+                        : (daysCount - 31) / 7 > 4 &&
+                          (daysCount - 31) / 7 < 5
+                        ? 396
+                        : (daysCount - 31) / 7 > 5 &&
+                          (daysCount - 31) / 7 < 6
+                        ? 495
+                        : (daysCount - 31) / 7 > 6 &&
+                          (daysCount - 31) / 7 < 7
+                        ? 594
+                        : (daysCount - 31) / 7 > 7 &&
+                          (daysCount - 31) / 7 < 8
+                        ? 693
+                        : 99 * Math.round((daysCount - 31) / 7),
               date: firebase.firestore.FieldValue.serverTimestamp(),
             });
           }
@@ -368,11 +476,29 @@ export default function Dashboard() {
               .update({
                 delayed_days: Math.round(daysCount) - 7,
                 delayed_charges:
-                  daysCount - 7 <= 7
-                    ? 0
-                    : (daysCount - 7) / 7 < 2
-                    ? 99
-                    : 99 * Math.round((daysCount - 7) / 7),
+                      daysCount - 7 <= 7
+                        ? 0
+                        : (daysCount - 7) / 7 < 2
+                        ? 99
+                        : (daysCount - 7) / 7 > 2 &&
+                          (daysCount - 7) / 7 < 3
+                        ? 198
+                        : (daysCount - 7) / 7 > 3 &&
+                          (daysCount - 7) / 7 < 4
+                        ? 297
+                        : (daysCount - 7) / 7 > 4 &&
+                          (daysCount - 7) / 7 < 5
+                        ? 396
+                        : (daysCount - 7) / 7 > 5 &&
+                          (daysCount - 7) / 7 < 6
+                        ? 495
+                        : (daysCount - 7) / 7 > 6 &&
+                          (daysCount - 7) / 7 < 7
+                        ? 594
+                        : (daysCount - 7) / 7 > 7 &&
+                          (daysCount - 7) / 7 < 8
+                        ? 693
+                        : 99 * Math.round((daysCount - 7) / 7),
               });
           } else {
             db.collection("arrears").add({
@@ -380,12 +506,30 @@ export default function Dashboard() {
               customer_id: eachRe.data().customer_id,
               nic: eachRe.data().nic,
               delayed_days: Math.round(daysCount) - 7,
-              delayed_charges:
-                daysCount - 7 <= 7
-                  ? 0
-                  : (daysCount - 7) / 7 < 2
-                  ? 99
-                  : 99 * Math.round((daysCount - 7) / 7),
+               delayed_charges:
+                      daysCount - 7 <= 7
+                        ? 0
+                        : (daysCount - 7) / 7 < 2
+                        ? 99
+                        : (daysCount - 7) / 7 > 2 &&
+                          (daysCount - 7) / 7 < 3
+                        ? 198
+                        : (daysCount - 7) / 7 > 3 &&
+                          (daysCount - 7) / 7 < 4
+                        ? 297
+                        : (daysCount - 7) / 7 > 4 &&
+                          (daysCount - 7) / 7 < 5
+                        ? 396
+                        : (daysCount - 7) / 7 > 5 &&
+                          (daysCount - 7) / 7 < 6
+                        ? 495
+                        : (daysCount - 7) / 7 > 6 &&
+                          (daysCount - 7) / 7 < 7
+                        ? 594
+                        : (daysCount - 7) / 7 > 7 &&
+                          (daysCount - 7) / 7 < 8
+                        ? 693
+                        : 99 * Math.round((daysCount - 7) / 7),
               date: firebase.firestore.FieldValue.serverTimestamp(),
             });
           }

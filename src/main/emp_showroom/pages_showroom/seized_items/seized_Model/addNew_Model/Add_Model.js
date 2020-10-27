@@ -36,7 +36,7 @@ export default function Add_Model({ closeModel }) {
             .get()
             .then((reThen) => {
               if (reThen.docs.length > 0) {
-                reThen.items.forEach((reI) => {
+                reThen.docs[0].data().items.forEach((reI) => {
                   db.collection("item")
                     .doc(reI.item_id)
                     .get()

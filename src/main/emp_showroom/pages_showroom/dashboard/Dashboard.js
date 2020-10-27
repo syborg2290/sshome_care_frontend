@@ -118,6 +118,8 @@ export default function Dashboard() {
                     delayed_charges:
                       daysCountInitial - 31 <= 7
                         ? 0
+                        : (daysCountInitial - 31) / 7 < 2
+                        ? 99
                         : 99 * Math.round((daysCountInitial - 31) / 7),
                   });
               } else {
@@ -129,6 +131,8 @@ export default function Dashboard() {
                   delayed_charges:
                     daysCountInitial - 31 <= 7
                       ? 0
+                      : (daysCountInitial - 31) / 7 < 2
+                      ? 99
                       : 99 * Math.round((daysCountInitial - 31) / 7),
                   date: firebase.firestore.FieldValue.serverTimestamp(),
                 });
@@ -192,6 +196,8 @@ export default function Dashboard() {
                     delayed_charges:
                       daysCountInitial - 7 <= 7
                         ? 0
+                        : (daysCountInitial - 7) / 7 < 2
+                        ? 99
                         : 99 * Math.round((daysCountInitial - 7) / 7),
                   });
               } else {
@@ -203,6 +209,8 @@ export default function Dashboard() {
                   delayed_charges:
                     daysCountInitial - 7 <= 7
                       ? 0
+                      : (daysCountInitial - 7) / 7 < 2
+                      ? 99
                       : 99 * Math.round((daysCountInitial - 7) / 7),
                   date: firebase.firestore.FieldValue.serverTimestamp(),
                 });
@@ -281,6 +289,8 @@ export default function Dashboard() {
                 delayed_charges:
                   daysCount - 31 <= 7
                     ? 0
+                    : (daysCount - 31) / 7 < 2
+                    ? 99
                     : 99 * Math.round((daysCount - 31) / 7),
               });
           } else {
@@ -290,7 +300,11 @@ export default function Dashboard() {
               nic: eachRe.data().nic,
               delayed_days: Math.round(daysCount) - 31,
               delayed_charges:
-                daysCount - 31 <= 7 ? 0 : 99 * Math.round((daysCount - 31) / 7),
+                daysCount - 31 <= 7
+                  ? 0
+                  : (daysCount - 31) / 7 < 2
+                  ? 99
+                  : 99 * Math.round((daysCount - 31) / 7),
               date: firebase.firestore.FieldValue.serverTimestamp(),
             });
           }
@@ -354,7 +368,11 @@ export default function Dashboard() {
               .update({
                 delayed_days: Math.round(daysCount) - 7,
                 delayed_charges:
-                  daysCount - 7 <= 7 ? 0 : 99 * Math.round((daysCount - 7) / 7),
+                  daysCount - 7 <= 7
+                    ? 0
+                    : (daysCount - 7) / 7 < 2
+                    ? 99
+                    : 99 * Math.round((daysCount - 7) / 7),
               });
           } else {
             db.collection("arrears").add({
@@ -363,7 +381,11 @@ export default function Dashboard() {
               nic: eachRe.data().nic,
               delayed_days: Math.round(daysCount) - 7,
               delayed_charges:
-                daysCount - 7 <= 7 ? 0 : 99 * Math.round((daysCount - 7) / 7),
+                daysCount - 7 <= 7
+                  ? 0
+                  : (daysCount - 7) / 7 < 2
+                  ? 99
+                  : 99 * Math.round((daysCount - 7) / 7),
               date: firebase.firestore.FieldValue.serverTimestamp(),
             });
           }
@@ -556,7 +578,6 @@ export default function Dashboard() {
               onRowClick: (rowData, rowMeta) => {
                 setCurrentIndx(rowMeta.rowIndex);
               },
-              
             }}
           />
         </Grid>

@@ -20,8 +20,6 @@ import { Modal } from "antd";
 import "./Arreas_update.css";
 
 export default function Arreas_update({ invoice_no, nic, close }) {
- 
-
   const [installments, setInstallments] = useState(0);
   const [delayedDays, setDelayedDays] = useState(0);
   const [allInstallment, setAllInstallment] = useState(0);
@@ -89,6 +87,8 @@ export default function Arreas_update({ invoice_no, nic, close }) {
                   setDelayedCharges(
                     daysCountInitial - 31 <= 7
                       ? 0
+                      : (daysCountInitial - 31) / 7 < 2
+                      ? 99
                       : 99 * Math.round((daysCountInitial - 31) / 7)
                   );
                 }
@@ -103,6 +103,8 @@ export default function Arreas_update({ invoice_no, nic, close }) {
                   setDelayedCharges(
                     daysCountInitial - 7 <= 7
                       ? 0
+                      : (daysCountInitial - 7) / 7 < 2
+                      ? 99
                       : 99 * Math.round((daysCountInitial - 7) / 7)
                   );
                 }
@@ -127,6 +129,8 @@ export default function Arreas_update({ invoice_no, nic, close }) {
                   setDelayedCharges(
                     daysCount - 31 <= 7
                       ? 0
+                      : (daysCount - 31) / 7 < 2
+                      ? 99
                       : 99 * Math.round((daysCount - 31) / 7)
                   );
                 }
@@ -141,6 +145,8 @@ export default function Arreas_update({ invoice_no, nic, close }) {
                   setDelayedCharges(
                     daysCount - 7 <= 7
                       ? 0
+                      : (daysCount - 7) / 7 < 2
+                      ? 99
                       : 99 * Math.round((daysCount - 7) / 7)
                   );
                 }

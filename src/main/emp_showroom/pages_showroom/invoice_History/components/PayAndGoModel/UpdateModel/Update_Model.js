@@ -82,6 +82,8 @@ export default function Update_Model({
                   setDelayedCharges(
                     daysCountInitial - 31 <= 7
                       ? 0
+                      : (daysCountInitial - 31) / 7 < 2
+                      ? 99
                       : 99 * Math.round((daysCountInitial - 31) / 7)
                   );
                 }
@@ -96,6 +98,8 @@ export default function Update_Model({
                   setDelayedCharges(
                     daysCountInitial - 7 <= 7
                       ? 0
+                      : (daysCountInitial - 7) / 7 < 2
+                      ? 99
                       : 99 * Math.round((daysCountInitial - 7) / 7)
                   );
                 }
@@ -120,6 +124,8 @@ export default function Update_Model({
                   setDelayedCharges(
                     daysCount - 31 <= 7
                       ? 0
+                      : (daysCount - 31) / 7 < 2
+                      ? 99
                       : 99 * Math.round((daysCount - 31) / 7)
                   );
                 }
@@ -134,6 +140,8 @@ export default function Update_Model({
                   setDelayedCharges(
                     daysCount - 7 <= 7
                       ? 0
+                      : (daysCount - 7) / 7 < 2
+                      ? 99
                       : 99 * Math.round((daysCount - 7) / 7)
                   );
                 }

@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
 import MUIDataTable from "mui-datatables";
 import { Grid } from "@material-ui/core";
+import { Modal } from "antd";
+import { useHistory } from "react-router-dom";
+
+// icons
+import { ExclamationCircleOutlined } from "@ant-design/icons";
+import PrintRoundedIcon from "@material-ui/icons/PrintRounded";
 
 // eslint-disable-next-line
 import CurrencyFormat from "react-currency-format";
@@ -20,6 +26,23 @@ export default function Arreas_History({ invoice_no }) {
   const [currentIndx, setCurrentIndx] = useState(0);
 
   const [installments, setInstallments] = useState([]);
+
+  const { confirm } = Modal;
+
+  let history = useHistory();
+
+  const showConfirm = () => {
+    confirm({
+      title: "Do you Want to print an invoice?",
+      icon: <ExclamationCircleOutlined />,
+      onOk() {
+        history.push(
+          "/showroom/invoice_history/payAndGo/updateModel/PrintReceipt"
+        );
+      },
+      onCancel() {},
+    });
+  };
 
   const columns = [
     {
@@ -65,6 +88,19 @@ export default function Arreas_History({ invoice_no }) {
         filter: true,
         setCellHeaderProps: (value) => ({
           style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "Action",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: {
+            fontSize: "15px",
+            color: "black",
+            fontWeight: "600",
+          },
         }),
       },
     },
@@ -115,6 +151,13 @@ export default function Arreas_History({ invoice_no }) {
                   thousandSeparator={true}
                   prefix={" "}
                 />
+              ),
+              Action: (
+                <div>
+                  <span>
+                    <PrintRoundedIcon onClick={showConfirm} />
+                  </span>
+                </div>
               ),
             },
           ]);

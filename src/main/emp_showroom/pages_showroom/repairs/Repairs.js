@@ -6,6 +6,12 @@ import moment from "moment";
 
 import db from "../../../../config/firebase.js";
 
+import { useHistory } from "react-router-dom";
+
+// icons
+import { ExclamationCircleOutlined } from "@ant-design/icons";
+import PrintRoundedIcon from "@material-ui/icons/PrintRounded";
+
 // components
 import RepairModel from "../repairs/repairs_Model/Repair_model";
 import RepairUpdateModel from "../repairs/repair_Update_Model/Repair_Update";
@@ -28,6 +34,23 @@ export default function Repairs() {
   const [repairModel, setrepairModel] = useState(false); //  table models
   const [repairUpdateModel, setRepairUpdateModel] = useState(false); //  table models
   const [repairViewModel, setRepairViewModel] = useState(false); //  table models
+
+  const { confirm } = Modal;
+
+  let history = useHistory();
+
+  const showConfirm = () => {
+    confirm({
+      title: "Do you Want to print an invoice?",
+      icon: <ExclamationCircleOutlined />,
+      onOk() {
+        history.push(
+          "/showroom/repairs/repairs_Model/repair_update_Recipt/Repair_recipt"
+        );
+      },
+      onCancel() {},
+    });
+  };
 
   const showModalRepair = () => {
     setrepairModel(true);
@@ -123,7 +146,7 @@ export default function Repairs() {
         filter: true,
         setCellHeaderProps: (value) => ({
           style: {
-            width: "150px",
+            width: "190px",
             margin: "auto",
             fontSize: "15px",
             color: "black",
@@ -178,6 +201,12 @@ export default function Repairs() {
                 <VisibilityIcon
                   onClick={showModalViewRepair}
                   className="icon_views"
+                />
+              </span>
+              <span>
+                <PrintRoundedIcon
+                  className="icon_print"
+                  onClick={showConfirm}
                 />
               </span>
             </div>

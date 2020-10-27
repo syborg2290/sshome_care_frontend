@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from "react";
 import MUIDataTable from "mui-datatables";
 import { Grid } from "@material-ui/core";
-import { Spin } from "antd";
+import { Spin, Modal } from "antd";
 import CurrencyFormat from "react-currency-format";
 import moment from "moment";
+
+import { useHistory } from "react-router-dom";
+
+// icons
+import { ExclamationCircleOutlined } from "@ant-design/icons";
+import PrintRoundedIcon from "@material-ui/icons/PrintRounded";
 
 // styles
 import "./CustomerHistoryModel.css";
@@ -16,6 +22,23 @@ export default function CustomerHistoryModel({ customerId }) {
 
   // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
+
+  const { confirm } = Modal;
+
+  let history = useHistory();
+
+  const showConfirm = () => {
+    confirm({
+      title: "Do you Want to print an invoice?",
+      icon: <ExclamationCircleOutlined />,
+      onOk() {
+        history.push(
+          "/showroom/invoice_history/payAndGo/updateModel/PrintReceipt"
+        );
+      },
+      onCancel() {},
+    });
+  };
 
   const columns = [
     {
@@ -64,6 +87,19 @@ export default function CustomerHistoryModel({ customerId }) {
         }),
       },
     },
+    {
+      name: "Action",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: {
+            fontSize: "15px",
+            color: "black",
+            fontWeight: "600",
+          },
+        }),
+      },
+    },
   ];
 
   useEffect(() => {
@@ -106,6 +142,13 @@ export default function CustomerHistoryModel({ customerId }) {
                       thousandSeparator={true}
                       prefix={" "}
                     />
+                  ),
+                  Action: (
+                    <div>
+                      <span>
+                        <PrintRoundedIcon onClick={showConfirm} />
+                      </span>
+                    </div>
                   ),
                 });
               });

@@ -19,11 +19,19 @@
 .btnupdate {
   border-radius: 10px !important;
   font-size: 10px !important;
+  margin-right: 10px !important;
+  margin-top: -15px !important;
 }
 
 .icon_views {
+  margin-right: 5px !important;
+  margin-top: 5px !important;
+}
+
+.icon_print {
   text-align: center !important;
-  float: right !important;
+  margin-right: 15px !important;
+  font-size: 35px !important;
 }
 
 .statusRepir {

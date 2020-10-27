@@ -5,9 +5,9 @@ import { Spin } from "antd";
 import CurrencyFormat from "react-currency-format";
 
 //styles
-import "./blackList_history.css";
+import "./History_Model.css";
 
-export default function blackList_history() {
+export default function History_Model() {
   // eslint-disable-next-line
   const [isLoading, setIsLoading] = useState(true);
 

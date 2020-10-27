@@ -7,6 +7,8 @@ import moment from "moment";
 import CurrencyFormat from "react-currency-format";
 import { Button, Box, Tab, Tabs, AppBar, Grid } from "@material-ui/core";
 
+import { ExclamationCircleOutlined } from "@ant-design/icons";
+import { useHistory } from "react-router-dom";
 import db from "../../../../config/firebase.js";
 
 // components
@@ -78,6 +80,21 @@ export default function Invoice_history() {
   const [installmentvisible, setInstallmentVisible] = useState(false); //  table models
   const [installmentHistory, setInstallmentHistory] = useState(false); //  table models
   const [installmentFullPayment, setInstallmentFullPayment] = useState(false); //  table models
+
+  const { confirm } = Modal;
+
+  let history = useHistory();
+
+  const showConfirm = () => {
+    confirm({
+      title: "Do you Want to print an invoice?",
+      icon: <ExclamationCircleOutlined />,
+      onOk() {
+        history.push("/showroom/invoice/printInvoice");
+      },
+      onCancel() {},
+    });
+  };
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -319,7 +336,7 @@ export default function Invoice_history() {
                   <VisibilityIcon onClick={showInstallmentView} />
                 </span>
                 <span className="icon_print">
-                  <PrintRoundedIcon />
+                  <PrintRoundedIcon onClick={showConfirm} />
                 </span>
               </div>
             ),
@@ -366,6 +383,9 @@ export default function Invoice_history() {
               <div>
                 <span className="icon_visibl">
                   <VisibilityIcon onClick={showInstallmentFullPayment} />
+                </span>
+                <span className="icon_print">
+                  <PrintRoundedIcon onClick={showConfirm} />
                 </span>
               </div>
             ),

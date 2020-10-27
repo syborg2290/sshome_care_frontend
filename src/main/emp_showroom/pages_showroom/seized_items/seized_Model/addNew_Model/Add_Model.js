@@ -36,7 +36,9 @@ export default function Add_Model({ closeModel }) {
             .get()
             .then((reThen) => {
               if (reThen.docs.length > 0) {
-                reThen.docs[0].data().items.forEach((reI) => {
+                if (reThen.docs[0].data()?.customer_id!==null) {
+                  
+                  reThen.docs[0].data().items.forEach((reI) => {
                   db.collection("item")
                     .doc(reI.item_id)
                     .get()
@@ -57,6 +59,12 @@ export default function Add_Model({ closeModel }) {
                         });
                     });
                 });
+                  
+                } else {
+                setLoading(false);
+                setError("Invoice number you entered is not 'pay and go' item!");
+                }
+                
               } else {
                 setLoading(false);
                 setError("Invoice number you entered is not found!");

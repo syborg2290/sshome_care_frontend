@@ -122,15 +122,15 @@ export default function Seized_item() {
       snap.docs.forEach((RESnap) => {
         rowAllData.push({
           id: RESnap.id,
-          data: RESnap.data(),
+          data: RESnap?.data(),
         });
 
         rowData.push({
-          InvoiceNo: RESnap.date().invoice_number,
-          Model_No: snap.date().model_no,
-          Item_Name: snap.date().item_name,
-          NIC: snap.date().nic,
-          Sized_date: snap.date().date,
+          InvoiceNo: RESnap.data()?.invoice_number,
+          Model_No: RESnap.data()?.model_no,
+          Item_Name: RESnap.data()?.item_name,
+          NIC: RESnap.data()?.nic,
+          Sized_date: RESnap.data()?.date,
           Action: (
             <div>
               <VisibilityIcon onClick={showModalView} />

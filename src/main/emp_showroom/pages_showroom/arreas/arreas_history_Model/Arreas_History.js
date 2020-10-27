@@ -164,6 +164,7 @@ export default function Arreas_History({ invoice_no }) {
         });
       });
     setIsLoading(false);
+    // eslint-disable-next-line
   }, [invoice_no]);
 
   return (

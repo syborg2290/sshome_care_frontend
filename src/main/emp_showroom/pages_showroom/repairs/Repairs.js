@@ -217,6 +217,7 @@ export default function Repairs() {
       setRepairAllData(allRawData);
       setIsLoading(false);
     });
+    // eslint-disable-next-line
   }, []);
 
   return (

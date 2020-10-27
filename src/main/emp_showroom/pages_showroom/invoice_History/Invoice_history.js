@@ -396,6 +396,7 @@ export default function Invoice_history() {
         setFullPaymentTableData(rawDataFull);
       });
     setIsLoading(false);
+    // eslint-disable-next-line
   }, []);
 
   //End Full Payment Rows

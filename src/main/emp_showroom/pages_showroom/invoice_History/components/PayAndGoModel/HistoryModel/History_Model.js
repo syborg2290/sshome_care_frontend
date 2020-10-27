@@ -162,6 +162,7 @@ export default function History_Model({ invoice_no }) {
         });
       });
     setIsLoading(false);
+    // eslint-disable-next-line
   }, [invoice_no]);
 
   return (

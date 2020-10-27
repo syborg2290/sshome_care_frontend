@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import MUIDataTable from "mui-datatables";
+import {Spin} from "antd";
 
 import db from "../../../../../../config/firebase.js";
 
@@ -13,9 +14,9 @@ import HistoryIcon from "@material-ui/icons/History";
 
 export default function View_Model({ pendingBlackList }) {
   // eslint-disable-next-line
-  const [isLoading, setIsLoading] = useState(true);
-  // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+  const [pendingList, setPendingList] = useState([]);
 
   //START pay And Go Columns
   const blockTableColomns = [
@@ -91,34 +92,33 @@ export default function View_Model({ pendingBlackList }) {
     },
   ];
 
-  const [pendingList, setPendingList] = useState([]);
-
   useEffect(() => {
-    var rawTableData = [];
     pendingBlackList.forEach((each) => {
       db.collection("customer")
         .where("nic", "==", each.nic)
         .get()
         .then((reThen) => {
-          rawTableData.push({
-            InvoiceNo: each.invoice_number,
-            FirstName: reThen.fname,
-            LastName: reThen.lname,
-            NIC: each.nic,
-            Telephone: reThen.mobile1,
-            Action: (
-              <div>
-                <VisibilityIcon />
-                <span className="icon_Edit">
-                  <HistoryIcon />
-                </span>
-              </div>
-            ),
-          });
+          setPendingList((old) => [
+            ...old,
+            {
+              InvoiceNo: each.invoice_number,
+              FirstName: reThen.docs[0].data().fname,
+              LastName: reThen.docs[0].data().lname,
+              NIC: each.nic,
+              Telephone: reThen.docs[0].data().mobile1,
+              Action: (
+                <div>
+                  <VisibilityIcon />
+                  <span className="icon_Edit">
+                    <HistoryIcon />
+                  </span>
+                </div>
+              ),
+            },
+          ]);
+          setIsLoading(false);
         });
     });
-
-    setPendingList(rawTableData);
   }, [pendingBlackList]);
 
   return (
@@ -143,6 +143,15 @@ export default function View_Model({ pendingBlackList }) {
         sort: true,
         onRowClick: (rowData, rowMeta) => {
           setCurrentIndx(rowMeta.dataIndex);
+        },
+        textLabels: {
+          body: {
+            noMatch: isLoading ? (
+              <Spin className="tblSpinner" size="large" spinning="true" />
+            ) : (
+              "No records for pending black list"
+            ),
+          },
         },
       }}
     />

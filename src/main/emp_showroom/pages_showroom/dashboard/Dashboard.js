@@ -750,7 +750,7 @@ export default function Dashboard() {
       {/*START Invoices  Table */}
 
       <Typography className="today_invoices" variant="h4" component="h6">
-        Invoices of issued in today
+        All invoices of issued in today
       </Typography>
       <Grid container spacing={4}>
         <Grid item xs={12}>

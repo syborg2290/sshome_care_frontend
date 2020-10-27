@@ -222,6 +222,11 @@ export default function Areas() {
             data={arreasTableData}
             columns={arreasTableColomns}
             options={{
+              setRowProps: (row, rowIndex) => {
+                return {
+                  style: { backgroundColor: "#F6CECE" },
+                };
+              },
               selectableRows: false,
               customToolbarSelect: () => {},
               filterType: "textfield",

@@ -167,7 +167,7 @@ export default function Example() {
       "popstate",
       (event) => {
         if (event.state) {
-          history.push("/showroom/ui/arreas");
+          history.push("/assistant/ui/arries");
         }
       },
       false

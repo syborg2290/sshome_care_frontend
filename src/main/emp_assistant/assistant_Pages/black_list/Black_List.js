@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import MUIDataTable from "mui-datatables";
 import { Grid } from "@material-ui/core";
-import { Spin, Modal } from "antd";
-// eslint-disable-next-line
-import CurrencyFormat from "react-currency-format";
+import {  Modal } from "antd";
 
 // components
 import BlackListCustomers from "../black_list/customer_model/BlackList_Customers";
@@ -18,8 +16,7 @@ import "./Black_List.css";
 import db from "../../../../config/firebase";
 
 export default function Black_List() {
-  // eslint-disable-next-line
-  const [isLoading, setIsLoading] = useState(true);
+ 
   // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
 
@@ -208,15 +205,6 @@ export default function Black_List() {
               sort: true,
               onRowClick: (rowData, rowMeta) => {
                 setCurrentIndx(rowMeta.dataIndex);
-              },
-              textLabels: {
-                body: {
-                  noMatch: isLoading ? (
-                    <Spin className="tblSpinner" size="large" spinning="true" />
-                  ) : (
-                    ""
-                  ),
-                },
               },
             }}
           />

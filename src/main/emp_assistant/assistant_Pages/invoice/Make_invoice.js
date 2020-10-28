@@ -205,7 +205,6 @@ function Make_invoice() {
         },
         async onCancel() {
           await invoiceIntoDb();
-
           history.push("/assistant/ui/ItemTable");
         },
       });
@@ -256,6 +255,7 @@ function Make_invoice() {
                         itemAPI[one.i] === "" ? 0 : itemAPI[one.i],
                       discount:
                         itemDiscount[one.i] === "" ? 0 : itemDiscount[one.i],
+                      item_name: one.title,
                     };
                     arrayItems.push(objItem);
                   });
@@ -389,6 +389,7 @@ function Make_invoice() {
                         itemAPI[one.i] === "" ? 0 : itemAPI[one.i],
                       discount:
                         itemDiscount[one.i] === "" ? 0 : itemDiscount[one.i],
+                      item_name: one.title,
                     };
                     arrayItems.push(objItem);
                   });
@@ -523,6 +524,7 @@ function Make_invoice() {
                     itemAPI[one.i] === "" ? 0 : itemAPI[one.i],
                   discount:
                     itemDiscount[one.i] === "" ? 0 : itemDiscount[one.i],
+                  item_name: one.title,
                 };
                 arrayItems.push(objItem);
               });
@@ -653,6 +655,7 @@ function Make_invoice() {
                     itemAPI[one.i] === "" ? 0 : itemAPI[one.i],
                   discount:
                     itemDiscount[one.i] === "" ? 0 : itemDiscount[one.i],
+                  item_name: one.title,
                 };
                 arrayItems.push(objItem);
               });
@@ -767,6 +770,7 @@ function Make_invoice() {
           noOfInstallment: itemNOI[one.i] === "" ? 0 : itemNOI[one.i],
           amountPerInstallment: itemAPI[one.i] === "" ? 0 : itemAPI[one.i],
           discount: itemDiscount[one.i] === "" ? 0 : itemDiscount[one.i],
+          item_name: one.title,
         };
         arrayItems.push(objItem);
       });

@@ -91,7 +91,8 @@ export default function Invoice_history() {
     setVisibleConfirmPrint(true);
   };
 
-  const PrintInvoice = () => {
+  const PrintInvoice = async() => {
+   
     if (printType === "fullpayment") {
       let passingWithCustomerObj = {
         invoice_number: fullPaymentAllData[currentIndx].data?.invoice_number,

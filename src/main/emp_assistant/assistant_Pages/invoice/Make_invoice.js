@@ -813,7 +813,8 @@ function Make_invoice() {
                   <div className="lbl_invoice">Invoice#</div>
                 </Grid>
                 <Grid item xs={5}>
-                  <TextField
+                  <h3>{invoiceNumber}</h3>
+                  {/* <TextField
                     className="txt_Invoice"
                     autoComplete="iNo"
                     name="invoice No"
@@ -827,7 +828,7 @@ function Make_invoice() {
                     fullWidth
                     id="invoiceNo"
                     label="Invoice No"
-                  />
+                  /> */}
                 </Grid>
                 <Grid item xs={5}></Grid>
 

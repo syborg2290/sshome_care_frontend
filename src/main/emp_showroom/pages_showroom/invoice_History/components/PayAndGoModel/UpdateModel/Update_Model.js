@@ -282,7 +282,6 @@ export default function Update_Model({
           invoice_number: invoice_no,
           customerDetails: customer,
           total: totalPlusRed(),
-
           delayedCharges: Math.round(delayedCharges),
         };
 

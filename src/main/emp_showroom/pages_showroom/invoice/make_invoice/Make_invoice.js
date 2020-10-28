@@ -172,6 +172,7 @@ function Make_invoice() {
               total: subTotalFunc() - totalDiscount,
               discription: discription,
               itemsList: arrayPassingItems,
+              backto: "item_list",
             };
 
             let moveWith = {
@@ -193,6 +194,7 @@ function Make_invoice() {
               total: subTotalFunc() - totalDiscount,
               discription: discription,
               itemsList: arrayPassingItems,
+              backto: "item_list",
             };
             let moveWith = {
               pathname: "/showroom/invoice/printInvoice",

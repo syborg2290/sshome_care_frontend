@@ -18,15 +18,12 @@ export default function View_Model({
   t_address2,
   t_mobile1,
   t_mobile2,
-  item_name,
-  basic_payment,
-  discount,
-  qty,
-  color,
-  model_no,
-  guarantte,
-  paid_installment,
-  downpayment,
+  t2_name,
+  t2_nic,
+  t2_address1,
+  t2_address2,
+  t2_mobile1,
+  t2_mobile2,
 }) {
   return (
     <Container component="main" className="conctainefr_main">
@@ -94,7 +91,7 @@ export default function View_Model({
               :
             </Grid>
             <Grid item xs={12} sm={6}>
-              <p>{addres2}</p>
+              <p>{addres2 === "" ? " - " : addres2}</p>
             </Grid>
             <Grid className="lbl_topi" item xs={12} sm={4}>
               Tele 1.
@@ -112,7 +109,7 @@ export default function View_Model({
               :
             </Grid>
             <Grid item xs={12} sm={6}>
-              <p>{mobil2}</p>
+              <p>{mobil2 === "" ? " - " : mobil2}</p>
             </Grid>
             <Grid item xs={12} sm={12}>
               <hr />
@@ -131,7 +128,7 @@ export default function View_Model({
               :
             </Grid>
             <Grid item xs={12} sm={2}>
-              {t_name}
+              {t_name === "" ? " - " : t_name}
             </Grid>
             <Grid item xs={12} sm={4}></Grid>
             <Grid className="lbl_topi" item xs={12} sm={4}>
@@ -141,7 +138,7 @@ export default function View_Model({
               :
             </Grid>
             <Grid item xs={12} sm={6}>
-              <p> {t_nic}</p>
+              <p> {t_nic === "" ? " - " : t_nic}</p>
             </Grid>
             <Grid className="lbl_topi" item xs={12} sm={4}>
               Address 1
@@ -150,7 +147,7 @@ export default function View_Model({
               :
             </Grid>
             <Grid item xs={12} sm={6}>
-              <p>{t_address1}</p>
+              <p>{t_address1 === "" ? " - " : t_address1}</p>
             </Grid>
             <Grid className="lbl_topi" item xs={12} sm={4}>
               {" "}
@@ -160,7 +157,7 @@ export default function View_Model({
               :
             </Grid>
             <Grid item xs={12} sm={6}>
-              <p>{t_address2}</p>
+              <p>{t_address2 === "" ? " - " : t_address2}</p>
             </Grid>
             <Grid className="lbl_topi" item xs={12} sm={4}>
               Tele 1.
@@ -169,7 +166,7 @@ export default function View_Model({
               :
             </Grid>
             <Grid item xs={12} sm={6}>
-              <p>{t_mobile1}</p>
+              <p>{t_mobile1 === "" ? " - " : t_mobile1}</p>
             </Grid>
             <Grid className="lbl_topi" item xs={12} sm={4}>
               Tele 2.
@@ -178,103 +175,77 @@ export default function View_Model({
               :
             </Grid>
             <Grid item xs={12} sm={6}>
-              <p>{t_mobile2}</p>
+              <p>{t_mobile2 === "" ? " - " : t_mobile2}</p>
             </Grid>
             <Grid item xs={12} sm={12}>
               <hr />
             </Grid>
 
             <Grid className="lbl_Subtopic" item xs={12} sm={12}>
-              Item Details
+              Trustee 2
             </Grid>
             <Grid item xs={12} sm={6}>
               <hr className="hr_Subtopic" />
             </Grid>
             <Grid item xs={12} sm={6}></Grid>
             <Grid className="lbl_topi" item xs={12} sm={4}>
-              Item Name
+              Full Name
             </Grid>
             <Grid item xs={12} sm={2}>
               :
             </Grid>
-            <Grid item xs={12} sm={6}>
-              {item_name}
+            <Grid item xs={12} sm={2}>
+              {t2_name === "" ? " - " : t2_name}
             </Grid>
-
+            <Grid item xs={12} sm={4}></Grid>
             <Grid className="lbl_topi" item xs={12} sm={4}>
-              Basic Payment(LKR)
+              NIC
             </Grid>
             <Grid item xs={12} sm={2}>
               :
             </Grid>
             <Grid item xs={12} sm={6}>
-              <p>{basic_payment}</p>
-            </Grid>
-            <Grid className="lbl_topi" item xs={12} sm={4}>
-              Discount(LKR)
-            </Grid>
-            <Grid item xs={12} sm={2}>
-              :
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <p>{discount}</p>
+              <p> {t2_nic === "" ? " - " : t2_nic}</p>
             </Grid>
             <Grid className="lbl_topi" item xs={12} sm={4}>
-              Qty
+              Address 1
             </Grid>
             <Grid item xs={12} sm={2}>
               :
             </Grid>
             <Grid item xs={12} sm={6}>
-              <p>{qty}</p>
+              <p>{t2_address1 === "" ? " - " : t2_address1}</p>
             </Grid>
             <Grid className="lbl_topi" item xs={12} sm={4}>
-              Color
+              {" "}
+              Address 2
             </Grid>
             <Grid item xs={12} sm={2}>
               :
             </Grid>
             <Grid item xs={12} sm={6}>
-              <p>{color}</p>
+              <p>{t2_address2 === "" ? " - " : t2_address2}</p>
             </Grid>
             <Grid className="lbl_topi" item xs={12} sm={4}>
-              Model No.
+              Tele 1.
             </Grid>
             <Grid item xs={12} sm={2}>
               :
             </Grid>
             <Grid item xs={12} sm={6}>
-              <p>{model_no}</p>
+              <p>{t2_mobile1 === "" ? " - " : t2_mobile1}</p>
             </Grid>
             <Grid className="lbl_topi" item xs={12} sm={4}>
-              Guarantee Period
+              Tele 2.
             </Grid>
             <Grid item xs={12} sm={2}>
               :
             </Grid>
             <Grid item xs={12} sm={6}>
-              <p>{guarantte}</p>
+              <p>{t2_mobile2 === "" ? " - " : t2_mobile2}</p>
             </Grid>
             <Grid item xs={12} sm={12}>
               <hr />
-            </Grid>
-            <Grid className="lbl_topi" item xs={12} sm={7}>
-              Paid Installment Total(LKR)
-            </Grid>
-            <Grid item xs={12} sm={2}>
-              :
-            </Grid>
-            <Grid className="totls" item xs={12} sm={3}>
-              <p>{paid_installment}</p>
-            </Grid>
-            <Grid className="lbl_topi" item xs={12} sm={7}>
-              Down Payment(LKR)
-            </Grid>
-            <Grid item xs={12} sm={2}>
-              :
-            </Grid>
-            <Grid className="totls" item xs={12} sm={3}>
-              <p>{downpayment}</p>
             </Grid>
           </Grid>
         </form>

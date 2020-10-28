@@ -15,7 +15,6 @@ import db from "../../../../config/firebase.js";
 import "./InvoiceHistory.css";
 
 // components
-import InstallmentFullPayment from "../invoice_History/components/FullPaymentModel/Full_Payment_Model";
 import InstallmentHistory from "./components/PayAndGoModel/HistoryModel/History_Model";
 import UpdateInstallment from "./components/PayAndGoModel/UpdateModel/Update_Model";
 import InstallmentView from "./components/PayAndGoModel/ViewModel/View_Model";
@@ -74,6 +73,7 @@ export default function InvoiceHistory() {
   const [payangoTableData, setpayangoTableData] = useState([]);
   const [payangoAllData, setpayangoAllData] = useState([]);
   const [fullPaymentTableData, setFullPaymentTableData] = useState([]);
+  // eslint-disable-next-line
   const [fullPaymentAllData, setFullPaymentAllData] = useState([]);
 
   const [installmentUpdate, setInstallmentUpdate] = useState(false); //  table models

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import MUIDataTable from "mui-datatables";
 import { Grid, Button } from "@material-ui/core";
-// eslint-disable-next-line
 import { Spin, Modal } from "antd";
 
 import db from "../../../../config/firebase.js";
@@ -118,30 +117,32 @@ export default function Seized_item() {
   useEffect(() => {
     var rowData = [];
     var rowAllData = [];
-    db.collection("seized").get().then((snap) => {
-      snap.docs.forEach((RESnap) => {
-        rowAllData.push({
-          id: RESnap.id,
-          data: RESnap?.data(),
-        });
+    db.collection("seized")
+      .get()
+      .then((snap) => {
+        snap.docs.forEach((RESnap) => {
+          rowAllData.push({
+            id: RESnap.id,
+            data: RESnap?.data(),
+          });
 
-        rowData.push({
-          InvoiceNo: RESnap.data()?.invoice_number,
-          Model_No: RESnap.data()?.model_no,
-          Item_Name: RESnap.data()?.item_name,
-          NIC: RESnap.data()?.nic,
-          Sized_date: RESnap.data()?.date,
-          Action: (
-            <div>
-              <VisibilityIcon onClick={showModalView} />
-            </div>
-          ),
+          rowData.push({
+            InvoiceNo: RESnap.data()?.invoice_number,
+            Model_No: RESnap.data()?.model_no,
+            Item_Name: RESnap.data()?.item_name,
+            NIC: RESnap.data()?.nic,
+            Sized_date: RESnap.data()?.date,
+            Action: (
+              <div>
+                <VisibilityIcon onClick={showModalView} />
+              </div>
+            ),
+          });
         });
+        setSeizedTableData(rowData);
+        setSeizedAllData(rowAllData);
+        setIsLoading(false);
       });
-      setSeizedTableData(rowData);
-      setSeizedAllData(rowAllData);
-      setIsLoading(false);
-    });
   }, []);
 
   return (
@@ -159,7 +160,8 @@ export default function Seized_item() {
         <div className="customer_Model">
           <div className="customer_Model_Main">
             <div className="customer_Modell_Detail">
-              <SeizedViewModel key={seizedAllData[currentIndx]?.id}
+              <SeizedViewModel
+                key={seizedAllData[currentIndx]?.id}
                 invoice_num={seizedAllData[currentIndx]?.data?.invoice_number}
                 nic={seizedAllData[currentIndx]?.data?.nic}
                 seized_date={seizedAllData[currentIndx]?.data?.date}

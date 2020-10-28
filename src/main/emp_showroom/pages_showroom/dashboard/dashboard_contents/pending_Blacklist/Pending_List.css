@@ -1,0 +1,22 @@
+.pending_history_Model {
+  width: 60% !important;
+}
+
+.btnublock {
+  border-radius: 10px !important;
+  font-size: 10px !important;
+  margin-left: 15px !important;
+  margin-top: -15px !important;
+  background-color: rgba(207, 9, 9, 0.829) !important;
+  color: aliceblue !important;
+}
+
+.icon_view {
+  margin-right: 10px !important;
+  margin-top: 5px !important;
+}
+
+.icon_histry {
+  text-align: center !important;
+  margin-left: 5px !important;
+}

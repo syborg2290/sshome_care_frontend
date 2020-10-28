@@ -1,14 +1,21 @@
 import React, { useState, useEffect } from "react";
 import MUIDataTable from "mui-datatables";
-import {Spin} from "antd";
+import { Spin, Modal } from "antd";
+import { Button } from "@material-ui/core";
 
 import db from "../../../../../../config/firebase.js";
 
 // styles
 import "./Pending_List.css";
 
-//icone
+// components
+import PendingViewModel from "./blackList_Models/View_Model/View_Model";
+import PendingHistoryModel from "./blackList_Models/History_Model/History_Model";
 
+import { useHistory } from "react-router-dom";
+
+//icone
+import { ExclamationCircleOutlined } from "@ant-design/icons";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import HistoryIcon from "@material-ui/icons/History";
 
@@ -17,6 +24,30 @@ export default function View_Model({ pendingBlackList }) {
   const [currentIndx, setCurrentIndx] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [pendingList, setPendingList] = useState([]);
+
+  const [pendingViewModel, setPendingViewModel] = useState(false); //  table models
+  const [pendingHistoryModel, setPendingHistoryModel] = useState(false); //  table models
+
+  const { confirm } = Modal;
+
+  let history = useHistory();
+
+  const showConfirm = () => {
+    confirm({
+      title: "Are You Sure?",
+      icon: <ExclamationCircleOutlined />,
+      onOk() {},
+      onCancel() {},
+    });
+  };
+
+  const showModalView = () => {
+    setPendingViewModel(true);
+  };
+
+  const showModalHistory = () => {
+    setPendingHistoryModel(true);
+  };
 
   //START pay And Go Columns
   const blockTableColomns = [
@@ -81,7 +112,7 @@ export default function View_Model({ pendingBlackList }) {
         filter: true,
         setCellHeaderProps: (value) => ({
           style: {
-            width: "150px",
+            width: "190px",
             margin: "auto",
             fontSize: "15px",
             color: "black",
@@ -108,9 +139,22 @@ export default function View_Model({ pendingBlackList }) {
               Telephone: reThen.docs[0].data().mobile1,
               Action: (
                 <div>
-                  <VisibilityIcon />
-                  <span className="icon_Edit">
-                    <HistoryIcon />
+                  <VisibilityIcon
+                    className="icon_view"
+                    onClick={showModalView}
+                  />
+                  <span className="icon_histry">
+                    <HistoryIcon onClick={showModalHistory} />
+                  </span>
+                  <span className="blk_btn">
+                    <Button
+                      variant="contained"
+                      size="small"
+                      className="btnublock"
+                      onClick={showConfirm}
+                    >
+                      Block
+                    </Button>
                   </span>
                 </div>
               ),
@@ -122,38 +166,82 @@ export default function View_Model({ pendingBlackList }) {
   }, [pendingBlackList]);
 
   return (
-    <MUIDataTable
-      title={<span className="title_Span_blackList">Pending black list</span>}
-      className="blackList_Table"
-      data={pendingList}
-      columns={blockTableColomns}
-      options={{
-        setRowProps: (row, rowIndex) => {
-          return {
-            style: { backgroundColor: "#F6CECE" },
-          };
-        },
-        selectableRows: false,
-        customToolbarSelect: () => {},
-        filterType: "textfield",
-        download: false,
-        print: false,
-        searchPlaceholder: "Search using any column names",
-        elevation: 4,
-        sort: true,
-        onRowClick: (rowData, rowMeta) => {
-          setCurrentIndx(rowMeta.dataIndex);
-        },
-        textLabels: {
-          body: {
-            noMatch: isLoading ? (
-              <Spin className="tblSpinner" size="large" spinning="true" />
-            ) : (
-              "No records for pending black list"
-            ),
+    <>
+      {/*Start Blacklist PENDING VIEW  model */}
+
+      <Modal
+        visible={pendingViewModel}
+        className="pending_Model"
+        footer={null}
+        onCancel={() => {
+          setPendingViewModel(false);
+        }}
+      >
+        <div className="pending_Model">
+          <div className="pending_Model_Main">
+            <div className="pending_Modell_Detail">
+              <PendingViewModel />
+            </div>
+          </div>
+        </div>
+      </Modal>
+
+      {/*END Blacklist PENDING VIEW  model */}
+
+      {/*Start Blacklist HISTORY  model */}
+
+      <Modal
+        visible={pendingHistoryModel}
+        className="pending_history_Model"
+        footer={null}
+        onCancel={() => {
+          setPendingHistoryModel(false);
+        }}
+      >
+        <div className="history_Model">
+          <div className="pending_history_Model_Main">
+            <div className="pending_history_Modell_Detail">
+              <PendingHistoryModel />
+            </div>
+          </div>
+        </div>
+      </Modal>
+
+      {/*END Blacklist HISTORY  model */}
+
+      <MUIDataTable
+        title={<span className="title_Span_blackList">Pending black list</span>}
+        className="blackList_Table"
+        data={pendingList}
+        columns={blockTableColomns}
+        options={{
+          setRowProps: (row, rowIndex) => {
+            return {
+              style: { backgroundColor: "#F6CECE" },
+            };
           },
-        },
-      }}
-    />
+          selectableRows: false,
+          customToolbarSelect: () => {},
+          filterType: "textfield",
+          download: false,
+          print: false,
+          searchPlaceholder: "Search using any column names",
+          elevation: 4,
+          sort: true,
+          onRowClick: (rowData, rowMeta) => {
+            setCurrentIndx(rowMeta.dataIndex);
+          },
+          textLabels: {
+            body: {
+              noMatch: isLoading ? (
+                <Spin className="tblSpinner" size="large" spinning="true" />
+              ) : (
+                "No records for pending black list"
+              ),
+            },
+          },
+        }}
+      />
+    </>
   );
 }

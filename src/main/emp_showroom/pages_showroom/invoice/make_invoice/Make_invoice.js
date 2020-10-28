@@ -252,10 +252,13 @@ function Make_invoice() {
                       item_id: one.id,
                       qty: itemQty[one.i],
                       paymentWay: one.paymentWay,
-                      downpayment: itemDP[one.i],
-                      noOfInstallment: itemNOI[one.i],
-                      amountPerInstallment: itemAPI[one.i],
-                      discount: itemDiscount[one.i],
+                      downpayment: itemDP[one.i] === "" ? 0 : itemDP[one.i],
+                      noOfInstallment:
+                        itemNOI[one.i] === "" ? 0 : itemNOI[one.i],
+                      amountPerInstallment:
+                        itemAPI[one.i] === "" ? 0 : itemAPI[one.i],
+                      discount:
+                        itemDiscount[one.i] === "" ? 0 : itemDiscount[one.i],
                     };
                     arrayItems.push(objItem);
                   });
@@ -269,8 +272,10 @@ function Make_invoice() {
                       installmentType: daysDate.value,
                       installemtnDayDate:
                         daysDate.value === "Weekly" ? days : dates,
-                      discount: totalDiscount,
-                      total: subTotalFunc() - totalDiscount,
+                      discount: totalDiscount === "" ? 0 : totalDiscount,
+                      total:
+                        subTotalFunc() -
+                        (totalDiscount === "" ? 0 : totalDiscount),
                       status_of_payandgo: "onGoing",
                       description: discription,
                       date: firebase.firestore.FieldValue.serverTimestamp(),
@@ -380,10 +385,13 @@ function Make_invoice() {
                       item_id: one.id,
                       qty: itemQty[one.i],
                       paymentWay: one.paymentWay,
-                      downpayment: itemDP[one.i],
-                      noOfInstallment: itemNOI[one.i],
-                      amountPerInstallment: itemAPI[one.i],
-                      discount: itemDiscount[one.i],
+                      downpayment: itemDP[one.i] === "" ? 0 : itemDP[one.i],
+                      noOfInstallment:
+                        itemNOI[one.i] === "" ? 0 : itemNOI[one.i],
+                      amountPerInstallment:
+                        itemAPI[one.i] === "" ? 0 : itemAPI[one.i],
+                      discount:
+                        itemDiscount[one.i] === "" ? 0 : itemDiscount[one.i],
                     };
                     arrayItems.push(objItem);
                   });
@@ -397,8 +405,10 @@ function Make_invoice() {
                       installmentType: daysDate.value,
                       installemtnDayDate:
                         daysDate.value === "Weekly" ? days : dates,
-                      discount: totalDiscount,
-                      total: subTotalFunc() - totalDiscount,
+                      discount: totalDiscount === "" ? 0 : totalDiscount,
+                      total:
+                        subTotalFunc() -
+                        (totalDiscount === "" ? 0 : totalDiscount),
                       status_of_payandgo: "onGoing",
                       description: discription,
                       date: firebase.firestore.FieldValue.serverTimestamp(),
@@ -510,10 +520,12 @@ function Make_invoice() {
                   item_id: one.id,
                   qty: itemQty[one.i],
                   paymentWay: one.paymentWay,
-                  downpayment: itemDP[one.i],
-                  noOfInstallment: itemNOI[one.i],
-                  amountPerInstallment: itemAPI[one.i],
-                  discount: itemDiscount[one.i],
+                  downpayment: itemDP[one.i] === "" ? 0 : itemDP[one.i],
+                  noOfInstallment: itemNOI[one.i] === "" ? 0 : itemNOI[one.i],
+                  amountPerInstallment:
+                    itemAPI[one.i] === "" ? 0 : itemAPI[one.i],
+                  discount:
+                    itemDiscount[one.i] === "" ? 0 : itemDiscount[one.i],
                 };
                 arrayItems.push(objItem);
               });
@@ -527,8 +539,9 @@ function Make_invoice() {
                   installmentType: daysDate.value,
                   installemtnDayDate:
                     daysDate.value === "Weekly" ? days : dates,
-                  discount: totalDiscount,
-                  total: subTotalFunc() - totalDiscount,
+                  discount: totalDiscount === "" ? 0 : totalDiscount,
+                  total:
+                    subTotalFunc() - (totalDiscount === "" ? 0 : totalDiscount),
                   status_of_payandgo: "onGoing",
                   description: discription,
                   date: firebase.firestore.FieldValue.serverTimestamp(),
@@ -637,10 +650,12 @@ function Make_invoice() {
                   item_id: one.id,
                   qty: itemQty[one.i],
                   paymentWay: one.paymentWay,
-                  downpayment: itemDP[one.i],
-                  noOfInstallment: itemNOI[one.i],
-                  amountPerInstallment: itemAPI[one.i],
-                  discount: itemDiscount[one.i],
+                  downpayment: itemDP[one.i] === "" ? 0 : itemDP[one.i],
+                  noOfInstallment: itemNOI[one.i] === "" ? 0 : itemNOI[one.i],
+                  amountPerInstallment:
+                    itemAPI[one.i] === "" ? 0 : itemAPI[one.i],
+                  discount:
+                    itemDiscount[one.i] === "" ? 0 : itemDiscount[one.i],
                 };
                 arrayItems.push(objItem);
               });
@@ -654,8 +669,9 @@ function Make_invoice() {
                   installmentType: daysDate.value,
                   installemtnDayDate:
                     daysDate.value === "Weekly" ? days : dates,
-                  discount: totalDiscount,
-                  total: subTotalFunc() - totalDiscount,
+                  discount: totalDiscount === "" ? 0 : totalDiscount,
+                  total:
+                    subTotalFunc() - (totalDiscount === "" ? 0 : totalDiscount),
                   status_of_payandgo: "onGoing",
                   description: discription,
                   date: firebase.firestore.FieldValue.serverTimestamp(),
@@ -750,10 +766,10 @@ function Make_invoice() {
           item_id: one.id,
           qty: itemQty[one.i],
           paymentWay: one.paymentWay,
-          downpayment: itemDP[one.i],
-          noOfInstallment: itemNOI[one.i],
-          amountPerInstallment: itemAPI[one.i],
-          discount: itemDiscount[one.i],
+          downpayment: itemDP[one.i] === "" ? 0 : itemDP[one.i],
+          noOfInstallment: itemNOI[one.i] === "" ? 0 : itemNOI[one.i],
+          amountPerInstallment: itemAPI[one.i] === "" ? 0 : itemAPI[one.i],
+          discount: itemDiscount[one.i] === "" ? 0 : itemDiscount[one.i],
         };
         arrayItems.push(objItem);
       });
@@ -764,8 +780,8 @@ function Make_invoice() {
         customer_id: null,
         installmentType: null,
         installemtnDayDate: null,
-        discount: totalDiscount,
-        total: subTotalFunc() - totalDiscount,
+        discount: totalDiscount === "" ? 0 : totalDiscount,
+        total: subTotalFunc() - (totalDiscount === "" ? 0 : totalDiscount),
         status_of_payandgo: "Done",
         description: discription,
         date: firebase.firestore.FieldValue.serverTimestamp(),
@@ -800,7 +816,8 @@ function Make_invoice() {
                   <div className="lbl_invoice">Invoice#</div>
                 </Grid>
                 <Grid item xs={5}>
-                  <TextField
+                  <h3>{invoiceNumber}</h3>
+                  {/* <TextField
                     className="txt_Invoice"
                     autoComplete="iNo"
                     name="invoice No"
@@ -809,12 +826,12 @@ function Make_invoice() {
                     required
                     value={invoiceNumber}
                     onChange={(e) => {
-                      setInvoiceNumber(e.target.value.trim());
+                       setInvoiceNumber(e.target.value.trim());
                     }}
                     fullWidth
                     id="invoiceNo"
                     label="Invoice No"
-                  />
+                  /> */}
                 </Grid>
                 <Grid item xs={5}></Grid>
 

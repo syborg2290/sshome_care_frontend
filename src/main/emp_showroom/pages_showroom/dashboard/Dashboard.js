@@ -313,7 +313,7 @@ export default function Dashboard() {
       }
     });
 
-    if (instRECheckCount > 0) {
+    if (instRECheckCount >= 7) {
       pendingBlackList.push({
         invoice_number: eachRe.data()?.invoice_number,
         nic: eachRe.data()?.nic,

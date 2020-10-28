@@ -305,6 +305,22 @@ export default function Dashboard() {
         ).getTime()) /
       (1000 * 3600 * 24);
 
+    let instRECheckCount = 0;
+
+    instReDoc.docs.forEach((instCheckRe) => {
+      if (instCheckRe.data().delayed > 0) {
+        instRECheckCount = instRECheckCount + 1;
+      }
+    });
+
+    if (instRECheckCount > 0) {
+      pendingBlackList.push({
+        invoice_number: eachRe.data()?.invoice_number,
+        nic: eachRe.data()?.nic,
+      });
+      setPendingBlackList((old) => [...old]);
+    }
+
     if (eachRe.data().installmentType === "Monthly") {
       if (31 - daysCount >= 0) {
         // setDelayedDays(0);

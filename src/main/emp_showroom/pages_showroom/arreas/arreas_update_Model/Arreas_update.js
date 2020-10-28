@@ -327,7 +327,7 @@ export default function Arreas_update({ invoice_no, nic, close }) {
 
     let againallPlusss = allPlusss + countAllPrevInstallments;
     let rest = instAmountProp * againallPlusss;
-    let finalTot = rest + delayedCharges < 693 ? 693 : delayedCharges;
+    let finalTot = rest + delayedCharges > 693 ? 693 : delayedCharges;
     return finalTot;
   };
 

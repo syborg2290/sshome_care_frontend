@@ -68,7 +68,7 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
         setLoading(false);
         //sent to direct invoice
         let moveWith = {
-          pathname: "/showroom/ui/makeInvoice",
+          pathname: "/assistant/ui/Invoice",
           search: "?query=abc",
           state: { detail: nextData },
         };
@@ -79,7 +79,7 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
           setLoading(false);
           //sent to add customer
           let moveWith = {
-            pathname: "/showroom/invoice/addCustomer",
+            pathname: "/assistant/ui/addCustomer",
             search: "?query=abc",
             state: { detail: nextData },
           };
@@ -89,7 +89,7 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
           setLoading(false);
           //sent to direct invoice
           let moveWith = {
-            pathname: "/showroom/ui/makeInvoice",
+            pathname: "/assistant/ui/Invoice",
             search: "?query=abc",
             state: { detail: nextData },
           };

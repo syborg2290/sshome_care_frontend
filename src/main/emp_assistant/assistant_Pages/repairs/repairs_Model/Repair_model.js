@@ -24,9 +24,8 @@ export default function Repair_model() {
       icon: <ExclamationCircleOutlined />,
       content: "Some descriptions",
       onOk() {
-        history.push(
-          "/showroom/repairs/repairs_Model/repair_update_Recipt/Repair_recipt"
-        );
+        console.log("yes");
+        history.push("/assistant/repair/repairRecipt");
       },
       onCancel() {
         console.log("Cancel");

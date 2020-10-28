@@ -107,7 +107,7 @@ export default function Arreas_update({ invoice_no, nic, close }) {
                       : (daysCountInitial - 31) / 7 > 7 &&
                         (daysCountInitial - 31) / 7 < 8
                       ? 693
-                      : 99 * Math.round((daysCountInitial - 31) / 7)
+                      : 693
                   );
                 }
               } else {
@@ -141,7 +141,7 @@ export default function Arreas_update({ invoice_no, nic, close }) {
                       : (daysCountInitial - 7) / 7 > 7 &&
                         (daysCountInitial - 7) / 7 < 8
                       ? 693
-                      : 99 * Math.round((daysCountInitial - 7) / 7)
+                      : 693
                   );
                 }
               }
@@ -179,7 +179,7 @@ export default function Arreas_update({ invoice_no, nic, close }) {
                       ? 594
                       : (daysCount - 31) / 7 > 7 && (daysCount - 31) / 7 < 8
                       ? 693
-                      : 99 * Math.round((daysCount - 31) / 7)
+                      : 693
                   );
                 }
               } else {
@@ -207,7 +207,7 @@ export default function Arreas_update({ invoice_no, nic, close }) {
                       ? 594
                       : (daysCount - 7) / 7 > 7 && (daysCount - 7) / 7 < 8
                       ? 693
-                      : 99 * Math.round((daysCount - 31) / 7)
+                      : 693
                   );
                 }
               }
@@ -311,7 +311,7 @@ export default function Arreas_update({ invoice_no, nic, close }) {
     let allPlusss = Math.round(updatingInstallmentCount) + installments;
     let againallPlusss = allPlusss + Math.round(allInstallment);
     let rest = instCount - againallPlusss;
-    return rest;
+    return rest < 0 ? 0 : rest;
   };
 
   const totalPlusRed = () => {
@@ -327,7 +327,7 @@ export default function Arreas_update({ invoice_no, nic, close }) {
 
     let againallPlusss = allPlusss + countAllPrevInstallments;
     let rest = instAmountProp * againallPlusss;
-    let finalTot = rest + delayedCharges;
+    let finalTot = rest + delayedCharges > 693 ? 693 : delayedCharges;
     return finalTot;
   };
 

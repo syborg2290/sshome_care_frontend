@@ -53,33 +53,39 @@ export default function View_Model({ pendingBlackList }) {
             status: "blacklist",
           });
 
-        await db.collection("blacklist").add({
-          InvoiceNo: allViewData[currentIndx]?.invoice_no,
-          FirstName: await (
-            await db
-              .collection("customer")
-              .doc(reArreas.docs[0].data().customer_id)
-              .get()
-          ).data().fname,
-          LastName: await (
-            await db
-              .collection("customer")
-              .doc(reArreas.docs[0].data().customer_id)
-              .get()
-          ).data().lname,
-          NIC: await (
-            await db
-              .collection("customer")
-              .doc(reArreas.docs[0].data().customer_id)
-              .get()
-          ).data().nic,
-          Telephone: await (
-            await db
-              .collection("customer")
-              .doc(reArreas.docs[0].data().customer_id)
-              .get()
-          ).data().mobile1,
-        });
+        await db
+          .collection("blacklist")
+          .add({
+            InvoiceNo: allViewData[currentIndx]?.invoice_no,
+            FirstName: await (
+              await db
+                .collection("customer")
+                .doc(reArreas.docs[0].data().customer_id)
+                .get()
+            ).data().fname,
+            LastName: await (
+              await db
+                .collection("customer")
+                .doc(reArreas.docs[0].data().customer_id)
+                .get()
+            ).data().lname,
+            NIC: await (
+              await db
+                .collection("customer")
+                .doc(reArreas.docs[0].data().customer_id)
+                .get()
+            ).data().nic,
+            Telephone: await (
+              await db
+                .collection("customer")
+                .doc(reArreas.docs[0].data().customer_id)
+                .get()
+            ).data().mobile1,
+          })
+          .then((_) => {
+            setVisibleConfirmPrint(false);
+            window.location.reload();
+          });
       });
   };
 
@@ -273,11 +279,7 @@ export default function View_Model({ pendingBlackList }) {
         cancelText="No"
         okText="Yes"
         bodyStyle={{ borderRadius: "30px" }}
-        onOk={async () => {
-          await changeToBlacklist();
-          setVisibleConfirmPrint(false);
-          // window.location.reload();
-        }}
+        onOk={changeToBlacklist}
         onCancel={() => {
           setVisibleConfirmPrint(false);
         }}

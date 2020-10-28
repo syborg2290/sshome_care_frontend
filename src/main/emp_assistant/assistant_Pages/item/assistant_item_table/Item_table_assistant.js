@@ -22,6 +22,7 @@ import SelectedItem from "./components/selected_Items/SelectedItem_model";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
+import DescriptionIcon from "@material-ui/icons/Description";
 
 // styles
 import "./Item_table_assistant.css";
@@ -29,6 +30,7 @@ import "./Item_table_assistant.css";
 import db from "../../../../../config/firebase.js";
 
 export default function Item_table_assistant() {
+  const [selectedItemtVisible, setSelectedItemtVisible] = useState(false);
   const [itemTableData, setItemTableData] = useState([]);
   // eslint-disable-next-line
   const [allTtemData, setAllItemData] = useState([]);
@@ -38,6 +40,12 @@ export default function Item_table_assistant() {
   const [editVisible, setEditVisible] = useState(false);
   const [confirmVisible, setConfirmVisible] = useState(false);
   // let socket = socketIOClient(RealtimeServerApi);
+  const [isLoaingToInvoice, setLoaingToInvoice] = useState(false);
+  // eslint-disable-next-line
+  var [selectedItems, setSelectedItems] = useState([]);
+
+  // eslint-disable-next-line
+  const [itemList, SetItemList] = useState([]);
 
   const showModal = () => {
     setVisible(true);
@@ -49,6 +57,11 @@ export default function Item_table_assistant() {
 
   const editModal = () => {
     setEditVisible(true);
+  };
+
+  const selectedModalClose = () => {
+    setSelectedItemtVisible(false);
+    window.location.reload();
   };
 
   useEffect(() => {
@@ -115,7 +128,24 @@ export default function Item_table_assistant() {
     // eslint-disable-next-line
   }, []);
 
-  
+  const onMakeInvoid = () => {
+    if (selectedItems.length > 0) {
+      setLoaingToInvoice(true);
+
+      selectedItems.forEach((reItem) => {
+        itemList.push({
+          qty: 1,
+          item: reItem,
+          paymentWay: "PayandGo",
+        });
+      });
+      setLoaingToInvoice(false);
+
+      setSelectedItemtVisible(true);
+    } else {
+      NotificationManager.info("Please select items");
+    }
+  };
 
   const showDeleteItemsConfirm = async () => {
     await db
@@ -219,6 +249,29 @@ export default function Item_table_assistant() {
 
   return (
     <>
+      {/*Selected Item Model */}
+
+      <Modal
+        title="Selected Items"
+        visible={selectedItemtVisible}
+        footer={null}
+        className="model_selected_Item"
+        onCancel={selectedModalClose}
+      >
+        <div className="table_selected_Model">
+          <div className="model_selected_Main">
+            <div className="model_selected_Detail">
+              <SelectedItem
+                closeModel={selectedModalClose}
+                itemListProps={itemList}
+              />
+            </div>
+          </div>
+        </div>
+      </Modal>
+
+      {/*Selected Item Model */}
+
       <Modal
         className="confo_model"
         closable={null}
@@ -606,15 +659,30 @@ export default function Item_table_assistant() {
         </div>
       </Modal>
 
+      <Button
+        variant="contained"
+        color="primary"
+        className="btn_MakeInvoice"
+        endIcon={<DescriptionIcon />}
+        onClick={onMakeInvoid}
+      >
+        {isLoaingToInvoice ? (
+          <Spin spinning={isLoaingToInvoice} size="large" />
+        ) : (
+          "Make Invoice"
+        )}
+      </Button>
+
       <Grid className="tbl_Container" container spacing={4}>
         <Grid item xs={12}>
           <MUIDataTable
-            title={<span className="title_Span">Item List</span>}
+            title={<span className="title_Span">All Items</span>}
             className="item_table"
             data={itemTableData}
             columns={columns}
             options={{
-              selectableRows: false,
+              rowHover: true,
+              selectableRows: true,
               customToolbarSelect: () => {},
               filterType: "textField",
               download: false,
@@ -622,6 +690,17 @@ export default function Item_table_assistant() {
               searchPlaceholder: "Search using any field",
               elevation: 4,
               sort: true,
+              onRowsSelect: (curRowSelected, allRowsSelected) => {
+                selectedItems = [];
+                allRowsSelected.forEach((single) => {
+                  if (allTtemData[single.dataIndex].data.qty > 0) {
+                    selectedItems.push(allTtemData[single.dataIndex]);
+                  } else {
+                    NotificationManager.warning("Out Of Stock");
+                  }
+                });
+              },
+              selectableRowsHeader: false,
               onRowClick: (rowData, rowMeta) => {
                 setCurrentIndx(rowMeta.dataIndex);
               },

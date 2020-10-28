@@ -59,7 +59,7 @@ const structure = [
   {
     id: 11,
     label: "Invoice",
-    link: "/assistant/ui/Invoice",
+    link: "/assistant/ui/InvoiceHistory",
     icon: <LibraryIcon className="icons" />,
   },
 

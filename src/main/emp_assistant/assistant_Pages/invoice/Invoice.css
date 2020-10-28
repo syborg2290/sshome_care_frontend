@@ -1,0 +1,169 @@
+.paper_in {
+  margin-top: 70px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+}
+.form_in {
+  width: 100% !important;
+  margin-top: 30px !important;
+}
+
+.container_In {
+  background-color: white !important;
+  width: 100% !important;
+  height: 100% !important;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  border-radius: 5px !important;
+}
+
+.main_In {
+  /* background-color: black !important; */
+  margin-top: 70px !important;
+  /* color: brown !important; */
+}
+
+.lbl_invoice {
+  margin: auto !important;
+  font-weight: 500 !important;
+  /* text-align: center !important; */
+  /* background-color: violet !important; */
+  height: 40px !important;
+  padding-top: 10px !important;
+}
+
+.hr_invoice {
+  margin-bottom: 30px !important;
+}
+.txt_Invoice {
+  width: 50% !important;
+}
+
+.btn_newItem {
+  width: 50% !important;
+  float: right !important;
+}
+
+label {
+  font-size: small !important;
+}
+
+.tbl_Container {
+  margin-top: 20px !important;
+}
+
+.tblMain_Container {
+  background-color: tomato !important;
+  border-color: black !important;
+}
+
+.tbl_Cell {
+  /* background-color: blue !important; */
+  border-color: brown !important;
+  border-top: brown !important;
+}
+
+.txt_discount {
+  width: 90px !important;
+}
+.txt_discts {
+  width: 90px !important;
+}
+
+.txt_distg {
+  width: 120px !important;
+}
+
+.cel {
+  width: 30px !important;
+}
+
+.txt_Invoicerr {
+  margin-top: 30px !important;
+}
+
+.iconpls_invTbl {
+  border-radius: 6px;
+}
+
+.iconpls_invTblspan {
+  padding-right: 15px !important;
+}
+
+.icon_invTbl {
+  border-radius: 6px;
+}
+
+.iconcls_invTblspan {
+  padding-left: 17px !important;
+}
+
+.iconcls_invTbl {
+  color: rgb(255, 0, 0);
+  text-align: center !important;
+}
+
+.btn_addCustomer {
+  margin-top: 40px !important;
+  margin-bottom: 40px !important;
+  width: 20% !important;
+  float: right !important;
+}
+
+.table_all_Item {
+  width: 60% !important;
+  z-index: 500px !important;
+}
+
+.txt_qty {
+  width: 60px !important;
+}
+
+.txt_discount {
+  width: 60px !important;
+  font-size: 1px !important;
+}
+
+.txt_dpayment {
+  width: 90px !important;
+}
+
+.txt_description {
+  margin-top: 15px !important;
+}
+
+.radio_dayDate {
+  margin-top: 5px !important;
+}
+
+.day {
+  margin-top: 40px !important;
+}
+
+.txt_day {
+  padding-top: 2px !important;
+  width: 75px !important;
+}
+
+.select {
+  padding-top: 20px !important;
+  width: 135x !important;
+}
+.select_label {
+  padding-top: 10px !important;
+  margin-left: 10px !important;
+}
+
+.confo_icon {
+  /* color: rgb(168, 19, 19) !important; */
+}
+
+.confo_title {
+  font-weight: 600 !important;
+}
+
+.txt_ip_setting {
+  float: right !important;
+  margin-top: 20px !important;
+  font-weight: 600 !important;
+}

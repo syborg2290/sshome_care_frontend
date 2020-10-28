@@ -7,7 +7,6 @@ import moment from "moment";
 import CurrencyFormat from "react-currency-format";
 import { Button, Box, Tab, Tabs, AppBar, Grid } from "@material-ui/core";
 
-import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { useHistory } from "react-router-dom";
 import db from "../../../../config/firebase.js";
 
@@ -69,6 +68,7 @@ export default function Invoice_history() {
   const [isLoading, setIsLoading] = useState(true);
   // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
+  const [currentIndx2, setCurrentIndx2] = useState(0);
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
   const [payangoTableData, setpayangoTableData] = useState([]);
@@ -80,20 +80,68 @@ export default function Invoice_history() {
   const [installmentvisible, setInstallmentVisible] = useState(false); //  table models
   const [installmentHistory, setInstallmentHistory] = useState(false); //  table models
   const [installmentFullPayment, setInstallmentFullPayment] = useState(false); //  table models
-
-  const { confirm } = Modal;
+  const [visibleConfirmPrint, setVisibleConfirmPrint] = useState(false);
+  const [printType, setPrintType] = useState("fullpayment");
 
   let history = useHistory();
 
-  const showConfirm = () => {
-    confirm({
-      title: "Do you Want to print an invoice?",
-      icon: <ExclamationCircleOutlined />,
-      onOk() {
-        history.push("/showroom/invoice/printInvoice");
-      },
-      onCancel() {},
-    });
+  const showVisibleConfirmPrintModal = (type) => {
+    setPrintType(type);
+    setVisibleConfirmPrint(true);
+  };
+
+  const PrintInvoice = () => {
+    if (printType === "fullpayment") {
+      let passingWithCustomerObj = {
+        invoice_number: fullPaymentAllData[currentIndx].data?.invoice_number,
+        customerDetails: null,
+        installmentType: null,
+        installemtnDayDate: null,
+        discount: fullPaymentAllData[currentIndx].data?.discount,
+        subTotal:
+          fullPaymentAllData[currentIndx].data?.total -
+          fullPaymentAllData[currentIndx].data?.discount,
+        total: fullPaymentAllData[currentIndx].data?.total,
+        discription: "",
+        itemsList: fullPaymentAllData[currentIndx].data?.items,
+        backto: "invoice_history",
+      };
+
+      let moveWith = {
+        pathname: "/showroom/invoice/printInvoice",
+        search: "?query=abc",
+        state: { detail: passingWithCustomerObj },
+      };
+      history.push(moveWith);
+    } else {
+      db.collection("customer")
+        .doc(payangoAllData[currentIndx2]?.data?.customer_id)
+        .get()
+        .then((reCust) => {
+          let passingWithCustomerObj = {
+            invoice_number: payangoAllData[currentIndx2]?.data?.invoice_number,
+            customerDetails: reCust.data(),
+            installmentType: payangoAllData[currentIndx2]?.data?.installmentType,
+            installemtnDayDate:
+              payangoAllData[currentIndx2]?.data?.installemtnDayDate,
+            discount: payangoAllData[currentIndx2]?.data?.discount,
+            subTotal:
+              payangoAllData[currentIndx2]?.data?.total -
+              payangoAllData[currentIndx2]?.data?.discount,
+            total: payangoAllData[currentIndx2]?.data?.total,
+            discription: "",
+            itemsList: payangoAllData[currentIndx2]?.data?.items,
+            backto: "invoice_history",
+          };
+
+          let moveWith = {
+            pathname: "/showroom/invoice/printInvoice",
+            search: "?query=abc",
+            state: { detail: passingWithCustomerObj },
+          };
+          history.push(moveWith);
+        });
+    }
   };
 
   const handleChange = (event, newValue) => {
@@ -336,7 +384,7 @@ export default function Invoice_history() {
                   <VisibilityIcon onClick={showInstallmentView} />
                 </span>
                 <span className="icon_print">
-                  <PrintRoundedIcon onClick={showConfirm} />
+                  <PrintRoundedIcon onClick={() => showVisibleConfirmPrintModal("payandgo")} />
                 </span>
               </div>
             ),
@@ -385,7 +433,9 @@ export default function Invoice_history() {
                   <VisibilityIcon onClick={showInstallmentFullPayment} />
                 </span>
                 <span className="icon_print">
-                  <PrintRoundedIcon onClick={showConfirm} />
+                  <PrintRoundedIcon
+                    onClick={() => showVisibleConfirmPrintModal("fullpayment")}
+                  />
                 </span>
               </div>
             ),
@@ -403,6 +453,25 @@ export default function Invoice_history() {
 
   return (
     <>
+      <Modal
+        className="confo_model"
+        closable={null}
+        visible={visibleConfirmPrint}
+        cancelText="No"
+        okText="Yes"
+        bodyStyle={{ borderRadius: "30px" }}
+        onOk={PrintInvoice}
+        onCancel={() => {
+          setVisibleConfirmPrint(false);
+        }}
+      >
+        <div className="confoModel_body">
+          <PrintRoundedIcon className="confo_Icon" />
+          <h3 className="txtConfoModel_body">
+            Do you want to print an invoice?{" "}
+          </h3>
+        </div>
+      </Modal>
       {/*Start Installment Model Update */}
       <Modal
         visible={installmentUpdate}
@@ -416,14 +485,14 @@ export default function Invoice_history() {
           <div className="update_Installment_Model_Main">
             <div className="update_Installment_Model_Detail">
               <UpdateInstallment
-                key={payangoAllData[currentIndx]?.id}
-                invoice_no={payangoAllData[currentIndx]?.data?.invoice_number}
+                key={payangoAllData[currentIndx2]?.id}
+                invoice_no={payangoAllData[currentIndx2]?.data?.invoice_number}
                 instAmountProp={
-                  payangoAllData[currentIndx]?.data?.items[0]
+                  payangoAllData[currentIndx2]?.data?.items[0]
                     .amountPerInstallment
                 }
                 instCount={
-                  payangoAllData[currentIndx]?.data?.items[0].noOfInstallment
+                  payangoAllData[currentIndx2]?.data?.items[0].noOfInstallment
                 }
                 customer_id={payangoAllData[currentIndx]?.data?.customer_id}
                 closeModal={closeModalUpdate}
@@ -447,8 +516,8 @@ export default function Invoice_history() {
           <div className="Installment_Model_Main">
             <div className="Installment_Model_Detail">
               <InstallmentHistory
-                key={payangoAllData[currentIndx]?.id}
-                invoice_no={payangoAllData[currentIndx]?.data?.invoice_number}
+                key={payangoAllData[currentIndx2]?.id}
+                invoice_no={payangoAllData[currentIndx2]?.data?.invoice_number}
               />
             </div>
           </div>
@@ -468,9 +537,9 @@ export default function Invoice_history() {
           <div className="Installment_Model_Main">
             <div className="Installment_Model_Detail">
               <InstallmentView
-                key={payangoAllData[currentIndx]?.id}
-                data={payangoAllData[currentIndx]?.data}
-                items_list_props={payangoAllData[currentIndx]?.data?.items}
+                key={payangoAllData[currentIndx2]?.id}
+                data={payangoAllData[currentIndx2]?.data}
+                items_list_props={payangoAllData[currentIndx2]?.data?.items}
               />
             </div>
           </div>
@@ -528,7 +597,7 @@ export default function Invoice_history() {
                   elevation: 4,
                   sort: true,
                   onRowClick: (rowData, rowMeta) => {
-                    setCurrentIndx(rowMeta.dataIndex);
+                    setCurrentIndx2(rowMeta.dataIndex);
                   },
                   textLabels: {
                     body: {

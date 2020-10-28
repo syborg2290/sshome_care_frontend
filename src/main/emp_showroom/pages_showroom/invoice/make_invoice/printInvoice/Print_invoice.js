@@ -48,11 +48,18 @@ class PrintInvoiceClass extends React.Component {
     this.state.dayOrDate = this.props.prop?.installemtnDayDate;
     this.state.discount = this.props.prop?.discount;
     this.state.subTotal = this.props.prop?.subTotal;
-    this.state.customer_nic = this.props.prop?.customerDetails?.customerNic;
+    this.state.customer_nic =
+      this.props.prop?.backto === "invoice_history"
+        ? this.props.prop?.customerDetails?.nic
+        : this.props.prop?.customerDetails?.customerNic;
     this.state.customer_name =
-      this.props.prop?.customerDetails?.customerFname +
-      " " +
-      this.props.prop?.customerDetails?.customerLname;
+      this.props.prop?.backto === "invoice_history"
+        ? this.props.prop?.customerDetails?.fname
+        : this.props.prop?.customerDetails?.customerFname +
+          " " +
+          "invoice_history"
+        ? this.props.prop?.customerDetails?.lname
+        : this.props.prop?.customerDetails?.customerLname;
     if (this.props.prop) {
       this.props.prop.itemsList.forEach((ele) => {
         if (ele?.paymentWay === "PayandGo") {
@@ -416,7 +423,11 @@ export default function PrintInvoice() {
       "popstate",
       (event) => {
         if (event.state) {
-          history.push("/showroom/ui/itemTable");
+          if (location.state?.detail.backto === "item_list") {
+            history.push("/showroom/ui/itemTable");
+          } else {
+            history.push("/showroom/ui/invoiceHistory");
+          }
         }
       },
       false
@@ -432,11 +443,15 @@ export default function PrintInvoice() {
       "on browser back click",
       window.location.href
     );
+    // eslint-disable-next-line
   }, [history]);
 
   return (
     <div>
-      <PrintInvoiceClass ref={componentRef} prop={location.state?.detail} />
+      <PrintInvoiceClass
+        ref={componentRef}
+        prop={location.state?.detail}
+      />
       <Button fullWidth className="btn_print" onClick={handlePrint}>
         Print
       </Button>

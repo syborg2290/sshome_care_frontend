@@ -9,7 +9,6 @@ import db from "../../../../config/firebase.js";
 import { useHistory } from "react-router-dom";
 
 // icons
-import { ExclamationCircleOutlined } from "@ant-design/icons";
 import PrintRoundedIcon from "@material-ui/icons/PrintRounded";
 
 // components
@@ -34,22 +33,35 @@ export default function Repairs() {
   const [repairModel, setrepairModel] = useState(false); //  table models
   const [repairUpdateModel, setRepairUpdateModel] = useState(false); //  table models
   const [repairViewModel, setRepairViewModel] = useState(false); //  table models
-
-  const { confirm } = Modal;
+  const [visibleConfirmPrint, setVisibleConfirmPrint] = useState(false);
+  const [repairTableData, setRepairTableData] = useState([]);
+  const [repairAllData, setRepairAllData] = useState([]);
 
   let history = useHistory();
 
-  const showConfirm = () => {
-    confirm({
-      title: "Do you Want to print an invoice?",
-      icon: <ExclamationCircleOutlined />,
-      onOk() {
-        history.push(
-          "/showroom/repairs/repairs_Model/repair_update_Recipt/Repair_recipt"
-        );
-      },
-      onCancel() {},
-    });
+  const showVisibleConfirmPrintModal = () => {
+    setVisibleConfirmPrint(true);
+  };
+
+  const repairRecieptPrint = () => {
+    db.collection("repair")
+      .doc(repairAllData[currentIndx].id)
+      .get()
+      .then((reRepair) => {
+        var passingWithCustomerObj = {
+          invoice_no: reRepair.data().invoice_no,
+          model_no: reRepair.data().model_no,
+          nic: reRepair.data().nic,
+          item_name: reRepair.data().item_name,
+        };
+        let moveWith = {
+          pathname:
+            "/showroom/repairs/repairs_Model/repair_update_Recipt/Repair_recipt",
+          search: "?query=abc",
+          state: { detail: passingWithCustomerObj },
+        };
+        history.push(moveWith);
+      });
   };
 
   const showModalRepair = () => {
@@ -157,9 +169,6 @@ export default function Repairs() {
     },
   ];
 
-  const [repairTableData, setRepairTableData] = useState([]);
-  const [repairAllData, setRepairAllData] = useState([]);
-
   useEffect(() => {
     db.collection("repair").onSnapshot((snap) => {
       var rawData = [];
@@ -206,7 +215,7 @@ export default function Repairs() {
               <span>
                 <PrintRoundedIcon
                   className="icon_print"
-                  onClick={showConfirm}
+                  onClick={showVisibleConfirmPrintModal}
                 />
               </span>
             </div>
@@ -222,6 +231,25 @@ export default function Repairs() {
 
   return (
     <>
+      <Modal
+        className="confo_model"
+        closable={null}
+        visible={visibleConfirmPrint}
+        cancelText="No"
+        okText="Yes"
+        bodyStyle={{ borderRadius: "30px" }}
+        onOk={repairRecieptPrint}
+        onCancel={() => {
+          setVisibleConfirmPrint(false);
+        }}
+      >
+        <div className="confoModel_body">
+          <PrintRoundedIcon className="confo_Icon" />
+          <h3 className="txtConfoModel_body">
+            Do you want to print an reciept?{" "}
+          </h3>
+        </div>
+      </Modal>
       {/*Start add repairs Model  */}
       <Modal
         visible={repairModel}

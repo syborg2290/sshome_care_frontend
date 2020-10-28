@@ -102,7 +102,7 @@ export default function Update_Model({
                       : (daysCountInitial - 31) / 7 > 7 &&
                         (daysCountInitial - 31) / 7 < 8
                       ? 693
-                      : 99 * Math.round((daysCountInitial - 31) / 7)
+                      : 693
                   );
                 }
               } else {
@@ -136,7 +136,7 @@ export default function Update_Model({
                       : (daysCountInitial - 7) / 7 > 7 &&
                         (daysCountInitial - 7) / 7 < 8
                       ? 693
-                      : 99 * Math.round((daysCountInitial - 7) / 7)
+                      : 693
                   );
                 }
               }
@@ -174,7 +174,7 @@ export default function Update_Model({
                       ? 594
                       : (daysCount - 31) / 7 > 7 && (daysCount - 31) / 7 < 8
                       ? 693
-                      : 99 * Math.round((daysCount - 31) / 7)
+                      : 693
                   );
                 }
               } else {
@@ -202,7 +202,7 @@ export default function Update_Model({
                       ? 594
                       : (daysCount - 7) / 7 > 7 && (daysCount - 7) / 7 < 8
                       ? 693
-                      : 99 * Math.round((daysCount - 7) / 7)
+                      : 693
                   );
                 }
               }
@@ -305,12 +305,12 @@ export default function Update_Model({
     let allPlusss = Math.round(updatingInstallmentCount) + installments;
     let againallPlusss = allPlusss + Math.round(allInstallment);
     let rest = instCount - againallPlusss;
-    return rest;
+    return rest < 0 ? 0 : rest;
   };
 
   const totalPlusRed = () => {
     let allPlusss = Math.round(updatingInstallmentCount);
-   
+
     let countAllPrevInstallments =
       (allInstallment < 0 || allInstallment) < 1
         ? 0
@@ -322,7 +322,7 @@ export default function Update_Model({
 
     let againallPlusss = allPlusss + countAllPrevInstallments;
     let rest = instAmountProp * againallPlusss;
-    let finalTot = rest + delayedCharges;
+    let finalTot = rest + delayedCharges<693?693:delayedCharges;
     return finalTot;
   };
 

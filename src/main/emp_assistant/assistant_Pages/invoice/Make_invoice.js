@@ -31,14 +31,12 @@ import {
 import "react-notifications/lib/notifications.css";
 
 import db, { storage } from "../../../../config/firebase.js";
-
-import "./Invoice.css";
-
+import "./Make_invoice.css";
 // icon
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import CloseOutlinedIcon from "@material-ui/icons/CloseOutlined";
 
-export default function Invoice() {
+function Make_invoice() {
   const location = useLocation();
   const [loadingsubmit, setLoadingSubmit] = useState(false);
   const [invoiceNumber, setInvoiceNumber] = useState("");
@@ -174,10 +172,11 @@ export default function Invoice() {
               total: subTotalFunc() - totalDiscount,
               discription: discription,
               itemsList: arrayPassingItems,
+              backto: "item_list",
             };
 
             let moveWith = {
-              pathname: "/showroom/invoice/printInvoice",
+              pathname: "/assistant/invoice/printInvoice",
               search: "?query=abc",
               state: { detail: passingWithCustomerObj },
             };
@@ -195,9 +194,10 @@ export default function Invoice() {
               total: subTotalFunc() - totalDiscount,
               discription: discription,
               itemsList: arrayPassingItems,
+              backto: "item_list",
             };
             let moveWith = {
-              pathname: "/showroom/invoice/printInvoice",
+              pathname: "/assistant/invoice/printInvoice",
               search: "?query=abc",
               state: { detail: passingWithoutCustomerObj },
             };
@@ -209,7 +209,7 @@ export default function Invoice() {
         async onCancel() {
           await invoiceIntoDb();
 
-          history.push("/showroom/ui/itemTable");
+          history.push("/assistant/ui/ItemTable");
         },
       });
     }
@@ -1004,7 +1004,7 @@ export default function Invoice() {
                                     tablerows.splice(index, 1);
                                     setTableRows([...tablerows]);
                                     if (tablerows.length === 0) {
-                                      history.push("/showroom/ui/itemTable");
+                                      history.push("/assistant/ui/ItemTable");
                                     }
                                     delete itemQty[row.i];
                                     delete itemDP[row.i];
@@ -1204,3 +1204,5 @@ export default function Invoice() {
     </>
   );
 }
+
+export default Make_invoice;

@@ -15,13 +15,13 @@ import firebase from "firebase";
 import moment from "moment";
 import { useLocation, useHistory } from "react-router-dom";
 
-import "./Recipt.css";
+import "./Arreas_recipt.css";
 
 function createData(description, delayed, amount) {
   return { description, delayed, amount };
 }
 
-class Recipt extends React.Component {
+class ArreasRecipt extends React.Component {
   state = {
     invoice_number: "",
     rows: [],
@@ -167,7 +167,7 @@ export default function Example() {
       "popstate",
       (event) => {
         if (event.state) {
-          history.push("assistant/ui/InvoiceHistory");
+          history.push("/showroom/ui/arreas");
         }
       },
       false
@@ -187,7 +187,7 @@ export default function Example() {
 
   return (
     <div>
-      <Recipt ref={componentRef} prop={location.state?.detail} />
+      <ArreasRecipt ref={componentRef} prop={location.state?.detail} />
 
       <Button className="print_btn" onClick={handlePrint}>
         Print

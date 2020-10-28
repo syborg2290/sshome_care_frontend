@@ -11,18 +11,19 @@ import Sidebar from "../assistant_Side_Bar/Assistant_Sidebar";
 import ItemTable from "../assistant_Pages/item/assistant_item_table/Item_table_assistant";
 import AddItem from "../assistant_Pages/item/add_Item/Add_Item";
 import AddCustomer from "../assistant_Pages/customer/add_Customer/Add_Customer";
-
+import MakeInvoice from "../assistant_Pages/invoice/Make_invoice";
+import PrintReceipt from "../assistant_Pages/invoice_History/components/PayAndGoModel/UpdateModel/Make_Recipt/Recipt";
 import RepairRecipt from "../assistant_Pages/repairs/repairs_Model/repair_update_Recipt/Repair_recipt";
-
+import PrintInvoice from "../assistant_Pages/invoice/printInvoice/Print_invoice";
 // pages
 import Dashboard from "../assistant_Pages/dashboard/Dashboard";
-import Arries from "../assistant_Pages/arreas/Arries";
+import Arries from "../assistant_Pages/arreas/Areas";
 import BlackList from "../assistant_Pages/black_list/Black_List";
 import Customer from "../assistant_Pages/customer/customer_table/Customer_table_assistant";
-import InvoiceHistory from "../assistant_Pages/invoice_History/InvoiceHistory";
+import InvoiceHistory from "../assistant_Pages/invoice_History/Invoice_history";
 import Item from "../assistant_Pages/item/Item";
-import Repair from "../assistant_Pages/repairs/Repair";
-import SeizedItems from "../assistant_Pages/seized_items/Seized_items";
+import Repair from "../assistant_Pages/repairs/Repairs";
+import SeizedItems from "../assistant_Pages/seized_items/Seized_item";
 
 function LayoutAssistant(props) {
   return (
@@ -48,10 +49,20 @@ function LayoutAssistant(props) {
             <Route path="/assistant/ui/ItemTable" component={ItemTable} />
             <Route path="/assistant/ui/AddItem" component={AddItem} />
             <Route path="/assistant/ui/addCustomer" component={AddCustomer} />
+            <Route
+              path="/assistant/invoice/printInvoice"
+              component={PrintInvoice}
+            />
+
+            <Route path="/assistant/ui/makeInvoice" component={MakeInvoice} />
             {/* recipt */}
             <Route
               path="/assistant/repair/repairRecipt"
               component={RepairRecipt}
+            />
+            <Route
+              path="/assistant/invoice_history/payAndGo/updateModel/PrintReceipt"
+              component={PrintReceipt}
             />
           </Switch>
         </div>

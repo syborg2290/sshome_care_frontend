@@ -1,10 +1,18 @@
 import React from "react";
 import { Grid, Container, Typography } from "@material-ui/core";
+import firebase from "firebase";
+import moment from "moment";
 
 // styles
 import "./Repair_View.css";
 
-export default function Repair_View() {
+export default function Repair_View({
+  invoice_number,
+  description,
+  cust_Name,
+  mobile_1,
+  mobile_2,
+}) {
   return (
     <Container component="main" className="conctainefr_main">
       <Typography className="titleffs" variant="h5" gutterBottom>
@@ -23,7 +31,29 @@ export default function Repair_View() {
               :
             </Grid>
             <Grid item xs={12} sm={6}>
-              <p>4637-4FK</p>
+              <p>{invoice_number}</p>
+            </Grid>
+            <Grid className="lbl_topi" item xs={12} sm={4}>
+              Customer Name
+            </Grid>
+            <Grid item xs={12} sm={2}>
+              :
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <p>{cust_Name}</p>
+            </Grid>
+            <Grid className="lbl_topi" item xs={12} sm={4}>
+              Tele
+            </Grid>
+            <Grid item xs={12} sm={2}>
+              :
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <p>{mobile_1}</p>
+            </Grid>
+            <Grid className="lbl_topi" item xs={12} sm={6}></Grid>
+            <Grid item xs={12} sm={6}>
+              <p>{mobile_2 === "" ? " - " : mobile_2}</p>
             </Grid>
 
             <Grid className="lbl_topi" item xs={12} sm={4}>
@@ -33,16 +63,21 @@ export default function Repair_View() {
               :
             </Grid>
             <Grid item xs={12} sm={6}>
-              <p>2020.09.27</p>
+              <p>
+                {" "}
+                {moment(firebase.firestore.FieldValue.serverTimestamp()).format(
+                  "dddd, MMMM Do YYYY"
+                )}
+              </p>
             </Grid>
             <Grid className="lbl_topi" item xs={12} sm={4}>
-              Reason
+              Description
             </Grid>
             <Grid item xs={12} sm={2}>
               :
             </Grid>
             <Grid item xs={12} sm={6}>
-              <p>About Reason</p>
+              <p>{description}</p>
             </Grid>
           </Grid>
         </form>

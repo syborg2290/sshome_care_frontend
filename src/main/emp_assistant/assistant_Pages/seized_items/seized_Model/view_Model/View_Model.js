@@ -1,10 +1,60 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Grid, Container, Typography } from "@material-ui/core";
+
+import db from "../../../../../../config/firebase.js";
 
 // styles
 import "./View_Model.css";
 
-export default function View_Model() {
+export default function View_Model({ invoice_num, seized_date, nic }) {
+  const [fullname, setFullName] = useState("");
+  const [address1, setAddress1] = useState("");
+  const [address2, setAddress2] = useState("");
+  const [tele1, setTele1] = useState("");
+  const [tele2, setTele2] = useState("");
+
+  const [totalInstallmentsPaid, setTotalInstallmentsPaid] = useState(0);
+  const [downPayment, setDownPayment] = useState(0);
+
+  useEffect(() => {
+    db.collection("customer")
+      .where("nic", "==", nic)
+      .get()
+      .then((reCust) => {
+        if (reCust.docs.length > 0) {
+          setFullName(
+            reCust.docs[0]?.data()?.fname + " " + reCust.docs[0]?.data()?.lname
+          );
+          setAddress1(reCust.docs[0]?.data()?.address1);
+          setAddress2(reCust.docs[0]?.data()?.address2);
+          setTele1(reCust.docs[0]?.data()?.mobile1);
+          setTele2(reCust.docs[0]?.data()?.mobile2);
+        }
+      });
+    db.collection("installment")
+      .where("invoice_number", "==", invoice_num)
+      .get()
+      .then((inst) => {
+        if (inst.docs.length > 0) {
+          inst.docs.forEach((docRe) => {
+            let plus = docRe.data()?.amount;
+            let now = plus * inst.docs.length;
+            setTotalInstallmentsPaid(now);
+          });
+        }
+      });
+
+    db.collection("invoice")
+      .where("invoice_number", "==", invoice_num)
+      .get()
+      .then((reInvoice) => {
+        if (reInvoice.docs.length > 0) {
+          setDownPayment(reInvoice.docs[0]?.data()?.items[0]?.downpayment);
+        }
+      });
+    // eslint-disable-next-line
+  }, []);
+
   return (
     <Container component="main" className="conctainefr_main">
       <Typography className="titleffs" variant="h5" gutterBottom>
@@ -23,7 +73,7 @@ export default function View_Model() {
               :
             </Grid>
             <Grid item xs={12} sm={6}>
-              <p>4637-4FK</p>
+              <p>{invoice_num}</p>
             </Grid>
 
             <Grid className="lbl_topi" item xs={12} sm={4}>
@@ -33,7 +83,7 @@ export default function View_Model() {
               :
             </Grid>
             <Grid item xs={12} sm={6}>
-              <p>2020.09.27</p>
+              <p>{seized_date}</p>
             </Grid>
             <Grid item xs={12} sm={12}>
               <hr />
@@ -52,11 +102,9 @@ export default function View_Model() {
               :
             </Grid>
             <Grid item xs={12} sm={2}>
-              <p>janith</p>
+              {fullname}
             </Grid>
-            <Grid item xs={12} sm={4}>
-              <p>kavishka</p>
-            </Grid>
+            <Grid item xs={12} sm={4}></Grid>
             <Grid className="lbl_topi" item xs={12} sm={4}>
               NIC
             </Grid>
@@ -64,78 +112,49 @@ export default function View_Model() {
               :
             </Grid>
             <Grid item xs={12} sm={6}>
-              <p>9835445627v</p>
+              <p>{nic}</p>
             </Grid>
             <Grid className="lbl_topi" item xs={12} sm={4}>
-              Address
+              Address 1
             </Grid>
             <Grid item xs={12} sm={2}>
               :
             </Grid>
             <Grid item xs={12} sm={6}>
-              <p>Galle Rd.</p>
+              <p>{address1}</p>
             </Grid>
             <Grid className="lbl_topi" item xs={12} sm={4}>
-              Tele.
+              {" "}
+              Address 2
             </Grid>
             <Grid item xs={12} sm={2}>
               :
             </Grid>
             <Grid item xs={12} sm={6}>
-              <p>0766254141</p>
+              <p>{address2 === "" ? "-" : address2}</p>
+            </Grid>
+            <Grid className="lbl_topi" item xs={12} sm={4}>
+              Tele 1.
+            </Grid>
+            <Grid item xs={12} sm={2}>
+              :
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <p>{tele1}</p>
+            </Grid>
+            <Grid className="lbl_topi" item xs={12} sm={4}>
+              Tele 2.
+            </Grid>
+            <Grid item xs={12} sm={2}>
+              :
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <p>{tele2 === "" ? " - " : tele2}</p>
             </Grid>
             <Grid item xs={12} sm={12}>
               <hr />
             </Grid>
-            <Grid className="lbl_Subtopic" item xs={12} sm={12}>
-              Trustee
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <hr className="hr_Subtopic" />
-            </Grid>
-            <Grid item xs={12} sm={6}></Grid>
-            <Grid className="lbl_topi" item xs={12} sm={4}>
-              Full Name
-            </Grid>
-            <Grid item xs={12} sm={2}>
-              :
-            </Grid>
-            <Grid item xs={12} sm={2}>
-              <p>janith</p>
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <p>kavishka</p>
-            </Grid>
-            <Grid className="lbl_topi" item xs={12} sm={4}>
-              NIC
-            </Grid>
-            <Grid item xs={12} sm={2}>
-              :
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <p>9835445627v</p>
-            </Grid>
-            <Grid className="lbl_topi" item xs={12} sm={4}>
-              Address
-            </Grid>
-            <Grid item xs={12} sm={2}>
-              :
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <p>Galle Rd.</p>
-            </Grid>
-            <Grid className="lbl_topi" item xs={12} sm={4}>
-              Tele.
-            </Grid>
-            <Grid item xs={12} sm={2}>
-              :
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <p>0766254141</p>
-            </Grid>
-            <Grid item xs={12} sm={12}>
-              <hr />
-            </Grid>
+
             <Grid className="lbl_topi" item xs={12} sm={7}>
               Paid Installment Total(LKR)
             </Grid>
@@ -143,7 +162,7 @@ export default function View_Model() {
               :
             </Grid>
             <Grid className="totls" item xs={12} sm={3}>
-              <p>1600</p>
+              <p>{totalInstallmentsPaid}</p>
             </Grid>
             <Grid className="lbl_topi" item xs={12} sm={7}>
               Down Payment(LKR)
@@ -152,7 +171,7 @@ export default function View_Model() {
               :
             </Grid>
             <Grid className="totls" item xs={12} sm={3}>
-              <p>100</p>
+              <p>{downPayment}</p>
             </Grid>
           </Grid>
         </form>

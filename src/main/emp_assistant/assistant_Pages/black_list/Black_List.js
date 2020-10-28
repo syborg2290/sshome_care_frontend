@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import MUIDataTable from "mui-datatables";
 import { Grid } from "@material-ui/core";
 import { Spin, Modal } from "antd";
@@ -7,7 +7,7 @@ import CurrencyFormat from "react-currency-format";
 
 // components
 import BlackListCustomers from "../black_list/customer_model/BlackList_Customers";
-import BlackListHistory from "../black_list/blackList_history_Model/blackList_history";
+import BlackListHistory from "./histry_model/History_Model";
 
 // icons
 import VisibilityIcon from "@material-ui/icons/Visibility";
@@ -15,6 +15,7 @@ import HistoryIcon from "@material-ui/icons/History";
 
 // styles
 import "./Black_List.css";
+import db from "../../../../config/firebase";
 
 export default function Black_List() {
   // eslint-disable-next-line
@@ -24,6 +25,9 @@ export default function Black_List() {
 
   const [visibleCustomer, setVisibleCustomer] = useState(false); // customer table models
   const [customerhistory, setCustomerhistory] = useState(false); // customer table models
+
+  const [blacklistTableRow, setBlackListTableRow] = useState([]);
+  const [allDataBlacklist, setAllData] = useState([]);
 
   const showModalCustomer = () => {
     setVisibleCustomer(true);
@@ -106,23 +110,37 @@ export default function Black_List() {
     },
   ];
 
-  const repairTableData = [
-    {
-      InvoiceNo: "3476-JDJCF",
-      FirstName: "test",
-      LastName: "test",
-      NIC: "test",
-      Telephone: "test",
-      Action: (
-        <div>
-          <VisibilityIcon onClick={showModalCustomer} />
-          <span className="icon_Edit">
-            <HistoryIcon onClick={showModalCustomerHistory} />
-          </span>
-        </div>
-      ),
-    },
-  ];
+  useEffect(() => {
+    db.collection("blacklist")
+      .get()
+      .then((reBlack) => {
+        var allTableRaw = [];
+        var allData = [];
+        reBlack.docs.forEach((each) => {
+          allData.push({
+            id: each.id,
+            data: each.data(),
+          });
+          allTableRaw.push({
+            InvoiceNo: each.data().InvoiceNo,
+            FirstName: each.data().FirstName,
+            LastName: each.data().LastName,
+            NIC: each.data().NIC,
+            Telephone: each.data().Telephone,
+            Action: (
+              <div>
+                <VisibilityIcon onClick={showModalCustomer} />
+                <span className="icon_Edit">
+                  <HistoryIcon onClick={showModalCustomerHistory} />
+                </span>
+              </div>
+            ),
+          });
+        });
+        setBlackListTableRow(allTableRaw);
+        setAllData(allData);
+      });
+  }, []);
 
   return (
     <>
@@ -139,7 +157,10 @@ export default function Black_List() {
         <div className="customer_Model">
           <div className="customer_Model_Main">
             <div className="customer_Modell_Detail">
-              <BlackListCustomers />
+              <BlackListCustomers
+                nic={allDataBlacklist[currentIndx]?.data?.NIC}
+                key={allDataBlacklist[currentIndx]?.data?.InvoiceNo}
+              />
             </div>
           </div>
         </div>
@@ -159,7 +180,10 @@ export default function Black_List() {
         <div>
           <div>
             <div>
-              <BlackListHistory />
+              <BlackListHistory
+                invoice_no={allDataBlacklist[currentIndx]?.data?.InvoiceNo}
+                key={allDataBlacklist[currentIndx]?.data?.InvoiceNo}
+              />
             </div>
           </div>
         </div>
@@ -171,7 +195,7 @@ export default function Black_List() {
           <MUIDataTable
             title={<span className="title_Span_blackList">BLACK LIST</span>}
             className="blackList_Table"
-            data={repairTableData}
+            data={blacklistTableRow}
             columns={repairTableColomns}
             options={{
               selectableRows: false,

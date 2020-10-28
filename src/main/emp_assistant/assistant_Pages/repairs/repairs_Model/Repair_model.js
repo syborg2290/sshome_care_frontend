@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   TextField,
   Grid,
@@ -9,28 +9,135 @@ import {
 
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { useHistory } from "react-router-dom";
-import { Modal } from "antd";
+import { Modal, Spin } from "antd";
+import firebase from "firebase";
+import moment from "moment";
+import db from "../../../../../config/firebase.js";
 
 // styles
 import "./Repair_model.css";
 
-export default function Repair_model() {
+export default function Repair_model({ closeModel }) {
   const { confirm } = Modal;
   let history = useHistory();
+  const [invoice, setInvoice] = useState("");
+  const [model_no, setModel_no] = useState("");
+  const [cust_name, setCust_name] = useState("");
+  const [nic, setNic] = useState("");
+  const [mobil_no1, setMobil_no1] = useState("");
+  const [mobil_no2, setMobil_no2] = useState("");
+  const [description, setDescription] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const showConfirm = () => {
+  const showConfirm = (item_name) => {
     confirm({
-      title: "Do you Want to ptint a Receipt?",
+      title: "Do you want to print a receipt?",
       icon: <ExclamationCircleOutlined />,
-      content: "Some descriptions",
       onOk() {
-        console.log("yes");
-        history.push("/assistant/repair/repairRecipt");
+        db.collection("repair")
+          .add({
+            invoice_no: invoice.trim(),
+            model_no: model_no.trim(),
+            nic: nic,
+            cust_name: cust_name.trim(),
+            mobil_no1: mobil_no1.trim(),
+            mobil_no2: mobil_no2.trim(),
+            item_name: item_name,
+            status: "accepted",
+            description: description.trim(),
+            date: firebase.firestore.FieldValue.serverTimestamp(),
+          })
+          .then(() => {
+            var passingWithCustomerObj = {
+              invoice_no: invoice.trim(),
+              model_no: model_no.trim(),
+              nic: nic,
+              item_name: item_name,
+            };
+            let moveWith = {
+              pathname: "/assistant/repair/repairRecipt",
+              search: "?query=abc",
+              state: { detail: passingWithCustomerObj },
+            };
+            history.push(moveWith);
+          });
       },
       onCancel() {
-        console.log("Cancel");
+        db.collection("repair")
+          .add({
+            invoice_no: invoice.trim(),
+            model_no: model_no.trim(),
+            nic: nic,
+            cust_name: cust_name.trim(),
+            mobil_no1: mobil_no1.trim(),
+            mobil_no2: mobil_no2.trim(),
+            item_name: item_name,
+            status: "accepted",
+            description: description.trim(),
+            date: firebase.firestore.FieldValue.serverTimestamp(),
+          })
+          .then(() => {
+            closeModel();
+          });
       },
     });
+  };
+
+  const addRepair = async () => {
+    setLoading(true);
+
+    db.collection("invoice")
+      .where("invoice_number", "==", invoice.trim())
+      .get()
+      .then((reThen) => {
+        if (reThen.docs.length > 0) {
+          reThen.docs.forEach((reInvo) => {
+            reInvo.data().items.forEach((reI) => {
+              db.collection("item")
+                .doc(reI.item_id)
+                .get()
+                .then((itRe) => {
+                  if (itRe.data().modelNo === model_no.trim()) {
+                    let daysCountInitial =
+                      (new Date().getTime() -
+                        new Date(
+                          reInvo.data()?.date?.seconds * 1000
+                        ).getTime()) /
+                      (1000 * 3600 * 24);
+
+                    if (itRe.data().guarantee.value === "Months") {
+                      if (
+                        Math.round(daysCountInitial / 30) <=
+                        itRe.data().guaranteePeriod
+                      ) {
+                        setLoading(false);
+                        showConfirm(itRe.data().itemName);
+                      } else {
+                        setLoading(false);
+                        setError("Item garuntee period is expired!");
+                      }
+                    } else {
+                      if (
+                        Math.round(daysCountInitial / 365) <=
+                        itRe.data().guaranteePeriod
+                      ) {
+                        setLoading(false);
+                        showConfirm(itRe.data().itemName);
+                      } else {
+                        setLoading(false);
+                        setError("Item garuntee period is expired!");
+                      }
+                    }
+                  }
+                });
+            });
+          });
+        } else {
+          setLoading(false);
+          setError("Invoice number you entered is not found!");
+        }
+      });
   };
 
   return (
@@ -58,6 +165,10 @@ export default function Repair_model() {
                 fullWidth
                 label="Invoice No"
                 size="small"
+                value={invoice}
+                onChange={(e) => {
+                  setInvoice(e.target.value);
+                }}
               />
             </Grid>
 
@@ -75,25 +186,106 @@ export default function Repair_model() {
                 fullWidth
                 label="Model No"
                 size="small"
+                value={model_no}
+                onChange={(e) => {
+                  setModel_no(e.target.value);
+                }}
               />
             </Grid>
-
             <Grid className="lbl_topi" item xs={12} sm={4}>
-              Reason
+              Customer Name
             </Grid>
             <Grid item xs={12} sm={2}>
               :
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
-                autoComplete="ino"
+                autoComplete="name"
                 variant="outlined"
                 required
+                fullWidth
+                label="Full Name"
+                size="small"
+                value={cust_name}
+                onChange={(e) => {
+                  setCust_name(e.target.value);
+                }}
+              />
+            </Grid>
+            <Grid className="lbl_topi" item xs={12} sm={4}>
+              NIC
+            </Grid>
+            <Grid item xs={12} sm={2}>
+              :
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                autoComplete="nic"
+                variant="outlined"
+                required
+                fullWidth
+                label="NIC"
+                size="small"
+                value={nic}
+                onChange={(e) => {
+                  setNic(e.target.value);
+                }}
+              />
+            </Grid>
+            <Grid className="lbl_topi" item xs={12} sm={4}>
+              Tele
+            </Grid>
+            <Grid item xs={12} sm={2}>
+              :
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                autoComplete="mobile"
+                variant="outlined"
+                required
+                fullWidth
+                label="Mobil 1"
+                size="small"
+                value={mobil_no1}
+                onChange={(e) => {
+                  setMobil_no1(e.target.value);
+                }}
+              />
+            </Grid>
+            <Grid className="lbl_topi" item xs={12} sm={6}></Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                autoComplete="mobil_no"
+                variant="outlined"
+                fullWidth
+                label="Mobil 2"
+                size="small"
+                value={mobil_no2}
+                onChange={(e) => {
+                  setMobil_no2(e.target.value);
+                }}
+              />
+            </Grid>
+
+            <Grid className="lbl_topi" item xs={12} sm={4}>
+              Description
+            </Grid>
+            <Grid item xs={12} sm={2}>
+              :
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                autoComplete="discription"
+                variant="outlined"
                 multiline
                 rowsMax={5}
                 fullWidth
-                label="Reason"
+                label="Description"
                 size="small"
+                value={description}
+                onChange={(e) => {
+                  setDescription(e.target.value);
+                }}
               />
             </Grid>
 
@@ -104,10 +296,15 @@ export default function Repair_model() {
               :
             </Grid>
             <Grid item xs={12} sm={6}>
-              <p>2020.09.27</p>
+              <p>
+                {" "}
+                {moment(firebase.firestore.FieldValue.serverTimestamp()).format(
+                  "dddd, MMMM Do YYYY"
+                )}
+              </p>
             </Grid>
           </Grid>
-
+          <p className="name_Msg">{error.length > 0 ? error : ""}</p>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={9}></Grid>
             <Grid item xs={12} sm={3}>
@@ -115,9 +312,19 @@ export default function Repair_model() {
                 variant="contained"
                 color="primary"
                 className="btn_update"
-                onClick={showConfirm}
+                onClick={addRepair}
+                disabled={
+                  loading ||
+                  invoice.length === 0 ||
+                  model_no.length === 0 ||
+                  cust_name.length === 0 ||
+                  nic.length === 0 ||
+                  mobil_no1.length === 0
+                    ? true
+                    : false
+                }
               >
-                Done
+                {loading ? <Spin /> : "Done"}
               </Button>
             </Grid>
           </Grid>

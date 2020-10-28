@@ -1,18 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import MUIDataTable from "mui-datatables";
 import { Grid } from "@material-ui/core";
-import { Spin } from "antd";
+import moment from "moment";
 import CurrencyFormat from "react-currency-format";
 
-//styles
-import "./blackList_history.css";
+import db from "../../../../../../../../config/firebase.js";
 
-export default function blackList_history() {
+//styles
+import "./History_Model.css";
+
+export default function History_Model({ invoice_no }) {
   // eslint-disable-next-line
   const [isLoading, setIsLoading] = useState(true);
-
   // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
+  const [installments, setInstallments] = useState([]);
 
   const columns = [
     {
@@ -63,41 +65,67 @@ export default function blackList_history() {
     },
   ];
 
-  const installments = [
-    {
-      InvoiceNo: "3476-JDJCF",
-      Date: "test",
-      Amount: (
-        <CurrencyFormat
-          value={1800}
-          // value={each.data().amount}
-          displayType={"text"}
-          thousandSeparator={true}
-          prefix={" "}
-        />
-      ),
-      Delayed: "test",
-      Balance: (
-        <CurrencyFormat
-          value={1500}
-          // value={each.data().amount}
-          displayType={"text"}
-          thousandSeparator={true}
-          prefix={" "}
-        />
-      ),
-    },
-  ];
+  useEffect(() => {
+    db.collection("installment")
+      .where("invoice_number", "==", invoice_no)
+      .get()
+      .then((instReDoc) => {
+        var reArray = instReDoc.docs;
+        reArray.sort((a, b) => {
+          if (a.data().balance > b.data().balance) {
+            return -1;
+          } else {
+            return 1;
+          }
+        });
+
+        reArray.forEach((each) => {
+          setInstallments((old) => [
+            ...old,
+            {
+              InvoiceNo: invoice_no,
+              Date: moment(each.data()?.date?.toDate()).format(
+                "dddd, MMMM Do YYYY"
+              ),
+              Amount: (
+                <CurrencyFormat
+                  value={each.data().amount}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+              Delayed: (
+                <CurrencyFormat
+                  value={each.data().delayed}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+              Balance: (
+                <CurrencyFormat
+                  value={each.data().balance}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+            },
+          ]);
+        });
+      });
+    setIsLoading(false);
+    // eslint-disable-next-line
+  }, [invoice_no]);
 
   return (
     <div>
-      <Grid container spacing={4} className="blockList_main_container">
+      <Grid container spacing={4} className="mains_container">
         <Grid item xs={12}>
           <MUIDataTable
-            title={
-              <span className="blockList_title_Span">Installment History</span>
-            }
-            className="blackList_installment_table"
+            title={<span className="title_Span">Installment History</span>}
+            className="installment_table"
             data={installments}
             columns={columns}
             options={{
@@ -111,15 +139,6 @@ export default function blackList_history() {
               sort: true,
               onRowClick: (rowData, rowMeta) => {
                 setCurrentIndx(rowMeta.dataIndex);
-              },
-              textLabels: {
-                body: {
-                  noMatch: isLoading ? (
-                    <Spin className="tblSpinner" size="large" spinning="true" />
-                  ) : (
-                    ""
-                  ),
-                },
               },
             }}
           />

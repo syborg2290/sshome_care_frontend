@@ -293,7 +293,7 @@ export default function Arreas_update({ invoice_no, nic, close }) {
 
         let moveWith = {
           pathname:
-            "/showroom/invoice_history/payAndGo/updateModel/PrintReceipt",
+            "/assistant/invoice_history/payAndGo/updateModel/PrintReceipt",
           search: "?query=abc",
           state: { detail: passingWithCustomerObj },
         };

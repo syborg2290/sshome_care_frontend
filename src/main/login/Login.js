@@ -18,6 +18,9 @@ import "react-notifications/lib/notifications.css";
 import useStyles from "./styles";
 import "./Login.css";
 
+import Particles from "react-particles-js";
+import particlesConfig from "../../config/particlesConfig.js";
+
 // context
 import { useUserDispatch, loginUser } from "../../context/UserContext";
 import db from "../../config/firebase.js";
@@ -87,67 +90,72 @@ function Login(props) {
   };
 
   return (
-    <Grid container className="container">
-      <div className="formContainer">
-        <div className="form">
-          <Typography className="lbl_Login">Login</Typography>
-          <React.Fragment>
-            <Typography variant="h3" className="greeting">
-              S S HOME CARE CITY
-            </Typography>
-            <div className={classes.formDividerContainer}>
-              <div className={classes.formDivider} />
-              <Typography className={classes.formDividerWord}>
-                <LockOpenIcon className="lock_Icon" />
-              </Typography>
-              <div className={classes.formDivider} />
-            </div>
-            <TextField
-              id="name"
-              className="txt_login"
-              value={loginValue}
-              onChange={(e) => setLoginValue(e.target.value)}
-              placeholder="Username"
-              type="name"
-              label="Username"
-              variant="outlined"
-              fullWidth
-            />
-            <TextField
-              id="password"
-              className="txt_login"
-              value={passwordValue}
-              onChange={(e) => setPasswordValue(e.target.value)}
-              margin="normal"
-              placeholder="Password"
-              type="password"
-              label="Password"
-              variant="outlined"
-              fullWidth
-            />
-            <div className={classes.formButtons}>
-              {isLoading ? (
-                <CircularProgress size={26} className="loginLoader" />
-              ) : (
-                <Button
-                  className="btn_Login"
-                  disabled={
-                    loginValue.length === 0 || passwordValue.length === 0
-                  }
-                  onClick={onLogin}
-                  variant="contained"
-                  color="primary"
-                  size="large"
-                >
-                  Login
-                </Button>
-              )}
-            </div>
-          </React.Fragment>
-        </div>
+    <>
+      <div style={{ position: 'absolute', background: "#000022"}}>
+        <Particles height="100vh" width="100vw" params={particlesConfig}/>
       </div>
-      <NotificationContainer />
-    </Grid>
+      <Grid container className="container">
+        <div className="formContainer">
+          <div className="form">
+            <Typography className="lbl_Login">Login</Typography>
+            <React.Fragment>
+              <Typography variant="h3" className="greeting">
+                S S HOME CARE CITY
+              </Typography>
+              <div className={classes.formDividerContainer}>
+                <div className={classes.formDivider} />
+                <Typography className={classes.formDividerWord}>
+                  <LockOpenIcon className="lock_Icon" />
+                </Typography>
+                <div className={classes.formDivider} />
+              </div>
+              <TextField
+                id="name"
+                className="txt_login"
+                value={loginValue}
+                onChange={(e) => setLoginValue(e.target.value)}
+                placeholder="Username"
+                type="name"
+                label="Username"
+                variant="outlined"
+                fullWidth
+              />
+              <TextField
+                id="password"
+                className="txt_login"
+                value={passwordValue}
+                onChange={(e) => setPasswordValue(e.target.value)}
+                margin="normal"
+                placeholder="Password"
+                type="password"
+                label="Password"
+                variant="outlined"
+                fullWidth
+              />
+              <div className={classes.formButtons}>
+                {isLoading ? (
+                  <CircularProgress size={26} className="loginLoader" />
+                ) : (
+                  <Button
+                    className="btn_Login"
+                    disabled={
+                      loginValue.length === 0 || passwordValue.length === 0
+                    }
+                    onClick={onLogin}
+                    variant="contained"
+                    color="primary"
+                    size="large"
+                  >
+                    Login
+                  </Button>
+                )}
+              </div>
+            </React.Fragment>
+          </div>
+        </div>
+        <NotificationContainer />
+      </Grid>
+    </>
   );
 }
 

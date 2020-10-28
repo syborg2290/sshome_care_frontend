@@ -4,7 +4,6 @@ import { Spin } from "antd";
 import CurrencyFormat from "react-currency-format";
 import db from "../../../../../../config/firebase.js";
 
-
 //icons
 
 export default function Full_Payment_Model({ items_list_props }) {

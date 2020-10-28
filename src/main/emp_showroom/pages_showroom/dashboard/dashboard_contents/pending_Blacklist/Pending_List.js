@@ -276,7 +276,7 @@ export default function View_Model({ pendingBlackList }) {
         onOk={async () => {
           await changeToBlacklist();
           setVisibleConfirmPrint(false);
-          window.location.reload();
+          // window.location.reload();
         }}
         onCancel={() => {
           setVisibleConfirmPrint(false);

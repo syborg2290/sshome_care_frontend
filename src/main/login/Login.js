@@ -90,9 +90,9 @@ function Login(props) {
   };
 
   return (
-    <div>
-       <div style={{ position: 'absolute'}}>
-        <Particles height="100vh" width="100vw" params={particlesConfig} />
+    <>
+      <div style={{ position: 'absolute', background: "#000022"}}>
+        <Particles height="100vh" width="100vw" params={particlesConfig}/>
       </div>
       <Grid container className="container">
         <div className="formContainer">
@@ -155,7 +155,7 @@ function Login(props) {
         </div>
         <NotificationContainer />
       </Grid>
-    </div>
+    </>
   );
 }
 

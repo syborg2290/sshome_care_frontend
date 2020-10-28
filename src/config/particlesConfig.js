@@ -4,11 +4,11 @@ const particlesConfig = {
       "value": 80,
       "density": {
         "enable": true,
-        "value_area": 800
+        "value_area": 600
       }
     },
     "color": {
-      "value": "#ffffff"
+      "value": "black"
     },
     "shape": {
       "type": "circle",
@@ -40,17 +40,17 @@ const particlesConfig = {
       "random": true,
       "anim": {
         "enable": false,
-        "speed": 40,
-        "size_min": 0.1,
+        "speed": 60,
+        "size_min": 0.3,
         "sync": false
       }
     },
     "line_linked": {
       "enable": true,
-      "distance": 150,
+      "distance": 100,
       "color": "#ffffff",
-      "opacity": 0.4,
-      "width": 1
+      "opacity": 0.9,
+      "width": 2
     },
     "move": {
       "enable": true,
@@ -89,9 +89,9 @@ const particlesConfig = {
       },
       "bubble": {
         "distance": 400,
-        "size": 40,
+        "size": 20,
         "duration": 2,
-        "opacity": 8,
+        "opacity": 5,
         "speed": 3
       },
       "repulse": {

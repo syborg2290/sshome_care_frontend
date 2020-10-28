@@ -320,9 +320,17 @@ export default function Update_Model({
         ? 2
         : allInstallment;
 
-    let againallPlusss = allPlusss + countAllPrevInstallments;
+    let againPreve =
+      countAllPrevInstallments <= instCount
+        ? countAllPrevInstallments
+        : instCount;
+
+    let agianSo = countAllPrevInstallments >= instCount ? 0 : allPlusss;
+
+    let againallPlusss = agianSo + againPreve;
     let rest = instAmountProp * againallPlusss;
-    let finalTot = rest + delayedCharges > 693 ? 693 : delayedCharges;
+    let totFinalRe = delayedCharges >= 693 ? 693 : delayedCharges;
+    let finalTot = rest + totFinalRe;
     return finalTot;
   };
 
@@ -562,7 +570,9 @@ export default function Update_Model({
                         ? 2
                         : allInstallment) +
                       " + " +
-                      updatingInstallmentCount +
+                      (dueInstallmentsCount() > 0
+                        ? updatingInstallmentCount
+                        : 0) +
                       ") + " +
                       Math.round(delayedCharges) +
                       " "

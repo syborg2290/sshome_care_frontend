@@ -128,7 +128,7 @@ export default function Dashboard() {
                         : (daysCountInitial - 31) / 7 > 7 &&
                           (daysCountInitial - 31) / 7 < 8
                         ? 693
-                        : 99 * Math.round((daysCountInitial - 31) / 7),
+                        : 693,
                   });
               } else {
                 db.collection("arrears").add({
@@ -159,7 +159,7 @@ export default function Dashboard() {
                       : (daysCountInitial - 31) / 7 > 7 &&
                         (daysCountInitial - 31) / 7 < 8
                       ? 693
-                      : 99 * Math.round((daysCountInitial - 31) / 7),
+                      : 693,
                   date: firebase.firestore.FieldValue.serverTimestamp(),
                 });
               }
@@ -256,7 +256,7 @@ export default function Dashboard() {
                         : (daysCountInitial - 7) / 7 > 7 &&
                           (daysCountInitial - 7) / 7 < 8
                         ? 693
-                        : 99 * Math.round((daysCountInitial - 7) / 7),
+                        : 693,
                   });
               } else {
                 db.collection("arrears").add({
@@ -287,7 +287,7 @@ export default function Dashboard() {
                       : (daysCountInitial - 7) / 7 > 7 &&
                         (daysCountInitial - 7) / 7 < 8
                       ? 693
-                      : 99 * Math.round((daysCountInitial - 7) / 7),
+                      : 693,
                   date: firebase.firestore.FieldValue.serverTimestamp(),
                 });
               }

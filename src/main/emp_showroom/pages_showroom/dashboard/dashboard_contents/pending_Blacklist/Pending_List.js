@@ -81,8 +81,6 @@ export default function View_Model({ pendingBlackList }) {
           ).data().mobile1,
         });
       });
-    setVisibleConfirmPrint(false);
-    window.location.reload();
   };
 
   const showModalView = () => {
@@ -275,7 +273,11 @@ export default function View_Model({ pendingBlackList }) {
         cancelText="No"
         okText="Yes"
         bodyStyle={{ borderRadius: "30px" }}
-        onOk={changeToBlacklist}
+        onOk={async () => {
+          await changeToBlacklist();
+          setVisibleConfirmPrint(false);
+          window.location.reload();
+        }}
         onCancel={() => {
           setVisibleConfirmPrint(false);
         }}

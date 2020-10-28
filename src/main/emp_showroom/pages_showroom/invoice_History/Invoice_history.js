@@ -349,7 +349,7 @@ export default function Invoice_history() {
                 >
                   Ongoing
                 </span>
-              ) : (
+              ) :siDoc.data().status_of_payandgo === "Done" ? (
                 <span
                   style={{
                     color: "white",
@@ -360,6 +360,18 @@ export default function Invoice_history() {
                   }}
                 >
                   Done
+                </span>
+              ): (
+                <span
+                  style={{
+                    color: "white",
+                    backgroundColor: "red",
+                    padding: "6px",
+                    borderRadius: "20px",
+                    width: "100%",
+                  }}
+                >
+                  Blacklist
                 </span>
               ),
             Action: (

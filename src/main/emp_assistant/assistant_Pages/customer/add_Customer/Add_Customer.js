@@ -131,7 +131,7 @@ export default function Add_Customer() {
                         passedObj[0].customer = customerObj;
 
                         let moveWith = {
-                          pathname: "/assistant/ui/Invoice",
+                          pathname: "/assistant/ui/makeInvoice",
                           search: "?query=abc",
                           state: { detail: passedObj },
                         };

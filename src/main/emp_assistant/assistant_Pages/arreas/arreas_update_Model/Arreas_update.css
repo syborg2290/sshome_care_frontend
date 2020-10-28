@@ -1,0 +1,18 @@
+.lbl_topi_radio {
+  font-weight: 600 !important;
+  color: #222a44 !important;
+  padding-top: 30px !important;
+  padding-bottom: 30px !important;
+}
+
+.lbl_topi_radio_not {
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
+}
+
+.spinner_arreas {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  margin-top: 20px !important;
+}

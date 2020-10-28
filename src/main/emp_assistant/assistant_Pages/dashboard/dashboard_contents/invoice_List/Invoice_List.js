@@ -1,28 +1,26 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
-import { Spin, Modal } from "antd";
+import { Modal } from "antd";
 import MUIDataTable from "mui-datatables";
 import moment from "moment";
 import CurrencyFormat from "react-currency-format";
 import { Button, Box, Tab, Tabs, AppBar, Grid } from "@material-ui/core";
 
-import { ExclamationCircleOutlined } from "@ant-design/icons";
-import { useHistory } from "react-router-dom";
-import db from "../../../../config/firebase.js";
-
-// styles
-import "./InvoiceHistory.css";
+import db from "../../../../../../config/firebase.js";
 
 // components
-import InstallmentHistory from "./components/PayAndGoModel/HistoryModel/History_Model";
-import UpdateInstallment from "./components/PayAndGoModel/UpdateModel/Update_Model";
-import InstallmentView from "./components/PayAndGoModel/ViewModel/View_Model";
+import UpdateInstallment from "../../../invoice_History/components/PayAndGoModel/UpdateModel/Update_Model";
+import InstallmentHistory from "../../../invoice_History/components/PayAndGoModel/HistoryModel/History_Model";
+import InstallmentView from "../../../invoice_History/components/PayAndGoModel/ViewModel/View_Model";
+import InstallmentFullPayment from "../../../invoice_History/components/FullPaymentModel/Full_Payment_Model";
+
+// styles
+import "./Invoice_List.css";
 
 // icons
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import HistoryIcon from "@material-ui/icons/History";
-import PrintRoundedIcon from "@material-ui/icons/PrintRounded";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -63,9 +61,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function InvoiceHistory() {
-  // eslint-disable-next-line
-  const [isLoading, setIsLoading] = useState(true);
+export default function Invoice_List() {
   // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
   const classes = useStyles();
@@ -73,28 +69,12 @@ export default function InvoiceHistory() {
   const [payangoTableData, setpayangoTableData] = useState([]);
   const [payangoAllData, setpayangoAllData] = useState([]);
   const [fullPaymentTableData, setFullPaymentTableData] = useState([]);
-  // eslint-disable-next-line
   const [fullPaymentAllData, setFullPaymentAllData] = useState([]);
 
   const [installmentUpdate, setInstallmentUpdate] = useState(false); //  table models
   const [installmentvisible, setInstallmentVisible] = useState(false); //  table models
   const [installmentHistory, setInstallmentHistory] = useState(false); //  table models
   const [installmentFullPayment, setInstallmentFullPayment] = useState(false); //  table models
-
-  const { confirm } = Modal;
-
-  let history = useHistory();
-
-  const showConfirm = () => {
-    confirm({
-      title: "Do you Want to print an invoice?",
-      icon: <ExclamationCircleOutlined />,
-      onOk() {
-        history.push("/showroom/invoice/printInvoice");
-      },
-      onCancel() {},
-    });
-  };
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -116,7 +96,7 @@ export default function InvoiceHistory() {
     setInstallmentVisible(true);
   };
 
-  const InstallmentFullPayment = () => {
+  const showInstallmentFullPayment = () => {
     setInstallmentFullPayment(true);
   };
 
@@ -261,86 +241,89 @@ export default function InvoiceHistory() {
         var rawAllData = [];
 
         cust.docs.forEach((siDoc) => {
-          rawAllData.push({
-            id: siDoc.id,
-            data: siDoc.data(),
-          });
+          let daysCountInitial =
+            (new Date().getTime() -
+              new Date(siDoc.data()?.date?.seconds * 1000).getTime()) /
+            (1000 * 3600 * 24);
+          if (Math.round(daysCountInitial) === 0) {
+            rawAllData.push({
+              id: siDoc.id,
+              data: siDoc.data(),
+            });
 
-          rawData.push({
-            InvoiceNo: siDoc.data().invoice_number,
-            Date: moment(siDoc.data()?.date?.toDate()).format(
-              "dddd, MMMM Do YYYY"
-            ),
-            NIC: siDoc.data().nic,
-            Discount: (
-              <CurrencyFormat
-                value={siDoc.data().discount}
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={" "}
-              />
-            ),
-            Paid: (
-              <CurrencyFormat
-                value={siDoc.data().total}
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={" "}
-              />
-            ),
-            Status:
-              siDoc.data().status_of_payandgo === "onGoing" ? (
-                <span
-                  style={{
-                    color: "black",
-                    backgroundColor: "#e6e600",
-                    padding: "6px",
-                    borderRadius: "20px",
-                    font: "10px",
-                  }}
-                >
-                  Ongoing
-                </span>
-              ) : (
-                <span
-                  style={{
-                    color: "white",
-                    backgroundColor: " #009900",
-                    padding: "6px",
-                    borderRadius: "20px",
-                    width: "100%",
-                  }}
-                >
-                  Done
-                </span>
+            rawData.push({
+              InvoiceNo: siDoc.data().invoice_number,
+              Date: moment(siDoc.data()?.date?.toDate()).format(
+                "dddd, MMMM Do YYYY"
               ),
-            Action: (
-              <div>
-                {siDoc.data().status_of_payandgo === "onGoing" ? (
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    size="small"
-                    className="btn_pay"
-                    onClick={showModalUpdate}
+              NIC: siDoc.data().nic,
+              Discount: (
+                <CurrencyFormat
+                  value={siDoc.data().discount}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+              Paid: (
+                <CurrencyFormat
+                  value={siDoc.data().total}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+              Status:
+                siDoc.data().status_of_payandgo === "onGoing" ? (
+                  <span
+                    style={{
+                      color: "black",
+                      backgroundColor: "#e6e600",
+                      padding: "6px",
+                      borderRadius: "20px",
+                      font: "10px",
+                    }}
                   >
-                    Update
-                  </Button>
+                    Ongoing
+                  </span>
                 ) : (
-                  ""
-                )}
-                <span className="icon_visibl">
-                  <HistoryIcon onClick={showModalHistory} />
-                </span>
-                <span className="icon_Edit">
-                  <VisibilityIcon onClick={showInstallmentView} />
-                </span>
-                <span className="icon_print">
-                  <PrintRoundedIcon onClick={showConfirm} />
-                </span>
-              </div>
-            ),
-          });
+                  <span
+                    style={{
+                      color: "white",
+                      backgroundColor: " #009900",
+                      padding: "6px",
+                      borderRadius: "20px",
+                      width: "100%",
+                    }}
+                  >
+                    Done
+                  </span>
+                ),
+              Action: (
+                <div>
+                  {siDoc.data().status_of_payandgo === "onGoing" ? (
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      size="small"
+                      className="btn_pay"
+                      onClick={showModalUpdate}
+                    >
+                      Update
+                    </Button>
+                  ) : (
+                    ""
+                  )}
+                  <span className="icon_visibl">
+                    <HistoryIcon onClick={showModalHistory} />
+                  </span>
+                  <span className="icon_Edit">
+                    <VisibilityIcon onClick={showInstallmentView} />
+                  </span>
+                </div>
+              ),
+            });
+          }
         });
         setpayangoAllData(rawAllData);
         setpayangoTableData(rawData);
@@ -354,49 +337,50 @@ export default function InvoiceHistory() {
         var rawDataFull = [];
         var rawAllDataFull = [];
         cust.docs.forEach((siDoc) => {
-          rawAllDataFull.push({
-            id: siDoc.id,
-            data: siDoc.data(),
-          });
-          rawDataFull.push({
-            InvoiceNo: siDoc.data().invoice_number,
-            Date: moment(siDoc.data()?.date?.toDate()).format(
-              "dddd, MMMM Do YYYY"
-            ),
-            Discount: (
-              <CurrencyFormat
-                value={siDoc.data().discount}
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={" "}
-              />
-            ),
-            Paid: (
-              <CurrencyFormat
-                value={siDoc.data().total}
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={" "}
-              />
-            ),
-            Action: (
-              <div>
-                <span className="icon_visibl">
-                  <VisibilityIcon onClick={InstallmentFullPayment} />
-                </span>
-                <span className="icon_print">
-                  <PrintRoundedIcon onClick={showConfirm} />
-                </span>
-              </div>
-            ),
-          });
+          let daysCountInitial =
+            (new Date().getTime() -
+              new Date(siDoc.data()?.date?.seconds * 1000).getTime()) /
+            (1000 * 3600 * 24);
+          if (Math.round(daysCountInitial) === 0) {
+            rawAllDataFull.push({
+              id: siDoc.id,
+              data: siDoc.data(),
+            });
+            rawDataFull.push({
+              InvoiceNo: siDoc.data().invoice_number,
+              Date: moment(siDoc.data()?.date?.toDate()).format(
+                "dddd, MMMM Do YYYY"
+              ),
+              Discount: (
+                <CurrencyFormat
+                  value={siDoc.data().discount}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+              Paid: (
+                <CurrencyFormat
+                  value={siDoc.data().total}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+              Action: (
+                <div>
+                  <span className="icon_visibl">
+                    <VisibilityIcon onClick={showInstallmentFullPayment} />
+                  </span>
+                </div>
+              ),
+            });
+          }
         });
 
         setFullPaymentAllData(rawAllDataFull);
         setFullPaymentTableData(rawDataFull);
       });
-    setIsLoading(false);
-    // eslint-disable-next-line
   }, []);
 
   //End Full Payment Rows
@@ -491,15 +475,15 @@ export default function InvoiceHistory() {
           <div className="FullPayment_Installment_Model_Main">
             <div className="FullPayment_Installment_Model_Detail">
               <InstallmentFullPayment
-              // key={fullPaymentAllData[currentIndx]?.id}
-              // items_list_props={fullPaymentAllData[currentIndx]?.data?.items}
+                key={fullPaymentAllData[currentIndx]?.id}
+                items_list_props={fullPaymentAllData[currentIndx]?.data?.items}
               />
             </div>
           </div>
         </div>
       </Modal>
       {/*End Installment Model Full Payment */}
-      <div component="main" className="main_containers">
+      <div component="main" className="main_container">
         <AppBar className="appBar" position="static">
           <Tabs
             classes={{ indicator: classes.indicator }}
@@ -530,19 +514,6 @@ export default function InvoiceHistory() {
                   onRowClick: (rowData, rowMeta) => {
                     setCurrentIndx(rowMeta.dataIndex);
                   },
-                  textLabels: {
-                    body: {
-                      noMatch: isLoading ? (
-                        <Spin
-                          className="tblSpinner"
-                          size="large"
-                          spinning="true"
-                        />
-                      ) : (
-                        ""
-                      ),
-                    },
-                  },
                 }}
               />
             </Grid>
@@ -567,19 +538,6 @@ export default function InvoiceHistory() {
                   sort: true,
                   onRowClick: (rowData, rowMeta) => {
                     setCurrentIndx(rowMeta.dataIndex);
-                  },
-                  textLabels: {
-                    body: {
-                      noMatch: isLoading ? (
-                        <Spin
-                          className="tblSpinner"
-                          size="large"
-                          spinning="true"
-                        />
-                      ) : (
-                        ""
-                      ),
-                    },
                   },
                 }}
               />

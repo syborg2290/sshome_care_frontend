@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import MUIDataTable from "mui-datatables";
 import { Grid } from "@material-ui/core";
-import CurrencyFormat from "react-currency-format";
 import moment from "moment";
+import CurrencyFormat from "react-currency-format";
 
-import db from "../../../../../../../config/firebase.js";
+import db from "../../../../../config/firebase.js";
 
-// styles
+//styles
 import "./History_Model.css";
 
 export default function History_Model({ invoice_no }) {

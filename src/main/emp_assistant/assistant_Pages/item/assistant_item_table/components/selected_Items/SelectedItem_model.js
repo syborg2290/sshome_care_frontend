@@ -68,7 +68,7 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
         setLoading(false);
         //sent to direct invoice
         let moveWith = {
-          pathname: "/assistant/ui/Invoice",
+          pathname: "/assistant/ui/makeInvoice",
           search: "?query=abc",
           state: { detail: nextData },
         };
@@ -89,7 +89,7 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
           setLoading(false);
           //sent to direct invoice
           let moveWith = {
-            pathname: "/assistant/ui/Invoice",
+            pathname: "/assistant/ui/makeInvoice",
             search: "?query=abc",
             state: { detail: nextData },
           };

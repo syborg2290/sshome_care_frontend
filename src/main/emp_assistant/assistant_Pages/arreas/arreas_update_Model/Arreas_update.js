@@ -11,21 +11,15 @@ import CurrencyFormat from "react-currency-format";
 import firebase from "firebase";
 import moment from "moment";
 
-import db from "../../../../../../../config/firebase.js";
+import db from "../../../../../config/firebase.js";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { useHistory } from "react-router-dom";
 import { Modal } from "antd";
 
 // styles
-import "./Update_Model.css";
+import "./Arreas_update.css";
 
-export default function Update_Model({
-  invoice_no,
-  instAmountProp,
-  instCount,
-  customer_id,
-  closeModal,
-}) {
+export default function Arreas_update({ invoice_no, nic, close }) {
   const [installments, setInstallments] = useState(0);
   const [delayedDays, setDelayedDays] = useState(0);
   const [allInstallment, setAllInstallment] = useState(0);
@@ -33,6 +27,8 @@ export default function Update_Model({
   const [updatingInstallmentCount, setUpdatingInstallmentCount] = useState(1);
   const [customer, setCustomer] = useState({});
   const [currentStatus, setCurrentStatus] = useState("a");
+  const [instCount, setInstCount] = useState(0);
+  const [instAmountProp, setInstAmountProp] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
   const { confirm } = Modal;
@@ -41,10 +37,17 @@ export default function Update_Model({
 
   useEffect(() => {
     db.collection("customer")
-      .doc(customer_id)
+      .where("nic", "==", nic)
       .get()
-      .then((custDocRe) => {
-        setCustomer(custDocRe.data());
+      .then((th) => {
+        if (th.docs.length > 0) {
+          db.collection("customer")
+            .doc(th.docs[0]?.id)
+            .get()
+            .then((custDocRe) => {
+              setCustomer(custDocRe.data());
+            });
+        }
       });
 
     db.collection("installment")
@@ -58,6 +61,8 @@ export default function Update_Model({
       .where("invoice_number", "==", invoice_no)
       .get()
       .then((inReDoc) => {
+        setInstCount(inReDoc.docs[0].data().items[0].noOfInstallment);
+        setInstAmountProp(inReDoc.docs[0].data().items[0].amountPerInstallment);
         db.collection("installment")
           .where("invoice_number", "==", invoice_no)
           .get()
@@ -282,12 +287,13 @@ export default function Update_Model({
           invoice_number: invoice_no,
           customerDetails: customer,
           total: totalPlusRed(),
+
           delayedCharges: Math.round(delayedCharges),
         };
 
         let moveWith = {
           pathname:
-            "/assistant/invoice_history/payAndGo/updateModel/PrintReceipt",
+            "/showroom/invoice_history/payAndGo/updateModel/PrintReceipt",
           search: "?query=abc",
           state: { detail: passingWithCustomerObj },
         };
@@ -295,7 +301,7 @@ export default function Update_Model({
       },
       async onCancel() {
         await updateInstallment();
-        closeModal();
+        close();
         window.location.reload();
       },
     });
@@ -310,7 +316,6 @@ export default function Update_Model({
 
   const totalPlusRed = () => {
     let allPlusss = Math.round(updatingInstallmentCount);
-
     let countAllPrevInstallments =
       (allInstallment < 0 || allInstallment) < 1
         ? 0

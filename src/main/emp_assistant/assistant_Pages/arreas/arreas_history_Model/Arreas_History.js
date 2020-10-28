@@ -1,19 +1,24 @@
 import React, { useState, useEffect } from "react";
 import MUIDataTable from "mui-datatables";
 import { Grid } from "@material-ui/core";
-import CurrencyFormat from "react-currency-format";
-import moment from "moment";
 
-import db from "../../../../../../../config/firebase.js";
+// eslint-disable-next-line
+import CurrencyFormat from "react-currency-format";
+// eslint-disable-next-line
+import moment from "moment";
+// eslint-disable-next-line
+import db from "../../../../../config/firebase.js";
 
 // styles
-import "./History_Model.css";
+import "./Arreas_History.css";
 
-export default function History_Model({ invoice_no }) {
+export default function Arreas_History({ invoice_no }) {
   // eslint-disable-next-line
   const [isLoading, setIsLoading] = useState(true);
+
   // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
+
   const [installments, setInstallments] = useState([]);
 
   const columns = [
@@ -84,7 +89,7 @@ export default function History_Model({ invoice_no }) {
             ...old,
             {
               InvoiceNo: invoice_no,
-              Date: moment(each.data()?.date?.toDate()).format(
+              Date: moment(each.data().date.toDate()).format(
                 "dddd, MMMM Do YYYY"
               ),
               Amount: (
@@ -138,7 +143,7 @@ export default function History_Model({ invoice_no }) {
               elevation: 4,
               sort: true,
               onRowClick: (rowData, rowMeta) => {
-                setCurrentIndx(rowMeta.dataIndex);
+                setCurrentIndx(rowMeta.rowIndex);
               },
             }}
           />

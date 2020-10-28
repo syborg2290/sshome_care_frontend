@@ -1,11 +1,34 @@
-import React from "react";
+import React, { useState } from "react";
 import { Radio } from "antd";
 import { Grid, Container, Typography, Button } from "@material-ui/core";
+import firebase from "firebase";
+import moment from "moment";
+
+import db from "../../../../../config/firebase.js";
 
 // styles
 import "./Repair_Update.css";
 
-export default function Repair_Update() {
+export default function Repair_Update({
+  invoice_number,
+  statusProp,
+  docId,
+  closeModel,
+}) {
+  const [status, setStatus] = useState(statusProp);
+
+  const updateStatus = () => {
+    db.collection("repair")
+      .doc(docId)
+      .update({
+        status: status,
+        date: firebase.firestore.FieldValue.serverTimestamp(),
+      })
+      .then((_) => {
+        closeModel();
+      });
+  };
+
   return (
     <Container component="main" className="conctainefr_main">
       <Typography className="titleffs" variant="h5" gutterBottom>
@@ -24,7 +47,7 @@ export default function Repair_Update() {
               :
             </Grid>
             <Grid item xs={12} sm={6}>
-              <p>4637-4FK</p>
+              <p>{invoice_number}</p>
             </Grid>
 
             <Grid className="lbl_topi" item xs={12} sm={4}>
@@ -34,14 +57,29 @@ export default function Repair_Update() {
               :
             </Grid>
             <Grid item xs={12} sm={6}>
-              <p>2020.09.27</p>
+              <p>
+                {" "}
+                {moment(firebase.firestore.FieldValue.serverTimestamp()).format(
+                  "dddd, MMMM Do YYYY, h:mm:ss a"
+                )}
+              </p>
             </Grid>
             <Grid item xs={12} sm={12}>
-              <Radio.Group defaultValue="a" buttonStyle="solid">
-                <Radio.Button value="a">Accepted</Radio.Button>
-                <Radio.Button value="b">Return</Radio.Button>
-                <Radio.Button value="c">Issued</Radio.Button>
-                <Radio.Button value="d">Deliverd</Radio.Button>
+              <Radio.Group
+                value={status}
+                onChange={(e) => setStatus(e.target.value)}
+                buttonStyle="solid"
+              >
+                <Radio.Button value="accepted">Accepted</Radio.Button>
+                <Radio.Button value="return_to_company">
+                  Return to company
+                </Radio.Button>
+                <Radio.Button value="return_from_company">
+                  Return from company
+                </Radio.Button>
+                <Radio.Button value="back_to_customer">
+                  Back to customer
+                </Radio.Button>
               </Radio.Group>
             </Grid>
           </Grid>
@@ -53,7 +91,7 @@ export default function Repair_Update() {
                 variant="contained"
                 color="primary"
                 className="btn_update"
-                // onClick={showConfirm}
+                onClick={updateStatus}
               >
                 Done
               </Button>

@@ -325,9 +325,17 @@ export default function Arreas_update({ invoice_no, nic, close }) {
         ? 2
         : allInstallment;
 
-    let againallPlusss = allPlusss + countAllPrevInstallments;
+    let againPreve =
+      countAllPrevInstallments <= instCount
+        ? countAllPrevInstallments
+        : instCount;
+
+    let agianSo = countAllPrevInstallments >= instCount ? 0 : allPlusss;
+
+    let againallPlusss = agianSo + againPreve;
     let rest = instAmountProp * againallPlusss;
-    let finalTot = rest + delayedCharges > 693 ? 693 : delayedCharges;
+    let totFinalRe = delayedCharges >= 693 ? 693 : delayedCharges;
+    let finalTot = rest + totFinalRe;
     return finalTot;
   };
 
@@ -384,7 +392,7 @@ export default function Arreas_update({ invoice_no, nic, close }) {
               ) : (
                 <Grid className="lbl_topi_radio_not" item xs={12} sm={2}></Grid>
               )}
-              {delayedDays > 7 ? (
+              {delayedDays > 7  ? (
                 <Grid className="invoHisty_radio" item xs={12} sm={6}>
                   <Radio.Group
                     value={currentStatus}
@@ -421,7 +429,11 @@ export default function Arreas_update({ invoice_no, nic, close }) {
                   variant="outlined"
                   required
                   fullWidth
-                  disabled={currentStatus === "a" ? false : true}
+                  disabled={
+                    currentStatus === "a"
+                      ? false
+                      : true
+                  }
                   label="Count"
                   size="small"
                   value={updatingInstallmentCount}
@@ -567,7 +579,9 @@ export default function Arreas_update({ invoice_no, nic, close }) {
                         ? 2
                         : allInstallment) +
                       " + " +
-                      updatingInstallmentCount +
+                      (dueInstallmentsCount() > 0
+                        ? updatingInstallmentCount
+                        : 0) +
                       ") + " +
                       Math.round(delayedCharges) +
                       " "

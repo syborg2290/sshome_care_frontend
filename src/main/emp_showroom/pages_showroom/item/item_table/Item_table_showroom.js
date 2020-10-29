@@ -11,8 +11,6 @@ import {
 } from "react-notifications";
 import "react-notifications/lib/notifications.css";
 
-// import { useHistory } from "react-router-dom";
-
 //components
 import SelectedtModel from "./components/SelectedItem_model";
 
@@ -46,8 +44,8 @@ export default function ItemTable() {
   };
 
   const selectedModalClose = () => {
-    setSelectedItemtVisible(false);
     window.location.reload();
+    setSelectedItemtVisible(false);
   };
 
   useEffect(() => {
@@ -237,8 +235,8 @@ export default function ItemTable() {
         footer={null}
         className="model_Item_Showroom"
         onCancel={() => {
-          setVisible(false);
           window.location.reload();
+          setVisible(false);
         }}
       >
         <div className="table_Model_Showroom">
@@ -498,7 +496,6 @@ export default function ItemTable() {
               searchPlaceholder: "Search using any field",
               elevation: 4,
               sort: true,
-
               onRowsSelect: (curRowSelected, allRowsSelected) => {
                 selectedItems = [];
                 allRowsSelected.forEach((single) => {

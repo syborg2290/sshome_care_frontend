@@ -8,9 +8,9 @@ import {
   Build as BuildIcon,
   PersonAddDisabled as PersonAddDisabledIcon,
   PermIdentity as PermIdentityIcon,
-  Settings as SettingsIcon,
   LibraryBooks as LibraryIcon,
   ArrowBack as ArrowBackIcon,
+  EventBusy as EventBusyIcon,
 } from "@material-ui/icons";
 import { useTheme } from "@material-ui/styles";
 import { withRouter } from "react-router-dom";
@@ -41,7 +41,7 @@ const structure = [
   {
     id: 11,
     label: "Invoice",
-    link: "",
+    link: "/admin/ui/invoiceHistory",
     icon: <LibraryIcon className="icons" />,
   },
   {
@@ -66,29 +66,35 @@ const structure = [
   {
     id: 10,
     label: "Arreas",
-    link: "",
+    link: "/admin/ui/arreas",
     icon: <MoneyOffIcon className="icons" />,
   },
-  { id: 6, label: "Repairs", link: "", icon: <BuildIcon className="icons" /> },
+  {
+    id: 6,
+    label: "Repairs",
+    link: "/admin/ui/repairs",
+    icon: <BuildIcon className="icons" />,
+  },
   {
     id: 9,
     label: "Black list",
-    link: "",
+    link: "/admin/ui/blackList",
     icon: <PersonAddDisabledIcon className="icons" />,
   },
   { id: 2, type: "divider" },
+
+  {
+    id: 12,
+    label: "Seized Item",
+    link: "/admin/ui/seized",
+    icon: <EventBusyIcon className="icons" />,
+  },
 
   {
     id: 7,
     label: "Accounts",
     link: "/admin/ui/accounts",
     icon: <PermIdentityIcon className="icons" />,
-  },
-  {
-    id: 8,
-    label: "Settings",
-    link: "/admin/ui/settings",
-    icon: <SettingsIcon className="icons" />,
   },
 ];
 

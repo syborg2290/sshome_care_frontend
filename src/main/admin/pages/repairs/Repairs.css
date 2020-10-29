@@ -1,0 +1,47 @@
+.title_Span_repairs {
+  font-weight: 700;
+  font-size: large;
+  color: #34314c;
+}
+
+.repair_Table {
+  margin-top: 25px !important;
+}
+
+.btn_AddnewRepair {
+  margin-top: 80px !important;
+  float: right;
+  border-radius: 10px;
+  height: 40px;
+  text-align: center;
+}
+
+.btnupdate {
+  border-radius: 10px !important;
+  font-size: 10px !important;
+  margin-right: 10px !important;
+  margin-top: -15px !important;
+}
+
+.icon_views {
+  margin-right: 5px !important;
+  margin-top: 5px !important;
+}
+
+.icon_print {
+  text-align: center !important;
+  margin-right: 15px !important;
+  font-size: 35px !important;
+}
+
+.statusRepir {
+  color: aliceblue;
+  font-weight: 500;
+  background-color: rgb(82, 177, 39);
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 4px;
+  padding-right: 4px;
+  border-radius: 6px;
+  font-size: 12px;
+}

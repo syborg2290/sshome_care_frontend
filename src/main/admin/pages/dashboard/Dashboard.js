@@ -273,7 +273,7 @@ export default function Dashboard(props) {
                       value={payandgoAllSales}
                       displayType={"text"}
                       thousandSeparator={true}
-                      prefix={""}
+                      prefix={" "}
                     />
                   </Typography>
                 </Grid>

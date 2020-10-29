@@ -49,7 +49,7 @@ const rows = [
     1000.0,
     20000.0,
     6,
-    <p className="status">Status</p>
+    <p className="status_dash">Status</p>
   ),
 ];
 
@@ -60,7 +60,7 @@ export default function Dashboard(props) {
       <PageTitle title="Dashboard" />
       <div className="widgetWrappe">
         <Grid container spacing={4}>
-          <Grid item xs={12} sm={3}>
+          <Grid item xs={12} sm={3} className="card_body1">
             <Paper title="Profit" className="card">
               <Grid item xs={12} sm={2}></Grid>
               <Grid item xs={12} sm={10}>
@@ -75,6 +75,7 @@ export default function Dashboard(props) {
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <LineChart
+                    className="line_chart"
                     width={55}
                     height={30}
                     data={[
@@ -106,23 +107,27 @@ export default function Dashboard(props) {
                 alignItems="center"
               >
                 <Grid item xs={12} sm={1}></Grid>
-                <Grid item xs={12} sm={5}>
+                <Grid className="payGoing" item xs={12} sm={5}>
                   <Typography color="text" colorBrightness="secondary">
                     Pay and Go
                   </Typography>
-                  <Typography size="md">860</Typography>
+                  <Typography className="payGoing_lbl" size="md">
+                    860
+                  </Typography>
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid className="fullPaying" item xs={12} sm={6}>
                   <Typography color="text" colorBrightness="secondary">
                     Full Payment
                   </Typography>
-                  <Typography size="md">32</Typography>
+                  <Typography className="fullPaying_lbl" size="md">
+                    32
+                  </Typography>
                 </Grid>
               </Grid>
             </Paper>
           </Grid>
 
-          <Grid item xs={12} sm={3}>
+          <Grid item xs={12} sm={3} className="card_body2">
             <Paper title="Today Sales" className="card">
               <Grid item xs={12} sm={2}></Grid>
               <Grid item xs={12} sm={10}>
@@ -137,6 +142,7 @@ export default function Dashboard(props) {
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <LineChart
+                    className="line_chart"
                     width={55}
                     height={30}
                     data={[
@@ -168,23 +174,27 @@ export default function Dashboard(props) {
                 alignItems="center"
               >
                 <Grid item xs={12} sm={1}></Grid>
-                <Grid item xs={12} sm={5}>
+                <Grid className="payGoing" item xs={12} sm={5}>
                   <Typography color="text" colorBrightness="secondary">
                     Pay and Go
                   </Typography>
-                  <Typography size="md">860</Typography>
+                  <Typography className="payGoing_lbl" size="md">
+                    860
+                  </Typography>
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid className="fullPaying" item xs={12} sm={6}>
                   <Typography color="text" colorBrightness="secondary">
                     Full Payment
                   </Typography>
-                  <Typography size="md">32</Typography>
+                  <Typography className="fullPaying_lbl" size="md">
+                    32
+                  </Typography>
                 </Grid>
               </Grid>
             </Paper>
           </Grid>
 
-          <Grid item xs={12} sm={3}>
+          <Grid item xs={12} sm={3} className="card_body3">
             <Paper title="Monthly Sales" className="card">
               <Grid item xs={12} sm={2}></Grid>
               <Grid item xs={12} sm={10}>
@@ -199,6 +209,7 @@ export default function Dashboard(props) {
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <LineChart
+                    className="line_chart"
                     width={55}
                     height={30}
                     data={[
@@ -230,23 +241,27 @@ export default function Dashboard(props) {
                 alignItems="center"
               >
                 <Grid item xs={12} sm={1}></Grid>
-                <Grid item xs={12} sm={5}>
+                <Grid className="payGoing" item xs={12} sm={5}>
                   <Typography color="text" colorBrightness="secondary">
                     Pay and Go
                   </Typography>
-                  <Typography size="md">860</Typography>
+                  <Typography className="payGoing_lbl" size="md">
+                    860
+                  </Typography>
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid className="fullPaying" item xs={12} sm={6}>
                   <Typography color="text" colorBrightness="secondary">
                     Full Payment
                   </Typography>
-                  <Typography size="md">32</Typography>
+                  <Typography className="fullPaying_lbl" size="md">
+                    32
+                  </Typography>
                 </Grid>
               </Grid>
             </Paper>
           </Grid>
 
-          <Grid item xs={12} sm={3}>
+          <Grid item xs={12} sm={3} className="card_body4">
             <Paper title="Current Arrears" className="card">
               <Grid item xs={12} sm={2}></Grid>
               <Grid item xs={12} sm={10}>
@@ -272,11 +287,17 @@ export default function Dashboard(props) {
               >
                 <Grid item xs={12} sm={1}></Grid>
                 <Grid item xs={12} sm={9}>
-                  <Typography color="text" colorBrightness="secondary">
+                  <Typography
+                    className="fullPaying"
+                    color="text"
+                    colorBrightness="secondary"
+                  >
                     Pay and Go Customers
                   </Typography>
 
-                  <Typography size="md">8</Typography>
+                  <Typography className="Customers_lbl" size="md">
+                    8
+                  </Typography>
                 </Grid>
                 <Grid item xs={12} sm={2}>
                   <p></p>
@@ -287,9 +308,7 @@ export default function Dashboard(props) {
           </Grid>
 
           <Grid item xs={12} sm={12}>
-            <Typography className="total" size="xl">
-              Most Sales Items
-            </Typography>
+            <Typography size="xl">Most Sales Items</Typography>
             <br />
             <hr />
           </Grid>

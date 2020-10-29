@@ -122,12 +122,12 @@ class PrintInvoiceClass extends React.Component {
                   <br />
                 </Col>
                 <Col span={2}>Tel.</Col>
-                <Col span={16}>
+                <Col span={15}>
                   0917901603
                   <br />
                   0715651711
                 </Col>
-                <Col span={5}>
+                <Col span={7}>
                   Mapalagama Rd.
                   <br />
                   <span className="lbl_address">THANABADDEGAMA.</span>
@@ -136,8 +136,8 @@ class PrintInvoiceClass extends React.Component {
                 <Col span={24}>
                   <br />
                 </Col>
-                <Col span={18}></Col>
-                <Col span={6}>
+                <Col span={17}></Col>
+                <Col span={7}>
                   Date :{" "}
                   {moment(
                     firebase.firestore.FieldValue.serverTimestamp()
@@ -299,12 +299,12 @@ class PrintInvoiceClass extends React.Component {
                     <br />
                   </Col>
                   <Col span={2}>Tel.</Col>
-                  <Col span={16}>
+                  <Col span={15}>
                     0917901603
                     <br />
                     0715651711
                   </Col>
-                  <Col span={5}>
+                  <Col span={7}>
                     Mapalagama Rd.
                     <br />
                     <span className="lbl_address">THANABADDEGAMA.</span>
@@ -313,8 +313,8 @@ class PrintInvoiceClass extends React.Component {
                   <Col span={24}>
                     <br />
                   </Col>
-                  <Col span={18}></Col>
-                  <Col span={6}>
+                  <Col span={17}></Col>
+                  <Col span={7}>
                     {" "}
                     Date :{" "}
                     {moment(

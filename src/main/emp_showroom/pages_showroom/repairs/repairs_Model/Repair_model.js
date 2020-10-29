@@ -241,6 +241,7 @@ export default function Repair_model({ closeModel }) {
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
+                type="number"
                 autoComplete="mobile"
                 variant="outlined"
                 required
@@ -256,6 +257,7 @@ export default function Repair_model({ closeModel }) {
             <Grid className="lbl_topi" item xs={12} sm={6}></Grid>
             <Grid item xs={12} sm={6}>
               <TextField
+                type="number"
                 autoComplete="mobil_no"
                 variant="outlined"
                 fullWidth

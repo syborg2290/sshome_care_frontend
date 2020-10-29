@@ -317,18 +317,7 @@ export default function ItemTable() {
       >
         <div className="table_Model">
           <div className="model_Main">
-            {/* <img
-              className="model_img"
-              src={
-                allTtemData.data && allTtemData.data[currentIndx]
-                  ? allTtemData.data[currentIndx].photo === "null"
-                    ? ""
-                    : allTtemData.data[currentIndx].photo
-                  : ""
-              }
-              alt=""
-            /> */}
-
+            
             <div className="model_Detail">
               <Row>
                 <Col span={12}>BRAND</Col>

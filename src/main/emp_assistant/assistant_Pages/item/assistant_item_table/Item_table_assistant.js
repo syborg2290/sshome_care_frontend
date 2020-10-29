@@ -60,8 +60,8 @@ export default function Item_table_assistant() {
   };
 
   const selectedModalClose = () => {
-    setSelectedItemtVisible(false);
     window.location.reload();
+    setSelectedItemtVisible(false);
   };
 
   useEffect(() => {
@@ -169,6 +169,7 @@ export default function Item_table_assistant() {
   };
 
   const editModalClose = () => {
+    window.location.reload();
     setEditVisible(false);
   };
 
@@ -281,6 +282,7 @@ export default function Item_table_assistant() {
         bodyStyle={{ borderRadius: "30px" }}
         onOk={showDeleteItemsConfirm}
         onCancel={() => {
+          window.location.reload();
           setConfirmVisible(false);
         }}
       >
@@ -303,23 +305,12 @@ export default function Item_table_assistant() {
         footer={null}
         className="model_Item"
         onCancel={() => {
+          window.location.reload();
           setVisible(false);
         }}
       >
         <div className="table_Model">
           <div className="model_Main">
-            {/* <img
-              className="model_img"
-              src={
-                allTtemData.data && allTtemData.data[currentIndx]
-                  ? allTtemData.data[currentIndx].photo === "null"
-                    ? ""
-                    : allTtemData.data[currentIndx].photo
-                  : ""
-              }
-              alt=""
-            /> */}
-
             <div className="model_Detail">
               <Row>
                 <Col span={12}>BRAND</Col>
@@ -550,6 +541,7 @@ export default function Item_table_assistant() {
         footer={null}
         className="model_edit_Item"
         onCancel={() => {
+          window.location.reload();
           setEditVisible(false);
         }}
       >

@@ -21,7 +21,6 @@ import Arries from "../assistant_Pages/arreas/Areas";
 import BlackList from "../assistant_Pages/black_list/Black_List";
 import Customer from "../assistant_Pages/customer/customer_table/Customer_table_assistant";
 import InvoiceHistory from "../assistant_Pages/invoice_History/Invoice_history";
-import Item from "../assistant_Pages/item/Item";
 import Repair from "../assistant_Pages/repairs/Repairs";
 import SeizedItems from "../assistant_Pages/seized_items/Seized_item";
 
@@ -35,7 +34,6 @@ function LayoutAssistant(props) {
           <div className="fakeToolbar" />
           <Switch>
             <Route path="/assistant/dashboard" component={Dashboard} />
-            <Route path="/assistant/ui/Item" component={Item} />
             <Route path="/assistant/ui/Customer" component={Customer} />
             <Route
               path="/assistant/ui/InvoiceHistory"

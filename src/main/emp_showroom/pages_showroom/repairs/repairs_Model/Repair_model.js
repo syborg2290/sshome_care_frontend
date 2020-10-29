@@ -88,57 +88,75 @@ export default function Repair_model({ closeModel }) {
   const addRepair = async () => {
     setLoading(true);
 
-    db.collection("invoice")
+    let statusOfBlacklist = await db
+      .collection("blacklist")
+      .where("InvoiceNo", "==", invoice.trim())
+      .get();
+    let statusOfSeized = await db
+      .collection("seized")
       .where("invoice_number", "==", invoice.trim())
-      .get()
-      .then((reThen) => {
-        if (reThen.docs.length > 0) {
-          reThen.docs.forEach((reInvo) => {
-            reInvo.data().items.forEach((reI) => {
-              db.collection("item")
-                .doc(reI.item_id)
-                .get()
-                .then((itRe) => {
-                  if (itRe.data().modelNo === model_no.trim()) {
-                    let daysCountInitial =
-                      (new Date().getTime() -
-                        new Date(
-                          reInvo.data()?.date?.seconds * 1000
-                        ).getTime()) /
-                      (1000 * 3600 * 24);
+      .get();
+    if (statusOfBlacklist.docs.length > 0) {
+      setLoading(false);
+      setError("Invoice number you entered is in the blacklist!");
+    } else {
+      if (statusOfSeized.docs.length > 0) {
+        setLoading(false);
+        setError("Invoice number you entered is in the seized list!");
+      } else {
+        db.collection("invoice")
+          .where("invoice_number", "==", invoice.trim())
+          .get()
+          .then((reThen) => {
+            if (reThen.docs.length > 0) {
+              reThen.docs.forEach((reInvo) => {
+                reInvo.data().items.forEach((reI) => {
+                  db.collection("item")
+                    .doc(reI.item_id)
+                    .get()
+                    .then((itRe) => {
+                      if (itRe.data().modelNo === model_no.trim()) {
+                        let daysCountInitial =
+                          (new Date().getTime() -
+                            new Date(
+                              reInvo.data()?.date?.seconds * 1000
+                            ).getTime()) /
+                          (1000 * 3600 * 24);
 
-                    if (itRe.data().guarantee.value === "Months") {
-                      if (
-                        Math.round(daysCountInitial / 30) <=
-                        itRe.data().guaranteePeriod
-                      ) {
-                        setLoading(false);
-                        showConfirm(itRe.data().itemName);
-                      } else {
-                        setLoading(false);
-                        setError("Item garuntee period is expired!");
+                        if (itRe.data().guarantee.value === "Months") {
+                          if (
+                            Math.round(daysCountInitial / 30) <=
+                            itRe.data().guaranteePeriod
+                          ) {
+                            setLoading(false);
+                            showConfirm(itRe.data().itemName);
+                          } else {
+                            setLoading(false);
+                            setError("Item's garuntee period is expired!");
+                          }
+                        } else {
+                          if (
+                            Math.round(daysCountInitial / 365) <=
+                            itRe.data().guaranteePeriod
+                          ) {
+                            setLoading(false);
+                            showConfirm(itRe.data().itemName);
+                          } else {
+                            setLoading(false);
+                            setError("Item's garuntee period is expired!");
+                          }
+                        }
                       }
-                    } else {
-                      if (
-                        Math.round(daysCountInitial / 365) <=
-                        itRe.data().guaranteePeriod
-                      ) {
-                        setLoading(false);
-                        showConfirm(itRe.data().itemName);
-                      } else {
-                        setLoading(false);
-                        setError("Item garuntee period is expired!");
-                      }
-                    }
-                  }
+                    });
                 });
-            });
+              });
+            } else {
+              setLoading(false);
+              setError("Invoice number you entered is not found!");
+            }
           });
-        } else {
-          setLoading(false);
-          setError("Invoice number you entered is not found!");
-        }
-      });
+      }
+    }
   };
 
   return (

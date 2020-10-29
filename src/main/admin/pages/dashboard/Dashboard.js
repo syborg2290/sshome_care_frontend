@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Grid } from "@material-ui/core";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -10,11 +10,11 @@ import Table from "@material-ui/core/Table";
 import { LineChart, Line } from "recharts";
 import { useTheme } from "@material-ui/styles";
 
+import db from "../../../../config/firebase.js";
+import CurrencyFormat from "react-currency-format";
+
 // styles
 import "./Dashboard.css";
-
-//icons
-import SupervisorAccountIcon from "@material-ui/icons/SupervisorAccount";
 
 // components
 import PageTitle from "../../PageTitle/PageTitle";
@@ -55,22 +55,178 @@ const rows = [
 
 export default function Dashboard(props) {
   var theme = useTheme();
+
+  const [payandgoAllSales, setPayandgoAllSales] = useState(0);
+  const [fullpaymentAllSales, setFullpaymentAllSales] = useState(0);
+  const [payandgoTodaySales, setPayandgoTodaySales] = useState(0);
+  const [fullpaymentTodaySales, setFullpaymentTodaySales] = useState(0);
+  const [payandgoMonthSales, setPayandgoMonthSales] = useState(0);
+  const [fullpaymentMonthSales, setFullpaymentMonthSales] = useState(0);
+
+  useEffect(() => {
+    var instaTot = 0;
+    var instaToday = 0;
+    var instaMonth = 0;
+    db.collection("invoice")
+      .get()
+      .then((reProfit) => {
+        reProfit.docs.forEach((eachPro) => {
+          if (eachPro.data().installmentType !== null) {
+            db.collection("installment")
+              .where("invoice_number", "==", eachPro.data().invoice_number)
+              .get()
+              .then((instReDoc) => {
+                instReDoc.docs.forEach((reInstall) => {
+                  // today installments
+
+                  if (
+                    new Date().getDate() ===
+                    new Date(reInstall.data()?.date?.seconds * 1000).getDate()
+                  ) {
+                    if (
+                      new Date().getMonth() ===
+                      new Date(
+                        reInstall.data()?.date?.seconds * 1000
+                      ).getMonth()
+                    ) {
+                      if (
+                        new Date().getFullYear() ===
+                        new Date(
+                          reInstall.data()?.date?.seconds * 1000
+                        ).getFullYear()
+                      ) {
+                        let sooooToday =
+                          reInstall.data().amount + reInstall.data().delayed;
+                        instaToday = instaToday + sooooToday;
+                      }
+                    }
+                  }
+
+                  // current month installments
+
+                  if (
+                    new Date().getMonth() ===
+                    new Date(reInstall.data()?.date?.seconds * 1000).getMonth()
+                  ) {
+                    if (
+                      new Date().getFullYear() ===
+                      new Date(
+                        reInstall.data()?.date?.seconds * 1000
+                      ).getFullYear()
+                    ) {
+                      let sooooMonth =
+                        reInstall.data().amount + reInstall.data().delayed;
+                      instaMonth = instaMonth + sooooMonth;
+                    }
+                  }
+
+                  //all installments
+
+                  let soooo =
+                    reInstall.data().amount + reInstall.data().delayed;
+                  instaTot = instaTot + soooo;
+                });
+
+                if (
+                  new Date().getDate() ===
+                  new Date(eachPro.data()?.date?.seconds * 1000).getDate()
+                ) {
+                  if (
+                    new Date().getMonth() ===
+                    new Date(eachPro.data()?.date?.seconds * 1000).getMonth()
+                  ) {
+                    if (
+                      new Date().getFullYear() ===
+                      new Date(
+                        eachPro.data()?.date?.seconds * 1000
+                      ).getFullYear()
+                    ) {
+                      let befToday = eachPro.data().total + instaToday;
+                      let passPayandgoToday = payandgoTodaySales + befToday;
+                      setPayandgoTodaySales(passPayandgoToday);
+                    }
+                  }
+                }
+
+                if (
+                  new Date().getMonth() ===
+                  new Date(eachPro.data()?.date?.seconds * 1000).getMonth()
+                ) {
+                  if (
+                    new Date().getFullYear() ===
+                    new Date(eachPro.data()?.date?.seconds * 1000).getFullYear()
+                  ) {
+                    let befMonth = eachPro.data().total + instaMonth;
+                    let passPayandgoMonth = payandgoMonthSales + befMonth;
+                    setPayandgoMonthSales(passPayandgoMonth);
+                  }
+                }
+
+                let bef = eachPro.data().total + instaTot;
+                let passPayandgo = payandgoAllSales + bef;
+                setPayandgoAllSales(passPayandgo);
+              });
+          } else {
+            if (
+              new Date().getDate() ===
+              new Date(eachPro.data()?.date?.seconds * 1000).getDate()
+            ) {
+              if (
+                new Date().getMonth() ===
+                new Date(eachPro.data()?.date?.seconds * 1000).getMonth()
+              ) {
+                if (
+                  new Date().getFullYear() ===
+                  new Date(eachPro.data()?.date?.seconds * 1000).getFullYear()
+                ) {
+                  let passFullpaymentToday =
+                    fullpaymentTodaySales + eachPro.data().total;
+                  setFullpaymentTodaySales(passFullpaymentToday);
+                }
+              }
+            }
+            if (
+              new Date().getMonth() ===
+              new Date(eachPro.data()?.date?.seconds * 1000).getMonth()
+            ) {
+              if (
+                new Date().getFullYear() ===
+                new Date(eachPro.data()?.date?.seconds * 1000).getFullYear()
+              ) {
+                let passFullpaymentMonth =
+                  fullpaymentMonthSales + eachPro.data().total;
+                setFullpaymentMonthSales(passFullpaymentMonth);
+              }
+            }
+            let passFullpayment = fullpaymentAllSales + eachPro.data().total;
+            setFullpaymentAllSales(passFullpayment);
+          }
+        });
+      });
+    // eslint-disable-next-line
+  }, []);
+
   return (
     <>
       <PageTitle title="Dashboard" />
       <div className="widgetWrappe">
-        <Grid container spacing={4}>
-          <Grid item xs={12} sm={3} className="card_body1">
+        <Grid container spacing={3}>
+          <Grid item xs={12} sm={4} className="card_body1">
             <Paper title="Profit" className="card">
               <Grid item xs={12} sm={2}></Grid>
               <Grid item xs={12} sm={10}>
-                <h2 className="tipics_cards">Profit</h2>
+                <h2 className="tipics_cards">All Income(LKR)</h2>
               </Grid>
               <div className="visitsNumberContainer">
                 <Grid item xs={12} sm={1}></Grid>
                 <Grid item xs={12} sm={5}>
                   <Typography className="total" size="xl">
-                    12, 678
+                    <CurrencyFormat
+                      value={payandgoAllSales + fullpaymentAllSales}
+                      displayType={"text"}
+                      thousandSeparator={true}
+                      prefix={""}
+                    />
                   </Typography>
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -111,8 +267,14 @@ export default function Dashboard(props) {
                   <Typography color="text" colorBrightness="secondary">
                     Pay and Go
                   </Typography>
-                  <Typography className="payGoing_lbl" size="md">
-                    860
+                  <Typography size="md" className="payGoing_lbl">
+                    {" "}
+                    <CurrencyFormat
+                      value={payandgoAllSales}
+                      displayType={"text"}
+                      thousandSeparator={true}
+                      prefix={""}
+                    />
                   </Typography>
                 </Grid>
                 <Grid className="fullPaying" item xs={12} sm={6}>
@@ -120,24 +282,35 @@ export default function Dashboard(props) {
                     Full Payment
                   </Typography>
                   <Typography className="fullPaying_lbl" size="md">
-                    32
+                    {" "}
+                    <CurrencyFormat
+                      value={fullpaymentAllSales}
+                      displayType={"text"}
+                      thousandSeparator={true}
+                      prefix={" "}
+                    />
                   </Typography>
                 </Grid>
               </Grid>
             </Paper>
           </Grid>
 
-          <Grid item xs={12} sm={3} className="card_body2">
+          <Grid item xs={12} sm={4} className="card_body2">
             <Paper title="Today Sales" className="card">
               <Grid item xs={12} sm={2}></Grid>
               <Grid item xs={12} sm={10}>
-                <h2 className="tipics_cards">Today Sales</h2>
+                <h2 className="tipics_cards">Today Income(LKR)</h2>
               </Grid>
               <div className="visitsNumberContainer">
                 <Grid item xs={12} sm={1}></Grid>
                 <Grid item xs={12} sm={5}>
                   <Typography className="total" size="xl">
-                    12, 678
+                    <CurrencyFormat
+                      value={payandgoTodaySales + fullpaymentTodaySales}
+                      displayType={"text"}
+                      thousandSeparator={true}
+                      prefix={""}
+                    />
                   </Typography>
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -178,33 +351,50 @@ export default function Dashboard(props) {
                   <Typography color="text" colorBrightness="secondary">
                     Pay and Go
                   </Typography>
-                  <Typography className="payGoing_lbl" size="md">
-                    860
+                  <Typography size="md" className="payGoing_lbl">
+                    {" "}
+                    <CurrencyFormat
+                      value={payandgoTodaySales}
+                      displayType={"text"}
+                      thousandSeparator={true}
+                      prefix={""}
+                    />
                   </Typography>
                 </Grid>
                 <Grid className="fullPaying" item xs={12} sm={6}>
                   <Typography color="text" colorBrightness="secondary">
                     Full Payment
                   </Typography>
-                  <Typography className="fullPaying_lbl" size="md">
-                    32
+                  <Typography size="md" className="fullPaying_lbl">
+                    {" "}
+                    <CurrencyFormat
+                      value={fullpaymentTodaySales}
+                      displayType={"text"}
+                      thousandSeparator={true}
+                      prefix={""}
+                    />
                   </Typography>
                 </Grid>
               </Grid>
             </Paper>
           </Grid>
 
-          <Grid item xs={12} sm={3} className="card_body3">
+          <Grid item xs={12} sm={4} className="card_body3">
             <Paper title="Monthly Sales" className="card">
               <Grid item xs={12} sm={2}></Grid>
               <Grid item xs={12} sm={10}>
-                <h2 className="tipics_cards">Monthly Sales</h2>
+                <h2 className="tipics_cards">Current Month Income(LKR)</h2>
               </Grid>
               <div className="visitsNumberContainer">
                 <Grid item xs={12} sm={1}></Grid>
                 <Grid item xs={12} sm={5}>
                   <Typography className="total" size="xl">
-                    12, 678
+                    <CurrencyFormat
+                      value={payandgoMonthSales + fullpaymentMonthSales}
+                      displayType={"text"}
+                      thousandSeparator={true}
+                      prefix={""}
+                    />
                   </Typography>
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -245,69 +435,33 @@ export default function Dashboard(props) {
                   <Typography color="text" colorBrightness="secondary">
                     Pay and Go
                   </Typography>
-                  <Typography className="payGoing_lbl" size="md">
-                    860
+                  <Typography size="md" className="payGoing_lbl">
+                    <CurrencyFormat
+                      value={payandgoMonthSales}
+                      displayType={"text"}
+                      thousandSeparator={true}
+                      prefix={""}
+                    />
                   </Typography>
                 </Grid>
                 <Grid className="fullPaying" item xs={12} sm={6}>
                   <Typography color="text" colorBrightness="secondary">
                     Full Payment
                   </Typography>
-                  <Typography className="fullPaying_lbl" size="md">
-                    32
+                  <Typography size="md" className="fullPaying_lbl">
+                    <CurrencyFormat
+                      value={fullpaymentMonthSales}
+                      displayType={"text"}
+                      thousandSeparator={true}
+                      prefix={""}
+                    />
                   </Typography>
                 </Grid>
               </Grid>
             </Paper>
           </Grid>
 
-          <Grid item xs={12} sm={3} className="card_body4">
-            <Paper title="Current Arrears" className="card">
-              <Grid item xs={12} sm={2}></Grid>
-              <Grid item xs={12} sm={10}>
-                <h2 className="tipics_cards">Current Arrears</h2>
-              </Grid>
-              <div className="visitsNumberContainer">
-                <Grid item xs={12} sm={1}></Grid>
-                <Grid item xs={12} sm={11}>
-                  <Typography className="total" size="xl">
-                    12, 678
-                  </Typography>
-                </Grid>
-              </div>
-              <Grid
-                item
-                xs={12}
-                sm={12}
-                container
-                direction="row"
-                className="cost"
-                justify="space-between"
-                alignItems="center"
-              >
-                <Grid item xs={12} sm={1}></Grid>
-                <Grid item xs={12} sm={9}>
-                  <Typography
-                    className="fullPaying"
-                    color="text"
-                    colorBrightness="secondary"
-                  >
-                    Pay and Go Customers
-                  </Typography>
-
-                  <Typography className="Customers_lbl" size="md">
-                    8
-                  </Typography>
-                </Grid>
-                <Grid item xs={12} sm={2}>
-                  <p></p>
-                  <SupervisorAccountIcon className="icon_customers" />
-                </Grid>
-              </Grid>
-            </Paper>
-          </Grid>
-
-          <Grid item xs={12} sm={12}>
+          <Grid item xs={12} sm={12} className="mostSales_tbl">
             <Typography size="xl">Most Sales Items</Typography>
             <br />
             <hr />

@@ -13,11 +13,6 @@
   padding-bottom: 20px;
 }
 
-/* .widgetWrapper {
-  display: flex !important;
-  min-height: 100% !important;
-} */
-
 .cost {
   margin-bottom: 15px !important;
   display: flex;
@@ -27,6 +22,10 @@
 
 .tipics_cards {
   color: rgba(24, 24, 24, 0.521) !important;
+}
+
+.mostSales_tbl {
+  margin-top: 50px !important;
 }
 
 .status_dash {

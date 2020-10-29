@@ -893,7 +893,13 @@ function Make_invoice() {
                               value={itemQty[row.i]}
                               onChange={(e) => {
                                 if (e.target.value !== "") {
-                                  handleQTYChange(e, row.id, row);
+                                  if (row.paymentWay === "PayandGo") {
+                                    if (Math.round(e.target.value) === 1) {
+                                      handleQTYChange(e, row.id, row);
+                                    }
+                                  } else {
+                                    handleQTYChange(e, row.id, row);
+                                  }
                                 }
                               }}
                             />

@@ -619,7 +619,7 @@ export default function Dashboard() {
   return (
     <Container component="main" className="main_container">
       <Typography className="titles" variant="h5" gutterBottom>
-        DashBoard
+        Dashboard
       </Typography>
       <Grid item xs={12} sm={2}>
         <hr className="titles_hr" />

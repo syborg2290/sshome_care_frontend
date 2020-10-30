@@ -133,6 +133,15 @@ export default function View_Model({ items_list_props, data }) {
                 <Grid item xs={12} sm={8}>
                   <p>{items_list_props.length}</p>
                 </Grid>
+                <Grid className="lbl_topis" item xs={12} sm={3}>
+                  Total Discount
+                </Grid>
+                <Grid item xs={12} sm={1}>
+                  :
+                </Grid>
+                <Grid item xs={12} sm={8}>
+                  <p>0</p>
+                </Grid>
               </Grid>
               <Grid className="lbl_topiSub" item xs={12} sm={12}>
                 Customer
@@ -246,6 +255,15 @@ export default function View_Model({ items_list_props, data }) {
                 </Grid>
               );
             })}
+            <Grid className="lbl_topiSub" item xs={12} sm={12}>
+              Item
+            </Grid>
+            <br />
+            <Grid item xs={12} sm={6}>
+              <hr className="hr_topiSub" />
+              <br />
+            </Grid>
+            <Grid item xs={12} sm={6}></Grid>
             {itemsList.map((eachItem) => {
               return (
                 <Grid key={eachItem.item_name} container spacing={2}>

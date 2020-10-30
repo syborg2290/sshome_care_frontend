@@ -8,11 +8,11 @@ import db from "../../../../../../config/firebase.js";
 
 export default function Full_Payment_Model({ items_list_props }) {
   const [itemsList, setItemList] = useState([]);
-     const [totalDiscount, setTotalDiscount] = useState(0);
+  const [totalDiscount, setTotalDiscount] = useState(0);
 
   useEffect(() => {
     items_list_props.forEach((each) => {
-       setTotalDiscount(each.discount);
+      setTotalDiscount(each.discount);
       db.collection("item")
         .doc(each.item_id)
         .get()
@@ -133,15 +133,6 @@ export default function Full_Payment_Model({ items_list_props }) {
                         " " +
                         eachItem.gurantee_type.value.toString()}
                     </p>
-                  </Grid>
-                  <Grid className="lbl_topis" item xs={12} sm={4}>
-                     Total Discount(LKR)
-                  </Grid>
-                  <Grid item xs={12} sm={1}>
-                    :
-                  </Grid>
-                  <Grid item xs={12} sm={7}>
-                    <p>{totalDiscount}</p>
                   </Grid>
                   <Grid className="lbl_topis" item xs={12} sm={12}>
                     <hr />

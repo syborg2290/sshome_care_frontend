@@ -49,7 +49,6 @@ export default function Dashboard() {
   };
 
   const intialStateOfArreasCheck = async (eachRe) => {
-   
     let daysCountInitial =
       (new Date().getTime() -
         new Date(eachRe.data()?.date?.seconds * 1000).getTime()) /
@@ -90,12 +89,13 @@ export default function Dashboard() {
       } else {
         if (daysCountInitial - 31 > 7) {
           if (Math.round(daysCountInitial) - 31 >= 49) {
-           
-              setPendingBlackList( [...pendingBlackList,{
-              invoice_number: eachRe.data().invoice_number,
-              nic: eachRe.data()?.nic,
-            }]);
-            
+            setPendingBlackList([
+              ...pendingBlackList,
+              {
+                invoice_number: eachRe.data().invoice_number,
+                nic: eachRe.data()?.nic,
+              },
+            ]);
           }
 
           db.collection("arrears")
@@ -220,13 +220,13 @@ export default function Dashboard() {
       } else {
         if (daysCountInitial - 7 > 7) {
           if (Math.round(daysCountInitial) - 7 >= 49) {
-            
-             setPendingBlackList( [...pendingBlackList,{
-              invoice_number: eachRe.data().invoice_number,
-              nic: eachRe.data()?.nic,
-            }]);
-            
-          
+            setPendingBlackList([
+              ...pendingBlackList,
+              {
+                invoice_number: eachRe.data().invoice_number,
+                nic: eachRe.data()?.nic,
+              },
+            ]);
           }
           db.collection("arrears")
             .where("invoice_number", "==", eachRe.data().invoice_number)
@@ -299,7 +299,6 @@ export default function Dashboard() {
         }
       }
     }
-    
   };
 
   const getDateCheck = (value, arr, prop) => {
@@ -328,11 +327,13 @@ export default function Dashboard() {
     });
 
     if (instRECheckCount >= 7) {
-     
-      setPendingBlackList( [...pendingBlackList,{
-        invoice_number: eachRe.data()?.invoice_number,
-        nic: eachRe.data()?.nic,
-      }]);
+      setPendingBlackList([
+        ...pendingBlackList,
+        {
+          invoice_number: eachRe.data()?.invoice_number,
+          nic: eachRe.data()?.nic,
+        },
+      ]);
     }
 
     if (eachRe.data().installmentType === "Monthly") {
@@ -377,11 +378,13 @@ export default function Dashboard() {
       } else {
         if (daysCount - 31 > 7) {
           if (Math.round(daysCount) - 31 >= 49) {
-           
-            setPendingBlackList( [...pendingBlackList,{
-              invoice_number: eachRe.data().invoice_number,
-              nic: eachRe.data()?.nic,
-            }]);
+            setPendingBlackList([
+              ...pendingBlackList,
+              {
+                invoice_number: eachRe.data().invoice_number,
+                nic: eachRe.data()?.nic,
+              },
+            ]);
           }
 
           let statusMonth = await db
@@ -498,10 +501,13 @@ export default function Dashboard() {
       } else {
         if (daysCount - 7 > 7) {
           if (Math.round(daysCount) - 7 >= 49) {
-             setPendingBlackList( [...pendingBlackList,{
-              invoice_number: eachRe.data().invoice_number,
-              nic: eachRe.data()?.nic,
-            }]);
+            setPendingBlackList([
+              ...pendingBlackList,
+              {
+                invoice_number: eachRe.data().invoice_number,
+                nic: eachRe.data()?.nic,
+              },
+            ]);
           }
 
           let statusWeek = await db
@@ -564,7 +570,7 @@ export default function Dashboard() {
       }
     }
   };
-  
+
   //START pay And Go Columns
   const dashboarColomns = [
     {
@@ -665,7 +671,7 @@ export default function Dashboard() {
       {/*START Invoices  Table */}
 
       <Typography className="today_invoices" variant="h4" component="h6">
-        All invoices of issued in today
+        All invoices of issued in recently
       </Typography>
       <Grid container spacing={4}>
         <Grid item xs={12}>

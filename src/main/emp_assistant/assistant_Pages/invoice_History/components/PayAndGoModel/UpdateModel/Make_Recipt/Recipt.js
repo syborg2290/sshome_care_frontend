@@ -167,7 +167,7 @@ export default function Example() {
       "popstate",
       (event) => {
         if (event.state) {
-          history.push("assistant/ui/InvoiceHistory");
+          history.push("/assistant/ui/InvoiceHistory");
         }
       },
       false

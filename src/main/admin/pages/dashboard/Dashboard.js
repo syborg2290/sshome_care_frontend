@@ -57,7 +57,7 @@ export default function Dashboard(props) {
     var instaToday = 0;
     var instaMonth = 0;
     var raw1 = [];
-    
+
     db.collection("invoice")
       .get()
       .then((reProfit) => {
@@ -272,7 +272,7 @@ export default function Dashboard(props) {
       <div className="widgetWrappe">
         <Grid container spacing={3}>
           <Grid item xs={12} sm={4} className="card_body1">
-            <Paper title="Profit" className="card">
+            <Paper title="All Income" className="card">
               <Grid item xs={12} sm={2}></Grid>
               <Grid item xs={12} sm={10}>
                 <h2 className="tipics_cards">All Income(LKR)</h2>
@@ -356,7 +356,7 @@ export default function Dashboard(props) {
           </Grid>
 
           <Grid item xs={12} sm={4} className="card_body2">
-            <Paper title="Today Sales" className="card">
+            <Paper title="Today Income" className="card">
               <Grid item xs={12} sm={2}></Grid>
               <Grid item xs={12} sm={10}>
                 <h2 className="tipics_cards">Today Income(LKR)</h2>
@@ -440,7 +440,7 @@ export default function Dashboard(props) {
           </Grid>
 
           <Grid item xs={12} sm={4} className="card_body3">
-            <Paper title="Monthly Sales" className="card">
+            <Paper title="Current Month Income" className="card">
               <Grid item xs={12} sm={2}></Grid>
               <Grid item xs={12} sm={10}>
                 <h2 className="tipics_cards">Current Month Income(LKR)</h2>

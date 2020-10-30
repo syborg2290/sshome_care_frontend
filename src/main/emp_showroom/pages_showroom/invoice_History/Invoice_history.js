@@ -121,7 +121,8 @@ export default function Invoice_history() {
           let passingWithCustomerObj = {
             invoice_number: payangoAllData[currentIndx2]?.data?.invoice_number,
             customerDetails: reCust.data(),
-            installmentType: payangoAllData[currentIndx2]?.data?.installmentType,
+            installmentType:
+              payangoAllData[currentIndx2]?.data?.installmentType,
             installemtnDayDate:
               payangoAllData[currentIndx2]?.data?.installemtnDayDate,
             discount: payangoAllData[currentIndx2]?.data?.discount,
@@ -209,7 +210,7 @@ export default function Invoice_history() {
       },
     },
     {
-      name: "Paid",
+      name: "Basic_Payment",
       options: {
         filter: false,
         setCellHeaderProps: (value) => ({
@@ -274,7 +275,7 @@ export default function Invoice_history() {
       },
     },
     {
-      name: "Paid",
+      name: "Full_Payment",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -328,7 +329,7 @@ export default function Invoice_history() {
                 prefix={" "}
               />
             ),
-            Paid: (
+            Basic_Payment: (
               <CurrencyFormat
                 value={siDoc.data().total}
                 displayType={"text"}
@@ -349,7 +350,7 @@ export default function Invoice_history() {
                 >
                   Ongoing
                 </span>
-              ) :siDoc.data().status_of_payandgo === "Done" ? (
+              ) : siDoc.data().status_of_payandgo === "Done" ? (
                 <span
                   style={{
                     color: "white",
@@ -361,7 +362,7 @@ export default function Invoice_history() {
                 >
                   Done
                 </span>
-              ): (
+              ) : (
                 <span
                   style={{
                     color: "white",
@@ -396,7 +397,9 @@ export default function Invoice_history() {
                   <VisibilityIcon onClick={showInstallmentView} />
                 </span>
                 <span className="icon_print">
-                  <PrintRoundedIcon onClick={() => showVisibleConfirmPrintModal("payandgo")} />
+                  <PrintRoundedIcon
+                    onClick={() => showVisibleConfirmPrintModal("payandgo")}
+                  />
                 </span>
               </div>
             ),
@@ -431,7 +434,7 @@ export default function Invoice_history() {
                 prefix={" "}
               />
             ),
-            Paid: (
+            Full_Payment: (
               <CurrencyFormat
                 value={siDoc.data().total}
                 displayType={"text"}

@@ -141,7 +141,7 @@ export default function Invoice_List() {
       },
     },
     {
-      name: "Paid",
+      name: "Basic_Payment",
       options: {
         filter: false,
         setCellHeaderProps: (value) => ({
@@ -206,7 +206,7 @@ export default function Invoice_List() {
       },
     },
     {
-      name: "Paid",
+      name: "Full_Payment",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -242,13 +242,10 @@ export default function Invoice_List() {
 
         cust.docs.forEach((siDoc) => {
           let daysCountInitial =
-                (new Date().getTime() -
-                 new Date(siDoc.data()?.date?.seconds * 1000).getTime()) /
-                (1000 * 3600 * 24);
-          if (
-            Math.round(daysCountInitial) ===
-            0
-          ) {
+            (new Date().getTime() -
+              new Date(siDoc.data()?.date?.seconds * 1000).getTime()) /
+            (1000 * 3600 * 24);
+          if (Math.round(daysCountInitial) === 0) {
             rawAllData.push({
               id: siDoc.id,
               data: siDoc.data(),
@@ -268,7 +265,7 @@ export default function Invoice_List() {
                   prefix={" "}
                 />
               ),
-              Paid: (
+              Basic_Payment: (
                 <CurrencyFormat
                   value={siDoc.data().total}
                   displayType={"text"}
@@ -340,14 +337,11 @@ export default function Invoice_List() {
         var rawDataFull = [];
         var rawAllDataFull = [];
         cust.docs.forEach((siDoc) => {
-           let daysCountInitial =
-                (new Date().getTime() -
-                 new Date(siDoc.data()?.date?.seconds * 1000).getTime()) /
-                (1000 * 3600 * 24);
-          if (
-            Math.round(daysCountInitial) ===
-            0
-          ) {
+          let daysCountInitial =
+            (new Date().getTime() -
+              new Date(siDoc.data()?.date?.seconds * 1000).getTime()) /
+            (1000 * 3600 * 24);
+          if (Math.round(daysCountInitial) === 0) {
             rawAllDataFull.push({
               id: siDoc.id,
               data: siDoc.data(),
@@ -365,7 +359,7 @@ export default function Invoice_List() {
                   prefix={" "}
                 />
               ),
-              Paid: (
+              Full_Payment: (
                 <CurrencyFormat
                   value={siDoc.data().total}
                   displayType={"text"}

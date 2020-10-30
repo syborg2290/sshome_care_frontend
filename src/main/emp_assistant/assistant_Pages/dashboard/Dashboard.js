@@ -340,7 +340,7 @@ export default function Dashboard() {
         // setDelayedDays(0);
 
         if (eachRe.data()?.installemtnDayDate === new Date().getDate()) {
-          if (!getDateCheck(new Date().getTime(), instReDoc.docs, "date")) {
+          if (getDateCheck(new Date().getTime(), instReDoc.docs, "date")) {
             setDueInstallmentsDueToday((old) => [
               ...old,
               {
@@ -446,7 +446,7 @@ export default function Dashboard() {
       if (7 - daysCount >= 0) {
         // setDelayedDays(0);
         if (eachRe.data()?.installemtnDayDate === new Date().getDay()) {
-          if (!getDateCheck(new Date().getTime(), instReDoc.docs, "date")) {
+          if (getDateCheck(new Date().getTime(), instReDoc.docs, "date")) {
             setDueInstallmentsDueToday((old) => [
               ...old,
               {

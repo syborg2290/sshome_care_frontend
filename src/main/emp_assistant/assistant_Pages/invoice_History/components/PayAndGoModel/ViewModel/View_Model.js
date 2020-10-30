@@ -12,7 +12,7 @@ export default function View_Model({ items_list_props, data }) {
   const [trustees, setTrustees] = useState([]);
   const [customer, setCustomer] = useState({});
   const [itemsList, setItemList] = useState([]);
-   const [totalDiscount, setTotalDiscount] = useState(0);
+  const [totalDiscount, setTotalDiscount] = useState(0);
 
   useEffect(() => {
     db.collection("customer")
@@ -49,7 +49,7 @@ export default function View_Model({ items_list_props, data }) {
       });
 
     items_list_props.forEach((each) => {
-       setTotalDiscount(each.discount);
+      setTotalDiscount(each.discount);
       db.collection("item")
         .doc(each.item_id)
         .get()
@@ -92,22 +92,22 @@ export default function View_Model({ items_list_props, data }) {
           <form className="form" noValidate>
             <Grid container spacing={2}>
               <Grid className="contine" container spacing={2}>
-                <Grid className="lbl_topis" item xs={12} sm={3}>
+                <Grid className="lbl_topis" item xs={12} sm={4}>
                   Installmanet Type
                 </Grid>
                 <Grid item xs={12} sm={1}>
                   :
                 </Grid>
-                <Grid item xs={12} sm={8}>
+                <Grid item xs={12} sm={7}>
                   <p>{data.installmentType}</p>
                 </Grid>
-                <Grid className="lbl_topis" item xs={12} sm={3}>
+                <Grid className="lbl_topis" item xs={12} sm={4}>
                   Installmanet (day/Date)
                 </Grid>
                 <Grid item xs={12} sm={1}>
                   :
                 </Grid>
-                <Grid item xs={12} sm={8}>
+                <Grid item xs={12} sm={7}>
                   {data.installmentType === "Weekly"
                     ? parseInt(data.installemtnDayDate) === 1
                       ? "Monday"
@@ -126,23 +126,23 @@ export default function View_Model({ items_list_props, data }) {
                       : ""
                     : data.installemtnDayDate}
                 </Grid>
-                <Grid className="lbl_topis" item xs={12} sm={3}>
+                <Grid className="lbl_topis" item xs={12} sm={4}>
                   Qty
                 </Grid>
                 <Grid item xs={12} sm={1}>
                   :
                 </Grid>
-                <Grid item xs={12} sm={8}>
+                <Grid item xs={12} sm={7}>
                   <p>{items_list_props.length}</p>
                 </Grid>
-                <Grid className="lbl_topis" item xs={12} sm={3}>
+                <Grid className="lbl_topis" item xs={12} sm={4}>
                   Total Discount(LKR)
                 </Grid>
                 <Grid item xs={12} sm={1}>
                   :
                 </Grid>
-                <Grid item xs={12} sm={8}>
-                    <p>{totalDiscount}</p>
+                <Grid item xs={12} sm={7}>
+                  <p>{totalDiscount}</p>
                 </Grid>
               </Grid>
               <Grid className="lbl_topiSub" item xs={12} sm={12}>

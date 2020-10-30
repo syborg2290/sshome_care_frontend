@@ -58,8 +58,7 @@ export default function Dashboard(props) {
     var instaMonth = 0;
     var raw1 = [];
     db.collection("invoice")
-      .get()
-      .then((reProfit) => {
+      .onSnapshot((reProfit) => {
         reProfit.docs.forEach((eachPro) => {
           eachPro.data().items.forEach((eachItems) => {
             var index = getIndex(eachItems.item_id, raw1, "items_id");

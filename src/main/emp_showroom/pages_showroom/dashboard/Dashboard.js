@@ -22,6 +22,8 @@ export default function Dashboard() {
   const [dueInstallmentsDueToday, setDueInstallmentsDueToday] = useState([]);
   // eslint-disable-next-line
   const [pendingBlackList, setPendingBlackList] = useState([]);
+  
+   
 
   useEffect(() => {
     db.collection("invoice")
@@ -49,6 +51,7 @@ export default function Dashboard() {
   };
 
   const intialStateOfArreasCheck = async (eachRe) => {
+   
     let daysCountInitial =
       (new Date().getTime() -
         new Date(eachRe.data()?.date?.seconds * 1000).getTime()) /
@@ -89,11 +92,12 @@ export default function Dashboard() {
       } else {
         if (daysCountInitial - 31 > 7) {
           if (Math.round(daysCountInitial) - 31 >= 49) {
-            pendingBlackList.push({
+           
+              setPendingBlackList( [...pendingBlackList,{
               invoice_number: eachRe.data().invoice_number,
               nic: eachRe.data()?.nic,
-            });
-            setPendingBlackList((old) => [...old]);
+            }]);
+            
           }
 
           db.collection("arrears")
@@ -218,11 +222,13 @@ export default function Dashboard() {
       } else {
         if (daysCountInitial - 7 > 7) {
           if (Math.round(daysCountInitial) - 7 >= 49) {
-            pendingBlackList.push({
+            
+             setPendingBlackList( [...pendingBlackList,{
               invoice_number: eachRe.data().invoice_number,
               nic: eachRe.data()?.nic,
-            });
-            setPendingBlackList((old) => [...old]);
+            }]);
+            
+          
           }
           db.collection("arrears")
             .where("invoice_number", "==", eachRe.data().invoice_number)
@@ -295,6 +301,16 @@ export default function Dashboard() {
         }
       }
     }
+    
+  };
+
+  const getDateCheck = (value, arr, prop) => {
+    for (var i = 0; i < arr.length; i++) {
+      if (new Date(arr[i].data()[prop].seconds * 1000) === value) {
+        return true;
+      }
+    }
+    return false; //to handle the case where the value doesn't exist
   };
 
   const afterStateOfArreasCheck = async (instReDoc, eachRe) => {
@@ -314,11 +330,11 @@ export default function Dashboard() {
     });
 
     if (instRECheckCount >= 7) {
-      pendingBlackList.push({
+     
+      setPendingBlackList( [...pendingBlackList,{
         invoice_number: eachRe.data()?.invoice_number,
         nic: eachRe.data()?.nic,
-      });
-      setPendingBlackList((old) => [...old]);
+      }]);
     }
 
     if (eachRe.data().installmentType === "Monthly") {
@@ -326,46 +342,48 @@ export default function Dashboard() {
         // setDelayedDays(0);
 
         if (eachRe.data()?.installemtnDayDate === new Date().getDate()) {
-          setDueInstallmentsDueToday((old) => [
-            ...old,
-            {
-              InvoiceNo: eachRe.data()?.invoice_number,
-              InstallmentType: eachRe.data()?.installmentType,
-              Day_Date: eachRe.data()?.installemtnDayDate,
-              Amount: (
-                <CurrencyFormat
-                  value={eachRe.data()?.items[0]?.amountPerInstallment}
-                  displayType={"text"}
-                  thousandSeparator={true}
-                  prefix={" "}
-                />
-              ),
+          if (!getDateCheck(new Date().getTime(), instReDoc.docs, "date")) {
+            setDueInstallmentsDueToday((old) => [
+              ...old,
+              {
+                InvoiceNo: eachRe.data()?.invoice_number,
+                InstallmentType: eachRe.data()?.installmentType,
+                Day_Date: eachRe.data()?.installemtnDayDate,
+                Amount: (
+                  <CurrencyFormat
+                    value={eachRe.data()?.items[0]?.amountPerInstallment}
+                    displayType={"text"}
+                    thousandSeparator={true}
+                    prefix={" "}
+                  />
+                ),
 
-              NIC: eachRe.data()?.nic,
-              Balance: (
-                <CurrencyFormat
-                  value={
-                    eachRe.data()?.items[0]?.noOfInstallment *
-                      eachRe.data()?.items[0]?.amountPerInstallment -
-                    eachRe.data()?.items[0]?.amountPerInstallment *
-                      instReDoc.docs.length
-                  }
-                  displayType={"text"}
-                  thousandSeparator={true}
-                  prefix={" "}
-                />
-              ),
-            },
-          ]);
+                NIC: eachRe.data()?.nic,
+                Balance: (
+                  <CurrencyFormat
+                    value={
+                      eachRe.data()?.items[0]?.noOfInstallment *
+                        eachRe.data()?.items[0]?.amountPerInstallment -
+                      eachRe.data()?.items[0]?.amountPerInstallment *
+                        instReDoc.docs.length
+                    }
+                    displayType={"text"}
+                    thousandSeparator={true}
+                    prefix={" "}
+                  />
+                ),
+              },
+            ]);
+          }
         }
       } else {
         if (daysCount - 31 > 7) {
           if (Math.round(daysCount) - 31 >= 49) {
-            pendingBlackList.push({
+           
+            setPendingBlackList( [...pendingBlackList,{
               invoice_number: eachRe.data().invoice_number,
               nic: eachRe.data()?.nic,
-            });
-            setPendingBlackList((old) => [...old]);
+            }]);
           }
 
           let statusMonth = await db
@@ -430,61 +448,62 @@ export default function Dashboard() {
       if (7 - daysCount >= 0) {
         // setDelayedDays(0);
         if (eachRe.data()?.installemtnDayDate === new Date().getDay()) {
-          setDueInstallmentsDueToday((old) => [
-            ...old,
-            {
-              InvoiceNo: eachRe.data()?.invoice_number,
-              InstallmentType: eachRe.data()?.installmentType,
-              Day_Date:
-                eachRe.data()?.installemtnDayDate === 1
-                  ? "Monday"
-                  : eachRe.data()?.installemtnDayDate === 2
-                  ? "Tuesday"
-                  : eachRe.data()?.installemtnDayDate === 3
-                  ? "Wednesday"
-                  : eachRe.data()?.installemtnDayDate === 4
-                  ? "Thursday"
-                  : eachRe.data()?.installemtnDayDate === 5
-                  ? "Friday"
-                  : eachRe.data()?.installemtnDayDate === 6
-                  ? "Saturday"
-                  : eachRe.data()?.installemtnDayDate === 0
-                  ? "Sunday"
-                  : "",
-              Amount: (
-                <CurrencyFormat
-                  value={eachRe.data()?.items[0]?.amountPerInstallment}
-                  displayType={"text"}
-                  thousandSeparator={true}
-                  prefix={" "}
-                />
-              ),
+          if (!getDateCheck(new Date().getTime(), instReDoc.docs, "date")) {
+            setDueInstallmentsDueToday((old) => [
+              ...old,
+              {
+                InvoiceNo: eachRe.data()?.invoice_number,
+                InstallmentType: eachRe.data()?.installmentType,
+                Day_Date:
+                  eachRe.data()?.installemtnDayDate === 1
+                    ? "Monday"
+                    : eachRe.data()?.installemtnDayDate === 2
+                    ? "Tuesday"
+                    : eachRe.data()?.installemtnDayDate === 3
+                    ? "Wednesday"
+                    : eachRe.data()?.installemtnDayDate === 4
+                    ? "Thursday"
+                    : eachRe.data()?.installemtnDayDate === 5
+                    ? "Friday"
+                    : eachRe.data()?.installemtnDayDate === 6
+                    ? "Saturday"
+                    : eachRe.data()?.installemtnDayDate === 0
+                    ? "Sunday"
+                    : "",
+                Amount: (
+                  <CurrencyFormat
+                    value={eachRe.data()?.items[0]?.amountPerInstallment}
+                    displayType={"text"}
+                    thousandSeparator={true}
+                    prefix={" "}
+                  />
+                ),
 
-              NIC: eachRe.data()?.nic,
-              Balance: (
-                <CurrencyFormat
-                  value={
-                    eachRe.data()?.items[0]?.noOfInstallment *
-                      eachRe.data()?.items[0]?.amountPerInstallment -
-                    eachRe.data()?.items[0]?.amountPerInstallment *
-                      instReDoc.docs.length
-                  }
-                  displayType={"text"}
-                  thousandSeparator={true}
-                  prefix={" "}
-                />
-              ),
-            },
-          ]);
+                NIC: eachRe.data()?.nic,
+                Balance: (
+                  <CurrencyFormat
+                    value={
+                      eachRe.data()?.items[0]?.noOfInstallment *
+                        eachRe.data()?.items[0]?.amountPerInstallment -
+                      eachRe.data()?.items[0]?.amountPerInstallment *
+                        instReDoc.docs.length
+                    }
+                    displayType={"text"}
+                    thousandSeparator={true}
+                    prefix={" "}
+                  />
+                ),
+              },
+            ]);
+          }
         }
       } else {
         if (daysCount - 7 > 7) {
           if (Math.round(daysCount) - 7 >= 49) {
-            pendingBlackList.push({
+             setPendingBlackList( [...pendingBlackList,{
               invoice_number: eachRe.data().invoice_number,
               nic: eachRe.data()?.nic,
-            });
-            setPendingBlackList((old) => [...old]);
+            }]);
           }
 
           let statusWeek = await db
@@ -619,7 +638,7 @@ export default function Dashboard() {
   return (
     <Container component="main" className="main_container">
       <Typography className="titles" variant="h5" gutterBottom>
-        DashBoard
+        Dashboard
       </Typography>
       <Grid item xs={12} sm={2}>
         <hr className="titles_hr" />

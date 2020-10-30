@@ -64,7 +64,7 @@ export default function HeaderShowroom(props) {
           )}
         </IconButton>
         <Typography variant="h6" weight="medium" className="logotype">
-          S S Home Care City | Assitant
+          S S Home Care City | Assistant
         </Typography>
         <div className="grow" />
 

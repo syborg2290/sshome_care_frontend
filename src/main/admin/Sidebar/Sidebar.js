@@ -47,7 +47,7 @@ const structure = [
   {
     id: 1,
     label: "Items",
-    link: "/admin/ui",
+    link: "/admin/ui/item/itemTable",
     icon: <TvIcon className="icons" />,
     children: [
       { label: "Item Table", link: "/admin/ui/item/itemTable" },

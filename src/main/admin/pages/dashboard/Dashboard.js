@@ -57,6 +57,7 @@ export default function Dashboard(props) {
     var instaToday = 0;
     var instaMonth = 0;
     var raw1 = [];
+    
     db.collection("invoice")
       .get()
       .then((reProfit) => {

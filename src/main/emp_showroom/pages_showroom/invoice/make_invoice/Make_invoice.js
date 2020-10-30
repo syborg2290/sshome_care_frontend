@@ -250,7 +250,7 @@ function Make_invoice() {
                   tablerows.forEach((one) => {
                     let objItem = {
                       item_id: one.id,
-                      qty: itemQty[one.i],
+                      qty: parseInt(itemQty[one.i]),
                       paymentWay: one.paymentWay,
                       downpayment: itemDP[one.i] === "" ? 0 : itemDP[one.i],
                       noOfInstallment:
@@ -384,7 +384,7 @@ function Make_invoice() {
                   tablerows.forEach((one) => {
                     let objItem = {
                       item_id: one.id,
-                      qty: itemQty[one.i],
+                      qty: parseInt(itemQty[one.i]),
                       paymentWay: one.paymentWay,
                       downpayment: itemDP[one.i] === "" ? 0 : itemDP[one.i],
                       noOfInstallment:
@@ -520,7 +520,7 @@ function Make_invoice() {
               tablerows.forEach((one) => {
                 let objItem = {
                   item_id: one.id,
-                  qty: itemQty[one.i],
+                  qty: parseInt(itemQty[one.i]),
                   paymentWay: one.paymentWay,
                   downpayment: itemDP[one.i] === "" ? 0 : itemDP[one.i],
                   noOfInstallment: itemNOI[one.i] === "" ? 0 : itemNOI[one.i],
@@ -651,7 +651,7 @@ function Make_invoice() {
               tablerows.forEach((one) => {
                 let objItem = {
                   item_id: one.id,
-                  qty: itemQty[one.i],
+                  qty: parseInt(itemQty[one.i]),
                   paymentWay: one.paymentWay,
                   downpayment: itemDP[one.i] === "" ? 0 : itemDP[one.i],
                   noOfInstallment: itemNOI[one.i] === "" ? 0 : itemNOI[one.i],
@@ -768,7 +768,7 @@ function Make_invoice() {
       tablerows.forEach((one) => {
         let objItem = {
           item_id: one.id,
-          qty: itemQty[one.i],
+          qty: parseInt(itemQty[one.i]),
           paymentWay: one.paymentWay,
           downpayment: itemDP[one.i] === "" ? 0 : itemDP[one.i],
           noOfInstallment: itemNOI[one.i] === "" ? 0 : itemNOI[one.i],

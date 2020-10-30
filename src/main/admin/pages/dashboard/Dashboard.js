@@ -42,6 +42,9 @@ export default function Dashboard(props) {
   const [payandgoMonthSales, setPayandgoMonthSales] = useState(0);
   const [fullpaymentMonthSales, setFullpaymentMonthSales] = useState(0);
   const [mostSalesItems, setMostSalesItems] = useState([]);
+  const [installmentToday, setInstallmentToday] = useState(0);
+  const [installmentMonth, setInstallmentMonth] = useState(0);
+  const [installmentAll, setInstallmentAll] = useState(0);
 
   const getIndex = (value, arr, prop) => {
     for (var i = 0; i < arr.length; i++) {
@@ -53,10 +56,8 @@ export default function Dashboard(props) {
   };
 
   useEffect(() => {
-    var instaTot = 0;
-    var instaToday = 0;
-    var instaMonth = 0;
     var raw1 = [];
+    var count = 0;
 
     db.collection("invoice")
       .get()
@@ -85,7 +86,6 @@ export default function Dashboard(props) {
               .then((instReDoc) => {
                 instReDoc.docs.forEach((reInstall) => {
                   // today installments
-
                   if (
                     new Date().getDate() ===
                     new Date(reInstall.data()?.date?.seconds * 1000).getDate()
@@ -102,9 +102,11 @@ export default function Dashboard(props) {
                           reInstall.data()?.date?.seconds * 1000
                         ).getFullYear()
                       ) {
-                        let sooooToday =
+                        var reInst =
                           reInstall.data().amount + reInstall.data().delayed;
-                        instaToday = instaToday + sooooToday;
+                        setInstallmentToday(
+                          (installmentTodaySoo) => installmentTodaySoo + reInst
+                        );
                       }
                     }
                   }
@@ -121,62 +123,66 @@ export default function Dashboard(props) {
                         reInstall.data()?.date?.seconds * 1000
                       ).getFullYear()
                     ) {
-                      let sooooMonth =
+                      var reMonthInst =
                         reInstall.data().amount + reInstall.data().delayed;
-                      instaMonth = instaMonth + sooooMonth;
+
+                      setInstallmentMonth(
+                        (installmentMonthSoo) =>
+                          installmentMonthSoo + reMonthInst
+                      );
                     }
                   }
 
                   //all installments
 
-                  let soooo =
+                  var reInstAll =
                     reInstall.data().amount + reInstall.data().delayed;
-                  instaTot = instaTot + soooo;
+
+                  setInstallmentAll(
+                    (installmentAllSoo) => installmentAllSoo + reInstAll
+                  );
                 });
-
-                if (
-                  new Date().getDate() ===
-                  new Date(eachPro.data()?.date?.seconds * 1000).getDate()
-                ) {
-                  if (
-                    new Date().getMonth() ===
-                    new Date(eachPro.data()?.date?.seconds * 1000).getMonth()
-                  ) {
-                    if (
-                      new Date().getFullYear() ===
-                      new Date(
-                        eachPro.data()?.date?.seconds * 1000
-                      ).getFullYear()
-                    ) {
-                      let befToday = eachPro.data().total + instaToday;
-
-                      setPayandgoTodaySales(
-                        (passPayandgoToday) => passPayandgoToday + befToday
-                      );
-                    }
-                  }
-                }
-
-                if (
-                  new Date().getMonth() ===
-                  new Date(eachPro.data()?.date?.seconds * 1000).getMonth()
-                ) {
-                  if (
-                    new Date().getFullYear() ===
-                    new Date(eachPro.data()?.date?.seconds * 1000).getFullYear()
-                  ) {
-                    let befMonth = eachPro.data().total + instaMonth;
-
-                    setPayandgoMonthSales(
-                      (passPayandgoMonth) => passPayandgoMonth + befMonth
-                    );
-                  }
-                }
-
-                let bef = eachPro.data().total + instaTot;
-
-                setPayandgoAllSales((payandgoAll) => payandgoAll + bef);
               });
+
+            if (
+              new Date().getDate() ===
+              new Date(eachPro.data()?.date?.seconds * 1000).getDate()
+            ) {
+              if (
+                new Date().getMonth() ===
+                new Date(eachPro.data()?.date?.seconds * 1000).getMonth()
+              ) {
+                if (
+                  new Date().getFullYear() ===
+                  new Date(eachPro.data()?.date?.seconds * 1000).getFullYear()
+                ) {
+                  let befToday = eachPro.data().total;
+
+                  setPayandgoTodaySales(
+                    (passPayandgoToday) => passPayandgoToday + befToday
+                  );
+                }
+              }
+            }
+
+            if (
+              new Date().getMonth() ===
+              new Date(eachPro.data()?.date?.seconds * 1000).getMonth()
+            ) {
+              if (
+                new Date().getFullYear() ===
+                new Date(eachPro.data()?.date?.seconds * 1000).getFullYear()
+              ) {
+                let befMonth = eachPro.data().total;
+
+                setPayandgoMonthSales(
+                  (passPayandgoMonth) => passPayandgoMonth + befMonth
+                );
+              }
+            }
+
+            let bef = eachPro.data().total;
+            setPayandgoAllSales((payandgoAll) => payandgoAll + bef);
           } else {
             if (
               new Date().getDate() ===
@@ -224,8 +230,6 @@ export default function Dashboard(props) {
             return 1;
           }
         });
-
-        var count = 0;
 
         if (count <= 5) {
           raw1.forEach((getItems) => {
@@ -292,7 +296,7 @@ export default function Dashboard(props) {
                 <Grid item xs={12} sm={5}>
                   <Typography className="total" size="xl">
                     <CurrencyFormat
-                      value={payandgoAllSales + fullpaymentAllSales}
+                      value={(payandgoAllSales+installmentAll) + fullpaymentAllSales}
                       displayType={"text"}
                       thousandSeparator={true}
                       prefix={""}
@@ -340,7 +344,7 @@ export default function Dashboard(props) {
                   <Typography size="md" className="payGoing_lbl">
                     {" "}
                     <CurrencyFormat
-                      value={payandgoAllSales}
+                      value={payandgoAllSales+installmentAll}
                       displayType={"text"}
                       thousandSeparator={true}
                       prefix={" "}
@@ -376,7 +380,7 @@ export default function Dashboard(props) {
                 <Grid item xs={12} sm={5}>
                   <Typography className="total" size="xl">
                     <CurrencyFormat
-                      value={payandgoTodaySales + fullpaymentTodaySales}
+                      value={(payandgoTodaySales+installmentToday) + fullpaymentTodaySales}
                       displayType={"text"}
                       thousandSeparator={true}
                       prefix={""}
@@ -424,7 +428,7 @@ export default function Dashboard(props) {
                   <Typography size="md" className="payGoing_lbl">
                     {" "}
                     <CurrencyFormat
-                      value={payandgoTodaySales}
+                      value={payandgoTodaySales + installmentToday}
                       displayType={"text"}
                       thousandSeparator={true}
                       prefix={""}
@@ -460,7 +464,7 @@ export default function Dashboard(props) {
                 <Grid item xs={12} sm={5}>
                   <Typography className="total" size="xl">
                     <CurrencyFormat
-                      value={payandgoMonthSales + fullpaymentMonthSales}
+                      value={(payandgoMonthSales+installmentMonth) + fullpaymentMonthSales}
                       displayType={"text"}
                       thousandSeparator={true}
                       prefix={""}
@@ -507,7 +511,7 @@ export default function Dashboard(props) {
                   </Typography>
                   <Typography size="md" className="payGoing_lbl">
                     <CurrencyFormat
-                      value={payandgoMonthSales}
+                      value={payandgoMonthSales + installmentMonth}
                       displayType={"text"}
                       thousandSeparator={true}
                       prefix={""}

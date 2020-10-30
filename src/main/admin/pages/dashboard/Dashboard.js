@@ -149,8 +149,10 @@ export default function Dashboard(props) {
                       ).getFullYear()
                     ) {
                       let befToday = eachPro.data().total + instaToday;
-                      let passPayandgoToday = payandgoTodaySales + befToday;
-                      setPayandgoTodaySales(passPayandgoToday);
+
+                      setPayandgoTodaySales(
+                        (passPayandgoToday) => passPayandgoToday + befToday
+                      );
                     }
                   }
                 }
@@ -164,14 +166,16 @@ export default function Dashboard(props) {
                     new Date(eachPro.data()?.date?.seconds * 1000).getFullYear()
                   ) {
                     let befMonth = eachPro.data().total + instaMonth;
-                    let passPayandgoMonth = payandgoMonthSales + befMonth;
-                    setPayandgoMonthSales(passPayandgoMonth);
+
+                    setPayandgoMonthSales(
+                      (passPayandgoMonth) => passPayandgoMonth + befMonth
+                    );
                   }
                 }
 
                 let bef = eachPro.data().total + instaTot;
-                let passPayandgo = payandgoAllSales + bef;
-                setPayandgoAllSales(passPayandgo);
+
+                setPayandgoAllSales((payandgoAll) => payandgoAll + bef);
               });
           } else {
             if (
@@ -186,9 +190,9 @@ export default function Dashboard(props) {
                   new Date().getFullYear() ===
                   new Date(eachPro.data()?.date?.seconds * 1000).getFullYear()
                 ) {
-                  let passFullpaymentToday =
-                    fullpaymentTodaySales + eachPro.data().total;
-                  setFullpaymentTodaySales(passFullpaymentToday);
+                  setFullpaymentTodaySales(
+                    (fPayDaySales) => fPayDaySales + eachPro.data().total
+                  );
                 }
               }
             }
@@ -200,13 +204,15 @@ export default function Dashboard(props) {
                 new Date().getFullYear() ===
                 new Date(eachPro.data()?.date?.seconds * 1000).getFullYear()
               ) {
-                let passFullpaymentMonth =
-                  fullpaymentMonthSales + eachPro.data().total;
-                setFullpaymentMonthSales(passFullpaymentMonth);
+                setFullpaymentMonthSales(
+                  (fpayMonthSales) => fpayMonthSales + eachPro.data().total
+                );
               }
             }
-            let passFullpayment = fullpaymentAllSales + eachPro.data().total;
-            setFullpaymentAllSales(passFullpayment);
+
+            setFullpaymentAllSales(
+              (fpayAllSales) => fpayAllSales + eachPro.data().total
+            );
           }
         });
       })
@@ -218,7 +224,10 @@ export default function Dashboard(props) {
             return 1;
           }
         });
-        if (mostSalesItems.length <= 5) {
+
+        var count = 0;
+
+        if (count <= 5) {
           raw1.forEach((getItems) => {
             db.collection("item")
               .doc(getItems.items_id)
@@ -259,6 +268,7 @@ export default function Dashboard(props) {
                   ),
                 ]);
               });
+            count++;
           });
         }
       });

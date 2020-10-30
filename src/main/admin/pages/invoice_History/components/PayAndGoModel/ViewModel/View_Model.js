@@ -135,15 +135,6 @@ export default function View_Model({ items_list_props, data }) {
                 <Grid item xs={12} sm={7}>
                   <p>{items_list_props.length}</p>
                 </Grid>
-                <Grid className="lbl_topis" item xs={12} sm={4}>
-                  Total Discount(LKR)
-                </Grid>
-                <Grid item xs={12} sm={1}>
-                  :
-                </Grid>
-                <Grid item xs={12} sm={7}>
-                  <p>{totalDiscount}</p>
-                </Grid>
               </Grid>
               <Grid className="lbl_topiSub" item xs={12} sm={12}>
                 Customer

@@ -32,27 +32,6 @@ function createData(
   return { name, modelNo, salePrice, cashPrice, downPayament, qty, status };
 }
 
-const rows = [
-  createData(
-    "Stand Fan",
-    "HJEE-32",
-    12000.0,
-    1000.0,
-    19000.0,
-    12,
-    <p className="status">Status</p>
-  ),
-  createData(
-    "Gass Cooker",
-    "HJEE-32",
-    1000.0,
-    1000.0,
-    20000.0,
-    6,
-    <p className="status_dash">Status</p>
-  ),
-];
-
 export default function Dashboard(props) {
   var theme = useTheme();
 
@@ -62,15 +41,42 @@ export default function Dashboard(props) {
   const [fullpaymentTodaySales, setFullpaymentTodaySales] = useState(0);
   const [payandgoMonthSales, setPayandgoMonthSales] = useState(0);
   const [fullpaymentMonthSales, setFullpaymentMonthSales] = useState(0);
+  const [mostSalesItems, setMostSalesItems] = useState([]);
+
+  const getIndex = (value, arr, prop) => {
+    for (var i = 0; i < arr.length; i++) {
+      if (arr[i][prop] === value) {
+        return i;
+      }
+    }
+    return -1; //to handle the case where the value doesn't exist
+  };
 
   useEffect(() => {
     var instaTot = 0;
     var instaToday = 0;
     var instaMonth = 0;
+    var raw1 = [];
     db.collection("invoice")
       .get()
       .then((reProfit) => {
         reProfit.docs.forEach((eachPro) => {
+          eachPro.data().items.forEach((eachItems) => {
+            var index = getIndex(eachItems.item_id, raw1, "items_id");
+            if (index === -1) {
+              raw1.push({
+                items_id: eachItems.item_id,
+                qty: eachItems.qty,
+              });
+            } else {
+              let plusQty = eachItems.qty + raw1[index].qty;
+              raw1[index] = {
+                items_id: eachItems.item_id,
+                qty: plusQty,
+              };
+            }
+          });
+
           if (eachPro.data().installmentType !== null) {
             db.collection("installment")
               .where("invoice_number", "==", eachPro.data().invoice_number)
@@ -202,7 +208,60 @@ export default function Dashboard(props) {
             setFullpaymentAllSales(passFullpayment);
           }
         });
+      })
+      .then((re) => {
+        raw1.sort((a, b) => {
+          if (a.qty > b.qty) {
+            return -1;
+          } else {
+            return 1;
+          }
+        });
+        if (mostSalesItems.length <= 5) {
+          raw1.forEach((getItems) => {
+            db.collection("item")
+              .doc(getItems.items_id)
+              .get()
+              .then((reEachIten) => {
+                setMostSalesItems((old) => [
+                  ...old,
+                  createData(
+                    reEachIten.data().itemName,
+                    reEachIten.data().modelNo,
+                    reEachIten.data().salePrice,
+                    reEachIten.data().cashPrice,
+                    reEachIten.data().downPayment,
+                    getItems.qty,
+
+                    <div
+                      color="secondary"
+                      size="small"
+                      className={
+                        reEachIten.data().qty !== 0
+                          ? reEachIten.data().qty >= 3
+                            ? "px-2"
+                            : "px-3"
+                          : "px-4"
+                      }
+                      variant="contained"
+                    >
+                      {reEachIten.data().qty !== 0 ? (
+                        reEachIten.data().qty >= 3 ? (
+                          <p className="status">Available</p>
+                        ) : (
+                          <p className="status">Low Stock</p>
+                        )
+                      ) : (
+                        <p className="status">Out Of Stock</p>
+                      )}
+                    </div>
+                  ),
+                ]);
+              });
+          });
+        }
       });
+
     // eslint-disable-next-line
   }, []);
 
@@ -496,7 +555,7 @@ export default function Dashboard(props) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {rows.map((row) => (
+                  {mostSalesItems.map((row) => (
                     <TableRow key={row.name}>
                       <TableCell component="th" scope="row">
                         {row.name}

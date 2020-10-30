@@ -6,6 +6,41 @@
   overflow: hidden; */
 }
 
+.status {
+  font-size: small !important;
+  font-family: Helvetica, sans-serif !important;
+  margin: auto !important;
+  font-weight: 100 !important;
+}
+
+.px-2 {
+  background-color: #09b66d !important;
+  color: aliceblue;
+  margin: auto;
+  text-align: center !important;
+  border-radius: 4px !important;
+  padding: 2px 0px 2px 0px !important;
+}
+
+.px-3 {
+  background-color: #ff9900 !important;
+  color: black !important;
+  margin: auto;
+  text-align: center !important;
+  border-radius: 4px !important;
+  padding: 2px 0px 2px 0px !important;
+}
+
+.px-4 {
+  background-color: #ff3d57 !important;
+  color: aliceblue;
+  margin: auto;
+  text-align: center !important;
+  border-radius: 4px !important;
+  padding: 2px 0px 2px 0px !important;
+}
+
+
 .visitsNumberContainer {
   display: flex;
   align-items: center;

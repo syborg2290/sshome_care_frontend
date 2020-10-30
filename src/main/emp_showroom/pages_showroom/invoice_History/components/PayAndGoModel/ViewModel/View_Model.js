@@ -12,7 +12,6 @@ export default function View_Model({ items_list_props, data }) {
   const [trustees, setTrustees] = useState([]);
   const [customer, setCustomer] = useState({});
   const [itemsList, setItemList] = useState([]);
-  const [totalDiscount, setTotalDiscount] = useState(0);
 
   useEffect(() => {
     db.collection("customer")
@@ -49,7 +48,6 @@ export default function View_Model({ items_list_props, data }) {
       });
 
     items_list_props.forEach((each) => {
-      setTotalDiscount(each.discount);
       db.collection("item")
         .doc(each.item_id)
         .get()

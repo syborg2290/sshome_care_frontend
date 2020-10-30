@@ -8,11 +8,9 @@ import db from "../../../../../../config/firebase.js";
 
 export default function Full_Payment_Model({ items_list_props }) {
   const [itemsList, setItemList] = useState([]);
-  const [totalDiscount, setTotalDiscount] = useState(0);
 
   useEffect(() => {
     items_list_props.forEach((each) => {
-      setTotalDiscount(each.discount);
       db.collection("item")
         .doc(each.item_id)
         .get()

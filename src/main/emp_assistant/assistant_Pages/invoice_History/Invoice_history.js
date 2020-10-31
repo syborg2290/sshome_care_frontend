@@ -91,8 +91,7 @@ export default function Invoice_history() {
     setVisibleConfirmPrint(true);
   };
 
-  const PrintInvoice = async() => {
-   
+  const PrintInvoice = async () => {
     if (printType === "fullpayment") {
       let passingWithCustomerObj = {
         invoice_number: fullPaymentAllData[currentIndx].data?.invoice_number,
@@ -212,7 +211,7 @@ export default function Invoice_history() {
       },
     },
     {
-      name: "Paid",
+      name: "Basic_Payment",
       options: {
         filter: false,
         setCellHeaderProps: (value) => ({
@@ -277,7 +276,7 @@ export default function Invoice_history() {
       },
     },
     {
-      name: "Paid",
+      name: "Full_Payment",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -331,7 +330,7 @@ export default function Invoice_history() {
                 prefix={" "}
               />
             ),
-            Paid: (
+            Basic_Payment: (
               <CurrencyFormat
                 value={siDoc.data().total}
                 displayType={"text"}
@@ -436,7 +435,7 @@ export default function Invoice_history() {
                 prefix={" "}
               />
             ),
-            Paid: (
+            Full_Payment: (
               <CurrencyFormat
                 value={siDoc.data().total}
                 displayType={"text"}

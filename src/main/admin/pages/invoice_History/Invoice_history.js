@@ -210,7 +210,7 @@ export default function Invoice_history() {
       },
     },
     {
-      name: "Paid",
+      name: "Basic_Payment",
       options: {
         filter: false,
         setCellHeaderProps: (value) => ({
@@ -275,7 +275,7 @@ export default function Invoice_history() {
       },
     },
     {
-      name: "Paid",
+      name: "Full_Payment",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -329,7 +329,7 @@ export default function Invoice_history() {
                 prefix={" "}
               />
             ),
-            Paid: (
+            Basic_Payment: (
               <CurrencyFormat
                 value={siDoc.data().total}
                 displayType={"text"}
@@ -434,7 +434,7 @@ export default function Invoice_history() {
                 prefix={" "}
               />
             ),
-            Paid: (
+            Full_Payment: (
               <CurrencyFormat
                 value={siDoc.data().total}
                 displayType={"text"}

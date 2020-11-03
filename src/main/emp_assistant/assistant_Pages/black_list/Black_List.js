@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import MUIDataTable from "mui-datatables";
 import { Grid } from "@material-ui/core";
-import {  Modal } from "antd";
+import { Modal } from "antd";
+import { Button } from "@material-ui/core";
 
 // components
 import BlackListCustomers from "../black_list/customer_model/BlackList_Customers";
@@ -16,7 +17,6 @@ import "./Black_List.css";
 import db from "../../../../config/firebase";
 
 export default function Black_List() {
- 
   // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
 
@@ -129,6 +129,16 @@ export default function Black_List() {
                 <VisibilityIcon onClick={showModalCustomer} />
                 <span className="icon_Edit">
                   <HistoryIcon onClick={showModalCustomerHistory} />
+                </span>
+                <span className="update_btn">
+                  <Button
+                    variant="contained"
+                    size="small"
+                    className="btnuUpdt"
+                    // onClick={showVisibleUpdate}
+                  >
+                    Update
+                  </Button>
                 </span>
               </div>
             ),

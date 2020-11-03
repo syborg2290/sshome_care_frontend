@@ -123,7 +123,7 @@ export default function Repairs() {
     },
 
     {
-      name: "STATUS",
+      name: "Status",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -182,7 +182,7 @@ export default function Repairs() {
           ModalNo: re.data().model_no,
           Item_Name: re.data().item_name,
           NIC: re.data().nic,
-          STATUS: (
+          Status: (
             <span className="statusRepir">
               {re.data().status === "accepted"
                 ? "Accepted"

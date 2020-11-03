@@ -330,6 +330,7 @@ function AddItem() {
                                                         itemName: itemName.trim(),
                                                         brand: brand.trim(),
                                                         modelNo: modelNo.trim(),
+                                                        serialNo:serialNo.trim(),
                                                         chassisNo: chassisNo.trim(),
                                                         color: color.trim(),
                                                         qty: Math.round(qty),

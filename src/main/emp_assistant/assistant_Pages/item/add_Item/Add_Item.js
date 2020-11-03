@@ -46,6 +46,7 @@ export default function Add_Item() {
     setBrand("");
     setModelNo("");
     setSerialNo("");
+    setSerialNo("");
     setChassisNo("");
     setColor("");
     setQty(1);
@@ -330,6 +331,7 @@ export default function Add_Item() {
                                                         itemName: itemName.trim(),
                                                         brand: brand.trim(),
                                                         modelNo: modelNo.trim(),
+                                                        serialNo:serialNo.trim(),
                                                         chassisNo: chassisNo.trim(),
                                                         color: color.trim(),
                                                         qty: Math.round(qty),

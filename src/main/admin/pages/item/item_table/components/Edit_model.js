@@ -20,6 +20,7 @@ function EditModel({
   itemNameProp,
   brandProp,
   modelNoProp,
+  serialNoProp,
   chassisNoProp,
   colorProp,
   qtyProp,
@@ -41,6 +42,7 @@ function EditModel({
   const [itemName, setItemName] = useState(itemNameProp);
   const [brand, setBrand] = useState(brandProp);
   const [modelNo, setModelNo] = useState(modelNoProp);
+  const [serialNo, setSerialNo] = useState(serialNoProp);
   const [chassisNo, setChassisNo] = useState(chassisNoProp);
   const [color, setColor] = useState(colorProp);
   const [qty, setQty] = useState(qtyProp);
@@ -81,122 +83,127 @@ function EditModel({
         if (modelNo === "") {
           setValidation("Item model number is required!");
         } else {
-          if (color === "") {
-            setValidation("Item color is required!");
+          if (serialNo === "") {
+            setValidation("Item Serial number is required!");
           } else {
-            if (qty === "") {
-              setValidation("Qty is required!");
+            if (color === "") {
+              setValidation("Item color is required!");
             } else {
-              if (cashPrice === "") {
-                setValidation("Item cash price is required!");
+              if (qty === "") {
+                setValidation("Qty is required!");
               } else {
-                if (salePrice === "") {
-                  setValidation("Item sale price is required!");
+                if (cashPrice === "") {
+                  setValidation("Item cash price is required!");
                 } else {
-                  if (noOfInstallments === "") {
-                    setValidation("Number of installment is required!");
+                  if (salePrice === "") {
+                    setValidation("Item sale price is required!");
                   } else {
-                    if (amountPerInstallment === "") {
-                      setValidation("Amount per installment is required!");
+                    if (noOfInstallments === "") {
+                      setValidation("Number of installment is required!");
                     } else {
-                      if (noOfInstallments === "") {
-                        setValidation("Number of installment is required!");
+                      if (amountPerInstallment === "") {
+                        setValidation("Amount per installment is required!");
                       } else {
-                        if (guaranteePeriod === "") {
-                          setValidation("Item guarantee period is required!");
+                        if (noOfInstallments === "") {
+                          setValidation("Number of installment is required!");
                         } else {
-                          if (downPayment === "") {
-                            setValidation("Item down payment is required!");
+                          if (guaranteePeriod === "") {
+                            setValidation("Item guarantee period is required!");
                           } else {
-                            if (discount === "") {
-                              setValidation("Item discount is required!");
+                            if (downPayment === "") {
+                              setValidation("Item down payment is required!");
                             } else {
-                              if (qty < 1) {
-                                setValidation("Qty must be greater than 0");
+                              if (discount === "") {
+                                setValidation("Item discount is required!");
                               } else {
-                                if (cashPrice < 0) {
-                                  setValidation(
-                                    "Check again the amount of cash price"
-                                  );
+                                if (qty < 1) {
+                                  setValidation("Qty must be greater than 0");
                                 } else {
-                                  if (salePrice < 0) {
+                                  if (cashPrice < 0) {
                                     setValidation(
-                                      "Check again the amount of sale price"
+                                      "Check again the amount of cash price"
                                     );
                                   } else {
-                                    if (noOfInstallments < 0) {
+                                    if (salePrice < 0) {
                                       setValidation(
-                                        "Check again the value of installments value"
+                                        "Check again the amount of sale price"
                                       );
                                     } else {
-                                      if (amountPerInstallment < 0) {
+                                      if (noOfInstallments < 0) {
                                         setValidation(
-                                          "Check again the amount per installment"
+                                          "Check again the value of installments value"
                                         );
                                       } else {
-                                        if (downPayment < 0) {
+                                        if (amountPerInstallment < 0) {
                                           setValidation(
-                                            "Check again the amount of down payment"
+                                            "Check again the amount per installment"
                                           );
                                         } else {
-                                          if (guaranteePeriod < 0) {
+                                          if (downPayment < 0) {
                                             setValidation(
-                                              "Check again the value of gurantee period"
+                                              "Check again the amount of down payment"
                                             );
                                           } else {
-                                            if (discount < 0) {
+                                            if (guaranteePeriod < 0) {
                                               setValidation(
-                                                "Check again the amount of discount"
+                                                "Check again the value of gurantee period"
                                               );
                                             } else {
-                                              //Rest of code here
-                                              setLoadingSubmit(true);
-                                              db.collection("item")
-                                                .doc(docId)
-                                                .get()
-                                                .then((docRe) => {
-                                                  let variable = {
-                                                    itemName: itemName,
-                                                    brand: brand,
-                                                    modelNo: modelNo,
-                                                    chassisNo: chassisNo,
-                                                    color: color,
-                                                    qty:
-                                                      Math.round(
-                                                        docRe.data().qty
-                                                      ) + Math.round(qty),
-                                                    cashPrice: cashPrice,
-                                                    salePrice: salePrice,
-                                                    noOfInstallments: noOfInstallments,
-                                                    amountPerInstallment: amountPerInstallment,
-                                                    downPayment: downPayment,
-                                                    guaranteePeriod: guaranteePeriod,
-                                                    discount: discount,
-                                                    description: description,
-                                                    cInvoiceNo: cInvoiceNo,
-                                                    GCardNo: GCardNo,
-                                                    guarantee: guarantee,
-                                                  };
+                                              if (discount < 0) {
+                                                setValidation(
+                                                  "Check again the amount of discount"
+                                                );
+                                              } else {
+                                                //Rest of code here
+                                                setLoadingSubmit(true);
+                                                db.collection("item")
+                                                  .doc(docId)
+                                                  .get()
+                                                  .then((docRe) => {
+                                                    let variable = {
+                                                      itemName: itemName,
+                                                      brand: brand,
+                                                      modelNo: modelNo,
+                                                      serialNo: serialNo,
+                                                      chassisNo: chassisNo,
+                                                      color: color,
+                                                      qty:
+                                                        Math.round(
+                                                          docRe.data().qty
+                                                        ) + Math.round(qty),
+                                                      cashPrice: cashPrice,
+                                                      salePrice: salePrice,
+                                                      noOfInstallments: noOfInstallments,
+                                                      amountPerInstallment: amountPerInstallment,
+                                                      downPayment: downPayment,
+                                                      guaranteePeriod: guaranteePeriod,
+                                                      discount: discount,
+                                                      description: description,
+                                                      cInvoiceNo: cInvoiceNo,
+                                                      GCardNo: GCardNo,
+                                                      guarantee: guarantee,
+                                                    };
 
-                                                  db.collection("item")
-                                                    .doc(docId)
-                                                    .update(variable)
-                                                    .then(function (docRef) {
-                                                      setLoadingSubmit(false);
-                                                      NotificationManager.success(
-                                                        "Item updated!",
-                                                        "Done"
-                                                      );
-                                                      editModalClose();
-                                                    })
-                                                    .catch(function (error) {
-                                                      setLoadingSubmit(false);
-                                                      NotificationManager.warning(
-                                                        "Failed to update the item!",
-                                                        "Please try again"
-                                                      );
-                                                    });
-                                                });
+                                                    db.collection("item")
+                                                      .doc(docId)
+                                                      .update(variable)
+                                                      .then(function (docRef) {
+                                                        setLoadingSubmit(false);
+                                                        NotificationManager.success(
+                                                          "Item updated!",
+                                                          "Done"
+                                                        );
+                                                        editModalClose();
+                                                      })
+                                                      .catch(function (error) {
+                                                        setLoadingSubmit(false);
+                                                        NotificationManager.warning(
+                                                          "Failed to update the item!",
+                                                          "Please try again"
+                                                        );
+                                                      });
+                                                  });
+                                              }
                                             }
                                           }
                                         }
@@ -251,6 +258,16 @@ function EditModel({
               value={modelNo}
               onChange={(e) => {
                 setModelNo(e.target.value);
+              }}
+            />
+          </Form.Item>
+          <Form.Item label="Serial no ">
+            <Input
+              allowClear
+              placeholder="xx 0091"
+              value={serialNo}
+              onChange={(e) => {
+                setSerialNo(e.target.value);
               }}
             />
           </Form.Item>

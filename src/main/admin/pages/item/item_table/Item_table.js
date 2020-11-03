@@ -71,7 +71,7 @@ export default function ItemTable() {
             element.data().itemName,
             element.data().brand,
             element.data().qty,
-            element.data().color,
+            element.data().serialNo,
             element.data().modelNo,
             <CurrencyFormat
               value={element.data().salePrice}
@@ -233,7 +233,7 @@ export default function ItemTable() {
       },
     },
     {
-      name: "Color",
+      name: "Serial no",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -317,7 +317,6 @@ export default function ItemTable() {
       >
         <div className="table_Model">
           <div className="model_Main">
-            
             <div className="model_Detail">
               <Row>
                 <Col span={12}>BRAND</Col>
@@ -359,6 +358,12 @@ export default function ItemTable() {
                     {allTtemData[currentIndx] && allTtemData[currentIndx].data
                       ? allTtemData[currentIndx].data.modelNo
                       : " - "}{" "}
+                  </span>
+                </Col>
+                <Col span={12}>SERIAL NO</Col>
+                <Col span={12}>
+                  <span className="load_Item">
+                    <span className="colan">:</span>
                   </span>
                 </Col>
                 <Col span={12}>SALE PRICE(LKR)</Col>

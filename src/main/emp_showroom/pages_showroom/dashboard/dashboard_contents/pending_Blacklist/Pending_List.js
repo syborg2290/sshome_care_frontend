@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import MUIDataTable from "mui-datatables";
 import { Modal } from "antd";
-import { Button } from "@material-ui/core";
+// import { Button } from "@material-ui/core";
 
 import db from "../../../../../../config/firebase.js";
 
@@ -13,7 +13,7 @@ import PendingViewModel from "./blackList_Models/View_Model/View_Model";
 import PendingHistoryModel from "./blackList_Models/History_Model/History_Model";
 
 //icone
-import { ExclamationCircleOutlined } from "@ant-design/icons";
+// import { ExclamationCircleOutlined } from "@ant-design/icons";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import HistoryIcon from "@material-ui/icons/History";
 
@@ -25,69 +25,69 @@ export default function View_Model({ pendingBlackList }) {
   const [pendingViewModel, setPendingViewModel] = useState(false); //  table models
   const [pendingHistoryModel, setPendingHistoryModel] = useState(false); //  table models
   const [allViewData, setAllViewData] = useState([]);
-  const [visibleConfirmPrint, setVisibleConfirmPrint] = useState(false);
+  // const [visibleConfirmPrint, setVisibleConfirmPrint] = useState(false);
 
-  const showVisibleConfirmModal = () => {
-    setVisibleConfirmPrint(true);
-  };
+  // const showVisibleConfirmModal = () => {
+  //   setVisibleConfirmPrint(true);
+  // };
 
-  const changeToBlacklist = () => {
-    db.collection("arrears")
-      .where("invoice_number", "==", allViewData[currentIndx]?.invoice_no)
-      .get()
-      .then(async (reArreas) => {
-        await db.collection("arrears").doc(reArreas.docs[0].id).delete();
-        await db
-          .collection("invoice")
-          .where("invoice_number", "==", allViewData[currentIndx]?.invoice_no)
-          .get()
-          .then(async (reInVo) => {
-            await db.collection("invoice").doc(reInVo.docs[0].id).update({
-              status_of_payandgo: "blacklist",
-            });
-          });
-        await db
-          .collection("customer")
-          .doc(reArreas.docs[0].data().customer_id)
-          .update({
-            status: "blacklist",
-          });
+  // const changeToBlacklist = () => {
+  //   db.collection("arrears")
+  //     .where("invoice_number", "==", allViewData[currentIndx]?.invoice_no)
+  //     .get()
+  //     .then(async (reArreas) => {
+  //       await db.collection("arrears").doc(reArreas.docs[0].id).delete();
+  //       await db
+  //         .collection("invoice")
+  //         .where("invoice_number", "==", allViewData[currentIndx]?.invoice_no)
+  //         .get()
+  //         .then(async (reInVo) => {
+  //           await db.collection("invoice").doc(reInVo.docs[0].id).update({
+  //             status_of_payandgo: "blacklist",
+  //           });
+  //         });
+  //       await db
+  //         .collection("customer")
+  //         .doc(reArreas.docs[0].data().customer_id)
+  //         .update({
+  //           status: "blacklist",
+  //         });
 
-        await db
-          .collection("blacklist")
-          .add({
-            InvoiceNo: allViewData[currentIndx]?.invoice_no,
-            FirstName: await (
-              await db
-                .collection("customer")
-                .doc(reArreas.docs[0].data().customer_id)
-                .get()
-            ).data().fname,
-            LastName: await (
-              await db
-                .collection("customer")
-                .doc(reArreas.docs[0].data().customer_id)
-                .get()
-            ).data().lname,
-            NIC: await (
-              await db
-                .collection("customer")
-                .doc(reArreas.docs[0].data().customer_id)
-                .get()
-            ).data().nic,
-            Telephone: await (
-              await db
-                .collection("customer")
-                .doc(reArreas.docs[0].data().customer_id)
-                .get()
-            ).data().mobile1,
-          })
-          .then((_) => {
-            setVisibleConfirmPrint(false);
-            window.location.reload();
-          });
-      });
-  };
+  //       await db
+  //         .collection("blacklist")
+  //         .add({
+  //           InvoiceNo: allViewData[currentIndx]?.invoice_no,
+  //           FirstName: await (
+  //             await db
+  //               .collection("customer")
+  //               .doc(reArreas.docs[0].data().customer_id)
+  //               .get()
+  //           ).data().fname,
+  //           LastName: await (
+  //             await db
+  //               .collection("customer")
+  //               .doc(reArreas.docs[0].data().customer_id)
+  //               .get()
+  //           ).data().lname,
+  //           NIC: await (
+  //             await db
+  //               .collection("customer")
+  //               .doc(reArreas.docs[0].data().customer_id)
+  //               .get()
+  //           ).data().nic,
+  //           Telephone: await (
+  //             await db
+  //               .collection("customer")
+  //               .doc(reArreas.docs[0].data().customer_id)
+  //               .get()
+  //           ).data().mobile1,
+  //         })
+  //         .then((_) => {
+  //           setVisibleConfirmPrint(false);
+  //           window.location.reload();
+  //         });
+  //     });
+  // };
 
   const showModalView = () => {
     setPendingViewModel(true);
@@ -194,7 +194,7 @@ export default function View_Model({ pendingBlackList }) {
                   <span className="icon_histry">
                     <HistoryIcon onClick={showModalHistory} />
                   </span>
-                  <span className="blk_btn">
+                  {/* <span className="blk_btn">
                     <Button
                       variant="contained"
                       size="small"
@@ -203,7 +203,7 @@ export default function View_Model({ pendingBlackList }) {
                     >
                       Blacklist
                     </Button>
-                  </span>
+                  </span> */}
                 </div>
               ),
             },
@@ -272,7 +272,7 @@ export default function View_Model({ pendingBlackList }) {
 
   return (
     <>
-      <Modal
+      {/* <Modal
         className="confo_model"
         closable={null}
         visible={visibleConfirmPrint}
@@ -288,7 +288,7 @@ export default function View_Model({ pendingBlackList }) {
           <ExclamationCircleOutlined className="confo_Icon" />
           <h3 className="txtConfoModel_body">Are you sure to continue? </h3>
         </div>
-      </Modal>
+      </Modal> */}
       {/*Start Blacklist PENDING VIEW  model */}
 
       <Modal

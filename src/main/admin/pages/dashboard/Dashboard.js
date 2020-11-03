@@ -242,6 +242,7 @@ export default function Dashboard(props) {
                   createData(
                     reEachIten.data().itemName,
                     reEachIten.data().modelNo,
+                    reEachIten.data().serialNo,
                     reEachIten.data().salePrice,
                     reEachIten.data().cashPrice,
                     reEachIten.data().downPayment,
@@ -296,7 +297,9 @@ export default function Dashboard(props) {
                 <Grid item xs={12} sm={5}>
                   <Typography className="total" size="xl">
                     <CurrencyFormat
-                      value={(payandgoAllSales+installmentAll) + fullpaymentAllSales}
+                      value={
+                        payandgoAllSales + installmentAll + fullpaymentAllSales
+                      }
                       displayType={"text"}
                       thousandSeparator={true}
                       prefix={""}
@@ -344,7 +347,7 @@ export default function Dashboard(props) {
                   <Typography size="md" className="payGoing_lbl">
                     {" "}
                     <CurrencyFormat
-                      value={payandgoAllSales+installmentAll}
+                      value={payandgoAllSales + installmentAll}
                       displayType={"text"}
                       thousandSeparator={true}
                       prefix={" "}
@@ -380,7 +383,11 @@ export default function Dashboard(props) {
                 <Grid item xs={12} sm={5}>
                   <Typography className="total" size="xl">
                     <CurrencyFormat
-                      value={(payandgoTodaySales+installmentToday) + fullpaymentTodaySales}
+                      value={
+                        payandgoTodaySales +
+                        installmentToday +
+                        fullpaymentTodaySales
+                      }
                       displayType={"text"}
                       thousandSeparator={true}
                       prefix={""}
@@ -464,7 +471,11 @@ export default function Dashboard(props) {
                 <Grid item xs={12} sm={5}>
                   <Typography className="total" size="xl">
                     <CurrencyFormat
-                      value={(payandgoMonthSales+installmentMonth) + fullpaymentMonthSales}
+                      value={
+                        payandgoMonthSales +
+                        installmentMonth +
+                        fullpaymentMonthSales
+                      }
                       displayType={"text"}
                       thousandSeparator={true}
                       prefix={""}
@@ -553,6 +564,9 @@ export default function Dashboard(props) {
                       Model&nbsp;No.
                     </TableCell>
                     <TableCell className="tbl_cell" align="left">
+                      Serial&nbsp;No.
+                    </TableCell>
+                    <TableCell className="tbl_cell" align="left">
                       Sales&nbsp;Price
                     </TableCell>
                     <TableCell className="tbl_cell" align="left">
@@ -576,6 +590,7 @@ export default function Dashboard(props) {
                         {row.name}
                       </TableCell>
                       <TableCell align="left">{row.modelNo}</TableCell>
+                      <TableCell align="left">{row.serialNo}</TableCell>
                       <TableCell align="left">{row.salePrice}</TableCell>
                       <TableCell align="left">{row.cashPrice}</TableCell>
                       <TableCell align="left">{row.downPayament}</TableCell>

@@ -11,3 +11,12 @@
 .blacListkModel_Model_history {
   width: 60% !important;
 }
+
+.btnuUpdt {
+  border-radius: 10px !important;
+  font-size: 10px !important;
+  margin-left: 15px !important;
+  margin-top: -15px !important;
+  background-color: rgba(29, 9, 207, 0.829) !important;
+  color: aliceblue !important;
+}

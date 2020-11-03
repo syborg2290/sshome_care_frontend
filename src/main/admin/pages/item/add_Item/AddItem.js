@@ -390,6 +390,71 @@ function AddItem() {
                                                         });
                                                     }
                                                   }
+                                                } else {
+                                                  if (inst) {
+                                                      let variable = {
+                                                        itemName: itemName.trim(),
+                                                        brand: brand.trim(),
+                                                        modelNo: modelNo.trim(),
+                                                        serialNo:serialNo.trim(),
+                                                        chassisNo: chassisNo.trim(),
+                                                        color: color.trim(),
+                                                        qty: Math.round(qty),
+                                                        cashPrice: Math.round(
+                                                          cashPrice
+                                                        ),
+                                                        salePrice: Math.round(
+                                                          salePrice
+                                                        ),
+                                                        noOfInstallments: Math.round(
+                                                          inst
+                                                        ),
+                                                        amountPerInstallment: Math.round(
+                                                          amountPerInstallment
+                                                        ),
+                                                        downPayment: Math.round(
+                                                          downPayment
+                                                        ),
+                                                        guaranteePeriod: Math.round(
+                                                          guaranteePeriod
+                                                        ),
+                                                        discount: Math.round(
+                                                          discount
+                                                        ),
+                                                        description: description,
+                                                        cInvoiceNo: cInvoiceNo.trim(),
+                                                        GCardNo: GCardNo.trim(),
+                                                        guarantee: guarantee,
+                                                        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                                                      };
+
+                                                      await db
+                                                        .collection("item")
+                                                        .add(variable)
+                                                        .then(function (
+                                                          docRef
+                                                        ) {
+                                                          setLoadingSubmit(
+                                                            false
+                                                          );
+                                                          valuesInitialState();
+                                                          NotificationManager.success(
+                                                            "Item creation successfully!",
+                                                            "Done"
+                                                          );
+                                                        })
+                                                        .catch(function (
+                                                          error
+                                                        ) {
+                                                          setLoadingSubmit(
+                                                            false
+                                                          );
+                                                          NotificationManager.warning(
+                                                            "Failed to make the item!",
+                                                            "Please try again"
+                                                          );
+                                                        });
+                                                    }
                                                 }
                                               }
                                             }

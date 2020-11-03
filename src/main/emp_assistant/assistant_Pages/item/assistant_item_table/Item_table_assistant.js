@@ -356,8 +356,12 @@ export default function Item_table_assistant() {
                 </Col>
                 <Col span={12}>SERIAL NO</Col>
                 <Col span={12}>
-                  <span className="load_Item">
-                    <span className="colan">:</span>
+                 <span className="load_Item">
+                    {" "}
+                    <span className="colan">:</span>{" "}
+                    {allTtemData[currentIndx] && allTtemData[currentIndx].data
+                      ? allTtemData[currentIndx].data.serialNo
+                      : " - "}{" "}
                   </span>
                 </Col>
                 <Col span={12}>SALE PRICE(LKR)</Col>
@@ -573,6 +577,11 @@ export default function Item_table_assistant() {
                 modelNoProp={
                   allTtemData[currentIndx] && allTtemData[currentIndx].data
                     ? allTtemData[currentIndx].data.modelNo
+                    : ""
+                }
+                serialNoProp={
+                  allTtemData[currentIndx] && allTtemData[currentIndx].data
+                    ? allTtemData[currentIndx].data.serialNo
                     : ""
                 }
                 chassisNoProp={

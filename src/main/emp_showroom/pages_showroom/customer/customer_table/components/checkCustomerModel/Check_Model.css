@@ -38,3 +38,17 @@
   align-items: center;
   margin-top: 10px;
 }
+
+.model_Loader {
+  margin: auto !important;
+  text-align: center !important;
+}
+
+.validate_check_green {
+  color: green;
+  text-align: center !important;
+  font-weight: 600 !important;
+  margin: auto;
+  align-items: center;
+  margin-top: 10px;
+}

@@ -18,7 +18,7 @@ import InvoiceHistory from "../pages_showroom/invoice_History/Invoice_history";
 import Arreas from "../pages_showroom/arreas/Areas";
 import Repairs from "../pages_showroom/repairs/Repairs";
 import BlackList from "../pages_showroom/black_list/Black_List";
-import Seized from "../pages_showroom/seized_items/Seized_item";
+// import Seized from "../pages_showroom/seized_items/Seized_item";
 
 import InvoiceCustomer from "../pages_showroom/customer/add_Customer/Add_Customer";
 import PrintInvoice from "../pages_showroom/invoice/make_invoice/printInvoice/Print_invoice";
@@ -67,7 +67,7 @@ function LayoutShowroom(props) {
             <Route path="/showroom/ui/arreas" component={Arreas} />
             <Route path="/showroom/ui/repairs" component={Repairs} />
             <Route path="/showroom/ui/blackList" component={BlackList} />
-            <Route path="/showroom/ui/seized" component={Seized} />
+            {/* <Route path="/showroom/ui/seized" component={Seized} /> */}
           </Switch>
         </div>
       </>

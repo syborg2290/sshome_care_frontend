@@ -338,7 +338,7 @@ class PrintInvoiceClass extends React.Component {
 
                   {this.state.cols.map((col) => (
                     <Row key={col.Itemname} className="installmentPrint">
-                      <Col className="installment_titls" span={8}>
+                      <Col className="instal/lment_titls" span={8}>
                         Down Payment(LKR)
                       </Col>
                       <Col span={4}>:{col.DPayment}</Col>

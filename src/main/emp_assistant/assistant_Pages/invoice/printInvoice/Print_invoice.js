@@ -106,7 +106,7 @@ class PrintInvoiceClass extends React.Component {
           </Typography>
 
           <Typography className="company_sub__title" variant="h5" gutterBottom>
-            Dealers In All Kind of Electtic & Electronic Items
+            Dealers In Alsl Kind of Electtic & Electronic Items
             <hr />
           </Typography>
 
@@ -162,14 +162,11 @@ class PrintInvoiceClass extends React.Component {
                             align="right"
                             colSpan={1}
                           >
-                            BP
+                            BP(LKR)
                           </TableCell>
 
                           <TableCell className="tbl_Cell" align="right">
-                            Discount
-                          </TableCell>
-                          <TableCell className="tbl_Cell" align="right">
-                            Balance
+                            Discount(LKR)
                           </TableCell>
                           <TableCell className="tbl_Cell" align="right">
                             Sum(LKR)
@@ -211,10 +208,10 @@ class PrintInvoiceClass extends React.Component {
 
                         <TableRow>
                           <TableCell rowSpan={4} />
-                          <TableCell align="right" colSpan={4}>
+                          <TableCell align="right" colSpan={3}>
                             Subtotal(LKR)
                           </TableCell>
-                          <TableCell align="right" colSpan={3}>
+                          <TableCell align="right" colSpan={2}>
                             <CurrencyFormat
                               value={this.state.subTotal}
                               displayType={"text"}
@@ -224,24 +221,12 @@ class PrintInvoiceClass extends React.Component {
                           </TableCell>
                         </TableRow>
                         <TableRow>
-                          <TableCell align="right" colSpan={4}>
+                          <TableCell align="right" colSpan={3}>
                             Discount(LKR)
                           </TableCell>
-                          <TableCell className="cel" align="right" colSpan={3}>
+                          <TableCell className="cel" align="right" colSpan={2}>
                             <CurrencyFormat
                               value={this.state.discount}
-                              displayType={"text"}
-                              thousandSeparator={true}
-                              prefix={" "}
-                            />
-                          </TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell align="right" colSpan={4}>
-                            Balance(LKR)
-                          </TableCell>
-                          <TableCell className="cel" align="right" colSpan={3}>
-                            <CurrencyFormat
                               displayType={"text"}
                               thousandSeparator={true}
                               prefix={" "}
@@ -252,11 +237,11 @@ class PrintInvoiceClass extends React.Component {
                           <TableCell
                             className="cell_total"
                             align="right"
-                            colSpan={4}
+                            colSpan={3}
                           >
                             Total(LKR)
                           </TableCell>
-                          <TableCell align="right" colSpan={3}>
+                          <TableCell align="right" colSpan={2}>
                             <CurrencyFormat
                               value={this.state.total}
                               displayType={"text"}
@@ -281,6 +266,8 @@ class PrintInvoiceClass extends React.Component {
             </form>
           </div>
         </Container>
+
+        <br />
       </div>
     );
   }

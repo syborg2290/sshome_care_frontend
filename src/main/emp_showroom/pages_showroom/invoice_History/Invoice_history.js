@@ -7,7 +7,6 @@ import moment from "moment";
 import CurrencyFormat from "react-currency-format";
 import { Button, Box, Tab, Tabs, AppBar, Grid } from "@material-ui/core";
 
-import { useHistory } from "react-router-dom";
 import db from "../../../../config/firebase.js";
 
 // components
@@ -22,7 +21,6 @@ import "./Invoice_history.css";
 // icons
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import HistoryIcon from "@material-ui/icons/History";
-import PrintRoundedIcon from "@material-ui/icons/PrintRounded";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -80,70 +78,6 @@ export default function Invoice_history() {
   const [installmentvisible, setInstallmentVisible] = useState(false); //  table models
   const [installmentHistory, setInstallmentHistory] = useState(false); //  table models
   const [installmentFullPayment, setInstallmentFullPayment] = useState(false); //  table models
-  const [visibleConfirmPrint, setVisibleConfirmPrint] = useState(false);
-  const [printType, setPrintType] = useState("fullpayment");
-
-  let history = useHistory();
-
-  const showVisibleConfirmPrintModal = (type) => {
-    setPrintType(type);
-    setVisibleConfirmPrint(true);
-  };
-
-  const PrintInvoice = () => {
-    if (printType === "fullpayment") {
-      let passingWithCustomerObj = {
-        invoice_number: fullPaymentAllData[currentIndx].data?.invoice_number,
-        customerDetails: null,
-        installmentType: null,
-        installemtnDayDate: null,
-        discount: fullPaymentAllData[currentIndx].data?.discount,
-        subTotal:
-          fullPaymentAllData[currentIndx].data?.total -
-          fullPaymentAllData[currentIndx].data?.discount,
-        total: fullPaymentAllData[currentIndx].data?.total,
-        discription: "",
-        itemsList: fullPaymentAllData[currentIndx].data?.items,
-        backto: "invoice_history",
-      };
-
-      let moveWith = {
-        pathname: "/showroom/invoice/printInvoice",
-        search: "?query=abc",
-        state: { detail: passingWithCustomerObj },
-      };
-      history.push(moveWith);
-    } else {
-      db.collection("customer")
-        .doc(payangoAllData[currentIndx2]?.data?.customer_id)
-        .get()
-        .then((reCust) => {
-          let passingWithCustomerObj = {
-            invoice_number: payangoAllData[currentIndx2]?.data?.invoice_number,
-            customerDetails: reCust.data(),
-            installmentType:
-              payangoAllData[currentIndx2]?.data?.installmentType,
-            installemtnDayDate:
-              payangoAllData[currentIndx2]?.data?.installemtnDayDate,
-            discount: payangoAllData[currentIndx2]?.data?.discount,
-            subTotal:
-              payangoAllData[currentIndx2]?.data?.total -
-              payangoAllData[currentIndx2]?.data?.discount,
-            total: payangoAllData[currentIndx2]?.data?.total,
-            discription: "",
-            itemsList: payangoAllData[currentIndx2]?.data?.items,
-            backto: "invoice_history",
-          };
-
-          let moveWith = {
-            pathname: "/showroom/invoice/printInvoice",
-            search: "?query=abc",
-            state: { detail: passingWithCustomerObj },
-          };
-          history.push(moveWith);
-        });
-    }
-  };
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -396,11 +330,6 @@ export default function Invoice_history() {
                 <span className="icon_Edit">
                   <VisibilityIcon onClick={showInstallmentView} />
                 </span>
-                <span className="icon_print">
-                  <PrintRoundedIcon
-                    onClick={() => showVisibleConfirmPrintModal("payandgo")}
-                  />
-                </span>
               </div>
             ),
           });
@@ -447,11 +376,6 @@ export default function Invoice_history() {
                 <span className="icon_visibl">
                   <VisibilityIcon onClick={showInstallmentFullPayment} />
                 </span>
-                <span className="icon_print">
-                  <PrintRoundedIcon
-                    onClick={() => showVisibleConfirmPrintModal("fullpayment")}
-                  />
-                </span>
               </div>
             ),
           });
@@ -468,25 +392,6 @@ export default function Invoice_history() {
 
   return (
     <>
-      <Modal
-        className="confo_model"
-        closable={null}
-        visible={visibleConfirmPrint}
-        cancelText="No"
-        okText="Yes"
-        bodyStyle={{ borderRadius: "30px" }}
-        onOk={PrintInvoice}
-        onCancel={() => {
-          setVisibleConfirmPrint(false);
-        }}
-      >
-        <div className="confoModel_body">
-          <PrintRoundedIcon className="confo_Icon" />
-          <h3 className="txtConfoModel_body">
-            Do you want to print an invoice?{" "}
-          </h3>
-        </div>
-      </Modal>
       {/*Start Installment Model Update */}
       <Modal
         visible={installmentUpdate}

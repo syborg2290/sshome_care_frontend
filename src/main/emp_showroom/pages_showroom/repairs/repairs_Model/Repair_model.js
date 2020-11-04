@@ -22,6 +22,7 @@ export default function Repair_model({ closeModel }) {
   let history = useHistory();
   const [invoice, setInvoice] = useState("");
   const [model_no, setModel_no] = useState("");
+  const [serial_no, setSerial_no] = useState("");
   const [cust_name, setCust_name] = useState("");
   const [nic, setNic] = useState("");
   const [mobil_no1, setMobil_no1] = useState("");
@@ -39,6 +40,7 @@ export default function Repair_model({ closeModel }) {
           .add({
             invoice_no: invoice.trim(),
             model_no: model_no.trim(),
+            serial_no: serial_no.trim(),
             nic: nic,
             cust_name: cust_name.trim(),
             mobil_no1: mobil_no1.trim(),
@@ -52,6 +54,7 @@ export default function Repair_model({ closeModel }) {
             var passingWithCustomerObj = {
               invoice_no: invoice.trim(),
               model_no: model_no.trim(),
+              serial_no: serial_no.trim(),
               nic: nic,
               item_name: item_name,
             };
@@ -69,6 +72,7 @@ export default function Repair_model({ closeModel }) {
           .add({
             invoice_no: invoice.trim(),
             model_no: model_no.trim(),
+            serial_no: serial_no.trim(),
             nic: nic,
             cust_name: cust_name.trim(),
             mobil_no1: mobil_no1.trim(),
@@ -212,6 +216,26 @@ export default function Repair_model({ closeModel }) {
               />
             </Grid>
             <Grid className="lbl_topi" item xs={12} sm={4}>
+              Serial No
+            </Grid>
+            <Grid item xs={12} sm={2}>
+              :
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                autoComplete="serialno"
+                variant="outlined"
+                required
+                fullWidth
+                label="Serial No"
+                size="small"
+                value={serial_no}
+                onChange={(e) => {
+                  setSerial_no(e.target.value);
+                }}
+              />
+            </Grid>
+            <Grid className="lbl_topi" item xs={12} sm={4}>
               Customer Name
             </Grid>
             <Grid item xs={12} sm={2}>
@@ -338,6 +362,7 @@ export default function Repair_model({ closeModel }) {
                   loading ||
                   invoice.length === 0 ||
                   model_no.length === 0 ||
+                  serial_no.length === 0 ||
                   cust_name.length === 0 ||
                   nic.length === 0 ||
                   mobil_no1.length === 0

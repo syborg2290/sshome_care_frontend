@@ -9,7 +9,7 @@ import {
   PersonAddDisabled as PersonAddDisabledIcon,
   LibraryBooks as LibraryIcon,
   ArrowBack as ArrowBackIcon,
-  EventBusy as EventBusyIcon,
+  // EventBusy as EventBusyIcon,
 } from "@material-ui/icons";
 
 import { useTheme } from "@material-ui/styles";
@@ -78,13 +78,13 @@ const structure = [
     link: "/showroom/ui/blackList",
     icon: <PersonAddDisabledIcon className="icons" />,
   },
-  { id: 2, type: "divider" },
-  {
-    id: 12,
-    label: "Seized Item",
-    link: "/showroom/ui/seized",
-    icon: <EventBusyIcon className="icons" />,
-  },
+  // { id: 2, type: "divider" },
+  // {
+  //   id: 12,
+  //   label: "Seized Item",
+  //   link: "/showroom/ui/seized",
+  //   icon: <EventBusyIcon className="icons" />,
+  // },
 ];
 
 function Sidebar({ location }) {

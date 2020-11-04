@@ -106,7 +106,7 @@ class PrintInvoiceClass extends React.Component {
           </Typography>
 
           <Typography className="company_sub__title" variant="h5" gutterBottom>
-            Dealers In Alsl Kind of Electtic & Electronic Items
+            Dealers In All Kind of Electtic & Electronic Items
             <hr />
           </Typography>
 
@@ -162,11 +162,14 @@ class PrintInvoiceClass extends React.Component {
                             align="right"
                             colSpan={1}
                           >
-                            DP(LKR)
+                            BP
                           </TableCell>
 
                           <TableCell className="tbl_Cell" align="right">
-                            Discount(LKR)
+                            Discount
+                          </TableCell>
+                          <TableCell className="tbl_Cell" align="right">
+                            Balance
                           </TableCell>
                           <TableCell className="tbl_Cell" align="right">
                             Sum(LKR)
@@ -208,10 +211,10 @@ class PrintInvoiceClass extends React.Component {
 
                         <TableRow>
                           <TableCell rowSpan={4} />
-                          <TableCell align="right" colSpan={3}>
+                          <TableCell align="right" colSpan={4}>
                             Subtotal(LKR)
                           </TableCell>
-                          <TableCell align="right" colSpan={2}>
+                          <TableCell align="right" colSpan={3}>
                             <CurrencyFormat
                               value={this.state.subTotal}
                               displayType={"text"}
@@ -221,12 +224,24 @@ class PrintInvoiceClass extends React.Component {
                           </TableCell>
                         </TableRow>
                         <TableRow>
-                          <TableCell align="right" colSpan={3}>
+                          <TableCell align="right" colSpan={4}>
                             Discount(LKR)
                           </TableCell>
-                          <TableCell className="cel" align="right" colSpan={2}>
+                          <TableCell className="cel" align="right" colSpan={3}>
                             <CurrencyFormat
                               value={this.state.discount}
+                              displayType={"text"}
+                              thousandSeparator={true}
+                              prefix={" "}
+                            />
+                          </TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell align="right" colSpan={4}>
+                            Balance(LKR)
+                          </TableCell>
+                          <TableCell className="cel" align="right" colSpan={3}>
+                            <CurrencyFormat
                               displayType={"text"}
                               thousandSeparator={true}
                               prefix={" "}
@@ -237,11 +252,11 @@ class PrintInvoiceClass extends React.Component {
                           <TableCell
                             className="cell_total"
                             align="right"
-                            colSpan={3}
+                            colSpan={4}
                           >
                             Total(LKR)
                           </TableCell>
-                          <TableCell align="right" colSpan={2}>
+                          <TableCell align="right" colSpan={3}>
                             <CurrencyFormat
                               value={this.state.total}
                               displayType={"text"}
@@ -266,144 +281,6 @@ class PrintInvoiceClass extends React.Component {
             </form>
           </div>
         </Container>
-
-        <br />
-
-        {/* installment detail */}
-        {this.state.cols.length === 0 ? (
-          ""
-        ) : (
-          <Container component="main" className="mainsPrint_container">
-            <Typography className="company_title" variant="h5" gutterBottom>
-              SS HOME CARE CITY
-            </Typography>
-
-            <Typography
-              className="company_sub__title"
-              variant="h5"
-              gutterBottom
-            >
-              Dealers In All Kind of Electtic & Electronic Items
-              <hr />
-            </Typography>
-
-            <div className="papers">
-              <form className="forms" noValidate>
-                <Row>
-                  <Col span={4}>Invoice No:</Col>
-                  <Col className="invo_number" span={20}>
-                    {this.state.invoice_number}
-                  </Col>
-                  <Col span={24}>
-                    <br />
-                    <br />
-                  </Col>
-                  <Col span={2}>Tel.</Col>
-                  <Col span={15}>
-                    0917901603
-                    <br />
-                    0715651711
-                  </Col>
-                  <Col span={7}>
-                    Mapalagama Rd.
-                    <br />
-                    <span className="lbl_address">THANABADDEGAMA.</span>
-                  </Col>
-
-                  <Col span={24}>
-                    <br />
-                  </Col>
-                  <Col span={17}></Col>
-                  <Col span={7}>
-                    {" "}
-                    Date :{" "}
-                    {moment(
-                      firebase.firestore.FieldValue.serverTimestamp()
-                    ).format("dddd, MMMM Do YYYY, h:mm:ss a")}
-                  </Col>
-                  <Col span={24}>
-                    <hr />
-                    <br />
-                  </Col>
-                  <Col className="installment_titls" span={6}>
-                    Customer Name:
-                  </Col>
-                  <Col span={10}>{this.state.customer_name}</Col>
-                  <Col className="installment_titls" span={2}>
-                    NIC:
-                  </Col>
-                  <Col span={6}>{this.state.customer_nic}</Col>
-
-                  <Col className="hr_installmentPrint" span={24}></Col>
-
-                  {this.state.cols.map((col) => (
-                    <Row key={col.Itemname} className="installmentPrint">
-                      <Col className="installment_titls" span={8}>
-                        Down Payment(LKR)
-                      </Col>
-                      <Col span={4}>:{col.DPayment}</Col>
-                      <Col span={12}></Col>
-                      <Col className="installment_titls" span={8}>
-                        Item Name
-                      </Col>
-                      <Col span={4}>:{col.Itemname}</Col>
-                      <Col span={12}></Col>
-                      <Col className="installment_titls" span={8}>
-                        Installment Type
-                      </Col>
-                      <Col span={4}>
-                        :{col.IType}
-                        <span>
-                          /
-                          {col.IType === "Weekly"
-                            ? this.state.dayOrDate === 1
-                              ? "Monday"
-                              : this.state.dayOrDate === 2
-                              ? "Tuesday"
-                              : this.state.dayOrDate === 3
-                              ? "Wednesday"
-                              : this.state.dayOrDate === 4
-                              ? "Thursday"
-                              : this.state.dayOrDate === 5
-                              ? "Friday"
-                              : this.state.dayOrDate === 6
-                              ? "Saturday"
-                              : this.state.dayOrDate === 0
-                              ? "Sunday"
-                              : ""
-                            : this.state.dayOrDate}
-                        </span>
-                      </Col>
-                      <Col span={12}></Col>
-                      <Col className="installment_titls" span={8}>
-                        Installment Cost(LKR)
-                      </Col>
-                      <Col span={4}>:{col.ICost}</Col>
-                      <Col span={12}></Col>
-                      <Col className="installment_titls" span={8}>
-                        Installment Count
-                      </Col>
-                      <Col span={4}>:{col.ICount}</Col>
-                      <Col span={12}></Col>
-                      <Col span={24}>
-                        <hr />
-                      </Col>
-                    </Row>
-                  ))}
-                </Row>
-
-                <br />
-                <Row className="row_signature">
-                  <Col className="lbl_signature" span={4}>
-                    ...............................
-                    <br />
-                    <span className="txt_signature"> Signature</span>
-                  </Col>
-                </Row>
-              </form>
-            </div>
-          </Container>
-        )}
       </div>
     );
   }

@@ -88,12 +88,6 @@ function Make_invoice() {
     // eslint-disable-next-line
   }, []);
 
-  const radioOnChange = (e) => {
-    setDaysDate({
-      value: e.target.value,
-    });
-  };
-
   const subTotalFunc = () => {
     var subTotalValue = 0;
     for (var a = 0; a < tablerows.length; a++) {
@@ -160,8 +154,8 @@ function Make_invoice() {
             let passingWithCustomerObj = {
               invoice_number: invoiceNumber,
               customerDetails: tablerows[0].customer,
-              installmentType: daysDate.value,
-              installemtnDayDate: daysDate.value === "Weekly" ? days : dates,
+              installemtnDay: days,
+              installemtnDate: dates,
               discount: totalDiscount,
               subTotal: subTotalFunc(),
               total: subTotalFunc() - totalDiscount,

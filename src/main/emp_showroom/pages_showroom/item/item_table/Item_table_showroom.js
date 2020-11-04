@@ -5,14 +5,6 @@ import MUIDataTable from "mui-datatables";
 import { Row, Col } from "antd";
 import CurrencyFormat from "react-currency-format";
 import moment from "moment";
-import {
-  NotificationContainer,
-  NotificationManager,
-} from "react-notifications";
-import "react-notifications/lib/notifications.css";
-
-//components
-import SelectedtModel from "./components/SelectedItem_model";
 
 // icons
 import VisibilityIcon from "@material-ui/icons/Visibility";
@@ -24,28 +16,15 @@ import "./Item_table_showroom.css";
 import db from "../../../../../config/firebase.js";
 
 export default function ItemTable() {
-  const [selectedItemtVisible, setSelectedItemtVisible] = useState(false);
-
-  const [isLoaingToInvoice, setLoaingToInvoice] = useState(false);
   const [itemTableData, setItemTableData] = useState([]);
   // eslint-disable-next-line
   const [allTtemData, setAllItemData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [visible, setVisible] = useState(false);
   const [currentIndx, setCurrentIndx] = useState(0);
-  // eslint-disable-next-line
-  var [selectedItems, setSelectedItems] = useState([]);
-
-  // eslint-disable-next-line
-  const [itemList, SetItemList] = useState([]);
 
   const showModal = () => {
     setVisible(true);
-  };
-
-  const selectedModalClose = () => {
-    window.location.reload();
-    setSelectedItemtVisible(false);
   };
 
   useEffect(() => {
@@ -103,25 +82,6 @@ export default function ItemTable() {
       });
     // eslint-disable-next-line
   }, []);
-
-  const onMakeInvoid = () => {
-    if (selectedItems.length > 0) {
-      setLoaingToInvoice(true);
-
-      selectedItems.forEach((reItem) => {
-        itemList.push({
-          qty: 1,
-          item: reItem,
-          paymentWay: "PayandGo",
-        });
-      });
-      setLoaingToInvoice(false);
-
-      setSelectedItemtVisible(true);
-    } else {
-      NotificationManager.info("Please select items");
-    }
-  };
 
   const columns = [
     {
@@ -200,29 +160,6 @@ export default function ItemTable() {
 
   return (
     <>
-      {/*Selected Item Model */}
-
-      <Modal
-        title="Selected Items"
-        visible={selectedItemtVisible}
-        footer={null}
-        className="model_selected_Item"
-        onCancel={selectedModalClose}
-      >
-        <div className="table_selected_Model">
-          <div className="model_selected_Main">
-            <div className="model_selected_Detail">
-              <SelectedtModel
-                closeModel={selectedModalClose}
-                itemListProps={itemList}
-              />
-            </div>
-          </div>
-        </div>
-      </Modal>
-
-      {/*Selected Item Model */}
-
       <Modal
         title={
           <span className="model_title_Showroom">
@@ -235,7 +172,6 @@ export default function ItemTable() {
         footer={null}
         className="model_Item_Showroom"
         onCancel={() => {
-          window.location.reload();
           setVisible(false);
         }}
       >
@@ -476,13 +412,8 @@ export default function ItemTable() {
         color="primary"
         className="btn_MakeInvoice"
         endIcon={<DescriptionIcon />}
-        onClick={onMakeInvoid}
       >
-        {isLoaingToInvoice ? (
-          <Spin spinning={isLoaingToInvoice} size="large" />
-        ) : (
-          "Make Invoice"
-        )}
+        Check customer & trustees
       </Button>
 
       <Grid container spacing={4}>
@@ -494,7 +425,7 @@ export default function ItemTable() {
             columns={columns}
             options={{
               rowHover: true,
-              selectableRows: true,
+              selectableRows: false,
               customToolbarSelect: () => {},
               filterType: "textField",
               download: false,
@@ -502,16 +433,7 @@ export default function ItemTable() {
               searchPlaceholder: "Search using any field",
               elevation: 4,
               sort: true,
-              onRowsSelect: (curRowSelected, allRowsSelected) => {
-                selectedItems = [];
-                allRowsSelected.forEach((single) => {
-                  if (allTtemData[single.dataIndex].data.qty > 0) {
-                    selectedItems.push(allTtemData[single.dataIndex]);
-                  } else {
-                    NotificationManager.warning("Out Of Stock");
-                  }
-                });
-              },
+
               selectableRowsHeader: false,
               onRowClick: (rowData, rowMeta) => {
                 setCurrentIndx(rowMeta.dataIndex);
@@ -528,7 +450,6 @@ export default function ItemTable() {
             }}
           />
         </Grid>
-        <NotificationContainer />
       </Grid>
     </>
   );

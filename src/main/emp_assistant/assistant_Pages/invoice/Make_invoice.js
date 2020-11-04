@@ -50,9 +50,7 @@ function Make_invoice() {
   const [discription, setDiscription] = useState("");
   const [days, setDays] = useState(new Date().getDay());
   const [dates, setDates] = useState(new Date().getDate());
-  const [daysDate, setDaysDate] = useState({
-    value: "Weekly",
-  });
+
   const { confirm } = Modal;
 
   let history = useHistory();
@@ -266,9 +264,8 @@ function Make_invoice() {
                       items: arrayItems,
                       customer_id: cust.id,
                       nic: tablerows[0].customer.customerNic,
-                      installmentType: daysDate.value,
-                      installemtnDayDate:
-                        daysDate.value === "Weekly" ? days : dates,
+                      installemtnDay: days,
+                      installemtnDate: dates,
                       discount: totalDiscount === "" ? 0 : totalDiscount,
                       total:
                         subTotalFunc() -
@@ -400,9 +397,8 @@ function Make_invoice() {
                       items: arrayItems,
                       customer_id: cust.id,
                       nic: tablerows[0].customer.customerNic,
-                      installmentType: daysDate.value,
-                      installemtnDayDate:
-                        daysDate.value === "Weekly" ? days : dates,
+                      installemtnDay: days,
+                      installemtnDate: dates,
                       discount: totalDiscount === "" ? 0 : totalDiscount,
                       total:
                         subTotalFunc() -
@@ -535,9 +531,8 @@ function Make_invoice() {
                   items: arrayItems,
                   customer_id: cust.id,
                   nic: tablerows[0].customer.customerNic,
-                  installmentType: daysDate.value,
-                  installemtnDayDate:
-                    daysDate.value === "Weekly" ? days : dates,
+                  installemtnDay: days,
+                  installemtnDate: dates,
                   discount: totalDiscount === "" ? 0 : totalDiscount,
                   total:
                     subTotalFunc() - (totalDiscount === "" ? 0 : totalDiscount),
@@ -666,9 +661,8 @@ function Make_invoice() {
                   items: arrayItems,
                   customer_id: cust.id,
                   nic: tablerows[0].customer.customerNic,
-                  installmentType: daysDate.value,
-                  installemtnDayDate:
-                    daysDate.value === "Weekly" ? days : dates,
+                  installemtnDay: days,
+                  installemtnDate: dates,
                   discount: totalDiscount === "" ? 0 : totalDiscount,
                   total:
                     subTotalFunc() - (totalDiscount === "" ? 0 : totalDiscount),
@@ -779,8 +773,8 @@ function Make_invoice() {
         invoice_number: invoiceNumber,
         items: arrayItems,
         customer_id: null,
-        installmentType: null,
-        installemtnDayDate: null,
+        installemtnDay: null,
+        installemtnDate: null,
         discount: totalDiscount === "" ? 0 : totalDiscount,
         total: subTotalFunc() - (totalDiscount === "" ? 0 : totalDiscount),
         status_of_payandgo: "Done",
@@ -1124,7 +1118,7 @@ function Make_invoice() {
                 </Grid>
                 <Grid className="xxx" item xs={12} sm={1}></Grid>
 
-                <Grid className="radio_dayDate" item xs={12} sm={1}>
+                {/* <Grid className="radio_dayDate" item xs={12} sm={1}>
                   <Radio.Group
                     onChange={radioOnChange}
                     value={daysDate.value}
@@ -1143,27 +1137,25 @@ function Make_invoice() {
                       Weekly
                     </Radio>
                   </Radio.Group>
-                </Grid>
+                </Grid> */}
                 <Grid className="radio_dayDate" item xs={12} sm={3}>
                   <TextField
                     className="txt_day"
                     variant="outlined"
                     size="small"
-                    disabled={
-                      tablerows.some((ob) => ob.paymentWay === "PayandGo")
-                        ? false
-                        : true
-                    }
+                    // disabled={
+                    //   tablerows.some((ob) => ob.paymentWay === "PayandGo")
+                    //     ? false
+                    //     : true
+                    // }
                     placeholder="date"
                     type="number"
                     InputProps={{ inputProps: { min: 1, max: 31 } }}
                     fullWidth
                     value={dates}
                     onChange={(e) => {
-                      if (daysDate.value === "Monthly") {
-                        if (e.target.value <= 31 || e.target.value < 0) {
-                          setDates(e.target.value.trim());
-                        }
+                      if (e.target.value <= 31 || e.target.value < 0) {
+                        setDates(e.target.value.trim());
                       }
                     }}
                   />
@@ -1177,15 +1169,13 @@ function Make_invoice() {
                     </InputLabel>
                     <Select
                       value={days}
-                      disabled={
-                        tablerows.some((ob) => ob.paymentWay === "PayandGo")
-                          ? false
-                          : true
-                      }
+                      // disabled={
+                      //   tablerows.some((ob) => ob.paymentWay === "PayandGo")
+                      //     ? false
+                      //     : true
+                      // }
                       onChange={(e) => {
-                        if (daysDate.value === "Weekly") {
-                          setDays(e.target.value);
-                        }
+                        setDays(e.target.value);
                       }}
                       native
                       variant="outlined"

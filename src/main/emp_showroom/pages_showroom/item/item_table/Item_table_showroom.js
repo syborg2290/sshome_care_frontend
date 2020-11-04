@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Grid, Button } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import { Spin, Modal } from "antd";
 import MUIDataTable from "mui-datatables";
 import { Row, Col } from "antd";
@@ -8,7 +8,6 @@ import moment from "moment";
 
 // icons
 import VisibilityIcon from "@material-ui/icons/Visibility";
-import DescriptionIcon from "@material-ui/icons/Description";
 
 // styles
 import "./Item_table_showroom.css";
@@ -406,15 +405,6 @@ export default function ItemTable() {
           </div>
         </div>
       </Modal>
-
-      <Button
-        variant="contained"
-        color="primary"
-        className="btn_MakeInvoice"
-        endIcon={<DescriptionIcon />}
-      >
-        Check customer & trustees
-      </Button>
 
       <Grid container spacing={4}>
         <Grid item xs={12}>

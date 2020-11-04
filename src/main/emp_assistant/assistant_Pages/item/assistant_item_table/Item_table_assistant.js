@@ -356,7 +356,7 @@ export default function Item_table_assistant() {
                 </Col>
                 <Col span={12}>SERIAL NO</Col>
                 <Col span={12}>
-                 <span className="load_Item">
+                  <span className="load_Item">
                     {" "}
                     <span className="colan">:</span>{" "}
                     {allTtemData[currentIndx] && allTtemData[currentIndx].data
@@ -669,7 +669,7 @@ export default function Item_table_assistant() {
       <Button
         variant="contained"
         color="primary"
-        className="btn_MakeInvoice"
+        className="btn_MakeInvoice_itm"
         endIcon={<DescriptionIcon />}
         onClick={onMakeInvoid}
       >

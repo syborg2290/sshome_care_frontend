@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Grid } from "@material-ui/core";
+import { Grid, Button } from "@material-ui/core";
 import { Spin, Modal } from "antd";
 import MUIDataTable from "mui-datatables";
 
@@ -12,17 +12,16 @@ import HistoryIcon from "@material-ui/icons/History";
 // components
 import CustomerDetails from "./components/customerDetailsModel/CustomerDetailsModel";
 import CustomerHistory from "./components/customerHistoryModel/CustomerHistoryModel";
+import CustomerCheck from "./components/checkCustomerModel/Check_Model";
 
 // styles
 import "./Customer_table_showroom.css";
 
 export default function ItemTable() {
-  // eslint-disable-next-line
   const [isLoading, setIsLoading] = useState(true);
   const [visible, setVisible] = useState(false); // customer table models
   const [history, setHistory] = useState(false); // customer table models
-
-  // eslint-disable-next-line
+  const [visibleCheckModel, setVisibleCheckModel] = useState(false);
   const [currentIndx, setCurrentIndx] = useState(0);
   const [customerTableData, setCustomerTableData] = useState([]);
   const [customerAllData, setCustomerAllData] = useState([]);
@@ -33,6 +32,10 @@ export default function ItemTable() {
 
   const showModalHistory = () => {
     setHistory(true);
+  };
+
+  const showVisibleCheckModel = () => {
+    setVisibleCheckModel(true);
   };
 
   const columns = [
@@ -193,6 +196,29 @@ export default function ItemTable() {
         </div>
       </Modal>
       {/*End customer History models */}
+
+      <Modal
+        className="checkModel"
+        footer={null}
+        visible={visibleCheckModel}
+        bodyStyle={{ borderRadius: "60px" }}
+        onCancel={() => {
+          setVisibleCheckModel(false);
+        }}
+      >
+        <div className="checkModel_body">
+          <CustomerCheck />
+        </div>
+      </Modal>
+
+      <Button
+        variant="contained"
+        color="primary"
+        className="btn_check"
+        onClick={showVisibleCheckModel}
+      >
+        Check customer & trustees
+      </Button>
 
       <Grid container spacing={4}>
         <Grid item xs={12}>

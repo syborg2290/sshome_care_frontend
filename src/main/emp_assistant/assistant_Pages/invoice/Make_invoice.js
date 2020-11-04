@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Radio, Spin } from "antd";
+import { Modal, Spin } from "antd";
 import { PrinterFilled } from "@ant-design/icons";
 import { useLocation, useHistory } from "react-router-dom";
 import {

@@ -1,3 +1,9 @@
 .t1 {
   margin-top: 70px !important;
 }
+
+.btn_MakeInvoice_itm {
+  margin-top: 70px !important;
+  float: right !important;
+  margin-bottom: -30px !important;
+}

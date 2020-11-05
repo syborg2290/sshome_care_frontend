@@ -9,6 +9,7 @@ import {
   PersonAddDisabled as PersonAddDisabledIcon,
   LibraryBooks as LibraryIcon,
   ArrowBack as ArrowBackIcon,
+  BatteryStd as BatteryStdIcon,
   EventBusy as EventBusyIcon,
   LocalShipping as LocalShippingIcon,
 } from "@material-ui/icons";
@@ -89,6 +90,13 @@ const structure = [
     label: "Gami Sarani",
     link: "/assistant/ui/Gamisarani",
     icon: <LocalShippingIcon className="icons" />,
+  },
+
+  {
+    id: 16,
+    label: "Gass",
+    link: "/assistant/ui/gass",
+    icon: <BatteryStdIcon className="icons" />,
   },
 
   { id: 2, type: "divider" },

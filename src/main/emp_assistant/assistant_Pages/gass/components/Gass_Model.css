@@ -1,0 +1,34 @@
+.select_type {
+  width: 185px !important;
+}
+.select_label_type {
+  margin-left: 15px !important;
+  margin-top: -8px;
+}
+
+.price {
+  margin: auto !important;
+}
+
+.btn_sellRdio {
+  margin-right: 25px !important;
+}
+
+.txt_qtyGas {
+  width: 60px !important;
+}
+
+.txt_qtyGas2 {
+  width: 60px !important;
+  float: right !important;
+  margin-right: 7px !important;
+}
+
+.lbl_qtyGas2tot {
+  margin-right: 20px !important;
+  float: right !important;
+}
+
+.btn_updateGass {
+  margin-top: 20px !important;
+}

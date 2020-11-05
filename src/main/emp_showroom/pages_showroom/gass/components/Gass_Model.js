@@ -1,22 +1,22 @@
 import React, { useState } from "react";
 import InputLabel from "@material-ui/core/InputLabel";
-import FormHelperText from "@material-ui/core/FormHelperText";
+// import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 
-import NativeSelect from "@material-ui/core/NativeSelect";
+// import NativeSelect from "@material-ui/core/NativeSelect";
 import {
   TextField,
   Grid,
   Container,
   Typography,
-  Button,
+  // Button,
   Select,
 } from "@material-ui/core";
 
 import "./Gass_Model.css";
 
 export default function Gass_Model() {
-  const [state, setState] = React.useState({
+  const [state, setState] = useState({
     age: "",
     name: "hai",
   });

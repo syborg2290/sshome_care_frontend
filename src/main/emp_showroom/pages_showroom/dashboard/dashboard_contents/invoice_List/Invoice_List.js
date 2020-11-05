@@ -120,6 +120,15 @@ export default function Invoice_List() {
         }),
       },
     },
+    {
+      name: "MemberID",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
 
     {
       name: "NIC",
@@ -256,6 +265,7 @@ export default function Invoice_List() {
               Date: moment(siDoc.data()?.date?.toDate()).format(
                 "dddd, MMMM Do YYYY"
               ),
+              MemberID: siDoc.data().mid,
               NIC: siDoc.data().nic,
               Discount: (
                 <CurrencyFormat

@@ -26,7 +26,7 @@ export default function customerDetailsModel({
         </Typography>
       </Col>
       <Col className="space_col" span={12}></Col>
-      <Col className="img_span" span={24}>
+      <Col className="img_span" span={12}>
         {" "}
         <img
           alt="Empty data"
@@ -37,6 +37,12 @@ export default function customerDetailsModel({
               : require("../../../../../../../assets/avatar.png")
           }
         />
+      </Col>
+      <Col className="lbl_member" span={6}>
+        Member ID:
+      </Col>
+      <Col className="img_span" span={6}>
+        1231
       </Col>
 
       <Col className="space_col" span={24}></Col>
@@ -87,7 +93,7 @@ export default function customerDetailsModel({
         :
       </Col>
       <Col className="customer" span={14}>
-        {mobile2 !=="" ?mobile2:"-"}
+        {mobile2 !== "" ? mobile2 : "-"}
       </Col>
 
       <Col className="customer_details" span={8}>
@@ -107,7 +113,7 @@ export default function customerDetailsModel({
         :
       </Col>
       <Col className="customer" span={14}>
-        {address2 !==""?address2:"-"}
+        {address2 !== "" ? address2 : "-"}
       </Col>
 
       <Col className="customer_details" span={8}>

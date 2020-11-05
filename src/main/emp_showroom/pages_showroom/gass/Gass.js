@@ -10,6 +10,7 @@ import { Button, Grid } from "@material-ui/core";
 import { Modal } from "antd";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
+import CurrencyFormat from "react-currency-format";
 
 // styles
 import "./Gass.css";
@@ -27,9 +28,36 @@ function createData(Weight, Qty, Price) {
 }
 
 const rows = [
-  createData("12.5 kg", 12, 870.0),
-  createData("5 kg", 6, 1005.0),
-  createData("2.5 kg", 15, 1400.0),
+  createData(
+    "12.5 kg",
+    12,
+    <CurrencyFormat
+      value={" 3500"}
+      displayType={"text"}
+      thousandSeparator={true}
+      prefix={" "}
+    />
+  ),
+  createData(
+    "5 kg",
+    6,
+    <CurrencyFormat
+      value={" 2500"}
+      displayType={"text"}
+      thousandSeparator={true}
+      prefix={" "}
+    />
+  ),
+  createData(
+    "2.5 kg",
+    15,
+    <CurrencyFormat
+      value={" 1200"}
+      displayType={"text"}
+      thousandSeparator={true}
+      prefix={" "}
+    />
+  ),
 ];
 
 export default function Gass() {
@@ -44,7 +72,7 @@ export default function Gass() {
       <Modal
         className="confo_model"
         visible={gassModal}
-        // onOk={repairRecieptPrint}
+        footer={null}
         onCancel={() => {
           setGassModal(false);
         }}

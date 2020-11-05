@@ -10,6 +10,7 @@ import {
   LibraryBooks as LibraryIcon,
   ArrowBack as ArrowBackIcon,
   EventBusy as EventBusyIcon,
+  LocalShipping as LocalShippingIcon,
 } from "@material-ui/icons";
 
 import { useTheme } from "@material-ui/styles";
@@ -82,7 +83,16 @@ const structure = [
     link: "/assistant/ui/BlackList",
     icon: <PersonAddDisabledIcon className="icons" />,
   },
+
+  {
+    id: 13,
+    label: "Gami Sarani",
+    link: "/assistant/ui/Gamisarani",
+    icon: <LocalShippingIcon className="icons" />,
+  },
+
   { id: 2, type: "divider" },
+
   {
     id: 12,
     label: "Seized Item",

@@ -29,3 +29,9 @@
   font-weight: 600 !important;
   margin-top: -20px !important;
 }
+
+.lbl_member {
+  font-weight: 800 !important;
+
+  color: rgb(10, 2, 31);
+}

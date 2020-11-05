@@ -1,0 +1,22 @@
+.mainPrint_container_gass {
+  width: 60% !important;
+  background-color: rgb(255, 255, 255) !important;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  margin-top: 70px;
+}
+
+.company_title_gass {
+  text-align: center !important;
+  font-weight: 700 !important;
+  font-family: "Times New Roman", Times, serif !important;
+  margin-top: 40px !important;
+}
+
+.print_btn_gass {
+  background-color: rgb(8, 8, 126) !important;
+  float: right !important;
+  margin-top: 35px !important;
+  color: aliceblue !important;
+  border-radius: 8px !important;
+  width: 20% !important;
+}

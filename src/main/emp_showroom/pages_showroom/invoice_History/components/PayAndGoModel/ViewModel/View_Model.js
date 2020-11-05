@@ -157,6 +157,15 @@ export default function View_Model({ items_list_props, data }) {
                 <p></p>
               </Grid>
               <Grid className="lbl_topis" item xs={12} sm={3}>
+                Member ID
+              </Grid>
+              <Grid item xs={12} sm={1}>
+                :
+              </Grid>
+              <Grid item xs={12} sm={8}>
+                <p>{customer.mid}</p>
+              </Grid>
+              <Grid className="lbl_topis" item xs={12} sm={3}>
                 NIC
               </Grid>
               <Grid item xs={12} sm={1}>

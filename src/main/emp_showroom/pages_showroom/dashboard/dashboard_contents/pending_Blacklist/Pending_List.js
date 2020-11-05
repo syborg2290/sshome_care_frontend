@@ -127,6 +127,19 @@ export default function View_Model({ pendingBlackList }) {
       },
     },
     {
+      name: "MemberID",
+      options: {
+        filter: false,
+        setCellHeaderProps: (value) => ({
+          style: {
+            fontSize: "15px",
+            color: "black",
+            fontWeight: "600",
+          },
+        }),
+      },
+    },
+    {
       name: "NIC",
       options: {
         filter: false,
@@ -183,6 +196,7 @@ export default function View_Model({ pendingBlackList }) {
               InvoiceNo: each.invoice_number,
               FirstName: reThen.docs[0].data().fname,
               LastName: reThen.docs[0].data().lname,
+              MemberID: each.mid,
               NIC: each.nic,
               Telephone: reThen.docs[0].data().mobile1,
               Action: (
@@ -221,6 +235,7 @@ export default function View_Model({ pendingBlackList }) {
                     reThen.docs[0].data().fname +
                     " " +
                     reThen.docs[0].data().lname,
+
                   nic: each.nic,
                   addres1: reThen.docs[0].data().address1,
                   addres2: reThen.docs[0].data().address2,

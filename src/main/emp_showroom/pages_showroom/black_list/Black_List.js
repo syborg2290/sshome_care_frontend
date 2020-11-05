@@ -64,6 +64,19 @@ export default function Black_List() {
       },
     },
     {
+      name: "MemberID",
+      options: {
+        filter: false,
+        setCellHeaderProps: (value) => ({
+          style: {
+            fontSize: "15px",
+            color: "black",
+            fontWeight: "600",
+          },
+        }),
+      },
+    },
+    {
       name: "NIC",
       options: {
         filter: false,
@@ -123,6 +136,7 @@ export default function Black_List() {
             InvoiceNo: each.data().InvoiceNo,
             FirstName: each.data().FirstName,
             LastName: each.data().LastName,
+            MemberID: each.data().mid,
             NIC: each.data().NIC,
             Telephone: each.data().Telephone,
             Action: (

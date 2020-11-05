@@ -51,6 +51,7 @@ export default function Repairs() {
         var passingWithCustomerObj = {
           invoice_no: reRepair.data().invoice_no,
           model_no: reRepair.data().model_no,
+          serial_no: reRepair.data().serial_no,
           nic: reRepair.data().nic,
           item_name: reRepair.data().item_name,
         };
@@ -97,6 +98,15 @@ export default function Repairs() {
     },
     {
       name: "ModalNo",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "SerialNo",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -181,6 +191,7 @@ export default function Repairs() {
         rawData.push({
           InvoiceNo: re.data().invoice_no,
           ModalNo: re.data().model_no,
+          SerialNo: re.data().serial_no,
           Item_Name: re.data().item_name,
           NIC: re.data().nic,
           Status: (

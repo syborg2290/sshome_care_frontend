@@ -1,0 +1,11 @@
+.select_type {
+  width: 185px !important;
+}
+.select_label_type {
+  margin-left: 15px !important;
+  margin-top: -8px;
+}
+
+.price {
+  margin: auto !important;
+}

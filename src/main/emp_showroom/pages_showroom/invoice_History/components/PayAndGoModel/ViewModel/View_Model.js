@@ -61,6 +61,7 @@ export default function View_Model({ items_list_props, data }) {
               qty: each.qty,
               color: th.data().color,
               model_no: th.data().modelNo,
+              serial_no: th.data().serialNo,
               gurantee_type: th.data().guarantee,
               gurantee_period: th.data().guaranteePeriod,
             },
@@ -325,6 +326,15 @@ export default function View_Model({ items_list_props, data }) {
                   </Grid>
                   <Grid item xs={12} sm={7}>
                     <p>{eachItem.model_no}</p>
+                  </Grid>
+                  <Grid className="lbl_topis" item xs={12} sm={4}>
+                    Serial No.
+                  </Grid>
+                  <Grid item xs={12} sm={1}>
+                    :
+                  </Grid>
+                  <Grid item xs={12} sm={7}>
+                    <p>{eachItem.serial_no}</p>
                   </Grid>
                   <Grid className="lbl_topis" item xs={12} sm={4}>
                     Guarantee Period

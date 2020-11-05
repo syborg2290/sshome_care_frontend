@@ -14,6 +14,7 @@ class RepairRecipt extends React.Component {
   state = {
     invoice_number: "",
     model_number: "",
+    serial_number: "",
     customer_nic: "",
     item_name: "",
   };
@@ -22,6 +23,7 @@ class RepairRecipt extends React.Component {
     super(props);
     this.state.invoice_number = this.props.prop?.invoice_no;
     this.state.model_number = this.props.prop?.model_no;
+    this.state.serial_number = this.props.prop?.serial_no;
     this.state.customer_nic = this.props.prop?.nic;
     this.state.item_name = this.props.prop?.item_name;
   }
@@ -67,6 +69,12 @@ class RepairRecipt extends React.Component {
                 </Col>
                 <Col className="tiles_details_repair" span={18}>
                   {this.state.model_number}
+                </Col>
+                <Col className="tiles_repair" span={6}>
+                  Serial No.
+                </Col>
+                <Col className="tiles_details_repair" span={18}>
+                  {this.state.serial_number}
                 </Col>
                 <Col className="tiles_repair" span={6}>
                   Item Name

@@ -16,6 +16,7 @@ import HelpIcon from "@material-ui/icons/Help";
 // styles
 import "./Black_List.css";
 import db from "../../../../config/firebase";
+import firebase from "firebase";
 
 export default function Black_List() {
   // eslint-disable-next-line
@@ -113,46 +114,106 @@ export default function Black_List() {
   ];
 
   useEffect(() => {
-    db.collection("blacklist")
-      .get()
-      .then((reBlack) => {
-        var allTableRaw = [];
-        var allData = [];
-        reBlack.docs.forEach((each) => {
-          allData.push({
-            id: each.id,
-            data: each.data(),
-          });
-          allTableRaw.push({
-            InvoiceNo: each.data().InvoiceNo,
-            FirstName: each.data().FirstName,
-            LastName: each.data().LastName,
-            NIC: each.data().NIC,
-            Telephone: each.data().Telephone,
-            Action: (
-              <div>
-                <VisibilityIcon onClick={showModalCustomer} />
-                <span className="icon_Edit">
-                  <HistoryIcon onClick={showModalCustomerHistory} />
-                </span>
-                <span className="done_btn">
-                  <Button
-                    variant="contained"
-                    size="small"
-                    className="btnDone"
-                    onClick={showModalConfirmModal}
-                  >
-                    Done
-                  </Button>
-                </span>
-              </div>
-            ),
-          });
+    db.collection("blacklist").onSnapshot((reBlack) => {
+      var allTableRaw = [];
+      var allData = [];
+      reBlack.docs.forEach((each) => {
+        allData.push({
+          id: each.id,
+          data: each.data(),
         });
-        setBlackListTableRow(allTableRaw);
-        setAllData(allData);
+        allTableRaw.push({
+          InvoiceNo: each.data().InvoiceNo,
+          FirstName: each.data().FirstName,
+          LastName: each.data().LastName,
+          NIC: each.data().NIC,
+          Telephone: each.data().Telephone,
+          Action: (
+            <div>
+              <VisibilityIcon onClick={showModalCustomer} />
+              <span className="icon_Edit">
+                <HistoryIcon onClick={showModalCustomerHistory} />
+              </span>
+              <span className="done_btn">
+                <Button
+                  variant="contained"
+                  size="small"
+                  className="btnDone"
+                  onClick={showModalConfirmModal}
+                >
+                  Done
+                </Button>
+              </span>
+            </div>
+          ),
+        });
       });
+      setBlackListTableRow(allTableRaw);
+      setAllData(allData);
+    });
   }, []);
+
+  const onOkConfirm = () => {
+    db.collection("blacklist")
+      .doc(allDataBlacklist[currentIndx]?.id)
+      .delete()
+      .then((_) => {
+        db.collection("customer")
+          .where("nic", "==", allDataBlacklist[currentIndx]?.data.NIC)
+          .get()
+          .then((reCu) => {
+            db.collection("customer")
+              .doc(reCu.docs[0].id)
+              .update({
+                status: "normal",
+              })
+              .then((_) => {
+                db.collection("invoice")
+                  .where(
+                    "invoice_number",
+                    "==",
+                    allDataBlacklist[currentIndx]?.data.InvoiceNo
+                  )
+                  .get()
+                  .then((getIn) => {
+                    db.collection("invoice")
+                      .doc(getIn.docs[0].id)
+                      .update({
+                        status_of_payandgo: "Done",
+                      })
+                      .then((_) => {
+                        db.collection("installment")
+                          .where(
+                            "invoice_number",
+                            "==",
+                            allDataBlacklist[currentIndx]?.data.InvoiceNo
+                          )
+                          .get()
+                          .then((reInst) => {
+                            let amount = 0;
+                            let count = 0;
+                            reInst.docs.forEach((each) => {
+                              amount = amount + parseInt(each.data().amount);
+                              count++;
+                            });
+                            if (count === reInst.docs.length) {
+                              db.collection("installment").add({
+                                invoice_number:
+                                  allDataBlacklist[currentIndx]?.data.InvoiceNo,
+                                amount: amount,
+                                delayed: 0,
+                                balance: 0,
+                                date: firebase.firestore.FieldValue.serverTimestamp(),
+                              });
+                               setConfirmVisible(false);
+                            }
+                          });
+                      });
+                  });
+              });
+          });
+      });
+  };
 
   return (
     <>
@@ -166,6 +227,7 @@ export default function Black_List() {
         onCancel={() => {
           setConfirmVisible(false);
         }}
+        onOk={onOkConfirm}
       >
         <div className="confoModel_body">
           <HelpIcon className="confo_Icon" />

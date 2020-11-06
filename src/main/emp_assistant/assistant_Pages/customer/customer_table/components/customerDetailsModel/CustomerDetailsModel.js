@@ -9,6 +9,7 @@ export default function customerDetailsModel({
   photo,
   fname,
   lname,
+  mid,
   nic,
   mobile1,
   mobile2,
@@ -58,6 +59,16 @@ export default function customerDetailsModel({
       </Col>
       <Col className="customer" span={14}>
         {lname}
+      </Col>
+
+      <Col className="customer_details" span={8}>
+        MemeberID
+      </Col>
+      <Col className="customer" span={2}>
+        :
+      </Col>
+      <Col className="customer" span={14}>
+        {mid}
       </Col>
 
       <Col className="customer_details" span={8}>

@@ -356,7 +356,7 @@ export default function Dashboard() {
                     prefix={" "}
                   />
                 ),
-
+                MemberID: eachRe.data()?.mid,
                 NIC: eachRe.data()?.nic,
                 Balance: (
                   <CurrencyFormat
@@ -607,6 +607,19 @@ export default function Dashboard() {
         filter: true,
         setCellHeaderProps: (value) => ({
           style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "MemberID",
+      options: {
+        filter: false,
+        setCellHeaderProps: (value) => ({
+          style: {
+            fontSize: "15px",
+            color: "black",
+            fontWeight: "600",
+          },
         }),
       },
     },

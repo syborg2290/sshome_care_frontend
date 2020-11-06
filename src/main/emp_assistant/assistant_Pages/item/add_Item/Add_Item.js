@@ -291,6 +291,47 @@ export default function Add_Item() {
                                                           Math.round(discount)
                                                     );
                                                     if (newArray) {
+                                                       let variable = {
+                                                        itemName: itemName.trim(),
+                                                        brand: brand.trim(),
+                                                        modelNo: modelNo.trim(),
+                                                        serialNo: serialNo.trim(),
+                                                        chassisNo: chassisNo.trim(),
+                                                        color: color.trim(),
+                                                        qty: Math.round(qty),
+                                                        cashPrice: Math.round(
+                                                          cashPrice
+                                                        ),
+                                                        salePrice: Math.round(
+                                                          salePrice
+                                                        ),
+                                                        noOfInstallments: Math.round(
+                                                          inst
+                                                        ),
+                                                        amountPerInstallment: Math.round(
+                                                          amountPerInstallment
+                                                        ),
+                                                        downPayment: Math.round(
+                                                          downPayment
+                                                        ),
+                                                        guaranteePeriod: Math.round(
+                                                          guaranteePeriod
+                                                        ),
+                                                        discount: Math.round(
+                                                          discount
+                                                        ),
+                                                        description: description,
+                                                        cInvoiceNo: cInvoiceNo.trim(),
+                                                        GCardNo: GCardNo.trim(),
+                                                        guarantee: guarantee,
+                                                        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                                                      };
+                                                      
+                                                        await db
+                                                        .collection("item_history")
+                                                        .add(variable);
+                                                      
+                                                      
                                                       await db
                                                         .collection("item")
                                                         .doc(newArray[0].id)
@@ -362,6 +403,10 @@ export default function Add_Item() {
                                                         guarantee: guarantee,
                                                         timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                                                       };
+                                                      
+                                                      await db
+                                                        .collection("item_history")
+                                                        .add(variable);
 
                                                       await db
                                                         .collection("item")

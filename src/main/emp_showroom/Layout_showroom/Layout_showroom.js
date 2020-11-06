@@ -23,6 +23,7 @@ import Gass from "../pages_showroom/gass/Gass";
 import PrintReceipt from "../pages_showroom/invoice_History/components/PayAndGoModel/UpdateModel/Make_Recipt/Recipt";
 import ArriesReceipt from "../pages_showroom/arreas/arreas_update_Model/arreas_update_Recipt/Arreas_recipt";
 import RepairReceipt from "../pages_showroom/repairs/repairs_Model/repair_update_Recipt/Repair_recipt";
+import GassRecipt from "../pages_showroom/gass/components/Make_Recipt/Gass_Recipt";
 
 function LayoutShowroom(props) {
   return (
@@ -52,6 +53,10 @@ function LayoutShowroom(props) {
             <Route
               path="/showroom/repairs/repairs_Model/repair_update_Recipt/Repair_recipt"
               component={RepairReceipt}
+            />
+            <Route
+              path="/showroom/gass/gass_Model/make_recipt/Gass_recipt"
+              component={GassRecipt}
             />
 
             <Route path="/showroom/ui/arreas" component={Arreas} />

@@ -187,7 +187,12 @@ export default function Edit_model({
                                                     db.collection("item")
                                                       .doc(docId)
                                                       .update(variable)
-                                                      .then(function (docRef) {
+                                                      .then(function async(
+                                                        docRef
+                                                      ) {
+                                                        db.collection(
+                                                          "item_history"
+                                                        ).add(variable);
                                                         setLoadingSubmit(false);
                                                         NotificationManager.success(
                                                           "Item updated!",

@@ -1,5 +1,7 @@
 import React from "react";
-import { Radio, Modal } from "antd";
+import { Radio, Modal, DatePicker, Space } from "antd";
+import FormControl from "@material-ui/core/FormControl";
+import InputLabel from "@material-ui/core/InputLabel";
 import { useHistory } from "react-router-dom";
 import CurrencyFormat from "react-currency-format";
 import {
@@ -8,6 +10,7 @@ import {
   Container,
   Typography,
   Button,
+  Select,
 } from "@material-ui/core";
 
 import "./Gass_Model.css";
@@ -16,6 +19,18 @@ import "./Gass_Model.css";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 
 export default function Gass_Model() {
+  const [state, setState] = React.useState({
+    age: "",
+    name: "hai",
+  });
+
+  const handleChange = (event) => {
+    const name = event.target.name;
+    setState({
+      ...state,
+      [name]: event.target.value,
+    });
+  };
   const { confirm } = Modal;
 
   let history = useHistory();
@@ -26,7 +41,7 @@ export default function Gass_Model() {
       icon: <ExclamationCircleOutlined />,
 
       onOk() {
-        history.push("/showroom/gass/gass_Model/make_recipt/Gass_recipt");
+        history.push("/assistant/gass/gass_Model/make_recipt/Gass_recipt");
       },
       onCancel() {
         console.log("Cancel");
@@ -105,6 +120,44 @@ export default function Gass_Model() {
               />
             </Grid>
             <Grid item xs={12} sm={2}></Grid>
+            <Grid className="txt_Labels" item xs={12} sm={3}>
+              Date :
+            </Grid>
+            <Grid item xs={12} sm={5}>
+              <Space direction="vertical">
+                <DatePicker />
+              </Space>
+            </Grid>
+            <Grid className="txt_Labels" item xs={12} sm={4}></Grid>
+            <Grid className="txt_Labels" item xs={12} sm={3}>
+              Field :
+            </Grid>
+            <Grid item xs={12} sm={5}>
+              <Space direction="vertical">
+                <FormControl variant="outlined" className="fcontrol">
+                  <InputLabel htmlFor="outlined-age-native-simple">
+                    Shop
+                  </InputLabel>
+                  <Select
+                    size="small"
+                    native
+                    value={state.age}
+                    onChange={handleChange}
+                    label="Field"
+                    inputProps={{
+                      name: "age",
+                      id: "outlined-age-native-simple",
+                    }}
+                  >
+                    <option aria-label="None" value="" />
+                    <option value={10}>Shop</option>
+                    <option value={20}>A</option>
+                    <option value={30}>B</option>
+                  </Select>
+                </FormControl>
+              </Space>
+            </Grid>
+            <Grid className="txt_Labels" item xs={12} sm={4}></Grid>
             <Grid className="txt_Labels" item xs={12} sm={3}>
               Tot(LKR)
             </Grid>

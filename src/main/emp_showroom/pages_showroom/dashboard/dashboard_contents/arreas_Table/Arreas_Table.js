@@ -53,6 +53,15 @@ export default function Arreas_Table() {
       },
     },
     {
+      name: "MemberID",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
       name: "NIC",
       options: {
         filter: true,
@@ -123,6 +132,7 @@ export default function Arreas_Table() {
 
         rawData.push({
           InvoiceNo: eachRe.data().invoice_number,
+          MemberID: eachRe.data().mid,
           NIC: eachRe.data().nic,
           Delayed_Days: Math.round(eachRe.data().delayed_days),
           Delayed_Charges: (

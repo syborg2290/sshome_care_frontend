@@ -1,7 +1,6 @@
 import React from "react";
 import { Row, Col } from "antd";
 import Typography from "@material-ui/core/Typography";
-import moment from "moment";
 // style
 import "./view_customer_Model.css";
 
@@ -16,8 +15,6 @@ export default function view_customer_Model({
   address1,
   address2,
   root,
-  status,
-  createdAt,
 }) {
   return (
     <Row>
@@ -127,49 +124,6 @@ export default function view_customer_Model({
       </Col>
       <Col className="customer_sarani" span={14}>
         {root !== "" ? root : "-"}
-      </Col>
-
-      <Col className="customer_details_sarani" span={8}>
-        Customer status
-      </Col>
-      <Col className="customer_sarani" span={2}>
-        :
-      </Col>
-      <Col className="customer_sarani" span={14}>
-        {status === "normal" ? (
-          <span
-            style={{
-              color: "white",
-              backgroundColor: "#09b66d",
-              padding: "6px",
-              borderRadius: "20px",
-            }}
-          >
-            {status}
-          </span>
-        ) : status === "arrears" ? (
-          <span
-            style={{
-              color: "black",
-              backgroundColor: "#ffd84d",
-              padding: "6px",
-              borderRadius: "20px",
-            }}
-          >
-            {status}
-          </span>
-        ) : (
-          <span
-            style={{
-              color: "white",
-              backgroundColor: "#ff5c33",
-              padding: "6px",
-              borderRadius: "20px",
-            }}
-          >
-            {status}
-          </span>
-        )}
       </Col>
 
       {/* <Col className="customer_details" span={8}>

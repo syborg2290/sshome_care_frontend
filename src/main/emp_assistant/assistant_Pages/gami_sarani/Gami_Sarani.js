@@ -23,8 +23,9 @@ export default function Gami_Sarani() {
   const [gamisaraniViewModel, setGamisaraniViewModel] = useState(false); // customer view model
   const [gamisaraniHistoryModel, setGamisaraniHistoryModel] = useState(false); // customer History model
   const [gamisaraniDepositModel, setGamisaraniDepositModel] = useState(false); // customer Deposit model
-
+  // eslint-disable-next-line
   const [isLoading, setIsLoading] = useState(true);
+  // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
 
   const GamisaraniAddCustomer = () => {

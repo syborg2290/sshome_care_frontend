@@ -1,12 +1,8 @@
-import React, { useState } from "react";
-import { TextField, Button, Select } from "@material-ui/core";
-import FormControl from "@material-ui/core/FormControl";
+import React from "react";
+import { TextField, Button } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
-import InputLabel from "@material-ui/core/InputLabel";
-import FormHelperText from "@material-ui/core/FormHelperText";
-import NativeSelect from "@material-ui/core/NativeSelect";
 import "react-notifications/lib/notifications.css";
 
 // styles
@@ -36,9 +32,11 @@ export default function UpdateGass_Model() {
                 required
                 fullWidth
                 id="weight"
-                label="Weight"
+                label="Qty"
                 autoFocus
                 size="small"
+                type="number"
+                InputProps={{ inputProps: { min: 1 } }}
               />
             </Grid>
             <Grid className="txt_Labels" item xs={12} sm={5}></Grid>
@@ -54,10 +52,11 @@ export default function UpdateGass_Model() {
                 required
                 fullWidth
                 id="weight"
-                label="Weight"
+                label="price"
                 autoFocus
                 size="small"
                 type="number"
+                InputProps={{ inputProps: { min: 1 } }}
               />
             </Grid>
             <Grid className="txt_Labels" item xs={12} sm={5}></Grid>

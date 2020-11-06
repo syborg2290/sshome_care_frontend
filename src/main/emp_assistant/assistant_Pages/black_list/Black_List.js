@@ -11,6 +11,7 @@ import BlackListHistory from "./histry_model/History_Model";
 // icons
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import HistoryIcon from "@material-ui/icons/History";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
 
 // styles
 import "./Black_List.css";
@@ -25,6 +26,8 @@ export default function Black_List() {
 
   const [blacklistTableRow, setBlackListTableRow] = useState([]);
   const [allDataBlacklist, setAllData] = useState([]);
+
+  const { confirm } = Modal;
 
   const showModalCustomer = () => {
     setVisibleCustomer(true);
@@ -107,6 +110,20 @@ export default function Black_List() {
     },
   ];
 
+  const showConfirm = () => {
+    confirm({
+      title: "Are You Sure !",
+      icon: <ExclamationCircleOutlined />,
+
+      onOk() {
+        console.log("okay");
+      },
+      onCancel() {
+        console.log("Cancel");
+      },
+    });
+  };
+
   useEffect(() => {
     db.collection("blacklist")
       .get()
@@ -130,14 +147,14 @@ export default function Black_List() {
                 <span className="icon_Edit">
                   <HistoryIcon onClick={showModalCustomerHistory} />
                 </span>
-                <span className="update_btn">
+                <span className="done_btn">
                   <Button
                     variant="contained"
                     size="small"
-                    className="btnuUpdt"
-                    // onClick={showVisibleUpdate}
+                    className="btnDone"
+                    onClick={showConfirm}
                   >
-                    Update
+                    Done
                   </Button>
                 </span>
               </div>

@@ -39,13 +39,10 @@ export default function Gass_Model() {
   }, []);
 
   const handleChange = (event) => {
-   setSelectedWeight(event.target.value)
-   
+    setSelectedWeight(event.target.value);
   };
 
-  const handleChangeWeight = (event) => {
-   
-  };
+  const handleChangeWeight = (event) => {};
 
   const showConfirm = () => {
     confirm({
@@ -90,10 +87,11 @@ export default function Gass_Model() {
                     native
                     value={selectedWeight}
                     onChange={handleChangeWeight}
-                    label="weight"
                   >
                     {allWeight.map((each) => (
-                      <option key={each} value={each}>{each} Kg</option>
+                      <option key={each} value={each}>
+                        {each} Kg
+                      </option>
                     ))}
                   </Select>
                 </FormControl>
@@ -146,9 +144,7 @@ export default function Gass_Model() {
                     // value={state.age}
                     onChange={handleChange}
                     label="Field"
-                   
                   >
-                    <option aria-label="None" value="" />
                     <option value={10}>Shop</option>
                     <option value={20}>A</option>
                     <option value={30}>B</option>

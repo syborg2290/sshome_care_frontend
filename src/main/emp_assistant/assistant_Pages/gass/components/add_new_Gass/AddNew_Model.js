@@ -62,7 +62,7 @@ export default function AddNew_Model({ close_model }) {
   return (
     <Container component="main" className="main_container_addGass">
       <Typography className="title_sarani" variant="h5" gutterBottom>
-        Add New Gass
+        Add/Update New Gas
       </Typography>
       <Grid item xs={12} sm={2}>
         <hr className="titles_hr_sarani" />

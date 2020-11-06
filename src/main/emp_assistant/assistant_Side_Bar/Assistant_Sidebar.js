@@ -94,7 +94,7 @@ const structure = [
 
   {
     id: 16,
-    label: "Gass",
+    label: "Gas",
     link: "/assistant/ui/gass",
     icon: <BatteryStdIcon className="icons" />,
   },

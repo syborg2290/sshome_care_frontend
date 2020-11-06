@@ -51,10 +51,6 @@ export default function Add_Customer() {
   const [trustee2Mobile1, setTrustee2Mobile1] = useState("");
   const [trustee2Mobile2, setTrustee2Mobile2] = useState("");
 
-  const [isValidatedCustomerNic, setisValidatedCustomerNic] = useState(false);
-  const [isValidatedTrustee1Nic, setisValidatedTrustee1Nic] = useState(false);
-  const [isValidatedTrustee2Nic, setisValidatedTrustee2Nic] = useState(false);
-
   const [loaderModalOpenV, setloaderModalOpen] = useState(false);
   const [inputsNic, setInputsNic] = useState({});
   const [customerId, setCustomerId] = useState(null);
@@ -272,7 +268,6 @@ export default function Add_Customer() {
           });
 
         if (relationsValidations) {
-          setisValidatedCustomerNic(false);
           loaderModalClose();
           NotificationManager.warning(
             "Entered customer have some relations with ongoing 'pay and go' list!",
@@ -289,7 +284,6 @@ export default function Add_Customer() {
                   .get()
                   .then((blackDoc) => {
                     if (blackDoc.docs.length > 0) {
-                      setisValidatedCustomerNic(false);
                       loaderModalClose();
                       NotificationManager.warning(
                         "Entered customer in the blacklist !",
@@ -301,7 +295,6 @@ export default function Add_Customer() {
                         .get()
                         .then((arrsDoc) => {
                           if (arrsDoc.docs.length > 0) {
-                            setisValidatedCustomerNic(false);
                             loaderModalClose();
                             NotificationManager.warning(
                               "Entered customer not payed and closed arrears as a customer !",
@@ -314,7 +307,6 @@ export default function Add_Customer() {
                               .get()
                               .then((doc2) => {
                                 if (doc2.docs.length > 0) {
-                                  setisValidatedCustomerNic(false);
                                   loaderModalClose();
                                   NotificationManager.warning(
                                     "Entered customer already on status of 'pay an go' !",
@@ -330,7 +322,7 @@ export default function Add_Customer() {
                                   setMobile2(doc.docs[0].data().mobile2);
                                   setRoot(doc.docs[0].data().root);
                                   setImageUrl(doc.docs[0].data().imgUrl);
-                                  setisValidatedCustomerNic(true);
+
                                   loaderModalClose();
                                 }
                               });
@@ -339,13 +331,11 @@ export default function Add_Customer() {
                     }
                   });
               } else {
-                setisValidatedCustomerNic(true);
                 loaderModalClose();
               }
             });
         }
       } else {
-        setisValidatedCustomerNic(false);
         NotificationManager.warning(
           "Customer's NIC format is invalid!",
           "Remember validations"
@@ -372,7 +362,6 @@ export default function Add_Customer() {
                 .get()
                 .then((blackDoc) => {
                   if (blackDoc.docs.length > 0) {
-                    setisValidatedTrustee1Nic(false);
                     loaderModalClose();
                     NotificationManager.warning(
                       "Entered trustee in the blacklist !",
@@ -384,7 +373,6 @@ export default function Add_Customer() {
                       .get()
                       .then((arrDoc) => {
                         if (arrDoc.docs.length > 0) {
-                          setisValidatedTrustee1Nic(false);
                           loaderModalClose();
                           NotificationManager.warning(
                             "Entered trustee not payed and closed arrears as a customer !",
@@ -397,7 +385,6 @@ export default function Add_Customer() {
                             .get()
                             .then((custRe) => {
                               if (custRe.docs.length > 0) {
-                                setisValidatedTrustee1Nic(false);
                                 loaderModalClose();
                                 NotificationManager.warning(
                                   "Entered trustee already on status of 'pay an go' as a customer !",
@@ -423,7 +410,6 @@ export default function Add_Customer() {
                                         .get()
                                         .then((doc2) => {
                                           if (doc2.docs.length > 0) {
-                                            setisValidatedTrustee1Nic(false);
                                             loaderModalClose();
                                             NotificationManager.warning(
                                               "Entered trustee already on status of 'pay an go' as a trustee !",
@@ -450,12 +436,10 @@ export default function Add_Customer() {
                                               doc.docs[0].data().mobile2
                                             );
 
-                                            setisValidatedTrustee1Nic(true);
                                             loaderModalClose();
                                           }
                                         });
                                     } else {
-                                      setisValidatedTrustee1Nic(true);
                                       loaderModalClose();
                                     }
                                   });
@@ -481,7 +465,6 @@ export default function Add_Customer() {
                       .get()
                       .then((doc2) => {
                         if (doc2.docs.length > 0) {
-                          setisValidatedTrustee1Nic(false);
                           loaderModalClose();
                           NotificationManager.warning(
                             "Entered trustee already on status of 'pay an go' as a trustee !",
@@ -496,19 +479,16 @@ export default function Add_Customer() {
                           setTrustee1Mobile1(doc.docs[0].data().mobile1);
                           setTrustee1Mobile2(doc.docs[0].data().mobile2);
 
-                          setisValidatedTrustee1Nic(true);
                           loaderModalClose();
                         }
                       });
                   } else {
-                    setisValidatedTrustee1Nic(true);
                     loaderModalClose();
                   }
                 });
             }
           });
       } else {
-        setisValidatedTrustee1Nic(false);
         NotificationManager.warning(
           "Trustee 1's NIC format is invalid!",
           "Remember validations"
@@ -535,7 +515,6 @@ export default function Add_Customer() {
                 .get()
                 .then((blackDoc) => {
                   if (blackDoc.docs.length > 0) {
-                    setisValidatedTrustee2Nic(false);
                     loaderModalClose();
                     NotificationManager.warning(
                       "Entered trustee in the blacklist !",
@@ -547,7 +526,6 @@ export default function Add_Customer() {
                       .get()
                       .then((arrDoc) => {
                         if (arrDoc.docs.length > 0) {
-                          setisValidatedTrustee2Nic(false);
                           loaderModalClose();
                           NotificationManager.warning(
                             "Entered trustee not payed and closed arrears as a customer !",
@@ -560,7 +538,6 @@ export default function Add_Customer() {
                             .get()
                             .then((custRe) => {
                               if (custRe.docs.length > 0) {
-                                setisValidatedTrustee2Nic(false);
                                 loaderModalClose();
                                 NotificationManager.warning(
                                   "Entered trustee already on status of 'pay an go' as a customer !",
@@ -586,7 +563,6 @@ export default function Add_Customer() {
                                         .get()
                                         .then((doc2) => {
                                           if (doc2.docs.length > 0) {
-                                            setisValidatedTrustee2Nic(false);
                                             loaderModalClose();
                                             NotificationManager.warning(
                                               "Entered trustee already on status of 'pay an go' as a trustee !",
@@ -613,12 +589,10 @@ export default function Add_Customer() {
                                               doc.docs[0].data().mobile2
                                             );
 
-                                            setisValidatedTrustee2Nic(true);
                                             loaderModalClose();
                                           }
                                         });
                                     } else {
-                                      setisValidatedTrustee2Nic(true);
                                       loaderModalClose();
                                     }
                                   });
@@ -644,7 +618,6 @@ export default function Add_Customer() {
                       .get()
                       .then((doc2) => {
                         if (doc2.docs.length > 0) {
-                          setisValidatedTrustee2Nic(false);
                           loaderModalClose();
                           NotificationManager.warning(
                             "Entered trustee already on status of 'pay an go' as a trustee !",
@@ -659,19 +632,16 @@ export default function Add_Customer() {
                           setTrustee2Mobile1(doc.docs[0].data().mobile1);
                           setTrustee2Mobile2(doc.docs[0].data().mobile2);
 
-                          setisValidatedTrustee2Nic(true);
                           loaderModalClose();
                         }
                       });
                   } else {
-                    setisValidatedTrustee2Nic(true);
                     loaderModalClose();
                   }
                 });
             }
           });
       } else {
-        setisValidatedTrustee2Nic(false);
         NotificationManager.warning(
           "Trustee 2's NIC format is invalid!",
           "Remember validations"
@@ -701,6 +671,7 @@ export default function Add_Customer() {
         <div className="model_Loader_Model">
           <div className="model_Loader_Main">
             <div className="model_Loader_Detail">
+              <h3>Checking the status...</h3>
               <Spin size="large" />
             </div>
           </div>
@@ -749,9 +720,7 @@ export default function Add_Customer() {
               <Grid item xs={12} sm={3}>
                 <TextField
                   value={fname}
-                  disabled={
-                    nic.length === 0 || !isValidatedCustomerNic ? true : false
-                  }
+                  disabled={nic.length === 0 ? true : false}
                   variant="outlined"
                   required
                   fullWidth
@@ -768,9 +737,7 @@ export default function Add_Customer() {
               <Grid item xs={12} sm={3}>
                 <TextField
                   value={lname}
-                  disabled={
-                    nic.length === 0 || !isValidatedCustomerNic ? true : false
-                  }
+                  disabled={nic.length === 0 ? true : false}
                   variant="outlined"
                   required
                   fullWidth
@@ -791,9 +758,7 @@ export default function Add_Customer() {
               <Grid item xs={12} sm={10}>
                 <TextField
                   value={addres1}
-                  disabled={
-                    nic.length === 0 || !isValidatedCustomerNic ? true : false
-                  }
+                  disabled={nic.length === 0 ? true : false}
                   variant="outlined"
                   required
                   fullWidth
@@ -813,9 +778,7 @@ export default function Add_Customer() {
               <Grid item xs={12} sm={10}>
                 <TextField
                   value={addres2}
-                  disabled={
-                    nic.length === 0 || !isValidatedCustomerNic ? true : false
-                  }
+                  disabled={nic.length === 0 ? true : false}
                   variant="outlined"
                   fullWidth
                   id="address2"
@@ -834,9 +797,7 @@ export default function Add_Customer() {
               <Grid item xs={12} sm={3}>
                 <TextField
                   value={mobile1}
-                  disabled={
-                    nic.length === 0 || !isValidatedCustomerNic ? true : false
-                  }
+                  disabled={nic.length === 0 ? true : false}
                   className="txt_Number"
                   autoComplete="mNumber"
                   name="mNumber"
@@ -855,9 +816,7 @@ export default function Add_Customer() {
               <Grid item xs={12} sm={3}>
                 <TextField
                   value={mobile2}
-                  disabled={
-                    nic.length === 0 || !isValidatedCustomerNic ? true : false
-                  }
+                  disabled={nic.length === 0 ? true : false}
                   className="txt_Number"
                   autoComplete="mNumber"
                   name="mNumber"
@@ -879,9 +838,7 @@ export default function Add_Customer() {
               <Grid item xs={12} sm={3}>
                 <TextField
                   value={root}
-                  disabled={
-                    nic.length === 0 || !isValidatedCustomerNic ? true : false
-                  }
+                  disabled={nic.length === 0 ? true : false}
                   className="txt_rHome"
                   autoComplete="rHome"
                   name="rHome"
@@ -903,9 +860,7 @@ export default function Add_Customer() {
               <Grid item xs={12} sm={6}>
                 <input
                   type="file"
-                  disabled={
-                    nic.length === 0 || !isValidatedCustomerNic ? true : false
-                  }
+                  disabled={nic.length === 0 ? true : false}
                   accept="image/*"
                   name=""
                   onChange={onImageChange}
@@ -914,9 +869,7 @@ export default function Add_Customer() {
                   hidden
                 />
                 <img
-                  disabled={
-                    nic.length === 0 || !isValidatedCustomerNic ? true : false
-                  }
+                  disabled={nic.length === 0 ? true : false}
                   alt="Item upload"
                   // style={{
                   //   borderRadius: "30px",
@@ -981,9 +934,7 @@ export default function Add_Customer() {
               variant="contained"
               color="primary"
               className="btn_ClearCustomer"
-              disabled={
-                nic.length === 0 || !isValidatedCustomerNic ? true : false
-              }
+              disabled={nic.length === 0 ? true : false}
               endIcon={<ClearOutlinedIcon />}
               onClick={() => {
                 setNic("");
@@ -1043,11 +994,7 @@ export default function Add_Customer() {
               <Grid item xs={12} sm={3}>
                 <TextField
                   value={trustee1Fname}
-                  disabled={
-                    trustee1Nic.length === 0 || !isValidatedTrustee1Nic
-                      ? true
-                      : false
-                  }
+                  disabled={trustee1Nic.length === 0 ? true : false}
                   variant="outlined"
                   required
                   fullWidth
@@ -1064,11 +1011,7 @@ export default function Add_Customer() {
               <Grid item xs={12} sm={3}>
                 <TextField
                   value={trustee1Lname}
-                  disabled={
-                    trustee1Nic.length === 0 || !isValidatedTrustee1Nic
-                      ? true
-                      : false
-                  }
+                  disabled={trustee1Nic.length === 0 ? true : false}
                   variant="outlined"
                   required
                   fullWidth
@@ -1089,11 +1032,7 @@ export default function Add_Customer() {
               <Grid item xs={12} sm={10}>
                 <TextField
                   value={trustee1Addres1}
-                  disabled={
-                    trustee1Nic.length === 0 || !isValidatedTrustee1Nic
-                      ? true
-                      : false
-                  }
+                  disabled={trustee1Nic.length === 0 ? true : false}
                   variant="outlined"
                   required
                   fullWidth
@@ -1113,11 +1052,7 @@ export default function Add_Customer() {
               <Grid item xs={12} sm={10}>
                 <TextField
                   value={trustee1Addres2}
-                  disabled={
-                    trustee1Nic.length === 0 || !isValidatedTrustee1Nic
-                      ? true
-                      : false
-                  }
+                  disabled={trustee1Nic.length === 0 ? true : false}
                   variant="outlined"
                   fullWidth
                   id="email"
@@ -1136,11 +1071,7 @@ export default function Add_Customer() {
               <Grid item xs={12} sm={3}>
                 <TextField
                   value={trustee1Mobile1}
-                  disabled={
-                    trustee1Nic.length === 0 || !isValidatedTrustee1Nic
-                      ? true
-                      : false
-                  }
+                  disabled={trustee1Nic.length === 0 ? true : false}
                   className="txt_Number"
                   autoComplete="mNumber"
                   name="mNumber"
@@ -1159,11 +1090,7 @@ export default function Add_Customer() {
               <Grid item xs={12} sm={3}>
                 <TextField
                   value={trustee1Mobile2}
-                  disabled={
-                    trustee1Nic.length === 0 || !isValidatedTrustee1Nic
-                      ? true
-                      : false
-                  }
+                  disabled={trustee1Nic.length === 0 ? true : false}
                   className="txt_Number"
                   autoComplete="mNumber"
                   name="mNumber"
@@ -1218,11 +1145,7 @@ export default function Add_Customer() {
               <Grid item xs={12} sm={3}>
                 <TextField
                   value={trustee2Fname}
-                  disabled={
-                    trustee2Nic.length === 0 || !isValidatedTrustee2Nic
-                      ? true
-                      : false
-                  }
+                  disabled={trustee2Nic.length === 0 ? true : false}
                   variant="outlined"
                   required
                   fullWidth
@@ -1239,11 +1162,7 @@ export default function Add_Customer() {
               <Grid item xs={12} sm={3}>
                 <TextField
                   value={trustee2Lname}
-                  disabled={
-                    trustee2Nic.length === 0 || !isValidatedTrustee2Nic
-                      ? true
-                      : false
-                  }
+                  disabled={trustee2Nic.length === 0 ? true : false}
                   variant="outlined"
                   required
                   fullWidth
@@ -1264,11 +1183,7 @@ export default function Add_Customer() {
               <Grid item xs={12} sm={10}>
                 <TextField
                   value={trustee2Address1}
-                  disabled={
-                    trustee2Nic.length === 0 || !isValidatedTrustee2Nic
-                      ? true
-                      : false
-                  }
+                  disabled={trustee2Nic.length === 0 ? true : false}
                   variant="outlined"
                   required
                   fullWidth
@@ -1288,11 +1203,7 @@ export default function Add_Customer() {
               <Grid item xs={12} sm={10}>
                 <TextField
                   value={trustee2Address2}
-                  disabled={
-                    trustee2Nic.length === 0 || !isValidatedTrustee2Nic
-                      ? true
-                      : false
-                  }
+                  disabled={trustee2Nic.length === 0 ? true : false}
                   variant="outlined"
                   fullWidth
                   id="email"
@@ -1311,11 +1222,7 @@ export default function Add_Customer() {
               <Grid item xs={12} sm={3}>
                 <TextField
                   value={trustee2Mobile1}
-                  disabled={
-                    trustee2Nic.length === 0 || !isValidatedTrustee2Nic
-                      ? true
-                      : false
-                  }
+                  disabled={trustee2Nic.length === 0 ? true : false}
                   className="txt_Number"
                   autoComplete="mNumber"
                   name="mNumber"
@@ -1334,11 +1241,7 @@ export default function Add_Customer() {
               <Grid item xs={12} sm={3}>
                 <TextField
                   value={trustee2Mobile2}
-                  disabled={
-                    trustee2Nic.length === 0 || !isValidatedTrustee2Nic
-                      ? true
-                      : false
-                  }
+                  disabled={trustee2Nic.length === 0 ? true : false}
                   className="txt_Number"
                   autoComplete="mNumber"
                   name="mNumber"

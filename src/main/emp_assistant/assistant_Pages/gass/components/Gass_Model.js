@@ -92,7 +92,6 @@ export default function Gass_Model() {
                       id: "outlined-age-native-simple",
                     }}
                   >
-                    <option aria-label="None" value="" />
                     <option value={10}> 2.5 kg</option>
                     <option value={20}> 5 kg</option>
                     <option value={30}>12.5 kg</option>
@@ -152,7 +151,6 @@ export default function Gass_Model() {
                       id: "outlined-age-native-simple",
                     }}
                   >
-                    <option aria-label="None" value="" />
                     <option value={10}>Shop</option>
                     <option value={20}>A</option>
                     <option value={30}>B</option>

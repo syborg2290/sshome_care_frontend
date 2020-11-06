@@ -11,7 +11,7 @@ import BlackListHistory from "./histry_model/History_Model";
 // icons
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import HistoryIcon from "@material-ui/icons/History";
-import { ExclamationCircleOutlined } from "@ant-design/icons";
+import HelpIcon from "@material-ui/icons/Help";
 
 // styles
 import "./Black_List.css";
@@ -23,11 +23,13 @@ export default function Black_List() {
 
   const [visibleCustomer, setVisibleCustomer] = useState(false); // customer table models
   const [customerhistory, setCustomerhistory] = useState(false); // customer table models
-
+  const [confirmVisible, setConfirmVisible] = useState(false);
   const [blacklistTableRow, setBlackListTableRow] = useState([]);
   const [allDataBlacklist, setAllData] = useState([]);
 
-  const { confirm } = Modal;
+  const showModalConfirmModal = () => {
+    setConfirmVisible(true);
+  };
 
   const showModalCustomer = () => {
     setVisibleCustomer(true);
@@ -110,20 +112,6 @@ export default function Black_List() {
     },
   ];
 
-  const showConfirm = () => {
-    confirm({
-      title: "Are You Sure !",
-      icon: <ExclamationCircleOutlined />,
-
-      onOk() {
-        console.log("okay");
-      },
-      onCancel() {
-        console.log("Cancel");
-      },
-    });
-  };
-
   useEffect(() => {
     db.collection("blacklist")
       .get()
@@ -152,7 +140,7 @@ export default function Black_List() {
                     variant="contained"
                     size="small"
                     className="btnDone"
-                    onClick={showConfirm}
+                    onClick={showModalConfirmModal}
                   >
                     Done
                   </Button>
@@ -168,6 +156,23 @@ export default function Black_List() {
 
   return (
     <>
+      <Modal
+        className="confo_model"
+        closable={null}
+        visible={confirmVisible}
+        cancelText="No"
+        okText="Yes"
+        bodyStyle={{ borderRadius: "30px" }}
+        onCancel={() => {
+          setConfirmVisible(false);
+        }}
+      >
+        <div className="confoModel_body">
+          <HelpIcon className="confo_Icon" />
+          <h3 className="txtConfoModel_body">Are You Sure? </h3>
+        </div>
+      </Modal>
+
       {/*Start customer Details models */}
 
       <Modal

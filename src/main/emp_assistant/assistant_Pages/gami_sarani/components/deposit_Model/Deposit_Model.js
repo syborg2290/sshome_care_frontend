@@ -13,7 +13,7 @@ import "./Deposit_Model.css";
 import firebase from "firebase";
 import db from "../../../../../../config/firebase.js";
 
-export default function Deposit_Model({ midProp,nicProp ,close_model }) {
+export default function Deposit_Model({ midProp, nicProp, close_model }) {
   const [nic, setNic] = useState(nicProp);
   const [mid, setMId] = useState(midProp);
   const [deposit, setDeposit] = useState(0);
@@ -41,43 +41,46 @@ export default function Deposit_Model({ midProp,nicProp ,close_model }) {
         if (nicRe.docs.length > 0) {
           if (nicRe.docs[0].data().mid === mid) {
             db.collection("gami_sarani")
-            .where("mid", "==", mid)
-            .get()
-            .then(async (midRe) => {
-              if (midRe.docs.length > 0) {
-                db.collection("gami_sarani_deposit")
-                  .add({
-                    nic: nic.trim(),
-                    mid: mid.trim(),
-                    deposit_amount: parseInt(deposit.trim()),
-                    current_Balance: parseInt(deposit.trim()) + currentBalance,
-                    date: saveTimestamp,
-                  })
-                  .then((_) => {
-                    db.collection("gami_sarani")
-                      .where("mid", "==", mid.trim())
-                      .get()
-                      .then((re) => {
-                        db.collection("gami_sarani")
-                          .doc(re.docs[0].id)
-                          .update({
-                            currentDeposit:
-                              parseInt(deposit.trim()) +
-                              re.docs[0].data().currentDeposit,
-                          })
-                          .then((_) => {
-                            setLoadingSubmit(false);
-                            close_model();
-                          });
-                      });
-                  });
-              } else {
-                setLoadingSubmit(false);
-                setValidation("Entered MID not found!");
-              }
-            });
+              .where("mid", "==", mid)
+              .get()
+              .then(async (midRe) => {
+                if (midRe.docs.length > 0) {
+                  db.collection("gami_sarani_deposit")
+                    .add({
+                      nic: nic.trim(),
+                      mid: mid.trim(),
+                      deposit_amount: parseInt(deposit.trim()),
+                      current_Balance:
+                        parseInt(deposit.trim()) + currentBalance,
+                      date: saveTimestamp,
+                    })
+                    .then((_) => {
+                      db.collection("gami_sarani")
+                        .where("mid", "==", mid.trim())
+                        .get()
+                        .then((re) => {
+                          db.collection("gami_sarani")
+                            .doc(re.docs[0].id)
+                            .update({
+                              currentDeposit:
+                                parseInt(deposit.trim()) +
+                                re.docs[0].data().currentDeposit,
+                            })
+                            .then((_) => {
+                              setLoadingSubmit(false);
+                              close_model();
+                            });
+                        });
+                    });
+                } else {
+                  setLoadingSubmit(false);
+                  setValidation("Entered MID not found!");
+                }
+              });
+          } else {
+            setLoadingSubmit(false);
+            setValidation("Entered MID and NIC not found!");
           }
-          
         } else {
           setLoadingSubmit(false);
           setValidation("Entered NIC not found!");

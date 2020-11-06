@@ -24,7 +24,8 @@ export default function Gass_Model() {
   const { confirm } = Modal;
   let history = useHistory();
   const [allWeight, setAllWeight] = useState([]);
-  const [selectedWeight, setSelectedWeight] = useState("");
+  // eslint-disable-next-line
+  const [selectedWeight, setSelectedWeight] = useState(0);
 
   useEffect(() => {
     db.collection("gas")
@@ -81,15 +82,13 @@ export default function Gass_Model() {
                   >
                     weight
                   </InputLabel>
-                  <Select
-                    className="roll_selector"
-                    size="small"
-                    native
-                    value={selectedWeight}
-                    onChange={handleChangeWeight}
-                  >
+                  <Select className="roll_selector" size="small" native>
                     {allWeight.map((each) => (
-                      <option key={each} value={each}>
+                      <option
+                        onChange={handleChangeWeight}
+                        key={each}
+                        value={each}
+                      >
                         {each} Kg
                       </option>
                     ))}

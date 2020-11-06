@@ -26,15 +26,24 @@ export default function AddNew_Model({ close_model }) {
             .doc(re.docs[0].id)
             .update({
               weight: weight,
-              qty:
-                parseInt(qty.trim()) + parseInt(re.docs[0].data().qty.trim()),
-              price: parseInt(price.trim()),
+              qty: parseInt(qty.trim()) + parseInt(re.docs[0].data().qty),
+              price:
+                price.trim() === 0 ||
+                price.trim() === "" ||
+                price.trim() === null
+                  ? re.docs[0].data().price
+                  : parseInt(price.trim()),
             })
             .then((_) => {
               db.collection("gas_history").add({
                 weight: weight,
                 qty: parseInt(qty.trim()),
-                price: parseInt(price.trim()),
+                price:
+                  price.trim() === 0 ||
+                  price.trim() === "" ||
+                  price.trim() === null
+                    ? re.docs[0].data().price
+                    : parseInt(price.trim()),
                 date: firebase.firestore.FieldValue.serverTimestamp(),
               });
               close_model();

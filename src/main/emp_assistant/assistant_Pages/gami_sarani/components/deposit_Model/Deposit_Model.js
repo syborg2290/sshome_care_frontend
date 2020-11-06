@@ -13,8 +13,8 @@ import "./Deposit_Model.css";
 import firebase from "firebase";
 import db from "../../../../../../config/firebase.js";
 
-export default function Deposit_Model({ midProp, close_model }) {
-  const [nic, setNic] = useState("");
+export default function Deposit_Model({ midProp,nicProp ,close_model }) {
+  const [nic, setNic] = useState(nicProp);
   const [mid, setMId] = useState(midProp);
   const [deposit, setDeposit] = useState(0);
   const [currentBalance, setCurrentBalance] = useState(0);
@@ -39,7 +39,8 @@ export default function Deposit_Model({ midProp, close_model }) {
       .get()
       .then((nicRe) => {
         if (nicRe.docs.length > 0) {
-          db.collection("gami_sarani")
+          if (nicRe.docs[0].data().mid === mid) {
+            db.collection("gami_sarani")
             .where("mid", "==", mid)
             .get()
             .then(async (midRe) => {
@@ -75,6 +76,8 @@ export default function Deposit_Model({ midProp, close_model }) {
                 setValidation("Entered MID not found!");
               }
             });
+          }
+          
         } else {
           setLoadingSubmit(false);
           setValidation("Entered NIC not found!");

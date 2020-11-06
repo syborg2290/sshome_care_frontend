@@ -158,7 +158,7 @@ export default function Add_Customer({ close_model }) {
 
             <br />
             <Grid className="txt_Labels" item xs={12} sm={2}>
-              Primary Contact :
+              Name :
             </Grid>
             <Grid item xs={12} sm={5}>
               <TextField

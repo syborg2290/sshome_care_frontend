@@ -28,7 +28,7 @@ export default function view_customer_Model({
         {" "}
         <img
           alt="Empty data"
-          className="avatar_customer__sarani"
+          className="avatar_customer_sarani"
           src={
             photo !== null
               ? photo
@@ -113,7 +113,7 @@ export default function view_customer_Model({
         :
       </Col>
       <Col className="customer_sarani" span={14}>
-        {address2 !== "" ? address2 : "-"}
+        {address2 !== "" ? address2 : " - "}
       </Col>
 
       <Col className="customer_details_sarani" span={8}>
@@ -126,15 +126,7 @@ export default function view_customer_Model({
         {root !== "" ? root : "-"}
       </Col>
 
-      {/* <Col className="customer_details" span={8}>
-        Created at
-      </Col>
-      <Col className="customer" span={2}>
-        :
-      </Col>
-      <Col className="customer" span={14}>
-        {moment(createdAt.toDate()).format("dddd, MMMM Do YYYY, h:mm:ss a")}
-      </Col> */}
+     
     </Row>
   );
 }

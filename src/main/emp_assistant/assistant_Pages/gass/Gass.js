@@ -22,7 +22,6 @@ import AddIcon from "@material-ui/icons/Add";
 // components
 import GassModel from "./components/Gass_Model";
 import AddNewModel from "./components/add_new_Gass/AddNew_Model";
-import UpdateGassModel from "./components/update_Gass/UpdateGass_Model";
 
 import "./Gass.css";
 
@@ -38,7 +37,6 @@ export default function Gass() {
   const [tableData, setTableData] = useState([]);
   const [gassModal, setGassModal] = useState(false); //models
   const [addNewGassModal, setAddNewGassModal] = useState(false); // Table models
-  const [updateGassModal, setUpdateGassModal] = useState(false); // Table models
 
   const showModalGass = () => {
     setGassModal(true);
@@ -111,23 +109,6 @@ export default function Gass() {
       </Modal>
 
       {/* END add gass model */}
-
-      {/* START update gass model */}
-
-      <Modal
-        className="confo_model"
-        visible={updateGassModal}
-        footer={null}
-        onCancel={() => {
-          setUpdateGassModal(false);
-        }}
-      >
-        <div className="confoModel_body">
-          <UpdateGassModel />
-        </div>
-      </Modal>
-
-      {/* END update gass model */}
 
       <Container component="main" className="main_containerr">
         <Typography className="titles" variant="h5" gutterBottom>

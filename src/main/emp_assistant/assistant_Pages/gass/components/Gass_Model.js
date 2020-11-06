@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, DatePicker, Space } from "antd";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -18,30 +18,31 @@ import "./Gass_Model.css";
 // icon
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 
+import db from "../../../../../config/firebase.js";
+
 export default function Gass_Model() {
-  const [state, setState] = React.useState({
-    age: "",
-    name: "hai",
-  });
+  const { confirm } = Modal;
+  let history = useHistory();
+  const [allWeight, setAllWeight] = useState([]);
+  const [selectedWeight, setSelectedWeight] = useState("");
+
+  useEffect(() => {
+    db.collection("gas")
+      .get()
+      .then((re) => {
+        var rawWeight = [];
+        re.docs.forEach((each) => {
+          rawWeight.push(each.data().weight);
+        });
+        setAllWeight(rawWeight);
+      });
+  }, []);
 
   const handleChange = (event) => {
-    const name = event.target.name;
-    setState({
-      ...state,
-      [name]: event.target.value,
-    });
+    setSelectedWeight(event.target.value);
   };
 
-  const handleChangeWeight = (event) => {
-    const name = event.target.name;
-    setState({
-      ...state,
-      [name]: event.target.value,
-    });
-  };
-  const { confirm } = Modal;
-
-  let history = useHistory();
+  const handleChangeWeight = (event) => {};
 
   const showConfirm = () => {
     confirm({
@@ -69,7 +70,7 @@ export default function Gass_Model() {
         <form className="form" noValidate>
           <Grid container spacing={2}>
             <Grid className="txt_Labels" item xs={12} sm={3}>
-              Type
+              Weight
             </Grid>
             <Grid item xs={12} sm={9}>
               <Space direction="vertical">
@@ -84,17 +85,14 @@ export default function Gass_Model() {
                     className="roll_selector"
                     size="small"
                     native
-                    value={state.age}
+                    value={selectedWeight}
                     onChange={handleChangeWeight}
-                    label="weight"
-                    inputProps={{
-                      name: "age",
-                      id: "outlined-age-native-simple",
-                    }}
                   >
-                    <option value={10}> 2.5 kg</option>
-                    <option value={20}> 5 kg</option>
-                    <option value={30}>12.5 kg</option>
+                    {allWeight.map((each) => (
+                      <option key={each} value={each}>
+                        {each} Kg
+                      </option>
+                    ))}
                   </Select>
                 </FormControl>
               </Space>
@@ -143,13 +141,9 @@ export default function Gass_Model() {
                     className="roll_selector"
                     size="small"
                     native
-                    value={state.age}
+                    // value={state.age}
                     onChange={handleChange}
                     label="Field"
-                    inputProps={{
-                      name: "age",
-                      id: "outlined-age-native-simple",
-                    }}
                   >
                     <option value={10}>Shop</option>
                     <option value={20}>A</option>

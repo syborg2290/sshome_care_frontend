@@ -40,3 +40,9 @@
   margin-top: 40px !important;
   float: right !important;
 }
+
+.validate_Edit {
+  color: red;
+  text-align: center !important;
+  font-weight: 600 !important;
+}

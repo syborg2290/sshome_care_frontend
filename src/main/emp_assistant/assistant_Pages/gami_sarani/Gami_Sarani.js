@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Spin, Modal } from "antd";
+import React, { useState, useEffect } from "react";
+import { Modal } from "antd";
 import { Grid, Button } from "@material-ui/core";
 import "react-notifications/lib/notifications.css";
 import CurrencyFormat from "react-currency-format";
@@ -18,18 +18,25 @@ import DepositModel from "./components/deposit_Model/Deposit_Model";
 // style
 import "./Gami_Sarani.css";
 
+import db from "../../../../config/firebase.js";
+
 export default function Gami_Sarani() {
   const [gamisaraniModel, setGamisaraniModel] = useState(false); // customer add model
   const [gamisaraniViewModel, setGamisaraniViewModel] = useState(false); // customer view model
   const [gamisaraniHistoryModel, setGamisaraniHistoryModel] = useState(false); // customer History model
   const [gamisaraniDepositModel, setGamisaraniDepositModel] = useState(false); // customer Deposit model
-  // eslint-disable-next-line
-  const [isLoading, setIsLoading] = useState(true);
+  const [tableData, setTableData] = useState([]);
+  const [allTableData, setAllTableData] = useState([]);
+
   // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
 
   const GamisaraniAddCustomer = () => {
     setGamisaraniModel(true);
+  };
+
+  const GamisaraniAddCustomerClose = () => {
+    setGamisaraniModel(false);
   };
 
   const GamisaraniViewCustomer = () => {
@@ -92,7 +99,7 @@ export default function Gami_Sarani() {
     },
 
     {
-      name: "Current Balance",
+      name: "Current_Balance",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -115,40 +122,66 @@ export default function Gami_Sarani() {
     },
   ];
 
-  const data = [
-    [
-      "img",
-      "Corp",
-      "Yonkers",
-      "nic",
-      "mid",
-      <CurrencyFormat
-        value={"3500"}
-        displayType={"text"}
-        thousandSeparator={true}
-        prefix={" "}
-      />,
-      <div>
-        <VisibilityIcon onClick={GamisaraniViewCustomer} />
-        <span>
-          <AccountBalanceIcon
-            className="btnHisty"
-            onClick={GamisaraniHistoryCustomer}
-          />
-        </span>
-        <span className="deposit_btn">
-          <Button
-            variant="contained"
-            size="small"
-            className="btnDipo"
-            onClick={GamisaraniDepositCustomer}
-          >
-            Deposit
-          </Button>
-        </span>
-      </div>,
-    ],
-  ];
+  useEffect(() => {
+    db.collection("gami_sarani").onSnapshot((re) => {
+      var rawAllData = [];
+      var rawData = [];
+      re.docs.forEach((each) => {
+        rawAllData.push({
+          id: each.id,
+          data: each.data(),
+        });
+        rawData.push({
+          IMG: (
+            <img
+              alt="Empty data"
+              className="avatar_data"
+              src={
+                each.data().photo !== null
+                  ? each.data().photo
+                  : require("../../../../assets/avatar.png")
+              }
+            />
+          ),
+          FirstName: each.data().fname,
+          LastName: each.data().lname,
+          NIC: each.data().nic,
+          MemberID: each.data().mid,
+          Current_Balance: (
+            <CurrencyFormat
+              value={each.data().currentDeposit}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={" "}
+            />
+          ),
+          Action: (
+            <div>
+              <VisibilityIcon onClick={GamisaraniViewCustomer} />
+              <span>
+                <AccountBalanceIcon
+                  className="btnHisty"
+                  onClick={GamisaraniHistoryCustomer}
+                />
+              </span>
+              <span className="deposit_btn">
+                <Button
+                  variant="contained"
+                  size="small"
+                  className="btnDipo"
+                  onClick={GamisaraniDepositCustomer}
+                >
+                  Deposit
+                </Button>
+              </span>
+            </div>
+          ),
+        });
+      });
+      setAllTableData(rawAllData);
+      setTableData(rawData);
+    });
+  }, []);
 
   return (
     <>
@@ -165,7 +198,7 @@ export default function Gami_Sarani() {
         <div className="table_Gamisarani_Cutomer">
           <div className="model_Gamisarani_Cutomer_Main">
             <div className="modelGamisarani_Cutomer_Detail">
-              <AddCustomer />
+              <AddCustomer close_model={GamisaraniAddCustomerClose} />
             </div>
           </div>
         </div>
@@ -186,7 +219,19 @@ export default function Gami_Sarani() {
         <div className="table_Gamisarani_ViewCutomer">
           <div className="model_Gamisarani_ViewCutomer_Main">
             <div className="modelGamisarani_ViewCutomer_Detail">
-              <ViewCustomer />
+              <ViewCustomer
+                key={allTableData[currentIndx]?.id}
+                mid={allTableData[currentIndx]?.data.mid}
+                fname={allTableData[currentIndx]?.data.fname}
+                address1={allTableData[currentIndx]?.data.address1}
+                address2={allTableData[currentIndx]?.data.address2}
+                lname={allTableData[currentIndx]?.data.lname}
+                mobile1={allTableData[currentIndx]?.data.mobile1}
+                mobile2={allTableData[currentIndx]?.data.mobile2}
+                nic={allTableData[currentIndx]?.data.nic}
+                photo={allTableData[currentIndx]?.data.photo}
+                root={allTableData[currentIndx]?.data.root}
+              />
             </div>
           </div>
         </div>
@@ -207,7 +252,10 @@ export default function Gami_Sarani() {
         <div className="table_Gamisarani_historyCutomer">
           <div className="model_Gamisarani_historyCutomer_Main">
             <div className="modelGamisarani_historyCutomer_Detail">
-              <HistoryCustomer />
+              <HistoryCustomer
+                key={allTableData[currentIndx]?.id}
+                mid={allTableData[currentIndx]?.data.mid}
+              />
             </div>
           </div>
         </div>
@@ -228,7 +276,13 @@ export default function Gami_Sarani() {
         <div className="table_Gamisarani_depositCutomer">
           <div className="model_Gamisarani_depositCutomer_Main">
             <div className="modelGamisarani_depositCutomer_Detail">
-              <DepositModel />
+              <DepositModel
+                key={allTableData[currentIndx]?.id}
+                midProp={allTableData[currentIndx]?.data.mid}
+                close_model={() => {
+                  setGamisaraniDepositModel(false);
+                }}
+              />
             </div>
           </div>
         </div>
@@ -251,26 +305,20 @@ export default function Gami_Sarani() {
             title={<span className="title_Span">Gami Sarani Customers</span>}
             className="customer_table"
             sty
-            data={data}
+            data={tableData}
             columns={columns}
             options={{
               selectableRows: false,
               customToolbarSelect: () => {},
+              onRowClick: (rowData, rowMeta) => {
+                setCurrentIndx(rowMeta.dataIndex);
+              },
               filterType: "textField",
               download: false,
               print: false,
               searchPlaceholder: "Search using any column names",
               elevation: 4,
               sort: true,
-              textLabels: {
-                body: {
-                  noMatch: isLoading ? (
-                    <Spin className="tblSpinner" size="large" spinning="true" />
-                  ) : (
-                    ""
-                  ),
-                },
-              },
             }}
           />
         </Grid>

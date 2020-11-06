@@ -279,6 +279,7 @@ export default function Gami_Sarani() {
               <DepositModel
                 key={allTableData[currentIndx]?.id}
                 midProp={allTableData[currentIndx]?.data.mid}
+                nicProp={allTableData[currentIndx]?.data.nic}
                 close_model={() => {
                   setGamisaraniDepositModel(false);
                 }}

@@ -89,6 +89,7 @@ export default function Add_Customer({ close_model }) {
                         .then((_) => {
                           setLoadingSubmit(false);
                           close_model();
+                          window.location.reload();
                         });
                     });
                 }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -17,7 +17,6 @@ import "./Gass.css";
 
 // icons
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
-import EditIcon from "@material-ui/icons/Edit";
 import AddIcon from "@material-ui/icons/Add";
 
 // components
@@ -27,7 +26,16 @@ import UpdateGassModel from "./components/update_Gass/UpdateGass_Model";
 
 import "./Gass.css";
 
+import db from "../../../../config/firebase.js";
+
+function createData(Weight, Qty, Price, Action) {
+  return { Weight, Qty, Price, Action };
+}
+
 export default function Gass() {
+  // eslint-disable-next-line
+  const [allTableData, setAllTableData] = useState([]);
+  const [tableData, setTableData] = useState([]);
   const [gassModal, setGassModal] = useState(false); //models
   const [addNewGassModal, setAddNewGassModal] = useState(false); // Table models
   const [updateGassModal, setUpdateGassModal] = useState(false); // Table models
@@ -40,29 +48,37 @@ export default function Gass() {
     setAddNewGassModal(true);
   };
 
-  const showModalUpdateGass = () => {
-    setUpdateGassModal(true);
+  const closeModalAddGass = () => {
+    setAddNewGassModal(false);
   };
 
-  function createData(Weight, Qty, Price, Action) {
-    return { Weight, Qty, Price, Action };
-  }
-
-  const rows = [
-    createData(
-      "12.5 kg",
-      12,
-      <CurrencyFormat
-        value={" 3500"}
-        displayType={"text"}
-        thousandSeparator={true}
-        prefix={" "}
-      />,
-      <div>
-        <EditIcon onClick={showModalUpdateGass} />
-      </div>
-    ),
-  ];
+  useEffect(() => {
+    db.collection("gas").onSnapshot((snap) => {
+      var raw = [];
+      var rawAll = [];
+      snap.docs.forEach((each) => {
+        rawAll.push({
+          id: each.id,
+          data: each.data(),
+          weight: each.data().weight,
+        });
+        raw.push(
+          createData(
+            each.data().weight + " Kg",
+            each.data().qty,
+            <CurrencyFormat
+              value={each.data().price}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={" "}
+            />
+          )
+        );
+      });
+      setAllTableData(rawAll);
+      setTableData(raw);
+    });
+  }, []);
 
   return (
     <>
@@ -90,7 +106,7 @@ export default function Gass() {
         }}
       >
         <div className="confoModel_body">
-          <AddNewModel />
+          <AddNewModel close_model={closeModalAddGass} />
         </div>
       </Modal>
 
@@ -140,7 +156,7 @@ export default function Gass() {
               endIcon={<AddIcon />}
               className="btn_gass_Add"
             >
-              Add New
+              Add/Update gas
             </Button>
           </Grid>
         </Grid>
@@ -151,18 +167,16 @@ export default function Gass() {
                 <TableCell>Weight</TableCell>
                 <TableCell align="right">Qty</TableCell>
                 <TableCell align="right">Price&nbsp;(LKR)</TableCell>
-                <TableCell align="right">Action</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((row) => (
+              {tableData.map((row) => (
                 <TableRow key={row.Weight}>
                   <TableCell component="th" scope="row">
                     {row.Weight}
                   </TableCell>
                   <TableCell align="right">{row.Qty}</TableCell>
                   <TableCell align="right">{row.Price}</TableCell>
-                  <TableCell align="right">{row.Action}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

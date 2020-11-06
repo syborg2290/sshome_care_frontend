@@ -9,7 +9,9 @@ import MUIDataTable from "mui-datatables";
 import "./History_Model.css";
 
 export default function History_Model() {
+  // eslint-disable-next-line
   const [isLoading, setIsLoading] = useState(true);
+  // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
 
   const columns = [

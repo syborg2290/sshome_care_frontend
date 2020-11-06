@@ -11,6 +11,7 @@ import "react-notifications/lib/notifications.css";
 import "./Add_Customer.css";
 
 export default function Add_Customer() {
+  // eslint-disable-next-line
   const [imageFile, setImageFile] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
 

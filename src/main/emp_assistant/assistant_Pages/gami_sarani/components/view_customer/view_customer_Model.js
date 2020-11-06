@@ -28,7 +28,7 @@ export default function view_customer_Model({
         {" "}
         <img
           alt="Empty data"
-          className="avatar_customer__sarani"
+          className="avatar_customer_sarani"
           src={
             photo !== null
               ? photo

@@ -137,7 +137,7 @@ export default function Gass() {
           <Grid item xs={12} sm={2}>
             <hr className="titles_hr" />
           </Grid>
-          <Grid item xs={12} sm={6}></Grid>
+          <Grid item xs={12} sm={5}></Grid>
           <Grid item xs={12} sm={2}>
             <Button
               variant="contained"
@@ -149,7 +149,7 @@ export default function Gass() {
               Sell
             </Button>
           </Grid>
-          <Grid item xs={12} sm={2}>
+          <Grid item xs={12} sm={3}>
             <Button
               variant="contained"
               onClick={showModalAddGass}

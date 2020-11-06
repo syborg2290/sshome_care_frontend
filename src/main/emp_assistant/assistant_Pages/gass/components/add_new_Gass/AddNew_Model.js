@@ -26,7 +26,8 @@ export default function AddNew_Model({ close_model }) {
             .doc(re.docs[0].id)
             .update({
               weight: weight,
-              qty: parseInt(qty.trim()) + parseInt(re.docs[0].data().qty.trim()),
+              qty:
+                parseInt(qty.trim()) + parseInt(re.docs[0].data().qty.trim()),
               price: parseInt(price.trim()),
             })
             .then((_) => {
@@ -62,7 +63,7 @@ export default function AddNew_Model({ close_model }) {
   return (
     <Container component="main" className="main_container_addGass">
       <Typography className="title_sarani" variant="h5" gutterBottom>
-        Add New Gass
+        Add & Update Gass
       </Typography>
       <Grid item xs={12} sm={2}>
         <hr className="titles_hr_sarani" />

@@ -1,22 +1,21 @@
-import React, { useState } from "react";
-import { Spin } from "antd";
+import React, { useEffect, useState } from "react";
 import { Grid } from "@material-ui/core";
 import "react-notifications/lib/notifications.css";
 import CurrencyFormat from "react-currency-format";
 import MUIDataTable from "mui-datatables";
+import moment from "moment";
 
 // style
 import "./History_Model.css";
 
-export default function History_Model() {
-  // eslint-disable-next-line
-  const [isLoading, setIsLoading] = useState(true);
-  // eslint-disable-next-line
-  const [currentIndx, setCurrentIndx] = useState(0);
+import db from "../../../../../../config/firebase.js";
+
+export default function History_Model({ mid }) {
+  const [allTableData, setTableData] = useState([]);
 
   const columns = [
     {
-      name: "Member ID",
+      name: "MID",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -38,7 +37,7 @@ export default function History_Model() {
       },
     },
     {
-      name: "Deposits Amount",
+      name: "Deposits_Amount",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -52,7 +51,7 @@ export default function History_Model() {
     },
 
     {
-      name: "Current Balance",
+      name: "Current_Balance",
       options: {
         filter: false,
         setCellHeaderProps: (value) => ({
@@ -66,30 +65,44 @@ export default function History_Model() {
     },
   ];
 
-  const data = [
-    [
-      "2324",
-      <div className="cBalance">2000</div>,
-      <div className="cBalance">
-        {" "}
-        <CurrencyFormat
-          value={"2500"}
-          displayType={"text"}
-          thousandSeparator={true}
-          prefix={" "}
-        />
-      </div>,
-      <div className="cBalance">
-        {" "}
-        <CurrencyFormat
-          value={"6500"}
-          displayType={"text"}
-          thousandSeparator={true}
-          prefix={" "}
-        />
-      </div>,
-    ],
-  ];
+  useEffect(() => {
+    db.collection("gami_sarani_deposit")
+      .where("mid", "==", mid)
+      .onSnapshot((re) => {
+        var raw = [];
+        re.docs.forEach((each) => {
+          raw.push({
+            MID: mid,
+            Date: moment(each.data()?.date?.toDate()).format(
+              "dddd, MMMM Do YYYY"
+            ),
+            Deposits_Amount: (
+              <div className="cBalance">
+                {" "}
+                <CurrencyFormat
+                  value={each.data()?.deposit_amount}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              </div>
+            ),
+            Current_Balance: (
+              <div className="cBalance">
+                {" "}
+                <CurrencyFormat
+                  value={each.data()?.current_Balance}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              </div>
+            ),
+          });
+        });
+        setTableData(raw);
+      });
+  }, [mid]);
 
   return (
     <Grid container spacing={4}>
@@ -98,7 +111,7 @@ export default function History_Model() {
           title={<span className="title_Span">Deposits</span>}
           className="customer_History_table"
           sty
-          data={data}
+          data={allTableData}
           columns={columns}
           options={{
             selectableRows: false,
@@ -109,15 +122,6 @@ export default function History_Model() {
             searchPlaceholder: "Search using any column names",
             elevation: 4,
             sort: true,
-            textLabels: {
-              body: {
-                noMatch: isLoading ? (
-                  <Spin className="tblSpinner" size="large" spinning="true" />
-                ) : (
-                  ""
-                ),
-              },
-            },
           }}
         />
       </Grid>

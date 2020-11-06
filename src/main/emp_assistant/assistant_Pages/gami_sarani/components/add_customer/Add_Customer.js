@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { TextField, Button } from "@material-ui/core";
+import { Spin } from "antd";
 
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
@@ -10,7 +11,23 @@ import "react-notifications/lib/notifications.css";
 // styles
 import "./Add_Customer.css";
 
-export default function Add_Customer() {
+import { nicValidation } from "../../../../../../config/validation.js";
+import db, { storage } from "../../../../../../config/firebase.js";
+import firebase from "firebase";
+
+export default function Add_Customer({ close_model }) {
+  // eslint-disable-next-line
+  const [nic, setNic] = useState("");
+  const [mid, setMId] = useState("");
+  const [fname, setFirstName] = useState("");
+  const [lname, setLastName] = useState("");
+  const [addres1, setAddres1] = useState("");
+  const [addres2, setAddres2] = useState("");
+  const [mobile1, setMobile1] = useState("");
+  const [mobile2, setMobile2] = useState("");
+  const [root, setRoot] = useState("");
+  const [validation, setValidation] = useState("");
+  const [isLoadingSubmit, setLoadingSubmit] = useState(false);
   // eslint-disable-next-line
   const [imageFile, setImageFile] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
@@ -23,6 +40,64 @@ export default function Add_Customer() {
         setImageUrl(e.target.result);
       };
       reader.readAsDataURL(event.target.files[0]);
+    }
+  };
+
+  const submit = () => {
+    setLoadingSubmit(true);
+    var result = nicValidation(nic);
+
+    if (result) {
+      db.collection("gami_sarani")
+        .where("nic", "==", nic)
+        .get()
+        .then((nicRe) => {
+          if (nicRe.docs.length > 0) {
+            setLoadingSubmit(false);
+            setValidation("Customer already exists by NIC");
+          } else {
+            db.collection("gami_sarani")
+              .where("mid", "==", mid)
+              .get()
+              .then(async (midRe) => {
+                if (midRe.docs.length > 0) {
+                  setLoadingSubmit(false);
+                  setValidation("Customer already exists by MID");
+                } else {
+                  await storage.ref(`images/${imageFile.name}`).put(imageFile);
+
+                  storage
+                    .ref("images")
+                    .child(imageFile.name)
+                    .getDownloadURL()
+                    .then((url) => {
+                      db.collection("gami_sarani")
+                        .add({
+                          mid: mid,
+                          nic: nic,
+                          fname: fname,
+                          lname: lname,
+                          address1: addres1,
+                          addres2: addres2,
+                          mobile1: mobile1,
+                          mobile2: mobile2,
+                          root: root,
+                          currentDeposit: 0,
+                          photo: url,
+                          date: firebase.firestore.FieldValue.serverTimestamp(),
+                        })
+                        .then((_) => {
+                          setLoadingSubmit(false);
+                          close_model();
+                        });
+                    });
+                }
+              });
+          }
+        });
+    } else {
+      setLoadingSubmit(false);
+      setValidation("Customer's NIC format is invalid!");
     }
   };
 
@@ -52,6 +127,10 @@ export default function Add_Customer() {
                 label="NIC"
                 autoFocus
                 size="small"
+                value={nic}
+                onChange={(e) => {
+                  setNic(e.target.value.trim());
+                }}
               />
             </Grid>
             <Grid className="txt_Labels" item xs={12} sm={2}>
@@ -69,6 +148,10 @@ export default function Add_Customer() {
                 label="Member ID"
                 autoFocus
                 size="small"
+                value={mid}
+                onChange={(e) => {
+                  setMId(e.target.value.trim());
+                }}
               />
             </Grid>
 
@@ -88,6 +171,10 @@ export default function Add_Customer() {
                 label="First Name"
                 autoFocus
                 size="small"
+                value={fname}
+                onChange={(e) => {
+                  setFirstName(e.target.value.trim());
+                }}
               />
             </Grid>
             <Grid item xs={12} sm={5}>
@@ -102,6 +189,10 @@ export default function Add_Customer() {
                 label="Last Name"
                 autoFocus
                 size="small"
+                value={lname}
+                onChange={(e) => {
+                  setLastName(e.target.value.trim());
+                }}
               />
             </Grid>
 
@@ -120,6 +211,10 @@ export default function Add_Customer() {
                 label="Address 1"
                 autoFocus
                 size="small"
+                value={addres1}
+                onChange={(e) => {
+                  setAddres1(e.target.value.trim());
+                }}
               />
             </Grid>
 
@@ -138,6 +233,10 @@ export default function Add_Customer() {
                 label="Address 2"
                 autoFocus
                 size="small"
+                value={addres2}
+                onChange={(e) => {
+                  setAddres2(e.target.value.trim());
+                }}
               />
             </Grid>
 
@@ -157,6 +256,10 @@ export default function Add_Customer() {
                 autoFocus
                 size="small"
                 type="number"
+                value={mobile1}
+                onChange={(e) => {
+                  setMobile1(e.target.value.trim());
+                }}
               />
             </Grid>
             <Grid item xs={12} sm={5}>
@@ -172,6 +275,10 @@ export default function Add_Customer() {
                 autoFocus
                 size="small"
                 type="number"
+                value={mobile2}
+                onChange={(e) => {
+                  setMobile2(e.target.value.trim());
+                }}
               />
             </Grid>
             <Grid className="txt_Labels" item xs={12} sm={2}>
@@ -189,6 +296,10 @@ export default function Add_Customer() {
                 id="rHome"
                 label="Root to Home"
                 size="small"
+                value={root}
+                onChange={(e) => {
+                  setRoot(e.target.value.trim());
+                }}
               />
             </Grid>
             <Grid className="txt_LabelsImg" item xs={12} sm={1}>
@@ -197,9 +308,6 @@ export default function Add_Customer() {
             <Grid item xs={12} sm={4}>
               <input
                 type="file"
-                // disabled={
-                //   nic.length === 0 || !isValidatedCustomerNic ? true : false
-                // }
                 accept="image/*"
                 name=""
                 onChange={onImageChange}
@@ -208,9 +316,6 @@ export default function Add_Customer() {
                 hidden
               />
               <img
-                // disabled={
-                //   nic.length === 0 || !isValidatedCustomerNic ? true : false
-                // }
                 alt="Item upload"
                 onClick={() => {
                   document.getElementById("item_image").click();
@@ -225,6 +330,7 @@ export default function Add_Customer() {
             </Grid>
             <Grid item xs={12} sm={6}></Grid>
           </Grid>
+          <p className="validate_Edit">{validation}</p>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={9}></Grid>
             <Grid item xs={12} sm={3}>
@@ -232,8 +338,17 @@ export default function Add_Customer() {
                 variant="contained"
                 color="primary"
                 className="btn_addCust"
+                onClick={submit}
+                disabled={
+                  nic.length === 0 ||
+                  mid.length === 0 ||
+                  fname.length === 0 ||
+                  lname.length === 0 ||
+                  addres1.length === 0 ||
+                  mobile1.length === 0
+                }
               >
-                Done
+                {isLoadingSubmit ? <Spin size="large" /> : "Done"}
               </Button>
             </Grid>
           </Grid>

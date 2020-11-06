@@ -79,7 +79,7 @@ export default function Deposit_Model({ midProp, nicProp, close_model }) {
               });
           } else {
             setLoadingSubmit(false);
-            setValidation("Entered MID and NIC not found!");
+            setValidation("Entered MID and NIC not matched!");
           }
         } else {
           setLoadingSubmit(false);

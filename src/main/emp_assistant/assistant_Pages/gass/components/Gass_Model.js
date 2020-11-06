@@ -24,6 +24,7 @@ export default function Gass_Model() {
   const { confirm } = Modal;
   let history = useHistory();
   const [allWeight, setAllWeight] = useState([]);
+  // eslint-disable-next-line
   const [selectedWeight, setSelectedWeight] = useState(0);
 
   useEffect(() => {

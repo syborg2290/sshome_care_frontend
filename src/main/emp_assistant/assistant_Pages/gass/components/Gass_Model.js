@@ -80,51 +80,55 @@ export default function Gass_Model() {
   };
 
   const showConfirm = () => {
-    confirm({
-      title: "Do you Want to Print a Recipt?",
-      icon: <ExclamationCircleOutlined />,
+    if (selectedWeight === "Select a weight") {
+      setValidation("Select a weight");
+    } else {
+      confirm({
+        title: "Do you Want to Print a Recipt?",
+        icon: <ExclamationCircleOutlined />,
 
-      onOk() {
-        if (selectedWeight === "Select a weight") {
-          setValidation("Select a weight");
-        } else {
-          db.collection("gas")
-            .where("weight", "==", selectedWeight)
-            .get()
-            .then((reSe) => {
-              db.collection("gas")
-                .doc(reSe.docs[0].id)
-                .update({
-                  qty: reSe.docs[0].data().qty - qty,
-                })
-                .then((_) => {
-                  let moveWith = {
-                    pathname:
-                      "/assistant/gass/gass_Model/make_recipt/Gass_recipt",
-                    search: "?query=abc",
-                    state: {
-                      detail: {
-                        total: total,
-                        list: [
-                          {
-                            weight: selectedWeight,
-                            qty: qty,
-                            unit: unit,
-                            price: total,
-                          },
-                        ],
+        onOk() {
+          if (selectedWeight === "Select a weight") {
+            setValidation("Select a weight");
+          } else {
+            db.collection("gas")
+              .where("weight", "==", selectedWeight)
+              .get()
+              .then((reSe) => {
+                db.collection("gas")
+                  .doc(reSe.docs[0].id)
+                  .update({
+                    qty: reSe.docs[0].data().qty - qty,
+                  })
+                  .then((_) => {
+                    let moveWith = {
+                      pathname:
+                        "/assistant/gass/gass_Model/make_recipt/Gass_recipt",
+                      search: "?query=abc",
+                      state: {
+                        detail: {
+                          total: total,
+                          list: [
+                            {
+                              weight: selectedWeight,
+                              qty: qty,
+                              unit: unit,
+                              price: total,
+                            },
+                          ],
+                        },
                       },
-                    },
-                  };
-                  history.push(moveWith);
-                });
-            });
-        }
-      },
-      onCancel() {
-        submit();
-      },
-    });
+                    };
+                    history.push(moveWith);
+                  });
+              });
+          }
+        },
+        onCancel() {
+          submit();
+        },
+      });
+    }
   };
 
   const submit = () => {

@@ -52,15 +52,14 @@ function Make_invoice() {
   const [days, setDays] = useState(new Date().getDay());
   const [dates, setDates] = useState(new Date().getDate());
   // eslint-disable-next-line
-  const [selectedRoot, setSelectedRoot] = useState(0);
-
+  const [selectedType, setSelectedType] = useState("shop");
+  const [gamisarani, setGamisarani] = useState(false);
+  let history = useHistory();
   const { confirm } = Modal;
 
   const handleChange = (event) => {
-    setSelectedRoot(event.target.value);
+    setSelectedType(event.target.value);
   };
-
-  let history = useHistory();
 
   useEffect(() => {
     setInvoiceNumber("IN-" + Math.floor(Math.random() * 1000000000 + 1));
@@ -1226,22 +1225,16 @@ function Make_invoice() {
                   </FormControl>
                 </Grid>
                 <Grid item xs={12} sm={3}>
-                  Select Root
+                  Select a type
                 </Grid>
                 <Grid item xs={12} sm={4}>
                   <Space direction="vertical">
                     <FormControl variant="outlined" className="fcontrol">
-                      <InputLabel
-                        className="rolllbl_selector"
-                        htmlFor="outlined-age-native-simple"
-                      >
-                        Root
-                      </InputLabel>
                       <Select
                         className="roll_selector"
                         size="small"
                         native
-                        // value={state.root}
+                        value={selectedType}
                         onChange={handleChange}
                         label="Field"
                       >
@@ -1257,7 +1250,12 @@ function Make_invoice() {
                   Gamisarani
                 </Grid>
                 <Grid item xs={12} sm={4}>
-                  <Checkbox />
+                  <Checkbox
+                    value={gamisarani}
+                    onChange={(e) => {
+                      setGamisarani(e.target.value);
+                    }}
+                  />
                 </Grid>
                 <Grid item xs={12} sm={5}></Grid>
               </Grid>

@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   TextField,
   Button,
@@ -19,7 +19,16 @@ import "react-notifications/lib/notifications.css";
 // styles
 import "./Update_Root.css";
 
-export default function Update_Root({docId,rootProp,descProp,employeeProp,employee2Prop,empName1,empName2,daysProp}) {
+export default function Update_Root({
+  docId,
+  rootProp,
+  descProp,
+  employeeProp,
+  employee2Prop,
+  empName1,
+  empName2,
+  daysProp,
+}) {
   const [rootName, setRootName] = useState(rootProp);
   const [description, setDescription] = useState(descProp);
   const [allEmployee, setAllEmployee] = useState([]);
@@ -64,7 +73,7 @@ export default function Update_Root({docId,rootProp,descProp,employeeProp,employ
 
   const handleChange2 = (event) => {
     setEmployee2(event.target.value);
-      allEmployee.forEach((reE) => {
+    allEmployee.forEach((reE) => {
       if (reE.nic === event.target.value) {
         setEmployeeName2(reE.fname + " " + reE.lname);
       }
@@ -94,13 +103,14 @@ export default function Update_Root({docId,rootProp,descProp,employeeProp,employ
           sunday: sunday,
         });
 
-        db.collection("root").doc(docId)
+        db.collection("root")
+          .doc(docId)
           .update({
             root: rootName.trim(),
             description: description,
             days: daysList,
             empName1: employeeName1,
-            empName2:employeeName2,
+            empName2: employeeName2,
             employee1: employee1,
             employee2: employee2,
           })
@@ -175,15 +185,17 @@ export default function Update_Root({docId,rootProp,descProp,employeeProp,employ
             </Grid>
 
             <Grid className="txt_Labels_root" item xs={12} sm={4}>
-              Assigne Employee:
+              Assigne Employees:
             </Grid>
             <Grid item xs={12} sm={5}>
               <FormControl size="small" variant="outlined">
-                <InputLabel htmlFor="outlined-age-native-simple">
-                  Employee 1
-                </InputLabel>
-                <Select native label="Name"  onChange={handleChange1} value={employee1}>
-                  
+                <InputLabel htmlFor="outlined-age-native-simple"></InputLabel>
+                <Select
+                  native
+                  label="Name"
+                  onChange={handleChange1}
+                  value={employee1}
+                >
                   {allEmployee.map((reM) => (
                     <option
                       key={reM.nic + "r"}
@@ -200,11 +212,13 @@ export default function Update_Root({docId,rootProp,descProp,employeeProp,employ
             <Grid className="txt_Labels_root" item xs={12} sm={4}></Grid>
             <Grid item xs={12} sm={5}>
               <FormControl size="small" variant="outlined">
-                <InputLabel htmlFor="outlined-age-native-simple">
-                  Employee 2
-                </InputLabel>
-                <Select native label="Name"  onChange={handleChange2} value={employee2}>
-                  
+                <InputLabel htmlFor="outlined-age-native-simple"></InputLabel>
+                <Select
+                  native
+                  label="Name"
+                  onChange={handleChange2}
+                  value={employee2}
+                >
                   {allEmployee.map((reM) => (
                     <option
                       key={reM.nic + "e"}

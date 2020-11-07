@@ -187,13 +187,11 @@ export default function Add_Root() {
             </Grid>
 
             <Grid className="txt_Labels_root" item xs={12} sm={4}>
-              Assigne Employee:
+              Assigne Employees:
             </Grid>
             <Grid item xs={12} sm={5}>
               <FormControl size="small" variant="outlined">
-                <InputLabel htmlFor="outlined-age-native-simple">
-                  Employee 1
-                </InputLabel>
+                <InputLabel htmlFor="outlined-age-native-simple"></InputLabel>
                 <Select native label="Name" onChange={handleChange1}>
                   {allEmployee.map((reM) => (
                     <option
@@ -211,9 +209,7 @@ export default function Add_Root() {
             <Grid className="txt_Labels_root" item xs={12} sm={4}></Grid>
             <Grid item xs={12} sm={5}>
               <FormControl size="small" variant="outlined">
-                <InputLabel htmlFor="outlined-age-native-simple">
-                  Employee 2
-                </InputLabel>
+                <InputLabel htmlFor="outlined-age-native-simple"></InputLabel>
                 <Select native label="Name" onChange={handleChange2}>
                   {allEmployee.map((reM) => (
                     <option

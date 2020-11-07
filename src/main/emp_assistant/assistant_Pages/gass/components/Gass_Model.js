@@ -252,7 +252,7 @@ export default function Gass_Model() {
             </Grid>
             <Grid className="txt_Labels" item xs={12} sm={4}></Grid>
             <Grid className="txt_Labels" item xs={12} sm={3}>
-              Field :
+              Type :
             </Grid>
             <Grid item xs={12} sm={5}>
               <Space direction="vertical">

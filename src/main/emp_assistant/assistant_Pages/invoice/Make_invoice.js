@@ -51,7 +51,7 @@ function Make_invoice() {
   const [totalDiscount, setTotalDiscount] = useState(0);
   // const [gamisaraniInitialAmount, setGamisaraniInitialAmount] = useState(0);
   // const [gamisaraniamount, setGamisaraniamount] = useState(0);
-  // const [gamisaraniId, setGamisaraniId] = useState("");
+  const [gamisaraniNic, setGamisaraniNic] = useState("");
   const [days, setDays] = useState(new Date().getDay());
   const [dates, setDates] = useState(new Date().getDate());
   // eslint-disable-next-line
@@ -1312,10 +1312,14 @@ function Make_invoice() {
                     </FormControl>
                   </Space>
                 </Grid>
-              </Grid>
-              <Grid item xs={12} sm={6}></Grid>
+                <Grid item xs={12} sm={6}></Grid>
+                <Grid item xs={12} sm={6}>
+                  <hr />
+                  <br />
+                  <p className="gami_cust">Gamisarani Coustomers :</p>
+                </Grid>
+                <Grid item xs={12} sm={6}></Grid>
 
-              <Grid className="gamiCrd" item xs={12} sm={6}>
                 <Grid item xs={12} sm={2}>
                   Gamisarani
                 </Grid>
@@ -1328,27 +1332,75 @@ function Make_invoice() {
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}></Grid>
-              </Grid>
-              <Grid item xs={12} sm={6}></Grid>
+                <Grid className="lbl_MI" item xs={12} sm={2}>
+                  NIC
+                </Grid>
+                <Grid className="nIc" item xs={12} sm={3}>
+                  <TextField
+                    className="nic_"
+                    variant="outlined"
+                    required
+                    fullWidth
+                    label="NIC"
+                    name="nic"
+                    autoComplete="nic"
+                    size="small"
+                    value={gamisaraniNic}
+                    onChange={(e) => {
+                      setGamisaraniNic(e.target.value.trim());
+                    }}
+                  />
+                </Grid>
 
-              <Button
-                fullWidth
-                variant="contained"
-                color="primary"
-                className="btn_addCustomer"
-                disabled={
-                  loadingsubmit ||
-                  tablerows.length === 0 ||
-                  intialTimestamp === null
-                    ? true
-                    : false
-                }
-                onClick={showConfirm}
-                // onClick={printInvoice}
-                endIcon={<ArrowForwardIcon />}
-              >
-                {loadingsubmit ? <Spin size="large" /> : "Next"}
-              </Button>
+                <Grid item xs={12} sm={1}>
+                  <Button fullWidth variant="contained" color="primary">
+                    {loadingsubmit ? <Spin size="large" /> : "Fetch"}
+                  </Button>
+                </Grid>
+                <Grid item xs={12} sm={6}></Grid>
+                <Grid className="lbl_MI" item xs={12} sm={2}>
+                  Amount
+                </Grid>
+                <Grid className="amouNt" item xs={12} sm={3}>
+                  <TextField
+                    className="amouNT"
+                    variant="outlined"
+                    required
+                    fullWidth
+                    label="Amount"
+                    name="amount"
+                    autoComplete="amount"
+                    size="small"
+                    type="number"
+                    InputProps={{ inputProps: { min: 0 } }}
+                    // value={gamisaraniamount}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={7}></Grid>
+                <Grid item xs={12} sm={6}>
+                  <hr />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <Button
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    className="btn_addCustomer"
+                    disabled={
+                      loadingsubmit ||
+                      tablerows.length === 0 ||
+                      intialTimestamp === null
+                        ? true
+                        : false
+                    }
+                    onClick={showConfirm}
+                    // onClick={printInvoice}
+                    endIcon={<ArrowForwardIcon />}
+                  >
+                    {loadingsubmit ? <Spin size="large" /> : "Next"}
+                  </Button>
+                </Grid>
+              </Grid>
             </form>
           </div>
           <Box mt={5}></Box>

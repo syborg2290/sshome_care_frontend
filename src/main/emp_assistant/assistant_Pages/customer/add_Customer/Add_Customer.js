@@ -711,11 +711,31 @@ export default function Add_Customer() {
                   }}
                 />
               </Grid>
-              <Grid className="txt_Note" item xs={12} sm={7}>
-                # Press Enter key after filled the NIC
+              <Grid className="txt_Note" item xs={12} sm={4}>
+                # Press Enter key to check the customer
+              </Grid>
+              <Grid className="txt_Labels" item xs={12} sm={1}>
+                Member ID :
+              </Grid>
+              <Grid className="txt_Note" item xs={12} sm={2}>
+                <TextField
+                  disabled={nic.length === 0 ? true : false}
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="fName"
+                  label="First Name"
+                  name="fName"
+                  autoComplete="fname"
+                  size="small"
+                  // value={fname}
+                  // onChange={(e) => {
+                  //   setFirstName(e.target.value);
+                  // }}
+                />
               </Grid>
               <Grid className="txt_Labels" item xs={12} sm={2}>
-                Primary Contact :
+                Customer Name :
               </Grid>
               <Grid item xs={12} sm={3}>
                 <TextField

@@ -134,7 +134,6 @@ export default function Deposit_Model({ midProp, nicProp, close_model }) {
                 fullWidth
                 id="mid"
                 label="Member ID"
-                autoFocus
                 size="small"
                 value={mid}
                 onChange={(e) => {
@@ -171,7 +170,6 @@ export default function Deposit_Model({ midProp, nicProp, close_model }) {
                 fullWidth
                 id="dAmount"
                 label="Deposit Amount"
-                autoFocus
                 size="small"
                 type="number"
                 InputProps={{ inputProps: { min: 1 } }}

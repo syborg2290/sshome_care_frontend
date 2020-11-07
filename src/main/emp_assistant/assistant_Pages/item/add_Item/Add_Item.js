@@ -291,7 +291,7 @@ export default function Add_Item() {
                                                           Math.round(discount)
                                                     );
                                                     if (newArray) {
-                                                       let variable = {
+                                                      let variable = {
                                                         itemName: itemName.trim(),
                                                         brand: brand.trim(),
                                                         modelNo: modelNo.trim(),
@@ -326,12 +326,13 @@ export default function Add_Item() {
                                                         guarantee: guarantee,
                                                         timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                                                       };
-                                                      
-                                                        await db
-                                                        .collection("item_history")
+
+                                                      await db
+                                                        .collection(
+                                                          "item_history"
+                                                        )
                                                         .add(variable);
-                                                      
-                                                      
+
                                                       await db
                                                         .collection("item")
                                                         .doc(newArray[0].id)
@@ -403,9 +404,11 @@ export default function Add_Item() {
                                                         guarantee: guarantee,
                                                         timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                                                       };
-                                                      
+
                                                       await db
-                                                        .collection("item_history")
+                                                        .collection(
+                                                          "item_history"
+                                                        )
                                                         .add(variable);
 
                                                       await db
@@ -649,7 +652,6 @@ export default function Add_Item() {
                   setBrand(e.target.value);
                 }}
                 label="Brand of Item"
-                autoFocus
                 size="small"
               />
             </Grid>
@@ -670,7 +672,6 @@ export default function Add_Item() {
                   setModelNo(e.target.value);
                 }}
                 label="xx 0091"
-                autoFocus
                 size="small"
               />
             </Grid>
@@ -692,7 +693,6 @@ export default function Add_Item() {
                   setChassisNo(e.target.value);
                 }}
                 label="xx 0091"
-                autoFocus
                 size="small"
               />
             </Grid>
@@ -713,7 +713,6 @@ export default function Add_Item() {
                   setSerialNo(e.target.value);
                 }}
                 label="xx-20097"
-                autoFocus
                 size="small"
               />
             </Grid>
@@ -735,7 +734,6 @@ export default function Add_Item() {
                   setColor(e.target.value);
                 }}
                 label="color of Item"
-                autoFocus
                 size="small"
               />
             </Grid>
@@ -758,7 +756,6 @@ export default function Add_Item() {
                   setQty(e.target.value);
                 }}
                 label="Item Qty"
-                autoFocus
                 size="small"
               />
             </Grid>
@@ -781,7 +778,6 @@ export default function Add_Item() {
                   setCashPrice(e.target.value);
                 }}
                 label="Cash Price of Item"
-                autoFocus
                 size="small"
               />
             </Grid>
@@ -822,7 +818,6 @@ export default function Add_Item() {
                   setSalePrice(e.target.value);
                 }}
                 label="sale Price"
-                autoFocus
                 size="small"
               />
             </Grid>
@@ -864,7 +859,6 @@ export default function Add_Item() {
                   setDownPayment(e.target.value);
                 }}
                 label="Down payment"
-                autoFocus
                 size="small"
               />
             </Grid>
@@ -888,7 +882,6 @@ export default function Add_Item() {
                   setNoOfInstallments(e.target.value);
                 }}
                 label="Installments"
-                autoFocus
                 size="small"
               />
             </Grid>
@@ -912,7 +905,6 @@ export default function Add_Item() {
                   setAmountPerInstallment(e.target.value);
                 }}
                 label="Installments Amount"
-                autoFocus
                 size="small"
               />
             </Grid>
@@ -944,7 +936,6 @@ export default function Add_Item() {
                   setGuaranteePeriod(e.target.value);
                 }}
                 label="Guarantee"
-                autoFocus
                 size="small"
               />
             </Grid>
@@ -965,7 +956,6 @@ export default function Add_Item() {
                   setDiscount(e.target.value);
                 }}
                 label="Discount"
-                autoFocus
                 size="small"
               />
             </Grid>
@@ -984,7 +974,6 @@ export default function Add_Item() {
                 fullWidth
                 id="description"
                 label="About Item"
-                autoFocus
                 size="small"
                 value={description}
                 onChange={(e) => {
@@ -1010,7 +999,6 @@ export default function Add_Item() {
                   setCInvoiceNo(e.target.value);
                 }}
                 label="Compny Invoice"
-                autoFocus
                 size="small"
               />
             </Grid>
@@ -1032,7 +1020,6 @@ export default function Add_Item() {
                   setGCardNo(e.target.value);
                 }}
                 label="Guarantee No"
-                autoFocus
                 size="small"
               />
             </Grid>

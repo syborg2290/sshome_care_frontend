@@ -28,9 +28,7 @@ export default function AddNew_Model({ close_model }) {
               weight: weight,
               qty: parseInt(qty.trim()) + parseInt(re.docs[0].data().qty),
               price:
-                price === 0 ||
-                price === "" ||
-                price === null
+                price === 0 || price === "" || price === null
                   ? re.docs[0].data().price
                   : parseInt(price.trim()),
             })
@@ -39,9 +37,7 @@ export default function AddNew_Model({ close_model }) {
                 weight: weight,
                 qty: parseInt(qty.trim()),
                 price:
-                  price === 0 ||
-                  price === "" ||
-                  price === null
+                  price === 0 || price === "" || price === null
                     ? re.docs[0].data().price
                     : parseInt(price.trim()),
                 date: firebase.firestore.FieldValue.serverTimestamp(),
@@ -117,7 +113,6 @@ export default function AddNew_Model({ close_model }) {
                 fullWidth
                 id="Qty"
                 label="Qty"
-                autoFocus
                 size="small"
                 type="number"
                 value={qty}
@@ -141,7 +136,6 @@ export default function AddNew_Model({ close_model }) {
                 fullWidth
                 id="Price"
                 label="Price"
-                autoFocus
                 size="small"
                 type="number"
                 value={price}

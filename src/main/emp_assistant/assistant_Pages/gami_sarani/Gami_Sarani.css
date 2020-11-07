@@ -4,7 +4,7 @@
 
 .btn_addSaraniCustomers {
   float: right !important;
-  margin-top: 100px !important;
+  margin-top: 75px !important;
 }
 
 .model_Gamisarani_Cutomer {
@@ -34,4 +34,8 @@
 
 .model_Gamisarani_depositCutomer {
   width: 40% !important;
+}
+
+.customer_table_sarani {
+  margin-top: 20px;
 }

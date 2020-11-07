@@ -304,7 +304,7 @@ export default function Gami_Sarani() {
         <Grid item xs={12}>
           <MUIDataTable
             title={<span className="title_Span">Gami Sarani Customers</span>}
-            className="customer_table"
+            className="customer_table_sarani"
             sty
             data={tableData}
             columns={columns}

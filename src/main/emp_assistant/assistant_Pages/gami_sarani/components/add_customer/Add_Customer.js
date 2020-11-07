@@ -147,7 +147,6 @@ export default function Add_Customer({ close_model }) {
                 fullWidth
                 id="mid"
                 label="Member ID"
-                autoFocus
                 size="small"
                 value={mid}
                 onChange={(e) => {
@@ -170,7 +169,6 @@ export default function Add_Customer({ close_model }) {
                 fullWidth
                 id="fname"
                 label="First Name"
-                autoFocus
                 size="small"
                 value={fname}
                 onChange={(e) => {
@@ -188,7 +186,6 @@ export default function Add_Customer({ close_model }) {
                 fullWidth
                 id="lname"
                 label="Last Name"
-                autoFocus
                 size="small"
                 value={lname}
                 onChange={(e) => {
@@ -210,7 +207,6 @@ export default function Add_Customer({ close_model }) {
                 fullWidth
                 id="addrs1"
                 label="Address 1"
-                autoFocus
                 size="small"
                 value={addres1}
                 onChange={(e) => {
@@ -232,7 +228,6 @@ export default function Add_Customer({ close_model }) {
                 fullWidth
                 id="addrs2"
                 label="Address 2"
-                autoFocus
                 size="small"
                 value={addres2}
                 onChange={(e) => {
@@ -254,7 +249,6 @@ export default function Add_Customer({ close_model }) {
                 fullWidth
                 id="mobile1"
                 label="Mobile 1"
-                autoFocus
                 size="small"
                 type="number"
                 value={mobile1}
@@ -273,7 +267,6 @@ export default function Add_Customer({ close_model }) {
                 fullWidth
                 id="mobile2"
                 label="Mobile 2"
-                autoFocus
                 size="small"
                 type="number"
                 value={mobile2}

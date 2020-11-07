@@ -166,7 +166,6 @@ export default function Update_Root({docId,rootProp,descProp,employeeProp,employ
                 fullWidth
                 id="description"
                 label="Description"
-                autoFocus
                 size="small"
                 value={description}
                 onChange={(e) => {

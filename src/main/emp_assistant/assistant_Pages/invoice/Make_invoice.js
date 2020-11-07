@@ -52,15 +52,14 @@ function Make_invoice() {
   const [days, setDays] = useState(new Date().getDay());
   const [dates, setDates] = useState(new Date().getDate());
   // eslint-disable-next-line
-  const [selectedRoot, setSelectedRoot] = useState(0);
-
+  const [selectedType, setSelectedType] = useState("shop");
+  const [gamisarani, setGamisarani] = useState(false);
+  let history = useHistory();
   const { confirm } = Modal;
 
   const handleChange = (event) => {
-    setSelectedRoot(event.target.value);
+    setSelectedType(event.target.value);
   };
-
-  let history = useHistory();
 
   useEffect(() => {
     setInvoiceNumber("IN-" + Math.floor(Math.random() * 1000000000 + 1));
@@ -234,6 +233,7 @@ function Make_invoice() {
                   address2: tablerows[0].customer.customerAddress2,
                   root: tablerows[0].customer.customerRootToHome,
                   nic: tablerows[0].customer.customerNic,
+                  mid: tablerows[0].customer.mid,
                   relations_nics: tablerows[0].customer.customerRelatedNics,
                   mobile1: tablerows[0].customer.customerMobile1,
                   mobile2: tablerows[0].customer.customerMobile2,
@@ -265,6 +265,7 @@ function Make_invoice() {
                       items: arrayItems,
                       customer_id: cust.id,
                       nic: tablerows[0].customer.customerNic,
+                      mid: tablerows[0].customer.mid,
                       installemtnDay: days,
                       installemtnDate: dates,
                       discount: totalDiscount === "" ? 0 : totalDiscount,
@@ -365,6 +366,7 @@ function Make_invoice() {
                   address2: tablerows[0].customer.customerAddress2,
                   root: tablerows[0].customer.customerRootToHome,
                   nic: tablerows[0].customer.customerNic,
+                  mid: tablerows[0].customer.mid,
                   relations_nics: tablerows[0].customer.customerRelatedNics,
                   mobile1: tablerows[0].customer.customerMobile1,
                   mobile2: tablerows[0].customer.customerMobile2,
@@ -398,6 +400,7 @@ function Make_invoice() {
                       items: arrayItems,
                       customer_id: cust.id,
                       nic: tablerows[0].customer.customerNic,
+                      mid: tablerows[0].customer.mid,
                       installemtnDay: days,
                       installemtnDate: dates,
                       discount: totalDiscount === "" ? 0 : totalDiscount,
@@ -502,6 +505,7 @@ function Make_invoice() {
               address2: tablerows[0].customer.customerAddress2,
               root: tablerows[0].customer.customerRootToHome,
               nic: tablerows[0].customer.customerNic,
+              mid: tablerows[0].customer.mid,
               relations_nics: tablerows[0].customer.customerRelatedNics,
               mobile1: tablerows[0].customer.customerMobile1,
               mobile2: tablerows[0].customer.customerMobile2,
@@ -532,6 +536,7 @@ function Make_invoice() {
                   items: arrayItems,
                   customer_id: cust.id,
                   nic: tablerows[0].customer.customerNic,
+                  mid: tablerows[0].customer.mid,
                   installemtnDay: days,
                   installemtnDate: dates,
                   discount: totalDiscount === "" ? 0 : totalDiscount,
@@ -630,6 +635,7 @@ function Make_invoice() {
               address2: tablerows[0].customer.customerAddress2,
               root: tablerows[0].customer.customerRootToHome,
               nic: tablerows[0].customer.customerNic,
+              mid: tablerows[0].customer.mid,
               relations_nics: tablerows[0].customer.customerRelatedNics,
               mobile1: tablerows[0].customer.customerMobile1,
               mobile2: tablerows[0].customer.customerMobile2,
@@ -662,6 +668,7 @@ function Make_invoice() {
                   items: arrayItems,
                   customer_id: cust.id,
                   nic: tablerows[0].customer.customerNic,
+                  mid: tablerows[0].customer.mid,
                   installemtnDay: days,
                   installemtnDate: dates,
                   discount: totalDiscount === "" ? 0 : totalDiscount,
@@ -1112,7 +1119,7 @@ function Make_invoice() {
                   Choose Installment Repayment Plan:
                 </Grid>
                 <Grid className="txt_description" item xs={12} sm={2}>
-                  Date of purches
+                  Initial date
                   <br />
                   <div
                     hidden={
@@ -1198,6 +1205,7 @@ function Make_invoice() {
                     </Select>
                   </FormControl>
                 </Grid>
+<<<<<<< HEAD
                 <Grid item xs={12} sm={2}></Grid>
                 <Grid item xs={12} sm={4}>
                   <hr />
@@ -1205,21 +1213,28 @@ function Make_invoice() {
                 <Grid item xs={12} sm={8}></Grid>
                 <Grid item xs={12} sm={2}>
                   Select Shop/Root
+=======
+                <Grid item xs={12} sm={3}>
+                  Select a type
+>>>>>>> e19689e14cdd33cd5ff8eb691774ba4f651de1e6
                 </Grid>
                 <Grid item xs={12} sm={4}>
                   <Space direction="vertical">
                     <FormControl variant="outlined" className="fcontrol">
+<<<<<<< HEAD
                       <InputLabel
                         className="rolllbl_selector"
                         htmlFor="outlined-age-native-simple"
                       >
                         Select
                       </InputLabel>
+=======
+>>>>>>> e19689e14cdd33cd5ff8eb691774ba4f651de1e6
                       <Select
                         className="roll_selector"
                         size="small"
                         native
-                        // value={state.root}
+                        value={selectedType}
                         onChange={handleChange}
                         label="Field"
                       >
@@ -1235,7 +1250,12 @@ function Make_invoice() {
                   Gamisarani
                 </Grid>
                 <Grid item xs={12} sm={4}>
-                  <Checkbox />
+                  <Checkbox
+                    value={gamisarani}
+                    onChange={(e) => {
+                      setGamisarani(e.target.value);
+                    }}
+                  />
                 </Grid>
                 <Grid item xs={12} sm={6}></Grid>
               </Grid>
@@ -1245,7 +1265,9 @@ function Make_invoice() {
                 variant="contained"
                 color="primary"
                 className="btn_addCustomer"
-                disabled={loadingsubmit ? true : false}
+                disabled={
+                  loadingsubmit || tablerows.length === 0 ? true : false
+                }
                 onClick={showConfirm}
                 // onClick={printInvoice}
                 endIcon={<ArrowForwardIcon />}

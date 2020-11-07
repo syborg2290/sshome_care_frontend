@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@material-ui/core";
 
 import { Modal } from "antd";
@@ -15,7 +15,11 @@ import AddRoot from "./components/add_root_Model/Add_Root";
 import ViewRoot from "./components/view_root_Model/View_Root";
 import UpdateRoot from "./components/update_root_Model/Update_Root";
 
+import db from "../../../../config/firebase.js";
+
 export default function Root() {
+  const [tableData, setTableData] = useState([]);
+  const [allTableData, setAllTableData] = useState([]);
   const [rootAddModel, setRootAddModel] = useState(false); // ROOT add model
   const [rootUpdateModel, setRootUpdateModel] = useState(false); // ROOT Update model
   const [rootViewModel, setRootViewModel] = useState(false); // ROOT View model
@@ -35,7 +39,7 @@ export default function Root() {
 
   const columns = [
     {
-      name: "Name",
+      name: "Root",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -122,40 +126,66 @@ export default function Root() {
     },
   ];
 
-  const tableData = [
-    [
-      "F/D",
-      <div className="yes">Yes</div>,
-      <div className="yes">Yes</div>,
-      <div className="yes">Yes</div>,
-      <div className="yes">Yes</div>,
-      <div className="yes">Yes</div>,
-      <div className="no">No</div>,
-      <div className="no">No</div>,
-      <div>
-        <VisibilityIcon className="btnView-root" onClick={RootView} />
-        <span>
-          <EditIcon className="btnEdit-root" onClick={RootUpdate} />
-        </span>
-      </div>,
-    ],
-    [
-      "F/B",
-      <div className="no">No</div>,
-      <div className="no">No</div>,
-      <div className="no">No</div>,
-      <div className="yes">Yes</div>,
-      <div className="yes">Yes</div>,
-      <div className="no">No</div>,
-      <div className="no">No</div>,
-      <div>
-        <VisibilityIcon className="btnView-root" onClick={RootView} />
-        <span>
-          <EditIcon className="btnEdit-root" onClick={RootUpdate} />
-        </span>
-      </div>,
-    ],
-  ];
+  useEffect(() => {
+    db.collection("root").onSnapshot((snap) => {
+      var raw = [];
+      var rawAll = [];
+      snap.docs.forEach((each) => {
+        rawAll.push({
+          id: each.id,
+          data: each.data(),
+        });
+        raw.push({
+          Root: each.data().root,
+          Monday: each.data().days[0].monday ? (
+            <div className="yes">Out</div>
+          ) : (
+            <div className="no">In</div>
+          ),
+          Tuseday: each.data().days[0].tuesday ? (
+            <div className="yes">Out</div>
+          ) : (
+            <div className="no">In</div>
+          ),
+          Wednesday: each.data().days[0].wendsday ? (
+            <div className="yes">Out</div>
+          ) : (
+            <div className="no">In</div>
+          ),
+          Thursday: each.data().days[0].thursday ? (
+            <div className="yes">Out</div>
+          ) : (
+            <div className="no">In</div>
+          ),
+          Friday: each.data().days[0].friday ? (
+            <div className="yes">Out</div>
+          ) : (
+            <div className="no">In</div>
+          ),
+          Saturday: each.data().days[0].saturday ? (
+            <div className="yes">Out</div>
+          ) : (
+            <div className="no">In</div>
+          ),
+          Sunday: each.data().days[0].sunday ? (
+            <div className="yes">Out</div>
+          ) : (
+            <div className="no">In</div>
+          ),
+          Action: (
+            <div>
+              <VisibilityIcon className="btnView-root" onClick={RootView} />
+              <span>
+                <EditIcon className="btnEdit-root" onClick={RootUpdate} />
+              </span>
+            </div>
+          ),
+        });
+      });
+      setTableData(raw);
+      setAllTableData(rawAll);
+    });
+  }, []);
 
   return (
     <>
@@ -193,7 +223,13 @@ export default function Root() {
         <div className="table__root_View">
           <div className="model__root_Main_View">
             <div className="model_root_Detail_View">
-              <ViewRoot />
+              <ViewRoot
+                key={allTableData[currentIndx]?.id}
+                description={allTableData[currentIndx]?.data.description}
+                empName={allTableData[currentIndx]?.data.empName1}
+                empName2={allTableData[currentIndx]?.data.empName2}
+                rootName={allTableData[currentIndx]?.data.root}
+              />
             </div>
           </div>
         </div>
@@ -214,7 +250,17 @@ export default function Root() {
         <div className="table__root_Update">
           <div className="model__root_Main_Update">
             <div className="model_root_Detail_Update">
-              <UpdateRoot />
+              <UpdateRoot
+                key={allTableData[currentIndx]?.id}
+                docId={allTableData[currentIndx]?.id}
+                descProp={allTableData[currentIndx]?.data.description}
+                empName1={allTableData[currentIndx]?.data.empName1}
+                empName2={allTableData[currentIndx]?.data.empName2}
+                rootProp={allTableData[currentIndx]?.data.root}
+                daysProp={allTableData[currentIndx]?.data.days}
+                employee2Prop={allTableData[currentIndx]?.data.employee2}
+                employeeProp={allTableData[currentIndx]?.data.employee1}
+              />
             </div>
           </div>
         </div>

@@ -19,31 +19,65 @@ import "./Gass_Model.css";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 
 import db from "../../../../../config/firebase.js";
+import firebase from "firebase";
 
 export default function Gass_Model() {
   const { confirm } = Modal;
   let history = useHistory();
   const [allWeight, setAllWeight] = useState([]);
+  const [allWeightData, setAllWeightData] = useState([]);
+  const [allRoot, setAllRoot] = useState([]);
   // eslint-disable-next-line
   const [selectedWeight, setSelectedWeight] = useState(0);
+  const [selectedType, setSelectedType] = useState("shop");
+  const [qty, setQty] = useState(1);
+  const [total, setTotal] = useState(0);
+  const [unit, setUnit] = useState(0);
+  const [saveTimestamp, setTimestamp] = useState(null);
+  const [validation, setValidation] = useState("");
 
   useEffect(() => {
     db.collection("gas")
       .get()
       .then((re) => {
         var rawWeight = [];
+        var rawWeightdataRe = [];
         re.docs.forEach((each) => {
+          rawWeightdataRe.push({
+            id: each.id,
+            data: each.data(),
+          });
           rawWeight.push(each.data().weight);
         });
         setAllWeight(rawWeight);
+        setAllWeightData(rawWeightdataRe);
+      });
+
+    db.collection("root")
+      .get()
+      .then((re) => {
+        var rawRoot = [];
+        re.docs.forEach((each) => {
+          rawRoot.push(each.data().root);
+        });
+        setAllRoot(rawRoot);
       });
   }, []);
 
-  const handleChange = (event) => {
+  const handleChangeWeight = (event) => {
     setSelectedWeight(event.target.value);
+
+    allWeightData.forEach((reE) => {
+      if (reE?.data.weight === event.target.value) {
+        setTotal(reE?.data.price * qty);
+        setUnit(reE?.data.price);
+      }
+    });
   };
 
-  const handleChangeWeight = (event) => {};
+  const handleChangeType = (event) => {
+    setSelectedType(event.target.value);
+  };
 
   const showConfirm = () => {
     confirm({
@@ -51,12 +85,62 @@ export default function Gass_Model() {
       icon: <ExclamationCircleOutlined />,
 
       onOk() {
-        history.push("/assistant/gass/gass_Model/make_recipt/Gass_recipt");
+        db.collection("gas")
+          .where("weight", "==", selectedWeight)
+          .get()
+          .then((reSe) => {
+            db.collection("gas")
+              .doc(reSe.docs[0].id)
+              .update({
+                qty: reSe.docs[0].data().qty - qty,
+              })
+              .then((_) => {
+                let moveWith = {
+                  pathname:
+                    "/assistant/gass/gass_Model/make_recipt/Gass_recipt",
+                  search: "?query=abc",
+                  state: {
+                    detail: {
+                      total: total,
+                      list: [
+                        {
+                          weight: selectedWeight,
+                          qty: qty,
+                          unit: unit,
+                          price: total,
+                        },
+                      ],
+                    },
+                  },
+                };
+                history.push(moveWith);
+              });
+          });
       },
       onCancel() {
-        console.log("Cancel");
+        submit();
+        window.location.reload();
       },
     });
+  };
+
+  const submit = () => {
+    db.collection("gas")
+      .where("weight", "==", selectedWeight)
+      .get()
+      .then((reSe) => {
+        db.collection("gas_purchase_history").add({
+          date: saveTimestamp,
+          type: selectedType,
+          price: total,
+          qty: qty,
+        });
+        db.collection("gas")
+          .doc(reSe.docs[0].id)
+          .update({
+            qty: reSe.docs[0].data().qty - qty,
+          });
+      });
   };
 
   return (
@@ -79,8 +163,16 @@ export default function Gass_Model() {
                   <InputLabel
                     className="rolllbl_selector"
                     htmlFor="outlined-age-native-simple"
-                  ></InputLabel>
-                  <Select className="roll_selector" size="small" native>
+                  >
+                    weight
+                  </InputLabel>
+                  <Select
+                    className="roll_selector"
+                    size="small"
+                    native
+                    onChange={handleChangeWeight}
+                  >
+                    <option>Select a weight</option>
                     {allWeight.map((each) => (
                       <option
                         onChange={handleChangeWeight}
@@ -109,6 +201,19 @@ export default function Gass_Model() {
                 autoComplete="qty"
                 size="small"
                 className="txt_qtyGas"
+                value={qty}
+                onChange={(e) => {
+                  allWeightData.forEach((reE) => {
+                    if (reE?.data.weight === selectedWeight) {
+                      if (reE?.data.qty - parseInt(e.target.value) >= 0) {
+                        setQty(parseInt(e.target.value));
+                        setTotal(reE?.data.price * e.target.value.trim());
+                      } else {
+                        setValidation("Out of stock");
+                      }
+                    }
+                  });
+                }}
               />
             </Grid>
 
@@ -118,7 +223,13 @@ export default function Gass_Model() {
             </Grid>
             <Grid item xs={12} sm={5}>
               <Space direction="vertical">
-                <DatePicker />
+                <DatePicker
+                  onChange={(e) => {
+                    setTimestamp(
+                      firebase.firestore.Timestamp.fromDate(e.toDate())
+                    );
+                  }}
+                />
               </Space>
             </Grid>
             <Grid className="txt_Labels" item xs={12} sm={4}></Grid>
@@ -128,36 +239,38 @@ export default function Gass_Model() {
             <Grid item xs={12} sm={5}>
               <Space direction="vertical">
                 <FormControl variant="outlined" className="fcontrol">
-                  <InputLabel
-                    className="rolllbl_selector"
-                    htmlFor="outlined-age-native-simple"
-                  >
-                    Shop
-                  </InputLabel>
                   <Select
                     className="roll_selector"
                     size="small"
                     native
-                    // value={state.age}
-                    onChange={handleChange}
-                    label="Field"
+                    onChange={handleChangeType}
+                    value={selectedType}
                   >
-                    <option value={10}>Shop</option>
-                    <option value={20}>A</option>
-                    <option value={30}>B</option>
+                    <option onChange={handleChangeType} value={"shop"}>
+                      shop
+                    </option>
+                    {allRoot.map((each) => (
+                      <option
+                        onChange={handleChangeType}
+                        key={each}
+                        value={each}
+                      >
+                        {each}
+                      </option>
+                    ))}
                   </Select>
                 </FormControl>
               </Space>
             </Grid>
             <Grid className="txt_Labels" item xs={12} sm={4}></Grid>
             <Grid className="txt_Labels" item xs={12} sm={3}>
-              Tot(LKR)
+              Total(LKR)
             </Grid>
             <Grid item xs={12} sm={5}>
               <p className="lbl_tots">
                 {" "}
                 <CurrencyFormat
-                  value={" 2500"}
+                  value={total}
                   displayType={"text"}
                   thousandSeparator={true}
                   prefix={" "}
@@ -169,22 +282,11 @@ export default function Gass_Model() {
               <hr />
             </Grid>
 
-            <Grid className="txt_Labels" item xs={12} sm={4}>
-              Total Price(LKR)
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <p className="price">
-                {" "}
-                <CurrencyFormat
-                  value={"11200"}
-                  displayType={"text"}
-                  thousandSeparator={true}
-                  prefix={" "}
-                />
-              </p>
-            </Grid>
+            <Grid className="txt_Labels" item xs={12} sm={4}></Grid>
+            <Grid item xs={12} sm={4}></Grid>
             <Grid item xs={12} sm={4}></Grid>
           </Grid>
+          <p className="validate_Edit">{validation}</p>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={9}></Grid>
             <Grid item xs={12} sm={3}>
@@ -193,6 +295,11 @@ export default function Gass_Model() {
                 color="primary"
                 className="btn_updateGass"
                 onClick={showConfirm}
+                disabled={
+                  saveTimestamp === null || allWeight.length === 0
+                    ? true
+                    : false
+                }
               >
                 Done
               </Button>

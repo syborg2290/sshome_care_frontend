@@ -24,6 +24,7 @@ export default function Add_Customer() {
   const location = useLocation();
 
   const [nic, setNic] = useState("");
+  const [mid, setMid] = useState("");
   const [fname, setFirstName] = useState("");
   const [lname, setLastName] = useState("");
   const [addres1, setAddres1] = useState("");
@@ -80,6 +81,7 @@ export default function Add_Customer() {
 
   const submit = () => {
     if (nic.length > 0) {
+       if (mid.length > 0) {
       if (fname.length > 0) {
         if (lname.length > 0) {
           if (addres1.length > 0) {
@@ -96,6 +98,7 @@ export default function Add_Customer() {
                           trustee1Id: trustee1Id,
                           trustee2Id: trustee2Id,
                           customerNic: nic.trim(),
+                          mid:mid.trim(),
                           customerFname: fname.trim(),
                           customerLname: lname.trim(),
                           customerAddress1: addres1.trim(),
@@ -186,7 +189,13 @@ export default function Add_Customer() {
           "Customer's first name is required!",
           "Remember validations"
         );
-      }
+         }
+          } else {
+      NotificationManager.info(
+        "Customer's MID is required!",
+        "Remember validations"
+      );
+    }
     } else {
       NotificationManager.info(
         "Customer's NIC is required!",
@@ -728,10 +737,10 @@ export default function Add_Customer() {
                   name="fName"
                   autoComplete="fname"
                   size="small"
-                  // value={fname}
-                  // onChange={(e) => {
-                  //   setFirstName(e.target.value);
-                  // }}
+                  value={mid}
+                  onChange={(e) => {
+                    setMid(e.target.value);
+                  }}
                 />
               </Grid>
               <Grid className="txt_Labels" item xs={12} sm={2}>

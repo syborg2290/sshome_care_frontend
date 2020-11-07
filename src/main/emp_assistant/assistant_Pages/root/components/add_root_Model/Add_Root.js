@@ -48,6 +48,8 @@ export default function Add_Root() {
         re.docs.forEach((each) => {
           raw.push(each.data());
         });
+        setEmployee1(raw[0].nic);
+        setEmployee2(raw[0].nic);
         setAllEmployee(raw);
       });
   }, []);
@@ -193,7 +195,6 @@ export default function Add_Root() {
                   Employee 1
                 </InputLabel>
                 <Select native label="Name" onChange={handleChange1}>
-                  <option>Select employee</option>
                   {allEmployee.map((reM) => (
                     <option
                       key={reM.nic + "r"}
@@ -214,7 +215,6 @@ export default function Add_Root() {
                   Employee 2
                 </InputLabel>
                 <Select native label="Name" onChange={handleChange2}>
-                  <option>Select employee</option>
                   {allEmployee.map((reM) => (
                     <option
                       key={reM.nic + "e"}

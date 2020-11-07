@@ -183,7 +183,7 @@ export default function Update_Root({docId,rootProp,descProp,employeeProp,employ
                   Employee 1
                 </InputLabel>
                 <Select native label="Name"  onChange={handleChange1} value={employee1}>
-                  <option>Select employee</option>
+                  
                   {allEmployee.map((reM) => (
                     <option
                       key={reM.nic + "r"}
@@ -204,7 +204,7 @@ export default function Update_Root({docId,rootProp,descProp,employeeProp,employ
                   Employee 2
                 </InputLabel>
                 <Select native label="Name"  onChange={handleChange2} value={employee2}>
-                  <option>Select employee</option>
+                  
                   {allEmployee.map((reM) => (
                     <option
                       key={reM.nic + "e"}

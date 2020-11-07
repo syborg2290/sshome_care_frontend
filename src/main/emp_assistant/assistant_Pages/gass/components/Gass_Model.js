@@ -125,7 +125,11 @@ export default function Gass_Model() {
   };
 
   const submit = () => {
-    db.collection("gas")
+    
+    if (selectedWeight === "Select a weight") {
+       setValidation("Select a weight");
+    } else {
+      db.collection("gas")
       .where("weight", "==", selectedWeight)
       .get()
       .then((reSe) => {
@@ -141,6 +145,8 @@ export default function Gass_Model() {
             qty: reSe.docs[0].data().qty - qty,
           });
       });
+    }
+    
   };
 
   return (

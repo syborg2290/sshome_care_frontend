@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Spin, DatePicker, Space } from "antd";
+import { Modal, Spin, DatePicker, Space, Checkbox } from "antd";
 import { PrinterFilled } from "@ant-design/icons";
 import { useLocation, useHistory } from "react-router-dom";
 
@@ -51,8 +51,14 @@ function Make_invoice() {
   // const [discription, setDiscription] = useState("");
   const [days, setDays] = useState(new Date().getDay());
   const [dates, setDates] = useState(new Date().getDate());
+  // eslint-disable-next-line
+  const [selectedRoot, setSelectedRoot] = useState(0);
 
   const { confirm } = Modal;
+
+  const handleChange = (event) => {
+    setSelectedRoot(event.target.value);
+  };
 
   let history = useHistory();
 
@@ -1078,6 +1084,19 @@ function Make_invoice() {
                       </TableRow>
                       <TableRow>
                         <TableCell align="right" colSpan={5}>
+                          Balance(LKR)
+                        </TableCell>
+                        <TableCell align="right" colSpan={2}>
+                          <CurrencyFormat
+                            value={500}
+                            displayType={"text"}
+                            thousandSeparator={true}
+                            prefix={" Rs. "}
+                          />
+                        </TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell align="right" colSpan={5}>
                           Total(LKR)
                         </TableCell>
                         <TableCell align="right" colSpan={2}>
@@ -1206,6 +1225,41 @@ function Make_invoice() {
                     </Select>
                   </FormControl>
                 </Grid>
+                <Grid item xs={12} sm={3}>
+                  Select Root
+                </Grid>
+                <Grid item xs={12} sm={4}>
+                  <Space direction="vertical">
+                    <FormControl variant="outlined" className="fcontrol">
+                      <InputLabel
+                        className="rolllbl_selector"
+                        htmlFor="outlined-age-native-simple"
+                      >
+                        Root
+                      </InputLabel>
+                      <Select
+                        className="roll_selector"
+                        size="small"
+                        native
+                        // value={state.root}
+                        onChange={handleChange}
+                        label="Field"
+                      >
+                        <option value={10}>Shop</option>
+                        <option value={20}>A</option>
+                        <option value={30}>B</option>
+                      </Select>
+                    </FormControl>
+                  </Space>
+                </Grid>
+                <Grid item xs={12} sm={5}></Grid>
+                <Grid item xs={12} sm={3}>
+                  Gamisarani
+                </Grid>
+                <Grid item xs={12} sm={4}>
+                  <Checkbox />
+                </Grid>
+                <Grid item xs={12} sm={5}></Grid>
               </Grid>
 
               <Button

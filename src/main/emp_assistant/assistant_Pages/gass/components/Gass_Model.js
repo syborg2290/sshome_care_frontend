@@ -85,68 +85,72 @@ export default function Gass_Model() {
       icon: <ExclamationCircleOutlined />,
 
       onOk() {
-        db.collection("gas")
-          .where("weight", "==", selectedWeight)
-          .get()
-          .then((reSe) => {
-            db.collection("gas")
-              .doc(reSe.docs[0].id)
-              .update({
-                qty: reSe.docs[0].data().qty - qty,
-              })
-              .then((_) => {
-                let moveWith = {
-                  pathname:
-                    "/assistant/gass/gass_Model/make_recipt/Gass_recipt",
-                  search: "?query=abc",
-                  state: {
-                    detail: {
-                      total: total,
-                      list: [
-                        {
-                          weight: selectedWeight,
-                          qty: qty,
-                          unit: unit,
-                          price: total,
-                        },
-                      ],
+        if (selectedWeight === "Select a weight") {
+          setValidation("Select a weight");
+        } else {
+          db.collection("gas")
+            .where("weight", "==", selectedWeight)
+            .get()
+            .then((reSe) => {
+              db.collection("gas")
+                .doc(reSe.docs[0].id)
+                .update({
+                  qty: reSe.docs[0].data().qty - qty,
+                })
+                .then((_) => {
+                  let moveWith = {
+                    pathname:
+                      "/assistant/gass/gass_Model/make_recipt/Gass_recipt",
+                    search: "?query=abc",
+                    state: {
+                      detail: {
+                        total: total,
+                        list: [
+                          {
+                            weight: selectedWeight,
+                            qty: qty,
+                            unit: unit,
+                            price: total,
+                          },
+                        ],
+                      },
                     },
-                  },
-                };
-                history.push(moveWith);
-              });
-          });
+                  };
+                  history.push(moveWith);
+                });
+            });
+        }
       },
       onCancel() {
         submit();
-        window.location.reload();
       },
     });
   };
 
   const submit = () => {
-    
     if (selectedWeight === "Select a weight") {
-       setValidation("Select a weight");
+      setValidation("Select a weight");
     } else {
       db.collection("gas")
-      .where("weight", "==", selectedWeight)
-      .get()
-      .then((reSe) => {
-        db.collection("gas_purchase_history").add({
-          date: saveTimestamp,
-          type: selectedType,
-          price: total,
-          qty: qty,
-        });
-        db.collection("gas")
-          .doc(reSe.docs[0].id)
-          .update({
-            qty: reSe.docs[0].data().qty - qty,
+        .where("weight", "==", selectedWeight)
+        .get()
+        .then((reSe) => {
+          db.collection("gas_purchase_history").add({
+            date: saveTimestamp,
+            type: selectedType,
+            price: total,
+            qty: qty,
           });
-      });
+          db.collection("gas")
+            .doc(reSe.docs[0].id)
+            .update({
+              qty: reSe.docs[0].data().qty - qty,
+            });
+        })
+        .then((_) => {
+          window.location.reload();
+        });
     }
-    
   };
 
   return (

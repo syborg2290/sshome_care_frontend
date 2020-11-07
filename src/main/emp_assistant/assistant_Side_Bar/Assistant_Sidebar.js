@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Drawer, IconButton, List } from "@material-ui/core";
+
 import {
   Tv as TvIcon,
   Dashboard as DashboardIcon,
@@ -12,6 +13,7 @@ import {
   BatteryStd as BatteryStdIcon,
   EventBusy as EventBusyIcon,
   LocalShipping as LocalShippingIcon,
+  GroupAdd as GroupAddIcon,
 } from "@material-ui/icons";
 
 import { useTheme } from "@material-ui/styles";
@@ -97,6 +99,12 @@ const structure = [
     label: "Gas",
     link: "/assistant/ui/gass",
     icon: <BatteryStdIcon className="icons" />,
+  },
+  {
+    id: 17,
+    label: "Employees",
+    link: "/assistant/ui/employee",
+    icon: <GroupAddIcon className="icons" />,
   },
 
   { id: 2, type: "divider" },

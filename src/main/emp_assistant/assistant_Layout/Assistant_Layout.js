@@ -28,6 +28,7 @@ import Gass from "../assistant_Pages/gass/Gass";
 import Repair from "../assistant_Pages/repairs/Repairs";
 import GamiSarani from "../assistant_Pages/gami_sarani/Gami_Sarani";
 import SeizedItems from "../assistant_Pages/seized_items/Seized_item";
+import Employee from "../assistant_Pages/employee/Employee";
 
 function LayoutAssistant(props) {
   return (
@@ -50,6 +51,7 @@ function LayoutAssistant(props) {
             <Route path="/assistant/ui/Repair" component={Repair} />
             <Route path="/assistant/ui/BlackList" component={BlackList} />
             <Route path="/assistant/ui/SeizedItems" component={SeizedItems} />
+            <Route path="/assistant/ui/employee" component={Employee} />
             {/* components */}
             <Route path="/assistant/ui/ItemTable" component={ItemTable} />
             <Route path="/assistant/ui/AddItem" component={AddItem} />

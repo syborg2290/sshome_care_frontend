@@ -156,7 +156,7 @@ export default function AddNew_Model({ close_model }) {
                 className="btn_done"
                 onClick={submit}
                 disabled={
-                  weight.length === 0 || price.length === 0 || qty.length === 0
+                  weight.length === 0 || price.length === 0 || qty.length === 0 || weight===0 || price===0 || qty ===0 
                 }
               >
                 Done

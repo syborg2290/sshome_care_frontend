@@ -39,6 +39,7 @@ import CloseOutlinedIcon from "@material-ui/icons/CloseOutlined";
 
 function Make_invoice() {
   const location = useLocation();
+  const [allRoot, setAllRoot] = useState([]);
   const [loadingsubmit, setLoadingSubmit] = useState(false);
   const [invoiceNumber, setInvoiceNumber] = useState("");
   const [tablerows, setTableRows] = useState([]);
@@ -48,12 +49,15 @@ function Make_invoice() {
   const [itemAPI, setItemAPI] = useState({});
   const [itemDiscount, setItemDiscount] = useState({});
   const [totalDiscount, setTotalDiscount] = useState(0);
+  const [gamisaraniamount, setGamisaraniamount] = useState(0);
   // const [discription, setDiscription] = useState("");
   const [days, setDays] = useState(new Date().getDay());
   const [dates, setDates] = useState(new Date().getDate());
   // eslint-disable-next-line
   const [selectedType, setSelectedType] = useState("shop");
   const [gamisarani, setGamisarani] = useState(false);
+  const [intialTimestamp, setInititialTimestamp] = useState(null);
+  const [deadlineTimestamp, setDeadlineTimestamp] = useState(null);
   let history = useHistory();
   const { confirm } = Modal;
 
@@ -91,6 +95,23 @@ function Make_invoice() {
       setItemDP(keepDataDP);
       setTableRows(tableData);
     }
+    db.collection("root")
+      .get()
+      .then((re) => {
+        var rawRoot = [];
+        re.docs.forEach((each) => {
+          rawRoot.push(each.data().root);
+        });
+        setAllRoot(rawRoot);
+      });
+
+    db.collection("gami_sarani")
+      .where("nic", "==", tablerows[0].customer.customerNic)
+      .get()
+      .then((gamiSa) => {
+        setGamisaraniamount(gamiSa.docs[0].data().Current_Balance);
+      });
+
     // eslint-disable-next-line
   }, []);
 
@@ -164,6 +185,7 @@ function Make_invoice() {
               installemtnDate: dates,
               discount: totalDiscount,
               subTotal: subTotalFunc(),
+              balance: itemNOI * itemAPI,
               total: subTotalFunc() - totalDiscount,
               // discription: discription,
               itemsList: arrayPassingItems,
@@ -186,6 +208,7 @@ function Make_invoice() {
               installemtnDayDate: null,
               discount: totalDiscount,
               subTotal: subTotalFunc(),
+              balance: 0,
               total: subTotalFunc() - totalDiscount,
               // discription: discription,
               itemsList: arrayPassingItems,
@@ -268,13 +291,17 @@ function Make_invoice() {
                       mid: tablerows[0].customer.mid,
                       installemtnDay: days,
                       installemtnDate: dates,
+                      gamisarani: gamisarani,
+                      balance: itemNOI * itemAPI,
+                      deadlineTimestamp: deadlineTimestamp,
+                      selectedType: selectedType,
                       discount: totalDiscount === "" ? 0 : totalDiscount,
                       total:
                         subTotalFunc() -
                         (totalDiscount === "" ? 0 : totalDiscount),
                       status_of_payandgo: "onGoing",
                       // description: discription,
-                      date: firebase.firestore.FieldValue.serverTimestamp(),
+                      date: intialTimestamp,
                     })
                     .then((invDoc) => {
                       if (tablerows[0].customer.trustee1Id !== null) {
@@ -403,13 +430,17 @@ function Make_invoice() {
                       mid: tablerows[0].customer.mid,
                       installemtnDay: days,
                       installemtnDate: dates,
+                      gamisarani: gamisarani,
+                      balance: itemNOI * itemAPI,
+                      deadlineTimestamp: deadlineTimestamp,
+                      selectedType: selectedType,
                       discount: totalDiscount === "" ? 0 : totalDiscount,
                       total:
                         subTotalFunc() -
                         (totalDiscount === "" ? 0 : totalDiscount),
                       status_of_payandgo: "onGoing",
                       // description: discription,
-                      date: firebase.firestore.FieldValue.serverTimestamp(),
+                      date: intialTimestamp,
                     })
                     .then((invDoc) => {
                       if (tablerows[0].customer.trustee1Id !== null) {
@@ -539,12 +570,16 @@ function Make_invoice() {
                   mid: tablerows[0].customer.mid,
                   installemtnDay: days,
                   installemtnDate: dates,
+                  gamisarani: gamisarani,
+                  balance: itemNOI * itemAPI,
+                  deadlineTimestamp: deadlineTimestamp,
+                  selectedType: selectedType,
                   discount: totalDiscount === "" ? 0 : totalDiscount,
                   total:
                     subTotalFunc() - (totalDiscount === "" ? 0 : totalDiscount),
                   status_of_payandgo: "onGoing",
                   // description: discription,
-                  date: firebase.firestore.FieldValue.serverTimestamp(),
+                  date: intialTimestamp,
                 })
                 .then((invDoc) => {
                   if (tablerows[0].customer.trustee1Id !== null) {
@@ -671,12 +706,16 @@ function Make_invoice() {
                   mid: tablerows[0].customer.mid,
                   installemtnDay: days,
                   installemtnDate: dates,
+                  gamisarani: gamisarani,
+                  balance: itemNOI * itemAPI,
+                  deadlineTimestamp: deadlineTimestamp,
+                  selectedType: selectedType,
                   discount: totalDiscount === "" ? 0 : totalDiscount,
                   total:
                     subTotalFunc() - (totalDiscount === "" ? 0 : totalDiscount),
                   status_of_payandgo: "onGoing",
                   // description: discription,
-                  date: firebase.firestore.FieldValue.serverTimestamp(),
+                  date: intialTimestamp,
                 })
                 .then((invDoc) => {
                   if (tablerows[0].customer.trustee1Id !== null) {
@@ -783,11 +822,15 @@ function Make_invoice() {
         customer_id: null,
         installemtnDay: null,
         installemtnDate: null,
+        gamisarani: gamisarani,
+        balance: 0,
+        deadlineTimestamp: null,
+        selectedType: selectedType,
         discount: totalDiscount === "" ? 0 : totalDiscount,
         total: subTotalFunc() - (totalDiscount === "" ? 0 : totalDiscount),
         status_of_payandgo: "Done",
         // description: discription,
-        date: firebase.firestore.FieldValue.serverTimestamp(),
+        date: intialTimestamp,
       });
 
       tablerows.forEach(async (itemUDoc) => {
@@ -1087,7 +1130,7 @@ function Make_invoice() {
                         </TableCell>
                         <TableCell align="right" colSpan={2}>
                           <CurrencyFormat
-                            value={500}
+                            value={itemNOI * itemAPI}
                             displayType={"text"}
                             thousandSeparator={true}
                             prefix={" Rs. "}
@@ -1134,7 +1177,13 @@ function Make_invoice() {
                 </Grid>
                 <Grid item xs={12} sm={4}>
                   <Space direction="vertical">
-                    <DatePicker />
+                    <DatePicker
+                      onChange={(e) => {
+                        setDeadlineTimestamp(
+                          firebase.firestore.Timestamp.fromDate(e.toDate())
+                        );
+                      }}
+                    />
                     <br />
                     <div
                       hidden={
@@ -1143,7 +1192,13 @@ function Make_invoice() {
                           : true
                       }
                     >
-                      <DatePicker />
+                      <DatePicker
+                        onChange={(e) => {
+                          setInititialTimestamp(
+                            firebase.firestore.Timestamp.fromDate(e.toDate())
+                          );
+                        }}
+                      />
                     </div>
                   </Space>
                 </Grid>
@@ -1215,13 +1270,21 @@ function Make_invoice() {
                         className="roll_selector"
                         size="small"
                         native
-                        value={selectedType}
                         onChange={handleChange}
-                        label="Field"
+                        value={selectedType}
                       >
-                        <option value={10}>Shop</option>
-                        <option value={20}>A</option>
-                        <option value={30}>B</option>
+                        <option onChange={handleChange} value={"shop"}>
+                          shop
+                        </option>
+                        {allRoot.map((each) => (
+                          <option
+                            onChange={handleChange}
+                            key={each}
+                            value={each}
+                          >
+                            {each}
+                          </option>
+                        ))}
                       </Select>
                     </FormControl>
                   </Space>
@@ -1247,7 +1310,11 @@ function Make_invoice() {
                 color="primary"
                 className="btn_addCustomer"
                 disabled={
-                  loadingsubmit || tablerows.length === 0 ? true : false
+                  loadingsubmit ||
+                  tablerows.length === 0 ||
+                  intialTimestamp === null
+                    ? true
+                    : false
                 }
                 onClick={showConfirm}
                 // onClick={printInvoice}

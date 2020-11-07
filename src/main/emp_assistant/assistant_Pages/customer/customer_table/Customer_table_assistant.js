@@ -64,6 +64,15 @@ export default function ItemTable() {
       },
     },
     {
+      name: "MID",
+      options: {
+        filter: false,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
       name: "NIC",
       options: {
         filter: false,
@@ -118,6 +127,7 @@ export default function ItemTable() {
             ),
             FirstName: siDoc.data().fname,
             LastName: siDoc.data().lname,
+            MID: siDoc.data().mid,
             NIC: siDoc.data().nic,
             Telephone: siDoc.data().mobile1,
             Action: (

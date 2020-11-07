@@ -450,6 +450,21 @@ export default function Update_Model({
               </Grid>
 
               <Grid className="lbl_topi" item xs={12} sm={4}>
+                Balance(LKR)
+              </Grid>
+              <Grid item xs={12} sm={2}>
+                :
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <CurrencyFormat
+                  // value={balance}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              </Grid>
+
+              <Grid className="lbl_topi" item xs={12} sm={4}>
                 Paid Amount(LKR)
               </Grid>
               <Grid item xs={12} sm={2}>

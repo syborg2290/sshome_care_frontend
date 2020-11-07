@@ -1105,7 +1105,9 @@ function Make_invoice() {
                 </TableContainer>
               </Grid>
               <Grid container spacing={2}>
-                <Grid className="" item xs={12} sm={7}></Grid>
+                <Grid className="txt_ip_setting" item xs={12} sm={7}>
+                  Invoice Dates :
+                </Grid>
                 <Grid className="txt_ip_setting" item xs={12} sm={5}>
                   Choose Installment Repayment Plan:
                 </Grid>
@@ -1139,27 +1141,6 @@ function Make_invoice() {
                   </Space>
                 </Grid>
                 <Grid className="xxx" item xs={12} sm={1}></Grid>
-
-                {/* <Grid className="radio_dayDate" item xs={12} sm={1}>
-                  <Radio.Group
-                    onChange={radioOnChange}
-                    value={daysDate.value}
-                    disabled={
-                      tablerows.some((ob) => ob.paymentWay === "PayandGo")
-                        ? false
-                        : true
-                    }
-                  >
-                    <Radio className="date" value={"Monthly"}>
-                      Monthly
-                    </Radio>
-
-                    <br />
-                    <Radio className="day" value={"Weekly"}>
-                      Weekly
-                    </Radio>
-                  </Radio.Group>
-                </Grid> */}
                 <Grid className="radio_dayDate" item xs={12} sm={3}>
                   <TextField
                     className="txt_day"
@@ -1217,8 +1198,13 @@ function Make_invoice() {
                     </Select>
                   </FormControl>
                 </Grid>
-                <Grid item xs={12} sm={3}>
-                  Select Root
+                <Grid item xs={12} sm={2}></Grid>
+                <Grid item xs={12} sm={4}>
+                  <hr />
+                </Grid>
+                <Grid item xs={12} sm={8}></Grid>
+                <Grid item xs={12} sm={2}>
+                  Select Shop/Root
                 </Grid>
                 <Grid item xs={12} sm={4}>
                   <Space direction="vertical">
@@ -1227,7 +1213,7 @@ function Make_invoice() {
                         className="rolllbl_selector"
                         htmlFor="outlined-age-native-simple"
                       >
-                        Root
+                        Select
                       </InputLabel>
                       <Select
                         className="roll_selector"
@@ -1244,14 +1230,14 @@ function Make_invoice() {
                     </FormControl>
                   </Space>
                 </Grid>
-                <Grid item xs={12} sm={5}></Grid>
-                <Grid item xs={12} sm={3}>
+                <Grid item xs={12} sm={6}></Grid>
+                <Grid item xs={12} sm={2}>
                   Gamisarani
                 </Grid>
                 <Grid item xs={12} sm={4}>
                   <Checkbox />
                 </Grid>
-                <Grid item xs={12} sm={5}></Grid>
+                <Grid item xs={12} sm={6}></Grid>
               </Grid>
 
               <Button

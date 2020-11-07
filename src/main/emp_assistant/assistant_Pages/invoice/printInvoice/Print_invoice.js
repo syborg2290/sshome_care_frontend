@@ -32,6 +32,7 @@ class PrintInvoiceClass extends React.Component {
     invoice_number: "",
     cols: [],
     rows: [],
+    balance: 0,
     total: 0,
     discount: 0,
     subTotal: 0,
@@ -227,6 +228,19 @@ class PrintInvoiceClass extends React.Component {
                           <TableCell className="cel" align="right" colSpan={2}>
                             <CurrencyFormat
                               value={this.state.discount}
+                              displayType={"text"}
+                              thousandSeparator={true}
+                              prefix={" "}
+                            />
+                          </TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell align="right" colSpan={3}>
+                            Balance(LKR)
+                          </TableCell>
+                          <TableCell className="cel" align="right" colSpan={2}>
+                            <CurrencyFormat
+                              value={this.state.balance}
                               displayType={"text"}
                               thousandSeparator={true}
                               prefix={" "}

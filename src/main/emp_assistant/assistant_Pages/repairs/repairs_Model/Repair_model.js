@@ -23,6 +23,7 @@ export default function Repair_model({ closeModel }) {
   const [invoice, setInvoice] = useState("");
   const [model_no, setModel_no] = useState("");
   const [cust_name, setCust_name] = useState("");
+  const [mid, setMid] = useState("");
   const [nic, setNic] = useState("");
   const [mobil_no1, setMobil_no1] = useState("");
   const [mobil_no2, setMobil_no2] = useState("");
@@ -39,6 +40,7 @@ export default function Repair_model({ closeModel }) {
           .add({
             invoice_no: invoice.trim(),
             model_no: model_no.trim(),
+            mid: mid,
             nic: nic,
             cust_name: cust_name.trim(),
             mobil_no1: mobil_no1.trim(),
@@ -52,6 +54,7 @@ export default function Repair_model({ closeModel }) {
             var passingWithCustomerObj = {
               invoice_no: invoice.trim(),
               model_no: model_no.trim(),
+              mid: mid,
               nic: nic,
               item_name: item_name,
             };
@@ -68,6 +71,7 @@ export default function Repair_model({ closeModel }) {
           .add({
             invoice_no: invoice.trim(),
             model_no: model_no.trim(),
+            mid: mid,
             nic: nic,
             cust_name: cust_name.trim(),
             mobil_no1: mobil_no1.trim(),
@@ -87,7 +91,7 @@ export default function Repair_model({ closeModel }) {
   const addRepair = async () => {
     setLoading(true);
 
-   let statusOfBlacklist = await db
+    let statusOfBlacklist = await db
       .collection("blacklist")
       .where("InvoiceNo", "==", invoice.trim())
       .get();
@@ -227,6 +231,26 @@ export default function Repair_model({ closeModel }) {
                 value={cust_name}
                 onChange={(e) => {
                   setCust_name(e.target.value);
+                }}
+              />
+            </Grid>
+            <Grid className="lbl_topi" item xs={12} sm={4}>
+              MID
+            </Grid>
+            <Grid item xs={12} sm={2}>
+              :
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                autoComplete="mic"
+                variant="outlined"
+                required
+                fullWidth
+                label="MID"
+                size="small"
+                value={mid}
+                onChange={(e) => {
+                  setMid(e.target.value);
                 }}
               />
             </Grid>

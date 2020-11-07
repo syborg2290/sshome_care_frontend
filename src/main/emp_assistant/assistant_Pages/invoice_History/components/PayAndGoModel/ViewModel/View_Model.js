@@ -100,7 +100,7 @@ export default function View_Model({ items_list_props, data }) {
                   <p>{data.installmentType}</p>
                 </Grid>
                 <Grid className="lbl_topis" item xs={12} sm={4}>
-                  Installmanet (day/Date)
+                  Installmanet day
                 </Grid>
                 <Grid item xs={12} sm={1}>
                   :
@@ -125,13 +125,34 @@ export default function View_Model({ items_list_props, data }) {
                     : data.installemtnDayDate}
                 </Grid>
                 <Grid className="lbl_topis" item xs={12} sm={4}>
-                  Qty
+                  Installmanet Date
                 </Grid>
                 <Grid item xs={12} sm={1}>
                   :
                 </Grid>
                 <Grid item xs={12} sm={7}>
-                  <p>{items_list_props.length}</p>
+                  2010.09.10
+                </Grid>
+                <Grid className="lbl_topis" item xs={12} sm={12}>
+                  <hr />
+                </Grid>
+                <Grid className="lbl_topis" item xs={12} sm={5}>
+                  Installment deadline
+                </Grid>
+                <Grid item xs={12} sm={1}>
+                  :
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  2010.12.10
+                </Grid>
+                <Grid className="lbl_topis" item xs={12} sm={5}>
+                  Gamisarani
+                </Grid>
+                <Grid item xs={12} sm={1}>
+                  :
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  NO
                 </Grid>
               </Grid>
               <Grid className="lbl_topiSub" item xs={12} sm={12}>
@@ -154,6 +175,15 @@ export default function View_Model({ items_list_props, data }) {
               </Grid>
               <Grid item xs={12} sm={3}>
                 <p></p>
+              </Grid>
+              <Grid className="lbl_topis" item xs={12} sm={3}>
+                MID
+              </Grid>
+              <Grid item xs={12} sm={1}>
+                :
+              </Grid>
+              <Grid item xs={12} sm={8}>
+                <p>{customer.mid}</p>
               </Grid>
               <Grid className="lbl_topis" item xs={12} sm={3}>
                 NIC

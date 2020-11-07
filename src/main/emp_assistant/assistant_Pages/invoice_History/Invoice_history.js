@@ -192,6 +192,15 @@ export default function Invoice_history() {
     },
 
     {
+      name: "MID",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
       name: "NIC",
       options: {
         filter: true,
@@ -321,6 +330,7 @@ export default function Invoice_history() {
             Date: moment(siDoc.data()?.date?.toDate()).format(
               "dddd, MMMM Do YYYY"
             ),
+            MID: siDoc.data().mid,
             NIC: siDoc.data().nic,
             Discount: (
               <CurrencyFormat

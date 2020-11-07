@@ -100,7 +100,6 @@ export default function Update_Root() {
                 fullWidth
                 id="description"
                 label="Description"
-                autoFocus
                 size="small"
                 value={description}
                 onChange={(e) => {

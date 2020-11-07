@@ -224,7 +224,7 @@ export default function Gami_Sarani() {
                 mid={allTableData[currentIndx]?.data.mid}
                 fname={allTableData[currentIndx]?.data.fname}
                 address1={allTableData[currentIndx]?.data.address1}
-                address2={allTableData[currentIndx]?.data.address2}
+                address2={allTableData[currentIndx]?.data.addres2}
                 lname={allTableData[currentIndx]?.data.lname}
                 mobile1={allTableData[currentIndx]?.data.mobile1}
                 mobile2={allTableData[currentIndx]?.data.mobile2}

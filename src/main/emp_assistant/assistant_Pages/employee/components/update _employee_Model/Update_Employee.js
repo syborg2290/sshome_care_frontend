@@ -5,50 +5,86 @@ import { Spin } from "antd";
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
-// eslint-disable-next-line
-import { nicValidation } from "../../../../../../config/validation.js";
+
 import "react-notifications/lib/notifications.css";
 
 // styles
 import "./Update_Employee.css";
 
-export default function Update_Employe() {
-  const [nic, setNic] = useState("");
-  const [fname, setFirstName] = useState("");
-  const [lname, setLastName] = useState("");
-  const [addres1, setAddres1] = useState("");
-  const [addres2, setAddres2] = useState("");
-  const [mobile1, setMobile1] = useState("");
-  const [mobile2, setMobile2] = useState("");
-  const [roll, setRoll] = useState("");
-  const [basic, setBasic] = useState("");
+import db from "../../../../../../config/firebase.js";
+
+export default function Update_Employe({
+  fnameProp,
+  lnameProp,
+  nicProp,
+  mobile1Prop,
+  mobile2Prop,
+  address1Prop,
+  address2Prop,
+  basicProp,
+  close_model,
+}) {
+  const [nic, setNic] = useState(nicProp);
+  const [fname, setFirstName] = useState(fnameProp);
+  const [lname, setLastName] = useState(lnameProp);
+  const [addres1, setAddres1] = useState(address1Prop);
+  const [addres2, setAddres2] = useState(address2Prop);
+  const [mobile1, setMobile1] = useState(mobile1Prop);
+  const [mobile2, setMobile2] = useState(mobile2Prop);
+  const [basic, setBasic] = useState(basicProp);
   const [validation, setValidation] = useState("");
   // eslint-disable-next-line
   const [isLoadingSubmit, setLoadingSubmit] = useState(false);
 
   const updateEmployee = async (e) => {
     e.preventDefault();
+    setLoadingSubmit(true);
+
     if (nic === "") {
+      setLoadingSubmit(false);
       setValidation("Employee NIC is required!");
     } else {
       if (fname === "") {
+        setLoadingSubmit(false);
         setValidation("Employee First Name is required!");
       } else {
         if (lname === "") {
+          setLoadingSubmit(false);
           setValidation("Employee Last Name is required!");
         } else {
           if (addres1 === "") {
+            setLoadingSubmit(false);
             setValidation("Employee Address 1  is required!");
           } else {
             if (mobile1 === "") {
+              setLoadingSubmit(false);
               setValidation("Employee Mobile 1 is required!");
             } else {
-              if (roll === "") {
-                setValidation("Employee Roll is required!");
+              if (basic === "") {
+                setLoadingSubmit(false);
+                setValidation("Employee Basic is required!");
               } else {
-                if (basic === "") {
-                  setValidation("Employee Basic is required!");
-                }
+                db.collection("employee")
+                  .where("nic", "==", nicProp)
+                  .get()
+                  .then((re) => {
+                    db.collection("employee")
+                      .doc(re.docs[0].id)
+                      .update({
+                        nic: nic,
+                        fname: fname,
+                        lname: lname,
+                        address1: addres1,
+                        addres2: addres2,
+                        mobile1: mobile1,
+                        mobile2: mobile2,
+                        basic: parseInt(basic),
+                      })
+                      .then(() => {
+                        setLoadingSubmit(false);
+                        close_model();
+                      });
+                  });
               }
             }
           }
@@ -174,7 +210,7 @@ export default function Update_Employe() {
                 size="small"
                 value={addres2}
                 onChange={(e) => {
-                  setAddres2(e.target.value.trim());
+                  setAddres2(e.target.value);
                 }}
               />
             </Grid>
@@ -220,32 +256,12 @@ export default function Update_Employe() {
                 type="number"
                 value={mobile2}
                 onChange={(e) => {
-                  setMobile2(e.target.value.trim());
+                  setMobile2(e.target.value);
                 }}
               />
             </Grid>
             <Grid item xs={12} sm={1}></Grid>
-            <Grid className="txt_Labels_employee_update" item xs={12} sm={4}>
-              Roll :
-            </Grid>
-            <Grid item xs={12} sm={7}>
-              <TextField
-                className="txtt_roll"
-                autoComplete="roll"
-                name="roll"
-                variant="outlined"
-                required
-                fullWidth
-                id="roll"
-                label="Roll"
-                autoFocus
-                size="small"
-                value={roll}
-                onChange={(e) => {
-                  setRoll(e.target.value.trim());
-                }}
-              />
-            </Grid>
+
             <Grid item xs={12} sm={1}></Grid>
             <Grid className="txt_Labels_employee_update" item xs={12} sm={4}>
               Basic :

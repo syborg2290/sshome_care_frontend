@@ -7,12 +7,14 @@ import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 // eslint-disable-next-line
 import { nicValidation } from "../../../../../../config/validation.js";
+import db from "../../../../../../config/firebase.js";
 import "react-notifications/lib/notifications.css";
+import firebase from "firebase";
 
 // styles
 import "./Add_Employee.css";
 
-export default function Add_Employee() {
+export default function Add_Employee({ close_model }) {
   const [nic, setNic] = useState("");
   const [fname, setFirstName] = useState("");
   const [lname, setLastName] = useState("");
@@ -20,12 +22,48 @@ export default function Add_Employee() {
   const [addres2, setAddres2] = useState("");
   const [mobile1, setMobile1] = useState("");
   const [mobile2, setMobile2] = useState("");
-  const [roll, setRoll] = useState("");
   const [basic, setBasic] = useState("");
   // eslint-disable-next-line
   const [validation, setValidation] = useState("");
   // eslint-disable-next-line
   const [isLoadingSubmit, setLoadingSubmit] = useState(false);
+
+  const submit = () => {
+    setLoadingSubmit(true);
+    var result = nicValidation(nic);
+    if (result) {
+      db.collection("employee")
+        .where("nic", "==", nic)
+        .get()
+        .then((nicRe) => {
+          if (nicRe.docs.length > 0) {
+            setLoadingSubmit(false);
+            setValidation("Employee already exists by NIC");
+          } else {
+            db.collection("employee")
+              .add({
+                nic: nic.trim(),
+                fname: fname.trim(),
+                lname: lname.trim(),
+                address1: addres1.trim(),
+                addres2: addres2.trim(),
+                mobile1: mobile1.trim(),
+                mobile2: mobile2.trim(),
+                basic: parseInt(basic.trim()),
+                date: firebase.firestore.FieldValue.serverTimestamp(),
+              })
+              .then((_) => {
+                setLoadingSubmit(false);
+                close_model();
+                window.location.reload();
+              });
+          }
+        });
+    } else {
+      setLoadingSubmit(false);
+      setValidation("Employee's NIC format is invalid!");
+    }
+  };
 
   return (
     <Container component="main" className="main_container_employee">
@@ -186,27 +224,6 @@ export default function Add_Employee() {
               />
             </Grid>
 
-            <Grid className="txt_Labels" item xs={12} sm={2}>
-              Roll :
-            </Grid>
-            <Grid item xs={12} sm={5}>
-              <TextField
-                className="txtt_roll"
-                autoComplete="roll"
-                name="roll"
-                variant="outlined"
-                required
-                fullWidth
-                id="roll"
-                label="Roll"
-                autoFocus
-                size="small"
-                value={roll}
-                onChange={(e) => {
-                  setRoll(e.target.value.trim());
-                }}
-              />
-            </Grid>
             <Grid item xs={12} sm={5}></Grid>
             <Grid className="txt_Labels" item xs={12} sm={2}>
               Basic :
@@ -241,14 +258,13 @@ export default function Add_Employee() {
                 variant="contained"
                 color="primary"
                 className="btn_addEmplyee"
-                // onClick={submit}
+                onClick={submit}
                 disabled={
                   nic.length === 0 ||
                   fname.length === 0 ||
                   lname.length === 0 ||
                   addres1.length === 0 ||
                   mobile1.length === 0 ||
-                  roll.length === 0 ||
                   basic.length === 0
                 }
               >

@@ -7,13 +7,11 @@ import "./View_Employee.css";
 export default function View_Employee({
   fname,
   lname,
-  mid,
   nic,
   mobile1,
   mobile2,
   address1,
   address2,
-  roll,
   basic,
 }) {
   return (
@@ -47,15 +45,7 @@ export default function View_Employee({
       <Col className="customer_sarani" span={14}>
         {lname}
       </Col>
-      <Col className="customer_details" span={8}>
-        MemeberID
-      </Col>
-      <Col className="customer" span={2}>
-        :
-      </Col>
-      <Col className="customer" span={14}>
-        {mid}
-      </Col>
+
       <Col className="customer_details_sarani" span={8}>
         NIC
       </Col>
@@ -107,17 +97,7 @@ export default function View_Employee({
       </Col>
 
       <Col className="customer_details_sarani" span={8}>
-        Roll
-      </Col>
-      <Col className="customer_sarani" span={2}>
-        :
-      </Col>
-      <Col className="customer_sarani" span={14}>
-        {roll}
-      </Col>
-
-      <Col className="customer_details_sarani" span={8}>
-        Basic
+        Basic(LKR)
       </Col>
       <Col className="customer_sarani" span={2}>
         :

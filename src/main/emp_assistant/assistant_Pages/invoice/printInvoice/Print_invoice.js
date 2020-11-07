@@ -46,6 +46,7 @@ class PrintInvoiceClass extends React.Component {
 
     this.state.invoice_number = this.props.prop?.invoice_number;
     this.state.total = this.props.prop?.total;
+    this.state.balance = this.props.prop?.balance;
     this.state.dayOrDate = this.props.prop?.installemtnDayDate;
     this.state.discount = this.props.prop?.discount;
     this.state.subTotal = this.props.prop?.subTotal;

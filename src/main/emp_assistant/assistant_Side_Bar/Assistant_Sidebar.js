@@ -14,6 +14,7 @@ import {
   EventBusy as EventBusyIcon,
   LocalShipping as LocalShippingIcon,
   GroupAdd as GroupAddIcon,
+  Commute as CommuteIcon,
 } from "@material-ui/icons";
 
 import { useTheme } from "@material-ui/styles";
@@ -106,7 +107,12 @@ const structure = [
     link: "/assistant/ui/employee",
     icon: <GroupAddIcon className="icons" />,
   },
-
+  {
+    id: 18,
+    label: "Root",
+    link: "/assistant/ui/root",
+    icon: <CommuteIcon className="icons" />,
+  },
   { id: 2, type: "divider" },
 
   {

@@ -50,6 +50,7 @@ export default function Black_List() {
         }),
       },
     },
+
     {
       name: "FirstName",
       options: {
@@ -65,6 +66,19 @@ export default function Black_List() {
         filter: true,
         setCellHeaderProps: (value) => ({
           style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "MID",
+      options: {
+        filter: false,
+        setCellHeaderProps: (value) => ({
+          style: {
+            fontSize: "15px",
+            color: "black",
+            fontWeight: "600",
+          },
         }),
       },
     },
@@ -124,8 +138,10 @@ export default function Black_List() {
         });
         allTableRaw.push({
           InvoiceNo: each.data().InvoiceNo,
+
           FirstName: each.data().FirstName,
           LastName: each.data().LastName,
+          MID: each.data().MID,
           NIC: each.data().NIC,
           Telephone: each.data().Telephone,
           Action: (
@@ -205,7 +221,7 @@ export default function Black_List() {
                                 balance: 0,
                                 date: firebase.firestore.FieldValue.serverTimestamp(),
                               });
-                               setConfirmVisible(false);
+                              setConfirmVisible(false);
                             }
                           });
                       });

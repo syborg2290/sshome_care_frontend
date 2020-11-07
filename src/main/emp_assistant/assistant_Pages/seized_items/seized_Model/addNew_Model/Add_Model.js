@@ -15,7 +15,9 @@ import db from "../../../../../../config/firebase.js";
 import "./Add_Model.css";
 
 export default function Add_Model({ closeModel }) {
+  // eslint-disable-next-line
   const [invoice, setInvoice] = useState("");
+  const [serial, setSerial] = useState("");
   const [date, setDate] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -66,24 +68,24 @@ export default function Add_Model({ closeModel }) {
                       } else {
                         setLoading(false);
                         setError(
-                          "Invoice number you entered is not 'pay and go' item!"
+                          "Serial number you entered is not 'pay and go' item!"
                         );
                       }
                     } else {
                       setLoading(false);
-                      setError("Invoice number you entered is not found!");
+                      setError("Serial number you entered is not found!");
                     }
                   });
               } else {
                 setLoading(false);
                 setError(
-                  "Invoice number you entered already in the seized list!"
+                  "Serial number you entered already in the seized list!"
                 );
               }
             });
         } else {
           setLoading(false);
-          setError("Invoice number you entered not in the blacklist!");
+          setError("Serial number you entered not in the blacklist!");
         }
       });
   };
@@ -100,22 +102,22 @@ export default function Add_Model({ closeModel }) {
         <form className="form" noValidate>
           <Grid container spacing={2}>
             <Grid className="lbl_topi" item xs={12} sm={4}>
-              Invoice No
+              Serial No
             </Grid>
             <Grid item xs={12} sm={2}>
               :
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
-                autoComplete="ino"
+                autoComplete="sio"
                 variant="outlined"
                 required
                 fullWidth
-                label="Invoice No"
+                label="Serial No"
                 size="small"
-                value={invoice}
+                value={serial}
                 onChange={(e) => {
-                  setInvoice(e.target.value);
+                  setSerial(e.target.value);
                 }}
               />
             </Grid>
@@ -143,7 +145,7 @@ export default function Add_Model({ closeModel }) {
                 className="btn_add"
                 onClick={addSeized}
                 disabled={
-                  loading || invoice.length === 0 || date.length === 0
+                  loading || serial.length === 0 || date.length === 0
                     ? true
                     : false
                 }

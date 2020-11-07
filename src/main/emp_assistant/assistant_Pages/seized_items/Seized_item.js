@@ -49,6 +49,15 @@ export default function Seized_item() {
       },
     },
     {
+      name: "Serial_number",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
       name: "Model_No",
       options: {
         filter: true,
@@ -63,6 +72,19 @@ export default function Seized_item() {
         filter: true,
         setCellHeaderProps: (value) => ({
           style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "MID",
+      options: {
+        filter: false,
+        setCellHeaderProps: (value) => ({
+          style: {
+            fontSize: "15px",
+            color: "black",
+            fontWeight: "600",
+          },
         }),
       },
     },
@@ -128,8 +150,10 @@ export default function Seized_item() {
 
           rowData.push({
             InvoiceNo: RESnap.data()?.invoice_number,
+            SerialNo: RESnap.data()?.serialNo,
             Model_No: RESnap.data()?.model_no,
             Item_Name: RESnap.data()?.item_name,
+            MID: RESnap.data()?.mid,
             NIC: RESnap.data()?.nic,
             Sized_date: RESnap.data()?.date,
             Action: (

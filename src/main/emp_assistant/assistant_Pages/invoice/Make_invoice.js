@@ -1137,11 +1137,11 @@ function Make_invoice() {
                     className="txt_day"
                     variant="outlined"
                     size="small"
-                    // disabled={
-                    //   tablerows.some((ob) => ob.paymentWay === "PayandGo")
-                    //     ? false
-                    //     : true
-                    // }
+                    disabled={
+                      tablerows.some((ob) => ob.paymentWay === "PayandGo")
+                        ? false
+                        : true
+                    }
                     placeholder="date"
                     type="number"
                     InputProps={{ inputProps: { min: 1, max: 31 } }}
@@ -1163,11 +1163,11 @@ function Make_invoice() {
                     </InputLabel>
                     <Select
                       value={days}
-                      // disabled={
-                      //   tablerows.some((ob) => ob.paymentWay === "PayandGo")
-                      //     ? false
-                      //     : true
-                      // }
+                      disabled={
+                        tablerows.some((ob) => ob.paymentWay === "PayandGo")
+                          ? false
+                          : true
+                      }
                       onChange={(e) => {
                         setDays(e.target.value);
                       }}

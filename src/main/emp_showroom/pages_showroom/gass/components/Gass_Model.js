@@ -1,5 +1,7 @@
-import React from "react";
-import { Radio, Modal } from "antd";
+import React, { useState, useEffect } from "react";
+import { Modal, DatePicker, Space } from "antd";
+import FormControl from "@material-ui/core/FormControl";
+import InputLabel from "@material-ui/core/InputLabel";
 import { useHistory } from "react-router-dom";
 import CurrencyFormat from "react-currency-format";
 import {
@@ -8,6 +10,7 @@ import {
   Container,
   Typography,
   Button,
+  Select,
 } from "@material-ui/core";
 
 import "./Gass_Model.css";
@@ -15,10 +18,32 @@ import "./Gass_Model.css";
 // icon
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 
+import db from "../../../../../config/firebase.js";
+
 export default function Gass_Model() {
   const { confirm } = Modal;
-
   let history = useHistory();
+  const [allWeight, setAllWeight] = useState([]);
+  // eslint-disable-next-line
+  const [selectedWeight, setSelectedWeight] = useState(0);
+
+  useEffect(() => {
+    db.collection("gas")
+      .get()
+      .then((re) => {
+        var rawWeight = [];
+        re.docs.forEach((each) => {
+          rawWeight.push(each.data().weight);
+        });
+        setAllWeight(rawWeight);
+      });
+  }, []);
+
+  const handleChange = (event) => {
+    setSelectedWeight(event.target.value);
+  };
+
+  const handleChangeWeight = (event) => {};
 
   const showConfirm = () => {
     confirm({
@@ -46,29 +71,38 @@ export default function Gass_Model() {
         <form className="form" noValidate>
           <Grid container spacing={2}>
             <Grid className="txt_Labels" item xs={12} sm={3}>
-              Type
+              Weight
             </Grid>
             <Grid item xs={12} sm={9}>
-              <Radio.Group defaultValue="a" buttonStyle="solid">
-                <Radio.Button className="btn_sellRdio" value="a">
-                  2.5 kg
-                </Radio.Button>
-                <Radio.Button className="btn_sellRdio" value="b">
-                  5 kg
-                </Radio.Button>
-                <Radio.Button className="btn_sellRdio" value="c">
-                  12.5 kg
-                </Radio.Button>
-              </Radio.Group>
+              <Space direction="vertical">
+                <FormControl variant="outlined" className="fcontrol">
+                  <InputLabel
+                    className="rolllbl_selector"
+                    htmlFor="outlined-age-native-simple"
+                  ></InputLabel>
+                  <Select className="roll_selector" size="small" native>
+                    {allWeight.map((each) => (
+                      <option
+                        onChange={handleChangeWeight}
+                        key={each}
+                        value={each}
+                      >
+                        {each} Kg
+                      </option>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Space>
             </Grid>
             <Grid className="lbl_qty" item xs={12} sm={3}>
               Qty
             </Grid>
-            <Grid className="qq" item xs={12} sm={3}>
+            <Grid className="qq" item xs={12} sm={5}>
               <TextField
                 variant="outlined"
                 required
                 type="number"
+                InputProps={{ inputProps: { min: 1 } }}
                 fullWidth
                 label="Qty"
                 name="qty"
@@ -77,39 +111,50 @@ export default function Gass_Model() {
                 className="txt_qtyGas"
               />
             </Grid>
-            <Grid className="qq2" item xs={12} sm={2}>
-              <TextField
-                variant="outlined"
-                id="txt_5"
-                required
-                type="number"
-                fullWidth
-                label="Qty"
-                name="qty"
-                autoComplete="qty"
-                size="small"
-                className="txt_qtyGas2"
-              />
+
+            <Grid item xs={12} sm={4}></Grid>
+            <Grid className="txt_Labels" item xs={12} sm={3}>
+              Date :
             </Grid>
-            <Grid item xs={12} sm={2}>
-              <TextField
-                variant="outlined"
-                required
-                type="number"
-                fullWidth
-                label="Qty"
-                name="qty"
-                autoComplete="qty"
-                size="small"
-                className="txt_qtyGas"
-              />
+            <Grid item xs={12} sm={5}>
+              <Space direction="vertical">
+                <DatePicker />
+              </Space>
             </Grid>
-            <Grid item xs={12} sm={2}></Grid>
+            <Grid className="txt_Labels" item xs={12} sm={4}></Grid>
+            <Grid className="txt_Labels" item xs={12} sm={3}>
+              Field :
+            </Grid>
+            <Grid item xs={12} sm={5}>
+              <Space direction="vertical">
+                <FormControl variant="outlined" className="fcontrol">
+                  <InputLabel
+                    className="rolllbl_selector"
+                    htmlFor="outlined-age-native-simple"
+                  >
+                    Shop
+                  </InputLabel>
+                  <Select
+                    className="roll_selector"
+                    size="small"
+                    native
+                    // value={state.age}
+                    onChange={handleChange}
+                    label="Field"
+                  >
+                    <option value={10}>Shop</option>
+                    <option value={20}>A</option>
+                    <option value={30}>B</option>
+                  </Select>
+                </FormControl>
+              </Space>
+            </Grid>
+            <Grid className="txt_Labels" item xs={12} sm={4}></Grid>
             <Grid className="txt_Labels" item xs={12} sm={3}>
               Tot(LKR)
             </Grid>
-            <Grid item xs={12} sm={3}>
-              <p>
+            <Grid item xs={12} sm={5}>
+              <p className="lbl_tots">
                 {" "}
                 <CurrencyFormat
                   value={" 2500"}
@@ -119,28 +164,7 @@ export default function Gass_Model() {
                 />
               </p>
             </Grid>
-            <Grid item xs={12} sm={2}>
-              <p className="lbl_qtyGas2tot">
-                <CurrencyFormat
-                  value={"2200"}
-                  displayType={"text"}
-                  thousandSeparator={true}
-                  prefix={" "}
-                />
-              </p>
-            </Grid>
-            <Grid item xs={12} sm={2}>
-              <p>
-                {" "}
-                <CurrencyFormat
-                  value={"3200"}
-                  displayType={"text"}
-                  thousandSeparator={true}
-                  prefix={" "}
-                />
-              </p>
-            </Grid>
-            <Grid item xs={12} sm={2}></Grid>
+            <Grid item xs={12} sm={4}></Grid>
             <Grid item xs={12} sm={12}>
               <hr />
             </Grid>

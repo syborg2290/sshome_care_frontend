@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -23,49 +23,49 @@ import GassModel from "./components/Gass_Model";
 
 import "./Gass.css";
 
+import db from "../../../../config/firebase.js";
+
 function createData(Weight, Qty, Price) {
   return { Weight, Qty, Price };
 }
 
-const rows = [
-  createData(
-    "12.5 kg",
-    12,
-    <CurrencyFormat
-      value={" 3500"}
-      displayType={"text"}
-      thousandSeparator={true}
-      prefix={" "}
-    />
-  ),
-  createData(
-    "5 kg",
-    6,
-    <CurrencyFormat
-      value={" 2500"}
-      displayType={"text"}
-      thousandSeparator={true}
-      prefix={" "}
-    />
-  ),
-  createData(
-    "2.5 kg",
-    15,
-    <CurrencyFormat
-      value={" 1200"}
-      displayType={"text"}
-      thousandSeparator={true}
-      prefix={" "}
-    />
-  ),
-];
-
 export default function Gass() {
+  // eslint-disable-next-line
+  const [allTableData, setAllTableData] = useState([]);
+  const [tableData, setTableData] = useState([]);
   const [gassModal, setGassModal] = useState(false);
 
   const showModalGass = () => {
     setGassModal(true);
   };
+
+  useEffect(() => {
+    db.collection("gas").onSnapshot((snap) => {
+      var raw = [];
+      var rawAll = [];
+      snap.docs.forEach((each) => {
+        rawAll.push({
+          id: each.id,
+          data: each.data(),
+          weight: each.data().weight,
+        });
+        raw.push(
+          createData(
+            each.data().weight + " Kg",
+            each.data().qty,
+            <CurrencyFormat
+              value={each.data().price}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={" "}
+            />
+          )
+        );
+      });
+      setAllTableData(rawAll);
+      setTableData(raw);
+    });
+  }, []);
 
   return (
     <>
@@ -113,7 +113,7 @@ export default function Gass() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((row) => (
+              {tableData.map((row) => (
                 <TableRow key={row.Weight}>
                   <TableCell component="th" scope="row">
                     {row.Weight}

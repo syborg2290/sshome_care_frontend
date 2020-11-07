@@ -1205,31 +1205,12 @@ function Make_invoice() {
                     </Select>
                   </FormControl>
                 </Grid>
-<<<<<<< HEAD
-                <Grid item xs={12} sm={2}></Grid>
-                <Grid item xs={12} sm={4}>
-                  <hr />
-                </Grid>
-                <Grid item xs={12} sm={8}></Grid>
-                <Grid item xs={12} sm={2}>
-                  Select Shop/Root
-=======
                 <Grid item xs={12} sm={3}>
                   Select a type
->>>>>>> e19689e14cdd33cd5ff8eb691774ba4f651de1e6
                 </Grid>
                 <Grid item xs={12} sm={4}>
                   <Space direction="vertical">
                     <FormControl variant="outlined" className="fcontrol">
-<<<<<<< HEAD
-                      <InputLabel
-                        className="rolllbl_selector"
-                        htmlFor="outlined-age-native-simple"
-                      >
-                        Select
-                      </InputLabel>
-=======
->>>>>>> e19689e14cdd33cd5ff8eb691774ba4f651de1e6
                       <Select
                         className="roll_selector"
                         size="small"

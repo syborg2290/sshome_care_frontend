@@ -79,9 +79,7 @@ export default function Gass_Model() {
                   <InputLabel
                     className="rolllbl_selector"
                     htmlFor="outlined-age-native-simple"
-                  >
-                    weight
-                  </InputLabel>
+                  ></InputLabel>
                   <Select className="roll_selector" size="small" native>
                     {allWeight.map((each) => (
                       <option

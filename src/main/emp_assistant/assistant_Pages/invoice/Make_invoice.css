@@ -129,7 +129,7 @@ label {
 }
 
 .txt_description {
-  margin-top: 15px !important;
+  margin-top: 10px !important;
 }
 
 .radio_dayDate {
@@ -166,4 +166,8 @@ label {
   float: right !important;
   margin-top: 20px !important;
   font-weight: 600 !important;
+}
+
+.deadline {
+  margin-top: 43px !important;
 }

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Spin } from "antd";
+import { Modal, Spin, DatePicker, Space } from "antd";
 import { PrinterFilled } from "@ant-design/icons";
 import { useLocation, useHistory } from "react-router-dom";
+
 import {
   Button,
   TextField,
@@ -47,7 +48,7 @@ function Make_invoice() {
   const [itemAPI, setItemAPI] = useState({});
   const [itemDiscount, setItemDiscount] = useState({});
   const [totalDiscount, setTotalDiscount] = useState(0);
-  const [discription, setDiscription] = useState("");
+  // const [discription, setDiscription] = useState("");
   const [days, setDays] = useState(new Date().getDay());
   const [dates, setDates] = useState(new Date().getDate());
 
@@ -159,7 +160,7 @@ function Make_invoice() {
               discount: totalDiscount,
               subTotal: subTotalFunc(),
               total: subTotalFunc() - totalDiscount,
-              discription: discription,
+              // discription: discription,
               itemsList: arrayPassingItems,
               backto: "item_list",
             };
@@ -181,7 +182,7 @@ function Make_invoice() {
               discount: totalDiscount,
               subTotal: subTotalFunc(),
               total: subTotalFunc() - totalDiscount,
-              discription: discription,
+              // discription: discription,
               itemsList: arrayPassingItems,
               backto: "item_list",
             };
@@ -265,7 +266,7 @@ function Make_invoice() {
                         subTotalFunc() -
                         (totalDiscount === "" ? 0 : totalDiscount),
                       status_of_payandgo: "onGoing",
-                      description: discription,
+                      // description: discription,
                       date: firebase.firestore.FieldValue.serverTimestamp(),
                     })
                     .then((invDoc) => {
@@ -398,7 +399,7 @@ function Make_invoice() {
                         subTotalFunc() -
                         (totalDiscount === "" ? 0 : totalDiscount),
                       status_of_payandgo: "onGoing",
-                      description: discription,
+                      // description: discription,
                       date: firebase.firestore.FieldValue.serverTimestamp(),
                     })
                     .then((invDoc) => {
@@ -531,7 +532,7 @@ function Make_invoice() {
                   total:
                     subTotalFunc() - (totalDiscount === "" ? 0 : totalDiscount),
                   status_of_payandgo: "onGoing",
-                  description: discription,
+                  // description: discription,
                   date: firebase.firestore.FieldValue.serverTimestamp(),
                 })
                 .then((invDoc) => {
@@ -661,7 +662,7 @@ function Make_invoice() {
                   total:
                     subTotalFunc() - (totalDiscount === "" ? 0 : totalDiscount),
                   status_of_payandgo: "onGoing",
-                  description: discription,
+                  // description: discription,
                   date: firebase.firestore.FieldValue.serverTimestamp(),
                 })
                 .then((invDoc) => {
@@ -772,7 +773,7 @@ function Make_invoice() {
         discount: totalDiscount === "" ? 0 : totalDiscount,
         total: subTotalFunc() - (totalDiscount === "" ? 0 : totalDiscount),
         status_of_payandgo: "Done",
-        description: discription,
+        // description: discription,
         date: firebase.firestore.FieldValue.serverTimestamp(),
       });
 
@@ -1090,25 +1091,33 @@ function Make_invoice() {
                   Choose Installment Repayment Plan:
                 </Grid>
                 <Grid className="txt_description" item xs={12} sm={2}>
-                  Description :
+                  Date of purches
+                  <br />
+                  <div
+                    hidden={
+                      tablerows.some((ob) => ob.paymentWay === "PayandGo")
+                        ? false
+                        : true
+                    }
+                    className="deadline"
+                  >
+                    Installment deadline
+                  </div>
                 </Grid>
                 <Grid item xs={12} sm={4}>
-                  <TextField
-                    className="txt_description"
-                    autoComplete="description"
-                    name="description"
-                    variant="outlined"
-                    multiline
-                    rows={4}
-                    fullWidth
-                    id="description"
-                    label="Description"
-                    size="small"
-                    value={discription}
-                    onChange={(e) => {
-                      setDiscription(e.target.value.trim());
-                    }}
-                  />
+                  <Space direction="vertical">
+                    <DatePicker />
+                    <br />
+                    <div
+                      hidden={
+                        tablerows.some((ob) => ob.paymentWay === "PayandGo")
+                          ? false
+                          : true
+                      }
+                    >
+                      <DatePicker />
+                    </div>
+                  </Space>
                 </Grid>
                 <Grid className="xxx" item xs={12} sm={1}></Grid>
 

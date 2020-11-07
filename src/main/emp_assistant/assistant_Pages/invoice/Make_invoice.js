@@ -1270,7 +1270,8 @@ function Make_invoice() {
                     </Select>
                   </FormControl>
                 </Grid>
-                <Grid item xs={12} sm={3}>
+                <Grid item xs={12} sm={2}></Grid>
+                <Grid item xs={12} sm={2}>
                   Select a type
                 </Grid>
                 <Grid item xs={12} sm={4}>
@@ -1299,7 +1300,10 @@ function Make_invoice() {
                     </FormControl>
                   </Space>
                 </Grid>
-                <Grid item xs={12} sm={6}></Grid>
+              </Grid>
+              <Grid item xs={12} sm={6}></Grid>
+
+              <Grid className="gamiCrd" item xs={12} sm={6}>
                 <Grid item xs={12} sm={2}>
                   Gamisarani
                 </Grid>
@@ -1313,6 +1317,7 @@ function Make_invoice() {
                 </Grid>
                 <Grid item xs={12} sm={6}></Grid>
               </Grid>
+              <Grid item xs={12} sm={6}></Grid>
 
               <Button
                 fullWidth

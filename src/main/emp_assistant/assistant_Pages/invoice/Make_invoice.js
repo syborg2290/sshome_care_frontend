@@ -49,9 +49,9 @@ function Make_invoice() {
   const [itemAPI, setItemAPI] = useState({});
   const [itemDiscount, setItemDiscount] = useState({});
   const [totalDiscount, setTotalDiscount] = useState(0);
-  const [gamisaraniInitialAmount, setGamisaraniInitialAmount] = useState(0);
-  const [gamisaraniamount, setGamisaraniamount] = useState(0);
-  const [gamisaraniId, setGamisaraniId] = useState("");
+  // const [gamisaraniInitialAmount, setGamisaraniInitialAmount] = useState(0);
+  // const [gamisaraniamount, setGamisaraniamount] = useState(0);
+  // const [gamisaraniId, setGamisaraniId] = useState("");
   const [days, setDays] = useState(new Date().getDay());
   const [dates, setDates] = useState(new Date().getDate());
   // eslint-disable-next-line
@@ -96,25 +96,25 @@ function Make_invoice() {
       setItemDP(keepDataDP);
       setTableRows(tableData);
 
-      db.collection("root")
-        .get()
-        .then((re) => {
-          var rawRoot = [];
-          re.docs.forEach((each) => {
-            rawRoot.push(each.data().root);
-          });
-          setAllRoot(rawRoot);
-        });
-
-      db.collection("gami_sarani")
-        .where("nic", "==", tableData[0]?.customer.customerNic)
-        .get()
-        .then((gamiSa) => {
-          setGamisaraniId(gamiSa.docs[0].id);
-          setGamisaraniInitialAmount(gamiSa.docs[0].data().Current_Balance);
-          setGamisaraniamount(gamiSa.docs[0].data().Current_Balance);
-        });
+      // db.collection("gami_sarani")
+      //   .where("nic", "==", tableData[0].customer.customerNic)
+      //   .get()
+      //   .then((gamiSa) => {
+      //     setGamisaraniId(gamiSa.docs[0].id);
+      //     setGamisaraniInitialAmount(gamiSa.docs[0].data().Current_Balance);
+      //     setGamisaraniamount(gamiSa.docs[0].data().Current_Balance);
+      //   });
     }
+
+    db.collection("root")
+      .get()
+      .then((re) => {
+        var rawRoot = [];
+        re.docs.forEach((each) => {
+          rawRoot.push(each.data().root);
+        });
+        setAllRoot(rawRoot);
+      });
 
     // eslint-disable-next-line
   }, []);
@@ -1134,7 +1134,13 @@ function Make_invoice() {
                         </TableCell>
                         <TableCell align="right" colSpan={2}>
                           <CurrencyFormat
-                            value={itemNOI * itemAPI}
+                            value={
+                              tablerows.some(
+                                (ob) => ob.paymentWay === "PayandGo"
+                              )
+                                ? itemNOI * itemAPI
+                                : 0
+                            }
                             displayType={"text"}
                             thousandSeparator={true}
                             prefix={" Rs. "}

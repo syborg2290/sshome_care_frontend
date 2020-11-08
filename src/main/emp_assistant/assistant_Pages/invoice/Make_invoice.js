@@ -1433,7 +1433,7 @@ function Make_invoice() {
                 <Grid item xs={12} sm={6}>
                   <hr />
                   <br />
-                  <p className="gami_cust">Gamisarani Coustomers :</p>
+                  <p className="gami_cust">Gamisarani Customers :</p>
                 </Grid>
                 <Grid item xs={12} sm={6}></Grid>
 

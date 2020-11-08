@@ -8,11 +8,15 @@ import MUIDataTable from "mui-datatables";
 // icons
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import AccountBalanceIcon from "@material-ui/icons/AccountBalance";
+import EditIcon from "@material-ui/icons/Edit";
+import HistoryIcon from "@material-ui/icons/History";
 
 // components
 import AddCustomer from "./components/add_customer/Add_Customer";
 import ViewCustomer from "./components/view_customer/view_customer_Model";
+import UpdateCustomer from "./components/update_customer/Update_Model";
 import HistoryCustomer from "./components/customer_history/History_Model";
+import WithdrawalCustomer from "./components/Withdrawal_customer/Withdrawal_Model";
 import DepositModel from "./components/deposit_Model/Deposit_Model";
 
 // style
@@ -25,6 +29,10 @@ export default function Gami_Sarani() {
   const [gamisaraniViewModel, setGamisaraniViewModel] = useState(false); // customer view model
   const [gamisaraniHistoryModel, setGamisaraniHistoryModel] = useState(false); // customer History model
   const [gamisaraniDepositModel, setGamisaraniDepositModel] = useState(false); // customer Deposit model
+  const [gamisaraniUpdateModel, setGamisaraniUpdateModel] = useState(false); // customer Update model
+  const [gamisaraniWithdrawalModel, setGamisaraniWithdrawalModel] = useState(
+    false
+  ); // customer Update model
   const [tableData, setTableData] = useState([]);
   const [allTableData, setAllTableData] = useState([]);
 
@@ -43,8 +51,16 @@ export default function Gami_Sarani() {
     setGamisaraniViewModel(true);
   };
 
+  const GamisaraniUpdateCustomer = () => {
+    setGamisaraniUpdateModel(true);
+  };
+
   const GamisaraniHistoryCustomer = () => {
     setGamisaraniHistoryModel(true);
+  };
+
+  const GamisaraniWithdrawalCustomer = () => {
+    setGamisaraniWithdrawalModel(true);
   };
 
   const GamisaraniDepositCustomer = () => {
@@ -116,6 +132,9 @@ export default function Gami_Sarani() {
             fontSize: "15px",
             color: "black",
             fontWeight: "600",
+            display: "flex",
+            justifyContent: "center",
+            flexDirection: "row-reverse",
           },
         }),
       },
@@ -157,13 +176,23 @@ export default function Gami_Sarani() {
           ),
           Action: (
             <div>
-              <VisibilityIcon onClick={GamisaraniViewCustomer} />
+              <VisibilityIcon
+                className="btnView"
+                onClick={GamisaraniViewCustomer}
+              />
+              <span>
+                <EditIcon
+                  className="btnUpdate"
+                  onClick={GamisaraniUpdateCustomer}
+                />
+              </span>
               <span>
                 <AccountBalanceIcon
                   className="btnHisty"
                   onClick={GamisaraniHistoryCustomer}
                 />
               </span>
+
               <span className="deposit_btn">
                 <Button
                   variant="contained"
@@ -173,6 +202,12 @@ export default function Gami_Sarani() {
                 >
                   Deposit
                 </Button>
+              </span>
+              <span>
+                <HistoryIcon
+                  className="WitdrHisty"
+                  onClick={GamisaraniWithdrawalCustomer}
+                />
               </span>
             </div>
           ),
@@ -239,6 +274,27 @@ export default function Gami_Sarani() {
 
       {/* End view Customer Model  */}
 
+      {/*Start UPDATE Customer Model */}
+
+      <Modal
+        visible={gamisaraniUpdateModel}
+        footer={null}
+        className="model_Gamisarani_UpdateCutomer"
+        onCancel={() => {
+          setGamisaraniUpdateModel(false);
+        }}
+      >
+        <div>
+          <div>
+            <div>
+              <UpdateCustomer />
+            </div>
+          </div>
+        </div>
+      </Modal>
+
+      {/* End UPDATE Customer Model  */}
+
       {/*Start History Customer Model */}
 
       <Modal
@@ -262,6 +318,27 @@ export default function Gami_Sarani() {
       </Modal>
 
       {/* End History Customer Model  */}
+
+      {/*Start Withdrawal Customer Model */}
+
+      <Modal
+        visible={gamisaraniWithdrawalModel}
+        footer={null}
+        className="model_Gamisarani_WithdrawalCutomer"
+        onCancel={() => {
+          setGamisaraniWithdrawalModel(false);
+        }}
+      >
+        <div>
+          <div>
+            <div>
+              <WithdrawalCustomer />
+            </div>
+          </div>
+        </div>
+      </Modal>
+
+      {/* End Withdrawal Customer Model  */}
 
       {/*Start Deposit Customer Model */}
 

@@ -44,12 +44,12 @@ export default function Update_Model({
   const updateCustomer = async (e) => {
     e.preventDefault();
     setLoadingSubmit(true);
-    db.collection("gamisani_customer")
+    db.collection("gami_sarani")
       .where("nic", "==", nic)
       .get()
       .then((re) => {
         if (re.docs.length > 0) {
-          db.collection("gamisani_customer")
+          db.collection("gami_sarani")
             .where("mid", "==", mid)
             .get()
             .then(async(reMid) => {
@@ -57,7 +57,7 @@ export default function Update_Model({
                 if (imageFile === null) {
                   
                 
-                db.collection("gamisani_customer")
+                db.collection("gami_sarani")
                   .doc(re.docs[0].id)
                   .update({
                     nic: nic,

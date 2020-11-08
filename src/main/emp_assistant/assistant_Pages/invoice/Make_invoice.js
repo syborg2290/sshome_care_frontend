@@ -205,7 +205,7 @@ function Make_invoice() {
                         installemtnDate: dates,
                         discount: totalDiscount,
                         subTotal: subTotalFunc(),
-                        balance: itemNOI * itemAPI,
+                        balance: parseInt(itemNOI) * parseInt(itemAPI),
                         total: subTotalFunc() - totalDiscount,
                         // discription: discription,
                         itemsList: arrayPassingItems,
@@ -1260,7 +1260,7 @@ function Make_invoice() {
                               tablerows.some(
                                 (ob) => ob.paymentWay === "PayandGo"
                               )
-                                ? itemNOI * itemAPI
+                                ? parseInt(itemNOI) * parseInt(itemAPI)
                                 : 0
                             }
                             displayType={"text"}

@@ -23,6 +23,15 @@ export default function Withdrawal_Model({ mid }) {
       },
     },
     {
+      name: "NIC",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
       name: "Date",
       options: {
         filter: true,
@@ -71,6 +80,7 @@ export default function Withdrawal_Model({ mid }) {
   //       re.docs.forEach((each) => {
   //         raw.push({
   //           MID: mid,
+  //          NIC: nic,
   //           Date: moment(each.data()?.date?.toDate()).format(
   //             "dddd, MMMM Do YYYY"
   //           ),

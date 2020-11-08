@@ -218,9 +218,9 @@ function Make_invoice() {
                         search: "?query=abc",
                         state: { detail: passingWithCustomerObj },
                       };
-                      await invoiceIntoDb();
-
-                      history.push(moveWith);
+                      await invoiceIntoDb().then((_) => {
+                        history.push(moveWith);
+                      });
                     } else {
                       let passingWithoutCustomerObj = {
                         invoice_number: invoiceNumber,
@@ -240,14 +240,15 @@ function Make_invoice() {
                         search: "?query=abc",
                         state: { detail: passingWithoutCustomerObj },
                       };
-                      await invoiceIntoDb();
-
-                      history.push(moveWith);
+                      await invoiceIntoDb().then((_) => {
+                        history.push(moveWith);
+                      });
                     }
                   },
                   async onCancel() {
-                    await invoiceIntoDb();
-                    history.push("/assistant/ui/ItemTable");
+                    await invoiceIntoDb().then((_) => {
+                      history.push("/assistant/ui/ItemTable");
+                    });
                   },
                 });
               });
@@ -297,9 +298,9 @@ function Make_invoice() {
                 search: "?query=abc",
                 state: { detail: passingWithCustomerObj },
               };
-              await invoiceIntoDb();
-
-              history.push(moveWith);
+              await invoiceIntoDb().then((_) => {
+                history.push(moveWith);
+              });
             } else {
               let passingWithoutCustomerObj = {
                 invoice_number: invoiceNumber,
@@ -319,14 +320,15 @@ function Make_invoice() {
                 search: "?query=abc",
                 state: { detail: passingWithoutCustomerObj },
               };
-              await invoiceIntoDb();
-
-              history.push(moveWith);
+              await invoiceIntoDb().then((_) => {
+                history.push(moveWith);
+              });
             }
           },
           async onCancel() {
-            await invoiceIntoDb();
-            history.push("/assistant/ui/ItemTable");
+            await invoiceIntoDb().then((_) => {
+              history.push("/assistant/ui/ItemTable");
+            });
           },
         });
       }

@@ -21,6 +21,7 @@ export default function Repair_model({ closeModel }) {
   const { confirm } = Modal;
   let history = useHistory();
   const [invoice, setInvoice] = useState("");
+  const [serialNo, setSerialNo] = useState("");
   const [model_no, setModel_no] = useState("");
   const [cust_name, setCust_name] = useState("");
   const [mid, setMid] = useState("");
@@ -38,9 +39,9 @@ export default function Repair_model({ closeModel }) {
       onOk() {
         db.collection("repair")
           .add({
-            invoice_no: invoice.trim(),
+            // invoice_no: invoice.trim(),
             model_no: model_no.trim(),
-            mid: mid,
+            // mid: mid,
             nic: nic,
             cust_name: cust_name.trim(),
             mobil_no1: mobil_no1.trim(),
@@ -69,9 +70,9 @@ export default function Repair_model({ closeModel }) {
       onCancel() {
         db.collection("repair")
           .add({
-            invoice_no: invoice.trim(),
+            // invoice_no: invoice.trim(),
             model_no: model_no.trim(),
-            mid: mid,
+            // mid: mid,
             nic: nic,
             cust_name: cust_name.trim(),
             mobil_no1: mobil_no1.trim(),
@@ -173,7 +174,7 @@ export default function Repair_model({ closeModel }) {
       <div className="paper">
         <form className="form" noValidate>
           <Grid container spacing={2}>
-            <Grid className="lbl_topi" item xs={12} sm={4}>
+            {/* <Grid className="lbl_topi" item xs={12} sm={4}>
               Invoice No
             </Grid>
             <Grid item xs={12} sm={2}>
@@ -190,6 +191,26 @@ export default function Repair_model({ closeModel }) {
                 value={invoice}
                 onChange={(e) => {
                   setInvoice(e.target.value);
+                }}
+              />
+            </Grid> */}
+            <Grid className="lbl_topi" item xs={12} sm={4}>
+              Serial No
+            </Grid>
+            <Grid item xs={12} sm={2}>
+              :
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                autoComplete="ino"
+                variant="outlined"
+                required
+                fullWidth
+                label="Invoice No"
+                size="small"
+                value={serialNo}
+                onChange={(e) => {
+                  setSerialNo(e.target.value);
                 }}
               />
             </Grid>
@@ -234,7 +255,7 @@ export default function Repair_model({ closeModel }) {
                 }}
               />
             </Grid>
-            <Grid className="lbl_topi" item xs={12} sm={4}>
+            {/* <Grid className="lbl_topi" item xs={12} sm={4}>
               MID
             </Grid>
             <Grid item xs={12} sm={2}>
@@ -253,7 +274,7 @@ export default function Repair_model({ closeModel }) {
                   setMid(e.target.value);
                 }}
               />
-            </Grid>
+            </Grid> */}
             <Grid className="lbl_topi" item xs={12} sm={4}>
               NIC
             </Grid>

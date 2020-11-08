@@ -62,6 +62,24 @@ export default function Arreas_Table() {
       },
     },
     {
+      name: "MID",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "Serial_No",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
       name: "Delayed_Days",
       options: {
         filter: true,
@@ -123,7 +141,10 @@ export default function Arreas_Table() {
 
         rawData.push({
           InvoiceNo: eachRe.data().invoice_number,
+
           NIC: eachRe.data().nic,
+          MID: eachRe.data().mid,
+          SerialNo: eachRe.data().serialNo,
           Delayed_Days: Math.round(eachRe.data().delayed_days),
           Delayed_Charges: (
             <CurrencyFormat

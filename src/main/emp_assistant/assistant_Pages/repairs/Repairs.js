@@ -86,7 +86,7 @@ export default function Repairs() {
   //START pay And Go Columns
   const repairTableColomns = [
     {
-      name: "InvoiceNo",
+      name: "Serial_No",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -112,15 +112,7 @@ export default function Repairs() {
         }),
       },
     },
-    {
-      name: "MID",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
+
     {
       name: "NIC",
       options: {
@@ -187,10 +179,9 @@ export default function Repairs() {
           data: re.data(),
         });
         rawData.push({
-          InvoiceNo: re.data().invoice_no,
+          SerialNo: re.data().serial_no,
           ModalNo: re.data().model_no,
           Item_Name: re.data().item_name,
-          MID: re.data().mid,
           NIC: re.data().nic,
           Status: (
             <span className="statusRepir">

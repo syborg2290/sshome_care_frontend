@@ -130,6 +130,24 @@ export default function Invoice_List() {
         }),
       },
     },
+    {
+      name: "MID",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "SerialNo",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
 
     {
       name: "Discount",
@@ -257,6 +275,8 @@ export default function Invoice_List() {
                 "dddd, MMMM Do YYYY"
               ),
               NIC: siDoc.data().nic,
+              MID: siDoc.data().mid,
+              SerialNo: siDoc.data().serialNo,
               Discount: (
                 <CurrencyFormat
                   value={siDoc.data().discount}

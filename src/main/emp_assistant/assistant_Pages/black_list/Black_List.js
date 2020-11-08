@@ -50,6 +50,15 @@ export default function Black_List() {
         }),
       },
     },
+    {
+      name: "SerialNo",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
 
     {
       name: "FirstName",

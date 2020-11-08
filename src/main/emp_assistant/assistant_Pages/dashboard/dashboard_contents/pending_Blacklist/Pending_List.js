@@ -140,6 +140,32 @@ export default function View_Model({ pendingBlackList }) {
       },
     },
     {
+      name: "MID",
+      options: {
+        filter: false,
+        setCellHeaderProps: (value) => ({
+          style: {
+            fontSize: "15px",
+            color: "black",
+            fontWeight: "600",
+          },
+        }),
+      },
+    },
+    {
+      name: "Serial_No",
+      options: {
+        filter: false,
+        setCellHeaderProps: (value) => ({
+          style: {
+            fontSize: "15px",
+            color: "black",
+            fontWeight: "600",
+          },
+        }),
+      },
+    },
+    {
       name: "Telephone",
       options: {
         filter: false,
@@ -184,6 +210,8 @@ export default function View_Model({ pendingBlackList }) {
               FirstName: reThen.docs[0].data().fname,
               LastName: reThen.docs[0].data().lname,
               NIC: each.nic,
+              MID: each.mid,
+              SerialNo: each.serialNo,
               Telephone: reThen.docs[0].data().mobile1,
               Action: (
                 <div>

@@ -205,7 +205,8 @@ function Make_invoice() {
                         installemtnDate: dates,
                         discount: totalDiscount,
                         subTotal: subTotalFunc(),
-                        balance: parseInt(itemNOI) * parseInt(itemAPI),
+                        balance:
+                          itemNOI[tablerows[0].i] * itemAPI[tablerows[0].i],
                         total: subTotalFunc() - totalDiscount,
                         // discription: discription,
                         itemsList: arrayPassingItems,
@@ -284,7 +285,7 @@ function Make_invoice() {
                 installemtnDate: dates,
                 discount: totalDiscount,
                 subTotal: subTotalFunc(),
-                balance: itemNOI * itemAPI,
+                balance: itemNOI[tablerows[0].i] * itemAPI[tablerows[0].i],
                 total: subTotalFunc() - totalDiscount,
                 // discription: discription,
                 itemsList: arrayPassingItems,
@@ -1260,7 +1261,8 @@ function Make_invoice() {
                               tablerows.some(
                                 (ob) => ob.paymentWay === "PayandGo"
                               )
-                                ? parseInt(itemNOI) * parseInt(itemAPI)
+                                ? itemNOI[tablerows[0].i] *
+                                  itemAPI[tablerows[0].i]
                                 : 0
                             }
                             displayType={"text"}

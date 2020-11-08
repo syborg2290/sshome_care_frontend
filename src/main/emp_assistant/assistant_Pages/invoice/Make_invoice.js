@@ -150,7 +150,7 @@ function Make_invoice() {
         "Issue with your calculations Pleace check again (May be Included minus values ! )"
       );
     } else {
-      if (gamisarani || gamisaraniamount > 0) {
+      if (gamisarani && gamisaraniamount > 0) {
         db.collection("gami_sarani")
           .doc(gamisaraniId)
           .get()

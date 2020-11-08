@@ -48,3 +48,14 @@
   overflow: hidden !important;
   margin-top: 70px !important;
 }
+
+.purchesModel_model {
+  width: 50% !important;
+}
+
+.btn_pHistry {
+  float: right !important;
+  margin-top: 5px !important;
+  margin-right: 30px !important;
+  background-color: rgba(32, 76, 148, 0.719) !important;
+}

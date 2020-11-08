@@ -164,8 +164,7 @@ function Make_invoice() {
                     : getRe.docs[0].data().currentDeposit - gamisaraniamount,
               })
               .then((re) => {
-                db.collection("gami_sarani_withdrawhistory")
-                .add({
+                db.collection("gami_sarani_withdrawhistory").add({
                   gami_nic: gamisaraniNic,
                   docId: gamisaraniId,
                   withdraw:
@@ -1437,9 +1436,13 @@ function Make_invoice() {
                 </Grid>
                 <Grid item xs={12} sm={4}>
                   <Checkbox
-                    value={gamisarani}
+                    checked={gamisarani}
                     onChange={(e) => {
-                      setGamisarani(e.target.value);
+                      if (gamisarani) {
+                        setGamisarani(false);
+                      } else {
+                        setGamisarani(true);
+                      }
                     }}
                   />
                 </Grid>
@@ -1471,7 +1474,7 @@ function Make_invoice() {
                     variant="contained"
                     color="primary"
                     disabled={
-                      !gamisarani || loadingNicsubmit || gamisaraniNic === ""
+                      !gamisarani || loadingNicsubmit || gamisaraniNic.length === 0
                         ? true
                         : false
                     }

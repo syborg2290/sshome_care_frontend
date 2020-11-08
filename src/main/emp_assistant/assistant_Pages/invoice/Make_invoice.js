@@ -159,16 +159,15 @@ function Make_invoice() {
               .doc(gamisaraniId)
               .update({
                 currentDeposit:
-                  getRe.docs[0].data().currentDeposit - gamisaraniamount < 0
+                  getRe.data().currentDeposit - gamisaraniamount < 0
                     ? 0
-                    : getRe.docs[0].data().currentDeposit - gamisaraniamount,
+                    : getRe.data().currentDeposit - gamisaraniamount,
               })
               .then((re) => {
                 db.collection("gami_sarani_withdrawhistory").add({
                   gami_nic: gamisaraniNic,
                   docId: gamisaraniId,
-                  withdraw:
-                    getRe.docs[0].data().currentDeposit - gamisaraniamount,
+                  withdraw: gamisaraniamount,
                   date: intialTimestamp,
                 });
 
@@ -977,7 +976,7 @@ function Make_invoice() {
             0
           ) {
             NotificationManager.warning(
-              `Info gamisarani ${gamisaraniNic}, not enough balance for the deduction !`
+              `Info gamisarani ${gamisaraniNic}, not enough balance for pay the total !`
             );
           }
         } else {
@@ -1310,14 +1309,14 @@ function Make_invoice() {
                 </Grid>
                 <Grid item xs={12} sm={4}>
                   <Space direction="vertical">
-                     <DatePicker
-                        onChange={(e) => {
-                          setInititialTimestamp(
-                            firebase.firestore.Timestamp.fromDate(e.toDate())
-                          );
-                        }}
-                      />
-                   
+                    <DatePicker
+                      onChange={(e) => {
+                        setInititialTimestamp(
+                          firebase.firestore.Timestamp.fromDate(e.toDate())
+                        );
+                      }}
+                    />
+
                     <br />
                     <div
                       hidden={
@@ -1326,13 +1325,13 @@ function Make_invoice() {
                           : true
                       }
                     >
-                       <DatePicker
-                      onChange={(e) => {
-                        setDeadlineTimestamp(
-                          firebase.firestore.Timestamp.fromDate(e.toDate())
-                        );
-                      }}
-                    />
+                      <DatePicker
+                        onChange={(e) => {
+                          setDeadlineTimestamp(
+                            firebase.firestore.Timestamp.fromDate(e.toDate())
+                          );
+                        }}
+                      />
                     </div>
                   </Space>
                 </Grid>
@@ -1475,7 +1474,9 @@ function Make_invoice() {
                     variant="contained"
                     color="primary"
                     disabled={
-                      !gamisarani || loadingNicsubmit || gamisaraniNic.length === 0
+                      !gamisarani ||
+                      loadingNicsubmit ||
+                      gamisaraniNic.length === 0
                         ? true
                         : false
                     }
@@ -1499,7 +1500,11 @@ function Make_invoice() {
                     autoComplete="amount"
                     size="small"
                     type="number"
-                    disabled={!gamisarani || gamisaraniInitialAmount === 0 ? true : false }
+                    disabled={
+                      !gamisarani || gamisaraniInitialAmount === 0
+                        ? true
+                        : false
+                    }
                     InputProps={{ inputProps: { min: 0 } }}
                     value={gamisaraniamount}
                     onChange={(e) => {
@@ -1525,7 +1530,7 @@ function Make_invoice() {
                     disabled={
                       loadingsubmit ||
                       tablerows.length === 0 ||
-                       intialTimestamp === null
+                      intialTimestamp === null
                         ? true
                         : false
                     }

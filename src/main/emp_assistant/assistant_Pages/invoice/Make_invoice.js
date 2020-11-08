@@ -1310,13 +1310,14 @@ function Make_invoice() {
                 </Grid>
                 <Grid item xs={12} sm={4}>
                   <Space direction="vertical">
-                    <DatePicker
-                      onChange={(e) => {
-                        setDeadlineTimestamp(
-                          firebase.firestore.Timestamp.fromDate(e.toDate())
-                        );
-                      }}
-                    />
+                     <DatePicker
+                        onChange={(e) => {
+                          setInititialTimestamp(
+                            firebase.firestore.Timestamp.fromDate(e.toDate())
+                          );
+                        }}
+                      />
+                   
                     <br />
                     <div
                       hidden={
@@ -1325,13 +1326,13 @@ function Make_invoice() {
                           : true
                       }
                     >
-                      <DatePicker
-                        onChange={(e) => {
-                          setInititialTimestamp(
-                            firebase.firestore.Timestamp.fromDate(e.toDate())
-                          );
-                        }}
-                      />
+                       <DatePicker
+                      onChange={(e) => {
+                        setDeadlineTimestamp(
+                          firebase.firestore.Timestamp.fromDate(e.toDate())
+                        );
+                      }}
+                    />
                     </div>
                   </Space>
                 </Grid>
@@ -1524,7 +1525,7 @@ function Make_invoice() {
                     disabled={
                       loadingsubmit ||
                       tablerows.length === 0 ||
-                      intialTimestamp === null
+                       intialTimestamp === null
                         ? true
                         : false
                     }

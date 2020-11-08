@@ -8,102 +8,69 @@ import Typography from "@material-ui/core/Typography";
 
 import "react-notifications/lib/notifications.css";
 
-// styles
-import "./Add_Customer.css";
+// style
+import "./Update_Model.css";
 
 import { nicValidation } from "../../../../../../config/validation.js";
 import db, { storage } from "../../../../../../config/firebase.js";
 import firebase from "firebase";
 
-export default function Add_Customer({ close_model }) {
-  const [nic, setNic] = useState("");
-  const [mid, setMId] = useState("");
-  const [fname, setFirstName] = useState("");
-  const [lname, setLastName] = useState("");
-  const [addres1, setAddres1] = useState("");
-  const [addres2, setAddres2] = useState("");
-  const [mobile1, setMobile1] = useState("");
-  const [mobile2, setMobile2] = useState("");
-  const [root, setRoot] = useState("");
+export default function Update_Model({
+  fnameProp,
+  lnameProp,
+  nicProp,
+  midProp,
+  mobile1Prop,
+  mobile2Prop,
+  address1Prop,
+  address2Prop,
+  rootProp,
+}) {
+  const [nic, setNic] = useState(nicProp);
+  const [mid, setMId] = useState(midProp);
+  const [fname, setFirstName] = useState(fnameProp);
+  const [lname, setLastName] = useState(lnameProp);
+  const [addres1, setAddres1] = useState(address1Prop);
+  const [addres2, setAddres2] = useState(address2Prop);
+  const [mobile1, setMobile1] = useState(mobile1Prop);
+  const [mobile2, setMobile2] = useState(mobile2Prop);
+  const [root, setRoot] = useState(rootProp);
   const [validation, setValidation] = useState("");
   const [isLoadingSubmit, setLoadingSubmit] = useState(false);
+  // eslint-disable-next-line
   const [imageFile, setImageFile] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
 
-  const onImageChange = (event) => {
-    if (event.target.files && event.target.files[0]) {
-      setImageFile(event.target.files[0]);
-      let reader = new FileReader();
-      reader.onload = (e) => {
-        setImageUrl(e.target.result);
-      };
-      reader.readAsDataURL(event.target.files[0]);
-    }
-  };
-
-  const submit = () => {
+  const updateCustomer = async (e) => {
+    e.preventDefault();
     setLoadingSubmit(true);
-    var result = nicValidation(nic);
-
-    if (result) {
-      db.collection("gami_sarani")
-        .where("nic", "==", nic)
-        .get()
-        .then((nicRe) => {
-          if (nicRe.docs.length > 0) {
+    db.collection("gamisani_customer")
+      .where("nic", "==", nicProp)
+      .get()
+      .then((re) => {
+        db.collection("gamisani_customer")
+          .doc(re.docs[0].id)
+          .update({
+            nic: nic,
+            mid: mid,
+            fname: fname,
+            lname: lname,
+            address1: addres1,
+            addres2: addres2,
+            mobile1: mobile1,
+            mobile2: mobile2,
+            root: root,
+          })
+          .then(() => {
             setLoadingSubmit(false);
-            setValidation("Customer already exists by NIC");
-          } else {
-            db.collection("gami_sarani")
-              .where("mid", "==", mid)
-              .get()
-              .then(async (midRe) => {
-                if (midRe.docs.length > 0) {
-                  setLoadingSubmit(false);
-                  setValidation("Customer already exists by MID");
-                } else {
-                  await storage.ref(`images/${imageFile.name}`).put(imageFile);
-
-                  storage
-                    .ref("images")
-                    .child(imageFile.name)
-                    .getDownloadURL()
-                    .then((url) => {
-                      db.collection("gami_sarani")
-                        .add({
-                          mid: mid,
-                          nic: nic,
-                          fname: fname,
-                          lname: lname,
-                          address1: addres1,
-                          addres2: addres2,
-                          mobile1: mobile1,
-                          mobile2: mobile2,
-                          root: root,
-                          currentDeposit: 0,
-                          photo: url,
-                          date: firebase.firestore.FieldValue.serverTimestamp(),
-                        })
-                        .then((_) => {
-                          setLoadingSubmit(false);
-                          close_model();
-                          window.location.reload();
-                        });
-                    });
-                }
-              });
-          }
-        });
-    } else {
-      setLoadingSubmit(false);
-      setValidation("Customer's NIC format is invalid!");
-    }
+          });
+      });
   };
 
   return (
     <Container component="main" className="main_container_sarani">
       <Typography className="title_sarani" variant="h5" gutterBottom>
-        Add Customer
+        Update Customer
       </Typography>
       <Grid item xs={12} sm={2}>
         <hr className="titles_hr_sarani" />
@@ -133,7 +100,7 @@ export default function Add_Customer({ close_model }) {
               />
             </Grid>
             <Grid className="txt_Labels" item xs={12} sm={2}>
-              Member ID :
+              Member ID:
             </Grid>
             <Grid className="txt_Note" item xs={12} sm={3}>
               <TextField
@@ -155,7 +122,7 @@ export default function Add_Customer({ close_model }) {
 
             <br />
             <Grid className="txt_Labels" item xs={12} sm={2}>
-              Name :
+              Name:
             </Grid>
             <Grid item xs={12} sm={5}>
               <TextField
@@ -214,7 +181,7 @@ export default function Add_Customer({ close_model }) {
             </Grid>
 
             <Grid className="txt_Labels" item xs={12} sm={2}>
-              Address 2 :
+              Address 2:
             </Grid>
             <Grid item xs={12} sm={10}>
               <TextField
@@ -235,7 +202,7 @@ export default function Add_Customer({ close_model }) {
             </Grid>
 
             <Grid className="txt_Labels" item xs={12} sm={2}>
-              Mobile :
+              Mobile:
             </Grid>
             <Grid item xs={12} sm={5}>
               <TextField
@@ -274,7 +241,7 @@ export default function Add_Customer({ close_model }) {
               />
             </Grid>
             <Grid className="txt_Labels" item xs={12} sm={2}>
-              Root to Home :
+              Root to Home:
             </Grid>
             <Grid item xs={12} sm={5}>
               <TextField
@@ -295,14 +262,14 @@ export default function Add_Customer({ close_model }) {
               />
             </Grid>
             <Grid className="txt_LabelsImg" item xs={12} sm={1}>
-              Image :
+              Image:
             </Grid>
             <Grid item xs={12} sm={4}>
               <input
                 type="file"
                 accept="image/*"
                 name=""
-                onChange={onImageChange}
+                // onChange={onImageChange}
                 className="image"
                 id="item_image"
                 hidden
@@ -322,7 +289,7 @@ export default function Add_Customer({ close_model }) {
             </Grid>
             <Grid item xs={12} sm={6}></Grid>
           </Grid>
-          <p className="validate_Edit">{validation}</p>
+          {/* <p className="validate_Edit">{validation}</p> */}
           <Grid container spacing={2}>
             <Grid item xs={12} sm={9}></Grid>
             <Grid item xs={12} sm={3}>
@@ -330,15 +297,7 @@ export default function Add_Customer({ close_model }) {
                 variant="contained"
                 color="primary"
                 className="btn_addCust"
-                onClick={submit}
-                disabled={
-                  nic.length === 0 ||
-                  mid.length === 0 ||
-                  fname.length === 0 ||
-                  lname.length === 0 ||
-                  addres1.length === 0 ||
-                  mobile1.length === 0
-                }
+                onClick={updateCustomer}
               >
                 {isLoadingSubmit ? <Spin size="large" /> : "Done"}
               </Button>

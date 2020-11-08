@@ -11,7 +11,6 @@ import "react-notifications/lib/notifications.css";
 // style
 import "./Update_Model.css";
 
-import firebase from 'firebase';
 import db, { storage } from "../../../../../../config/firebase.js";
 
 export default function Update_Model({
@@ -52,30 +51,30 @@ export default function Update_Model({
           db.collection("gami_sarani")
             .where("mid", "==", mid)
             .get()
-            .then(async(reMid) => {
+            .then(async (reMid) => {
               if (reMid.docs.length > 0) {
                 if (imageFile === null) {
-                  
-                
-                db.collection("gami_sarani")
-                  .doc(re.docs[0].id)
-                  .update({
-                    nic: nic,
-                    mid: mid,
-                    fname: fname,
-                    lname: lname,
-                    address1: addres1,
-                    addres2: addres2,
-                    mobile1: mobile1,
-                    mobile2: mobile2,
-                    root: root,
-                  })
-                  .then(() => {
-                    setLoadingSubmit(false);
-                     window.location.reload();
-                  });
+                  db.collection("gami_sarani")
+                    .doc(re.docs[0].id)
+                    .update({
+                      mid: mid,
+                      nic: nic,
+                      fname: fname,
+                      lname: lname,
+                      address1: addres1,
+                      addres2: addres2,
+                      mobile1: mobile1,
+                      mobile2: mobile2,
+                      root: root,
+                      currentDeposit: 0,
+                      photo: imageUrl,
+                    })
+                    .then(() => {
+                      setLoadingSubmit(false);
+                      window.location.reload();
+                    });
                 } else {
-                    await storage.ref(`images/${imageFile.name}`).put(imageFile);
+                  await storage.ref(`images/${imageFile.name}`).put(imageFile);
 
                   storage
                     .ref("images")
@@ -83,7 +82,8 @@ export default function Update_Model({
                     .getDownloadURL()
                     .then((url) => {
                       db.collection("gami_sarani")
-                        .add({
+                        .doc(re.docs[0].id)
+                        .update({
                           mid: mid,
                           nic: nic,
                           fname: fname,
@@ -94,15 +94,14 @@ export default function Update_Model({
                           mobile2: mobile2,
                           root: root,
                           currentDeposit: 0,
-                          photo: url,
-                          date: firebase.firestore.FieldValue.serverTimestamp(),
+                          photo: imageUrl,
                         })
                         .then((_) => {
                           setLoadingSubmit(false);
                           window.location.reload();
                         });
                     });
-              }
+                }
               } else {
                 setLoadingSubmit(false);
                 setValidation("Any record not found as entered MID");

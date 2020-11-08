@@ -104,6 +104,7 @@ export default function Invoice_history() {
           fullPaymentAllData[currentIndx].data?.discount,
         total: fullPaymentAllData[currentIndx].data?.total,
         discription: "",
+        balance: 0,
         itemsList: fullPaymentAllData[currentIndx].data?.items,
         backto: "invoice_history",
       };
@@ -132,6 +133,7 @@ export default function Invoice_history() {
               payangoAllData[currentIndx2]?.data?.discount,
             total: payangoAllData[currentIndx2]?.data?.total,
             discription: "",
+            balance: payangoAllData[currentIndx2]?.data?.balance,
             itemsList: payangoAllData[currentIndx2]?.data?.items,
             backto: "invoice_history",
           };
@@ -522,6 +524,7 @@ export default function Invoice_history() {
                 }
                 customer_id={payangoAllData[currentIndx]?.data?.customer_id}
                 closeModal={closeModalUpdate}
+                balanceProp={payangoAllData[currentIndx]?.data?.balance}
               />
             </div>
           </div>

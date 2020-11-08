@@ -25,8 +25,11 @@ export default function Update_Model({
   instCount,
   customer_id,
   closeModal,
+  balanceProp
 }) {
   const [installments, setInstallments] = useState(0);
+  // eslint-disable-next-line
+  const [balance, setBalance] = useState(balanceProp);
   const [delayedDays, setDelayedDays] = useState(0);
   const [allInstallment, setAllInstallment] = useState(0);
   const [delayedCharges, setDelayedCharges] = useState(0);
@@ -457,7 +460,7 @@ export default function Update_Model({
               </Grid>
               <Grid item xs={12} sm={6}>
                 <CurrencyFormat
-                  // value={balance}
+                  value={balance}
                   displayType={"text"}
                   thousandSeparator={true}
                   prefix={" "}

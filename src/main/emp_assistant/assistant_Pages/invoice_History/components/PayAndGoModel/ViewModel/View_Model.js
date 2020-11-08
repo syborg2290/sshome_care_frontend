@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Grid, Container, Typography } from "@material-ui/core";
 import CurrencyFormat from "react-currency-format";
 import { Spin } from "antd";
+import moment from "moment";
 
 import db from "../../../../../../../config/firebase.js";
 
@@ -97,7 +98,7 @@ export default function View_Model({ items_list_props, data }) {
                   :
                 </Grid>
                 <Grid item xs={12} sm={7}>
-                  <p>{data.installmentType}</p>
+                  <p>{data.selectedType}</p>
                 </Grid>
                 <Grid className="lbl_topis" item xs={12} sm={4}>
                   Installmanet day
@@ -106,23 +107,21 @@ export default function View_Model({ items_list_props, data }) {
                   :
                 </Grid>
                 <Grid item xs={12} sm={7}>
-                  {data.installmentType === "Weekly"
-                    ? parseInt(data.installemtnDayDate) === 1
-                      ? "Monday"
-                      : parseInt(data.installemtnDayDate) === 2
-                      ? "Tuesday"
-                      : parseInt(data.installemtnDayDate) === 3
-                      ? "Wednesday"
-                      : parseInt(data.installemtnDayDate) === 4
-                      ? "Thursday"
-                      : parseInt(data.installemtnDayDate) === 5
-                      ? "Friday"
-                      : parseInt(data.installemtnDayDate) === 6
-                      ? "Saturday"
-                      : parseInt(data.installemtnDayDate) === 0
-                      ? "Sunday"
-                      : ""
-                    : data.installemtnDayDate}
+                  {parseInt(data.installemtnDay) === 1
+                    ? "Monday"
+                    : parseInt(data.installemtnDay) === 2
+                    ? "Tuesday"
+                    : parseInt(data.installemtnDay) === 3
+                    ? "Wednesday"
+                    : parseInt(data.installemtnDay) === 4
+                    ? "Thursday"
+                    : parseInt(data.installemtnDay) === 5
+                    ? "Friday"
+                    : parseInt(data.installemtnDay) === 6
+                    ? "Saturday"
+                    : parseInt(data.installemtnDay) === 0
+                    ? "Sunday"
+                    : ""}
                 </Grid>
                 <Grid className="lbl_topis" item xs={12} sm={4}>
                   Installmanet Date
@@ -131,10 +130,19 @@ export default function View_Model({ items_list_props, data }) {
                   :
                 </Grid>
                 <Grid item xs={12} sm={7}>
-                  2010.09.10
+                  {data.installemtnDate}
                 </Grid>
                 <Grid className="lbl_topis" item xs={12} sm={12}>
                   <hr />
+                </Grid>
+                <Grid className="lbl_topis" item xs={12} sm={5}>
+                  Purchase date
+                </Grid>
+                <Grid item xs={12} sm={1}>
+                  :
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  {moment(data.date.toDate()).format("dddd, MMMM Do YYYY")}
                 </Grid>
                 <Grid className="lbl_topis" item xs={12} sm={5}>
                   Installment deadline
@@ -143,7 +151,7 @@ export default function View_Model({ items_list_props, data }) {
                   :
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  2010.12.10
+                  {moment(data.deadlineTimestamp.toDate()).format("dddd, MMMM Do YYYY")}
                 </Grid>
                 <Grid className="lbl_topis" item xs={12} sm={5}>
                   Gamisarani
@@ -152,7 +160,7 @@ export default function View_Model({ items_list_props, data }) {
                   :
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  NO
+                  {data.gamisarani ? "Yes" : "No"}
                 </Grid>
               </Grid>
               <Grid className="lbl_topiSub" item xs={12} sm={12}>

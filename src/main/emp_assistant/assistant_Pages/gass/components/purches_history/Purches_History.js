@@ -21,6 +21,15 @@ export default function Purches_History() {
       },
     },
     {
+      name: "Type",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
       name: "Date",
       options: {
         filter: true,
@@ -63,7 +72,8 @@ export default function Purches_History() {
 
       snap.docs.forEach((each) => {
         raw.push({
-          Weight: each.data().type,
+          Weight: each.data().weight,
+          Type:each.data().type,
           Date: moment(each.data()?.date?.toDate()).format(
             "dddd, MMMM Do YYYY"
           ),

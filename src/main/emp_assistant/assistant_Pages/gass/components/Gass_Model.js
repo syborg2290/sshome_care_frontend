@@ -100,6 +100,7 @@ export default function Gass_Model() {
                 .then((reSe) => {
                   db.collection("gas_purchase_history").add({
                     date: saveTimestamp,
+                    weight: selectedWeight,
                     type: selectedType,
                     price: total,
                     qty: qty,
@@ -151,6 +152,7 @@ export default function Gass_Model() {
         .then((reSe) => {
           db.collection("gas_purchase_history").add({
             date: saveTimestamp,
+            weight: selectedWeight,
             type: selectedType,
             price: total,
             qty: qty,

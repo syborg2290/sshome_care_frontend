@@ -1,13 +1,15 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Grid } from "@material-ui/core";
 
 import CurrencyFormat from "react-currency-format";
+import moment from "moment";
 import MUIDataTable from "mui-datatables";
 // styles
 import "./Purches_History.css";
+import db from "../../../../../../config/firebase.js";
 
 export default function Purches_History() {
-  //   const [allTableData, setTableData] = useState([]);
+  const [allTableData, setTableData] = useState([]);
   const columns = [
     {
       name: "Weight",
@@ -41,7 +43,7 @@ export default function Purches_History() {
       },
     },
     {
-      name: "Price",
+      name: "Total",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -55,19 +57,31 @@ export default function Purches_History() {
     },
   ];
 
-  const allTableData = [
-    [
-      "5 kg",
-      "2020",
-      "5",
-      <CurrencyFormat
-        value={5000}
-        displayType={"text"}
-        thousandSeparator={true}
-        prefix={" "}
-      />,
-    ],
-  ];
+  useEffect(() => {
+    db.collection("gas_purchase_history").onSnapshot((snap) => {
+      var raw = [];
+
+      snap.docs.forEach((each) => {
+        raw.push({
+          Weight: each.data().type,
+          Date: moment(each.data()?.date?.toDate()).format(
+            "dddd, MMMM Do YYYY"
+          ),
+          Qty: each.data().qty,
+          Total: (
+            <CurrencyFormat
+              value={each.data().price}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={" "}
+            />
+          ),
+        });
+      });
+
+      setTableData(raw);
+    });
+  }, []);
 
   return (
     <Grid container spacing={4}>

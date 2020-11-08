@@ -98,6 +98,12 @@ export default function Gass_Model() {
                 .where("weight", "==", selectedWeight)
                 .get()
                 .then((reSe) => {
+                  db.collection("gas_purchase_history").add({
+                    date: saveTimestamp,
+                    type: selectedType,
+                    price: total,
+                    qty: qty,
+                  });
                   db.collection("gas")
                     .doc(reSe.docs[0].id)
                     .update({

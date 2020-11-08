@@ -41,6 +41,7 @@ function Make_invoice() {
   const location = useLocation();
   const [allRoot, setAllRoot] = useState([]);
   const [loadingsubmit, setLoadingSubmit] = useState(false);
+  const [loadingNicsubmit, setLoadingNicSubmit] = useState(false);
   const [invoiceNumber, setInvoiceNumber] = useState("");
   const [tablerows, setTableRows] = useState([]);
   const [itemQty, setItemQty] = useState({});
@@ -49,8 +50,9 @@ function Make_invoice() {
   const [itemAPI, setItemAPI] = useState({});
   const [itemDiscount, setItemDiscount] = useState({});
   const [totalDiscount, setTotalDiscount] = useState(0);
-  // const [gamisaraniInitialAmount, setGamisaraniInitialAmount] = useState(0);
-  // const [gamisaraniamount, setGamisaraniamount] = useState(0);
+  const [gamisaraniInitialAmount, setGamisaraniInitialAmount] = useState(0);
+  const [gamisaraniamount, setGamisaraniamount] = useState(0);
+  const [gamisaraniId, setGamisaraniId] = useState("");
   const [gamisaraniNic, setGamisaraniNic] = useState("");
   const [days, setDays] = useState(new Date().getDay());
   const [dates, setDates] = useState(new Date().getDate());
@@ -95,15 +97,6 @@ function Make_invoice() {
       setItemQty(keepDataQTY);
       setItemDP(keepDataDP);
       setTableRows(tableData);
-
-      // db.collection("gami_sarani")
-      //   .where("nic", "==", tableData[0].customer.customerNic)
-      //   .get()
-      //   .then((gamiSa) => {
-      //     setGamisaraniId(gamiSa.docs[0].id);
-      //     setGamisaraniInitialAmount(gamiSa.docs[0].data().Current_Balance);
-      //     setGamisaraniamount(gamiSa.docs[0].data().Current_Balance);
-      //   });
     }
 
     db.collection("root")
@@ -157,82 +150,187 @@ function Make_invoice() {
         "Issue with your calculations Pleace check again (May be Included minus values ! )"
       );
     } else {
-      confirm({
-        title: (
-          <h5 className="confo_title">Do you Want to Print an Invoice?</h5>
-        ),
-        icon: <PrinterFilled className="confo_icon" />,
-        okText: "Yes",
-        cancelText: "No",
-        async onOk() {
-          var arrayPassingItems = [];
+      if (gamisarani) {
+        db.collection("gami_sarani")
+          .doc(gamisaraniId)
+          .get()
+          .then((getRe) => {
+            db.collection("gami_sarani")
+              .doc(gamisaraniId)
+              .update({
+                currentDeposit:
+                  getRe.docs[0].data().currentDeposit - gamisaraniamount < 0
+                    ? 0
+                    : getRe.docs[0].data().currentDeposit - gamisaraniamount,
+              })
+              .then((re) => {
+                db.collection("gami_sarani_withdrawhistory")
+                .add({
+                  gami_nic: gamisaraniNic,
+                  docId: gamisaraniId,
+                  withdraw:
+                    getRe.docs[0].data().currentDeposit - gamisaraniamount,
+                  date: intialTimestamp,
+                });
 
-          tablerows.forEach((one) => {
-            let objItem = {
-              item_id: one.id,
-              item_name: one.title,
-              qty: itemQty[one.i],
-              paymentWay: one.paymentWay,
-              downpayment: itemDP[one.i],
-              noOfInstallment: itemNOI[one.i],
-              amountPerInstallment: itemAPI[one.i],
-              discount: itemDiscount[one.i],
-            };
-            arrayPassingItems.push(objItem);
+                confirm({
+                  title: (
+                    <h5 className="confo_title">
+                      Do you Want to Print an Invoice?
+                    </h5>
+                  ),
+                  icon: <PrinterFilled className="confo_icon" />,
+                  okText: "Yes",
+                  cancelText: "No",
+                  async onOk() {
+                    var arrayPassingItems = [];
+
+                    tablerows.forEach((one) => {
+                      let objItem = {
+                        item_id: one.id,
+                        item_name: one.title,
+                        qty: itemQty[one.i],
+                        paymentWay: one.paymentWay,
+                        downpayment: itemDP[one.i],
+                        noOfInstallment: itemNOI[one.i],
+                        amountPerInstallment: itemAPI[one.i],
+                        discount: itemDiscount[one.i],
+                      };
+                      arrayPassingItems.push(objItem);
+                    });
+
+                    if (tablerows.some((ob) => ob.customer !== null)) {
+                      let passingWithCustomerObj = {
+                        invoice_number: invoiceNumber,
+                        customerDetails: tablerows[0].customer,
+                        installemtnDay: days,
+                        installemtnDate: dates,
+                        discount: totalDiscount,
+                        subTotal: subTotalFunc(),
+                        balance: itemNOI * itemAPI,
+                        total: subTotalFunc() - totalDiscount,
+                        // discription: discription,
+                        itemsList: arrayPassingItems,
+                        backto: "item_list",
+                      };
+
+                      let moveWith = {
+                        pathname: "/assistant/invoice/printInvoice",
+                        search: "?query=abc",
+                        state: { detail: passingWithCustomerObj },
+                      };
+                      await invoiceIntoDb();
+
+                      history.push(moveWith);
+                    } else {
+                      let passingWithoutCustomerObj = {
+                        invoice_number: invoiceNumber,
+                        customerDetails: null,
+                        installmentType: null,
+                        installemtnDayDate: null,
+                        discount: totalDiscount,
+                        subTotal: subTotalFunc(),
+                        balance: 0,
+                        total: subTotalFunc() - totalDiscount,
+                        // discription: discription,
+                        itemsList: arrayPassingItems,
+                        backto: "item_list",
+                      };
+                      let moveWith = {
+                        pathname: "/assistant/invoice/printInvoice",
+                        search: "?query=abc",
+                        state: { detail: passingWithoutCustomerObj },
+                      };
+                      await invoiceIntoDb();
+
+                      history.push(moveWith);
+                    }
+                  },
+                  async onCancel() {
+                    await invoiceIntoDb();
+                    history.push("/assistant/ui/ItemTable");
+                  },
+                });
+              });
           });
+      } else {
+        confirm({
+          title: (
+            <h5 className="confo_title">Do you Want to Print an Invoice?</h5>
+          ),
+          icon: <PrinterFilled className="confo_icon" />,
+          okText: "Yes",
+          cancelText: "No",
+          async onOk() {
+            var arrayPassingItems = [];
 
-          if (tablerows.some((ob) => ob.customer !== null)) {
-            let passingWithCustomerObj = {
-              invoice_number: invoiceNumber,
-              customerDetails: tablerows[0].customer,
-              installemtnDay: days,
-              installemtnDate: dates,
-              discount: totalDiscount,
-              subTotal: subTotalFunc(),
-              balance: itemNOI * itemAPI,
-              total: subTotalFunc() - totalDiscount,
-              // discription: discription,
-              itemsList: arrayPassingItems,
-              backto: "item_list",
-            };
+            tablerows.forEach((one) => {
+              let objItem = {
+                item_id: one.id,
+                item_name: one.title,
+                qty: itemQty[one.i],
+                paymentWay: one.paymentWay,
+                downpayment: itemDP[one.i],
+                noOfInstallment: itemNOI[one.i],
+                amountPerInstallment: itemAPI[one.i],
+                discount: itemDiscount[one.i],
+              };
+              arrayPassingItems.push(objItem);
+            });
 
-            let moveWith = {
-              pathname: "/assistant/invoice/printInvoice",
-              search: "?query=abc",
-              state: { detail: passingWithCustomerObj },
-            };
+            if (tablerows.some((ob) => ob.customer !== null)) {
+              let passingWithCustomerObj = {
+                invoice_number: invoiceNumber,
+                customerDetails: tablerows[0].customer,
+                installemtnDay: days,
+                installemtnDate: dates,
+                discount: totalDiscount,
+                subTotal: subTotalFunc(),
+                balance: itemNOI * itemAPI,
+                total: subTotalFunc() - totalDiscount,
+                // discription: discription,
+                itemsList: arrayPassingItems,
+                backto: "item_list",
+              };
+
+              let moveWith = {
+                pathname: "/assistant/invoice/printInvoice",
+                search: "?query=abc",
+                state: { detail: passingWithCustomerObj },
+              };
+              await invoiceIntoDb();
+
+              history.push(moveWith);
+            } else {
+              let passingWithoutCustomerObj = {
+                invoice_number: invoiceNumber,
+                customerDetails: null,
+                installmentType: null,
+                installemtnDayDate: null,
+                discount: totalDiscount,
+                subTotal: subTotalFunc(),
+                balance: 0,
+                total: subTotalFunc() - totalDiscount,
+                // discription: discription,
+                itemsList: arrayPassingItems,
+                backto: "item_list",
+              };
+              let moveWith = {
+                pathname: "/assistant/invoice/printInvoice",
+                search: "?query=abc",
+                state: { detail: passingWithoutCustomerObj },
+              };
+              await invoiceIntoDb();
+
+              history.push(moveWith);
+            }
+          },
+          async onCancel() {
             await invoiceIntoDb();
-
-            history.push(moveWith);
-          } else {
-            let passingWithoutCustomerObj = {
-              invoice_number: invoiceNumber,
-              customerDetails: null,
-              installmentType: null,
-              installemtnDayDate: null,
-              discount: totalDiscount,
-              subTotal: subTotalFunc(),
-              balance: 0,
-              total: subTotalFunc() - totalDiscount,
-              // discription: discription,
-              itemsList: arrayPassingItems,
-              backto: "item_list",
-            };
-            let moveWith = {
-              pathname: "/assistant/invoice/printInvoice",
-              search: "?query=abc",
-              state: { detail: passingWithoutCustomerObj },
-            };
-            await invoiceIntoDb();
-
-            history.push(moveWith);
-          }
-        },
-        async onCancel() {
-          await invoiceIntoDb();
-          history.push("/assistant/ui/ItemTable");
-        },
-      });
+            history.push("/assistant/ui/ItemTable");
+          },
+        });
+      }
     }
   };
 
@@ -863,6 +961,35 @@ function Make_invoice() {
     }
   };
 
+  const getCurrentBalanceFromGami = () => {
+    setLoadingNicSubmit(true);
+    db.collection("gami_sarani")
+      .where("nic", "==", gamisaraniNic)
+      .get()
+      .then((reGami) => {
+        if (reGami.docs.length > 0) {
+          setGamisaraniId(reGami.docs[0].id);
+          setGamisaraniInitialAmount(reGami.docs[0].data().currentDeposit);
+          setGamisaraniamount(reGami.docs[0].data().currentDeposit);
+          setLoadingNicSubmit(false);
+          if (
+            reGami.docs[0].data().currentDeposit -
+              (subTotalFunc() - totalDiscount) <
+            0
+          ) {
+            NotificationManager.warning(
+              `Info gamisarani ${gamisaraniNic}, not enough balance for the deduction !`
+            );
+          }
+        } else {
+          setLoadingNicSubmit(false);
+          NotificationManager.warning(
+            "Any gamisarani customer not found from this NIC!"
+          );
+        }
+      });
+  };
+
   return (
     <>
       <div className="main_In">
@@ -879,21 +1006,6 @@ function Make_invoice() {
                 </Grid>
                 <Grid item xs={5}>
                   <h3>{invoiceNumber}</h3>
-                  {/* <TextField
-                    className="txt_Invoice"
-                    autoComplete="iNo"
-                    name="invoice No"
-                    variant="outlined"
-                    size="small"
-                    required
-                    value={invoiceNumber}
-                    onChange={(e) => {
-                      setInvoiceNumber(e.target.value.trim());
-                    }}
-                    fullWidth
-                    id="invoiceNo"
-                    label="Invoice No"
-                  /> */}
                 </Grid>
                 <Grid item xs={5}></Grid>
 
@@ -1345,6 +1457,7 @@ function Make_invoice() {
                     name="nic"
                     autoComplete="nic"
                     size="small"
+                    disabled={!gamisarani ? true : false}
                     value={gamisaraniNic}
                     onChange={(e) => {
                       setGamisaraniNic(e.target.value.trim());
@@ -1353,8 +1466,18 @@ function Make_invoice() {
                 </Grid>
 
                 <Grid item xs={12} sm={1}>
-                  <Button fullWidth variant="contained" color="primary">
-                    {loadingsubmit ? <Spin size="large" /> : "Fetch"}
+                  <Button
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    disabled={
+                      !gamisarani || loadingNicsubmit || gamisaraniNic === ""
+                        ? true
+                        : false
+                    }
+                    onClick={getCurrentBalanceFromGami}
+                  >
+                    {loadingNicsubmit ? <Spin size="large" /> : "Fetch"}
                   </Button>
                 </Grid>
                 <Grid item xs={12} sm={6}></Grid>
@@ -1372,8 +1495,17 @@ function Make_invoice() {
                     autoComplete="amount"
                     size="small"
                     type="number"
+                    disabled={!gamisarani ? true : false}
                     InputProps={{ inputProps: { min: 0 } }}
-                    // value={gamisaraniamount}
+                    value={gamisaraniamount}
+                    onChange={(e) => {
+                      if (
+                        gamisaraniInitialAmount >=
+                        parseInt(e.target.value.trim())
+                      ) {
+                        setGamisaraniamount(parseInt(e.target.value.trim()));
+                      }
+                    }}
                   />
                 </Grid>
                 <Grid item xs={12} sm={7}></Grid>

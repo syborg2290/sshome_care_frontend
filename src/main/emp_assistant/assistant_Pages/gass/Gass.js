@@ -18,10 +18,12 @@ import "./Gass.css";
 // icons
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import AddIcon from "@material-ui/icons/Add";
+import ShoppingBasketIcon from "@material-ui/icons/ShoppingBasket";
 
 // components
 import GassModel from "./components/Gass_Model";
 import AddNewModel from "./components/add_new_Gass/AddNew_Model";
+import PurchesHistory from "./components/purches_history/Purches_History";
 
 import "./Gass.css";
 
@@ -37,6 +39,7 @@ export default function Gass() {
   const [tableData, setTableData] = useState([]);
   const [gassModal, setGassModal] = useState(false); //models
   const [addNewGassModal, setAddNewGassModal] = useState(false); // Table models
+  const [purchaseHistory, setPurchaseHistory] = useState(false); // Table models
 
   const showModalGass = () => {
     setGassModal(true);
@@ -48,6 +51,9 @@ export default function Gass() {
 
   const closeModalAddGass = () => {
     setAddNewGassModal(false);
+  };
+  const PurchaseHistory = () => {
+    setPurchaseHistory(true);
   };
 
   useEffect(() => {
@@ -110,6 +116,23 @@ export default function Gass() {
 
       {/* END add gass model */}
 
+      {/* START add gass Purches History model */}
+
+      <Modal
+        className="purchesModel_model"
+        visible={purchaseHistory}
+        footer={null}
+        onCancel={() => {
+          setPurchaseHistory(false);
+        }}
+      >
+        <div className="purchesModel_body">
+          <PurchesHistory />
+        </div>
+      </Modal>
+
+      {/* END add gass Purches History model */}
+
       <Container component="main" className="main_containerr">
         <Typography className="titles" variant="h5" gutterBottom>
           Gass
@@ -118,7 +141,7 @@ export default function Gass() {
           <Grid item xs={12} sm={2}>
             <hr className="titles_hr" />
           </Grid>
-          <Grid item xs={12} sm={5}></Grid>
+          <Grid item xs={12} sm={2}></Grid>
           <Grid item xs={12} sm={2}>
             <Button
               variant="contained"
@@ -128,6 +151,17 @@ export default function Gass() {
               className="btn_gass"
             >
               Sell
+            </Button>
+          </Grid>
+          <Grid item xs={12} sm={3}>
+            <Button
+              variant="contained"
+              onClick={PurchaseHistory}
+              endIcon={<ShoppingBasketIcon />}
+              color="primary"
+              className="btn_pHistry"
+            >
+              Purches History
             </Button>
           </Grid>
           <Grid item xs={12} sm={3}>

@@ -10,7 +10,7 @@ import "./Withdrawal_Model.css";
 
 import db from "../../../../../../config/firebase.js";
 
-export default function Withdrawal_Model({ mid }) {
+export default function Withdrawal_Model({ docId, nicProp, midProp }) {
   const [allTableData, setTableData] = useState([]);
   const columns = [
     {
@@ -72,50 +72,50 @@ export default function Withdrawal_Model({ mid }) {
       },
     },
   ];
-  // useEffect(() => {
-  //   db.collection("gami_sarani_withdrawal")
-  //     .where("mid", "==", mid)
-  //     .onSnapshot((re) => {
-  //       var raw = [];
-  //       re.docs.forEach((each) => {
-  //         raw.push({
-  //           MID: mid,
-  //          NIC: nic,
-  //           Date: moment(each.data()?.date?.toDate()).format(
-  //             "dddd, MMMM Do YYYY"
-  //           ),
-  //           Withdrawal_Amount: (
-  //             <div className="cBalance">
-  //               {" "}
-  //               <CurrencyFormat
-  //                 value={each.data()?.deposit_amount}
-  //                 displayType={"text"}
-  //                 thousandSeparator={true}
-  //                 prefix={" "}
-  //               />
-  //             </div>
-  //           ),
-  //           Current_Balance: (
-  //             <div className="cBalance">
-  //               {" "}
-  //               <CurrencyFormat
-  //                 value={each.data()?.current_Balance}
-  //                 displayType={"text"}
-  //                 thousandSeparator={true}
-  //                 prefix={" "}
-  //               />
-  //             </div>
-  //           ),
-  //         });
-  //       });
-  //       setTableData(raw);
-  //     });
-  // }, [mid]);
+  useEffect(() => {
+    db.collection("gami_sarani_withdrawhistory")
+      .where("docId", "==", docId)
+      .onSnapshot((re) => {
+        var raw = [];
+        re.docs.forEach((each) => {
+          raw.push({
+            MID: midProp,
+            NIC: nicProp,
+            Date: moment(each.data()?.date?.toDate()).format(
+              "dddd, MMMM Do YYYY"
+            ),
+            Withdrawal_Amount: (
+              <div className="cBalance">
+                {" "}
+                <CurrencyFormat
+                  value={each.data()?.withdraw}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              </div>
+            ),
+            Current_Balance: (
+              <div className="cBalance">
+                {" "}
+                <CurrencyFormat
+                  value={each.data()?.balance}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              </div>
+            ),
+          });
+        });
+        setTableData(raw);
+      });
+  }, [docId, midProp, nicProp]);
   return (
     <Grid container spacing={4}>
       <Grid item xs={12}>
         <MUIDataTable
-          title={<span className="title_Span">Withdrawals</span>}
+          title={<span className="title_Span">Withdraw history</span>}
           className="customer_Withdrawals_table"
           sty
           data={allTableData}

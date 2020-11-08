@@ -11,9 +11,8 @@ import "react-notifications/lib/notifications.css";
 // style
 import "./Update_Model.css";
 
-import { nicValidation } from "../../../../../../config/validation.js";
+import firebase from 'firebase';
 import db, { storage } from "../../../../../../config/firebase.js";
-import firebase from "firebase";
 
 export default function Update_Model({
   fnameProp,
@@ -25,6 +24,7 @@ export default function Update_Model({
   address1Prop,
   address2Prop,
   rootProp,
+  imageUrlProp,
 }) {
   const [nic, setNic] = useState(nicProp);
   const [mid, setMId] = useState(midProp);
@@ -39,32 +39,91 @@ export default function Update_Model({
   const [isLoadingSubmit, setLoadingSubmit] = useState(false);
   // eslint-disable-next-line
   const [imageFile, setImageFile] = useState(null);
-  const [imageUrl, setImageUrl] = useState(null);
+  const [imageUrl, setImageUrl] = useState(imageUrlProp);
 
   const updateCustomer = async (e) => {
     e.preventDefault();
     setLoadingSubmit(true);
     db.collection("gamisani_customer")
-      .where("nic", "==", nicProp)
+      .where("nic", "==", nic)
       .get()
       .then((re) => {
-        db.collection("gamisani_customer")
-          .doc(re.docs[0].id)
-          .update({
-            nic: nic,
-            mid: mid,
-            fname: fname,
-            lname: lname,
-            address1: addres1,
-            addres2: addres2,
-            mobile1: mobile1,
-            mobile2: mobile2,
-            root: root,
-          })
-          .then(() => {
-            setLoadingSubmit(false);
-          });
+        if (re.docs.length > 0) {
+          db.collection("gamisani_customer")
+            .where("mid", "==", mid)
+            .get()
+            .then(async(reMid) => {
+              if (reMid.docs.length > 0) {
+                if (imageFile === null) {
+                  
+                
+                db.collection("gamisani_customer")
+                  .doc(re.docs[0].id)
+                  .update({
+                    nic: nic,
+                    mid: mid,
+                    fname: fname,
+                    lname: lname,
+                    address1: addres1,
+                    addres2: addres2,
+                    mobile1: mobile1,
+                    mobile2: mobile2,
+                    root: root,
+                  })
+                  .then(() => {
+                    setLoadingSubmit(false);
+                     window.location.reload();
+                  });
+                } else {
+                    await storage.ref(`images/${imageFile.name}`).put(imageFile);
+
+                  storage
+                    .ref("images")
+                    .child(imageFile.name)
+                    .getDownloadURL()
+                    .then((url) => {
+                      db.collection("gami_sarani")
+                        .add({
+                          mid: mid,
+                          nic: nic,
+                          fname: fname,
+                          lname: lname,
+                          address1: addres1,
+                          addres2: addres2,
+                          mobile1: mobile1,
+                          mobile2: mobile2,
+                          root: root,
+                          currentDeposit: 0,
+                          photo: url,
+                          date: firebase.firestore.FieldValue.serverTimestamp(),
+                        })
+                        .then((_) => {
+                          setLoadingSubmit(false);
+                          window.location.reload();
+                        });
+                    });
+              }
+              } else {
+                setLoadingSubmit(false);
+                setValidation("Any record not found as entered MID");
+              }
+            });
+        } else {
+          setLoadingSubmit(false);
+          setValidation("Any record not found as entered NIC");
+        }
       });
+  };
+
+  const onImageChange = (event) => {
+    if (event.target.files && event.target.files[0]) {
+      setImageFile(event.target.files[0]);
+      let reader = new FileReader();
+      reader.onload = (e) => {
+        setImageUrl(e.target.result);
+      };
+      reader.readAsDataURL(event.target.files[0]);
+    }
   };
 
   return (
@@ -269,7 +328,7 @@ export default function Update_Model({
                 type="file"
                 accept="image/*"
                 name=""
-                // onChange={onImageChange}
+                onChange={onImageChange}
                 className="image"
                 id="item_image"
                 hidden
@@ -289,7 +348,7 @@ export default function Update_Model({
             </Grid>
             <Grid item xs={12} sm={6}></Grid>
           </Grid>
-          {/* <p className="validate_Edit">{validation}</p> */}
+          <p className="validate_Edit">{validation}</p>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={9}></Grid>
             <Grid item xs={12} sm={3}>
@@ -298,6 +357,14 @@ export default function Update_Model({
                 color="primary"
                 className="btn_addCust"
                 onClick={updateCustomer}
+                disabled={
+                  nic.length === 0 ||
+                  mid.length === 0 ||
+                  fname.length === 0 ||
+                  lname.length === 0 ||
+                  addres1.length === 0 ||
+                  mobile1.length === 0
+                }
               >
                 {isLoadingSubmit ? <Spin size="large" /> : "Done"}
               </Button>

@@ -168,6 +168,7 @@ function Make_invoice() {
                   gami_nic: gamisaraniNic,
                   docId: gamisaraniId,
                   withdraw: gamisaraniamount,
+                  balance:getRe.data().currentDeposit - gamisaraniamount,
                   date: intialTimestamp,
                 });
 

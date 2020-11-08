@@ -287,7 +287,19 @@ export default function Gami_Sarani() {
         <div>
           <div>
             <div>
-              <UpdateCustomer />
+              <UpdateCustomer
+                key={allTableData[currentIndx]?.id}
+                midProp={allTableData[currentIndx]?.data.mid}
+                fnameProp={allTableData[currentIndx]?.data.fname}
+                address1Prop={allTableData[currentIndx]?.data.address1}
+                address2Prop={allTableData[currentIndx]?.data.addres2}
+                lnameProp={allTableData[currentIndx]?.data.lname}
+                mobile1Prop={allTableData[currentIndx]?.data.mobile1}
+                mobile2Prop={allTableData[currentIndx]?.data.mobile2}
+                nicProp={allTableData[currentIndx]?.data.nic}
+                imageUrlProp={allTableData[currentIndx]?.data.photo}
+                rootProp={allTableData[currentIndx]?.data.root}
+              />
             </div>
           </div>
         </div>
@@ -332,7 +344,12 @@ export default function Gami_Sarani() {
         <div>
           <div>
             <div>
-              <WithdrawalCustomer />
+              <WithdrawalCustomer
+                docId={allTableData[currentIndx]?.id}
+                key={allTableData[currentIndx]?.id}
+                midProp={allTableData[currentIndx]?.data.mid}
+                nicProp={allTableData[currentIndx]?.data.nic}
+              />
             </div>
           </div>
         </div>

@@ -1498,7 +1498,7 @@ function Make_invoice() {
                     autoComplete="amount"
                     size="small"
                     type="number"
-                    disabled={!gamisarani ? true : false}
+                    disabled={!gamisarani || gamisaraniInitialAmount === 0 ? true : false }
                     InputProps={{ inputProps: { min: 0 } }}
                     value={gamisaraniamount}
                     onChange={(e) => {

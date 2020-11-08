@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-import MUIDataTable from "mui-datatables";
+
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
-import CurrencyFormat from "react-currency-format";
 
 //components
 import ArreasTable from "../dashboard/dashboard_contents/arreas_Table/Arreas_Table";
@@ -17,9 +16,6 @@ import db from "../../../../config/firebase.js";
 import "./Dashboard.css";
 
 export default function Dashboard() {
-  // eslint-disable-next-line
-  const [currentIndx, setCurrentIndx] = useState(0);
-  const [dueInstallmentsDueToday, setDueInstallmentsDueToday] = useState([]);
   // eslint-disable-next-line
   const [pendingBlackList, setPendingBlackList] = useState([]);
 
@@ -48,175 +44,17 @@ export default function Dashboard() {
     }
   };
 
+  function isDateBeforeToday(date) {
+    return new Date(date.toDateString()) < new Date(new Date().toDateString());
+  }
+
   const intialStateOfArreasCheck = async (eachRe) => {
     let daysCountInitial =
       (new Date().getTime() -
         new Date(eachRe.data()?.date?.seconds * 1000).getTime()) /
       (1000 * 3600 * 24);
-    if (eachRe.data().installmentType === "Monthly") {
-      if (31 - daysCountInitial >= 0) {
-        if (eachRe.data()?.installemtnDayDate === new Date().getDate()) {
-          setDueInstallmentsDueToday((old) => [
-            ...old,
-            {
-              InvoiceNo: eachRe.data()?.invoice_number,
-              InstallmentType: eachRe.data()?.installmentType,
-              Day_Date: eachRe.data()?.installemtnDayDate,
-              Amount: (
-                <CurrencyFormat
-                  value={eachRe.data()?.items[0]?.amountPerInstallment}
-                  displayType={"text"}
-                  thousandSeparator={true}
-                  prefix={" "}
-                />
-              ),
-
-              NIC: eachRe.data()?.nic,
-              Balance: (
-                <CurrencyFormat
-                  value={
-                    eachRe.data()?.items[0]?.noOfInstallment *
-                    eachRe.data()?.items[0]?.amountPerInstallment
-                  }
-                  displayType={"text"}
-                  thousandSeparator={true}
-                  prefix={" "}
-                />
-              ),
-            },
-          ]);
-        }
-      } else {
-        if (daysCountInitial - 31 > 7) {
-          if (Math.round(daysCountInitial) - 31 >= 49) {
-            setPendingBlackList([
-              ...pendingBlackList,
-              {
-                invoice_number: eachRe.data().invoice_number,
-                nic: eachRe.data()?.nic,
-              },
-            ]);
-          }
-
-          db.collection("arrears")
-            .where("invoice_number", "==", eachRe.data().invoice_number)
-            .get()
-            .then((reArreas) => {
-              if (reArreas.docs.length > 0) {
-                db.collection("arrears")
-                  .doc(reArreas.docs[0].id)
-                  .update({
-                    delayed_days: Math.round(daysCountInitial) - 31,
-                    delayed_charges:
-                      daysCountInitial - 31 <= 7
-                        ? 0
-                        : (daysCountInitial - 31) / 7 < 2
-                        ? 99
-                        : (daysCountInitial - 31) / 7 > 2 &&
-                          (daysCountInitial - 31) / 7 < 3
-                        ? 198
-                        : (daysCountInitial - 31) / 7 > 3 &&
-                          (daysCountInitial - 31) / 7 < 4
-                        ? 297
-                        : (daysCountInitial - 31) / 7 > 4 &&
-                          (daysCountInitial - 31) / 7 < 5
-                        ? 396
-                        : (daysCountInitial - 31) / 7 > 5 &&
-                          (daysCountInitial - 31) / 7 < 6
-                        ? 495
-                        : (daysCountInitial - 31) / 7 > 6 &&
-                          (daysCountInitial - 31) / 7 < 7
-                        ? 594
-                        : (daysCountInitial - 31) / 7 > 7 &&
-                          (daysCountInitial - 31) / 7 < 8
-                        ? 693
-                        : 693,
-                  });
-              } else {
-                db.collection("arrears").add({
-                  invoice_number: eachRe.data().invoice_number,
-                  customer_id: eachRe.data().customer_id,
-                  nic: eachRe.data().nic,
-                  delayed_days: Math.round(daysCountInitial) - 31,
-                  delayed_charges:
-                    daysCountInitial - 31 <= 7
-                      ? 0
-                      : (daysCountInitial - 31) / 7 < 2
-                      ? 99
-                      : (daysCountInitial - 31) / 7 > 2 &&
-                        (daysCountInitial - 31) / 7 < 3
-                      ? 198
-                      : (daysCountInitial - 31) / 7 > 3 &&
-                        (daysCountInitial - 31) / 7 < 4
-                      ? 297
-                      : (daysCountInitial - 31) / 7 > 4 &&
-                        (daysCountInitial - 31) / 7 < 5
-                      ? 396
-                      : (daysCountInitial - 31) / 7 > 5 &&
-                        (daysCountInitial - 31) / 7 < 6
-                      ? 495
-                      : (daysCountInitial - 31) / 7 > 6 &&
-                        (daysCountInitial - 31) / 7 < 7
-                      ? 594
-                      : (daysCountInitial - 31) / 7 > 7 &&
-                        (daysCountInitial - 31) / 7 < 8
-                      ? 693
-                      : 693,
-                  date: firebase.firestore.FieldValue.serverTimestamp(),
-                });
-              }
-            });
-        }
-      }
-    } else {
+    if (eachRe.data().installmentType === "shop") {
       if (7 - daysCountInitial >= 0) {
-        // setDelayedDays(0);
-        if (eachRe.data()?.installemtnDayDate === new Date().getDay()) {
-          setDueInstallmentsDueToday((old) => [
-            ...old,
-            {
-              InvoiceNo: eachRe.data()?.invoice_number,
-              InstallmentType: eachRe.data()?.installmentType,
-              Day_Date:
-                eachRe.data()?.installemtnDayDate === 1
-                  ? "Monday"
-                  : eachRe.data()?.installemtnDayDate === 2
-                  ? "Tuesday"
-                  : eachRe.data()?.installemtnDayDate === 3
-                  ? "Wednesday"
-                  : eachRe.data()?.installemtnDayDate === 4
-                  ? "Thursday"
-                  : eachRe.data()?.installemtnDayDate === 5
-                  ? "Friday"
-                  : eachRe.data()?.installemtnDayDate === 6
-                  ? "Saturday"
-                  : eachRe.data()?.installemtnDayDate === 0
-                  ? "Sunday"
-                  : "",
-              Amount: (
-                <CurrencyFormat
-                  value={eachRe.data()?.items[0]?.amountPerInstallment}
-                  displayType={"text"}
-                  thousandSeparator={true}
-                  prefix={" "}
-                />
-              ),
-
-              NIC: eachRe.data()?.nic,
-              Balance: (
-                <CurrencyFormat
-                  value={
-                    eachRe.data()?.items[0]?.noOfInstallment *
-                    eachRe.data()?.items[0]?.amountPerInstallment
-                  }
-                  displayType={"text"}
-                  thousandSeparator={true}
-                  prefix={" "}
-                />
-              ),
-            },
-          ]);
-        }
       } else {
         if (daysCountInitial - 7 > 7) {
           if (Math.round(daysCountInitial) - 7 >= 49) {
@@ -228,6 +66,7 @@ export default function Dashboard() {
               },
             ]);
           }
+
           db.collection("arrears")
             .where("invoice_number", "==", eachRe.data().invoice_number)
             .get()
@@ -267,7 +106,7 @@ export default function Dashboard() {
                   invoice_number: eachRe.data().invoice_number,
                   customer_id: eachRe.data().customer_id,
                   nic: eachRe.data().nic,
-                  delayed_days: Math.round(daysCountInitial) - 7,
+                  delayed_days: Math.round(daysCountInitial) - 31,
                   delayed_charges:
                     daysCountInitial - 7 <= 7
                       ? 0
@@ -298,17 +137,113 @@ export default function Dashboard() {
             });
         }
       }
+    } else {
+      if (14 - daysCountInitial >= 0) {
+      } else {
+        if (daysCountInitial - 14 > 7) {
+          if (Math.round(daysCountInitial) - 14 >= 49) {
+            setPendingBlackList([
+              ...pendingBlackList,
+              {
+                invoice_number: eachRe.data().invoice_number,
+                nic: eachRe.data()?.nic,
+              },
+            ]);
+          }
+          db.collection("arrears")
+            .where("invoice_number", "==", eachRe.data().invoice_number)
+            .get()
+            .then((reArreas) => {
+              if (reArreas.docs.length > 0) {
+                db.collection("arrears")
+                  .doc(reArreas.docs[0].id)
+                  .update({
+                    delayed_days: Math.round(daysCountInitial) - 14,
+                    delayed_charges:
+                      daysCountInitial - 14 <= 7
+                        ? 0
+                        : (daysCountInitial - 14) / 7 < 2
+                        ? 99
+                        : (daysCountInitial - 14) / 7 > 2 &&
+                          (daysCountInitial - 14) / 7 < 3
+                        ? 198
+                        : (daysCountInitial - 14) / 7 > 3 &&
+                          (daysCountInitial - 14) / 7 < 4
+                        ? 297
+                        : (daysCountInitial - 14) / 7 > 4 &&
+                          (daysCountInitial - 14) / 7 < 5
+                        ? 396
+                        : (daysCountInitial - 14) / 7 > 5 &&
+                          (daysCountInitial - 14) / 7 < 6
+                        ? 495
+                        : (daysCountInitial - 14) / 7 > 6 &&
+                          (daysCountInitial - 14) / 7 < 7
+                        ? 594
+                        : (daysCountInitial - 14) / 7 > 7 &&
+                          (daysCountInitial - 14) / 7 < 8
+                        ? 693
+                        : 693,
+                  });
+              } else {
+                db.collection("arrears").add({
+                  invoice_number: eachRe.data().invoice_number,
+                  customer_id: eachRe.data().customer_id,
+                  nic: eachRe.data().nic,
+                  delayed_days: Math.round(daysCountInitial) - 7,
+                  delayed_charges:
+                    daysCountInitial - 14 <= 7
+                      ? 0
+                      : (daysCountInitial - 14) / 7 < 2
+                      ? 99
+                      : (daysCountInitial - 14) / 7 > 2 &&
+                        (daysCountInitial - 14) / 7 < 3
+                      ? 198
+                      : (daysCountInitial - 14) / 7 > 3 &&
+                        (daysCountInitial - 14) / 7 < 4
+                      ? 297
+                      : (daysCountInitial - 14) / 7 > 4 &&
+                        (daysCountInitial - 14) / 7 < 5
+                      ? 396
+                      : (daysCountInitial - 14) / 7 > 5 &&
+                        (daysCountInitial - 14) / 7 < 6
+                      ? 495
+                      : (daysCountInitial - 14) / 7 > 6 &&
+                        (daysCountInitial - 14) / 7 < 7
+                      ? 594
+                      : (daysCountInitial - 14) / 7 > 7 &&
+                        (daysCountInitial - 14) / 7 < 8
+                      ? 693
+                      : 693,
+                  date: firebase.firestore.FieldValue.serverTimestamp(),
+                });
+              }
+            });
+        }
+      }
+    }
+
+    let isBeforeDate = isDateBeforeToday(
+      new Date(eachRe.data()?.deadlineTimestamp?.seconds * 1000)
+    );
+    if (!isBeforeDate) {
+      setPendingBlackList([
+        ...pendingBlackList,
+        {
+          invoice_number: eachRe.data().invoice_number,
+          nic: eachRe.data()?.nic,
+        },
+      ]);
     }
   };
 
-  const getDateCheck = (value, arr, prop) => {
-    for (var i = 0; i < arr.length; i++) {
-      if (new Date(arr[i].data()[prop].seconds * 1000) === value) {
-        return true;
-      }
-    }
-    return false; //to handle the case where the value doesn't exist
-  };
+  // const getDateCheck = (value, arr, prop) => {
+  //   for (var i = 0; i < arr.length; i++) {
+  //     if (new Date(arr[i].data()[prop].seconds * 1000) === value) {
+  //       return true;
+  //     }
+  //   }
+  //   return false; //to handle the case where the value doesn't exist
+  // };
 
   const afterStateOfArreasCheck = async (instReDoc, eachRe) => {
     let daysCount =
@@ -336,48 +271,11 @@ export default function Dashboard() {
       ]);
     }
 
-    if (eachRe.data().installmentType === "Monthly") {
-      if (31 - daysCount >= 0) {
-        // setDelayedDays(0);
-
-        if (eachRe.data()?.installemtnDayDate === new Date().getDate()) {
-          if (getDateCheck(new Date().getTime(), instReDoc.docs, "date")) {
-            setDueInstallmentsDueToday((old) => [
-              ...old,
-              {
-                InvoiceNo: eachRe.data()?.invoice_number,
-                InstallmentType: eachRe.data()?.installmentType,
-                Day_Date: eachRe.data()?.installemtnDayDate,
-                Amount: (
-                  <CurrencyFormat
-                    value={eachRe.data()?.items[0]?.amountPerInstallment}
-                    displayType={"text"}
-                    thousandSeparator={true}
-                    prefix={" "}
-                  />
-                ),
-
-                NIC: eachRe.data()?.nic,
-                Balance: (
-                  <CurrencyFormat
-                    value={
-                      eachRe.data()?.items[0]?.noOfInstallment *
-                        eachRe.data()?.items[0]?.amountPerInstallment -
-                      eachRe.data()?.items[0]?.amountPerInstallment *
-                        instReDoc.docs.length
-                    }
-                    displayType={"text"}
-                    thousandSeparator={true}
-                    prefix={" "}
-                  />
-                ),
-              },
-            ]);
-          }
-        }
+    if (eachRe.data().installmentType === "shop") {
+      if (7 - daysCount >= 0) {
       } else {
-        if (daysCount - 31 > 7) {
-          if (Math.round(daysCount) - 31 >= 49) {
+        if (daysCount - 7 > 7) {
+          if (Math.round(daysCount) - 7 >= 49) {
             setPendingBlackList([
               ...pendingBlackList,
               {
@@ -396,130 +294,7 @@ export default function Dashboard() {
             db.collection("arrears")
               .doc(statusMonth.docs[0].id)
               .update({
-                delayed_days: daysCount - 31,
-                delayed_charges:
-                  daysCount - 31 <= 7
-                    ? 0
-                    : (daysCount - 31) / 7 < 2
-                    ? 99
-                    : (daysCount - 31) / 7 > 2 && (daysCount - 31) / 7 < 3
-                    ? 198
-                    : (daysCount - 31) / 7 > 3 && (daysCount - 31) / 7 < 4
-                    ? 297
-                    : (daysCount - 31) / 7 > 4 && (daysCount - 31) / 7 < 5
-                    ? 396
-                    : (daysCount - 31) / 7 > 5 && (daysCount - 31) / 7 < 6
-                    ? 495
-                    : (daysCount - 31) / 7 > 6 && (daysCount - 31) / 7 < 7
-                    ? 594
-                    : (daysCount - 31) / 7 > 7 && (daysCount - 31) / 7 < 8
-                    ? 693
-                    : 99 * Math.round((daysCount - 31) / 7),
-              });
-          } else {
-            db.collection("arrears").add({
-              invoice_number: eachRe.data().invoice_number,
-              customer_id: eachRe.data().customer_id,
-              nic: eachRe.data().nic,
-              delayed_days: Math.round(daysCount) - 31,
-              delayed_charges:
-                daysCount - 31 <= 7
-                  ? 0
-                  : (daysCount - 31) / 7 < 2
-                  ? 99
-                  : (daysCount - 31) / 7 > 2 && (daysCount - 31) / 7 < 3
-                  ? 198
-                  : (daysCount - 31) / 7 > 3 && (daysCount - 31) / 7 < 4
-                  ? 297
-                  : (daysCount - 31) / 7 > 4 && (daysCount - 31) / 7 < 5
-                  ? 396
-                  : (daysCount - 31) / 7 > 5 && (daysCount - 31) / 7 < 6
-                  ? 495
-                  : (daysCount - 31) / 7 > 6 && (daysCount - 31) / 7 < 7
-                  ? 594
-                  : (daysCount - 31) / 7 > 7 && (daysCount - 31) / 7 < 8
-                  ? 693
-                  : 99 * Math.round((daysCount - 31) / 7),
-              date: firebase.firestore.FieldValue.serverTimestamp(),
-            });
-          }
-        }
-      }
-    } else {
-      if (7 - daysCount >= 0) {
-        // setDelayedDays(0);
-        if (eachRe.data()?.installemtnDayDate === new Date().getDay()) {
-          if (getDateCheck(new Date().getTime(), instReDoc.docs, "date")) {
-            setDueInstallmentsDueToday((old) => [
-              ...old,
-              {
-                InvoiceNo: eachRe.data()?.invoice_number,
-                InstallmentType: eachRe.data()?.installmentType,
-                Day_Date:
-                  eachRe.data()?.installemtnDayDate === 1
-                    ? "Monday"
-                    : eachRe.data()?.installemtnDayDate === 2
-                    ? "Tuesday"
-                    : eachRe.data()?.installemtnDayDate === 3
-                    ? "Wednesday"
-                    : eachRe.data()?.installemtnDayDate === 4
-                    ? "Thursday"
-                    : eachRe.data()?.installemtnDayDate === 5
-                    ? "Friday"
-                    : eachRe.data()?.installemtnDayDate === 6
-                    ? "Saturday"
-                    : eachRe.data()?.installemtnDayDate === 0
-                    ? "Sunday"
-                    : "",
-                Amount: (
-                  <CurrencyFormat
-                    value={eachRe.data()?.items[0]?.amountPerInstallment}
-                    displayType={"text"}
-                    thousandSeparator={true}
-                    prefix={" "}
-                  />
-                ),
-
-                NIC: eachRe.data()?.nic,
-                Balance: (
-                  <CurrencyFormat
-                    value={
-                      eachRe.data()?.items[0]?.noOfInstallment *
-                        eachRe.data()?.items[0]?.amountPerInstallment -
-                      eachRe.data()?.items[0]?.amountPerInstallment *
-                        instReDoc.docs.length
-                    }
-                    displayType={"text"}
-                    thousandSeparator={true}
-                    prefix={" "}
-                  />
-                ),
-              },
-            ]);
-          }
-        }
-      } else {
-        if (daysCount - 7 > 7) {
-          if (Math.round(daysCount) - 7 >= 49) {
-            setPendingBlackList([
-              ...pendingBlackList,
-              {
-                invoice_number: eachRe.data().invoice_number,
-                nic: eachRe.data()?.nic,
-              },
-            ]);
-          }
-
-          let statusWeek = await db
-            .collection("arrears")
-            .where("invoice_number", "==", eachRe.data().invoice_number)
-            .get();
-
-          if (statusWeek.docs.length > 0) {
-            db.collection("arrears")
-              .doc(statusWeek.docs[0].id)
-              .update({
-                delayed_days: Math.round(daysCount) - 7,
+                delayed_days: daysCount - 7,
                 delayed_charges:
                   daysCount - 7 <= 7
                     ? 0
@@ -568,76 +343,93 @@ export default function Dashboard() {
           }
         }
       }
+    } else {
+      if (14 - daysCount >= 0) {
+      } else {
+        if (daysCount - 14 > 7) {
+          if (Math.round(daysCount) - 14 >= 49) {
+            setPendingBlackList([
+              ...pendingBlackList,
+              {
+                invoice_number: eachRe.data().invoice_number,
+                nic: eachRe.data()?.nic,
+              },
+            ]);
+          }
+
+          let statusWeek = await db
+            .collection("arrears")
+            .where("invoice_number", "==", eachRe.data().invoice_number)
+            .get();
+
+          if (statusWeek.docs.length > 0) {
+            db.collection("arrears")
+              .doc(statusWeek.docs[0].id)
+              .update({
+                delayed_days: Math.round(daysCount) - 14,
+                delayed_charges:
+                  daysCount - 14 <= 7
+                    ? 0
+                    : (daysCount - 14) / 7 < 2
+                    ? 99
+                    : (daysCount - 14) / 7 > 2 && (daysCount - 14) / 7 < 3
+                    ? 198
+                    : (daysCount - 14) / 7 > 3 && (daysCount - 14) / 7 < 4
+                    ? 297
+                    : (daysCount - 14) / 7 > 4 && (daysCount - 14) / 7 < 5
+                    ? 396
+                    : (daysCount - 14) / 7 > 5 && (daysCount - 14) / 7 < 6
+                    ? 495
+                    : (daysCount - 14) / 7 > 6 && (daysCount - 14) / 7 < 7
+                    ? 594
+                    : (daysCount - 14) / 7 > 7 && (daysCount - 14) / 7 < 8
+                    ? 693
+                    : 99 * Math.round((daysCount - 14) / 7),
+              });
+          } else {
+            db.collection("arrears").add({
+              invoice_number: eachRe.data().invoice_number,
+              customer_id: eachRe.data().customer_id,
+              nic: eachRe.data().nic,
+              delayed_days: Math.round(daysCount) - 14,
+              delayed_charges:
+                daysCount - 14 <= 7
+                  ? 0
+                  : (daysCount - 14) / 7 < 2
+                  ? 99
+                  : (daysCount - 14) / 7 > 2 && (daysCount - 14) / 7 < 3
+                  ? 198
+                  : (daysCount - 14) / 7 > 3 && (daysCount - 14) / 7 < 4
+                  ? 297
+                  : (daysCount - 14) / 7 > 4 && (daysCount - 14) / 7 < 5
+                  ? 396
+                  : (daysCount - 14) / 7 > 5 && (daysCount - 14) / 7 < 6
+                  ? 495
+                  : (daysCount - 14) / 7 > 6 && (daysCount - 14) / 7 < 7
+                  ? 594
+                  : (daysCount - 14) / 7 > 7 && (daysCount - 14) / 7 < 8
+                  ? 693
+                  : 99 * Math.round((daysCount - 14) / 7),
+              date: firebase.firestore.FieldValue.serverTimestamp(),
+            });
+          }
+        }
+      }
+    }
+
+    let isBeforeDate = isDateBeforeToday(
+      new Date(eachRe.data()?.deadlineTimestamp?.seconds * 1000)
+    );
+    if (!isBeforeDate) {
+      setPendingBlackList([
+        ...pendingBlackList,
+        {
+          invoice_number: eachRe.data().invoice_number,
+          nic: eachRe.data()?.nic,
+        },
+      ]);
     }
   };
-
-  //START pay And Go Columns
-  const dashboarColomns = [
-    {
-      name: "InvoiceNo",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
-    {
-      name: "InstallmentType",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
-    {
-      name: "Day_Date",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
-
-    {
-      name: "Amount",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
-    {
-      name: "NIC",
-      options: {
-        filter: false,
-        setCellHeaderProps: (value) => ({
-          style: {
-            fontSize: "15px",
-            color: "black",
-            fontWeight: "600",
-          },
-        }),
-      },
-    },
-
-    {
-      name: "Balance",
-      options: {
-        filter: false,
-        setCellHeaderProps: (value) => ({
-          style: {
-            fontSize: "15px",
-            color: "black",
-            fontWeight: "600",
-          },
-        }),
-      },
-    },
-  ];
 
   return (
     <Container component="main" className="main_container">
@@ -679,34 +471,6 @@ export default function Dashboard() {
         </Grid>
       </Grid>
       {/*END Invoices  Table */}
-
-      <Grid container spacing={4}>
-        <Grid item xs={12}>
-          <MUIDataTable
-            title={
-              <span className="title_Span_blackList">
-                Due installments of the day
-              </span>
-            }
-            className="blackList_Table"
-            data={dueInstallmentsDueToday}
-            columns={dashboarColomns}
-            options={{
-              selectableRows: false,
-              customToolbarSelect: () => {},
-              filterType: "textfield",
-              download: false,
-              print: false,
-              searchPlaceholder: "Search using any column names",
-              elevation: 4,
-              sort: true,
-              onRowClick: (rowData, rowMeta) => {
-                setCurrentIndx(rowMeta.dataIndex);
-              },
-            }}
-          />
-        </Grid>
-      </Grid>
     </Container>
   );
 }

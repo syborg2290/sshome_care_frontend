@@ -20,10 +20,12 @@ import "./Repair_model.css";
 export default function Repair_model({ closeModel }) {
   const { confirm } = Modal;
   let history = useHistory();
+  // eslint-disable-next-line
   const [invoice, setInvoice] = useState("");
   const [serialNo, setSerialNo] = useState("");
   const [model_no, setModel_no] = useState("");
   const [cust_name, setCust_name] = useState("");
+  // eslint-disable-next-line
   const [mid, setMid] = useState("");
   const [nic, setNic] = useState("");
   const [mobil_no1, setMobil_no1] = useState("");

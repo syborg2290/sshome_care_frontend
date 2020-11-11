@@ -173,6 +173,7 @@ export default function ItemTable() {
                 root={customerAllData[currentIndx]?.data.root}
                 status={customerAllData[currentIndx]?.data.status}
                 createdAt={customerAllData[currentIndx]?.data.date}
+                mid={customerAllData[currentIndx]?.data.mid}
                 key={customerAllData[currentIndx]?.id}
               />
             </div>

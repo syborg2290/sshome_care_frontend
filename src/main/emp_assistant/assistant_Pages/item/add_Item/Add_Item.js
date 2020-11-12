@@ -73,6 +73,7 @@ export default function Add_Item() {
 
   const addItem = async (e) => {
     e.preventDefault();
+    
 
     if (itemName === "") {
       NotificationManager.info(
@@ -289,6 +290,7 @@ export default function Add_Item() {
                                                           Math.round(discount)
                                                     );
                                                     if (newArray) {
+                                                      
                                                       let variable = {
                                                         itemName: itemName.trim(),
                                                         brand: brand.trim(),
@@ -367,6 +369,7 @@ export default function Add_Item() {
                                                     }
                                                   } else {
                                                     if (inst) {
+                                      
                                                       let variable = {
                                                         itemName: itemName.trim(),
                                                         brand: brand.trim(),

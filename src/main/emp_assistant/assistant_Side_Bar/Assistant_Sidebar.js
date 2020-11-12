@@ -15,6 +15,7 @@ import {
   LocalShipping as LocalShippingIcon,
   GroupAdd as GroupAddIcon,
   Commute as CommuteIcon,
+  PlaylistAddCheck as PlaylistAddCheckIcon,
 } from "@material-ui/icons";
 
 import { useTheme } from "@material-ui/styles";
@@ -81,12 +82,6 @@ const structure = [
     link: "/assistant/ui/Repair",
     icon: <BuildIcon className="icons" />,
   },
-  {
-    id: 9,
-    label: "Black list",
-    link: "/assistant/ui/BlackList",
-    icon: <PersonAddDisabledIcon className="icons" />,
-  },
 
   {
     id: 13,
@@ -108,12 +103,24 @@ const structure = [
     icon: <GroupAddIcon className="icons" />,
   },
   {
+    id: 17,
+    label: "Attendance",
+    link: "/assistant/ui/attendance",
+    icon: <PlaylistAddCheckIcon className="icons" />,
+  },
+  {
     id: 18,
     label: "Root",
     link: "/assistant/ui/root",
     icon: <CommuteIcon className="icons" />,
   },
   { id: 2, type: "divider" },
+  {
+    id: 9,
+    label: "Black list",
+    link: "/assistant/ui/BlackList",
+    icon: <PersonAddDisabledIcon className="icons" />,
+  },
 
   {
     id: 12,

@@ -29,6 +29,7 @@ import Repair from "../assistant_Pages/repairs/Repairs";
 import GamiSarani from "../assistant_Pages/gami_sarani/Gami_Sarani";
 import SeizedItems from "../assistant_Pages/seized_items/Seized_item";
 import Employee from "../assistant_Pages/employee/Employee";
+import Attendance from "../assistant_Pages/attendance/Attendance";
 import Root from "../assistant_Pages/root/Root";
 
 function LayoutAssistant(props) {
@@ -53,6 +54,7 @@ function LayoutAssistant(props) {
             <Route path="/assistant/ui/BlackList" component={BlackList} />
             <Route path="/assistant/ui/SeizedItems" component={SeizedItems} />
             <Route path="/assistant/ui/employee" component={Employee} />
+            <Route path="/assistant/ui/attendance" component={Attendance} />
             <Route path="/assistant/ui/root" component={Root} />
             {/* components */}
             <Route path="/assistant/ui/ItemTable" component={ItemTable} />

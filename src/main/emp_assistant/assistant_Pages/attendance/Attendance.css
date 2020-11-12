@@ -1,0 +1,32 @@
+.workingStts {
+  background-color: green;
+  color: aliceblue;
+  border-radius: 8px;
+  width: 45%;
+  text-align: center;
+}
+
+.offStts {
+  background-color: rgba(240, 15, 15, 0.849);
+  color: aliceblue;
+  border-radius: 8px;
+  width: 45%;
+  text-align: center;
+}
+
+.leaveStts {
+  background-color: rgba(189, 80, 17, 0.884);
+  color: aliceblue;
+  border-radius: 8px;
+  width: 45%;
+  text-align: center;
+}
+
+.btn_attendance {
+  float: right !important;
+  margin-top: 80px !important;
+}
+
+.attemdance_Table {
+  margin-top: 30px !important;
+}

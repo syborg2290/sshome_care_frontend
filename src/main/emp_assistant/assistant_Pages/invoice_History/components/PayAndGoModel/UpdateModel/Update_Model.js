@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Radio, Spin } from "antd";
+import { Spin } from "antd";
 import {
   TextField,
   Grid,
@@ -25,17 +25,19 @@ export default function Update_Model({
   instCount,
   customer_id,
   closeModal,
-  balanceProp
+  balanceProp,
 }) {
   const [installments, setInstallments] = useState(0);
   // eslint-disable-next-line
+  const [intialBalance, setInitialBalance] = useState(balanceProp);
+  // eslint-disable-next-line
   const [balance, setBalance] = useState(balanceProp);
+  const [serialNo, setSerialNo] = useState("");
   const [delayedDays, setDelayedDays] = useState(0);
+  const [installmentAmount, setInstallmentAmount] = useState(instAmountProp);
   const [allInstallment, setAllInstallment] = useState(0);
   const [delayedCharges, setDelayedCharges] = useState(0);
-  const [updatingInstallmentCount, setUpdatingInstallmentCount] = useState(1);
   const [customer, setCustomer] = useState({});
-  const [currentStatus, setCurrentStatus] = useState("a");
   const [isLoading, setIsLoading] = useState(true);
 
   const { confirm } = Modal;
@@ -43,6 +45,13 @@ export default function Update_Model({
   let history = useHistory();
 
   useEffect(() => {
+    db.collection("invoice")
+      .where("invoice_number", "==", invoice_no)
+      .get()
+      .then((reInvoice) => {
+        setSerialNo(reInvoice.docs[0].data().items[0].serialNo);
+      });
+
     db.collection("customer")
       .doc(customer_id)
       .get()
@@ -73,49 +82,15 @@ export default function Update_Model({
                   ).getTime()) /
                 (1000 * 3600 * 24);
 
-              if (inReDoc.docs[0].data().installmentType === "Monthly") {
-                if (30 - daysCountInitial >= 0) {
-                  setDelayedDays(0);
-                } else {
-                  setDelayedDays(daysCountInitial - 31);
-                  if (daysCountInitial / 31 > 0) {
-                    setAllInstallment((daysCountInitial - 7) / 31);
-                  }
-
-                  setDelayedCharges(
-                    daysCountInitial - 31 <= 7
-                      ? 0
-                      : (daysCountInitial - 31) / 7 < 2
-                      ? 99
-                      : (daysCountInitial - 31) / 7 > 2 &&
-                        (daysCountInitial - 31) / 7 < 3
-                      ? 198
-                      : (daysCountInitial - 31) / 7 > 3 &&
-                        (daysCountInitial - 31) / 7 < 4
-                      ? 297
-                      : (daysCountInitial - 31) / 7 > 4 &&
-                        (daysCountInitial - 31) / 7 < 5
-                      ? 396
-                      : (daysCountInitial - 31) / 7 > 5 &&
-                        (daysCountInitial - 31) / 7 < 6
-                      ? 495
-                      : (daysCountInitial - 31) / 7 > 6 &&
-                        (daysCountInitial - 31) / 7 < 7
-                      ? 594
-                      : (daysCountInitial - 31) / 7 > 7 &&
-                        (daysCountInitial - 31) / 7 < 8
-                      ? 693
-                      : 693
-                  );
-                }
-              } else {
+              if (inReDoc.docs[0].data().installmentType === "shop") {
                 if (7 - daysCountInitial >= 0) {
                   setDelayedDays(0);
                 } else {
                   setDelayedDays(daysCountInitial - 7);
                   if (daysCountInitial / 7 > 0) {
-                    setAllInstallment(Math.round((daysCountInitial - 7) / 7));
+                    setAllInstallment((daysCountInitial - 7) / 7);
                   }
+
                   setDelayedCharges(
                     daysCountInitial - 7 <= 7
                       ? 0
@@ -142,6 +117,40 @@ export default function Update_Model({
                       : 693
                   );
                 }
+              } else {
+                if (14 - daysCountInitial >= 0) {
+                  setDelayedDays(0);
+                } else {
+                  setDelayedDays(daysCountInitial - 14);
+                  if (daysCountInitial / 7 > 0) {
+                    setAllInstallment(Math.round((daysCountInitial - 14) / 7));
+                  }
+                  setDelayedCharges(
+                    daysCountInitial - 14 <= 7
+                      ? 0
+                      : (daysCountInitial - 14) / 7 < 2
+                      ? 99
+                      : (daysCountInitial - 14) / 7 > 2 &&
+                        (daysCountInitial - 14) / 7 < 3
+                      ? 198
+                      : (daysCountInitial - 14) / 7 > 3 &&
+                        (daysCountInitial - 14) / 7 < 4
+                      ? 297
+                      : (daysCountInitial - 14) / 7 > 4 &&
+                        (daysCountInitial - 14) / 7 < 5
+                      ? 396
+                      : (daysCountInitial - 14) / 7 > 5 &&
+                        (daysCountInitial - 14) / 7 < 6
+                      ? 495
+                      : (daysCountInitial - 14) / 7 > 6 &&
+                        (daysCountInitial - 14) / 7 < 7
+                      ? 594
+                      : (daysCountInitial - 14) / 7 > 7 &&
+                        (daysCountInitial - 14) / 7 < 8
+                      ? 693
+                      : 693
+                  );
+                }
               }
             } else {
               let daysCount =
@@ -152,41 +161,13 @@ export default function Update_Model({
                   ).getTime()) /
                 (1000 * 3600 * 24);
 
-              if (inReDoc.docs[0].data().installmentType === "Monthly") {
-                if (30 - daysCount >= 0) {
-                  setDelayedDays(0);
-                } else {
-                  setDelayedDays(daysCount - 31);
-                  if (daysCount / 31 > 0) {
-                    setAllInstallment((daysCount - 7) / 31);
-                  }
-                  setDelayedCharges(
-                    daysCount - 31 <= 7
-                      ? 0
-                      : (daysCount - 31) / 7 < 2
-                      ? 99
-                      : (daysCount - 31) / 7 > 2 && (daysCount - 31) / 7 < 3
-                      ? 198
-                      : (daysCount - 31) / 7 > 3 && (daysCount - 31) / 7 < 4
-                      ? 297
-                      : (daysCount - 31) / 7 > 4 && (daysCount - 31) / 7 < 5
-                      ? 396
-                      : (daysCount - 31) / 7 > 5 && (daysCount - 31) / 7 < 6
-                      ? 495
-                      : (daysCount - 31) / 7 > 6 && (daysCount - 31) / 7 < 7
-                      ? 594
-                      : (daysCount - 31) / 7 > 7 && (daysCount - 31) / 7 < 8
-                      ? 693
-                      : 693
-                  );
-                }
-              } else {
+              if (inReDoc.docs[0].data().installmentType === "shop") {
                 if (7 - daysCount >= 0) {
                   setDelayedDays(0);
                 } else {
                   setDelayedDays(daysCount - 7);
                   if (daysCount / 7 > 0) {
-                    setAllInstallment(Math.round((daysCount - 7) / 7));
+                    setAllInstallment((daysCount - 7) / 7);
                   }
                   setDelayedCharges(
                     daysCount - 7 <= 7
@@ -208,6 +189,34 @@ export default function Update_Model({
                       : 693
                   );
                 }
+              } else {
+                if (14 - daysCount >= 0) {
+                  setDelayedDays(0);
+                } else {
+                  setDelayedDays(daysCount - 7);
+                  if (daysCount / 7 > 0) {
+                    setAllInstallment(Math.round((daysCount - 14) / 7));
+                  }
+                  setDelayedCharges(
+                    daysCount - 14 <= 7
+                      ? 0
+                      : (daysCount - 14) / 7 < 2
+                      ? 99
+                      : (daysCount - 14) / 7 > 2 && (daysCount - 14) / 7 < 3
+                      ? 198
+                      : (daysCount - 14) / 7 > 3 && (daysCount - 14) / 7 < 4
+                      ? 297
+                      : (daysCount - 14) / 7 > 4 && (daysCount - 14) / 7 < 5
+                      ? 396
+                      : (daysCount - 14) / 7 > 5 && (daysCount - 14) / 7 < 6
+                      ? 495
+                      : (daysCount - 14) / 7 > 6 && (daysCount - 14) / 7 < 7
+                      ? 594
+                      : (daysCount - 14) / 7 > 7 && (daysCount - 14) / 7 < 8
+                      ? 693
+                      : 693
+                  );
+                }
               }
             }
           });
@@ -217,33 +226,24 @@ export default function Update_Model({
   }, [invoice_no]);
 
   const updateInstallment = async () => {
-    var j = 0;
-    let plussForLoop = allInstallment + Math.round(updatingInstallmentCount);
-
-    for (var i = 1; i <= plussForLoop; i++) {
-      await db
-        .collection("installment")
-        .where("invoice_number", "==", invoice_no)
-        .get()
-        // eslint-disable-next-line
-        .then(async (reInst) => {
-          await db.collection("installment").add({
-            invoice_number: invoice_no,
-            amount: Math.round(instAmountProp),
-            delayed:
-              delayedCharges === ""
-                ? 0
-                : j === 0
-                ? Math.round(delayedCharges)
-                : 0,
-            balance:
-              Math.round(instAmountProp) *
-              (Math.round(instCount) - (reInst.docs.length + 1)),
-            date: firebase.firestore.FieldValue.serverTimestamp(),
-          });
+    await db
+      .collection("installment")
+      .where("invoice_number", "==", invoice_no)
+      .get()
+      // eslint-disable-next-line
+      .then(async (reInst) => {
+        await db.collection("installment").add({
+          invoice_number: invoice_no,
+          serialNo: serialNo,
+          amount: parseInt(installmentAmount),
+          delayed: delayedCharges === "" ? 0 : parseInt(delayedCharges),
+          balance:
+            balance - parseInt(installmentAmount) <= 0
+              ? 0
+              : balance - parseInt(installmentAmount),
+          date: firebase.firestore.FieldValue.serverTimestamp(),
         });
-      j++;
-    }
+      });
 
     if (allInstallment > 0) {
       await db
@@ -257,8 +257,7 @@ export default function Update_Model({
         });
     }
 
-    let allPlus =
-      Math.round(updatingInstallmentCount) + installments + allInstallment;
+    let allPlus = 1 + installments + allInstallment;
 
     if (instCount - allPlus <= 0) {
       await db
@@ -305,35 +304,15 @@ export default function Update_Model({
   };
 
   const dueInstallmentsCount = () => {
-    let allPlusss = Math.round(updatingInstallmentCount) + installments;
+    let allPlusss = 1 + installments;
     let againallPlusss = allPlusss + Math.round(allInstallment);
     let rest = instCount - againallPlusss;
     return rest < 0 ? 0 : rest;
   };
 
   const totalPlusRed = () => {
-    let allPlusss = Math.round(updatingInstallmentCount);
-
-    let countAllPrevInstallments =
-      (allInstallment < 0 || allInstallment) < 1
-        ? 0
-        : (allInstallment < 1 || allInstallment) < 2
-        ? 1
-        : (allInstallment < 2 || allInstallment) < 3
-        ? 2
-        : allInstallment;
-
-    let againPreve =
-      countAllPrevInstallments <= instCount
-        ? countAllPrevInstallments
-        : instCount;
-
-    let agianSo = countAllPrevInstallments >= instCount ? 0 : allPlusss;
-
-    let againallPlusss = agianSo + againPreve;
-    let rest = instAmountProp * againallPlusss;
     let totFinalRe = delayedCharges >= 693 ? 693 : delayedCharges;
-    let finalTot = rest + totFinalRe;
+    let finalTot = installmentAmount + totFinalRe;
     return finalTot;
   };
 
@@ -352,13 +331,13 @@ export default function Update_Model({
           <form className="form" noValidate>
             <Grid container spacing={2}>
               <Grid className="lbl_topi" item xs={12} sm={4}>
-                Invoice No
+                Serial No
               </Grid>
               <Grid item xs={12} sm={2}>
                 :
               </Grid>
               <Grid item xs={12} sm={6}>
-                <p>{invoice_no}</p>
+                <p>{serialNo}</p>
               </Grid>
 
               <Grid className="lbl_topi" item xs={12} sm={4}>
@@ -367,80 +346,26 @@ export default function Update_Model({
               <Grid item xs={12} sm={2}>
                 :
               </Grid>
+
               <Grid item xs={12} sm={6}>
-                <CurrencyFormat
-                  value={Math.round(instAmountProp)}
-                  displayType={"text"}
-                  thousandSeparator={true}
-                  prefix={" "}
-                />
-              </Grid>
-
-              {delayedDays > 7 ? (
-                <Grid className="lbl_topi_radio" item xs={12} sm={4}>
-                  Current Installment
-                </Grid>
-              ) : (
-                <Grid className="lbl_topi_radio_not" item xs={12} sm={4}></Grid>
-              )}
-              {delayedDays > 7 ? (
-                <Grid className="lbl_topi_radio" item xs={12} sm={2}>
-                  :
-                </Grid>
-              ) : (
-                <Grid className="lbl_topi_radio_not" item xs={12} sm={2}></Grid>
-              )}
-              {delayedDays > 7 ? (
-                <Grid className="invoHisty_radio" item xs={12} sm={6}>
-                  <Radio.Group
-                    value={currentStatus}
-                    onChange={(e) => {
-                      if (e.target.value === "b") {
-                        setUpdatingInstallmentCount(0);
-                        setCurrentStatus("b");
-                      } else {
-                        setUpdatingInstallmentCount(1);
-                        setCurrentStatus("a");
-                      }
-                    }}
-                    defaultValue="a"
-                    buttonStyle="solid"
-                  >
-                    <Radio.Button value="a">Include</Radio.Button>
-                    <Radio.Button value="b">Not Include</Radio.Button>
-                  </Radio.Group>
-                </Grid>
-              ) : (
-                <Grid className="lbl_topi_radio_not" item xs={12} sm={4}></Grid>
-              )}
-
-              <Grid className="lbl_topi" item xs={12} sm={4}>
-                Updating Installment Count
-              </Grid>
-              <Grid item xs={12} sm={2}>
-                :
-              </Grid>
-              <Grid item xs={12} sm={3}>
                 <TextField
                   type="number"
-                  InputProps={{ inputProps: { min: 1 } }}
+                  autoComplete="delayed"
                   variant="outlined"
                   required
                   fullWidth
-                  disabled={currentStatus === "a" ? false : true}
-                  label="Count"
+                  label="Delayed"
                   size="small"
-                  value={updatingInstallmentCount}
+                  value={installmentAmount}
+                  InputProps={{ inputProps: { min: 0 } }}
                   onChange={(e) => {
-                    if (
-                      instCount - (allInstallment + installments) >=
-                      e.target.value
-                    ) {
-                      setUpdatingInstallmentCount(e.target.value);
+                    if (balance >= parseInt(e.target.value.trim())) {
+                      setInstallmentAmount(parseInt(e.target.value));
                     }
                   }}
                 />
               </Grid>
+
               <Grid item xs={12} sm={3}></Grid>
               <Grid className="lbl_topi" item xs={12} sm={4}>
                 Due Installment Count
@@ -588,18 +513,14 @@ export default function Update_Model({
                         ? 2
                         : allInstallment) +
                       " + " +
-                      (dueInstallmentsCount() > 0
-                        ? updatingInstallmentCount
-                        : 0) +
+                      (dueInstallmentsCount() > 0 ? 1 : 0) +
                       ") + " +
                       Math.round(delayedCharges) +
                       " "
                     : "  " +
                       Math.round(instAmountProp) +
                       " X " +
-                      (updatingInstallmentCount +
-                        " + " +
-                        Math.round(delayedCharges)) +
+                      (1 + " + " + Math.round(delayedCharges)) +
                       " "}
                   )
                 </div>

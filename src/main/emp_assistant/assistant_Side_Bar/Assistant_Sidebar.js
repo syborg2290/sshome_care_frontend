@@ -103,13 +103,13 @@ const structure = [
     icon: <GroupAddIcon className="icons" />,
   },
   {
-    id: 17,
+    id: 18,
     label: "Attendance",
     link: "/assistant/ui/attendance",
     icon: <PlaylistAddCheckIcon className="icons" />,
   },
   {
-    id: 18,
+    id: 19,
     label: "Root",
     link: "/assistant/ui/root",
     icon: <CommuteIcon className="icons" />,

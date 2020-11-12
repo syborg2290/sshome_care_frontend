@@ -106,7 +106,7 @@ export default function Dashboard() {
                   invoice_number: eachRe.data().invoice_number,
                   customer_id: eachRe.data().customer_id,
                   nic: eachRe.data().nic,
-                  delayed_days: Math.round(daysCountInitial) - 31,
+                  delayed_days: Math.round(daysCountInitial) - 7,
                   delayed_charges:
                     daysCountInitial - 7 <= 7
                       ? 0

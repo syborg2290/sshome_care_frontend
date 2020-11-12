@@ -7,8 +7,6 @@ import { useHistory } from "react-router-dom";
 
 // styles
 import "./SelectedItem_model.css";
-// eslint-disable-next-line
-import style from "react-syntax-highlighter/dist/esm/styles/hljs/agate";
 
 export default function SelectedItem_Model({ itemListProps, closeModel }) {
   const [isLoading, setLoading] = useState(false);
@@ -23,6 +21,7 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
       keepData.push({
         i: i,
         id: ele.item.id,
+        serialNo: ele.item.data.serialNo,
         title: ele.item.data.itemName,
         unitprice: ele.item.data.salePrice,
         qty: ele.qty,
@@ -54,6 +53,7 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
       let obj = {
         i: i,
         id: itemsData[i].id,
+        serialNo: itemsData[i].serialNo,
         title: itemsData[i].title,
         unitprice: itemsData[i].unitprice,
         qty: itemsData[i].qty,

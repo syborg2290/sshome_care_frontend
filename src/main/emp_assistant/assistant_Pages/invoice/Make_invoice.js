@@ -371,29 +371,21 @@ function Make_invoice() {
                     let arrayItems = [];
 
                     tablerows.forEach((one) => {
-                      db.collection("item")
-                        .doc(one.id)
-                        .get()
-                        .then((reItem) => {
-                          let objItem = {
-                            item_id: one.id,
-                            serialNo: reItem.data().serialNo,
-                            qty: parseInt(itemQty[one.i]),
-                            paymentWay: one.paymentWay,
-                            downpayment:
-                              itemDP[one.i] === "" ? 0 : itemDP[one.i],
-                            noOfInstallment:
-                              itemNOI[one.i] === "" ? 0 : itemNOI[one.i],
-                            amountPerInstallment:
-                              itemAPI[one.i] === "" ? 0 : itemAPI[one.i],
-                            discount:
-                              itemDiscount[one.i] === ""
-                                ? 0
-                                : itemDiscount[one.i],
-                            item_name: one.title,
-                          };
-                          arrayItems.push(objItem);
-                        });
+                      let objItem = {
+                        item_id: one.id,
+                        serialNo: one.serialNo,
+                        qty: parseInt(itemQty[one.i]),
+                        paymentWay: one.paymentWay,
+                        downpayment: itemDP[one.i] === "" ? 0 : itemDP[one.i],
+                        noOfInstallment:
+                          itemNOI[one.i] === "" ? 0 : itemNOI[one.i],
+                        amountPerInstallment:
+                          itemAPI[one.i] === "" ? 0 : itemAPI[one.i],
+                        discount:
+                          itemDiscount[one.i] === "" ? 0 : itemDiscount[one.i],
+                        item_name: one.title,
+                      };
+                      arrayItems.push(objItem);
                     });
 
                     db.collection("invoice")
@@ -522,29 +514,21 @@ function Make_invoice() {
                     let arrayItems = [];
 
                     tablerows.forEach((one) => {
-                      db.collection("item")
-                        .doc(one.id)
-                        .get()
-                        .then((reItem) => {
-                          let objItem = {
-                            item_id: one.id,
-                            serialNo: reItem.data().serialNo,
-                            qty: parseInt(itemQty[one.i]),
-                            paymentWay: one.paymentWay,
-                            downpayment:
-                              itemDP[one.i] === "" ? 0 : itemDP[one.i],
-                            noOfInstallment:
-                              itemNOI[one.i] === "" ? 0 : itemNOI[one.i],
-                            amountPerInstallment:
-                              itemAPI[one.i] === "" ? 0 : itemAPI[one.i],
-                            discount:
-                              itemDiscount[one.i] === ""
-                                ? 0
-                                : itemDiscount[one.i],
-                            item_name: one.title,
-                          };
-                          arrayItems.push(objItem);
-                        });
+                      let objItem = {
+                        item_id: one.id,
+                        serialNo: one.serialNo,
+                        qty: parseInt(itemQty[one.i]),
+                        paymentWay: one.paymentWay,
+                        downpayment: itemDP[one.i] === "" ? 0 : itemDP[one.i],
+                        noOfInstallment:
+                          itemNOI[one.i] === "" ? 0 : itemNOI[one.i],
+                        amountPerInstallment:
+                          itemAPI[one.i] === "" ? 0 : itemAPI[one.i],
+                        discount:
+                          itemDiscount[one.i] === "" ? 0 : itemDiscount[one.i],
+                        item_name: one.title,
+                      };
+                      arrayItems.push(objItem);
                     });
 
                     db.collection("invoice")
@@ -675,26 +659,20 @@ function Make_invoice() {
                 let arrayItems = [];
 
                 tablerows.forEach((one) => {
-                  db.collection("item")
-                    .doc(one.id)
-                    .get()
-                    .then((reItem) => {
-                      let objItem = {
-                        item_id: one.id,
-                        serialNo: reItem.data().serialNo,
-                        qty: parseInt(itemQty[one.i]),
-                        paymentWay: one.paymentWay,
-                        downpayment: itemDP[one.i] === "" ? 0 : itemDP[one.i],
-                        noOfInstallment:
-                          itemNOI[one.i] === "" ? 0 : itemNOI[one.i],
-                        amountPerInstallment:
-                          itemAPI[one.i] === "" ? 0 : itemAPI[one.i],
-                        discount:
-                          itemDiscount[one.i] === "" ? 0 : itemDiscount[one.i],
-                        item_name: one.title,
-                      };
-                      arrayItems.push(objItem);
-                    });
+                  let objItem = {
+                    item_id: one.id,
+                    serialNo: one.serialNo,
+                    qty: parseInt(itemQty[one.i]),
+                    paymentWay: one.paymentWay,
+                    downpayment: itemDP[one.i] === "" ? 0 : itemDP[one.i],
+                    noOfInstallment: itemNOI[one.i] === "" ? 0 : itemNOI[one.i],
+                    amountPerInstallment:
+                      itemAPI[one.i] === "" ? 0 : itemAPI[one.i],
+                    discount:
+                      itemDiscount[one.i] === "" ? 0 : itemDiscount[one.i],
+                    item_name: one.title,
+                  };
+                  arrayItems.push(objItem);
                 });
 
                 db.collection("invoice")
@@ -820,26 +798,20 @@ function Make_invoice() {
                 let arrayItems = [];
 
                 tablerows.forEach((one) => {
-                  db.collection("item")
-                    .doc(one.id)
-                    .get()
-                    .then((reItem) => {
-                      let objItem = {
-                        item_id: one.id,
-                        serialNo: reItem.data().serialNo,
-                        qty: parseInt(itemQty[one.i]),
-                        paymentWay: one.paymentWay,
-                        downpayment: itemDP[one.i] === "" ? 0 : itemDP[one.i],
-                        noOfInstallment:
-                          itemNOI[one.i] === "" ? 0 : itemNOI[one.i],
-                        amountPerInstallment:
-                          itemAPI[one.i] === "" ? 0 : itemAPI[one.i],
-                        discount:
-                          itemDiscount[one.i] === "" ? 0 : itemDiscount[one.i],
-                        item_name: one.title,
-                      };
-                      arrayItems.push(objItem);
-                    });
+                  let objItem = {
+                    item_id: one.id,
+                    serialNo: one.serialNo,
+                    qty: parseInt(itemQty[one.i]),
+                    paymentWay: one.paymentWay,
+                    downpayment: itemDP[one.i] === "" ? 0 : itemDP[one.i],
+                    noOfInstallment: itemNOI[one.i] === "" ? 0 : itemNOI[one.i],
+                    amountPerInstallment:
+                      itemAPI[one.i] === "" ? 0 : itemAPI[one.i],
+                    discount:
+                      itemDiscount[one.i] === "" ? 0 : itemDiscount[one.i],
+                    item_name: one.title,
+                  };
+                  arrayItems.push(objItem);
                 });
 
                 db.collection("invoice")
@@ -953,23 +925,18 @@ function Make_invoice() {
       let arrayItems = [];
 
       tablerows.forEach((one) => {
-        db.collection("item")
-          .doc(one.id)
-          .get()
-          .then((reItem) => {
-            let objItem = {
-              item_id: one.id,
-              serialNo: reItem.data().serialNo,
-              qty: parseInt(itemQty[one.i]),
-              paymentWay: one.paymentWay,
-              downpayment: itemDP[one.i] === "" ? 0 : itemDP[one.i],
-              noOfInstallment: itemNOI[one.i] === "" ? 0 : itemNOI[one.i],
-              amountPerInstallment: itemAPI[one.i] === "" ? 0 : itemAPI[one.i],
-              discount: itemDiscount[one.i] === "" ? 0 : itemDiscount[one.i],
-              item_name: one.title,
-            };
-            arrayItems.push(objItem);
-          });
+        let objItem = {
+          item_id: one.id,
+          serialNo: one.serialNo,
+          qty: parseInt(itemQty[one.i]),
+          paymentWay: one.paymentWay,
+          downpayment: itemDP[one.i] === "" ? 0 : itemDP[one.i],
+          noOfInstallment: itemNOI[one.i] === "" ? 0 : itemNOI[one.i],
+          amountPerInstallment: itemAPI[one.i] === "" ? 0 : itemAPI[one.i],
+          discount: itemDiscount[one.i] === "" ? 0 : itemDiscount[one.i],
+          item_name: one.title,
+        };
+        arrayItems.push(objItem);
       });
 
       await db.collection("invoice").add({

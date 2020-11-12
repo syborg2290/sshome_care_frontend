@@ -61,6 +61,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+function isDateBeforeToday(date) {
+  return new Date(date.toDateString()) < new Date(new Date().toDateString());
+}
+
 export default function Invoice_List() {
   // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
@@ -253,6 +257,20 @@ export default function Invoice_List() {
 
   useEffect(() => {
     db.collection("invoice")
+      .where("status_of_payandgo", "==", "onGoing")
+      .onSnapshot((custIn) => {
+        custIn.docs.forEach((siDoc) => {
+          let isBeforeDate = isDateBeforeToday(
+            new Date(siDoc.data()?.deadlineTimestamp?.seconds * 1000)
+          );
+          if (isBeforeDate) {
+            db.collection("invoice").doc(siDoc.id).update({
+              status_of_payandgo: "expired",
+            });
+          }
+        });
+      });
+    db.collection("invoice")
       .where("customer_id", "!=", null)
       .onSnapshot((cust) => {
         var rawData = [];
@@ -276,7 +294,7 @@ export default function Invoice_List() {
               ),
               NIC: siDoc.data().nic,
               MID: siDoc.data().mid,
-              SerialNo: siDoc.data().serialNo,
+              SerialNo: siDoc.data().items[0].serialNo,
               Discount: (
                 <CurrencyFormat
                   value={siDoc.data().discount}

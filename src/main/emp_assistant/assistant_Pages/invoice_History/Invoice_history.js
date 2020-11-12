@@ -63,6 +63,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+function isDateBeforeToday(date) {
+  return new Date(date.toDateString()) < new Date(new Date().toDateString());
+}
+
 export default function Invoice_history() {
   // eslint-disable-next-line
   const [isLoading, setIsLoading] = useState(true);
@@ -325,6 +329,20 @@ export default function Invoice_history() {
 
   useEffect(() => {
     db.collection("invoice")
+      .where("status_of_payandgo", "==", "onGoing")
+      .onSnapshot((custIn) => {
+        custIn.docs.forEach((siDoc) => {
+          let isBeforeDate = isDateBeforeToday(
+            new Date(siDoc.data()?.deadlineTimestamp?.seconds * 1000)
+          );
+          if (isBeforeDate) {
+            db.collection("invoice").doc(siDoc.id).update({
+              status_of_payandgo: "expired",
+            });
+          }
+        });
+      });
+    db.collection("invoice")
       .where("customer_id", "!=", null)
       .onSnapshot((cust) => {
         var rawData = [];
@@ -377,13 +395,25 @@ export default function Invoice_history() {
                 <span
                   style={{
                     color: "white",
-                    backgroundColor: " #009900",
+                    backgroundColor: "#009900",
                     padding: "6px",
                     borderRadius: "20px",
                     width: "100%",
                   }}
                 >
                   Done
+                </span>
+              ) : siDoc.data().status_of_payandgo === "expired" ? (
+                <span
+                  style={{
+                    color: "white",
+                    backgroundColor: "#ff8c00",
+                    padding: "6px",
+                    borderRadius: "20px",
+                    width: "100%",
+                  }}
+                >
+                  Expired
                 </span>
               ) : (
                 <span

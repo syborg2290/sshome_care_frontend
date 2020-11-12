@@ -153,6 +153,16 @@ export default function Invoice_List() {
       },
     },
 
+           {
+      name: "Type",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+
     {
       name: "Discount",
       options: {
@@ -164,6 +174,16 @@ export default function Invoice_List() {
     },
     {
       name: "Basic_Payment",
+      options: {
+        filter: false,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+
+      {
+      name: "Balance",
       options: {
         filter: false,
         setCellHeaderProps: (value) => ({
@@ -201,6 +221,17 @@ export default function Invoice_List() {
   const fullPaymentColumns = [
     {
       name: "InvoiceNo",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+
+
+           {
+      name: "Type",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -295,6 +326,7 @@ export default function Invoice_List() {
               NIC: siDoc.data().nic,
               MID: siDoc.data().mid,
               SerialNo: siDoc.data().items[0].serialNo,
+               Type: siDoc.data().type,
               Discount: (
                 <CurrencyFormat
                   value={siDoc.data().discount}
@@ -306,6 +338,14 @@ export default function Invoice_List() {
               Basic_Payment: (
                 <CurrencyFormat
                   value={siDoc.data().total}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+               Balance: (
+                <CurrencyFormat
+                  value={11111111}
                   displayType={"text"}
                   thousandSeparator={true}
                   prefix={" "}
@@ -386,6 +426,8 @@ export default function Invoice_List() {
             });
             rawDataFull.push({
               InvoiceNo: siDoc.data().invoice_number,
+             
+               Type: siDoc.data().type,
               Date: moment(siDoc.data()?.date?.toDate()).format(
                 "dddd, MMMM Do YYYY"
               ),

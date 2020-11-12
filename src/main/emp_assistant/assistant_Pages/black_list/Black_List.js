@@ -59,6 +59,15 @@ export default function Black_List() {
         }),
       },
     },
+        {
+      name: "Type",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
 
     {
       name: "FirstName",
@@ -147,7 +156,8 @@ export default function Black_List() {
         });
         allTableRaw.push({
           InvoiceNo: each.data().InvoiceNo,
-
+          SerialNo: each.data().serialNo,
+          Type: each.data().type,
           FirstName: each.data().FirstName,
           LastName: each.data().LastName,
           MID: each.data().MID,

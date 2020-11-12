@@ -166,6 +166,19 @@ export default function View_Model({ pendingBlackList }) {
       },
     },
     {
+      name: "Type",
+      options: {
+        filter: false,
+        setCellHeaderProps: (value) => ({
+          style: {
+            fontSize: "15px",
+            color: "black",
+            fontWeight: "600",
+          },
+        }),
+      },
+    },
+    {
       name: "Telephone",
       options: {
         filter: false,
@@ -212,6 +225,7 @@ export default function View_Model({ pendingBlackList }) {
               NIC: each.nic,
               MID: each.mid,
               SerialNo: each.serialNo,
+              Type: each.type,
               Telephone: reThen.docs[0].data().mobile1,
               Action: (
                 <div>

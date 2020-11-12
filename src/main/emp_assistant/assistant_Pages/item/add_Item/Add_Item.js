@@ -227,8 +227,7 @@ export default function Add_Item() {
                                                           itemName.trim() &&
                                                         ob.data().brand ===
                                                           brand.trim() &&
-                                                        ob.data().chassisNo ===
-                                                          chassisNo.trim() &&
+                                                       
                                                         ob.data().color ===
                                                           color.trim() &&
                                                         ob.data().cashPrice ===
@@ -262,8 +261,7 @@ export default function Add_Item() {
                                                           itemName.trim() &&
                                                         ob.data().brand ===
                                                           brand.trim() &&
-                                                        ob.data().chassisNo ===
-                                                          chassisNo.trim() &&
+                                                      
                                                         ob.data().color ===
                                                           color.trim() &&
                                                         ob.data().cashPrice ===

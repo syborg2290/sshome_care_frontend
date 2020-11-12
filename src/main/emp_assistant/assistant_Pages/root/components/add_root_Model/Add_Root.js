@@ -142,7 +142,7 @@ export default function Add_Root() {
         <form className="form_root" noValidate>
           <Grid container spacing={2}>
             <Grid className="txt_Labels_root" item xs={12} sm={4}>
-              Root Name:
+              Root Name :
             </Grid>
             <Grid item xs={12} sm={5}>
               <TextField
@@ -164,7 +164,7 @@ export default function Add_Root() {
             </Grid>
             <Grid item xs={12} sm={3}></Grid>
             <Grid className="txt_descriptin_root" item xs={12} sm={4}>
-              Description:
+              Description :
             </Grid>
             <Grid item xs={12} sm={8}>
               <TextField
@@ -187,7 +187,7 @@ export default function Add_Root() {
             </Grid>
 
             <Grid className="txt_Labels_root" item xs={12} sm={4}>
-              Assigne Employees:
+              Assigne Employees :
             </Grid>
             <Grid item xs={12} sm={5}>
               <FormControl size="small" variant="outlined">
@@ -226,26 +226,26 @@ export default function Add_Root() {
             <Grid item xs={12} sm={3}></Grid>
 
             <Grid className="txt_dayTopic_root" item xs={12} sm={4}>
-              Select Days:
+              Select Days :
               <br />
               <hr />
             </Grid>
             <Grid item xs={12} sm={4}></Grid>
             <Grid item xs={12} sm={4}></Grid>
             <Grid className="txt_days_root" item xs={12} sm={4}>
-              Monday:
+              Monday :
               <br />
-              Tuesday:
+              Tuesday :
               <br />
-              Wednesday:
+              Wednesday :
               <br />
-              Thursday:
+              Thursday :
               <br />
-              Friday:
+              Friday :
               <br />
-              Saturday:
+              Saturday :
               <br />
-              Sunday:
+              Sunday :
             </Grid>
             <Grid item xs={12} sm={5} className="txt_days_root_Checkbox">
               <Checkbox

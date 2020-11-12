@@ -24,6 +24,12 @@
   color: aliceblue !important;
 }
 
+.btn_gassHis {
+  margin-top: 5px !important;
+  background-color: rgba(57, 55, 180, 0.747) !important;
+  color: aliceblue !important;
+}
+
 .gass_Table_head {
   background-color: rgba(131, 183, 226, 0.664) !important;
 }
@@ -58,4 +64,8 @@
   margin-top: 5px !important;
   margin-right: 30px !important;
   background-color: rgba(32, 76, 148, 0.719) !important;
+}
+
+.gassHistory_model {
+  width: 60% !important;
 }

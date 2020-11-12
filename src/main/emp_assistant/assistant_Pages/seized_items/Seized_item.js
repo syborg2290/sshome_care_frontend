@@ -57,6 +57,15 @@ export default function Seized_item() {
         }),
       },
     },
+      {
+      name: "Type",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
     {
       name: "Model_No",
       options: {
@@ -151,6 +160,7 @@ export default function Seized_item() {
           rowData.push({
             InvoiceNo: RESnap.data()?.invoice_number,
             SerialNo: RESnap.data()?.serialNo,
+            Type: RESnap.data()?.type,
             Model_No: RESnap.data()?.model_no,
             Item_Name: RESnap.data()?.item_name,
             MID: RESnap.data()?.mid,

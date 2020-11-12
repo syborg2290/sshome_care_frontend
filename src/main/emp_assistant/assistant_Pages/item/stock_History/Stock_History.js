@@ -4,15 +4,17 @@ import { Grid } from "@material-ui/core";
 import CurrencyFormat from "react-currency-format";
 import moment from "moment";
 import MUIDataTable from "mui-datatables";
-// styles
-import "./Purches_History.css";
-import db from "../../../../../../config/firebase.js";
 
-export default function Purches_History() {
-  const [allTableData, setTableData] = useState([]);
-  const columns = [
+// styles
+import "./Stock_History.css";
+
+export default function Stock_History() {
+    
+    const [allTableData, setTableData] = useState([]);
+
+    const columns = [
     {
-      name: "Weight",
+      name: "Serial_No",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -21,7 +23,16 @@ export default function Purches_History() {
       },
     },
     {
-      name: "Type",
+      name: "Item_Name",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+        },
+     {
+      name: "Brand",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -30,7 +41,7 @@ export default function Purches_History() {
       },
     },
     {
-      name: "Date",
+      name: "Model_No",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -52,7 +63,20 @@ export default function Purches_History() {
       },
     },
     {
-      name: "Total",
+      name: "Date",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: {
+            fontSize: "15px",
+            color: "black",
+            fontWeight: "600",
+          },
+        }),
+      },
+    },
+      {
+      name: "Cash_Price",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -66,39 +90,19 @@ export default function Purches_History() {
     },
   ];
 
-  useEffect(() => {
-    db.collection("gas_purchase_history").onSnapshot((snap) => {
-      var raw = [];
+    const data = [
+ ["mes", "Torp", "Yonkers", "NY", "Torp", "Yonkers", "NY"],
 
-      snap.docs.forEach((each) => {
-        raw.push({
-          Weight: each.data().weight + " Kg",
-          Type:each.data().type,
-          Date: moment(each.data()?.date?.toDate()).format(
-            "dddd, MMMM Do YYYY"
-          ),
-          Qty: each.data().qty,
-          Total: (
-            <CurrencyFormat
-              value={each.data().price}
-              displayType={"text"}
-              thousandSeparator={true}
-              prefix={" "}
-            />
-          ),
-        });
-      });
+];
+    
+    
+    return (
 
-      setTableData(raw);
-    });
-  }, []);
-
-  return (
     <Grid container spacing={4}>
       <Grid item xs={12}>
         <MUIDataTable
-          title={<span className="title_Span">Purches History</span>}
-          className="gass_purches_history"
+          title={<span className="title_Span">Stock History</span>}
+          className="stock_history"
           sty
           data={allTableData}
           columns={columns}
@@ -115,5 +119,5 @@ export default function Purches_History() {
         />
       </Grid>
     </Grid>
-  );
+    );
 }

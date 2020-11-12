@@ -10,6 +10,7 @@ import Header from "../assistant_Header/Assistant_Header";
 import Sidebar from "../assistant_Side_Bar/Assistant_Sidebar";
 import ItemTable from "../assistant_Pages/item/assistant_item_table/Item_table_assistant";
 import AddItem from "../assistant_Pages/item/add_Item/Add_Item";
+import StockHistory from "../assistant_Pages/item/stock_History/Stock_History";
 import AddCustomer from "../assistant_Pages/customer/add_Customer/Add_Customer";
 import MakeInvoice from "../assistant_Pages/invoice/Make_invoice";
 
@@ -59,6 +60,7 @@ function LayoutAssistant(props) {
             {/* components */}
             <Route path="/assistant/ui/ItemTable" component={ItemTable} />
             <Route path="/assistant/ui/AddItem" component={AddItem} />
+            <Route path="/assistant/ui/StockHistory" component={StockHistory} />
             <Route path="/assistant/ui/addCustomer" component={AddCustomer} />
 
             <Route

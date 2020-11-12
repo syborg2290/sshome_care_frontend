@@ -63,6 +63,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+function isDateBeforeToday(date) {
+  return new Date(date.toDateString()) < new Date(new Date().toDateString());
+}
+
 export default function Invoice_history() {
   // eslint-disable-next-line
   const [isLoading, setIsLoading] = useState(true);
@@ -314,19 +318,15 @@ export default function Invoice_history() {
 
   //START pay And Go Rows
 
-  const isDateBeforeToday = (date) => {
-    return new Date(date.toDateString()) < new Date(new Date().toDateString());
-  };
-
   useEffect(() => {
     db.collection("invoice")
-      .where("customer_id", "!=", null)
+      .where("status_of_payandgo", "==", "onGoing")
       .onSnapshot((custIn) => {
         custIn.docs.forEach((siDoc) => {
           let isBeforeDate = isDateBeforeToday(
             new Date(siDoc.data()?.deadlineTimestamp?.seconds * 1000)
           );
-          if (!isBeforeDate) {
+          if (isBeforeDate) {
             db.collection("invoice").doc(siDoc.id).update({
               status_of_payandgo: "expired",
             });

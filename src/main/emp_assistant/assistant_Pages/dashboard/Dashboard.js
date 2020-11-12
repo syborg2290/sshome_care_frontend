@@ -15,6 +15,10 @@ import db from "../../../../config/firebase.js";
 // styles
 import "./Dashboard.css";
 
+function isDateBeforeToday(date) {
+  return new Date(date.toDateString()) < new Date(new Date().toDateString());
+}
+
 export default function Dashboard() {
   // eslint-disable-next-line
   const [pendingBlackList, setPendingBlackList] = useState([]);
@@ -43,10 +47,6 @@ export default function Dashboard() {
       afterStateOfArreasCheck(installmentStatus, eachRe);
     }
   };
-
-  const isDateBeforeToday=(date)=> {
-    return new Date(date.toDateString()) < new Date(new Date().toDateString());
-  }
 
   const intialStateOfArreasCheck = async (eachRe) => {
     let daysCountInitial =
@@ -225,7 +225,7 @@ export default function Dashboard() {
     let isBeforeDate = isDateBeforeToday(
       new Date(eachRe.data()?.deadlineTimestamp?.seconds * 1000)
     );
-    if (!isBeforeDate) {
+    if (isBeforeDate) {
       setPendingBlackList([
         ...pendingBlackList,
         {
@@ -420,7 +420,7 @@ export default function Dashboard() {
     let isBeforeDate = isDateBeforeToday(
       new Date(eachRe.data()?.deadlineTimestamp?.seconds * 1000)
     );
-    if (!isBeforeDate) {
+    if (isBeforeDate) {
       setPendingBlackList([
         ...pendingBlackList,
         {

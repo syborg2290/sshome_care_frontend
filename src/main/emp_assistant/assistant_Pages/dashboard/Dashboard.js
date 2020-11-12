@@ -44,7 +44,7 @@ export default function Dashboard() {
     }
   };
 
-  function isDateBeforeToday(date) {
+  const isDateBeforeToday=(date)=> {
     return new Date(date.toDateString()) < new Date(new Date().toDateString());
   }
 

@@ -262,7 +262,7 @@ export default function Update_Employe({
             </Grid>
             <Grid item xs={12} sm={1}></Grid>
 
-            <Grid item xs={12} sm={1}></Grid>
+         
             <Grid className="txt_Labels_employee_update" item xs={12} sm={4}>
               Basic :
             </Grid>

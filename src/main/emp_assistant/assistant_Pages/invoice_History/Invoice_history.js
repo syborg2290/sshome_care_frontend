@@ -196,6 +196,15 @@ export default function Invoice_history() {
         }),
       },
     },
+        {
+      name: "Type",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
     {
       name: "Date",
       options: {
@@ -243,6 +252,15 @@ export default function Invoice_history() {
         }),
       },
     },
+      {
+      name: "Balance",
+      options: {
+        filter: false,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
 
     {
       name: "Status",
@@ -273,6 +291,24 @@ export default function Invoice_history() {
   const fullPaymentColumns = [
     {
       name: "InvoiceNo",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+        {
+      name: "SerialNo",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+        {
+      name: "Type",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -357,6 +393,7 @@ export default function Invoice_history() {
           rawData.push({
             InvoiceNo: siDoc.data().invoice_number,
             SerialNo: siDoc.data().serial_no,  
+              Type: siDoc.data().type, 
             Date: moment(siDoc.data()?.date?.toDate()).format(
               "dddd, MMMM Do YYYY"
             ),
@@ -373,6 +410,14 @@ export default function Invoice_history() {
             Basic_Payment: (
               <CurrencyFormat
                 value={siDoc.data().total}
+                displayType={"text"}
+                thousandSeparator={true}
+                prefix={" "}
+              />
+            ),
+              Balance: (
+              <CurrencyFormat
+                value={10000}
                 displayType={"text"}
                 thousandSeparator={true}
                 prefix={" "}
@@ -476,6 +521,8 @@ export default function Invoice_history() {
           });
           rawDataFull.push({
             InvoiceNo: siDoc.data().invoice_number,
+             SerialNo: siDoc.data().serial_no,  
+              Type: siDoc.data().type, 
             Date: moment(siDoc.data()?.date?.toDate()).format(
               "dddd, MMMM Do YYYY"
             ),

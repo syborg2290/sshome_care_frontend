@@ -53,6 +53,24 @@ export default function Areas() {
         }),
       },
     },
+       {
+      name: "SerialNo",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+      {
+      name: "Type",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
     {
       name: "MID",
       options: {
@@ -133,6 +151,8 @@ export default function Areas() {
 
         rawData.push({
           InvoiceNo: eachRe.data().invoice_number,
+          SerialNo: eachRe.data().serialNo,
+           Type: eachRe.data().displayType,
           MID: eachRe.data().mid,
           NIC: eachRe.data().nic,
           Delayed_Days: Math.round(eachRe.data().delayed_days),

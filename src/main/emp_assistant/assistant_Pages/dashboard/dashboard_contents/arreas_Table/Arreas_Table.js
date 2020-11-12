@@ -79,6 +79,15 @@ export default function Arreas_Table() {
         }),
       },
     },
+      {
+      name: "Type",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
     {
       name: "Delayed_Days",
       options: {
@@ -145,6 +154,7 @@ export default function Arreas_Table() {
           NIC: eachRe.data().nic,
           MID: eachRe.data().mid,
           SerialNo: eachRe.data().serialNo,
+          Type: eachRe.data().type,
           Delayed_Days: Math.round(eachRe.data().delayed_days),
           Delayed_Charges: (
             <CurrencyFormat

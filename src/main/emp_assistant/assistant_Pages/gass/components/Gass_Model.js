@@ -181,7 +181,7 @@ export default function Gass_Model() {
         <form className="form" noValidate>
           <Grid container spacing={2}>
             <Grid className="txt_Labels" item xs={12} sm={3}>
-              Weight
+              Weight(kg)
             </Grid>
             <Grid item xs={12} sm={9}>
               <Space direction="vertical">
@@ -190,7 +190,7 @@ export default function Gass_Model() {
                     className="rolllbl_selector"
                     htmlFor="outlined-age-native-simple"
                   >
-                    weight
+                    weight(kg)
                   </InputLabel>
                   <Select
                     className="roll_selector"

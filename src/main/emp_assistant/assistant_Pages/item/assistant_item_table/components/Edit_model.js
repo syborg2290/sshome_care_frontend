@@ -256,36 +256,7 @@ export default function Edit_model({
               }}
             />
           </Form.Item>
-          <Form.Item label="Model no ">
-            <Input
-              allowClear
-              placeholder="xx 0091"
-              value={modelNo}
-              onChange={(e) => {
-                setModelNo(e.target.value);
-              }}
-            />
-          </Form.Item>
-          <Form.Item label="Serial no ">
-            <Input
-              allowClear
-              placeholder="xx 0091"
-              value={serialNo}
-              onChange={(e) => {
-                setSerialNo(e.target.value);
-              }}
-            />
-          </Form.Item>
-          <Form.Item label="Chassis no ">
-            <Input
-              allowClear
-              placeholder="xx 95091"
-              value={chassisNo}
-              onChange={(e) => {
-                setChassisNo(e.target.value);
-              }}
-            />
-          </Form.Item>
+        
           <Form.Item label="Color ">
             <Input
               allowClear

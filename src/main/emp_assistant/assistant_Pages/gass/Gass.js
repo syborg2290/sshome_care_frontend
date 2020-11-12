@@ -19,13 +19,15 @@ import "./Gass.css";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import AddIcon from "@material-ui/icons/Add";
 import ShoppingBasketIcon from "@material-ui/icons/ShoppingBasket";
+import HistoryIcon from "@material-ui/icons/History";
 
 // components
 import GassModel from "./components/Gass_Model";
 import AddNewModel from "./components/add_new_Gass/AddNew_Model";
 import PurchesHistory from "./components/purches_history/Purches_History";
+import GassHistoryModel from "./components/gass_history/Gass_History";
 
-import "./Gass.css";
+
 
 import db from "../../../../config/firebase.js";
 
@@ -40,6 +42,7 @@ export default function Gass() {
   const [gassModal, setGassModal] = useState(false); //models
   const [addNewGassModal, setAddNewGassModal] = useState(false); // Table models
   const [purchaseHistory, setPurchaseHistory] = useState(false); // Table models
+  const [gassHistory, setGassHistory] = useState(false); //models
 
   const showModalGass = () => {
     setGassModal(true);
@@ -54,6 +57,10 @@ export default function Gass() {
   };
   const PurchaseHistory = () => {
     setPurchaseHistory(true);
+  };
+
+    const GassHistory = () => {
+    setGassHistory(true);
   };
 
   useEffect(() => {
@@ -133,15 +140,33 @@ export default function Gass() {
 
       {/* END add gass Purches History model */}
 
+      
+      {/* START  gass History model */}
+
+      <Modal
+        className="gassHistory_model"
+        visible={gassHistory}
+        footer={null}
+        onCancel={() => {
+          setGassHistory(false);
+        }}
+      >
+        <div className="gassHistory-body">
+          <GassHistoryModel />
+        </div>
+      </Modal>
+
+      {/* END  gass History model */}
+
       <Container component="main" className="main_containerr">
         <Typography className="titles" variant="h5" gutterBottom>
           Gass
         </Typography>
         <Grid container spacing={2}>
-          <Grid item xs={12} sm={2}>
+          <Grid item xs={12} sm={1}>
             <hr className="titles_hr" />
           </Grid>
-          <Grid item xs={12} sm={2}></Grid>
+       
           <Grid item xs={12} sm={2}>
             <Button
               variant="contained"
@@ -161,8 +186,20 @@ export default function Gass() {
               color="primary"
               className="btn_pHistry"
             >
-              Purches History
+              Selling History
             </Button>
+          </Grid>
+             <Grid item xs={12} sm={3}>
+           <Button
+              variant="contained"
+              onClick={GassHistory}
+              endIcon={<HistoryIcon />}
+              color="primary"
+              className="btn_gassHis"
+            >
+             Gass History
+            </Button>
+
           </Grid>
           <Grid item xs={12} sm={3}>
             <Button
@@ -179,7 +216,7 @@ export default function Gass() {
           <Table className="gass_Table" size="small" aria-label="a dense table">
             <TableHead className="gass_Table_head">
               <TableRow>
-                <TableCell>Weight</TableCell>
+                <TableCell>Weight(kg)</TableCell>
                 <TableCell align="right">Qty</TableCell>
                 <TableCell align="right">Price&nbsp;(LKR)</TableCell>
               </TableRow>

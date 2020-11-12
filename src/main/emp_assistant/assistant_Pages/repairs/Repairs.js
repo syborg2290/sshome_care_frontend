@@ -94,6 +94,15 @@ export default function Repairs() {
         }),
       },
     },
+     {
+      name: "Type",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
     {
       name: "ModalNo",
       options: {
@@ -180,6 +189,7 @@ export default function Repairs() {
         });
         rawData.push({
           SerialNo: re.data().serial_no,
+           Type: re.data().type,
           ModalNo: re.data().model_no,
           Item_Name: re.data().item_name,
           NIC: re.data().nic,

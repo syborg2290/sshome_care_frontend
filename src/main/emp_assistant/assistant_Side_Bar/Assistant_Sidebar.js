@@ -52,6 +52,7 @@ const structure = [
     children: [
       { label: "Item Table", link: "/assistant/ui/ItemTable" },
       { label: "Add Item", link: "/assistant/ui/AddItem" },
+      { label: "Stock History", link: "/assistant/ui/StockHistory" },
     ],
   },
 

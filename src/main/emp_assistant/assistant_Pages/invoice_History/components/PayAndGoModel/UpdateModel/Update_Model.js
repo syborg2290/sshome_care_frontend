@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Spin, Checkbox } from "antd";
+import { Spin, Checkbox,DatePicker } from "antd";
 import {
   TextField,
   Grid,
@@ -553,12 +553,15 @@ export default function Update_Model({
                   :
               </Grid>
                 <Grid item xs={12} sm={6}>
-                  <p>
+                  <DatePicker
+                     
+                      />
+                  {/* <p>
                     {" "}
                     {moment(
                       firebase.firestore.FieldValue.serverTimestamp()
                     ).format("dddd, MMMM Do YYYY, h:mm:ss a")}
-                  </p>
+                  </p> */}
                 </Grid>
 
                 <Grid className="lbl_topi" item xs={12} sm={4}>

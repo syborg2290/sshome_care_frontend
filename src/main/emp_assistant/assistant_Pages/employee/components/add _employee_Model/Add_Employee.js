@@ -224,7 +224,7 @@ export default function Add_Employee({ close_model }) {
               />
             </Grid>
 
-            <Grid item xs={12} sm={5}></Grid>
+           
             <Grid className="txt_Labels" item xs={12} sm={2}>
               Basic :
             </Grid>

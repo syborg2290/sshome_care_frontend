@@ -15,6 +15,7 @@ export default function AddNew_Model({ close_model }) {
   const [weight, setWeight] = useState(0);
   const [qty, setQty] = useState(0);
   const [price, setPrice] = useState(0);
+  const [purchesPrice, setPurchesPrice] = useState(0);
 
   const submit = () => {
     db.collection("gas")
@@ -76,8 +77,8 @@ export default function AddNew_Model({ close_model }) {
       <div className="paper">
         <form className="form" noValidate>
           <Grid container spacing={2}>
-            <Grid className="txt_Labels" item xs={12} sm={2}>
-              Weight :
+            <Grid className="txt_Labels" item xs={12} sm={4}>
+              Weight(kg) :
             </Grid>
             <Grid item xs={12} sm={5}>
               <TextField
@@ -99,8 +100,8 @@ export default function AddNew_Model({ close_model }) {
                 }}
               />
             </Grid>
-            <Grid className="txt_Labels" item xs={12} sm={5}></Grid>
-            <Grid className="txt_Labels" item xs={12} sm={2}>
+            <Grid className="txt_Labels" item xs={12} sm={3}></Grid>
+            <Grid className="txt_Labels" item xs={12} sm={4}>
               Qty :
             </Grid>
             <Grid item xs={12} sm={5}>
@@ -122,9 +123,9 @@ export default function AddNew_Model({ close_model }) {
                 }}
               />
             </Grid>
-            <Grid className="txt_Labels" item xs={12} sm={5}></Grid>
-            <Grid className="txt_Labels" item xs={12} sm={2}>
-              Price :
+            <Grid className="txt_Labels" item xs={12} sm={3}></Grid>
+            <Grid className="txt_Labels" item xs={12} sm={4}>
+             Selling Price :
             </Grid>
             <Grid item xs={12} sm={5}>
               <TextField
@@ -145,7 +146,30 @@ export default function AddNew_Model({ close_model }) {
                 }}
               />
             </Grid>
-            <Grid className="txt_Labels" item xs={12} sm={5}></Grid>
+            <Grid className="txt_Labels" item xs={12} sm={3}></Grid>
+            <Grid className="txt_Labels" item xs={12} sm={4}>
+             Unit Purchesed Price :
+            </Grid>
+            <Grid item xs={12} sm={5}>
+              <TextField
+                className="txtt_nic"
+                autoComplete="weight"
+                name="PurchesPrice"
+                variant="outlined"
+                required
+                fullWidth
+                id="PurchesPrice"
+                label="Purches Price"
+                size="small"
+                type="number"
+                value={purchesPrice}
+                InputProps={{ inputProps: { min: 0 } }}
+                onChange={(e) => {
+                  setPurchesPrice(e.target.value.trim());
+                }}
+              />
+            </Grid>
+            <Grid className="txt_Labels" item xs={12} sm={3}></Grid>
           </Grid>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={9}></Grid>
@@ -156,7 +180,7 @@ export default function AddNew_Model({ close_model }) {
                 className="btn_done"
                 onClick={submit}
                 disabled={
-                  weight.length === 0 || price.length === 0 || qty.length === 0 || weight===0 || price===0 || qty ===0 
+                  weight.length === 0 || price.length === 0 || purchesPrice.length === 0 || qty.length === 0 || weight===0 || price===0 || qty ===0 
                 }
               >
                 Done

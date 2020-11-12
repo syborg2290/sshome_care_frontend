@@ -40,6 +40,15 @@ export default function Attendance() {
         }),
       },
     },
+      {
+      name: "NIC",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
     {
       name: "Date",
       options: {
@@ -90,6 +99,7 @@ export default function Attendance() {
       "Joe James",
       "Test Corp",
       "Yonkers",
+       "Yonkers",
       <div className="workingStts">Working</div>,
       <div>
         <VisibilityIcon />
@@ -103,6 +113,7 @@ export default function Attendance() {
       "Joe James",
       "Test Corp",
       "Yonkers",
+       "Yonkers",
       <div className="leaveStts">Short Leave</div>,
       <div>
         <VisibilityIcon />

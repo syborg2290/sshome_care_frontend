@@ -183,6 +183,15 @@ export default function Invoice_history() {
         }),
       },
     },
+       {
+      name: "SerialNo",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
     {
       name: "Date",
       options: {
@@ -329,6 +338,7 @@ export default function Invoice_history() {
 
           rawData.push({
             InvoiceNo: siDoc.data().invoice_number,
+            SerialNo: siDoc.data().serial_no,  
             Date: moment(siDoc.data()?.date?.toDate()).format(
               "dddd, MMMM Do YYYY"
             ),

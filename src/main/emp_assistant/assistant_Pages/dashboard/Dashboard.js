@@ -8,6 +8,8 @@ import Grid from "@material-ui/core/Grid";
 import ArreasTable from "../dashboard/dashboard_contents/arreas_Table/Arreas_Table";
 import PendingList from "../dashboard/dashboard_contents/pending_Blacklist/Pending_List";
 import InvoiceList from "../dashboard/dashboard_contents/invoice_List/Invoice_List";
+import ExpireInvoice from "../dashboard/dashboard_contents/expire_Table/Expire_Invoice";
+
 
 import firebase from "firebase";
 import db from "../../../../config/firebase.js";
@@ -448,6 +450,16 @@ export default function Dashboard() {
         </Grid>
       </Grid>
       {/* END Arreas Table */}
+
+
+         {/*START Expire Invoice Table */}
+
+      <Grid container spacing={4}>
+        <Grid item xs={12}>
+          <ExpireInvoice />
+        </Grid>
+      </Grid>
+      {/* END Expire Invoice Table */}
 
       {/*START BlockListPrnding Table */}
 

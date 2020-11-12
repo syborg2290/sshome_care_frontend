@@ -19,6 +19,7 @@ export default function Full_Payment_Model({ items_list_props }) {
             ...old,
             {
               item_name: th.data().itemName,
+              serial_no: each.serialNo,
               dp: each.downpayment,
               discount: each.discount,
               qty: each.qty,
@@ -63,6 +64,15 @@ export default function Full_Payment_Model({ items_list_props }) {
                   </Grid>
                   <Grid item xs={12} sm={7}>
                     <p>{eachItem.item_name}</p>
+                  </Grid>
+                    <Grid className="lbl_topis" item xs={12} sm={4}>
+                    Serial No
+                  </Grid>
+                  <Grid item xs={12} sm={1}>
+                    :
+                  </Grid>
+                  <Grid item xs={12} sm={7}>
+                    <p>{eachItem.serial_no}</p>
                   </Grid>
                   <Grid className="lbl_topis" item xs={12} sm={4}>
                     Basic Payment(LKR)

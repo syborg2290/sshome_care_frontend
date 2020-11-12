@@ -1,17 +1,21 @@
 import React, { useState } from "react";
 import MUIDataTable from "mui-datatables";
-import { Grid } from "@material-ui/core";
+import { Grid,Button } from "@material-ui/core";
 // eslint-disable-next-line
 import { Modal } from "antd";
-import { Button } from "@material-ui/core";
+
 
 // icons
 import VisibilityIcon from "@material-ui/icons/Visibility";
 // eslint-disable-next-line
 import HistoryIcon from "@material-ui/icons/History";
 // eslint-disable-next-line
-import HelpIcon from "@material-ui/icons/Help";
 import AutorenewIcon from "@material-ui/icons/Autorenew";
+
+
+// components
+import ViewEmployee from "./components/view_Employee_Model/View_Employee";
+import UpdateStatus from "./components/status_Update_Model/Update_Status";
 
 // styles
 import "./Attendance.css";
@@ -19,6 +23,18 @@ import "./Attendance.css";
 export default function Attendance() {
   // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
+
+  const [viewEmployeesModel, setviewEmployeesModel] = useState(false); // Table models
+  const [statusUpdateModel, setStatusUpdateModel] = useState(false); // Table models
+
+
+   const showModalView = () => {
+    setviewEmployeesModel(true);
+  };
+
+     const showModalStatusUpdate = () => {
+    setStatusUpdateModel(true);
+  };
 
   //START pay And Go Columns
   const attendanceTableColomns = [
@@ -102,30 +118,54 @@ export default function Attendance() {
        "Yonkers",
       <div className="workingStts">Working</div>,
       <div>
-        <VisibilityIcon />
+        <VisibilityIcon onClick={showModalView}/>
         <span className="icon_Edit">
-          <AutorenewIcon />
+          <AutorenewIcon  onClick={showModalStatusUpdate}/>
         </span>
       </div>,
     ],
 
-    [
-      "Joe James",
-      "Test Corp",
-      "Yonkers",
-       "Yonkers",
-      <div className="leaveStts">Short Leave</div>,
-      <div>
-        <VisibilityIcon />
-        <span className="icon_Edit">
-          <AutorenewIcon />
-        </span>
-      </div>,
-    ],
   ];
 
   return (
     <>
+
+  {/* START View model */}
+        <Modal
+        className="confo_model"
+        visible={viewEmployeesModel}
+        footer={null}
+        onCancel={() => {
+          setviewEmployeesModel(false);
+        }}
+      >
+        <div className="view_body">
+          <ViewEmployee />
+        </div>
+      </Modal>
+
+      {/* END View model */}
+
+      
+  {/* START View model */}
+        <Modal
+        className="sttsUp_model"
+        visible={statusUpdateModel}
+        footer={null}
+        onCancel={() => {
+          setStatusUpdateModel(false);
+        }}
+      >
+        <div className="view_body">
+          <UpdateStatus />
+        </div>
+      </Modal>
+
+      {/* END View model */}
+      
+      <Button variant="contained" className="btn_attendanceHistory">
+        Attendance History
+      </Button>
       <Button variant="contained" color="primary" className="btn_attendance">
         Mark Attendance
       </Button>

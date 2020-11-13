@@ -16,6 +16,7 @@ import "../components/Edit_model.css";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 
 import db from "../../../../../../config/firebase.js";
+import firebase from 'firebase';
 
 const { Content } = Layout;
 const { TextArea } = Input;
@@ -267,6 +268,7 @@ export default function Edit_model({
                                                       cInvoiceNo: cInvoiceNo,
                                                       GCardNo: GCardNo,
                                                       guarantee: guarantee,
+                                                      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                                                     };
 
                                                     db.collection("item")

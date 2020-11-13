@@ -229,7 +229,7 @@ export default function Item_View_Model() {
                 </Col>
               </Row>
 
-        
+        <hr />
          <TableContainer component={Paper} className="main_containerNo">
           <Table className="gass_Table" size="small" aria-label="a dense table">
             <TableHead className="No_Table_head">

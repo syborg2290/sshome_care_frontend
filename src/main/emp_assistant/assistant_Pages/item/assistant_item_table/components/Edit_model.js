@@ -458,6 +458,7 @@ export default function Edit_model({
                     <div key={i + 1}>
                        <Form.Item>
                         <Input
+                          placeholder="090-WQA"
                           className="finput"
                         allowClear
                         key={i + 2}
@@ -495,7 +496,8 @@ export default function Edit_model({
                     <div key={i + 1}>
                       <Form.Item>
                         <Input
-                         className="finput"
+                          className="finput"
+                           placeholder="000-WWW"
                         allowClear
                         key={i + 2}
                         id={i.toString()}
@@ -531,6 +533,7 @@ export default function Edit_model({
                      
                       <Form.Item >
                         <Input
+                           placeholder="121-CVA"
                         allowClear
                         key={i + 2}
                         id={i.toString()}

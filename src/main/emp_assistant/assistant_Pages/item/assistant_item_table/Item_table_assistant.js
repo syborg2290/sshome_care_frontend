@@ -219,7 +219,6 @@ export default function Item_table_assistant() {
         }),
       },
     },
-
     {
       name: "Sale price(LKR)",
       options: {
@@ -345,26 +344,7 @@ export default function Item_table_assistant() {
                       : " - "}{" "}
                   </span>
                 </Col>
-                {/* <Col span={12}>MODEL NO</Col>
-                <Col span={12}>
-                  <span className="load_Item">
-                    {" "}
-                    <span className="colan">:</span>{" "}
-                    {allTtemData[currentIndx] && allTtemData[currentIndx].data
-                      ? allTtemData[currentIndx].data.modelNo
-                      : " - "}{" "}
-                  </span>
-                </Col>
-                <Col span={12}>SERIAL NO</Col>
-                <Col span={12}>
-                  <span className="load_Item">
-                    {" "}
-                    <span className="colan">:</span>{" "}
-                    {allTtemData[currentIndx] && allTtemData[currentIndx].data
-                      ? allTtemData[currentIndx].data.serialNo
-                      : " - "}{" "}
-                  </span>
-                </Col> */}
+               
                 <Col span={12}>SALE PRICE(LKR)</Col>
                 <Col span={12}>
                   <span className="load_Item">
@@ -383,16 +363,7 @@ export default function Item_table_assistant() {
                     )}{" "}
                   </span>
                 </Col>
-                {/* <Col span={12}>CHASSIS NO</Col>
-                <Col span={12}>
-                  <span className="load_Item">
-                    {" "}
-                    <span className="colan">:</span>{" "}
-                    {allTtemData[currentIndx] && allTtemData[currentIndx].data
-                      ? allTtemData[currentIndx].data.chassisNo
-                      : " - "}{" "}
-                  </span>
-                </Col> */}
+               
                 <Col span={12}>CASH PRICE(LKR)</Col>
                 <Col span={12}>
                   <span className="load_Item">

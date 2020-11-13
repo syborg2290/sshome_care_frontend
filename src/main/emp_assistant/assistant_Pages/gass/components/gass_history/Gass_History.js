@@ -1,56 +1,117 @@
 import React, { useState, useEffect } from "react";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import Paper from "@material-ui/core/Paper";
-import Typography from "@material-ui/core/Typography";
-import Container from "@material-ui/core/Container";
+import { Grid } from "@material-ui/core";
 
+import CurrencyFormat from "react-currency-format";
+import moment from "moment";
+import MUIDataTable from "mui-datatables";
 
 // styles
 import "./Gass_History.css";
+import db from "../../../../../../config/firebase.js";
 
-function createData(Weight, Qty, Date,Price) {
-  return {Weight, Qty, Date,Price};
-}
 
 export default function Gass_History() {
-      // eslint-disable-next-line
-  const [allTableData, setAllTableData] = useState([]);
+   
   const [tableData, setTableData] = useState([]);
-    return (
-        <Container component="main" className="main_containerhis">
-             <Typography className="titles-his" variant="h5" gutterBottom>
-          Gass History
-        </Typography>
-         <TableContainer component={Paper} className="main_containerGasshis">
-          <Table className="gass_Table-his" size="small" aria-label="a dense table">
-            <TableHead className="gass_Table_head">
-              <TableRow>
-                <TableCell>Weight(kg)</TableCell>
-                <TableCell align="right">Qty</TableCell>
-                  <TableCell align="right">Date</TableCell>
-                <TableCell align="right">Purches&nbsp;Price(LKR)</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {tableData.map((row) => (
-                <TableRow key={row.Weight}>
-                  <TableCell component="th" scope="row">
-                    {row.Weight}
-                  </TableCell>
-                      <TableCell align="right">{row.Qty}</TableCell>
-                      <TableCell align="right">{row.Date}</TableCell>
-                  <TableCell align="right">{row.Price}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
- </Container>
- 
-    );
+  
+   const columns = [
+    {
+      name: "Weight",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "Date",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "Qty",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: {
+            fontSize: "15px",
+            color: "black",
+            fontWeight: "600",
+          },
+        }),
+      },
+    },
+    {
+      name: "Purchased_Price",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: {
+            fontSize: "15px",
+            color: "black",
+            fontWeight: "600",
+          },
+        }),
+      },
+    },
+  ];
+
+  useEffect(() => {
+    db.collection("gas_history").onSnapshot((snap) => {
+      var raw = [];
+
+      snap.docs.forEach((each) => {
+        raw.push({
+          Weight: each.data().weight + " Kg",
+          Date: moment(each.data()?.date?.toDate()).format(
+            "dddd, MMMM Do YYYY"
+          ),
+          Qty: each.data().qty,
+          Purchased_Price: (
+            <CurrencyFormat
+              value={each.data().price}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={" "}
+            />
+          ),
+        });
+      });
+
+      setTableData(raw);
+    });
+  }, []);
+
+  return (
+    <Grid container spacing={4}>
+      <Grid item xs={12}>
+        <MUIDataTable
+          title={<span className="title_Span">Gass History</span>}
+          className="gass_purches_history"
+          sty
+          data={tableData}
+          columns={columns}
+          options={{
+            selectableRows: false,
+            customToolbarSelect: () => {},
+            filterType: "textField",
+            download: false,
+            print: false,
+            searchPlaceholder: "Search using any column names",
+            elevation: 4,
+            sort: true,
+          }}
+        />
+      </Grid>
+    </Grid>
+  );
 }
+
+  
+    
+

@@ -49,7 +49,7 @@ export default function Add_Item() {
       [Object.keys(inputsSerialNo).length]: "",
     });
   };
-  const handleChangeAddSerialNoInputs = (e,i) => {
+  const handleChangeAddSerialNoInputs = (e, i) => {
     setInputsSerialNo({ ...inputsSerialNo, [i]: e.target.value });
   };
 
@@ -60,7 +60,7 @@ export default function Add_Item() {
       [Object.keys(inputsModelNo).length]: "",
     });
   };
-  const handleChangeAddModelNoInputs = (e,i) => {
+  const handleChangeAddModelNoInputs = (e, i) => {
     setInputsModelNo({ ...inputsModelNo, [i]: e.target.value });
   };
 
@@ -71,7 +71,7 @@ export default function Add_Item() {
       [Object.keys(inputsChassisNo).length]: "",
     });
   };
-  const handleChangeAddChassisNoInputs = (e,i) => {
+  const handleChangeAddChassisNoInputs = (e, i) => {
     setInputsChassisNo({ ...inputsChassisNo, [i]: e.target.value });
   };
   //
@@ -159,7 +159,8 @@ export default function Add_Item() {
             if (
               Object.keys(inputsModelNo).length === 0 ||
               Object.keys(inputsModelNo).length !==
-                Object.keys(inputsSerialNo).length ||  modelNosList.includes("")
+                Object.keys(inputsSerialNo).length ||
+              modelNosList.includes("")
             ) {
               NotificationManager.info(
                 "Item model number is required!",
@@ -169,7 +170,8 @@ export default function Add_Item() {
               if (
                 Object.keys(inputsSerialNo).length === 0 ||
                 Object.keys(inputsModelNo).length !==
-                  Object.keys(inputsSerialNo).length ||  serialNosList.includes("")
+                  Object.keys(inputsSerialNo).length ||
+                serialNosList.includes("")
               ) {
                 NotificationManager.info(
                   "Item Serial number is required!",
@@ -337,12 +339,23 @@ export default function Add_Item() {
                                                         Math.round(discount)
                                                   );
                                                   if (newArray) {
+                                                    let modelNoNewList = modelNosList.concat(
+                                                      newArray[0].data().modelNo
+                                                    );
+                                                    let serialNoNewList = serialNosList.concat(
+                                                      newArray[0].data()
+                                                        .serialNo
+                                                    );
+                                                    let chassisNoNewList = chassisNosList.concat(
+                                                      newArray[0].data()
+                                                        .chassisNo
+                                                    );
                                                     let variable = {
                                                       itemName: itemName.trim(),
                                                       brand: brand.trim(),
-                                                      modelNo: modelNosList,
-                                                      serialNo: serialNosList,
-                                                      chassisNo: chassisNosList,
+                                                      modelNo: modelNoNewList,
+                                                      serialNo: serialNoNewList,
+                                                      chassisNo: chassisNoNewList,
                                                       color: color.trim(),
                                                       qty: serialNosList.length,
                                                       cashPrice: Math.round(
@@ -507,12 +520,10 @@ export default function Add_Item() {
                                                     guarantee: guarantee,
                                                     timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                                                   };
-                                                  
-                                                   await db
-                                                      .collection(
-                                                        "item_history"
-                                                      )
-                                                      .add(variable);
+
+                                                  await db
+                                                    .collection("item_history")
+                                                    .add(variable);
 
                                                   await db
                                                     .collection("item")
@@ -980,14 +991,14 @@ export default function Add_Item() {
               </Grid>
 
               <Grid className="txt_Labels" item xs={12} sm={12}>
-                <hr  className="hr_divider"/>
-               </Grid>
-              
-               <Grid item xs={12} sm={2}>
-                  <Button className="serialNo_add" onClick={addInputChassisNo}>
+                <hr className="hr_divider" />
+              </Grid>
+
+              <Grid item xs={12} sm={2}>
+                <Button className="serialNo_add" onClick={addInputChassisNo}>
                   Chassis Numbers
-                    <PlusOutlined className="inpu_addIcon" />
-              </Button>
+                  <PlusOutlined className="inpu_addIcon" />
+                </Button>
               </Grid>
               <Grid item xs={12} sm={6}>
                 {Object.keys(inputsChassisNo).map((i) => (
@@ -1003,7 +1014,7 @@ export default function Add_Item() {
                       label="xxy-54091"
                       size="small"
                       required={true}
-                      onChange={(e)=>handleChangeAddChassisNoInputs(e,i)}
+                      onChange={(e) => handleChangeAddChassisNoInputs(e, i)}
                     />
 
                     <MinusCircleOutlined
@@ -1039,7 +1050,7 @@ export default function Add_Item() {
                       required={true}
                       label="xx-20097"
                       size="small"
-                      onChange={(e)=>handleChangeAddSerialNoInputs(e,i)}
+                      onChange={(e) => handleChangeAddSerialNoInputs(e, i)}
                     />
 
                     <MinusCircleOutlined
@@ -1075,7 +1086,7 @@ export default function Add_Item() {
                       label="xx 0091"
                       size="small"
                       required={true}
-                      onChange={(e)=>handleChangeAddModelNoInputs(e,i)}
+                      onChange={(e) => handleChangeAddModelNoInputs(e, i)}
                     />
 
                     <MinusCircleOutlined

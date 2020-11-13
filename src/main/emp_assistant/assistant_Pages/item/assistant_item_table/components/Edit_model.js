@@ -138,7 +138,7 @@ export default function Edit_model({
       serialNosList.push(inputsSerialNo[k]);
     }
 
-    if (serialNosList.length === Object.keys(inputsSerialNo).length) {
+    if (serialNosList.length >= Object.keys(inputsSerialNo).length) {
       if (isInAlreadySerial || isInAlreadyModel) {
         NotificationManager.info(
           "Item serial no & model no must be unique !",

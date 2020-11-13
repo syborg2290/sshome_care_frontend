@@ -13,7 +13,6 @@ import "react-notifications/lib/notifications.css";
 import CurrencyFormat from "react-currency-format";
 import moment from "moment";
 
-
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -21,7 +20,6 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
-
 
 // components
 import EditModel from "./components/Edit_model";
@@ -39,9 +37,7 @@ import "./Item_table_assistant.css";
 
 import db from "../../../../../config/firebase.js";
 
-
 export default function Item_table_assistant() {
-   
   const [selectedItemtVisible, setSelectedItemtVisible] = useState(false);
   // eslint-disable-next-line
   const [itemTableData, setItemTableData] = useState([]);
@@ -59,9 +55,8 @@ export default function Item_table_assistant() {
 
   // eslint-disable-next-line
   const [itemList, SetItemList] = useState([]);
-  
-   const [itemListSeMo, SetItemListSeMo] = useState([]);
-  
+
+  const [itemListSeMo, SetItemListSeMo] = useState([]);
 
   const showModal = () => {
     setVisible(true);
@@ -87,19 +82,19 @@ export default function Item_table_assistant() {
         var newData = [];
         var itemData = [];
         var itemDataSeMo = [];
-        
+
         snapshot.docs.forEach((element) => {
           itemData.push({
             id: element.id,
             data: element.data(),
           });
-          
+
           itemDataSeMo.push({
             serialNo: element.data().serialNo,
             modelNo: element.data().modelNo,
-            chassisNo:element.data().chassisNo,
+            chassisNo: element.data().chassisNo,
           });
-         
+
           newData.push([
             element.data().itemName,
             element.data().brand,
@@ -224,7 +219,7 @@ export default function Item_table_assistant() {
         }),
       },
     },
-   
+
     {
       name: "Sale price(LKR)",
       options: {
@@ -546,39 +541,47 @@ export default function Item_table_assistant() {
                   </span>
                 </Col>
               </Row>
-               <hr />
-         <TableContainer component={Paper} className="main_containerNo">
-          <Table className="gass_Table" size="small" aria-label="a dense table">
-            <TableHead className="No_Table_head">
-              <TableRow>
-                <TableCell className="tbl_cell">SerialNo</TableCell>
-                <TableCell className="tbl_cell"align="right">ModelNo</TableCell>
-                <TableCell className="tbl_cell" align="right">ChasisseNo</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {itemListSeMo.map((row) => (
-                <TableRow key={row.serialNo[0]}>
-                  <TableCell component="th" scope="row">
-                    {row.serialNo.map((serailNoT)=>(
-                     <h5 component="th" scope="column">{serailNoT}</h5>
+              <hr />
+              <TableContainer component={Paper} className="main_containerNo">
+                <Table
+                  className="gass_Table"
+                  size="small"
+                  aria-label="a dense table"
+                >
+                  <TableHead className="No_Table_head">
+                    <TableRow>
+                      <TableCell className="tbl_cell">SerialNo</TableCell>
+                      <TableCell className="tbl_cell" align="right">
+                        ModelNo
+                      </TableCell>
+                      <TableCell className="tbl_cell" align="right">
+                        ChasisseNo
+                      </TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {itemListSeMo.map((row) => (
+                      <TableRow key={row.serialNo[0]}>
+                        <TableCell component="th" scope="row">
+                          {row.serialNo.map((serailNoT) => (
+                            <h5>{serailNoT}</h5>
+                          ))}
+                        </TableCell>
+                        <TableCell component="th" scope="row">
+                          {row.modelNo.map((modelNoT) => (
+                            <h5>{modelNoT}</h5>
+                          ))}
+                        </TableCell>
+                        <TableCell component="th" scope="row">
+                          {row.chassisNo.map((chassisNoT) => (
+                            <h5>{chassisNoT}</h5>
+                          ))}
+                        </TableCell>
+                      </TableRow>
                     ))}
-                  </TableCell>
-                   <TableCell component="th" scope="row">
-                    {row.modelNo.map((modelNoT)=>(
-                     <h5 component="th" scope="column">{modelNoT}</h5>
-                    ))}
-                  </TableCell>
-                   <TableCell component="th" scope="row">
-                    {row.chassisNo.map((chassisNoT)=>(
-                     <h5 component="th" scope="column">{chassisNoT}</h5>
-                    ))}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+                  </TableBody>
+                </Table>
+              </TableContainer>
             </div>
           </div>
         </div>

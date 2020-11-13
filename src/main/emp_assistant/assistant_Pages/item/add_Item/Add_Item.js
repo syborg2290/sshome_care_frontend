@@ -40,6 +40,9 @@ export default function Add_Item() {
   const [inputsSerialNo, setInputsSerialNo] = useState({});
   const [inputsModelNo, setInputsModelNo] = useState({});
   const [inputsChassisNo, setInputsChassisNo] = useState({});
+  const [isInAlreadySerial, setIsInAlreadySerial] = useState(false);
+  const [isInAlreadyModel, setIsInAlreadyModel] = useState(false);
+ 
 
   //add InputSerial No
   const addInputSerialNo = () => {
@@ -93,6 +96,9 @@ export default function Add_Item() {
     setDescription("");
     setCInvoiceNo("");
     setGCardNo("");
+    setInputsSerialNo({});
+    setInputsChassisNo({});
+    setInputsModelNo({});
     setGuarantee({
       value: "Years",
     });
@@ -109,8 +115,7 @@ export default function Add_Item() {
     let modelNosList = [];
     let serialNosList = [];
     let chassisNosList = [];
-    var isInAlreadySerial = false;
-    var isInAlreadyModel = false;
+    
 
     for (var k = 0; k < Object.keys(inputsSerialNo).length; k++) {
       chassisNosList.push(
@@ -121,7 +126,8 @@ export default function Add_Item() {
         .get()
         .then((reModel) => {
           if (reModel.docs.length > 0) {
-            isInAlreadyModel = true;
+            setIsInAlreadyModel(true);
+            
           }
         });
       db.collection("item")
@@ -129,7 +135,7 @@ export default function Add_Item() {
         .get()
         .then((reSeril) => {
           if (reSeril.docs.length > 0) {
-            isInAlreadySerial = true;
+            setIsInAlreadySerial(true);
           }
         });
       modelNosList.push(inputsModelNo[k]);
@@ -1009,7 +1015,6 @@ export default function Add_Item() {
                       autoComplete="chassisNo"
                       name="chassisNo"
                       variant="outlined"
-                      id="chassisNo"
                       label="xxy-54091"
                       size="small"
                       required={true}
@@ -1045,7 +1050,6 @@ export default function Add_Item() {
                       autoComplete="serialNo"
                       name="serialNo"
                       variant="outlined"
-                      id="serialNo"
                       required={true}
                       label="xx-20097"
                       size="small"
@@ -1081,7 +1085,6 @@ export default function Add_Item() {
                       autoComplete="modelNo"
                       name="modelNo"
                       variant="outlined"
-                      id="modelNo"
                       label="xx 0091"
                       size="small"
                       required={true}

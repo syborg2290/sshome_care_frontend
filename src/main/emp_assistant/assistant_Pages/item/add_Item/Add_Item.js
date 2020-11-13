@@ -507,6 +507,12 @@ export default function Add_Item() {
                                                     guarantee: guarantee,
                                                     timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                                                   };
+                                                  
+                                                   await db
+                                                      .collection(
+                                                        "item_history"
+                                                      )
+                                                      .add(variable);
 
                                                   await db
                                                     .collection("item")

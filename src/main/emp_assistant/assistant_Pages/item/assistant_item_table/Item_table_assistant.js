@@ -37,18 +37,13 @@ import DescriptionIcon from "@material-ui/icons/Description";
 // styles
 import "./Item_table_assistant.css";
 
-
 import db from "../../../../../config/firebase.js";
-
-function createData(  SerialNo, ModelNo, ChasisseNo) {
-  return {  SerialNo, ModelNo, ChasisseNo };
-}
 
 
 export default function Item_table_assistant() {
    
   const [selectedItemtVisible, setSelectedItemtVisible] = useState(false);
-   const [tableData, setTableData] = useState([]);
+  // eslint-disable-next-line
   const [itemTableData, setItemTableData] = useState([]);
   // eslint-disable-next-line
   const [allTtemData, setAllItemData] = useState([]);
@@ -64,6 +59,9 @@ export default function Item_table_assistant() {
 
   // eslint-disable-next-line
   const [itemList, SetItemList] = useState([]);
+  
+   const [itemListSeMo, SetItemListSeMo] = useState([]);
+  
 
   const showModal = () => {
     setVisible(true);
@@ -88,18 +86,24 @@ export default function Item_table_assistant() {
       .onSnapshot((snapshot) => {
         var newData = [];
         var itemData = [];
+        var itemDataSeMo = [];
+        
         snapshot.docs.forEach((element) => {
           itemData.push({
             id: element.id,
             data: element.data(),
           });
-
+          
+          itemDataSeMo.push({
+            serialNo: element.data().serialNo,
+            modelNo: element.data().modelNo,
+            chassisNo:element.data().chassisNo,
+          });
+         
           newData.push([
             element.data().itemName,
             element.data().brand,
             element.data().qty,
-            // element.data().serialNo,
-            // element.data().modelNo,
             <CurrencyFormat
               value={element.data().salePrice}
               displayType={"text"}
@@ -141,6 +145,7 @@ export default function Item_table_assistant() {
         });
         setItemTableData(newData);
         setAllItemData(itemData);
+        SetItemListSeMo(itemDataSeMo);
         setIsLoading(false);
       });
     // eslint-disable-next-line
@@ -219,6 +224,7 @@ export default function Item_table_assistant() {
         }),
       },
     },
+   
     {
       name: "Sale price(LKR)",
       options: {
@@ -551,13 +557,23 @@ export default function Item_table_assistant() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {tableData.map((row) => (
-                <TableRow key={row.SerialNo}>
+              {itemListSeMo.map((row) => (
+                <TableRow key={row.serialNo[0]}>
                   <TableCell component="th" scope="row">
-                    {row.SerialNo}
+                    {row.serialNo.map((serailNoT)=>(
+                     <h5 component="th" scope="column">{serailNoT}</h5>
+                    ))}
                   </TableCell>
-                  <TableCell align="right">{row.ModelNo}</TableCell>
-                  <TableCell align="right">{row.ChasisseNo}</TableCell>
+                   <TableCell component="th" scope="row">
+                    {row.modelNo.map((modelNoT)=>(
+                     <h5 component="th" scope="column">{modelNoT}</h5>
+                    ))}
+                  </TableCell>
+                   <TableCell component="th" scope="row">
+                    {row.chassisNo.map((chassisNoT)=>(
+                     <h5 component="th" scope="column">{chassisNoT}</h5>
+                    ))}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>

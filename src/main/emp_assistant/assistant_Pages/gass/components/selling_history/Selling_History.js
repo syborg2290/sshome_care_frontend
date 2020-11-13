@@ -5,10 +5,10 @@ import CurrencyFormat from "react-currency-format";
 import moment from "moment";
 import MUIDataTable from "mui-datatables";
 // styles
-import "./Purches_History.css";
+import "./Selling_History.css";
 import db from "../../../../../../config/firebase.js";
 
-export default function Purches_History() {
+export default function Selling_History() {
   const [allTableData, setTableData] = useState([]);
   const columns = [
     {
@@ -97,7 +97,7 @@ export default function Purches_History() {
     <Grid container spacing={4}>
       <Grid item xs={12}>
         <MUIDataTable
-          title={<span className="title_Span">Purches History</span>}
+          title={<span className="title_Span">Selling History</span>}
           className="gass_purches_history"
           sty
           data={allTableData}

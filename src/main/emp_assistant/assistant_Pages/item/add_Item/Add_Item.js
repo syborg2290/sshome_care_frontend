@@ -49,8 +49,8 @@ export default function Add_Item() {
       [Object.keys(inputsSerialNo).length]: "",
     });
   };
-  const handleChangeAddSerialNoInputs = (e) => {
-    setInputsSerialNo({ ...inputsSerialNo, [e.target.id]: e.target.value });
+  const handleChangeAddSerialNoInputs = (e,i) => {
+    setInputsSerialNo({ ...inputsSerialNo, [i]: e.target.value });
   };
 
   //add InputModel No
@@ -60,8 +60,8 @@ export default function Add_Item() {
       [Object.keys(inputsModelNo).length]: "",
     });
   };
-  const handleChangeAddModelNoInputs = (e) => {
-    setInputsModelNo({ ...inputsModelNo, [e.target.id]: e.target.value });
+  const handleChangeAddModelNoInputs = (e,i) => {
+    setInputsModelNo({ ...inputsModelNo, [i]: e.target.value });
   };
 
   //add InputChassis No
@@ -71,8 +71,8 @@ export default function Add_Item() {
       [Object.keys(inputsChassisNo).length]: "",
     });
   };
-  const handleChangeAddChassisNoInputs = (e) => {
-    setInputsChassisNo({ ...inputsChassisNo, [e.target.id]: e.target.value });
+  const handleChangeAddChassisNoInputs = (e,i) => {
+    setInputsChassisNo({ ...inputsChassisNo, [i]: e.target.value });
   };
   //
 
@@ -1003,7 +1003,7 @@ export default function Add_Item() {
                       label="xxy-54091"
                       size="small"
                       required={true}
-                      onChange={handleChangeAddChassisNoInputs}
+                      onChange={(e)=>handleChangeAddChassisNoInputs(e,i)}
                     />
 
                     <MinusCircleOutlined
@@ -1039,7 +1039,7 @@ export default function Add_Item() {
                       required={true}
                       label="xx-20097"
                       size="small"
-                      onChange={handleChangeAddSerialNoInputs}
+                      onChange={(e)=>handleChangeAddSerialNoInputs(e,i)}
                     />
 
                     <MinusCircleOutlined
@@ -1075,7 +1075,7 @@ export default function Add_Item() {
                       label="xx 0091"
                       size="small"
                       required={true}
-                      onChange={handleChangeAddModelNoInputs}
+                      onChange={(e)=>handleChangeAddModelNoInputs(e,i)}
                     />
 
                     <MinusCircleOutlined

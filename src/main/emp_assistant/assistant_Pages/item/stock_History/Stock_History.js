@@ -1,33 +1,31 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Grid } from "@material-ui/core";
-
-import CurrencyFormat from "react-currency-format";
-import moment from "moment";
+import {Modal } from "antd";
 import MUIDataTable from "mui-datatables";
 
 // styles
 import "./Stock_History.css";
 
 // components
-// import EditModel from "../assistant_item_table/components/";
+ import ViewModel from "./components/Item_View_Model";
 
 // icons
 import VisibilityIcon from "@material-ui/icons/Visibility";
 
 export default function Stock_History() {
-    
-    const [allTableData, setTableData] = useState([]);
+  // eslint-disable-next-line
+  const [allTtemData, setAllItemData] = useState([]);
+  // eslint-disable-next-line
+  const [currentIndx, setCurrentIndx] = useState(0);
+  const [visible, setVisible] = useState(false);
+
+
+   const showModal = () => {
+    setVisible(true);
+  };
 
     const columns = [
-    // {
-    //   name: "Serial_No",
-    //   options: {
-    //     filter: true,
-    //     setCellHeaderProps: (value) => ({
-    //       style: { fontSize: "15px", color: "black", fontWeight: "600" },
-    //     }),
-    //   },
-    // },
+   
     {
       name: "Item_Name",
       options: {
@@ -106,10 +104,10 @@ export default function Stock_History() {
     },
   ];
 
-    const data = [
+    const allTableData = [
       ["mes", "Torp", "Yonkers", "Yonkers", "NY",
         <VisibilityIcon
-      // onClick={showModal} 
+      onClick={showModal} 
         />
       ],
 
@@ -117,6 +115,34 @@ export default function Stock_History() {
     
     
     return (
+<>
+
+       <Modal
+        title={
+          <span className="model_title">
+            {allTtemData[currentIndx] && allTtemData[currentIndx].data
+              ? allTtemData[currentIndx].data.itemName
+              : null}
+          </span>
+        }
+        visible={visible}
+        footer={null}
+        className="model_Item"
+        onCancel={() => {
+          window.location.reload();
+          setVisible(false);
+        }}
+      >
+        <div className="table_Model">
+          <div className="model_Main">
+            <div className="model_Detail">
+            <ViewModel />
+            </div>
+          </div>
+        </div>
+      </Modal>
+
+
 
     <Grid container spacing={4}>
       <Grid item xs={12}>
@@ -139,5 +165,7 @@ export default function Stock_History() {
         />
       </Grid>
     </Grid>
+
+      </>
     );
 }

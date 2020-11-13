@@ -77,8 +77,8 @@ export default function Edit_model({
       [Object.keys(inputsSerialNo).length]: "",
     });
   };
-  const handleChangeAddSerialNoInputs = (e) => {
-    setInputsSerialNo({ ...inputsSerialNo, [e.target.id]: e.target.value });
+  const handleChangeAddSerialNoInputs = (e,i) => {
+    setInputsSerialNo({ ...inputsSerialNo, [i]: e.target.value });
   };
 
   //add InputModel No
@@ -88,8 +88,8 @@ export default function Edit_model({
       [Object.keys(inputsModelNo).length]: "",
     });
   };
-  const handleChangeAddModelNoInputs = (e) => {
-    setInputsModelNo({ ...inputsModelNo, [e.target.id]: e.target.value });
+  const handleChangeAddModelNoInputs = (e,i) => {
+    setInputsModelNo({ ...inputsModelNo, [i]: e.target.value });
   };
 
   //add InputChassis No
@@ -99,8 +99,8 @@ export default function Edit_model({
       [Object.keys(inputsChassisNo).length]: "",
     });
   };
-  const handleChangeAddChassisNoInputs = (e) => {
-    setInputsChassisNo({ ...inputsChassisNo, [e.target.id]: e.target.value });
+  const handleChangeAddChassisNoInputs = (e,i) => {
+    setInputsChassisNo({ ...inputsChassisNo, [i]: e.target.value });
   };
   //
 
@@ -492,7 +492,7 @@ export default function Edit_model({
                         allowClear
                         key={i + 2}
                         id={i.toString()}
-                        onChange={handleChangeAddChassisNoInputs}
+                        onChange={(e)=>handleChangeAddChassisNoInputs(e,i)}
                         placeholder="xxx-chas"
                         end="true"
                       />
@@ -529,7 +529,7 @@ export default function Edit_model({
                         key={i + 2}
                         id={i.toString()}
                         placeholder="xxx-serial"
-                        onChange={handleChangeAddSerialNoInputs}
+                        onChange={(e)=>handleChangeAddSerialNoInputs(e,i)}
                       />
 
                       <MinusCircleOutlined
@@ -563,7 +563,7 @@ export default function Edit_model({
                         key={i + 2}
                         id={i.toString()}
                         placeholder="xxx-model"
-                        onChange={handleChangeAddModelNoInputs}
+                        onChange={(e)=>handleChangeAddModelNoInputs(e,i)}
                       />
 
                       <MinusCircleOutlined

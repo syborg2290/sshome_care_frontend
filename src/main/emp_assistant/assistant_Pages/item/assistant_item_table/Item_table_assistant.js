@@ -13,6 +13,16 @@ import "react-notifications/lib/notifications.css";
 import CurrencyFormat from "react-currency-format";
 import moment from "moment";
 
+
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import Paper from "@material-ui/core/Paper";
+
+
 // components
 import EditModel from "./components/Edit_model";
 // eslint-disable-next-line
@@ -27,10 +37,18 @@ import DescriptionIcon from "@material-ui/icons/Description";
 // styles
 import "./Item_table_assistant.css";
 
+
 import db from "../../../../../config/firebase.js";
 
+function createData(  SerialNo, ModelNo, ChasisseNo) {
+  return {  SerialNo, ModelNo, ChasisseNo };
+}
+
+
 export default function Item_table_assistant() {
+   
   const [selectedItemtVisible, setSelectedItemtVisible] = useState(false);
+   const [tableData, setTableData] = useState([]);
   const [itemTableData, setItemTableData] = useState([]);
   // eslint-disable-next-line
   const [allTtemData, setAllItemData] = useState([]);
@@ -540,6 +558,29 @@ export default function Item_table_assistant() {
                   </span>
                 </Col>
               </Row>
+               <hr />
+         <TableContainer component={Paper} className="main_containerNo">
+          <Table className="gass_Table" size="small" aria-label="a dense table">
+            <TableHead className="No_Table_head">
+              <TableRow>
+                <TableCell className="tbl_cell">SerialNo</TableCell>
+                <TableCell className="tbl_cell"align="right">ModelNo</TableCell>
+                <TableCell className="tbl_cell" align="right">ChasisseNo</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {tableData.map((row) => (
+                <TableRow key={row.SerialNo}>
+                  <TableCell component="th" scope="row">
+                    {row.SerialNo}
+                  </TableCell>
+                  <TableCell align="right">{row.ModelNo}</TableCell>
+                  <TableCell align="right">{row.ChasisseNo}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
             </div>
           </div>
         </div>

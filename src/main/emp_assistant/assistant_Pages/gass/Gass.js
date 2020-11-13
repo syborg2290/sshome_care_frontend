@@ -24,7 +24,7 @@ import HistoryIcon from "@material-ui/icons/History";
 // components
 import GassModel from "./components/Gass_Model";
 import AddNewModel from "./components/add_new_Gass/AddNew_Model";
-import PurchesHistory from "./components/purches_history/Purches_History";
+import SellingHistory from "./components/selling_history/Selling_History";
 import GassHistoryModel from "./components/gass_history/Gass_History";
 
 
@@ -134,7 +134,7 @@ export default function Gass() {
         }}
       >
         <div className="purchesModel_body">
-          <PurchesHistory />
+          <SellingHistory />
         </div>
       </Modal>
 

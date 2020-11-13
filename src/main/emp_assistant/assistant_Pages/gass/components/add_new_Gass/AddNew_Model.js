@@ -148,7 +148,7 @@ export default function AddNew_Model({ close_model }) {
             </Grid>
             <Grid className="txt_Labels" item xs={12} sm={3}></Grid>
             <Grid className="txt_Labels" item xs={12} sm={4}>
-             Unit Purchesed Price :
+             Unit Purchased Price :
             </Grid>
             <Grid item xs={12} sm={5}>
               <TextField

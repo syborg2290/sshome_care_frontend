@@ -391,29 +391,33 @@ export default function Stock_History() {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {itemListSeMoCon.map((row) => (
-                      <TableRow key={0}>
-                        <TableCell component="th" scope="row">
-                          {itemListSeMo[currentIndx].serialNo.map(
-                            (serailNoT) => (
-                              <h5>{serailNoT}</h5>
-                            )
-                          )}
-                        </TableCell>
-                        <TableCell component="th" scope="row">
-                          {itemListSeMo[currentIndx].modelNo.map((modelNoT) => (
-                            <h5>{modelNoT}</h5>
-                          ))}
-                        </TableCell>
-                        <TableCell component="th" scope="row">
-                          {itemListSeMo[currentIndx].chassisNo.map(
-                            (chassisNoT) => (
-                              <h5>{chassisNoT}</h5>
-                            )
-                          )}
-                        </TableCell>
-                      </TableRow>
-                    ))}
+                    {itemListSeMoCon.length > 0
+                      ? itemListSeMoCon.map((row) => (
+                          <TableRow key={0}>
+                            <TableCell component="th" scope="row">
+                              {itemListSeMo[currentIndx]?.serialNo.map(
+                                (serailNoT) => (
+                                  <h5 key={serailNoT}>{serailNoT}</h5>
+                                )
+                              )}
+                            </TableCell>
+                            <TableCell component="th" scope="row">
+                              {itemListSeMo[currentIndx]?.modelNo.map(
+                                (modelNoT) => (
+                                  <h5 key={modelNoT}>{modelNoT}</h5>
+                                )
+                              )}
+                            </TableCell>
+                            <TableCell component="th" scope="row">
+                              {itemListSeMo[currentIndx]?.chassisNo.map(
+                                (chassisNoT) => (
+                                  <h5 key={chassisNoT}>{chassisNoT}</h5>
+                                )
+                              )}
+                            </TableCell>
+                          </TableRow>
+                        ))
+                      : ""}
                   </TableBody>
                 </Table>
               </TableContainer>

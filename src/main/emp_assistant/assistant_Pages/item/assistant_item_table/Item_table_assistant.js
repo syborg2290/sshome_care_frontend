@@ -86,7 +86,7 @@ export default function Item_table_assistant() {
         var itemDataSeMo = [];
         var itemDataSeMoCon = [];
 
-         if (snapshot.docs.length > 0) {
+        if (snapshot.docs.length > 0) {
           itemDataSeMoCon.push({
             serialNo: snapshot.docs[0].data().serialNo,
             modelNo: snapshot.docs[0].modelNo,
@@ -517,7 +517,8 @@ export default function Item_table_assistant() {
                     <span className="colan">:</span>{" "}
                     {moment(
                       allTtemData[currentIndx] && allTtemData[currentIndx]?.data
-                        ? allTtemData[currentIndx]?.data?.timestamp?.seconds * 1000
+                        ? allTtemData[currentIndx]?.data?.timestamp?.seconds *
+                            1000
                         : " - "
                     ).format("dddd, MMMM Do YYYY, h:mm:ss a")}
                   </span>
@@ -542,29 +543,33 @@ export default function Item_table_assistant() {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {itemListSeMoCon.map((row) => (
-                      <TableRow key={0}>
-                        <TableCell component="th" scope="row">
-                          {itemListSeMo[currentIndx].serialNo.map(
-                            (serailNoT) => (
-                              <h5 key={serailNoT}>{serailNoT}</h5>
-                            )
-                          )}
-                        </TableCell>
-                        <TableCell component="th" scope="row">
-                          {itemListSeMo[currentIndx].modelNo.map((modelNoT) => (
-                            <h5 key={modelNoT}>{modelNoT}</h5>
-                          ))}
-                        </TableCell>
-                        <TableCell component="th" scope="row">
-                          {itemListSeMo[currentIndx].chassisNo.map(
-                            (chassisNoT) => (
-                              <h5 key={chassisNoT}>{chassisNoT}</h5>
-                            )
-                          )}
-                        </TableCell>
-                      </TableRow>
-                    ))}
+                    {itemListSeMoCon.length > 0
+                      ? itemListSeMoCon.map((row) => (
+                          <TableRow key={0}>
+                            <TableCell component="th" scope="row">
+                              {itemListSeMo[currentIndx]?.serialNo.map(
+                                (serailNoT) => (
+                                  <h5 key={serailNoT}>{serailNoT}</h5>
+                                )
+                              )}
+                            </TableCell>
+                            <TableCell component="th" scope="row">
+                              {itemListSeMo[currentIndx]?.modelNo.map(
+                                (modelNoT) => (
+                                  <h5 key={modelNoT}>{modelNoT}</h5>
+                                )
+                              )}
+                            </TableCell>
+                            <TableCell component="th" scope="row">
+                              {itemListSeMo[currentIndx]?.chassisNo.map(
+                                (chassisNoT) => (
+                                  <h5 key={chassisNoT}>{chassisNoT}</h5>
+                                )
+                              )}
+                            </TableCell>
+                          </TableRow>
+                        ))
+                      : ""}
                   </TableBody>
                 </Table>
               </TableContainer>

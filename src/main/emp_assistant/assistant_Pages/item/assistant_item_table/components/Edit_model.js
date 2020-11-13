@@ -323,7 +323,7 @@ export default function Edit_model({
                                                         "Item updated!",
                                                         "Done"
                                                       );
-                                                      // editModalClose();
+                                                      editModalClose();
                                                     })
                                                     .catch(function (error) {
                                                       setLoadingSubmit(false);

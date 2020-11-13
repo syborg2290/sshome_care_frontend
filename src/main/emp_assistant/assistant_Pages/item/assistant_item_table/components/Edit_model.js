@@ -23,11 +23,7 @@ const { TextArea } = Input;
 export default function Edit_model({
   itemNameProp,
   brandProp,
-  modelNoProp,
-  serialNoProp,
-  chassisNoProp,
   colorProp,
-  qtyProp,
   cashpriceProp,
   salepriceProp,
   noOfInstallmentsProp,

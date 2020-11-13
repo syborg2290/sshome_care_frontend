@@ -219,24 +219,6 @@ export default function Item_table_assistant() {
         }),
       },
     },
-    // {
-    //   name: "Serial no",
-    //   options: {
-    //     filter: true,
-    //     setCellHeaderProps: (value) => ({
-    //       style: { fontSize: "15px", color: "black", fontWeight: "600" },
-    //     }),
-    //   },
-    // },
-    // {
-    //   name: "Model no",
-    //   options: {
-    //     filter: true,
-    //     setCellHeaderProps: (value) => ({
-    //       style: { fontSize: "15px", color: "black", fontWeight: "600" },
-    //     }),
-    //   },
-    // },
     {
       name: "Sale price(LKR)",
       options: {
@@ -362,7 +344,7 @@ export default function Item_table_assistant() {
                       : " - "}{" "}
                   </span>
                 </Col>
-                <Col span={12}>MODEL NO</Col>
+                {/* <Col span={12}>MODEL NO</Col>
                 <Col span={12}>
                   <span className="load_Item">
                     {" "}
@@ -381,7 +363,7 @@ export default function Item_table_assistant() {
                       ? allTtemData[currentIndx].data.serialNo
                       : " - "}{" "}
                   </span>
-                </Col>
+                </Col> */}
                 <Col span={12}>SALE PRICE(LKR)</Col>
                 <Col span={12}>
                   <span className="load_Item">
@@ -400,7 +382,7 @@ export default function Item_table_assistant() {
                     )}{" "}
                   </span>
                 </Col>
-                <Col span={12}>CHASSIS NO</Col>
+                {/* <Col span={12}>CHASSIS NO</Col>
                 <Col span={12}>
                   <span className="load_Item">
                     {" "}
@@ -409,7 +391,7 @@ export default function Item_table_assistant() {
                       ? allTtemData[currentIndx].data.chassisNo
                       : " - "}{" "}
                   </span>
-                </Col>
+                </Col> */}
                 <Col span={12}>CASH PRICE(LKR)</Col>
                 <Col span={12}>
                   <span className="load_Item">

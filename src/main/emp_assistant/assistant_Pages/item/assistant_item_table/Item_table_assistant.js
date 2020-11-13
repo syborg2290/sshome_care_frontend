@@ -80,8 +80,8 @@ export default function Item_table_assistant() {
             element.data().itemName,
             element.data().brand,
             element.data().qty,
-            element.data().serialNo,
-            element.data().modelNo,
+            // element.data().serialNo,
+            // element.data().modelNo,
             <CurrencyFormat
               value={element.data().salePrice}
               displayType={"text"}
@@ -201,24 +201,24 @@ export default function Item_table_assistant() {
         }),
       },
     },
-    {
-      name: "Serial no",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
-    {
-      name: "Model no",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
+    // {
+    //   name: "Serial no",
+    //   options: {
+    //     filter: true,
+    //     setCellHeaderProps: (value) => ({
+    //       style: { fontSize: "15px", color: "black", fontWeight: "600" },
+    //     }),
+    //   },
+    // },
+    // {
+    //   name: "Model no",
+    //   options: {
+    //     filter: true,
+    //     setCellHeaderProps: (value) => ({
+    //       style: { fontSize: "15px", color: "black", fontWeight: "600" },
+    //     }),
+    //   },
+    // },
     {
       name: "Sale price(LKR)",
       options: {

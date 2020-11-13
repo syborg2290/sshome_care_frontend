@@ -159,7 +159,7 @@ export default function Add_Item() {
             if (
               Object.keys(inputsModelNo).length === 0 ||
               Object.keys(inputsModelNo).length !==
-                Object.keys(inputsSerialNo).length
+                Object.keys(inputsSerialNo).length ||  modelNosList.includes("")
             ) {
               NotificationManager.info(
                 "Item model number is required!",
@@ -169,7 +169,7 @@ export default function Add_Item() {
               if (
                 Object.keys(inputsSerialNo).length === 0 ||
                 Object.keys(inputsModelNo).length !==
-                  Object.keys(inputsSerialNo).length
+                  Object.keys(inputsSerialNo).length ||  serialNosList.includes("")
               ) {
                 NotificationManager.info(
                   "Item Serial number is required!",

@@ -42,7 +42,6 @@ export default function Add_Item() {
   const [inputsChassisNo, setInputsChassisNo] = useState({});
   const [isInAlreadySerial, setIsInAlreadySerial] = useState(false);
   const [isInAlreadyModel, setIsInAlreadyModel] = useState(false);
- 
 
   //add InputSerial No
   const addInputSerialNo = () => {
@@ -52,7 +51,26 @@ export default function Add_Item() {
     });
   };
   const handleChangeAddSerialNoInputs = (e, i) => {
-    setInputsSerialNo({ ...inputsSerialNo, [i]: e.target.value });
+    const { value } = e.target;
+
+    db.collection("serail_no")
+      .get()
+      .then((re) => {
+        if (re.docs.length > 0) {
+          if (re.docs[0].data().serail_no.some((ob) => ob === value)) {
+            delete inputsSerialNo[i];
+            setInputsSerialNo({ ...inputsSerialNo });
+            NotificationManager.info(
+              "Item serial number must be unique !",
+              "Remember validations"
+            );
+          } else {
+            setInputsSerialNo({ ...inputsSerialNo, [i]: value });
+          }
+        } else {
+          setInputsSerialNo({ ...inputsSerialNo, [i]: value });
+        }
+      });
   };
 
   //add InputModel No
@@ -115,19 +133,15 @@ export default function Add_Item() {
     let modelNosList = [];
     let serialNosList = [];
     let chassisNosList = [];
-    
 
     for (var k = 0; k < Object.keys(inputsSerialNo).length; k++) {
-      chassisNosList.push(
-        inputsChassisNo[k] === "" ? "" : inputsChassisNo[k]
-      );
+      chassisNosList.push(inputsChassisNo[k] === "" ? "" : inputsChassisNo[k]);
       db.collection("item")
         .where("modelNo", "==", inputsModelNo[k])
         .get()
         .then((reModel) => {
           if (reModel.docs.length > 0) {
             setIsInAlreadyModel(true);
-            
           }
         });
       db.collection("item")
@@ -143,7 +157,7 @@ export default function Add_Item() {
     }
 
     if (serialNosList.length >= Object.keys(inputsSerialNo).length) {
-      if (isInAlreadySerial || isInAlreadyModel) {
+      if (isInAlreadySerial && isInAlreadyModel) {
         NotificationManager.info(
           "Item serial no & model no must be unique !",
           "Remember validations"
@@ -355,14 +369,16 @@ export default function Add_Item() {
                                                       newArray[0].data()
                                                         .chassisNo
                                                     );
-                                                    let variable = {
+
+                                                    let variable2 = {
                                                       itemName: itemName.trim(),
                                                       brand: brand.trim(),
-                                                      modelNo: modelNoNewList,
-                                                      serialNo: serialNoNewList,
-                                                      chassisNo: chassisNoNewList,
+                                                      modelNo: modelNosList,
+                                                      serialNo: serialNosList,
+                                                      chassisNo: chassisNosList,
                                                       color: color.trim(),
-                                                      qty: serialNoNewList.length,
+                                                      qty:
+                                                        serialNoNewList.length,
                                                       cashPrice: Math.round(
                                                         cashPrice
                                                       ),
@@ -395,7 +411,37 @@ export default function Add_Item() {
                                                       .collection(
                                                         "item_history"
                                                       )
-                                                      .add(variable);
+                                                      .add(variable2);
+                                                    db.collection("serail_no")
+                                                      .get()
+                                                      .then((reSerial) => {
+                                                        if (
+                                                          reSerial.docs.length >
+                                                          0
+                                                        ) {
+                                                          let reSerialChange = reSerial.docs[0]
+                                                            .data()
+                                                            .serail_no.concat(
+                                                              serialNosList
+                                                            );
+                                                          db.collection(
+                                                            "serail_no"
+                                                          )
+                                                            .doc(
+                                                              reSerial.docs[0]
+                                                                .id
+                                                            )
+                                                            .update({
+                                                              serail_no: reSerialChange,
+                                                            });
+                                                        } else {
+                                                          db.collection(
+                                                            "serail_no"
+                                                          ).add({
+                                                            serail_no: serialNosList,
+                                                          });
+                                                        }
+                                                      });
 
                                                     await db
                                                       .collection("item")
@@ -407,6 +453,9 @@ export default function Add_Item() {
                                                               .qty
                                                           ) +
                                                           serialNosList.length,
+                                                        modelNo: modelNoNewList,
+                                                        serialNo: serialNoNewList,
+                                                        chassisNo: chassisNoNewList,
                                                       })
                                                       .then(function (docRef) {
                                                         setLoadingSubmit(false);
@@ -467,6 +516,37 @@ export default function Add_Item() {
                                                         "item_history"
                                                       )
                                                       .add(variable);
+
+                                                    db.collection("serail_no")
+                                                      .get()
+                                                      .then((reSerial) => {
+                                                        if (
+                                                          reSerial.docs.length >
+                                                          0
+                                                        ) {
+                                                          let reSerialChange = reSerial.docs[0]
+                                                            .data()
+                                                            .serail_no.concat(
+                                                              serialNosList
+                                                            );
+                                                          db.collection(
+                                                            "serail_no"
+                                                          )
+                                                            .doc(
+                                                              reSerial.docs[0]
+                                                                .id
+                                                            )
+                                                            .update({
+                                                              serail_no: reSerialChange,
+                                                            });
+                                                        } else {
+                                                          db.collection(
+                                                            "serail_no"
+                                                          ).add({
+                                                            serail_no: serialNosList,
+                                                          });
+                                                        }
+                                                      });
 
                                                     await db
                                                       .collection("item")
@@ -529,6 +609,35 @@ export default function Add_Item() {
                                                   await db
                                                     .collection("item_history")
                                                     .add(variable);
+
+                                                  db.collection("serail_no")
+                                                    .get()
+                                                    .then((reSerial) => {
+                                                      if (
+                                                        reSerial.docs.length > 0
+                                                      ) {
+                                                        let reSerialChange = reSerial.docs[0]
+                                                          .data()
+                                                          .serail_no.concat(
+                                                            serialNosList
+                                                          );
+                                                        db.collection(
+                                                          "serail_no"
+                                                        )
+                                                          .doc(
+                                                            reSerial.docs[0].id
+                                                          )
+                                                          .update({
+                                                            serail_no: reSerialChange,
+                                                          });
+                                                      } else {
+                                                        db.collection(
+                                                          "serail_no"
+                                                        ).add({
+                                                          serail_no: serialNosList,
+                                                        });
+                                                      }
+                                                    });
 
                                                   await db
                                                     .collection("item")

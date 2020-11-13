@@ -26,11 +26,7 @@ export default function Add_Item() {
   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const [itemName, setItemName] = useState("");
   const [brand, setBrand] = useState("");
-  const [modelNo, setModelNo] = useState("");
-  const [serialNo, setSerialNo] = useState("");
-  const [chassisNo, setChassisNo] = useState("");
   const [color, setColor] = useState("");
-  const [qty, setQty] = useState(1);
   const [cashPrice, setCashPrice] = useState(0);
   const [salePrice, setSalePrice] = useState(0);
   const [noOfInstallments, setNoOfInstallments] = useState(0);
@@ -45,31 +41,40 @@ export default function Add_Item() {
   const [inputsSerialNo, setInputsSerialNo] = useState({});
   const [inputsModelNo, setInputsModelNo] = useState({});
   const [inputsChassisNo, setInputsChassisNo] = useState({});
-  
-//add InputSerial No
+
+  //add InputSerial No
   const addInputSerialNo = () => {
-    setInputsSerialNo({ ...inputsSerialNo, [Object.keys(inputsSerialNo).length]: "" });
+    setInputsSerialNo({
+      ...inputsSerialNo,
+      [Object.keys(inputsSerialNo).length]: "",
+    });
   };
   const handleChangeAddSerialNoInputs = (e) => {
     setInputsSerialNo({ ...inputsSerialNo, [e.target.id]: e.target.value });
   };
 
-//add InputModel No
+  //add InputModel No
   const addInputModelNo = () => {
-    setInputsModelNo({ ...inputsModelNo, [Object.keys(inputsModelNo).length]: "" });
+    setInputsModelNo({
+      ...inputsModelNo,
+      [Object.keys(inputsModelNo).length]: "",
+    });
   };
   const handleChangeAddModelNoInputs = (e) => {
     setInputsModelNo({ ...inputsModelNo, [e.target.id]: e.target.value });
   };
 
   //add InputChassis No
-   const addInputChassisNo = () => {
-    setInputsChassisNo({ ...inputsChassisNo, [Object.keys(inputsChassisNo).length]: "" });
+  const addInputChassisNo = () => {
+    setInputsChassisNo({
+      ...inputsChassisNo,
+      [Object.keys(inputsChassisNo).length]: "",
+    });
   };
   const handleChangeAddChassisNoInputs = (e) => {
     setInputsChassisNo({ ...inputsChassisNo, [e.target.id]: e.target.value });
   };
-//
+  //
 
   const [guarantee, setGuarantee] = useState({
     value: "Years",
@@ -78,12 +83,7 @@ export default function Add_Item() {
   const valuesInitialState = () => {
     setItemName("");
     setBrand("");
-    setModelNo("");
-    setSerialNo("");
-    setSerialNo("");
-    setChassisNo("");
     setColor("");
-    setQty(1);
     setCashPrice(0);
     setSalePrice(0);
     setNoOfInstallments(0);
@@ -107,71 +107,102 @@ export default function Add_Item() {
 
   const addItem = async (e) => {
     e.preventDefault();
-    
+    let modelNosList = [];
+    let serialNosList = [];
+    let chassisNosList = [];
+    let isInAlreadySerial = false;
+    let isInAlreadyModel = false;
 
-    if (itemName === "") {
-      NotificationManager.info(
-        "Item name is required!",
-        "Remember validations"
+    for (var k = 0; k < Object.keys(inputsSerialNo).length; k++) {
+      chassisNosList.push(
+        inputsChassisNo[k] === null ? null : inputsChassisNo[k]
       );
-    } else {
-      if (brand === "") {
+      db.collection("item")
+        .where("modelNo", "==", inputsModelNo[k])
+        .get()
+        .then((reModel) => {
+          if (reModel.docs.length > 0) {
+            isInAlreadyModel = true;
+          }
+        });
+      db.collection("item")
+        .where("serialNo", "==", inputsSerialNo[k])
+        .get()
+        .then((reSeril) => {
+          if (reSeril.docs.length > 0) {
+            isInAlreadySerial = true;
+          }
+        });
+      modelNosList.push(inputsModelNo[k]);
+      serialNosList.push(inputsSerialNo[k]);
+    }
+
+    if (serialNosList.length === Object.keys(inputsSerialNo).length) {
+      if (isInAlreadySerial || isInAlreadyModel) {
         NotificationManager.info(
-          "Item brand is required!",
+          "Item serial no & model no must be unique !",
           "Remember validations"
         );
       } else {
-        if (modelNo === "") {
+        if (itemName === "") {
           NotificationManager.info(
-            "Item model number is required!",
+            "Item name is required!",
             "Remember validations"
           );
         } else {
-          if (serialNo === "") {
+          if (brand === "") {
             NotificationManager.info(
-              "Item Serial number is required!",
+              "Item brand is required!",
               "Remember validations"
             );
           } else {
-            if (color === "") {
+            if (
+              Object.keys(inputsModelNo).length === 0 ||
+              Object.keys(inputsModelNo).length !==
+                Object.keys(inputsSerialNo).length
+            ) {
               NotificationManager.info(
-                "Item color is required!",
+                "Item model number is required!",
                 "Remember validations"
               );
             } else {
-              if (qty === "") {
+              if (
+                Object.keys(inputsSerialNo).length === 0 ||
+                Object.keys(inputsModelNo).length !==
+                  Object.keys(inputsSerialNo).length
+              ) {
                 NotificationManager.info(
-                  "Qty is required!",
+                  "Item Serial number is required!",
                   "Remember validations"
                 );
               } else {
-                if (cashPrice === "") {
+                if (color === "") {
                   NotificationManager.info(
-                    "Item cash price is required!",
+                    "Item color is required!",
                     "Remember validations"
                   );
                 } else {
-                  if (salePrice === "") {
+                  if (cashPrice === "") {
                     NotificationManager.info(
-                      "Item sale price is required!",
+                      "Item cash price is required!",
                       "Remember validations"
                     );
                   } else {
-                    if (noOfInstallments === "") {
+                    if (salePrice === "") {
                       NotificationManager.info(
-                        "Number of installment is required!",
+                        "Item sale price is required!",
                         "Remember validations"
                       );
                     } else {
-                      if (amountPerInstallment === "") {
+                      if (noOfInstallments === "") {
                         NotificationManager.info(
-                          "Amount per installment is required!",
+                          "Number of installment is required!",
                           "Remember validations"
                         );
                       } else {
-                        if (noOfInstallments === "") {
+                        if (amountPerInstallment === "") {
                           NotificationManager.info(
-                            "Number of installment is required!",
+                            "Amount per installment is required!",
                             "Remember validations"
                           );
                         } else {
@@ -193,297 +224,127 @@ export default function Add_Item() {
                                   "Remember validations"
                                 );
                               } else {
-                                if (qty < 1) {
+                                if (cashPrice < 0) {
                                   NotificationManager.info(
-                                    "Qty must be greater than 0",
+                                    "Check again the amount of cash price",
                                     "Remember validations"
                                   );
                                 } else {
-                                  if (cashPrice < 0) {
+                                  if (salePrice < 0) {
                                     NotificationManager.info(
-                                      "Check again the amount of cash price",
+                                      "Check again the amount of sale price",
                                       "Remember validations"
                                     );
                                   } else {
-                                    if (salePrice < 0) {
+                                    if (noOfInstallments < 0) {
                                       NotificationManager.info(
-                                        "Check again the amount of sale price",
+                                        "Check again the value of installments value",
                                         "Remember validations"
                                       );
                                     } else {
-                                      if (noOfInstallments < 0) {
+                                      if (amountPerInstallment < 0) {
                                         NotificationManager.info(
-                                          "Check again the value of installments value",
+                                          "Check again the amount per installment",
                                           "Remember validations"
                                         );
                                       } else {
-                                        if (amountPerInstallment < 0) {
+                                        if (downPayment < 0) {
                                           NotificationManager.info(
-                                            "Check again the amount per installment",
+                                            "Check again the amount of down payment",
                                             "Remember validations"
                                           );
                                         } else {
-                                          if (downPayment < 0) {
+                                          if (guaranteePeriod < 0) {
                                             NotificationManager.info(
-                                              "Check again the amount of down payment",
+                                              "Check again the value of gurantee period",
                                               "Remember validations"
                                             );
                                           } else {
-                                            if (guaranteePeriod < 0) {
+                                            if (discount < 0) {
                                               NotificationManager.info(
-                                                "Check again the value of gurantee period",
+                                                "Check again the amount of discount",
                                                 "Remember validations"
                                               );
                                             } else {
-                                              if (discount < 0) {
-                                                NotificationManager.info(
-                                                  "Check again the amount of discount",
-                                                  "Remember validations"
-                                                );
-                                              } else {
-                                                //Rest of code here
-                                                setLoadingSubmit(true);
+                                              //Rest of code here
+                                              setLoadingSubmit(true);
 
-                                                var value =
-                                                  Math.round(salePrice) -
-                                                  Math.round(downPayment);
-                                                var inst = returnInstallmentCount(
-                                                  value
-                                                );
+                                              var value =
+                                                Math.round(salePrice) -
+                                                Math.round(downPayment);
+                                              var inst = returnInstallmentCount(
+                                                value
+                                              );
 
-                                                var allItems = await db
-                                                  .collection("item")
-                                                  .get();
-                                                if (allItems) {
-                                                  if (
-                                                    allItems.docs.some(
-                                                      (ob) =>
-                                                        ob.data().itemName ===
-                                                          itemName.trim() &&
-                                                        ob.data().brand ===
-                                                          brand.trim() &&
-                                                       
-                                                        ob.data().color ===
-                                                          color.trim() &&
-                                                        ob.data().cashPrice ===
-                                                          Math.round(
-                                                            cashPrice
-                                                          ) &&
-                                                        ob.data().salePrice ===
-                                                          Math.round(
-                                                            salePrice
-                                                          ) &&
-                                                        ob.data()
-                                                          .noOfInstallments ===
-                                                          Math.round(inst) &&
-                                                        ob.data()
-                                                          .amountPerInstallment ===
-                                                          Math.round(
-                                                            amountPerInstallment
-                                                          ) &&
-                                                        ob.data()
-                                                          .downPayment ===
-                                                          Math.round(
-                                                            downPayment
-                                                          ) &&
-                                                        ob.data().discount ===
-                                                          Math.round(discount)
-                                                    )
-                                                  ) {
-                                                    var newArray = allItems.docs.filter(
-                                                      (ob) =>
-                                                        ob.data().itemName ===
-                                                          itemName.trim() &&
-                                                        ob.data().brand ===
-                                                          brand.trim() &&
-                                                      
-                                                        ob.data().color ===
-                                                          color.trim() &&
-                                                        ob.data().cashPrice ===
-                                                          Math.round(
-                                                            cashPrice
-                                                          ) &&
-                                                        ob.data().salePrice ===
-                                                          Math.round(
-                                                            salePrice
-                                                          ) &&
-                                                        ob.data()
-                                                          .noOfInstallments ===
-                                                          Math.round(inst) &&
-                                                        ob.data()
-                                                          .amountPerInstallment ===
-                                                          Math.round(
-                                                            amountPerInstallment
-                                                          ) &&
-                                                        ob.data()
-                                                          .downPayment ===
-                                                          Math.round(
-                                                            downPayment
-                                                          ) &&
-                                                        ob.data().discount ===
-                                                          Math.round(discount)
-                                                    );
-                                                    if (newArray) {
-                                                      
-                                                      let variable = {
-                                                        itemName: itemName.trim(),
-                                                        brand: brand.trim(),
-                                                        modelNo: modelNo.trim(),
-                                                        serialNo: serialNo.trim(),
-                                                        chassisNo: chassisNo.trim(),
-                                                        color: color.trim(),
-                                                        qty: Math.round(qty),
-                                                        cashPrice: Math.round(
-                                                          cashPrice
-                                                        ),
-                                                        salePrice: Math.round(
-                                                          salePrice
-                                                        ),
-                                                        noOfInstallments: Math.round(
-                                                          inst
-                                                        ),
-                                                        amountPerInstallment: Math.round(
+                                              var allItems = await db
+                                                .collection("item")
+                                                .get();
+                                              if (allItems) {
+                                                if (
+                                                  allItems.docs.some(
+                                                    (ob) =>
+                                                      ob.data().itemName ===
+                                                        itemName.trim() &&
+                                                      ob.data().brand ===
+                                                        brand.trim() &&
+                                                      ob.data().color ===
+                                                        color.trim() &&
+                                                      ob.data().cashPrice ===
+                                                        Math.round(cashPrice) &&
+                                                      ob.data().salePrice ===
+                                                        Math.round(salePrice) &&
+                                                      ob.data()
+                                                        .noOfInstallments ===
+                                                        Math.round(inst) &&
+                                                      ob.data()
+                                                        .amountPerInstallment ===
+                                                        Math.round(
                                                           amountPerInstallment
-                                                        ),
-                                                        downPayment: Math.round(
+                                                        ) &&
+                                                      ob.data().downPayment ===
+                                                        Math.round(
                                                           downPayment
-                                                        ),
-                                                        guaranteePeriod: Math.round(
-                                                          guaranteePeriod
-                                                        ),
-                                                        discount: Math.round(
-                                                          discount
-                                                        ),
-                                                        description: description,
-                                                        cInvoiceNo: cInvoiceNo.trim(),
-                                                        GCardNo: GCardNo.trim(),
-                                                        guarantee: guarantee,
-                                                        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                                                      };
-
-                                                      await db
-                                                        .collection(
-                                                          "item_history"
-                                                        )
-                                                        .add(variable);
-
-                                                      await db
-                                                        .collection("item")
-                                                        .doc(newArray[0].id)
-                                                        .update({
-                                                          qty:
-                                                            Math.round(
-                                                              newArray[0].data()
-                                                                .qty
-                                                            ) + Math.round(qty),
-                                                        })
-                                                        .then(function (
-                                                          docRef
-                                                        ) {
-                                                          setLoadingSubmit(
-                                                            false
-                                                          );
-                                                          valuesInitialState();
-                                                          NotificationManager.success(
-                                                            "Item creation successfully!",
-                                                            "Done"
-                                                          );
-                                                        })
-                                                        .catch(function (
-                                                          error
-                                                        ) {
-                                                          setLoadingSubmit(
-                                                            false
-                                                          );
-                                                          NotificationManager.warning(
-                                                            "Failed to make the item!",
-                                                            "Please try again"
-                                                          );
-                                                        });
-                                                    }
-                                                  } else {
-                                                    if (inst) {
-                                      
-                                                      let variable = {
-                                                        itemName: itemName.trim(),
-                                                        brand: brand.trim(),
-                                                        modelNo: modelNo.trim(),
-                                                        serialNo: serialNo.trim(),
-                                                        chassisNo: chassisNo.trim(),
-                                                        color: color.trim(),
-                                                        qty: Math.round(qty),
-                                                        cashPrice: Math.round(
-                                                          cashPrice
-                                                        ),
-                                                        salePrice: Math.round(
-                                                          salePrice
-                                                        ),
-                                                        noOfInstallments: Math.round(
-                                                          inst
-                                                        ),
-                                                        amountPerInstallment: Math.round(
+                                                        ) &&
+                                                      ob.data().discount ===
+                                                        Math.round(discount)
+                                                  )
+                                                ) {
+                                                  var newArray = allItems.docs.filter(
+                                                    (ob) =>
+                                                      ob.data().itemName ===
+                                                        itemName.trim() &&
+                                                      ob.data().brand ===
+                                                        brand.trim() &&
+                                                      ob.data().color ===
+                                                        color.trim() &&
+                                                      ob.data().cashPrice ===
+                                                        Math.round(cashPrice) &&
+                                                      ob.data().salePrice ===
+                                                        Math.round(salePrice) &&
+                                                      ob.data()
+                                                        .noOfInstallments ===
+                                                        Math.round(inst) &&
+                                                      ob.data()
+                                                        .amountPerInstallment ===
+                                                        Math.round(
                                                           amountPerInstallment
-                                                        ),
-                                                        downPayment: Math.round(
+                                                        ) &&
+                                                      ob.data().downPayment ===
+                                                        Math.round(
                                                           downPayment
-                                                        ),
-                                                        guaranteePeriod: Math.round(
-                                                          guaranteePeriod
-                                                        ),
-                                                        discount: Math.round(
-                                                          discount
-                                                        ),
-                                                        description: description,
-                                                        cInvoiceNo: cInvoiceNo.trim(),
-                                                        GCardNo: GCardNo.trim(),
-                                                        guarantee: guarantee,
-                                                        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                                                      };
-
-                                                      await db
-                                                        .collection(
-                                                          "item_history"
-                                                        )
-                                                        .add(variable);
-
-                                                      await db
-                                                        .collection("item")
-                                                        .add(variable)
-                                                        .then(function (
-                                                          docRef
-                                                        ) {
-                                                          setLoadingSubmit(
-                                                            false
-                                                          );
-                                                          valuesInitialState();
-                                                          NotificationManager.success(
-                                                            "Item creation successfully!",
-                                                            "Done"
-                                                          );
-                                                        })
-                                                        .catch(function (
-                                                          error
-                                                        ) {
-                                                          setLoadingSubmit(
-                                                            false
-                                                          );
-                                                          NotificationManager.warning(
-                                                            "Failed to make the item!",
-                                                            "Please try again"
-                                                          );
-                                                        });
-                                                    }
-                                                  }
-                                                } else {
-                                                  if (inst) {
+                                                        ) &&
+                                                      ob.data().discount ===
+                                                        Math.round(discount)
+                                                  );
+                                                  if (newArray) {
                                                     let variable = {
                                                       itemName: itemName.trim(),
                                                       brand: brand.trim(),
-                                                      modelNo: modelNo.trim(),
-                                                      serialNo: serialNo.trim(),
-                                                      chassisNo: chassisNo.trim(),
+                                                      modelNo: modelNosList,
+                                                      serialNo: serialNosList,
+                                                      chassisNo: chassisNosList,
                                                       color: color.trim(),
-                                                      qty: Math.round(qty),
+                                                      qty: serialNosList.length,
                                                       cashPrice: Math.round(
                                                         cashPrice
                                                       ),
@@ -513,6 +374,83 @@ export default function Add_Item() {
                                                     };
 
                                                     await db
+                                                      .collection(
+                                                        "item_history"
+                                                      )
+                                                      .add(variable);
+
+                                                    await db
+                                                      .collection("item")
+                                                      .doc(newArray[0].id)
+                                                      .update({
+                                                        qty:
+                                                          Math.round(
+                                                            newArray[0].data()
+                                                              .qty
+                                                          ) +
+                                                          serialNosList.length,
+                                                      })
+                                                      .then(function (docRef) {
+                                                        setLoadingSubmit(false);
+                                                        valuesInitialState();
+                                                        NotificationManager.success(
+                                                          "Item creation successfully!",
+                                                          "Done"
+                                                        );
+                                                      })
+                                                      .catch(function (error) {
+                                                        setLoadingSubmit(false);
+                                                        NotificationManager.warning(
+                                                          "Failed to make the item!",
+                                                          "Please try again"
+                                                        );
+                                                      });
+                                                  }
+                                                } else {
+                                                  if (inst) {
+                                                    let variable = {
+                                                      itemName: itemName.trim(),
+                                                      brand: brand.trim(),
+                                                      modelNo: modelNosList,
+                                                      serialNo: serialNosList,
+                                                      chassisNo: chassisNosList,
+                                                      color: color.trim(),
+                                                      qty: serialNosList.length,
+                                                      cashPrice: Math.round(
+                                                        cashPrice
+                                                      ),
+                                                      salePrice: Math.round(
+                                                        salePrice
+                                                      ),
+                                                      noOfInstallments: Math.round(
+                                                        inst
+                                                      ),
+                                                      amountPerInstallment: Math.round(
+                                                        amountPerInstallment
+                                                      ),
+                                                      downPayment: Math.round(
+                                                        downPayment
+                                                      ),
+                                                      guaranteePeriod: Math.round(
+                                                        guaranteePeriod
+                                                      ),
+                                                      discount: Math.round(
+                                                        discount
+                                                      ),
+                                                      description: description,
+                                                      cInvoiceNo: cInvoiceNo.trim(),
+                                                      GCardNo: GCardNo.trim(),
+                                                      guarantee: guarantee,
+                                                      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                                                    };
+
+                                                    await db
+                                                      .collection(
+                                                        "item_history"
+                                                      )
+                                                      .add(variable);
+
+                                                    await db
                                                       .collection("item")
                                                       .add(variable)
                                                       .then(function (docRef) {
@@ -531,6 +469,63 @@ export default function Add_Item() {
                                                         );
                                                       });
                                                   }
+                                                }
+                                              } else {
+                                                if (inst) {
+                                                  let variable = {
+                                                    itemName: itemName.trim(),
+                                                    brand: brand.trim(),
+                                                    modelNo: modelNosList,
+                                                    serialNo: serialNosList,
+                                                    chassisNo: chassisNosList,
+                                                    color: color.trim(),
+                                                    qty: serialNosList.length,
+                                                    cashPrice: Math.round(
+                                                      cashPrice
+                                                    ),
+                                                    salePrice: Math.round(
+                                                      salePrice
+                                                    ),
+                                                    noOfInstallments: Math.round(
+                                                      inst
+                                                    ),
+                                                    amountPerInstallment: Math.round(
+                                                      amountPerInstallment
+                                                    ),
+                                                    downPayment: Math.round(
+                                                      downPayment
+                                                    ),
+                                                    guaranteePeriod: Math.round(
+                                                      guaranteePeriod
+                                                    ),
+                                                    discount: Math.round(
+                                                      discount
+                                                    ),
+                                                    description: description,
+                                                    cInvoiceNo: cInvoiceNo.trim(),
+                                                    GCardNo: GCardNo.trim(),
+                                                    guarantee: guarantee,
+                                                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                                                  };
+
+                                                  await db
+                                                    .collection("item")
+                                                    .add(variable)
+                                                    .then(function (docRef) {
+                                                      setLoadingSubmit(false);
+                                                      valuesInitialState();
+                                                      NotificationManager.success(
+                                                        "Item creation successfully!",
+                                                        "Done"
+                                                      );
+                                                    })
+                                                    .catch(function (error) {
+                                                      setLoadingSubmit(false);
+                                                      NotificationManager.warning(
+                                                        "Failed to make the item!",
+                                                        "Please try again"
+                                                      );
+                                                    });
                                                 }
                                               }
                                             }
@@ -638,508 +633,474 @@ export default function Add_Item() {
     }
   };
 
-
- 
-
   return (
     <>
-    <Container component="main" className="main_container">
-      <Typography className="titles" variant="h5" gutterBottom>
-        Add New Item
-      </Typography>
-      <Grid item xs={12} sm={2}>
-        <hr className="titles_hr" />
-      </Grid>
-      <div className="paper">
-        <form className="form" noValidate>
-          <Grid container spacing={2}>
-            <Grid className="txt_Labels" item xs={12} sm={2}>
-              * Item Name
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <TextField
-                className="txtt_nic"
-                autoComplete="iname"
-                name="iname"
-                variant="outlined"
-                required={true}
-                value={itemName}
-                fullWidth
-                id="iname"
-                onChange={(e) => {
-                  setItemName(e.target.value);
-                }}
-                label="Name of Item"
-                autoFocus
-                size="small"
-              />
-            </Grid>
-            <Grid className="txt_Labels" item xs={12} sm={2}>
-              * Brand
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <TextField
-                className="txtt_nic"
-                autoComplete="brand"
-                name="brand"
-                variant="outlined"
-                fullWidth
-                id="brand"
-                required={true}
-                value={brand}
-                onChange={(e) => {
-                  setBrand(e.target.value);
-                }}
-                label="Brand of Item"
-                size="small"
-              />
-            </Grid>
- 
-            <Grid className="txt_Labels" item xs={12} sm={2}>
-              * Color
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <TextField
-                className="txtt_nic"
-                autoComplete="color"
-                name="color"
-                variant="outlined"
-                fullWidth
-                id="color"
-                required={true}
-                value={color}
-                onChange={(e) => {
-                  setColor(e.target.value);
-                }}
-                label="color of Item"
-                size="small"
-              />
-            </Grid>
-            {/* <Grid className="txt_Labels" item xs={12} sm={2}>
-              * Qty
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <TextField
-                className="txtt_nic"
-                autoComplete="qty"
-                name="qty"
-                InputProps={{ inputProps: { min: 1 } }}
-                type="number"
-                variant="outlined"
-                fullWidth
-                id="qty"
-                required={true}
-                value={qty}
-                onChange={(e) => {
-                  setQty(e.target.value);
-                }}
-                label="Item Qty"
-                size="small"
-              />
-            </Grid> */}
-            <Grid className="txt_Labels" item xs={12} sm={2}>
-              * Cash price (LKR)
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <TextField
-                className="txtt_nic"
-                autoComplete="cPrice"
-                name="cPrice"
-                InputProps={{ inputProps: { min: 1 } }}
-                type="number"
-                variant="outlined"
-                fullWidth
-                id="cPrice"
-                required={true}
-                value={cashPrice}
-                onChange={(e) => {
-                  setCashPrice(e.target.value);
-                }}
-                label="Cash Price of Item"
-                size="small"
-              />
-            </Grid>
-            <Grid className="txt_Labels" item xs={12} sm={2}>
-              * Sale Price (LKR)
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <TextField
-                className="txtt_nic"
-                autoComplete="sPrice"
-                name="sPrice"
-                type="number"
-                InputProps={{ inputProps: { min: 0 } }}
-                variant="outlined"
-                fullWidth
-                id="sPrice"
-                required={true}
-                value={salePrice}
-                onChange={(e) => {
-                  if (e.target.value.length === 0) {
-                    setNoOfInstallments(0);
-                  } else {
-                    if (e.target.value === downPayment) {
-                      setNoOfInstallments(0);
-                    } else {
-                      if (e.target.value === 0) {
-                        setNoOfInstallments(0);
-                      } else {
-                        if (downPayment > 0 && downPayment < e.target.value) {
-                          setInstallmentCount(e.target.value - downPayment);
-                        } else {
-                          setNoOfInstallments(0);
-                        }
-                      }
-                    }
-                  }
-
-                  setSalePrice(e.target.value);
-                }}
-                label="sale Price"
-                size="small"
-              />
-            </Grid>
-            <Grid className="txt_Labels" item xs={12} sm={2}>
-              * Down Payment (LKR)
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <TextField
-                className="txtt_nic"
-                disabled={salePrice > 0 ? false : true}
-                autoComplete="dPayment"
-                name="dPayment"
-                InputProps={{ inputProps: { min: 0 } }}
-                type="number"
-                variant="outlined"
-                fullWidth
-                id="dPayment"
-                required={true}
-                value={downPayment}
-                onChange={(e) => {
-                  if (e.target.value.length === 0) {
-                    setNoOfInstallments(0);
-                  } else {
-                    if (e.target.value === salePrice) {
-                      setNoOfInstallments(0);
-                    } else {
-                      if (e.target.value === 0) {
-                        setNoOfInstallments(0);
-                      } else {
-                        if (e.target.value > 0) {
-                          setInstallmentCount(salePrice - e.target.value);
-                        } else {
-                          setNoOfInstallments(0);
-                        }
-                      }
-                    }
-                  }
-
-                  setDownPayment(e.target.value);
-                }}
-                label="Down payment"
-                size="small"
-              />
-            </Grid>
-            <Grid className="txt_Labels" item xs={12} sm={2}>
-              * No Of Installments
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <TextField
-                className="txtt_nic"
-                disabled={salePrice > 0 ? false : true}
-                autoComplete="nInstallments"
-                name="nInstallments"
-                type="number"
-                variant="outlined"
-                InputProps={{ inputProps: { min: 0 } }}
-                fullWidth
-                id="nInstallments"
-                required={true}
-                value={noOfInstallments}
-                onChange={(e) => {
-                  setNoOfInstallments(e.target.value);
-                }}
-                label="Installments"
-                size="small"
-              />
-            </Grid>
-            <Grid className="txt_Labels" item xs={12} sm={2}>
-              * Amount Per Installment (LKR)
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <TextField
-                className="txtt_nic"
-                autoComplete="aPerInstallments"
-                disabled={salePrice > 0 ? false : true}
-                name="aPerInstallments"
-                type="number"
-                variant="outlined"
-                InputProps={{ inputProps: { min: 0 } }}
-                fullWidth
-                id="aPerInstallments"
-                required={true}
-                value={amountPerInstallment}
-                onChange={(e) => {
-                  setAmountPerInstallment(e.target.value);
-                }}
-                label="Installments Amount"
-                size="small"
-              />
-            </Grid>
-            <Grid className="txt_Labels" item xs={12} sm={2}>
-              * Guarantee Months / Years
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <Radio.Group onChange={radioOnChange} value={guarantee.value}>
-                <Radio value={"Years"}>Years</Radio>
-                <Radio value={"Months"}>Months</Radio>
-              </Radio.Group>
-            </Grid>
-            <Grid className="txt_Labels" item xs={12} sm={2}>
-              * Guarantee Period
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <TextField
-                className="txtt_nic"
-                autoComplete="gPeriod"
-                name="gPeriod"
-                type="number"
-                variant="outlined"
-                InputProps={{ inputProps: { min: 0 } }}
-                fullWidth
-                id="gPeriod"
-                required={true}
-                value={guaranteePeriod}
-                onChange={(e) => {
-                  setGuaranteePeriod(e.target.value);
-                }}
-                label="Guarantee"
-                size="small"
-              />
-            </Grid>
-
-            <Grid className="txt_Labels" item xs={12} sm={2}>
-              * Discount (LKR)
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <TextField
-                className="txtt_nic"
-                disabled={salePrice > 0 ? false : true}
-                type="number"
-                InputProps={{ inputProps: { min: 0 } }}
-                variant="outlined"
-                fullWidth
-                value={discount}
-                onChange={(e) => {
-                  setDiscount(e.target.value);
-                }}
-                label="Discount"
-                size="small"
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}></Grid>
-            <Grid className="txt_Labels" item xs={12} sm={2}>
-              Description :
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                className="txt_rHofdfme"
-                autoComplete="description"
-                name="description"
-                variant="outlined"
-                multiline
-                rows={6}
-                fullWidth
-                id="description"
-                label="About Item"
-                size="small"
-                value={description}
-                onChange={(e) => {
-                  setDescription(e.target.value);
-                }}
-              />
-            </Grid>
-            <Grid className="txt_Labels" item xs={12} sm={4}></Grid>
-
-            <Grid className="txt_Labels" item xs={12} sm={2}>
-              * Company Invoice No
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <TextField
-                className="txtt_nic"
-                autoComplete="cInvoiceNo"
-                variant="outlined"
-                fullWidth
-                id="cInvoiceNo"
-                required={true}
-                value={cInvoiceNo}
-                onChange={(e) => {
-                  setCInvoiceNo(e.target.value);
-                }}
-                label="Compny Invoice"
-                size="small"
-              />
-            </Grid>
-
-            <Grid className="txt_Labels" item xs={12} sm={2}>
-              * Guarantee Card No
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <TextField
-                className="txtt_nic"
-                autoComplete="gCardNo"
-                name="gCardNo"
-                variant="outlined"
-                fullWidth
-                id="gCardNo"
-                required={true}
-                value={GCardNo}
-                onChange={(e) => {
-                  setGCardNo(e.target.value);
-                }}
-                label="Guarantee No"
-                size="small"
-              />
+      <Container component="main" className="main_container">
+        <Typography className="titles" variant="h5" gutterBottom>
+          Add New Item
+        </Typography>
+        <Grid item xs={12} sm={2}>
+          <hr className="titles_hr" />
+        </Grid>
+        <div className="paper">
+          <form className="form" noValidate>
+            <Grid container spacing={2}>
+              <Grid className="txt_Labels" item xs={12} sm={2}>
+                * Item Name
+              </Grid>
+              <Grid item xs={12} sm={4}>
+                <TextField
+                  className="txtt_nic"
+                  autoComplete="iname"
+                  name="iname"
+                  variant="outlined"
+                  required={true}
+                  value={itemName}
+                  fullWidth
+                  id="iname"
+                  onChange={(e) => {
+                    setItemName(e.target.value);
+                  }}
+                  label="Name of Item"
+                  autoFocus
+                  size="small"
+                />
+              </Grid>
+              <Grid className="txt_Labels" item xs={12} sm={2}>
+                * Brand
+              </Grid>
+              <Grid item xs={12} sm={4}>
+                <TextField
+                  className="txtt_nic"
+                  autoComplete="brand"
+                  name="brand"
+                  variant="outlined"
+                  fullWidth
+                  id="brand"
+                  required={true}
+                  value={brand}
+                  onChange={(e) => {
+                    setBrand(e.target.value);
+                  }}
+                  label="Brand of Item"
+                  size="small"
+                />
               </Grid>
 
-               <Grid item xs={12} sm={2}>
-                  <Button className="serialNo_add" onClick={addInputChassisNo}>
+              <Grid className="txt_Labels" item xs={12} sm={2}>
+                * Color
+              </Grid>
+              <Grid item xs={12} sm={4}>
+                <TextField
+                  className="txtt_nic"
+                  autoComplete="color"
+                  name="color"
+                  variant="outlined"
+                  fullWidth
+                  id="color"
+                  required={true}
+                  value={color}
+                  onChange={(e) => {
+                    setColor(e.target.value);
+                  }}
+                  label="color of Item"
+                  size="small"
+                />
+              </Grid>
+
+              <Grid className="txt_Labels" item xs={12} sm={2}>
+                * Cash price (LKR)
+              </Grid>
+              <Grid item xs={12} sm={4}>
+                <TextField
+                  className="txtt_nic"
+                  autoComplete="cPrice"
+                  name="cPrice"
+                  InputProps={{ inputProps: { min: 1 } }}
+                  type="number"
+                  variant="outlined"
+                  fullWidth
+                  id="cPrice"
+                  required={true}
+                  value={cashPrice}
+                  onChange={(e) => {
+                    setCashPrice(e.target.value);
+                  }}
+                  label="Cash Price of Item"
+                  size="small"
+                />
+              </Grid>
+              <Grid className="txt_Labels" item xs={12} sm={2}>
+                * Sale Price (LKR)
+              </Grid>
+              <Grid item xs={12} sm={4}>
+                <TextField
+                  className="txtt_nic"
+                  autoComplete="sPrice"
+                  name="sPrice"
+                  type="number"
+                  InputProps={{ inputProps: { min: 0 } }}
+                  variant="outlined"
+                  fullWidth
+                  id="sPrice"
+                  required={true}
+                  value={salePrice}
+                  onChange={(e) => {
+                    if (e.target.value.length === 0) {
+                      setNoOfInstallments(0);
+                    } else {
+                      if (e.target.value === downPayment) {
+                        setNoOfInstallments(0);
+                      } else {
+                        if (e.target.value === 0) {
+                          setNoOfInstallments(0);
+                        } else {
+                          if (downPayment > 0 && downPayment < e.target.value) {
+                            setInstallmentCount(e.target.value - downPayment);
+                          } else {
+                            setNoOfInstallments(0);
+                          }
+                        }
+                      }
+                    }
+
+                    setSalePrice(e.target.value);
+                  }}
+                  label="sale Price"
+                  size="small"
+                />
+              </Grid>
+              <Grid className="txt_Labels" item xs={12} sm={2}>
+                * Down Payment (LKR)
+              </Grid>
+              <Grid item xs={12} sm={4}>
+                <TextField
+                  className="txtt_nic"
+                  disabled={salePrice > 0 ? false : true}
+                  autoComplete="dPayment"
+                  name="dPayment"
+                  InputProps={{ inputProps: { min: 0 } }}
+                  type="number"
+                  variant="outlined"
+                  fullWidth
+                  id="dPayment"
+                  required={true}
+                  value={downPayment}
+                  onChange={(e) => {
+                    if (e.target.value.length === 0) {
+                      setNoOfInstallments(0);
+                    } else {
+                      if (e.target.value === salePrice) {
+                        setNoOfInstallments(0);
+                      } else {
+                        if (e.target.value === 0) {
+                          setNoOfInstallments(0);
+                        } else {
+                          if (e.target.value > 0) {
+                            setInstallmentCount(salePrice - e.target.value);
+                          } else {
+                            setNoOfInstallments(0);
+                          }
+                        }
+                      }
+                    }
+
+                    setDownPayment(e.target.value);
+                  }}
+                  label="Down payment"
+                  size="small"
+                />
+              </Grid>
+              <Grid className="txt_Labels" item xs={12} sm={2}>
+                * No Of Installments
+              </Grid>
+              <Grid item xs={12} sm={4}>
+                <TextField
+                  className="txtt_nic"
+                  disabled={salePrice > 0 ? false : true}
+                  autoComplete="nInstallments"
+                  name="nInstallments"
+                  type="number"
+                  variant="outlined"
+                  InputProps={{ inputProps: { min: 0 } }}
+                  fullWidth
+                  id="nInstallments"
+                  required={true}
+                  value={noOfInstallments}
+                  onChange={(e) => {
+                    setNoOfInstallments(e.target.value);
+                  }}
+                  label="Installments"
+                  size="small"
+                />
+              </Grid>
+              <Grid className="txt_Labels" item xs={12} sm={2}>
+                * Amount Per Installment (LKR)
+              </Grid>
+              <Grid item xs={12} sm={4}>
+                <TextField
+                  className="txtt_nic"
+                  autoComplete="aPerInstallments"
+                  disabled={salePrice > 0 ? false : true}
+                  name="aPerInstallments"
+                  type="number"
+                  variant="outlined"
+                  InputProps={{ inputProps: { min: 0 } }}
+                  fullWidth
+                  id="aPerInstallments"
+                  required={true}
+                  value={amountPerInstallment}
+                  onChange={(e) => {
+                    setAmountPerInstallment(e.target.value);
+                  }}
+                  label="Installments Amount"
+                  size="small"
+                />
+              </Grid>
+              <Grid className="txt_Labels" item xs={12} sm={2}>
+                * Guarantee Months / Years
+              </Grid>
+              <Grid item xs={12} sm={4}>
+                <Radio.Group onChange={radioOnChange} value={guarantee.value}>
+                  <Radio value={"Years"}>Years</Radio>
+                  <Radio value={"Months"}>Months</Radio>
+                </Radio.Group>
+              </Grid>
+              <Grid className="txt_Labels" item xs={12} sm={2}>
+                * Guarantee Period
+              </Grid>
+              <Grid item xs={12} sm={4}>
+                <TextField
+                  className="txtt_nic"
+                  autoComplete="gPeriod"
+                  name="gPeriod"
+                  type="number"
+                  variant="outlined"
+                  InputProps={{ inputProps: { min: 0 } }}
+                  fullWidth
+                  id="gPeriod"
+                  required={true}
+                  value={guaranteePeriod}
+                  onChange={(e) => {
+                    setGuaranteePeriod(e.target.value);
+                  }}
+                  label="Guarantee"
+                  size="small"
+                />
+              </Grid>
+
+              <Grid className="txt_Labels" item xs={12} sm={2}>
+                * Discount (LKR)
+              </Grid>
+              <Grid item xs={12} sm={4}>
+                <TextField
+                  className="txtt_nic"
+                  disabled={salePrice > 0 ? false : true}
+                  type="number"
+                  InputProps={{ inputProps: { min: 0 } }}
+                  variant="outlined"
+                  fullWidth
+                  value={discount}
+                  onChange={(e) => {
+                    setDiscount(e.target.value);
+                  }}
+                  label="Discount"
+                  size="small"
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}></Grid>
+              <Grid className="txt_Labels" item xs={12} sm={2}>
+                Description :
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  className="txt_rHofdfme"
+                  autoComplete="description"
+                  name="description"
+                  variant="outlined"
+                  multiline
+                  rows={6}
+                  fullWidth
+                  id="description"
+                  label="About Item"
+                  size="small"
+                  value={description}
+                  onChange={(e) => {
+                    setDescription(e.target.value);
+                  }}
+                />
+              </Grid>
+              <Grid className="txt_Labels" item xs={12} sm={4}></Grid>
+
+              <Grid className="txt_Labels" item xs={12} sm={2}>
+                * Company Invoice No
+              </Grid>
+              <Grid item xs={12} sm={4}>
+                <TextField
+                  className="txtt_nic"
+                  autoComplete="cInvoiceNo"
+                  variant="outlined"
+                  fullWidth
+                  id="cInvoiceNo"
+                  required={true}
+                  value={cInvoiceNo}
+                  onChange={(e) => {
+                    setCInvoiceNo(e.target.value);
+                  }}
+                  label="Compny Invoice"
+                  size="small"
+                />
+              </Grid>
+
+              <Grid className="txt_Labels" item xs={12} sm={2}>
+                * Guarantee Card No
+              </Grid>
+              <Grid item xs={12} sm={4}>
+                <TextField
+                  className="txtt_nic"
+                  autoComplete="gCardNo"
+                  name="gCardNo"
+                  variant="outlined"
+                  fullWidth
+                  id="gCardNo"
+                  required={true}
+                  value={GCardNo}
+                  onChange={(e) => {
+                    setGCardNo(e.target.value);
+                  }}
+                  label="Guarantee No"
+                  size="small"
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={2}>
+                <Button className="serialNo_add" onClick={addInputChassisNo}>
                   Chassis Numbers
-                    <PlusOutlined className="reltion_addIcon" />
-              </Button>
+                  <PlusOutlined className="reltion_addIcon" />
+                </Button>
               </Grid>
-                 <Grid item xs={12} sm={6}>
-                  {Object.keys(inputsChassisNo).map((i) => (
-                    <div key={i + 1}>
-                      <TextField
-                        key={i + 2}
-                        id={i.toString()}
-                        className="txt_input"
-                        autoComplete="chassisNo"
-                        name="chassisNo"
-                        variant="outlined"
-                       
-                        id="chassisNo"
-                          label="xxy-54091"
-                        size="small" 
-                        required={true}
-                        value={chassisNo}
-                        onChange={handleChangeAddChassisNoInputs}
-                       
-                      />
+              <Grid item xs={12} sm={6}>
+                {Object.keys(inputsChassisNo).map((i) => (
+                  <div key={i + 1}>
+                    <TextField
+                      key={i + 2}
+                      id={i.toString()}
+                      className="txt_input"
+                      autoComplete="chassisNo"
+                      name="chassisNo"
+                      variant="outlined"
+                      id="chassisNo"
+                      label="xxy-54091"
+                      size="small"
+                      required={true}
+                      onChange={handleChangeAddChassisNoInputs}
+                    />
 
-                      <MinusCircleOutlined
-                        key={i + 3}
-                        className="rmov_iconss"
-                        onClick={() => {
-                          delete inputsChassisNo[i];
-                          setInputsChassisNo({ ...inputsChassisNo });
-                        }}
-                      />
-                    </div>
-                  ))}
-                </Grid>
-            <Grid className="txt_Labels" item xs={12} sm={4}></Grid>
-
-
-                <Grid item xs={12} sm={2}>
-                  <Button className="serialNo_add" onClick={addInputSerialNo}>
-                   Serial Numbers
-                    <PlusOutlined className="reltion_addIcon" />
-              </Button>
+                    <MinusCircleOutlined
+                      key={i + 3}
+                      className="rmov_iconss"
+                      onClick={() => {
+                        delete inputsChassisNo[i];
+                        setInputsChassisNo({ ...inputsChassisNo });
+                      }}
+                    />
+                  </div>
+                ))}
               </Grid>
-                 <Grid item xs={12} sm={6}>
-                  {Object.keys(inputsSerialNo).map((i) => (
-                    <div key={i + 1}>
-                      <TextField
-                        key={i + 2}
-                        id={i.toString()}
-                         className="txt_input"
-                         autoComplete="serialNo"
-                         name="serialNo"
-                         variant="outlined"
-                         id="serialNo"
-                         required={true}
-                        value={serialNo}
-                        label="xx-20097"
-                        size="small" 
-                        onChange={handleChangeAddSerialNoInputs}
-                       
-                      />
+              <Grid className="txt_Labels" item xs={12} sm={4}></Grid>
 
-                      <MinusCircleOutlined
-                        key={i + 3}
-                        className="rmov_iconss"
-                        onClick={() => {
-                          delete inputsSerialNo[i];
-                          setInputsSerialNo({ ...inputsSerialNo });
-                        }}
-                      />
-                    </div>
-                  ))}
-                </Grid>
-            <Grid className="txt_Labels" item xs={12} sm={4}></Grid>
-              
-
-                <Grid item xs={12} sm={2}>
-                  <Button className="serialNo_add" onClick={addInputModelNo}>
-                 Model Numbers
-                    <PlusOutlined className="reltion_addIcon" />
-              </Button>
+              <Grid item xs={12} sm={2}>
+                <Button className="serialNo_add" onClick={addInputSerialNo}>
+                  Serial Numbers
+                  <PlusOutlined className="reltion_addIcon" />
+                </Button>
               </Grid>
-                 <Grid item xs={12} sm={6}>
-                  {Object.keys(inputsModelNo).map((i) => (
-                    <div key={i + 1}>
-                     
-                      <TextField
-                        key={i + 2}
-                        id={i.toString()}
-                         className="txt_input"
-                        autoComplete="modelNo"
-                        name="modelNo"
-                        variant="outlined"
-                        id="modelNo"
-                        label="xx 0091"
-                        size="small" 
-                        required={true}
-                        value={modelNo}
-                        onChange={handleChangeAddModelNoInputs}
-                       
-                      />
+              <Grid item xs={12} sm={6}>
+                {Object.keys(inputsSerialNo).map((i) => (
+                  <div key={i + 1}>
+                    <TextField
+                      key={i + 2}
+                      id={i.toString()}
+                      className="txt_input"
+                      autoComplete="serialNo"
+                      name="serialNo"
+                      variant="outlined"
+                      id="serialNo"
+                      required={true}
+                      label="xx-20097"
+                      size="small"
+                      onChange={handleChangeAddSerialNoInputs}
+                    />
 
-                      <MinusCircleOutlined
-                        key={i + 3}
-                        className="rmov_iconss"
-                        onClick={() => {
-                          delete inputsModelNo[i];
-                          setInputsModelNo({ ...inputsModelNo });
-                        }}
-                      />
-                    </div>
-                  ))}
-                </Grid>
-            <Grid className="txt_Labels" item xs={12} sm={4}></Grid>
- 
-            <Grid className="txt_Labels" item xs={12} sm={8}></Grid>
-            <Grid className="txt_Labels" item xs={12} sm={4}>
-              <Button
-                disabled={!loadingSubmit ? false : true}
-                className="btnAdd"
-                type="primary"
-                onClick={addItem}
-              >
-                {loadingSubmit ? (
-                  <Spin spinning={loadingSubmit} size="large" />
-                ) : (
-                  "Submit"
-                )}
-              </Button>
+                    <MinusCircleOutlined
+                      key={i + 3}
+                      className="rmov_iconss"
+                      onClick={() => {
+                        delete inputsSerialNo[i];
+                        setInputsSerialNo({ ...inputsSerialNo });
+                      }}
+                    />
+                  </div>
+                ))}
+              </Grid>
+              <Grid className="txt_Labels" item xs={12} sm={4}></Grid>
+
+              <Grid item xs={12} sm={2}>
+                <Button className="serialNo_add" onClick={addInputModelNo}>
+                  Model Numbers
+                  <PlusOutlined className="reltion_addIcon" />
+                </Button>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                {Object.keys(inputsModelNo).map((i) => (
+                  <div key={i + 1}>
+                    <TextField
+                      key={i + 2}
+                      id={i.toString()}
+                      className="txt_input"
+                      autoComplete="modelNo"
+                      name="modelNo"
+                      variant="outlined"
+                      id="modelNo"
+                      label="xx 0091"
+                      size="small"
+                      required={true}
+                      onChange={handleChangeAddModelNoInputs}
+                    />
+
+                    <MinusCircleOutlined
+                      key={i + 3}
+                      className="rmov_iconss"
+                      onClick={() => {
+                        delete inputsModelNo[i];
+                        setInputsModelNo({ ...inputsModelNo });
+                      }}
+                    />
+                  </div>
+                ))}
+              </Grid>
+              <Grid className="txt_Labels" item xs={12} sm={4}></Grid>
+
+              <Grid className="txt_Labels" item xs={12} sm={8}></Grid>
+              <Grid className="txt_Labels" item xs={12} sm={4}>
+                <Button
+                  disabled={!loadingSubmit ? false : true}
+                  className="btnAdd"
+                  type="primary"
+                  onClick={addItem}
+                >
+                  {loadingSubmit ? (
+                    <Spin spinning={loadingSubmit} size="large" />
+                  ) : (
+                    "Submit"
+                  )}
+                </Button>
+              </Grid>
             </Grid>
-          </Grid>
-        </form>
-      </div>
-      <NotificationContainer />
-    </Container>
+          </form>
+        </div>
+        <NotificationContainer />
+      </Container>
     </>
   );
 }

@@ -111,12 +111,12 @@ export default function Edit_model({
     let modelNosList = [];
     let serialNosList = [];
     let chassisNosList = [];
-    let isInAlreadySerial = false;
-    let isInAlreadyModel = false;
+    var isInAlreadySerial = false;
+    var isInAlreadyModel = false;
 
     for (var k = 0; k < Object.keys(inputsSerialNo).length; k++) {
       chassisNosList.push(
-        inputsChassisNo[k] === null ? null : inputsChassisNo[k]
+        inputsChassisNo[k] === "" ? "" : inputsChassisNo[k]
       );
       db.collection("item")
         .where("modelNo", "==", inputsModelNo[k])

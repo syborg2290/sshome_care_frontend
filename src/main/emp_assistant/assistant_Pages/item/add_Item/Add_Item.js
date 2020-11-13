@@ -51,18 +51,24 @@ export default function Add_Item() {
     });
   };
   const handleChangeAddSerialNoInputs = (e, i) => {
+    const { value } = e.target;
+
     db.collection("serail_no")
       .get()
       .then((re) => {
-        if (re.docs[0].data().serail_no.some((ob) => ob === e.target.value)) {
-          delete inputsSerialNo[i];
-          setInputsSerialNo({ ...inputsSerialNo });
-          NotificationManager.info(
-            "Item serial number must be unique !",
-            "Remember validations"
-          );
+        if (re.docs.length > 0) {
+          if (re.docs[0].data().serail_no.some((ob) => ob === value)) {
+            delete inputsSerialNo[i];
+            setInputsSerialNo({ ...inputsSerialNo });
+            NotificationManager.info(
+              "Item serial number must be unique !",
+              "Remember validations"
+            );
+          } else {
+            setInputsSerialNo({ ...inputsSerialNo, [i]: value });
+          }
         } else {
-          setInputsSerialNo({ ...inputsSerialNo, [i]: e.target.value });
+          setInputsSerialNo({ ...inputsSerialNo, [i]: value });
         }
       });
   };

@@ -23,11 +23,7 @@ const { TextArea } = Input;
 export default function Edit_model({
   itemNameProp,
   brandProp,
-  modelNoProp,
-  serialNoProp,
-  chassisNoProp,
   colorProp,
-  qtyProp,
   cashpriceProp,
   salepriceProp,
   noOfInstallmentsProp,
@@ -77,7 +73,7 @@ export default function Edit_model({
       [Object.keys(inputsSerialNo).length]: "",
     });
   };
-  const handleChangeAddSerialNoInputs = (e,i) => {
+  const handleChangeAddSerialNoInputs = (e, i) => {
     setInputsSerialNo({ ...inputsSerialNo, [i]: e.target.value });
   };
 
@@ -88,7 +84,7 @@ export default function Edit_model({
       [Object.keys(inputsModelNo).length]: "",
     });
   };
-  const handleChangeAddModelNoInputs = (e,i) => {
+  const handleChangeAddModelNoInputs = (e, i) => {
     setInputsModelNo({ ...inputsModelNo, [i]: e.target.value });
   };
 
@@ -99,7 +95,7 @@ export default function Edit_model({
       [Object.keys(inputsChassisNo).length]: "",
     });
   };
-  const handleChangeAddChassisNoInputs = (e,i) => {
+  const handleChangeAddChassisNoInputs = (e, i) => {
     setInputsChassisNo({ ...inputsChassisNo, [i]: e.target.value });
   };
   //
@@ -157,13 +153,15 @@ export default function Edit_model({
           } else {
             if (
               Object.keys(inputsModelNo).length !==
-              Object.keys(inputsSerialNo).length
+                Object.keys(inputsSerialNo).length ||
+              modelNosList.includes("")
             ) {
               setValidation("Item model number is required!");
             } else {
               if (
                 Object.keys(inputsModelNo).length !==
-                Object.keys(inputsSerialNo).length
+                  Object.keys(inputsSerialNo).length ||
+                serialNosList.includes("")
               ) {
                 setValidation("Item Serial number is required!");
               } else {
@@ -237,12 +235,21 @@ export default function Edit_model({
                                                   .doc(docId)
                                                   .get()
                                                   .then((docRe) => {
+                                                    let modelNoNewList = modelNosList.concat(
+                                                      docRe.data().modelNo
+                                                    );
+                                                    let serialNoNewList = serialNosList.concat(
+                                                      docRe.data().serialNo
+                                                    );
+                                                    let chassisNoNewList = chassisNosList.concat(
+                                                      docRe.data().chassisNo
+                                                    );
                                                     let variable = {
                                                       itemName: itemName,
                                                       brand: brand,
-                                                      modelNo: modelNosList,
-                                                      serialNo: serialNosList,
-                                                      chassisNo: chassisNosList,
+                                                      modelNo: modelNoNewList,
+                                                      serialNo: serialNoNewList,
+                                                      chassisNo: chassisNoNewList,
                                                       color: color,
                                                       qty:
                                                         Math.round(
@@ -492,7 +499,7 @@ export default function Edit_model({
                         allowClear
                         key={i + 2}
                         id={i.toString()}
-                        onChange={(e)=>handleChangeAddChassisNoInputs(e,i)}
+                        onChange={(e) => handleChangeAddChassisNoInputs(e, i)}
                         placeholder="xxx-chas"
                         end="true"
                       />
@@ -529,7 +536,7 @@ export default function Edit_model({
                         key={i + 2}
                         id={i.toString()}
                         placeholder="xxx-serial"
-                        onChange={(e)=>handleChangeAddSerialNoInputs(e,i)}
+                        onChange={(e) => handleChangeAddSerialNoInputs(e, i)}
                       />
 
                       <MinusCircleOutlined
@@ -563,7 +570,7 @@ export default function Edit_model({
                         key={i + 2}
                         id={i.toString()}
                         placeholder="xxx-model"
-                        onChange={(e)=>handleChangeAddModelNoInputs(e,i)}
+                        onChange={(e) => handleChangeAddModelNoInputs(e, i)}
                       />
 
                       <MinusCircleOutlined

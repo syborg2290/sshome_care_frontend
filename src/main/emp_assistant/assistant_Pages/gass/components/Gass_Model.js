@@ -78,6 +78,29 @@ export default function Gass_Model() {
   const handleChangeType = (event) => {
     setSelectedType(event.target.value);
   };
+  
+    const submit = () => {
+    db.collection("gas")
+      .where("weight", "==", selectedWeight)
+      .get()
+      .then((reSe) => {
+        db.collection("gas_purchase_history").add({
+          date: saveTimestamp,
+          weight: selectedWeight,
+          type: selectedType,
+          price: total,
+          qty: qty,
+        });
+        db.collection("gas")
+          .doc(reSe.docs[0].id)
+          .update({
+            qty: reSe.docs[0].data().qty - qty,
+          });
+      })
+      .then((_) => {
+        window.location.reload();
+      });
+  };
 
   const showConfirm = () => {
     if (qty === 0) {
@@ -142,32 +165,7 @@ export default function Gass_Model() {
     }
   };
 
-  const submit = () => {
-    if (selectedWeight === "Select a weight") {
-      setValidation("Select a weight");
-    } else {
-      db.collection("gas")
-        .where("weight", "==", selectedWeight)
-        .get()
-        .then((reSe) => {
-          db.collection("gas_purchase_history").add({
-            date: saveTimestamp,
-            weight: selectedWeight,
-            type: selectedType,
-            price: total,
-            qty: qty,
-          });
-          db.collection("gas")
-            .doc(reSe.docs[0].id)
-            .update({
-              qty: reSe.docs[0].data().qty - qty,
-            });
-        })
-        .then((_) => {
-          window.location.reload();
-        });
-    }
-  };
+
 
   return (
     <Container component="main" className="conctainefr_main">

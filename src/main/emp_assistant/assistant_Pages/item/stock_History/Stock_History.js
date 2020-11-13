@@ -24,7 +24,6 @@ export default function Stock_History() {
   const [itemTableData, setItemTableData] = useState([]);
   // eslint-disable-next-line
   const [allTtemData, setAllItemData] = useState([]);
-
   const [visible, setVisible] = useState(false);
   const [currentIndx, setCurrentIndx] = useState(0);
   const [itemListSeMo, SetItemListSeMo] = useState([]);
@@ -40,8 +39,10 @@ export default function Stock_History() {
         var newData = [];
         var itemData = [];
         var itemDataSeMo = [];
+        
 
         snapshot.docs.forEach((element) => {
+         
           itemData.push({
             id: element.id,
             data: element.data(),
@@ -53,23 +54,27 @@ export default function Stock_History() {
             chassisNo: element.data().chassisNo,
           });
 
-          newData.push([
-            element.data().itemName,
-            element.data().brand,
-            element.data().qty,
-            <CurrencyFormat
-              value={element.data().cashPrice}
-              displayType={"text"}
-              thousandSeparator={true}
-              prefix={" "}
-            />,
-            moment(element.data()?.timestamp?.toDate()).format(
+          newData.push({
+            Item_name: element.data().itemName,
+            Brand: element.data().brand,
+            Qty: element.data().qty,
+            Cash_price: (
+              <CurrencyFormat
+                value={element.data().cashPrice}
+                displayType={"text"}
+                thousandSeparator={true}
+                prefix={" "}
+              />
+            ),
+            Date: moment(element.data()?.timestamp?.toDate()).format(
               "dddd, MMMM Do YYYY"
             ),
-            <div className="table_icon">
-              <VisibilityIcon onClick={showModal} />
-            </div>,
-          ]);
+            Action: (
+              <div className="table_icon">
+                <VisibilityIcon onClick={showModal} />
+              </div>
+            ),
+          });
         });
         setItemTableData(newData);
         setAllItemData(itemData);
@@ -80,7 +85,7 @@ export default function Stock_History() {
 
   const columns = [
     {
-      name: "Item name",
+      name: "Item_name",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -408,7 +413,7 @@ export default function Stock_History() {
       <Grid className="tbl_Container" container spacing={4}>
         <Grid item xs={12}>
           <MUIDataTable
-            title={<span className="title_Span">All Items</span>}
+            title={<span className="title_Span">Stcok history</span>}
             className="item_table"
             data={itemTableData}
             columns={columns}
@@ -422,7 +427,6 @@ export default function Stock_History() {
               searchPlaceholder: "Search using any field",
               elevation: 4,
               sort: true,
-
               selectableRowsHeader: false,
               onRowClick: (rowData, rowMeta) => {
                 setCurrentIndx(rowMeta.dataIndex);

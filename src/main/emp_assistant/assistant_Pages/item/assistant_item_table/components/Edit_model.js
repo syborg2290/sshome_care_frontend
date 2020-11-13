@@ -456,7 +456,6 @@ export default function Edit_model({
              <Grid  item xs={12} sm={7}>
                   {Object.keys(inputsChassisNo).map((i) => (
                     <div key={i + 1}>
-                       
                        <Form.Item>
                         <Input
                           className="finput"
@@ -464,7 +463,7 @@ export default function Edit_model({
                         key={i + 2}
                         id={i.toString()}     
                           onChange={handleChangeAddChassisNoInputs}
-                          end
+                          end="true"
                        
                       />
                      

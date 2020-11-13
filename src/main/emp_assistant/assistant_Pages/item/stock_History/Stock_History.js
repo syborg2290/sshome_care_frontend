@@ -26,7 +26,8 @@ export default function Stock_History() {
   const [allTtemData, setAllItemData] = useState([]);
   const [visible, setVisible] = useState(false);
   const [currentIndx, setCurrentIndx] = useState(0);
-  const [itemListSeMo, SetItemListSeMo] = useState([]);
+  const [itemListSeMo, setItemListSeMo] = useState([]);
+  const [itemListSeMoCon, setItemListSeMoCon] = useState([]);
 
   const showModal = () => {
     setVisible(true);
@@ -39,10 +40,16 @@ export default function Stock_History() {
         var newData = [];
         var itemData = [];
         var itemDataSeMo = [];
-        
+        var itemDataSeMoCon = [];
+        if (snapshot.docs.length > 0) {
+          itemDataSeMoCon.push({
+            serialNo: snapshot.docs[0].data().serialNo,
+            modelNo: snapshot.docs[0].modelNo,
+            chassisNo: snapshot.docs[0].chassisNo,
+          });
+        }
 
         snapshot.docs.forEach((element) => {
-         
           itemData.push({
             id: element.id,
             data: element.data(),
@@ -78,7 +85,8 @@ export default function Stock_History() {
         });
         setItemTableData(newData);
         setAllItemData(itemData);
-        SetItemListSeMo(itemDataSeMo);
+        setItemListSeMoCon(itemDataSeMoCon);
+        setItemListSeMo(itemDataSeMo);
       });
     // eslint-disable-next-line
   }, []);
@@ -383,22 +391,26 @@ export default function Stock_History() {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {itemListSeMo.map((row) => (
-                      <TableRow key={row.serialNo[0]}>
+                    {itemListSeMoCon.map((row) => (
+                      <TableRow key={0}>
                         <TableCell component="th" scope="row">
-                          {row.serialNo.map((serailNoT) => (
-                            <h5>{serailNoT}</h5>
-                          ))}
+                          {itemListSeMo[currentIndx].serialNo.map(
+                            (serailNoT) => (
+                              <h5>{serailNoT}</h5>
+                            )
+                          )}
                         </TableCell>
                         <TableCell component="th" scope="row">
-                          {row.modelNo.map((modelNoT) => (
+                          {itemListSeMo[currentIndx].modelNo.map((modelNoT) => (
                             <h5>{modelNoT}</h5>
                           ))}
                         </TableCell>
                         <TableCell component="th" scope="row">
-                          {row.chassisNo.map((chassisNoT) => (
-                            <h5>{chassisNoT}</h5>
-                          ))}
+                          {itemListSeMo[currentIndx].chassisNo.map(
+                            (chassisNoT) => (
+                              <h5>{chassisNoT}</h5>
+                            )
+                          )}
                         </TableCell>
                       </TableRow>
                     ))}

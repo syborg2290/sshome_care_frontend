@@ -66,8 +66,6 @@ export default function Edit_model({
   const [inputsSerialNo, setInputsSerialNo] = useState({});
   const [inputsModelNo, setInputsModelNo] = useState({});
   const [inputsChassisNo, setInputsChassisNo] = useState({});
-  const [isInAlreadySerial, setIsInAlreadySerial] = useState(false);
-  const [isInAlreadyModel, setIsInAlreadyModel] = useState(false);
 
   //add InputSerial No
   const addInputSerialNo = () => {
@@ -77,7 +75,20 @@ export default function Edit_model({
     });
   };
   const handleChangeAddSerialNoInputs = (e, i) => {
-    setInputsSerialNo({ ...inputsSerialNo, [i]: e.target.value });
+    db.collection("serail_no")
+      .get()
+      .then((re) => {
+        if (re.docs[0].data().serail_no.some((ob) => ob === e.target.value)) {
+           delete inputsSerialNo[i];
+                          setInputsSerialNo({ ...inputsSerialNo });
+           NotificationManager.info(
+          "Item serial number must be unique !",
+          "Remember validations"
+        );
+        } else {
+          setInputsSerialNo({ ...inputsSerialNo, [i]: e.target.value });
+        }
+      });
   };
 
   //add InputModel No
@@ -114,36 +125,16 @@ export default function Edit_model({
     let modelNosList = [];
     let serialNosList = [];
     let chassisNosList = [];
+    
 
     for (var k = 0; k < Object.keys(inputsSerialNo).length; k++) {
       chassisNosList.push(inputsChassisNo[k] === "" ? "" : inputsChassisNo[k]);
-      db.collection("item")
-        .where("modelNo", "==", inputsModelNo[k])
-        .get()
-        .then((reModel) => {
-          if (reModel.docs.length > 0) {
-            setIsInAlreadyModel(true);
-          }
-        });
-      db.collection("item")
-        .where("serialNo", "==", inputsSerialNo[k])
-        .get()
-        .then((reSeril) => {
-          if (reSeril.docs.length > 0) {
-            setIsInAlreadySerial(true);
-          }
-        });
       modelNosList.push(inputsModelNo[k]);
       serialNosList.push(inputsSerialNo[k]);
     }
 
     if (serialNosList.length >= Object.keys(inputsSerialNo).length) {
-      if (isInAlreadySerial || isInAlreadyModel) {
-        NotificationManager.info(
-          "Item serial no & model no must be unique !",
-          "Remember validations"
-        );
-      } else {
+     
         if (itemName === "") {
           setValidation("Item name is required!");
         } else {
@@ -269,21 +260,73 @@ export default function Edit_model({
                                                       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                                                     };
 
+                                                    let variable2 = {
+                                                      itemName: itemName,
+                                                      brand: brand,
+                                                      modelNo: modelNosList,
+                                                      serialNo: serialNosList,
+                                                      chassisNo: chassisNosList,
+                                                      color: color,
+                                                      qty: serialNosList.length,
+                                                      cashPrice: cashPrice,
+                                                      salePrice: salePrice,
+                                                      noOfInstallments: noOfInstallments,
+                                                      amountPerInstallment: amountPerInstallment,
+                                                      downPayment: downPayment,
+                                                      guaranteePeriod: guaranteePeriod,
+                                                      discount: discount,
+                                                      description: description,
+                                                      cInvoiceNo: cInvoiceNo,
+                                                      GCardNo: GCardNo,
+                                                      guarantee: guarantee,
+                                                      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                                                    };
+
                                                     db.collection("item")
                                                       .doc(docId)
                                                       .update(variable)
                                                       .then(function async(
                                                         docRef
                                                       ) {
-                                                        db.collection(
-                                                          "item_history"
-                                                        ).add(variable);
+                                                        if (
+                                                          serialNoNewList.length >
+                                                          0
+                                                        ) {
+                                                          db.collection(
+                                                            "item_history"
+                                                          ).add(variable2);
+                                                          db.collection(
+                                                            "serail_no"
+                                                          )
+                                                            .get()
+                                                            .then(
+                                                              (reSerial) => {
+                                                                let reSerialChange = reSerial.docs[0]
+                                                                  .data()
+                                                                  .serail_no.concat(
+                                                                    serialNosList
+                                                                  );
+                                                                db.collection(
+                                                                  "serail_no"
+                                                                )
+                                                                  .doc(
+                                                                    reSerial
+                                                                      .docs[0]
+                                                                      .id
+                                                                  )
+                                                                  .update({
+                                                                    serail_no: reSerialChange,
+                                                                  });
+                                                              }
+                                                            );
+                                                        }
+
                                                         setLoadingSubmit(false);
                                                         NotificationManager.success(
                                                           "Item updated!",
                                                           "Done"
                                                         );
-                                                        editModalClose();
+                                                        // editModalClose();
                                                       })
                                                       .catch(function (error) {
                                                         setLoadingSubmit(false);
@@ -313,7 +356,7 @@ export default function Edit_model({
             }
           }
         }
-      }
+      
     }
   };
 

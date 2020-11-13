@@ -54,11 +54,11 @@ export default function Item_table_assistant() {
   var [selectedItems, setSelectedItems] = useState([]);
 
   // eslint-disable-next-line
-  const [itemList, SetItemList] = useState([]);
+  const [itemList, setItemList] = useState([]);
 
-  const [itemListSeMo, SetItemListSeMo] = useState([]);
+  const [itemListSeMo, setItemListSeMo] = useState([]);
 
-  const [itemListSeMoCon, SetItemListSeMoCon] = useState([]);
+  const [itemListSeMoCon, setItemListSeMoCon] = useState([]);
 
   const showModal = () => {
     setVisible(true);
@@ -86,11 +86,13 @@ export default function Item_table_assistant() {
         var itemDataSeMo = [];
         var itemDataSeMoCon = [];
 
-        itemDataSeMoCon.push({
-          serialNo: snapshot.docs[0].data().serialNo,
-          modelNo: snapshot.docs[0].modelNo,
-          chassisNo: snapshot.docs[0].chassisNo,
-        });
+         if (snapshot.docs.length > 0) {
+          itemDataSeMoCon.push({
+            serialNo: snapshot.docs[0].data().serialNo,
+            modelNo: snapshot.docs[0].modelNo,
+            chassisNo: snapshot.docs[0].chassisNo,
+          });
+        }
         snapshot.docs.forEach((element) => {
           itemData.push({
             id: element.id,
@@ -148,8 +150,8 @@ export default function Item_table_assistant() {
         });
         setItemTableData(newData);
         setAllItemData(itemData);
-        SetItemListSeMo(itemDataSeMo);
-        SetItemListSeMoCon(itemDataSeMoCon);
+        setItemListSeMo(itemDataSeMo);
+        setItemListSeMoCon(itemDataSeMoCon);
         setIsLoading(false);
       });
     // eslint-disable-next-line
@@ -514,8 +516,8 @@ export default function Item_table_assistant() {
                     {" "}
                     <span className="colan">:</span>{" "}
                     {moment(
-                      allTtemData[currentIndx] && allTtemData[currentIndx].data
-                        ? allTtemData[currentIndx].data.timestamp.seconds * 1000
+                      allTtemData[currentIndx] && allTtemData[currentIndx]?.data
+                        ? allTtemData[currentIndx]?.data?.timestamp?.seconds * 1000
                         : " - "
                     ).format("dddd, MMMM Do YYYY, h:mm:ss a")}
                   </span>
@@ -545,19 +547,19 @@ export default function Item_table_assistant() {
                         <TableCell component="th" scope="row">
                           {itemListSeMo[currentIndx].serialNo.map(
                             (serailNoT) => (
-                              <h5>{serailNoT}</h5>
+                              <h5 key={serailNoT}>{serailNoT}</h5>
                             )
                           )}
                         </TableCell>
                         <TableCell component="th" scope="row">
                           {itemListSeMo[currentIndx].modelNo.map((modelNoT) => (
-                            <h5>{modelNoT}</h5>
+                            <h5 key={modelNoT}>{modelNoT}</h5>
                           ))}
                         </TableCell>
                         <TableCell component="th" scope="row">
                           {itemListSeMo[currentIndx].chassisNo.map(
                             (chassisNoT) => (
-                              <h5>{chassisNoT}</h5>
+                              <h5 key={chassisNoT}>{chassisNoT}</h5>
                             )
                           )}
                         </TableCell>

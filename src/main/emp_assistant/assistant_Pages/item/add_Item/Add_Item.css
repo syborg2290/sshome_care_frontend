@@ -109,3 +109,105 @@ h2 {
     margin-bottom: 40px;
   }
 }
+
+.serialNo_add {
+  margin-top: 10px !important;
+  background-color: rgba(1, 1, 78, 0.842) !important;
+  color: aliceblue !important;
+  border-radius: 6px !important;
+}
+
+.rmov_iconss {
+  margin-top: 20px !important;
+  padding-left: 20px !important;
+}
+
+.txt_input {
+  margin-top: 10px !important;
+}
+
+/* @media screen and (min-width: 320px) and (max-width: 533px) {
+  .rmov_iconss {
+    margin-top: -75px !important;
+    float: right !important;
+    margin-right: 10px !important;
+  }
+}
+
+@media screen and (min-width: 570px) and (max-width: 620px) {
+  .rmov_iconss {
+    margin-top: -75px !important;
+    float: right !important;
+    margin-right: 10px !important;
+  }
+}
+
+@media screen and (min-width: 534px) and (max-width: 570px) {
+  .rmov_iconss {
+    margin-top: -75px !important;
+    float: right !important;
+    margin-right: 10px !important;
+  }
+}
+
+@media screen and (min-width: 360px) and (max-width: 500px) {
+  .rmov_iconss {
+    margin-top: -75px !important;
+    float: right !important;
+    margin-right: 10px !important;
+  }
+}
+
+@media screen and (min-width: 395px) and (max-width: 655px) {
+  .rmov_iconss {
+    margin-top: -75px !important;
+    float: right !important;
+    margin-left: 80px !important;
+  }
+}
+
+@media screen and (min-width: 411px) and (max-width: 731px) {
+  .rmov_iconss {
+    margin-top: -75px !important;
+    float: right !important;
+    margin-left: 80px !important;
+  }
+}
+
+@media screen and (min-width: 500px) and (max-width: 530px) {
+  .rmov_iconss {
+    margin-top: -75px !important;
+    float: right !important;
+    margin-right: 20px !important;
+  }
+}
+
+@media screen and (min-width: 540px) and (max-width: 720px) {
+  .rmov_iconss {
+    float: right !important;
+    margin-left: 190px !important;
+  }
+} */
+
+/* @media screen and (min-width: 768px) and (max-width: 1024px) {
+  .rmov_iconss {
+    float: right !important;
+    margin-left: 140px !important;
+    margin-top: -40px !important;
+  }
+} */
+
+/* @media screen and (min-width: 800px) and (max-width: 1280px) {
+  .rmov_iconss {
+    float: right !important;
+    margin-left: 140px !important;
+    margin-top: -40px !important;
+  }
+}
+
+@media screen and (min-width: 1280px) {
+  .rmov_iconss {
+    margin-right: 90px !important;
+    margin-top: -40px !important;
+  }
+} */

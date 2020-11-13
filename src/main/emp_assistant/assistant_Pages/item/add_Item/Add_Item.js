@@ -12,6 +12,11 @@ import {
   NotificationManager,
 } from "react-notifications";
 import "react-notifications/lib/notifications.css";
+
+//icon
+import ClearOutlinedIcon from "@material-ui/icons/ClearOutlined";
+import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
+
 // styles
 import "./Add_Item.css";
 
@@ -36,6 +41,35 @@ export default function Add_Item() {
   const [description, setDescription] = useState("");
   const [cInvoiceNo, setCInvoiceNo] = useState("");
   const [GCardNo, setGCardNo] = useState("");
+
+  const [inputsSerialNo, setInputsSerialNo] = useState({});
+  const [inputsModelNo, setInputsModelNo] = useState({});
+  const [inputsChassisNo, setInputsChassisNo] = useState({});
+  
+//add InputSerial No
+  const addInputSerialNo = () => {
+    setInputsSerialNo({ ...inputsSerialNo, [Object.keys(inputsSerialNo).length]: "" });
+  };
+  const handleChangeAddSerialNoInputs = (e) => {
+    setInputsSerialNo({ ...inputsSerialNo, [e.target.id]: e.target.value });
+  };
+
+//add InputModel No
+  const addInputModelNo = () => {
+    setInputsModelNo({ ...inputsModelNo, [Object.keys(inputsModelNo).length]: "" });
+  };
+  const handleChangeAddModelNoInputs = (e) => {
+    setInputsModelNo({ ...inputsModelNo, [e.target.id]: e.target.value });
+  };
+
+  //add InputChassis No
+   const addInputChassisNo = () => {
+    setInputsChassisNo({ ...inputsChassisNo, [Object.keys(inputsChassisNo).length]: "" });
+  };
+  const handleChangeAddChassisNoInputs = (e) => {
+    setInputsChassisNo({ ...inputsChassisNo, [e.target.id]: e.target.value });
+  };
+//
 
   const [guarantee, setGuarantee] = useState({
     value: "Years",
@@ -604,7 +638,11 @@ export default function Add_Item() {
     }
   };
 
+
+ 
+
   return (
+    <>
     <Container component="main" className="main_container">
       <Typography className="titles" variant="h5" gutterBottom>
         Add New Item
@@ -656,68 +694,7 @@ export default function Add_Item() {
                 size="small"
               />
             </Grid>
-            <Grid className="txt_Labels" item xs={12} sm={2}>
-              * Model no
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <TextField
-                className="txtt_nic"
-                autoComplete="modelNo"
-                name="modelNo"
-                variant="outlined"
-                fullWidth
-                id="modelNo"
-                required={true}
-                value={modelNo}
-                onChange={(e) => {
-                  setModelNo(e.target.value);
-                }}
-                label="xx 0091"
-                size="small"
-              />
-            </Grid>
-
-            <Grid className="txt_Labels" item xs={12} sm={2}>
-              * Chassis no
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <TextField
-                className="txtt_nic"
-                autoComplete="chassisNo"
-                name="chassisNo"
-                variant="outlined"
-                fullWidth
-                id="chassisNo"
-                required={true}
-                value={chassisNo}
-                onChange={(e) => {
-                  setChassisNo(e.target.value);
-                }}
-                label="xx 0091"
-                size="small"
-              />
-            </Grid>
-            <Grid className="txt_Labels" item xs={12} sm={2}>
-              * Serial no
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <TextField
-                className="txtt_nic"
-                autoComplete="serialNo"
-                name="serialNo"
-                variant="outlined"
-                fullWidth
-                id="serialNo"
-                required={true}
-                value={serialNo}
-                onChange={(e) => {
-                  setSerialNo(e.target.value);
-                }}
-                label="xx-20097"
-                size="small"
-              />
-            </Grid>
-
+ 
             <Grid className="txt_Labels" item xs={12} sm={2}>
               * Color
             </Grid>
@@ -738,7 +715,7 @@ export default function Add_Item() {
                 size="small"
               />
             </Grid>
-            <Grid className="txt_Labels" item xs={12} sm={2}>
+            {/* <Grid className="txt_Labels" item xs={12} sm={2}>
               * Qty
             </Grid>
             <Grid item xs={12} sm={4}>
@@ -759,7 +736,7 @@ export default function Add_Item() {
                 label="Item Qty"
                 size="small"
               />
-            </Grid>
+            </Grid> */}
             <Grid className="txt_Labels" item xs={12} sm={2}>
               * Cash price (LKR)
             </Grid>
@@ -1023,7 +1000,126 @@ export default function Add_Item() {
                 label="Guarantee No"
                 size="small"
               />
-            </Grid>
+              </Grid>
+
+               <Grid item xs={12} sm={2}>
+                  <Button className="serialNo_add" onClick={addInputChassisNo}>
+                  Chassis Numbers
+                    <PlusOutlined className="reltion_addIcon" />
+              </Button>
+              </Grid>
+                 <Grid item xs={12} sm={6}>
+                  {Object.keys(inputsChassisNo).map((i) => (
+                    <div key={i + 1}>
+                      <TextField
+                        key={i + 2}
+                        id={i.toString()}
+                        className="txt_input"
+                        autoComplete="chassisNo"
+                        name="chassisNo"
+                        variant="outlined"
+                       
+                        id="chassisNo"
+                          label="xxy-54091"
+                        size="small" 
+                        required={true}
+                        value={chassisNo}
+                        onChange={handleChangeAddChassisNoInputs}
+                       
+                      />
+
+                      <MinusCircleOutlined
+                        key={i + 3}
+                        className="rmov_iconss"
+                        onClick={() => {
+                          delete inputsChassisNo[i];
+                          setInputsChassisNo({ ...inputsChassisNo });
+                        }}
+                      />
+                    </div>
+                  ))}
+                </Grid>
+            <Grid className="txt_Labels" item xs={12} sm={4}></Grid>
+
+
+                <Grid item xs={12} sm={2}>
+                  <Button className="serialNo_add" onClick={addInputSerialNo}>
+                   Serial Numbers
+                    <PlusOutlined className="reltion_addIcon" />
+              </Button>
+              </Grid>
+                 <Grid item xs={12} sm={6}>
+                  {Object.keys(inputsSerialNo).map((i) => (
+                    <div key={i + 1}>
+                      <TextField
+                        key={i + 2}
+                        id={i.toString()}
+                         className="txt_input"
+                         autoComplete="serialNo"
+                         name="serialNo"
+                         variant="outlined"
+                         id="serialNo"
+                         required={true}
+                        value={serialNo}
+                        label="xx-20097"
+                        size="small" 
+                        onChange={handleChangeAddSerialNoInputs}
+                       
+                      />
+
+                      <MinusCircleOutlined
+                        key={i + 3}
+                        className="rmov_iconss"
+                        onClick={() => {
+                          delete inputsSerialNo[i];
+                          setInputsSerialNo({ ...inputsSerialNo });
+                        }}
+                      />
+                    </div>
+                  ))}
+                </Grid>
+            <Grid className="txt_Labels" item xs={12} sm={4}></Grid>
+              
+
+                <Grid item xs={12} sm={2}>
+                  <Button className="serialNo_add" onClick={addInputModelNo}>
+                 Model Numbers
+                    <PlusOutlined className="reltion_addIcon" />
+              </Button>
+              </Grid>
+                 <Grid item xs={12} sm={6}>
+                  {Object.keys(inputsModelNo).map((i) => (
+                    <div key={i + 1}>
+                     
+                      <TextField
+                        key={i + 2}
+                        id={i.toString()}
+                         className="txt_input"
+                        autoComplete="modelNo"
+                        name="modelNo"
+                        variant="outlined"
+                        id="modelNo"
+                        label="xx 0091"
+                        size="small" 
+                        required={true}
+                        value={modelNo}
+                        onChange={handleChangeAddModelNoInputs}
+                       
+                      />
+
+                      <MinusCircleOutlined
+                        key={i + 3}
+                        className="rmov_iconss"
+                        onClick={() => {
+                          delete inputsModelNo[i];
+                          setInputsModelNo({ ...inputsModelNo });
+                        }}
+                      />
+                    </div>
+                  ))}
+                </Grid>
+            <Grid className="txt_Labels" item xs={12} sm={4}></Grid>
+ 
             <Grid className="txt_Labels" item xs={12} sm={8}></Grid>
             <Grid className="txt_Labels" item xs={12} sm={4}>
               <Button
@@ -1044,5 +1140,6 @@ export default function Add_Item() {
       </div>
       <NotificationContainer />
     </Container>
+    </>
   );
 }

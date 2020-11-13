@@ -373,7 +373,7 @@ function Make_invoice() {
                     tablerows.forEach((one) => {
                       let objItem = {
                         item_id: one.id,
-                        serialNo: one.serialNo,
+                        serialNo: one.serialNo[0],
                         qty: parseInt(itemQty[one.i]),
                         paymentWay: one.paymentWay,
                         downpayment: itemDP[one.i] === "" ? 0 : itemDP[one.i],
@@ -480,7 +480,17 @@ function Make_invoice() {
                             .collection("item")
                             .doc(itemUDoc.id)
                             .get();
-
+                          let serialNoList = [];
+                          let modelNoList = [];
+                          let chassisiNoList = [];
+                          serialNoList = newArray.data().serialNo;
+                          modelNoList = newArray.data().modelNo;
+                          chassisiNoList = newArray.data().chassisNo;
+                          serialNoList.splice(0, 1);
+                          modelNoList.splice(0, 1);
+                          if (chassisiNoList[0] !== null) {
+                            chassisiNoList.splice(0, 1);
+                          }
                           await db
                             .collection("item")
                             .doc(itemUDoc.id)
@@ -488,6 +498,9 @@ function Make_invoice() {
                               qty:
                                 Math.round(newArray.data().qty) -
                                 itemQty[itemUDoc.i],
+                              serialNo: serialNoList,
+                              modelNo: modelNoList,
+                              chassisNo: chassisiNoList,
                             });
                         });
                         setLoadingSubmit(false);
@@ -516,7 +529,7 @@ function Make_invoice() {
                     tablerows.forEach((one) => {
                       let objItem = {
                         item_id: one.id,
-                        serialNo: one.serialNo,
+                        serialNo: one.serialNo[0],
                         qty: parseInt(itemQty[one.i]),
                         paymentWay: one.paymentWay,
                         downpayment: itemDP[one.i] === "" ? 0 : itemDP[one.i],
@@ -624,6 +637,17 @@ function Make_invoice() {
                             .doc(itemUDoc.id)
                             .get();
 
+                          let serialNoList = [];
+                          let modelNoList = [];
+                          let chassisiNoList = [];
+                          serialNoList = newArray.data().serialNo;
+                          modelNoList = newArray.data().modelNo;
+                          chassisiNoList = newArray.data().chassisNo;
+                          serialNoList.splice(0, 1);
+                          modelNoList.splice(0, 1);
+                          if (chassisiNoList[0] !== null) {
+                            chassisiNoList.splice(0, 1);
+                          }
                           await db
                             .collection("item")
                             .doc(itemUDoc.id)
@@ -631,6 +655,9 @@ function Make_invoice() {
                               qty:
                                 Math.round(newArray.data().qty) -
                                 itemQty[itemUDoc.i],
+                              serialNo: serialNoList,
+                              modelNo: modelNoList,
+                              chassisNo: chassisiNoList,
                             });
                         });
                         setLoadingSubmit(false);
@@ -661,7 +688,7 @@ function Make_invoice() {
                 tablerows.forEach((one) => {
                   let objItem = {
                     item_id: one.id,
-                    serialNo: one.serialNo,
+                    serialNo: one.serialNo[0],
                     qty: parseInt(itemQty[one.i]),
                     paymentWay: one.paymentWay,
                     downpayment: itemDP[one.i] === "" ? 0 : itemDP[one.i],
@@ -765,6 +792,17 @@ function Make_invoice() {
                         .doc(itemUDoc.id)
                         .get();
 
+                      let serialNoList = [];
+                      let modelNoList = [];
+                      let chassisiNoList = [];
+                      serialNoList = newArray.data().serialNo;
+                      modelNoList = newArray.data().modelNo;
+                      chassisiNoList = newArray.data().chassisNo;
+                      serialNoList.splice(0, 1);
+                      modelNoList.splice(0, 1);
+                      if (chassisiNoList[0] !== null) {
+                        chassisiNoList.splice(0, 1);
+                      }
                       await db
                         .collection("item")
                         .doc(itemUDoc.id)
@@ -772,6 +810,9 @@ function Make_invoice() {
                           qty:
                             Math.round(newArray.data().qty) -
                             itemQty[itemUDoc.i],
+                          serialNo: serialNoList,
+                          modelNo: modelNoList,
+                          chassisNo: chassisiNoList,
                         });
                     });
                     setLoadingSubmit(false);
@@ -800,7 +841,7 @@ function Make_invoice() {
                 tablerows.forEach((one) => {
                   let objItem = {
                     item_id: one.id,
-                    serialNo: one.serialNo,
+                    serialNo: one.serialNo[0],
                     qty: parseInt(itemQty[one.i]),
                     paymentWay: one.paymentWay,
                     downpayment: itemDP[one.i] === "" ? 0 : itemDP[one.i],
@@ -904,6 +945,17 @@ function Make_invoice() {
                         .doc(itemUDoc.id)
                         .get();
 
+                      let serialNoList = [];
+                      let modelNoList = [];
+                      let chassisiNoList = [];
+                      serialNoList = newArray.data().serialNo;
+                      modelNoList = newArray.data().modelNo;
+                      chassisiNoList = newArray.data().chassisNo;
+                      serialNoList.splice(0, 1);
+                      modelNoList.splice(0, 1);
+                      if (chassisiNoList[0] !== null) {
+                        chassisiNoList.splice(0, 1);
+                      }
                       await db
                         .collection("item")
                         .doc(itemUDoc.id)
@@ -911,6 +963,9 @@ function Make_invoice() {
                           qty:
                             Math.round(newArray.data().qty) -
                             itemQty[itemUDoc.i],
+                          serialNo: serialNoList,
+                          modelNo: modelNoList,
+                          chassisNo: chassisiNoList,
                         });
                     });
                     setLoadingSubmit(false);
@@ -925,18 +980,24 @@ function Make_invoice() {
       let arrayItems = [];
 
       tablerows.forEach((one) => {
-        let objItem = {
-          item_id: one.id,
-          serialNo: one.serialNo,
-          qty: parseInt(itemQty[one.i]),
-          paymentWay: one.paymentWay,
-          downpayment: itemDP[one.i] === "" ? 0 : itemDP[one.i],
-          noOfInstallment: itemNOI[one.i] === "" ? 0 : itemNOI[one.i],
-          amountPerInstallment: itemAPI[one.i] === "" ? 0 : itemAPI[one.i],
-          discount: itemDiscount[one.i] === "" ? 0 : itemDiscount[one.i],
-          item_name: one.title,
-        };
-        arrayItems.push(objItem);
+        let listOfSerilNo = [];
+        for (var n = 0; n < parseInt(itemQty[one.i]); n++) {
+          listOfSerilNo.push(one.serialNo[n]);
+        }
+        if (listOfSerilNo.length === parseInt(itemQty[one.i])) {
+          let objItem = {
+            item_id: one.id,
+            serialNo: listOfSerilNo,
+            qty: parseInt(itemQty[one.i]),
+            paymentWay: one.paymentWay,
+            downpayment: itemDP[one.i] === "" ? 0 : itemDP[one.i],
+            noOfInstallment: itemNOI[one.i] === "" ? 0 : itemNOI[one.i],
+            amountPerInstallment: itemAPI[one.i] === "" ? 0 : itemAPI[one.i],
+            discount: itemDiscount[one.i] === "" ? 0 : itemDiscount[one.i],
+            item_name: one.title,
+          };
+          arrayItems.push(objItem);
+        }
       });
 
       await db.collection("invoice").add({
@@ -959,11 +1020,26 @@ function Make_invoice() {
       tablerows.forEach(async (itemUDoc) => {
         let newArray = await await db.collection("item").doc(itemUDoc.id).get();
 
+        let serialNoList = [];
+        let modelNoList = [];
+        let chassisiNoList = [];
+        serialNoList = newArray.data().serialNo;
+        modelNoList = newArray.data().modelNo;
+        chassisiNoList = newArray.data().chassisNo;
+        serialNoList.splice(0, itemQty[itemUDoc.i]);
+        modelNoList.splice(0, itemQty[itemUDoc.i]);
+        if (chassisiNoList[0] !== null) {
+          chassisiNoList.splice(0, itemQty[itemUDoc.i]);
+        }
+
         await db
           .collection("item")
           .doc(itemUDoc.id)
           .update({
             qty: Math.round(newArray.data().qty) - itemQty[itemUDoc.i],
+            serialNo: serialNoList,
+            modelNo: modelNoList,
+            chassisNo: chassisiNoList,
           });
       });
       setLoadingSubmit(false);

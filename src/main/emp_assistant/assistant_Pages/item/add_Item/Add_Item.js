@@ -62,7 +62,7 @@ export default function Add_Item() {
             setInputsSerialNo({ ...inputsSerialNo });
             NotificationManager.info(
               "Item serial number must be unique !",
-              "Remember validations"
+             
             );
           } else {
             setInputsSerialNo({ ...inputsSerialNo, [i]: value });
@@ -160,19 +160,19 @@ export default function Add_Item() {
       if (isInAlreadySerial && isInAlreadyModel) {
         NotificationManager.info(
           "Item serial no & model no must be unique !",
-          "Remember validations"
+         
         );
       } else {
         if (itemName === "") {
           NotificationManager.info(
             "Item name is required!",
-            "Remember validations"
+           
           );
         } else {
           if (brand === "") {
             NotificationManager.info(
               "Item brand is required!",
-              "Remember validations"
+             
             );
           } else {
             if (
@@ -183,7 +183,7 @@ export default function Add_Item() {
             ) {
               NotificationManager.info(
                 "Item model number is required!",
-                "Remember validations"
+               
               );
             } else {
               if (
@@ -194,97 +194,97 @@ export default function Add_Item() {
               ) {
                 NotificationManager.info(
                   "Item Serial number is required!",
-                  "Remember validations"
+                 
                 );
               } else {
                 if (color === "") {
                   NotificationManager.info(
                     "Item color is required!",
-                    "Remember validations"
+                   
                   );
                 } else {
                   if (cashPrice === "") {
                     NotificationManager.info(
                       "Item cash price is required!",
-                      "Remember validations"
+                     
                     );
                   } else {
                     if (salePrice === "") {
                       NotificationManager.info(
                         "Item sale price is required!",
-                        "Remember validations"
+                       
                       );
                     } else {
                       if (noOfInstallments === "") {
                         NotificationManager.info(
                           "Number of installment is required!",
-                          "Remember validations"
+                         
                         );
                       } else {
                         if (amountPerInstallment === "") {
                           NotificationManager.info(
                             "Amount per installment is required!",
-                            "Remember validations"
+                           
                           );
                         } else {
                           if (guaranteePeriod === "") {
                             NotificationManager.info(
                               "Item guarantee period is required!",
-                              "Remember validations"
+                             
                             );
                           } else {
                             if (downPayment === "") {
                               NotificationManager.info(
                                 "Item down payment is required!",
-                                "Remember validations"
+                               
                               );
                             } else {
                               if (discount === "") {
                                 NotificationManager.info(
                                   "Item discount is required!",
-                                  "Remember validations"
+                                 
                                 );
                               } else {
                                 if (cashPrice < 0) {
                                   NotificationManager.info(
                                     "Check again the amount of cash price",
-                                    "Remember validations"
+                                   
                                   );
                                 } else {
                                   if (salePrice < 0) {
                                     NotificationManager.info(
                                       "Check again the amount of sale price",
-                                      "Remember validations"
+                                     
                                     );
                                   } else {
                                     if (noOfInstallments < 0) {
                                       NotificationManager.info(
                                         "Check again the value of installments value",
-                                        "Remember validations"
+                                       
                                       );
                                     } else {
                                       if (amountPerInstallment < 0) {
                                         NotificationManager.info(
                                           "Check again the amount per installment",
-                                          "Remember validations"
+                                         
                                         );
                                       } else {
                                         if (downPayment < 0) {
                                           NotificationManager.info(
                                             "Check again the amount of down payment",
-                                            "Remember validations"
+                                           
                                           );
                                         } else {
                                           if (guaranteePeriod < 0) {
                                             NotificationManager.info(
                                               "Check again the value of gurantee period",
-                                              "Remember validations"
+                                             
                                             );
                                           } else {
                                             if (discount < 0) {
                                               NotificationManager.info(
                                                 "Check again the amount of discount",
-                                                "Remember validations"
+                                               
                                               );
                                             } else {
                                               //Rest of code here

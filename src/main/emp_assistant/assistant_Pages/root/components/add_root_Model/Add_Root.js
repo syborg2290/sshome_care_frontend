@@ -5,12 +5,13 @@ import {
   Select,
   FormControl,
   InputLabel,
+  Grid,
+  Container,
+  Typography,
+
 } from "@material-ui/core";
-import { Spin } from "antd";
-import { Checkbox } from "antd";
-import Grid from "@material-ui/core/Grid";
-import Container from "@material-ui/core/Container";
-import Typography from "@material-ui/core/Typography";
+import { Checkbox , Spin } from "antd";
+
 
 import db from "../../../../../../config/firebase.js";
 import "react-notifications/lib/notifications.css";

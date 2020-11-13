@@ -16,6 +16,8 @@ import AutorenewIcon from "@material-ui/icons/Autorenew";
 // components
 import ViewEmployee from "./components/view_Employee_Model/View_Employee";
 import UpdateStatus from "./components/status_Update_Model/Update_Status";
+import MarkAttendance from "./components/mark_Attendance_Model/Mark_Attendance";
+import HistoryAttendance from "./components/attedance_History_Model/History_Attendance";
 
 // styles
 import "./Attendance.css";
@@ -27,16 +29,27 @@ export default function Attendance() {
   const [viewEmployeesModel, setviewEmployeesModel] = useState(false); // Table models
   const [statusUpdateModel, setStatusUpdateModel] = useState(false); // Table models
 
+  const [markAttendanceModel, setMarkAttendanceModel] = useState(false);
+  const [historyAttendanceModel, setHistoryAttendanceModel] = useState(false);
+
 
    const showModalView = () => {
     setviewEmployeesModel(true);
   };
 
-     const showModalStatusUpdate = () => {
+  const showModalStatusUpdate = () => {
     setStatusUpdateModel(true);
   };
 
-  //START pay And Go Columns
+  const showModalMarkAttendance = () => {
+    setMarkAttendanceModel(true);
+  };
+
+    const showModalHistoryAttendance = () => {
+    setHistoryAttendanceModel(true);
+  };
+
+  //START Attendance Table Colomns
   const attendanceTableColomns = [
     {
       name: "FirstName",
@@ -130,6 +143,40 @@ export default function Attendance() {
   return (
     <>
 
+      {/* START Mark model */}
+        <Modal
+        className="mark_bodyModel"
+        visible={markAttendanceModel}
+        footer={null}
+        onCancel={() => {
+          setMarkAttendanceModel(false);
+        }}
+      >
+        <div className="mark_body">
+          <MarkAttendance />
+        </div>
+      </Modal>
+
+      {/* END Mark model */}
+
+      {/* START History model */}
+      
+        <Modal
+        className="confo_model"
+        visible={historyAttendanceModel}
+        footer={null}
+        onCancel={() => {
+          setHistoryAttendanceModel(false);
+        }}
+      >
+        <div className="history_body">
+          <HistoryAttendance />
+        </div>
+      </Modal>
+
+      {/* END History model */}
+      
+
   {/* START View model */}
         <Modal
         className="confo_model"
@@ -163,10 +210,14 @@ export default function Attendance() {
 
       {/* END View model */}
       
-      <Button variant="contained" className="btn_attendanceHistory">
+      <Button
+        onClick={showModalHistoryAttendance}
+        variant="contained" className="btn_attendanceHistory">
         Attendance History
       </Button>
-      <Button variant="contained" color="primary" className="btn_attendance">
+      <Button onClick={showModalMarkAttendance}
+        variant="contained" color="primary"
+        className="btn_attendance">
         Mark Attendance
       </Button>
 

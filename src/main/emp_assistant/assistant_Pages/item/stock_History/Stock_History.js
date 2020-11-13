@@ -8,6 +8,12 @@ import MUIDataTable from "mui-datatables";
 // styles
 import "./Stock_History.css";
 
+// components
+// import EditModel from "../assistant_item_table/components/";
+
+// icons
+import VisibilityIcon from "@material-ui/icons/Visibility";
+
 export default function Stock_History() {
     
     const [allTableData, setTableData] = useState([]);
@@ -88,10 +94,24 @@ export default function Stock_History() {
         }),
       },
     },
+
+       {
+      name: "Action",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
   ];
 
     const data = [
- ["mes", "Torp", "Yonkers","Yonkers", "NY"],
+      ["mes", "Torp", "Yonkers", "Yonkers", "NY",
+        <VisibilityIcon
+      // onClick={showModal} 
+        />
+      ],
 
 ];
     

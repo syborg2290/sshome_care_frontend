@@ -112,7 +112,7 @@ export default function Edit_model({
 
   const updateItem = async (e) => {
     e.preventDefault();
-      let modelNosList = [];
+    let modelNosList = [];
     let serialNosList = [];
     let chassisNosList = [];
     let isInAlreadySerial = false;
@@ -155,18 +155,21 @@ export default function Edit_model({
           if (brand === "") {
             setValidation("Item brand is required!");
           } else {
-            if (Object.keys(inputsModelNo).length !==
-              Object.keys(inputsSerialNo).length) {
+            if (
+              Object.keys(inputsModelNo).length !==
+              Object.keys(inputsSerialNo).length
+            ) {
               setValidation("Item model number is required!");
             } else {
-              if (Object.keys(inputsModelNo).length !==
-                Object.keys(inputsSerialNo).length) {
+              if (
+                Object.keys(inputsModelNo).length !==
+                Object.keys(inputsSerialNo).length
+              ) {
                 setValidation("Item Serial number is required!");
               } else {
                 if (color === "") {
                   setValidation("Item color is required!");
                 } else {
-             
                   if (cashPrice === "") {
                     setValidation("Item cash price is required!");
                   } else {
@@ -183,7 +186,9 @@ export default function Edit_model({
                             setValidation("Number of installment is required!");
                           } else {
                             if (guaranteePeriod === "") {
-                              setValidation("Item guarantee period is required!");
+                              setValidation(
+                                "Item guarantee period is required!"
+                              );
                             } else {
                               if (downPayment === "") {
                                 setValidation("Item down payment is required!");
@@ -191,7 +196,6 @@ export default function Edit_model({
                                 if (discount === "") {
                                   setValidation("Item discount is required!");
                                 } else {
-                               
                                   if (cashPrice < 0) {
                                     setValidation(
                                       "Check again the amount of cash price"
@@ -243,7 +247,8 @@ export default function Edit_model({
                                                       qty:
                                                         Math.round(
                                                           docRe.data().qty
-                                                        ) + serialNosList.length,
+                                                        ) +
+                                                        serialNosList.length,
                                                       cashPrice: cashPrice,
                                                       salePrice: salePrice,
                                                       noOfInstallments: noOfInstallments,
@@ -292,12 +297,10 @@ export default function Edit_model({
                               }
                             }
                           }
-                        
                         }
                       }
                     }
                   }
-              
                 }
               }
             }
@@ -343,7 +346,7 @@ export default function Edit_model({
                 }}
               />
             </Form.Item>
-           
+
             <Form.Item label="* Cash price (LKR)">
               <Input
                 type="number"
@@ -490,7 +493,8 @@ export default function Edit_model({
                         key={i + 2}
                         id={i.toString()}
                         onChange={handleChangeAddChassisNoInputs}
-                        end
+                        placeholder="xxx-chas"
+                        end="true"
                       />
 
                       <MinusCircleOutlined
@@ -524,6 +528,7 @@ export default function Edit_model({
                         allowClear
                         key={i + 2}
                         id={i.toString()}
+                        placeholder="xxx-serial"
                         onChange={handleChangeAddSerialNoInputs}
                       />
 
@@ -557,6 +562,7 @@ export default function Edit_model({
                         allowClear
                         key={i + 2}
                         id={i.toString()}
+                        placeholder="xxx-model"
                         onChange={handleChangeAddModelNoInputs}
                       />
 

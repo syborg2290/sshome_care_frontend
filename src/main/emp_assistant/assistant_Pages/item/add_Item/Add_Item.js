@@ -357,7 +357,7 @@ export default function Add_Item() {
                                                       serialNo: serialNoNewList,
                                                       chassisNo: chassisNoNewList,
                                                       color: color.trim(),
-                                                      qty: serialNosList.length,
+                                                      qty: serialNoNewList.length,
                                                       cashPrice: Math.round(
                                                         cashPrice
                                                       ),

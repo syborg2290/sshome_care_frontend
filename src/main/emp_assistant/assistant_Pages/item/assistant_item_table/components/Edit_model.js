@@ -16,7 +16,7 @@ import "../components/Edit_model.css";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 
 import db from "../../../../../../config/firebase.js";
-import firebase from 'firebase';
+import firebase from "firebase";
 
 const { Content } = Layout;
 const { TextArea } = Input;
@@ -66,6 +66,8 @@ export default function Edit_model({
   const [inputsSerialNo, setInputsSerialNo] = useState({});
   const [inputsModelNo, setInputsModelNo] = useState({});
   const [inputsChassisNo, setInputsChassisNo] = useState({});
+  const [isInAlreadySerial, setIsInAlreadySerial] = useState(false);
+  const [isInAlreadyModel, setIsInAlreadyModel] = useState(false);
 
   //add InputSerial No
   const addInputSerialNo = () => {
@@ -112,19 +114,15 @@ export default function Edit_model({
     let modelNosList = [];
     let serialNosList = [];
     let chassisNosList = [];
-    var isInAlreadySerial = false;
-    var isInAlreadyModel = false;
 
     for (var k = 0; k < Object.keys(inputsSerialNo).length; k++) {
-      chassisNosList.push(
-        inputsChassisNo[k] === "" ? "" : inputsChassisNo[k]
-      );
+      chassisNosList.push(inputsChassisNo[k] === "" ? "" : inputsChassisNo[k]);
       db.collection("item")
         .where("modelNo", "==", inputsModelNo[k])
         .get()
         .then((reModel) => {
           if (reModel.docs.length > 0) {
-            isInAlreadyModel = true;
+            setIsInAlreadyModel(true);
           }
         });
       db.collection("item")
@@ -132,7 +130,7 @@ export default function Edit_model({
         .get()
         .then((reSeril) => {
           if (reSeril.docs.length > 0) {
-            isInAlreadySerial = true;
+            setIsInAlreadySerial(true);
           }
         });
       modelNosList.push(inputsModelNo[k]);

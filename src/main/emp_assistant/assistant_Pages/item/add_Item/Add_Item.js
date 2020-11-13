@@ -999,10 +999,14 @@ export default function Add_Item() {
               />
               </Grid>
 
+              <Grid className="txt_Labels" item xs={12} sm={12}>
+                <hr  className="hr_divider"/>
+               </Grid>
+              
                <Grid item xs={12} sm={2}>
                   <Button className="serialNo_add" onClick={addInputChassisNo}>
                   Chassis Numbers
-                    <PlusOutlined className="reltion_addIcon" />
+                    <PlusOutlined className="inpu_addIcon" />
               </Button>
               </Grid>
                  <Grid item xs={12} sm={6}>

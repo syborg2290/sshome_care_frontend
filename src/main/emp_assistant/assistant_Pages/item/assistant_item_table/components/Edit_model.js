@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Form, Radio, Input, Layout, Button, Spin } from "antd";
+import Grid from "@material-ui/core/Grid";
 
 import "antd/dist/antd.css";
 import {
@@ -10,6 +11,10 @@ import "react-notifications/lib/notifications.css";
 
 // styles
 import "../components/Edit_model.css";
+
+//icon
+import ClearOutlinedIcon from "@material-ui/icons/ClearOutlined";
+import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 
 import db from "../../../../../../config/firebase.js";
 
@@ -65,6 +70,38 @@ export default function Edit_model({
   });
 
   const [validation, setValidation] = useState("");
+
+
+  const [inputsSerialNo, setInputsSerialNo] = useState({});
+  const [inputsModelNo, setInputsModelNo] = useState({});
+  const [inputsChassisNo, setInputsChassisNo] = useState({});
+  
+//add InputSerial No
+  const addInputSerialNo = () => {
+    setInputsSerialNo({ ...inputsSerialNo, [Object.keys(inputsSerialNo).length]: "" });
+  };
+  const handleChangeAddSerialNoInputs = (e) => {
+    setInputsSerialNo({ ...inputsSerialNo, [e.target.id]: e.target.value });
+  };
+
+//add InputModel No
+  const addInputModelNo = () => {
+    setInputsModelNo({ ...inputsModelNo, [Object.keys(inputsModelNo).length]: "" });
+  };
+  const handleChangeAddModelNoInputs = (e) => {
+    setInputsModelNo({ ...inputsModelNo, [e.target.id]: e.target.value });
+  };
+
+  //add InputChassis No
+   const addInputChassisNo = () => {
+    setInputsChassisNo({ ...inputsChassisNo, [Object.keys(inputsChassisNo).length]: "" });
+  };
+  const handleChangeAddChassisNoInputs = (e) => {
+    setInputsChassisNo({ ...inputsChassisNo, [e.target.id]: e.target.value });
+  };
+//
+  
+  
 
   const radioOnChange = (e) => {
     setGuarantee({
@@ -233,6 +270,7 @@ export default function Edit_model({
   };
 
   return (
+    <>
     <div>
       <Content>
         <Form className="form">
@@ -267,7 +305,7 @@ export default function Edit_model({
               }}
             />
           </Form.Item>
-          <Form.Item label="* Qty ">
+          {/* <Form.Item label="* Qty ">
             <Input
               type="number"
               min={1}
@@ -278,7 +316,7 @@ export default function Edit_model({
                 setQty(e.target.value);
               }}
             />
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item label="* Cash price (LKR)">
             <Input
               type="number"
@@ -401,8 +439,122 @@ export default function Edit_model({
                 setGCardNo(e.target.value);
               }}
             />
-          </Form.Item>
+            </Form.Item>
+            <Grid container spacing={2}>
+            <Grid item xs={12} sm={12}>
+              <hr />
+              </Grid>
+              </Grid>
+ <Grid container spacing={2}>
+            <Grid item xs={12} sm={4}>
+                    <Button className="chassisNo_add" onClick={addInputChassisNo}>
+                    Chassis Numbers
+                    <PlusOutlined className="inpu_addIcon" />
+                </Button>
+              </Grid>
+                <Grid  item xs={12} sm={1}></Grid>
+             <Grid  item xs={12} sm={7}>
+                  {Object.keys(inputsChassisNo).map((i) => (
+                    <div key={i + 1}>
+                       
+                       <Form.Item>
+                        <Input
+                          className="finput"
+                        allowClear
+                        key={i + 2}
+                        id={i.toString()}     
+                          onChange={handleChangeAddChassisNoInputs}
+                          end
+                       
+                      />
+                     
+                        <MinusCircleOutlined
+                        key={i + 3}
+                        className="rmov_icos"
+                        onClick={() => {
+                          delete inputsChassisNo[i];
+                          setInputsChassisNo({ ...inputsChassisNo });
+                        }}
+                        />
+                         </Form.Item>
+                      
+                      </div>
+                  ))}
+                </Grid>
+                </Grid>
+               
+              <Grid container spacing={2}>
+            <Grid item xs={12} sm={4}>
+                  <Button className="inputess"  onClick={addInputSerialNo}>
+                   Serial Numbers
+                    <PlusOutlined className="reltion_addIcon" />
+                </Button>
+                </Grid>
+                <Grid  item xs={12} sm={1}></Grid>
+             <Grid  item xs={12} sm={7}>
+                  {Object.keys(inputsSerialNo).map((i) => (
+                    <div key={i + 1}>
+                      <Form.Item>
+                        <Input
+                         className="finput"
+                        allowClear
+                        key={i + 2}
+                        id={i.toString()}
+                        onChange={handleChangeAddSerialNoInputs}
+                       
+                      />
 
+                      <MinusCircleOutlined
+                        key={i + 3}
+                        className="rmov_icos"
+                        onClick={() => {
+                          delete inputsSerialNo[i];
+                          setInputsSerialNo({ ...inputsSerialNo });
+                        }}
+                          />
+                      </Form.Item>
+                    </div>
+                  ))}
+                 </Grid>
+                </Grid>
+
+   <Grid container spacing={2}>
+            <Grid item xs={12} sm={4}>
+                    <Button className="inputess" onClick={addInputModelNo}>
+                     Model Numbers
+                    <PlusOutlined className="reltion_addIcon" />
+                    </Button>
+                     </Grid>
+                <Grid  item xs={12} sm={1}></Grid>
+             <Grid  item xs={12} sm={7}>
+                  {Object.keys(inputsModelNo).map((i) => (
+                    <div key={i + 1}>
+                     
+                      <Form.Item >
+                        <Input
+                        allowClear
+                        key={i + 2}
+                        id={i.toString()}
+                        // value={modelNo}
+                        onChange={handleChangeAddModelNoInputs}
+                       
+                      />
+
+                      <MinusCircleOutlined
+                        key={i + 3}
+                        className="rmov_icos"
+                        onClick={() => {
+                          delete inputsModelNo[i];
+                          setInputsModelNo({ ...inputsModelNo });
+                        }}
+                          />
+                      </Form.Item>
+                    </div>
+                  ))}
+             </Grid>
+                </Grid>
+              
+            
           <p className="validate_Edit">{validation}</p>
           <Button
             disabled={!loadingSubmit ? false : true}
@@ -421,5 +573,6 @@ export default function Edit_model({
         <NotificationContainer />
       </Content>
     </div>
+            </>
   );
 }

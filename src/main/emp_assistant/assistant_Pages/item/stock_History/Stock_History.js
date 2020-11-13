@@ -13,15 +13,15 @@ export default function Stock_History() {
     const [allTableData, setTableData] = useState([]);
 
     const columns = [
-    {
-      name: "Serial_No",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
+    // {
+    //   name: "Serial_No",
+    //   options: {
+    //     filter: true,
+    //     setCellHeaderProps: (value) => ({
+    //       style: { fontSize: "15px", color: "black", fontWeight: "600" },
+    //     }),
+    //   },
+    // },
     {
       name: "Item_Name",
       options: {
@@ -40,15 +40,15 @@ export default function Stock_History() {
         }),
       },
     },
-    {
-      name: "Model_No",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
+    // {
+    //   name: "Model_No",
+    //   options: {
+    //     filter: true,
+    //     setCellHeaderProps: (value) => ({
+    //       style: { fontSize: "15px", color: "black", fontWeight: "600" },
+    //     }),
+    //   },
+    // },
     {
       name: "Qty",
       options: {
@@ -91,7 +91,7 @@ export default function Stock_History() {
   ];
 
     const data = [
- ["mes", "Torp", "Yonkers", "NY", "Torp", "Yonkers", "NY"],
+ ["mes", "Torp", "Yonkers","Yonkers", "NY"],
 
 ];
     

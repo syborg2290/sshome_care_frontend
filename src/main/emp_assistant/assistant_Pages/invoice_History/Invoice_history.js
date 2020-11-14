@@ -458,7 +458,8 @@ export default function Invoice_history() {
               ),
             Action: (
               <div>
-                {siDoc.data().status_of_payandgo === "onGoing" ? (
+                {siDoc.data().status_of_payandgo === "onGoing" ||
+                siDoc.data().status_of_payandgo === "expired" ? (
                   <Button
                     variant="contained"
                     color="primary"
@@ -594,7 +595,12 @@ export default function Invoice_history() {
                 customer_id={payangoAllData[currentIndx]?.data?.customer_id}
                 closeModal={closeModalUpdate}
                 balanceProp={payangoAllData[currentIndx]?.data?.balance}
-                isEx={payangoAllData[currentIndx]?.data?.status_of_payandgo === "expired"?true:false}
+                isEx={
+                  payangoAllData[currentIndx]?.data?.status_of_payandgo ===
+                  "expired"
+                    ? true
+                    : false
+                }
               />
             </div>
           </div>

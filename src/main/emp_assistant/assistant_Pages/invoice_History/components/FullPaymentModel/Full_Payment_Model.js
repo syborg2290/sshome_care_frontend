@@ -20,7 +20,6 @@ export default function Full_Payment_Model({ items_list_props }) {
             {
               item_name: th.data().itemName,
               serial_no: each.serialNo,
-              dp: each.downpayment,
               discount: each.discount,
               qty: each.qty,
               color: th.data().color,
@@ -74,20 +73,7 @@ export default function Full_Payment_Model({ items_list_props }) {
                   <Grid item xs={12} sm={7}>
                     <p>{eachItem.serial_no}</p>
                   </Grid>
-                  <Grid className="lbl_topis" item xs={12} sm={4}>
-                    Basic Payment(LKR)
-                  </Grid>
-                  <Grid item xs={12} sm={1}>
-                    :
-                  </Grid>
-                  <Grid item xs={12} sm={7}>
-                    <CurrencyFormat
-                      value={eachItem.dp}
-                      displayType={"text"}
-                      thousandSeparator={true}
-                      prefix={" "}
-                    />
-                  </Grid>
+                 
                   <Grid className="lbl_topis" item xs={12} sm={4}>
                     Item Discount(LKR)
                   </Grid>

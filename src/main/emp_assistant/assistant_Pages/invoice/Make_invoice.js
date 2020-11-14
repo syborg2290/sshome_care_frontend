@@ -531,7 +531,6 @@ function Make_invoice() {
                     tablerows.forEach((one) => {
                       let objItem = {
                         item_id: one.id,
-
                         serialNo: one.serialNo[0],
                         modelNo: one.modelNo[0],
                         chassisNo: one.chassisNo[0],

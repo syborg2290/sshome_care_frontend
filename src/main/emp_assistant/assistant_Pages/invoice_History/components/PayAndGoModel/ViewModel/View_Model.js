@@ -61,7 +61,7 @@ export default function View_Model({ items_list_props, data }) {
               discount: each.discount,
               qty: each.qty,
               color: th.data().color,
-              model_no: th.data().modelNo,
+              model_no: each.modelNo,
               gurantee_type: th.data().guarantee,
               gurantee_period: th.data().guaranteePeriod,
             },

@@ -30,6 +30,7 @@ export default function Update_Model({
   customer_id,
   closeModal,
   balanceProp,
+  isEx
 }) {
   const [installments, setInstallments] = useState(0);
   // eslint-disable-next-line
@@ -250,6 +251,7 @@ export default function Update_Model({
           serialNo: serialNo,
           amount: parseInt(installmentAmount) + parseInt(gamisaraniamount),
           delayed: delayedCharges === "" ? 0 : parseInt(delayedCharges),
+          isExpired:isEx,
           balance:
             balance -
               (parseInt(installmentAmount) + parseInt(gamisaraniamount)) <=

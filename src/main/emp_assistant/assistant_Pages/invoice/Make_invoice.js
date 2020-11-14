@@ -61,6 +61,7 @@ function Make_invoice() {
   const [gamisarani, setGamisarani] = useState(false);
   const [intialTimestamp, setInititialTimestamp] = useState(null);
   const [deadlineTimestamp, setDeadlineTimestamp] = useState(null);
+  const [isFullPayment, setIsFullPayment] = useState(false);
   let history = useHistory();
   const { confirm } = Modal;
 
@@ -90,6 +91,11 @@ function Make_invoice() {
           obj.paymentWay === "PayandGo" ? obj.item.amountPerInstallment : 0;
         keepDataDiscount[obj.i] = obj.item.discount;
         tableData.push(obj);
+        if (obj.paymentWay === "PayandGo") {
+          setIsFullPayment(false);
+        } else {
+          setIsFullPayment(true);
+        }
       });
       setItemDiscount(keepDataDiscount);
       setItemAPI(keepDataAPI);
@@ -113,14 +119,19 @@ function Make_invoice() {
   }, []);
 
   const subTotalFunc = () => {
-    var subTotalValue = gamisaraniamount;
+    var subTotalValue = 0;
     for (var a = 0; a < tablerows.length; a++) {
       subTotalValue =
         subTotalValue +
         (itemDP[tablerows[a].i] - itemDiscount[tablerows[a].i]) *
           itemQty[tablerows[a].i];
     }
-    return subTotalValue;
+    let fTotoS = isFullPayment
+      ? subTotalValue - gamisaraniamount <= 0
+        ? 0
+        : subTotalValue - gamisaraniamount
+      : gamisaraniamount + subTotalValue;
+    return fTotoS;
   };
 
   const handleQTYChange = (e, itemid, row) => {

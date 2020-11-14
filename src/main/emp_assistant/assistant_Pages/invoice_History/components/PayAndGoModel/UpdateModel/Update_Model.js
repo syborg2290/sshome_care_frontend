@@ -10,8 +10,6 @@ import {
 import CurrencyFormat from "react-currency-format";
 import firebase from "firebase";
 
-
-
 import db from "../../../../../../../config/firebase.js";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { useHistory } from "react-router-dom";
@@ -78,7 +76,6 @@ export default function Update_Model({
       .then((instReDoc) => {
         setInstallments(instReDoc.docs.length);
       });
-    
 
     db.collection("invoice")
       .where("invoice_number", "==", invoice_no)
@@ -95,7 +92,7 @@ export default function Update_Model({
                     inReDoc.docs[0].data().date.seconds * 1000
                   ).getTime()) /
                 (1000 * 3600 * 24);
-              
+
               if (inReDoc.docs[0].data().installmentType === "shop") {
                 if (7 - daysCountInitial >= 0) {
                   setDelayedDays(0);
@@ -174,7 +171,6 @@ export default function Update_Model({
                       ?.seconds * 1000
                   ).getTime()) /
                 (1000 * 3600 * 24);
-            
 
               if (inReDoc.docs[0].data().installmentType === "shop") {
                 if (7 - daysCount >= 0) {
@@ -247,20 +243,14 @@ export default function Update_Model({
       .get()
       // eslint-disable-next-line
       .then(async (reInst) => {
-        let tot=parseInt(installmentAmount) + parseInt(gamisaraniamount)
+        let tot = parseInt(installmentAmount) + parseInt(gamisaraniamount);
         await db.collection("installment").add({
           invoice_number: invoice_no,
           serialNo: serialNo,
           amount: parseInt(installmentAmount) + parseInt(gamisaraniamount),
           delayed: delayedCharges === "" ? 0 : parseInt(delayedCharges),
           isExpired: isEx,
-          balance:
-            balance -
-              tot <=
-            0
-              ? 0
-              : balance -
-                tot,
+          balance: balance - tot <= 0 ? 0 : balance - tot,
           gamisarani_amount: parseInt(gamisaraniamount),
           date: updateTimestamp,
         });
@@ -277,12 +267,9 @@ export default function Update_Model({
           .doc(reBalance.docs[0].id)
           .update({
             balance:
-              reBalance.docs[0].data().balance -
-                totot <=
-              0
+              reBalance.docs[0].data().balance - totot <= 0
                 ? 0
-                : reBalance.docs[0].data().balance -
-                  totot,
+                : reBalance.docs[0].data().balance - totot,
           });
       });
 
@@ -349,13 +336,7 @@ export default function Update_Model({
           serialNo: serialNo,
           customerDetails: customer,
           total: totalPlusRed(),
-          balance:
-            balance -
-              toto <=
-            0
-              ? 0
-              : balance -
-                toto,
+          balance: balance - toto <= 0 ? 0 : balance - toto,
           gamisarani_amount: parseInt(gamisaraniamount),
           date: updateTimestamp,
           delayedCharges: Math.round(delayedCharges),
@@ -407,7 +388,7 @@ export default function Update_Model({
           setLoadingNicSubmit(false);
         } else {
           setLoadingNicSubmit(false);
-           setValidation("Any gamisarani customer not found from this NIC!");
+          setValidation("Any gamisarani customer not found from this NIC!");
         }
       });
   };
@@ -537,8 +518,8 @@ export default function Update_Model({
                 />
               </Grid>
               <Grid item xs={12} sm={1}></Grid>
-                <Grid item xs={12} sm={12}>
-                    <p className="validate_updateEmployee">{validation}</p>
+              <Grid item xs={12} sm={12}>
+                <p className="validate_updateEmployee">{validation}</p>
                 <hr />
               </Grid>
               <Grid className="lbl_topi" item xs={12} sm={4}>
@@ -589,6 +570,8 @@ export default function Update_Model({
                   value={
                     gamisaraniamount + installmentAmount === 0
                       ? intialBalance
+                      : balance - (gamisaraniamount + installmentAmount) <= 0
+                      ? 0
                       : balance - (gamisaraniamount + installmentAmount)
                   }
                   displayType={"text"}
@@ -608,8 +591,10 @@ export default function Update_Model({
                   onChange={(e) => {
                     setTimestamp(
                       firebase.firestore.Timestamp.fromDate(e.toDate())
-                      );
-                      console.log(firebase.firestore.Timestamp.fromDate(e.toDate()))
+                    );
+                    console.log(
+                      firebase.firestore.Timestamp.fromDate(e.toDate())
+                    );
                   }}
                 />
               </Grid>
@@ -742,7 +727,6 @@ export default function Update_Model({
           </form>
         </div>
       )}
-   
     </Container>
   );
 }

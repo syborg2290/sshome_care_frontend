@@ -415,6 +415,7 @@ function Make_invoice() {
                         installemtnDay: days,
                         installemtnDate: dates,
                         gamisarani: gamisarani,
+                        gamisarani_amount: gamisaraniamount,
                         balance:
                           itemNOI[tablerows[0].i] * itemAPI[tablerows[0].i] -
                           gamisaraniamount,
@@ -574,6 +575,7 @@ function Make_invoice() {
                         installemtnDay: days,
                         installemtnDate: dates,
                         gamisarani: gamisarani,
+                        gamisarani_amount: gamisaraniamount,
                         balance:
                           itemNOI[tablerows[0].i] * itemAPI[tablerows[0].i] -
                           gamisaraniamount,
@@ -735,6 +737,7 @@ function Make_invoice() {
                     installemtnDay: days,
                     installemtnDate: dates,
                     gamisarani: gamisarani,
+                    gamisarani_amount: gamisaraniamount,
                     balance:
                       itemNOI[tablerows[0].i] * itemAPI[tablerows[0].i] -
                       gamisaraniamount,
@@ -892,6 +895,7 @@ function Make_invoice() {
                     installemtnDay: days,
                     installemtnDate: dates,
                     gamisarani: gamisarani,
+                    gamisarani_amount: gamisaraniamount,
                     balance:
                       itemNOI[tablerows[0].i] * itemAPI[tablerows[0].i] -
                       gamisaraniamount,
@@ -1042,6 +1046,7 @@ function Make_invoice() {
         installemtnDay: null,
         installemtnDate: null,
         gamisarani: gamisarani,
+        gamisarani_amount: gamisaraniamount,
         balance: 0,
         deadlineTimestamp: null,
         selectedType: selectedType,

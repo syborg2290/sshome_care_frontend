@@ -10,7 +10,6 @@ import PendingList from "../dashboard/dashboard_contents/pending_Blacklist/Pendi
 import InvoiceList from "../dashboard/dashboard_contents/invoice_List/Invoice_List";
 import ExpireInvoice from "../dashboard/dashboard_contents/expire_Table/Expire_Invoice";
 
-
 import firebase from "firebase";
 import db from "../../../../config/firebase.js";
 
@@ -24,9 +23,11 @@ function isDateBeforeToday(date) {
 export default function Dashboard() {
   // eslint-disable-next-line
   const [pendingBlackList, setPendingBlackList] = useState([]);
+  const [expiredList, setExpiredList] = useState([]);
 
   useEffect(() => {
     db.collection("invoice")
+      .where("status_of_payandgo", "==", "expired")
       .where("status_of_payandgo", "==", "onGoing")
       .get()
       .then((onSnap) => {
@@ -228,8 +229,8 @@ export default function Dashboard() {
       new Date(eachRe.data()?.deadlineTimestamp?.seconds * 1000)
     );
     if (isBeforeDate) {
-      setPendingBlackList([
-        ...pendingBlackList,
+      setExpiredList([
+        ...expiredList,
         {
           invoice_number: eachRe.data().invoice_number,
           nic: eachRe.data()?.nic,
@@ -423,8 +424,8 @@ export default function Dashboard() {
       new Date(eachRe.data()?.deadlineTimestamp?.seconds * 1000)
     );
     if (isBeforeDate) {
-      setPendingBlackList([
-        ...pendingBlackList,
+      setExpiredList([
+        ...expiredList,
         {
           invoice_number: eachRe.data().invoice_number,
           nic: eachRe.data()?.nic,
@@ -451,8 +452,7 @@ export default function Dashboard() {
       </Grid>
       {/* END Arreas Table */}
 
-
-         {/*START Expire Invoice Table */}
+      {/*START Expire Invoice Table */}
 
       <Grid container spacing={4}>
         <Grid item xs={12}>

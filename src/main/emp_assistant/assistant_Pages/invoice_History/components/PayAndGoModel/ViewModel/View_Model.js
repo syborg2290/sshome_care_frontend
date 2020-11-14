@@ -169,7 +169,7 @@ export default function View_Model({ items_list_props, data }) {
                   :
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  {data.amount}
+                  {data.gamisarani_amount}
                 </Grid>
               </Grid>
               <Grid className="lbl_topiSub" item xs={12} sm={12}>

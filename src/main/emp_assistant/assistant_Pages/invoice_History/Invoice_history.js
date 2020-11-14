@@ -235,7 +235,7 @@ export default function Invoice_history() {
     },
 
     {
-      name: "Total Discount",
+      name: "Total_Discount",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -317,7 +317,7 @@ export default function Invoice_history() {
     },
 
     {
-      name: "Total Discount",
+      name: "Total_Discount",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -389,7 +389,7 @@ export default function Invoice_history() {
             ),
             MID: siDoc.data().mid,
             NIC: siDoc.data().nic,
-            Discount: (
+            Total_Discount: (
               <CurrencyFormat
                 value={siDoc.data().discount}
                 displayType={"text"}
@@ -508,7 +508,7 @@ export default function Invoice_history() {
             Date: moment(siDoc.data()?.date?.toDate()).format(
               "dddd, MMMM Do YYYY"
             ),
-            Discount: (
+            Total_Discount: (
               <CurrencyFormat
                 value={siDoc.data().discount}
                 displayType={"text"}

@@ -10,23 +10,25 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
-import { Row, Col } from "antd";
-
-
-//icons
 
 export default function Full_Payment_Model({ items_list_props }) {
   const [itemsList, setItemList] = useState([]);
-   const [itemTableData, setItemTableData] = useState([]);
-  // eslint-disable-next-line
-  const [allTtemData, setAllItemData] = useState([]);
-  const [visible, setVisible] = useState(false);
-  const [currentIndx, setCurrentIndx] = useState(0);
-  const [itemListSeMo, setItemListSeMo] = useState([]);
-  const [itemListSeMoCon, setItemListSeMoCon] = useState([]);
 
   useEffect(() => {
     items_list_props.forEach((each) => {
+      let itemDataSeMo = [];
+      let listOfSerilNo = [];
+      let listOfModelNo = [];
+      let listOfChassisNo = [];
+      listOfSerilNo = each.serialNo;
+      listOfModelNo = each.modelNo;
+      listOfChassisNo = each.chassisNo;
+
+      itemDataSeMo.push({
+        serialNo: listOfSerilNo,
+        modelNo: listOfModelNo,
+        chassisNo: listOfChassisNo,
+      });
       db.collection("item")
         .doc(each.item_id)
         .get()
@@ -35,8 +37,7 @@ export default function Full_Payment_Model({ items_list_props }) {
             ...old,
             {
               item_name: th.data().itemName,
-              serial_no: each.serialNo,
-              dp: each.downpayment,
+              listSe: itemDataSeMo,
               discount: each.discount,
               qty: each.qty,
               color: th.data().color,
@@ -46,7 +47,6 @@ export default function Full_Payment_Model({ items_list_props }) {
             },
           ]);
         });
-       
     });
   }, [items_list_props]);
 
@@ -82,29 +82,6 @@ export default function Full_Payment_Model({ items_list_props }) {
                   <Grid item xs={12} sm={7}>
                     <p>{eachItem.item_name}</p>
                   </Grid>
-                    {/* <Grid className="lbl_topis" item xs={12} sm={4}>
-                    Serial No
-                  </Grid>
-                  <Grid item xs={12} sm={1}>
-                    :
-                  </Grid>
-                  <Grid item xs={12} sm={7}>
-                    <p>{eachItem.serial_no}</p>
-                  </Grid> */}
-                  <Grid className="lbl_topis" item xs={12} sm={4}>
-                    Basic Payment(LKR)
-                  </Grid>
-                  <Grid item xs={12} sm={1}>
-                    :
-                  </Grid>
-                  <Grid item xs={12} sm={7}>
-                    <CurrencyFormat
-                      value={eachItem.dp}
-                      displayType={"text"}
-                      thousandSeparator={true}
-                      prefix={" "}
-                    />
-                  </Grid>
                   <Grid className="lbl_topis" item xs={12} sm={4}>
                     Item Discount(LKR)
                   </Grid>
@@ -138,15 +115,6 @@ export default function Full_Payment_Model({ items_list_props }) {
                     <p>{eachItem.color}</p>
                   </Grid>
                   <Grid className="lbl_topis" item xs={12} sm={4}>
-                    Model No.
-                  </Grid>
-                  <Grid item xs={12} sm={1}>
-                    :
-                  </Grid>
-                  <Grid item xs={12} sm={7}>
-                    <p>{eachItem.model_no}</p>
-                  </Grid>
-                  <Grid className="lbl_topis" item xs={12} sm={4}>
                     Guarantee Period
                   </Grid>
                   <Grid item xs={12} sm={1}>
@@ -163,54 +131,50 @@ export default function Full_Payment_Model({ items_list_props }) {
                     <hr />
                   </Grid>
                 </Grid>
-                  
-              <TableContainer component={Paper} className="main_containerNo">
-                <Table
-                  className="gass_Table"
-                  size="small"
-                  aria-label="a dense table"
-                >
-                  <TableHead className="No_Table_head">
-                    <TableRow>
-                      <TableCell className="tbl_cell">SerialNo</TableCell>
-                      <TableCell className="tbl_cell" align="right">
-                        ModelNo
-                      </TableCell>
-                      <TableCell className="tbl_cell" align="right">
-                        ChasisseNo
-                      </TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {itemListSeMoCon.length > 0
-                      ? itemListSeMoCon.map((row) => (
-                          <TableRow key={0}>
-                            <TableCell component="th" scope="row">
-                              {itemListSeMo[currentIndx]?.serialNo.map(
-                                (serailNoT) => (
+
+                <TableContainer component={Paper} className="main_containerNo">
+                  <Table
+                    className="gass_Table"
+                    size="small"
+                    aria-label="a dense table"
+                  >
+                    <TableHead className="No_Table_head">
+                      <TableRow>
+                        <TableCell className="tbl_cell">SerialNo</TableCell>
+                        <TableCell className="tbl_cell" align="right">
+                          ModelNo
+                        </TableCell>
+                        <TableCell className="tbl_cell" align="right">
+                          ChasisseNo
+                        </TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {eachItem.listSe.length > 0
+                        ? eachItem?.listSe?.map((row) => (
+                            <TableRow key={0}>
+                              <TableCell component="th" scope="row">
+                                {eachItem.listSe[0]?.serialNo?.map((serailNoT) => (
                                   <h5 key={serailNoT}>{serailNoT}</h5>
-                                )
-                              )}
-                            </TableCell>
-                            <TableCell component="th" scope="row">
-                              {itemListSeMo[currentIndx]?.modelNo.map(
-                                (modelNoT) => (
+                                ))}
+                              </TableCell>
+                              <TableCell component="th" scope="row">
+                                {eachItem.listSe[0]?.modelNo?.map((modelNoT) => (
                                   <h5 key={modelNoT}>{modelNoT}</h5>
-                                )
-                              )}
-                            </TableCell>
-                            <TableCell component="th" scope="row">
-                              {itemListSeMo[currentIndx]?.chassisNo.map(
-                                (chassisNoT) => (
-                                  <h5 key={chassisNoT}>{chassisNoT}</h5>
-                                )
-                              )}
-                            </TableCell>
-                          </TableRow>
-                        ))
-                      : ""}
-                  </TableBody>
-                </Table>
+                                ))}
+                              </TableCell>
+                              <TableCell component="th" scope="row">
+                                {eachItem.listSe[0]?.chassisNo?.map(
+                                  (chassisNoT) => (
+                                    <h5 key={chassisNoT}>{chassisNoT}</h5>
+                                  )
+                                )}
+                              </TableCell>
+                            </TableRow>
+                          ))
+                        : ""}
+                    </TableBody>
+                  </Table>
                 </TableContainer>
                 <hr />
               </form>

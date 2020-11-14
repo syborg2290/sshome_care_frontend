@@ -374,6 +374,8 @@ function Make_invoice() {
                       let objItem = {
                         item_id: one.id,
                         serialNo: one.serialNo[0],
+                        modelNo: one.modelNo[0],
+                        chassisNo: one.chassisNo[0],
                         qty: parseInt(itemQty[one.i]),
                         paymentWay: one.paymentWay,
                         downpayment: itemDP[one.i] === "" ? 0 : itemDP[one.i],
@@ -529,7 +531,10 @@ function Make_invoice() {
                     tablerows.forEach((one) => {
                       let objItem = {
                         item_id: one.id,
+
                         serialNo: one.serialNo[0],
+                        modelNo: one.modelNo[0],
+                        chassisNo: one.chassisNo[0],
                         qty: parseInt(itemQty[one.i]),
                         paymentWay: one.paymentWay,
                         downpayment: itemDP[one.i] === "" ? 0 : itemDP[one.i],
@@ -689,6 +694,8 @@ function Make_invoice() {
                   let objItem = {
                     item_id: one.id,
                     serialNo: one.serialNo[0],
+                    modelNo: one.modelNo[0],
+                    chassisNo: one.chassisNo[0],
                     qty: parseInt(itemQty[one.i]),
                     paymentWay: one.paymentWay,
                     downpayment: itemDP[one.i] === "" ? 0 : itemDP[one.i],
@@ -842,6 +849,8 @@ function Make_invoice() {
                   let objItem = {
                     item_id: one.id,
                     serialNo: one.serialNo[0],
+                    modelNo: one.modelNo[0],
+                    chassisNo: one.chassisNo[0],
                     qty: parseInt(itemQty[one.i]),
                     paymentWay: one.paymentWay,
                     downpayment: itemDP[one.i] === "" ? 0 : itemDP[one.i],
@@ -981,13 +990,19 @@ function Make_invoice() {
 
       tablerows.forEach((one) => {
         let listOfSerilNo = [];
+        let listOfModelNo = [];
+        let listOfChassisNo = [];
         for (var n = 0; n < parseInt(itemQty[one.i]); n++) {
           listOfSerilNo.push(one.serialNo[n]);
+          listOfModelNo.push(one.modelNo[n]);
+          listOfChassisNo.push(one.chassisNo[n]);
         }
         if (listOfSerilNo.length === parseInt(itemQty[one.i])) {
           let objItem = {
             item_id: one.id,
             serialNo: listOfSerilNo,
+            modelNo: listOfModelNo,
+            chassisNo: listOfChassisNo,
             qty: parseInt(itemQty[one.i]),
             paymentWay: one.paymentWay,
             downpayment: itemDP[one.i] === "" ? 0 : itemDP[one.i],

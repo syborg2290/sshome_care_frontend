@@ -22,6 +22,8 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
         i: i,
         id: ele.item.id,
         serialNo: ele.item.data.serialNo,
+        modelNo: ele.item.data.modelNo,
+        chassisNo:ele.item.data.chassisNo,
         title: ele.item.data.itemName,
         unitprice: ele.item.data.salePrice,
         qty: ele.qty,

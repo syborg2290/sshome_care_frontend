@@ -78,6 +78,7 @@ export default function Update_Model({
       .then((instReDoc) => {
         setInstallments(instReDoc.docs.length);
       });
+    
 
     db.collection("invoice")
       .where("invoice_number", "==", invoice_no)
@@ -94,7 +95,7 @@ export default function Update_Model({
                     inReDoc.docs[0].data().date.seconds * 1000
                   ).getTime()) /
                 (1000 * 3600 * 24);
-
+              
               if (inReDoc.docs[0].data().installmentType === "shop") {
                 if (7 - daysCountInitial >= 0) {
                   setDelayedDays(0);
@@ -173,6 +174,7 @@ export default function Update_Model({
                       ?.seconds * 1000
                   ).getTime()) /
                 (1000 * 3600 * 24);
+            
 
               if (inReDoc.docs[0].data().installmentType === "shop") {
                 if (7 - daysCount >= 0) {
@@ -206,7 +208,7 @@ export default function Update_Model({
                 if (14 - daysCount >= 0) {
                   setDelayedDays(0);
                 } else {
-                  setDelayedDays(daysCount - 7);
+                  setDelayedDays(daysCount - 14);
                   if (daysCount / 7 > 0) {
                     setAllInstallment(Math.round((daysCount - 14) / 7));
                   }
@@ -245,6 +247,7 @@ export default function Update_Model({
       .get()
       // eslint-disable-next-line
       .then(async (reInst) => {
+        let tot=parseInt(installmentAmount) + parseInt(gamisaraniamount)
         await db.collection("installment").add({
           invoice_number: invoice_no,
           serialNo: serialNo,
@@ -253,11 +256,11 @@ export default function Update_Model({
           isExpired: isEx,
           balance:
             balance -
-              (parseInt(installmentAmount) + parseInt(gamisaraniamount)) <=
+              tot <=
             0
               ? 0
               : balance -
-                (parseInt(installmentAmount) + parseInt(gamisaraniamount)),
+                tot,
           gamisarani_amount: parseInt(gamisaraniamount),
           date: updateTimestamp,
         });
@@ -267,19 +270,19 @@ export default function Update_Model({
       .collection("invoice")
       .where("invoice_number", "==", invoice_no)
       .get()
-      .then()
       .then(async (reBalance) => {
+        let totot = parseInt(installmentAmount) + parseInt(gamisaraniamount);
         await db
           .collection("invoice")
           .doc(reBalance.docs[0].id)
           .update({
             balance:
               reBalance.docs[0].data().balance -
-                (parseInt(installmentAmount) + parseInt(gamisaraniamount)) <=
+                totot <=
               0
                 ? 0
                 : reBalance.docs[0].data().balance -
-                  (parseInt(installmentAmount) + parseInt(gamisaraniamount)),
+                  totot,
           });
       });
 
@@ -605,7 +608,8 @@ export default function Update_Model({
                   onChange={(e) => {
                     setTimestamp(
                       firebase.firestore.Timestamp.fromDate(e.toDate())
-                    );
+                      );
+                      console.log(firebase.firestore.Timestamp.fromDate(e.toDate()))
                   }}
                 />
               </Grid>

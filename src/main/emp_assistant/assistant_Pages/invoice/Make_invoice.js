@@ -193,7 +193,7 @@ function Make_invoice() {
                         downpayment: itemDP[one.i],
                         noOfInstallment: itemNOI[one.i],
                         amountPerInstallment: itemAPI[one.i],
-                        discount: itemDiscount[0][one.i],
+                        discount: itemDiscount[one.i],
                       };
                       arrayPassingItems.push(objItem);
                     });
@@ -275,7 +275,7 @@ function Make_invoice() {
                 downpayment: itemDP[one.i],
                 noOfInstallment: itemNOI[one.i],
                 amountPerInstallment: itemAPI[one.i],
-                discount: itemDiscount[0][one.i],
+                discount: itemDiscount[one.i],
               };
               arrayPassingItems.push(objItem);
             });

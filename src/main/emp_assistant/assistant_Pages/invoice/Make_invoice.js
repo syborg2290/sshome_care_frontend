@@ -120,7 +120,7 @@ function Make_invoice() {
         (itemDP[tablerows[a].i] - itemDiscount[tablerows[a].i]) *
           itemQty[tablerows[a].i];
     }
-    return subTotalValue;
+    return subTotalValue + gamisaraniamount;
   };
 
   const handleQTYChange = (e, itemid, row) => {
@@ -207,7 +207,8 @@ function Make_invoice() {
                         discount: totalDiscount,
                         subTotal: subTotalFunc(),
                         balance:
-                          itemNOI[tablerows[0].i] * itemAPI[tablerows[0].i],
+                          itemNOI[tablerows[0].i] * itemAPI[tablerows[0].i] -
+                          gamisaraniamount,
                         total: subTotalFunc() - totalDiscount,
                         // discription: discription,
                         itemsList: arrayPassingItems,
@@ -287,7 +288,9 @@ function Make_invoice() {
                 installemtnDate: dates,
                 discount: totalDiscount,
                 subTotal: subTotalFunc(),
-                balance: itemNOI[tablerows[0].i] * itemAPI[tablerows[0].i],
+                balance:
+                  itemNOI[tablerows[0].i] * itemAPI[tablerows[0].i] -
+                  gamisaraniamount,
                 total: subTotalFunc() - totalDiscount,
                 // discription: discription,
                 itemsList: arrayPassingItems,
@@ -401,7 +404,8 @@ function Make_invoice() {
                         installemtnDate: dates,
                         gamisarani: gamisarani,
                         balance:
-                          itemNOI[tablerows[0].i] * itemAPI[tablerows[0].i],
+                          itemNOI[tablerows[0].i] * itemAPI[tablerows[0].i] -
+                          gamisaraniamount,
                         deadlineTimestamp: deadlineTimestamp,
                         selectedType: selectedType,
                         discount: totalDiscount === "" ? 0 : totalDiscount,
@@ -559,7 +563,8 @@ function Make_invoice() {
                         installemtnDate: dates,
                         gamisarani: gamisarani,
                         balance:
-                          itemNOI[tablerows[0].i] * itemAPI[tablerows[0].i],
+                          itemNOI[tablerows[0].i] * itemAPI[tablerows[0].i] -
+                          gamisaraniamount,
                         deadlineTimestamp: deadlineTimestamp,
                         selectedType: selectedType,
                         discount: totalDiscount === "" ? 0 : totalDiscount,
@@ -718,7 +723,9 @@ function Make_invoice() {
                     installemtnDay: days,
                     installemtnDate: dates,
                     gamisarani: gamisarani,
-                    balance: itemNOI[tablerows[0].i] * itemAPI[tablerows[0].i],
+                    balance:
+                      itemNOI[tablerows[0].i] * itemAPI[tablerows[0].i] -
+                      gamisaraniamount,
                     deadlineTimestamp: deadlineTimestamp,
                     selectedType: selectedType,
                     discount: totalDiscount === "" ? 0 : totalDiscount,
@@ -873,7 +880,9 @@ function Make_invoice() {
                     installemtnDay: days,
                     installemtnDate: dates,
                     gamisarani: gamisarani,
-                    balance: itemNOI[tablerows[0].i] * itemAPI[tablerows[0].i],
+                    balance:
+                      itemNOI[tablerows[0].i] * itemAPI[tablerows[0].i] -
+                      gamisaraniamount,
                     deadlineTimestamp: deadlineTimestamp,
                     selectedType: selectedType,
                     discount: totalDiscount === "" ? 0 : totalDiscount,
@@ -1362,7 +1371,8 @@ function Make_invoice() {
                                 (ob) => ob.paymentWay === "PayandGo"
                               )
                                 ? itemNOI[tablerows[0].i] *
-                                  itemAPI[tablerows[0].i]
+                                    itemAPI[tablerows[0].i] -
+                                  gamisaraniamount
                                 : 0
                             }
                             displayType={"text"}

@@ -104,8 +104,8 @@ export default function Invoice_history() {
         installemtnDayDate: null,
         discount: fullPaymentAllData[currentIndx].data?.discount,
         subTotal:
-          fullPaymentAllData[currentIndx].data?.total +
-          fullPaymentAllData[currentIndx].data?.discount,
+          parseInt(fullPaymentAllData[currentIndx].data?.total) +
+          parseInt(fullPaymentAllData[currentIndx].data?.discount),
         total: fullPaymentAllData[currentIndx].data?.total,
         discription: "",
         balance: 0,
@@ -133,8 +133,8 @@ export default function Invoice_history() {
               payangoAllData[currentIndx2]?.data?.installemtnDayDate,
             discount: payangoAllData[currentIndx2]?.data?.discount,
             subTotal:
-              payangoAllData[currentIndx2]?.data?.total +
-              payangoAllData[currentIndx2]?.data?.discount,
+              parseInt(payangoAllData[currentIndx2]?.data?.total) +
+              parseInt(payangoAllData[currentIndx2]?.data?.discount),
             total: payangoAllData[currentIndx2]?.data?.total,
             discription: "",
             balance: payangoAllData[currentIndx2]?.data?.balance,

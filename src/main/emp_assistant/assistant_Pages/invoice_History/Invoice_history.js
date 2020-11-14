@@ -400,7 +400,7 @@ export default function Invoice_history() {
 
             Balance: (
               <CurrencyFormat
-                value={10000}
+                value={siDoc.data().balance}
                 displayType={"text"}
                 thousandSeparator={true}
                 prefix={" "}

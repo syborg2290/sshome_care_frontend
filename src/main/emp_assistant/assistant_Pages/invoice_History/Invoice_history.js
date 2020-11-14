@@ -239,19 +239,19 @@ export default function Invoice_history() {
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+          style: { fontSize: "15px", color: "black", fontWeight: "600", minWidth: "15px", },
         }),
       },
     },
-    {
-      name: "Basic_Payment",
-      options: {
-        filter: false,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
+    // {
+    //   name: "Basic_Payment",
+    //   options: {
+    //     filter: false,
+    //     setCellHeaderProps: (value) => ({
+    //       style: { fontSize: "15px", color: "black", fontWeight: "600" },
+    //     }),
+    //   },
+    // },
       {
       name: "Balance",
       options: {
@@ -280,6 +280,10 @@ export default function Invoice_history() {
             fontSize: "15px",
             color: "black",
             fontWeight: "600",
+             minWidth: "215px",
+         
+             
+              // maxWidth: "800px",
           },
         }),
       },
@@ -298,15 +302,15 @@ export default function Invoice_history() {
         }),
       },
     },
-        {
-      name: "SerialNo",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
+    //     {
+    //   name: "SerialNo",
+    //   options: {
+    //     filter: true,
+    //     setCellHeaderProps: (value) => ({
+    //       style: { fontSize: "15px", color: "black", fontWeight: "600" },
+    //     }),
+    //   },
+    // },
         {
       name: "Type",
       options: {
@@ -407,14 +411,14 @@ export default function Invoice_history() {
                 prefix={" "}
               />
             ),
-            Basic_Payment: (
-              <CurrencyFormat
-                value={siDoc.data().total}
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={" "}
-              />
-            ),
+            // Basic_Payment: (
+            //   <CurrencyFormat
+            //     value={siDoc.data().total}
+            //     displayType={"text"}
+            //     thousandSeparator={true}
+            //     prefix={" "}
+            //   />
+            // ),
               Balance: (
               <CurrencyFormat
                 value={10000}
@@ -521,7 +525,7 @@ export default function Invoice_history() {
           });
           rawDataFull.push({
             InvoiceNo: siDoc.data().invoice_number,
-             SerialNo: siDoc.data().serial_no,  
+            //  SerialNo: siDoc.data().serial_no,  
               Type: siDoc.data().type, 
             Date: moment(siDoc.data()?.date?.toDate()).format(
               "dddd, MMMM Do YYYY"

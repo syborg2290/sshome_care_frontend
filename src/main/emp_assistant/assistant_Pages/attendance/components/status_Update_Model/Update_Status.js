@@ -1,11 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Row, Col ,Spin} from "antd";
 import {
   TextField,
   Button,
-  Select,
-  FormControl,
-  InputLabel,
   Grid,
   Container,
   Typography,
@@ -23,6 +20,7 @@ export default function Update_Status({
 //   reason,
 }) {
 
+   // eslint-disable-next-line
     const [isLoadingSubmit, setLoadingSubmit] = useState(false);
      const [reason, setReason] = useState("");
     

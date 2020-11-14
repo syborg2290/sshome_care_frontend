@@ -381,7 +381,7 @@ export default function Update_Model({
                   <p>{serialNo}</p>
                 </Grid>
                
-                <Grid className="lbl_topi" item xs={12} sm={12}>Gamisarani Customers
+                <Grid className="lbl_topi-gami" item xs={12} sm={12}>-Gamisarani Customers-
                                   <br />
  <hr />
                 </Grid>

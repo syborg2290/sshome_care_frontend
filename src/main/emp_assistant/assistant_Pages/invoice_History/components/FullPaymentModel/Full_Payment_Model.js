@@ -3,14 +3,32 @@ import { Grid, Container, Typography } from "@material-ui/core";
 import { Spin } from "antd";
 import CurrencyFormat from "react-currency-format";
 import db from "../../../../../../config/firebase.js";
-
-//icons
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import Paper from "@material-ui/core/Paper";
 
 export default function Full_Payment_Model({ items_list_props }) {
   const [itemsList, setItemList] = useState([]);
 
   useEffect(() => {
     items_list_props.forEach((each) => {
+      let itemDataSeMo = [];
+      let listOfSerilNo = [];
+      let listOfModelNo = [];
+      let listOfChassisNo = [];
+      listOfSerilNo = each.serialNo;
+      listOfModelNo = each.modelNo;
+      listOfChassisNo = each.chassisNo;
+
+      itemDataSeMo.push({
+        serialNo: listOfSerilNo,
+        modelNo: listOfModelNo,
+        chassisNo: listOfChassisNo,
+      });
       db.collection("item")
         .doc(each.item_id)
         .get()
@@ -19,7 +37,7 @@ export default function Full_Payment_Model({ items_list_props }) {
             ...old,
             {
               item_name: th.data().itemName,
-              serial_no: each.serialNo,
+              listSe: itemDataSeMo,
               discount: each.discount,
               qty: each.qty,
               color: th.data().color,
@@ -64,16 +82,6 @@ export default function Full_Payment_Model({ items_list_props }) {
                   <Grid item xs={12} sm={7}>
                     <p>{eachItem.item_name}</p>
                   </Grid>
-                    <Grid className="lbl_topis" item xs={12} sm={4}>
-                    Serial No
-                  </Grid>
-                  <Grid item xs={12} sm={1}>
-                    :
-                  </Grid>
-                  <Grid item xs={12} sm={7}>
-                    <p>{eachItem.serial_no}</p>
-                  </Grid>
-                 
                   <Grid className="lbl_topis" item xs={12} sm={4}>
                     Item Discount(LKR)
                   </Grid>
@@ -107,15 +115,6 @@ export default function Full_Payment_Model({ items_list_props }) {
                     <p>{eachItem.color}</p>
                   </Grid>
                   <Grid className="lbl_topis" item xs={12} sm={4}>
-                    Model No.
-                  </Grid>
-                  <Grid item xs={12} sm={1}>
-                    :
-                  </Grid>
-                  <Grid item xs={12} sm={7}>
-                    <p>{eachItem.model_no}</p>
-                  </Grid>
-                  <Grid className="lbl_topis" item xs={12} sm={4}>
                     Guarantee Period
                   </Grid>
                   <Grid item xs={12} sm={1}>
@@ -132,6 +131,52 @@ export default function Full_Payment_Model({ items_list_props }) {
                     <hr />
                   </Grid>
                 </Grid>
+
+                <TableContainer component={Paper} className="main_containerNo">
+                  <Table
+                    className="gass_Table"
+                    size="small"
+                    aria-label="a dense table"
+                  >
+                    <TableHead className="No_Table_head">
+                      <TableRow>
+                        <TableCell className="tbl_cell">SerialNo</TableCell>
+                        <TableCell className="tbl_cell" align="right">
+                          ModelNo
+                        </TableCell>
+                        <TableCell className="tbl_cell" align="right">
+                          ChasisseNo
+                        </TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {eachItem.listSe.length > 0
+                        ? eachItem?.listSe?.map((row) => (
+                            <TableRow key={0}>
+                              <TableCell component="th" scope="row">
+                                {eachItem.listSe[0]?.serialNo?.map((serailNoT) => (
+                                  <h5 key={serailNoT}>{serailNoT}</h5>
+                                ))}
+                              </TableCell>
+                              <TableCell component="th" scope="row">
+                                {eachItem.listSe[0]?.modelNo?.map((modelNoT) => (
+                                  <h5 key={modelNoT}>{modelNoT}</h5>
+                                ))}
+                              </TableCell>
+                              <TableCell component="th" scope="row">
+                                {eachItem.listSe[0]?.chassisNo?.map(
+                                  (chassisNoT) => (
+                                    <h5 key={chassisNoT}>{chassisNoT}</h5>
+                                  )
+                                )}
+                              </TableCell>
+                            </TableRow>
+                          ))
+                        : ""}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+                <hr />
               </form>
             </div>
           );

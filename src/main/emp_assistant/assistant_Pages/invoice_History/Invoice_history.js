@@ -235,7 +235,7 @@ export default function Invoice_history() {
     },
 
     {
-      name: "Discount",
+      name: "Total Discount",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -278,7 +278,6 @@ export default function Invoice_history() {
             color: "black",
             fontWeight: "600",
             minWidth: "215px",
-
             // maxWidth: "800px",
           },
         }),
@@ -298,7 +297,6 @@ export default function Invoice_history() {
         }),
       },
     },
-
     {
       name: "Type",
       options: {
@@ -319,7 +317,7 @@ export default function Invoice_history() {
     },
 
     {
-      name: "Discount",
+      name: "Total Discount",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({

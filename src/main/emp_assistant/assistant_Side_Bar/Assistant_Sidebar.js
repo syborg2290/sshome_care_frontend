@@ -16,6 +16,7 @@ import {
   GroupAdd as GroupAddIcon,
   Commute as CommuteIcon,
   PlaylistAddCheck as PlaylistAddCheckIcon,
+  MonetizationOnOutlined as MonetizationOnOutlinedIcon,
 } from "@material-ui/icons";
 
 import { useTheme } from "@material-ui/styles";
@@ -102,6 +103,12 @@ const structure = [
     label: "Employees",
     link: "/assistant/ui/employee",
     icon: <GroupAddIcon className="icons" />,
+  },
+   {
+    id: 20,
+    label: "Salary",
+    link: "/assistant/ui/salary",
+    icon: <MonetizationOnOutlinedIcon className="icons" />,
   },
   {
     id: 18,

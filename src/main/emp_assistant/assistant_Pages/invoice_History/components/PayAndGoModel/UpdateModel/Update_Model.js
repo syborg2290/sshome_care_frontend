@@ -87,12 +87,13 @@ export default function Update_Model({
           .get()
           .then((instReDoc) => {
             if (instReDoc.docs.length === 0) {
-              let daysCountInitial =
+              let daysCountNode1 =
                 (new Date().getTime() -
                   new Date(
                     inReDoc.docs[0].data().date.seconds * 1000
                   ).getTime()) /
                 (1000 * 3600 * 24);
+              let daysCountInitial = daysCountNode1 - 31;
 
               if (inReDoc.docs[0].data().installmentType === "shop") {
                 if (7 - daysCountInitial >= 0) {
@@ -165,13 +166,14 @@ export default function Update_Model({
                 }
               }
             } else {
-              let daysCount =
+              let daysCountNode2 =
                 (new Date().getTime() -
                   new Date(
                     instReDoc.docs[instReDoc.docs.length - 1].data()?.date
                       ?.seconds * 1000
                   ).getTime()) /
                 (1000 * 3600 * 24);
+              let daysCount = daysCountNode2 - 31;
 
               if (inReDoc.docs[0].data().installmentType === "shop") {
                 if (7 - daysCount >= 0) {

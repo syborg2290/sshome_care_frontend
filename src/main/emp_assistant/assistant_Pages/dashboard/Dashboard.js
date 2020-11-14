@@ -52,10 +52,11 @@ export default function Dashboard() {
   };
 
   const intialStateOfArreasCheck = async (eachRe) => {
-    let daysCountInitial =
+    let daysCountNode1 =
       (new Date().getTime() -
         new Date(eachRe.data()?.date?.seconds * 1000).getTime()) /
       (1000 * 3600 * 24);
+    let daysCountInitial = daysCountNode1 - 31;
     if (eachRe.data().installmentType === "shop") {
       if (7 - daysCountInitial >= 0) {
       } else {
@@ -249,12 +250,13 @@ export default function Dashboard() {
   // };
 
   const afterStateOfArreasCheck = async (instReDoc, eachRe) => {
-    let daysCount =
+    let daysCountNode2 =
       (new Date().getTime() -
         new Date(
           instReDoc.docs[instReDoc.docs.length - 1].data()?.date?.seconds * 1000
         ).getTime()) /
       (1000 * 3600 * 24);
+    let daysCount = daysCountNode2 - 31;
 
     let instRECheckCount = 0;
 

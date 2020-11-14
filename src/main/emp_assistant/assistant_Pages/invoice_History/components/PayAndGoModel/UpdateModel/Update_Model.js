@@ -454,6 +454,10 @@ export default function Update_Model({
                   onChange={(e) => {
                     if (gamisarani) {
                       setGamisarani(false);
+                      setGamisaraniId("");
+                      setGamisaraniInitialAmount(0);
+                      setGamisaraniamount(0);
+                      setGamisaraniNic("");
                     } else {
                       setGamisarani(true);
                     }

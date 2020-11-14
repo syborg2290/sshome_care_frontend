@@ -113,14 +113,14 @@ function Make_invoice() {
   }, []);
 
   const subTotalFunc = () => {
-    var subTotalValue = 0;
+    var subTotalValue = gamisaraniamount;
     for (var a = 0; a < tablerows.length; a++) {
       subTotalValue =
         subTotalValue +
         (itemDP[tablerows[a].i] - itemDiscount[tablerows[a].i]) *
           itemQty[tablerows[a].i];
     }
-    return subTotalValue + gamisaraniamount;
+    return subTotalValue ;
   };
 
   const handleQTYChange = (e, itemid, row) => {

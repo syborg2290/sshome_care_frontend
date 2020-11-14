@@ -24,6 +24,7 @@ function isDateBeforeToday(date) {
 export default function Dashboard() {
   // eslint-disable-next-line
   const [pendingBlackList, setPendingBlackList] = useState([]);
+   const [expiredList, setExpiredList] = useState([]);
 
   useEffect(() => {
     db.collection("invoice")
@@ -228,8 +229,8 @@ export default function Dashboard() {
       new Date(eachRe.data()?.deadlineTimestamp?.seconds * 1000)
     );
     if (isBeforeDate) {
-      setPendingBlackList([
-        ...pendingBlackList,
+      setExpiredList([
+        ...expiredList,
         {
           invoice_number: eachRe.data().invoice_number,
           nic: eachRe.data()?.nic,
@@ -422,9 +423,9 @@ export default function Dashboard() {
     let isBeforeDate = isDateBeforeToday(
       new Date(eachRe.data()?.deadlineTimestamp?.seconds * 1000)
     );
-    if (isBeforeDate) {
-      setPendingBlackList([
-        ...pendingBlackList,
+     if (isBeforeDate) {
+      setExpiredList([
+        ...expiredList,
         {
           invoice_number: eachRe.data().invoice_number,
           nic: eachRe.data()?.nic,

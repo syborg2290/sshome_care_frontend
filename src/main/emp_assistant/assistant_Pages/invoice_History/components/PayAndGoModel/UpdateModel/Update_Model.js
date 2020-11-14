@@ -9,11 +9,8 @@ import {
 } from "@material-ui/core";
 import CurrencyFormat from "react-currency-format";
 import firebase from "firebase";
-import {
-  NotificationContainer,
-  NotificationManager,
-} from "react-notifications";
-import "react-notifications/lib/notifications.css";
+
+
 
 import db from "../../../../../../../config/firebase.js";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
@@ -53,6 +50,8 @@ export default function Update_Model({
 
   const [loadingNicsubmit, setLoadingNicSubmit] = useState(false);
   const [updateTimestamp, setTimestamp] = useState(null);
+
+  const [validation, setValidation] = useState("");
 
   const { confirm } = Modal;
 
@@ -405,9 +404,7 @@ export default function Update_Model({
           setLoadingNicSubmit(false);
         } else {
           setLoadingNicSubmit(false);
-          NotificationManager.warning(
-            "Any gamisarani customer not found from this NIC!"
-          );
+           setValidation("Any gamisarani customer not found from this NIC!");
         }
       });
   };
@@ -533,7 +530,8 @@ export default function Update_Model({
                 />
               </Grid>
               <Grid item xs={12} sm={1}></Grid>
-              <Grid item xs={12} sm={12}>
+                <Grid item xs={12} sm={12}>
+                    <p className="validate_updateEmployee">{validation}</p>
                 <hr />
               </Grid>
               <Grid className="lbl_topi" item xs={12} sm={4}>
@@ -736,7 +734,7 @@ export default function Update_Model({
           </form>
         </div>
       )}
-      <NotificationContainer />
+   
     </Container>
   );
 }

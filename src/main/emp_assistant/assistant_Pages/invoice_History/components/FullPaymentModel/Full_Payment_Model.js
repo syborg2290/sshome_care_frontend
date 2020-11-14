@@ -11,7 +11,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 
-export default function Full_Payment_Model({ items_list_props }) {
+export default function Full_Payment_Model({ items_list_props,data }) {
   const [itemsList, setItemList] = useState([]);
 
   useEffect(() => {
@@ -48,7 +48,7 @@ export default function Full_Payment_Model({ items_list_props }) {
           ]);
         });
     });
-  }, [items_list_props]);
+  }, [items_list_props,data]);
 
   return (
     <>
@@ -58,7 +58,34 @@ export default function Full_Payment_Model({ items_list_props }) {
       </Typography>
       <Grid item xs={12} sm={12}>
         <hr className="titl_hr" />
-      </Grid>
+        </Grid>
+       
+         <form className="form" noValidate>
+           <Grid container spacing={2} >
+                <Grid className="lbl_topis" item xs={12} sm={5}>
+                  Gamisarani
+                </Grid>
+                <Grid item xs={12} sm={1}>
+                  :
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  oh no{/* {data.gamisarani ? "Yes" : "No"} */}
+                </Grid>
+                  <Grid className="lbl_topis" item xs={12} sm={5}>
+                  Gamisarani withdrawal Amount
+                </Grid>
+                <Grid item xs={12} sm={1}>
+                  :
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  44545454
+                </Grid>
+                   <Grid className="lbl_topis" item xs={12} sm={12}>
+                  <hr />
+                  </Grid>
+          </Grid>
+</form>
+
       {itemsList.length === 0 ? (
         <Spin
           size="large"
@@ -70,9 +97,12 @@ export default function Full_Payment_Model({ items_list_props }) {
       ) : (
         itemsList.map((eachItem) => {
           return (
+
+            
             <div key={eachItem.item_name} className="paper">
-              <form className="form" noValidate>
+              <form className="form1" noValidate>
                 <Grid container spacing={2}>
+              
                   {" "}
                   <Grid className="lbl_topis" item xs={12} sm={4}>
                     Item Name

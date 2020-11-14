@@ -120,7 +120,7 @@ function Make_invoice() {
         (itemDP[tablerows[a].i] - itemDiscount[tablerows[a].i]) *
           itemQty[tablerows[a].i];
     }
-    return subTotalValue ;
+    return subTotalValue;
   };
 
   const handleQTYChange = (e, itemid, row) => {
@@ -193,7 +193,8 @@ function Make_invoice() {
                         downpayment: itemDP[one.i],
                         noOfInstallment: itemNOI[one.i],
                         amountPerInstallment: itemAPI[one.i],
-                        discount: itemDiscount[one.i] === "" ? 0 : itemDiscount[one.i],
+                        discount:
+                          itemDiscount[one.i] === "" ? 0 : itemDiscount[one.i],
                       };
                       arrayPassingItems.push(objItem);
                     });
@@ -1552,6 +1553,10 @@ function Make_invoice() {
                     onChange={(e) => {
                       if (gamisarani) {
                         setGamisarani(false);
+                        setGamisaraniId("");
+                        setGamisaraniInitialAmount(0);
+                        setGamisaraniamount(0);
+                        setGamisaraniNic("");
                       } else {
                         setGamisarani(true);
                       }

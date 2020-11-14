@@ -30,7 +30,7 @@ export default function Update_Model({
   customer_id,
   closeModal,
   balanceProp,
-  isEx
+  isEx,
 }) {
   const [installments, setInstallments] = useState(0);
   // eslint-disable-next-line
@@ -251,7 +251,7 @@ export default function Update_Model({
           serialNo: serialNo,
           amount: parseInt(installmentAmount) + parseInt(gamisaraniamount),
           delayed: delayedCharges === "" ? 0 : parseInt(delayedCharges),
-          isExpired:isEx,
+          isExpired: isEx,
           balance:
             balance -
               (parseInt(installmentAmount) + parseInt(gamisaraniamount)) <=
@@ -262,6 +262,26 @@ export default function Update_Model({
           gamisarani_amount: parseInt(gamisaraniamount),
           date: updateTimestamp,
         });
+      });
+
+    await db
+      .collection("invoice")
+      .where("invoice_number", "==", invoice_no)
+      .get()
+      .then()
+      .then(async (reBalance) => {
+        await db
+          .collection("invoice")
+          .doc(reBalance.docs[0].id)
+          .update({
+            balance:
+              reBalance.docs[0].data().balance -
+                (parseInt(installmentAmount) + parseInt(gamisaraniamount)) <=
+              0
+                ? 0
+                : reBalance.docs[0].data().balance -
+                  (parseInt(installmentAmount) + parseInt(gamisaraniamount)),
+          });
       });
 
     if (gamisarani && gamisaraniamount > 0) {

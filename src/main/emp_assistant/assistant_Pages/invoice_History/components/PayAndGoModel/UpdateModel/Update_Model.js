@@ -50,6 +50,7 @@ export default function Update_Model({
   const [updateTimestamp, setTimestamp] = useState(null);
 
   const [validation, setValidation] = useState("");
+  const [validationDate, setValidationDate] = useState("");
 
   const { confirm } = Modal;
 
@@ -324,38 +325,42 @@ export default function Update_Model({
   };
 
   const showConfirm = async () => {
-    confirm({
-      title: "Do you Want to Print a Recipt?",
-      icon: <ExclamationCircleOutlined />,
+    if (updateTimestamp === null) {
+      setValidationDate("Please select the date of installment!");
+    } else {
+      confirm({
+        title: "Do you Want to Print a Recipt?",
+        icon: <ExclamationCircleOutlined />,
 
-      async onOk() {
-        await updateInstallment();
-        let toto = parseInt(installmentAmount) + parseInt(gamisaraniamount);
-        let passingWithCustomerObj = {
-          invoice_number: invoice_no,
-          serialNo: serialNo,
-          customerDetails: customer,
-          total: totalPlusRed(),
-          balance: balance - toto <= 0 ? 0 : balance - toto,
-          gamisarani_amount: parseInt(gamisaraniamount),
-          date: updateTimestamp,
-          delayedCharges: Math.round(delayedCharges),
-        };
+        async onOk() {
+          await updateInstallment();
+          let toto = parseInt(installmentAmount) + parseInt(gamisaraniamount);
+          let passingWithCustomerObj = {
+            invoice_number: invoice_no,
+            serialNo: serialNo,
+            customerDetails: customer,
+            total: totalPlusRed(),
+            balance: balance - toto <= 0 ? 0 : balance - toto,
+            gamisarani_amount: parseInt(gamisaraniamount),
+            date: updateTimestamp,
+            delayedCharges: Math.round(delayedCharges),
+          };
 
-        let moveWith = {
-          pathname:
-            "/assistant/invoice_history/payAndGo/updateModel/PrintReceipt",
-          search: "?query=abc",
-          state: { detail: passingWithCustomerObj },
-        };
-        history.push(moveWith);
-      },
-      async onCancel() {
-        await updateInstallment();
-        closeModal();
-        window.location.reload();
-      },
-    });
+          let moveWith = {
+            pathname:
+              "/assistant/invoice_history/payAndGo/updateModel/PrintReceipt",
+            search: "?query=abc",
+            state: { detail: passingWithCustomerObj },
+          };
+          history.push(moveWith);
+        },
+        async onCancel() {
+          await updateInstallment();
+          closeModal();
+          window.location.reload();
+        },
+      });
+    }
   };
 
   const dueInstallmentsCount = () => {
@@ -706,6 +711,7 @@ export default function Update_Model({
                 </div>
               </Grid>
             </Grid>
+            <p className="validate_updateEmployee">{validationDate}</p>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={9}></Grid>
               <Grid item xs={12} sm={3}>
@@ -713,7 +719,7 @@ export default function Update_Model({
                   variant="contained"
                   color="primary"
                   disabled={
-                    totalPlusRed() > 0 || updateTimestamp !== null
+                    totalPlusRed() > 0
                       ? false
                       : true
                   }

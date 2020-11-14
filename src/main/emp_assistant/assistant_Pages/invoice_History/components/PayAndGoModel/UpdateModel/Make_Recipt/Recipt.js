@@ -16,8 +16,8 @@ import { useLocation, useHistory } from "react-router-dom";
 
 import "./Recipt.css";
 
-function createData(description, delayed, amount) {
-  return { description, delayed, amount };
+function createData(description, delayed,balance,amount) {
+  return { description, delayed,balance, amount };
 }
 
 class Recipt extends React.Component {
@@ -36,6 +36,7 @@ class Recipt extends React.Component {
   constructor(props) {
     super(props);
     this.state.invoice_number = this.props.prop?.invoice_number;
+     this.state.serial_number = this.props.prop?.serial_number;
     this.state.total = this.props.prop?.total;
     this.state.date = this.props.prop?.date;
     this.state.serial_num = this.props.prop?.serialNo;
@@ -89,6 +90,13 @@ class Recipt extends React.Component {
                     this.state.date?.toDate()
                   ).format("dddd, MMMM Do YYYY")}
                 </Col>
+                 <Col className="tiles" span={6}>
+                  Serial No.
+                </Col>
+                <Col className="tiles_details" span={8}>
+                  {this.state.serial_number}
+                </Col>
+                 <Col  span={10}></Col>
                 <Col className="tiles" span={6}>
                   Customer Name
                 </Col>
@@ -127,7 +135,11 @@ class Recipt extends React.Component {
                           <TableCell className="tbl_row">Description</TableCell>
                           <TableCell className="tbl_row" align="right">
                             {" "}
-                            Delayed Count
+                            Delayed Dates
+                          </TableCell>
+                           <TableCell className="tbl_row" align="right">
+                            {" "}
+                            Current Balance
                           </TableCell>
                           <TableCell className="tbl_row" align="right">
                             {" "}
@@ -142,6 +154,7 @@ class Recipt extends React.Component {
                               {row.description}
                             </TableCell>
                             <TableCell align="right">{row.delayed}</TableCell>
+                             <TableCell align="right">{row.balance}</TableCell>
                             <TableCell align="right">{row.amount}</TableCell>
                           </TableRow>
                         ))}

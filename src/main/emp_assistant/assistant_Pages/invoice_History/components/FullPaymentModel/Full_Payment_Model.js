@@ -3,11 +3,27 @@ import { Grid, Container, Typography } from "@material-ui/core";
 import { Spin } from "antd";
 import CurrencyFormat from "react-currency-format";
 import db from "../../../../../../config/firebase.js";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import Paper from "@material-ui/core/Paper";
+import { Row, Col } from "antd";
+
 
 //icons
 
 export default function Full_Payment_Model({ items_list_props }) {
   const [itemsList, setItemList] = useState([]);
+   const [itemTableData, setItemTableData] = useState([]);
+  // eslint-disable-next-line
+  const [allTtemData, setAllItemData] = useState([]);
+  const [visible, setVisible] = useState(false);
+  const [currentIndx, setCurrentIndx] = useState(0);
+  const [itemListSeMo, setItemListSeMo] = useState([]);
+  const [itemListSeMoCon, setItemListSeMoCon] = useState([]);
 
   useEffect(() => {
     items_list_props.forEach((each) => {
@@ -30,6 +46,7 @@ export default function Full_Payment_Model({ items_list_props }) {
             },
           ]);
         });
+       
     });
   }, [items_list_props]);
 
@@ -65,7 +82,7 @@ export default function Full_Payment_Model({ items_list_props }) {
                   <Grid item xs={12} sm={7}>
                     <p>{eachItem.item_name}</p>
                   </Grid>
-                    <Grid className="lbl_topis" item xs={12} sm={4}>
+                    {/* <Grid className="lbl_topis" item xs={12} sm={4}>
                     Serial No
                   </Grid>
                   <Grid item xs={12} sm={1}>
@@ -73,7 +90,7 @@ export default function Full_Payment_Model({ items_list_props }) {
                   </Grid>
                   <Grid item xs={12} sm={7}>
                     <p>{eachItem.serial_no}</p>
-                  </Grid>
+                  </Grid> */}
                   <Grid className="lbl_topis" item xs={12} sm={4}>
                     Basic Payment(LKR)
                   </Grid>
@@ -146,6 +163,56 @@ export default function Full_Payment_Model({ items_list_props }) {
                     <hr />
                   </Grid>
                 </Grid>
+                  
+              <TableContainer component={Paper} className="main_containerNo">
+                <Table
+                  className="gass_Table"
+                  size="small"
+                  aria-label="a dense table"
+                >
+                  <TableHead className="No_Table_head">
+                    <TableRow>
+                      <TableCell className="tbl_cell">SerialNo</TableCell>
+                      <TableCell className="tbl_cell" align="right">
+                        ModelNo
+                      </TableCell>
+                      <TableCell className="tbl_cell" align="right">
+                        ChasisseNo
+                      </TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {itemListSeMoCon.length > 0
+                      ? itemListSeMoCon.map((row) => (
+                          <TableRow key={0}>
+                            <TableCell component="th" scope="row">
+                              {itemListSeMo[currentIndx]?.serialNo.map(
+                                (serailNoT) => (
+                                  <h5 key={serailNoT}>{serailNoT}</h5>
+                                )
+                              )}
+                            </TableCell>
+                            <TableCell component="th" scope="row">
+                              {itemListSeMo[currentIndx]?.modelNo.map(
+                                (modelNoT) => (
+                                  <h5 key={modelNoT}>{modelNoT}</h5>
+                                )
+                              )}
+                            </TableCell>
+                            <TableCell component="th" scope="row">
+                              {itemListSeMo[currentIndx]?.chassisNo.map(
+                                (chassisNoT) => (
+                                  <h5 key={chassisNoT}>{chassisNoT}</h5>
+                                )
+                              )}
+                            </TableCell>
+                          </TableRow>
+                        ))
+                      : ""}
+                  </TableBody>
+                </Table>
+                </TableContainer>
+                <hr />
               </form>
             </div>
           );

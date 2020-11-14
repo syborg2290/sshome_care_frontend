@@ -16,8 +16,8 @@ import { useLocation, useHistory } from "react-router-dom";
 
 import "./Recipt.css";
 
-function createData(description, delayed,balance,amount) {
-  return { description, delayed,balance, amount };
+function createData(description, delayed, balance, amount) {
+  return { description, delayed, balance, amount };
 }
 
 class Recipt extends React.Component {
@@ -30,17 +30,15 @@ class Recipt extends React.Component {
     customer_name: "",
     date: null,
     serial_num: "",
-    balance:0,
   };
 
   constructor(props) {
     super(props);
     this.state.invoice_number = this.props.prop?.invoice_number;
-     this.state.serial_number = this.props.prop?.serial_number;
+    this.state.serial_number = this.props.prop?.serial_number;
     this.state.total = this.props.prop?.total;
     this.state.date = this.props.prop?.date;
     this.state.serial_num = this.props.prop?.serialNo;
-    this.state.balance = this.props.prop?.balance;
     this.state.delayed = this.props.prop?.delayedCharges;
     this.state.customer_nic = this.props.prop?.customerDetails?.nic;
     this.state.customer_name =
@@ -52,6 +50,12 @@ class Recipt extends React.Component {
       createData(
         "Installment Payment",
         this.props.prop?.delayedCharges,
+        <CurrencyFormat
+          value={this.props.prop?.balance}
+          displayType={"text"}
+          thousandSeparator={true}
+          prefix={" "}
+        />,
         <CurrencyFormat
           value={this.props.prop?.total}
           displayType={"text"}
@@ -86,17 +90,17 @@ class Recipt extends React.Component {
                   Date
                 </Col>
                 <Col className="tiles_details" span={6}>
-                  {moment(
-                    this.state.date?.toDate()
-                  ).format("dddd, MMMM Do YYYY")}
+                  {moment(this.state.date?.toDate()).format(
+                    "dddd, MMMM Do YYYY"
+                  )}
                 </Col>
-                 <Col className="tiles" span={6}>
+                <Col className="tiles" span={6}>
                   Serial No.
                 </Col>
                 <Col className="tiles_details" span={8}>
-                  {this.state.serial_number}
+                  {this.state.serial_num}
                 </Col>
-                 <Col  span={10}></Col>
+                <Col span={10}></Col>
                 <Col className="tiles" span={6}>
                   Customer Name
                 </Col>
@@ -137,7 +141,7 @@ class Recipt extends React.Component {
                             {" "}
                             Delayed Dates
                           </TableCell>
-                           <TableCell className="tbl_row" align="right">
+                          <TableCell className="tbl_row" align="right">
                             {" "}
                             Current Balance
                           </TableCell>
@@ -154,7 +158,7 @@ class Recipt extends React.Component {
                               {row.description}
                             </TableCell>
                             <TableCell align="right">{row.delayed}</TableCell>
-                             <TableCell align="right">{row.balance}</TableCell>
+                            <TableCell align="right">{row.balance}</TableCell>
                             <TableCell align="right">{row.amount}</TableCell>
                           </TableRow>
                         ))}

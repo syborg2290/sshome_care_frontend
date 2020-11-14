@@ -11,7 +11,6 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Button from "@material-ui/core/Button";
-import firebase from "firebase";
 import moment from "moment";
 import { useLocation, useHistory } from "react-router-dom";
 
@@ -29,12 +28,18 @@ class Recipt extends React.Component {
     delayed: 0,
     customer_nic: "",
     customer_name: "",
+    date: null,
+    serial_num: "",
+    balance:0,
   };
 
   constructor(props) {
     super(props);
     this.state.invoice_number = this.props.prop?.invoice_number;
     this.state.total = this.props.prop?.total;
+    this.state.date = this.props.prop?.date;
+    this.state.serial_num = this.props.prop?.serialNo;
+    this.state.balance = this.props.prop?.balance;
     this.state.delayed = this.props.prop?.delayedCharges;
     this.state.customer_nic = this.props.prop?.customerDetails?.nic;
     this.state.customer_name =
@@ -81,8 +86,8 @@ class Recipt extends React.Component {
                 </Col>
                 <Col className="tiles_details" span={6}>
                   {moment(
-                    firebase.firestore.FieldValue.serverTimestamp()
-                  ).format("dddd, MMMM Do YYYY, h:mm:ss a")}
+                    this.state.date?.toDate()
+                  ).format("dddd, MMMM Do YYYY")}
                 </Col>
                 <Col className="tiles" span={6}>
                   Customer Name

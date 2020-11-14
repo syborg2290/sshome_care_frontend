@@ -343,7 +343,7 @@ export default function Update_Model({
 
       async onOk() {
         await updateInstallment();
-
+        let toto = parseInt(installmentAmount) + parseInt(gamisaraniamount);
         let passingWithCustomerObj = {
           invoice_number: invoice_no,
           serialNo: serialNo,
@@ -351,11 +351,11 @@ export default function Update_Model({
           total: totalPlusRed(),
           balance:
             balance -
-              (parseInt(installmentAmount) + parseInt(gamisaraniamount)) <=
+              toto <=
             0
               ? 0
               : balance -
-                (parseInt(installmentAmount) + parseInt(gamisaraniamount)),
+                toto,
           gamisarani_amount: parseInt(gamisaraniamount),
           date: updateTimestamp,
           delayedCharges: Math.round(delayedCharges),

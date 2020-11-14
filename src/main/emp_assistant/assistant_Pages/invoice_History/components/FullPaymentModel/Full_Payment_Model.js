@@ -51,6 +51,7 @@ export default function Full_Payment_Model({ items_list_props }) {
   }, [items_list_props]);
 
   return (
+    <>
     <Container component="main" className="conctainers_main">
       <Typography className="titls" variant="h5" gutterBottom>
         View Full Payment Invoice
@@ -127,12 +128,13 @@ export default function Full_Payment_Model({ items_list_props }) {
                         eachItem.gurantee_type.value.toString()}
                     </p>
                   </Grid>
-                  <Grid className="lbl_topis" item xs={12} sm={12}>
+                  {/* <Grid className="lbl_topis" item xs={12} sm={12}>
                     <hr />
-                  </Grid>
+                  </Grid> */}
                 </Grid>
 
                 <TableContainer component={Paper} className="main_containerNo">
+                  <hr />
                   <Table
                     className="gass_Table"
                     size="small"
@@ -176,12 +178,14 @@ export default function Full_Payment_Model({ items_list_props }) {
                     </TableBody>
                   </Table>
                 </TableContainer>
-                <hr />
               </form>
+               <hr />
             </div>
+            
           );
         })
       )}
-    </Container>
+      </Container>
+      </>
   );
 }

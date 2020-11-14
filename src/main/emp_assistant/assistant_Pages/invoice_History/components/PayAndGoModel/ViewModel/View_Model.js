@@ -162,6 +162,15 @@ export default function View_Model({ items_list_props, data }) {
                 <Grid item xs={12} sm={6}>
                   {data.gamisarani ? "Yes" : "No"}
                 </Grid>
+                 <Grid className="lbl_topis" item xs={12} sm={5}>
+                  Gamisarani withdrawal Amount
+                </Grid>
+                <Grid item xs={12} sm={1}>
+                  :
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  {data.amount}
+                </Grid>
               </Grid>
               <Grid className="lbl_topiSub" item xs={12} sm={12}>
                 Customer

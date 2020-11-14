@@ -541,7 +541,7 @@ export default function Update_Model({
                   variant="outlined"
                   required
                   fullWidth
-                  label="Delayed"
+                  label="Installment Amount"
                   size="small"
                   value={installmentAmount}
                   InputProps={{ inputProps: { min: 0 } }}
@@ -555,7 +555,7 @@ export default function Update_Model({
 
               {/* <Grid item xs={12} sm={3}></Grid> */}
               <Grid className="lbl_topi" item xs={12} sm={4}>
-                Due Installment Count
+                Due Installment Dates
               </Grid>
               <Grid item xs={12} sm={2}>
                 :

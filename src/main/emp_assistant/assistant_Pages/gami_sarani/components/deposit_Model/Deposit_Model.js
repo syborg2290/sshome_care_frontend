@@ -183,7 +183,7 @@ export default function Deposit_Model({ midProp, nicProp, close_model }) {
             <Grid className="txt_Labels" item xs={12} sm={12}>
               <hr />
             </Grid>
-            <Grid className="txt_LabelsDepo" item xs={12} sm={4}>
+            <Grid className="txt_LabelsDepo" item xs={12} sm={7}>
               Current Balance(LKR) :
             </Grid>
             <Grid item xs={12} sm={4}>
@@ -197,7 +197,7 @@ export default function Deposit_Model({ midProp, nicProp, close_model }) {
                 />
               </p>
             </Grid>
-            <Grid className="txt_Labels" item xs={12} sm={4}></Grid>
+            <Grid className="txt_Labels" item xs={12} sm={1}></Grid>
           </Grid>
           <p className="validate_Edit">{validation}</p>
           <Grid container spacing={2}>

@@ -136,16 +136,15 @@ function Make_invoice() {
       subTotalValue =
         subTotalValue +
         (itemDP[tablerows[a].i] - itemDiscount[tablerows[a].i]) *
-          itemQty[tablerows[a].i];
+        itemQty[tablerows[a].i];
     }
+    let gamiam = gamisaraniamount === ""
+      ? 0
+      : gamisaraniamount;
     let fTotoS =
-      subTotalValue - gamisaraniamount === ""
+      subTotalValue - gamiam <= 0
         ? 0
-        : gamisaraniamount <= 0
-        ? 0
-        : subTotalValue - gamisaraniamount === ""
-        ? 0
-        : gamisaraniamount;
+        : subTotalValue - gamiam;
     return fTotoS;
   };
 
@@ -188,10 +187,10 @@ function Make_invoice() {
                   getRe.data().currentDeposit - gamisaraniamount === ""
                     ? 0
                     : gamisaraniamount < 0
-                    ? 0
-                    : getRe.data().currentDeposit - gamisaraniamount === ""
-                    ? 0
-                    : gamisaraniamount,
+                      ? 0
+                      : getRe.data().currentDeposit - gamisaraniamount === ""
+                        ? 0
+                        : gamisaraniamount,
               })
               .then((re) => {
                 db.collection("gami_sarani_withdrawhistory").add({
@@ -1175,7 +1174,7 @@ function Make_invoice() {
           setLoadingNicSubmit(false);
           if (
             reGami.docs[0].data().currentDeposit -
-              (subTotalFunc() - totalDiscount) <
+            (subTotalFunc() - totalDiscount) <
             0
           ) {
             NotificationManager.warning(
@@ -1665,8 +1664,8 @@ function Make_invoice() {
                           color="primary"
                           disabled={
                             !gamisarani ||
-                            loadingNicsubmit ||
-                            gamisaraniNic.length === 0
+                              loadingNicsubmit ||
+                              gamisaraniNic.length === 0
                               ? true
                               : false
                           }
@@ -1811,8 +1810,8 @@ function Make_invoice() {
                     className="btn_addCustomer"
                     disabled={
                       loadingsubmit ||
-                      tablerows.length === 0 ||
-                      intialTimestamp === null
+                        tablerows.length === 0 ||
+                        intialTimestamp === null
                         ? true
                         : false
                     }

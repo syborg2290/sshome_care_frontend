@@ -113,7 +113,7 @@ function Make_invoice() {
       subTotalValue =
         subTotalValue +
         (itemDP[tablerows[a].i] - itemDiscount[tablerows[a].i]) *
-        itemQty[tablerows[a].i];
+          itemQty[tablerows[a].i];
     }
     let fTotoS = isFullPayment
       ? subTotalValue - gamisaraniamount <= 0
@@ -378,11 +378,7 @@ function Make_invoice() {
                     photo: url,
                   })
                   .then((cust) => {
-
                     let arrayItems = [];
-
-
-
 
                     tablerows.forEach((one) => {
                       let listOfSerilNo = [];
@@ -400,35 +396,41 @@ function Make_invoice() {
                           modelNo: listOfModelNo,
                           chassisNo: listOfChassisNo,
                           qty: parseInt(itemQty[one.i]),
-                          discount: itemDiscount[one.i] === "" ? 0 : itemDiscount[one.i],
+                          discount:
+                            itemDiscount[one.i] === ""
+                              ? 0
+                              : itemDiscount[one.i],
                           item_name: one.title,
                         };
                         arrayItems.push(objItem);
                       }
                     });
 
-                    await db.collection("invoice").add({
-                      invoice_number: invoiceNumber,
-                      items: arrayItems,
-                      customer_id: cust.id,
-                      nic: tablerows[0].customer.customerNic,
-                      mid: tablerows[0].customer.mid,
-                      installemtnDay: days,
-                      installemtnDate: dates,
-                      gamisarani: gamisarani,
-                      gamisarani_amount: gamisaraniamount,
-                      paymentWay: isFullPayment ? "FullPayment" : "PayandGo",
-                      downpayment: dpayment,
-                      noOfInstallment: itemNOI,
-                      amountPerInstallment: itemAPI,
-                      balance: balance,
-                      deadlineTimestamp: deadlineTimestamp,
-                      selectedType: selectedType,
-                      discount: totalDiscount === "" ? 0 : totalDiscount,
-                      total: subTotalFunc() - (totalDiscount === "" ? 0 : totalDiscount),
-                      status_of_payandgo: "onGoing",
-                      date: intialTimestamp,
-                    })
+                    db.collection("invoice")
+                      .add({
+                        invoice_number: invoiceNumber,
+                        items: arrayItems,
+                        customer_id: cust.id,
+                        nic: tablerows[0].customer.customerNic,
+                        mid: tablerows[0].customer.mid,
+                        installemtnDay: days,
+                        installemtnDate: dates,
+                        gamisarani: gamisarani,
+                        gamisarani_amount: gamisaraniamount,
+                        paymentWay: isFullPayment ? "FullPayment" : "PayandGo",
+                        downpayment: dpayment,
+                        noOfInstallment: itemNOI,
+                        amountPerInstallment: itemAPI,
+                        balance: balance,
+                        deadlineTimestamp: deadlineTimestamp,
+                        selectedType: selectedType,
+                        discount: totalDiscount === "" ? 0 : totalDiscount,
+                        total:
+                          subTotalFunc() -
+                          (totalDiscount === "" ? 0 : totalDiscount),
+                        status_of_payandgo: "onGoing",
+                        date: intialTimestamp,
+                      })
                       .then((invDoc) => {
                         if (tablerows[0].customer.trustee1Id !== null) {
                           db.collection("trustee")
@@ -494,9 +496,11 @@ function Make_invoice() {
                           }
                         }
 
-
                         tablerows.forEach(async (itemUDoc) => {
-                          let newArray = await await db.collection("item").doc(itemUDoc.id).get();
+                          let newArray = await await db
+                            .collection("item")
+                            .doc(itemUDoc.id)
+                            .get();
 
                           let serialNoList = [];
                           let modelNoList = [];
@@ -514,7 +518,9 @@ function Make_invoice() {
                             .collection("item")
                             .doc(itemUDoc.id)
                             .update({
-                              qty: Math.round(newArray.data().qty) - itemQty[itemUDoc.i],
+                              qty:
+                                Math.round(newArray.data().qty) -
+                                itemQty[itemUDoc.i],
                               serialNo: serialNoList,
                               modelNo: modelNoList,
                               chassisNo: chassisiNoList,
@@ -544,9 +550,6 @@ function Make_invoice() {
                   .then((cust) => {
                     let arrayItems = [];
 
-
-
-
                     tablerows.forEach((one) => {
                       let listOfSerilNo = [];
                       let listOfModelNo = [];
@@ -563,35 +566,41 @@ function Make_invoice() {
                           modelNo: listOfModelNo,
                           chassisNo: listOfChassisNo,
                           qty: parseInt(itemQty[one.i]),
-                          discount: itemDiscount[one.i] === "" ? 0 : itemDiscount[one.i],
+                          discount:
+                            itemDiscount[one.i] === ""
+                              ? 0
+                              : itemDiscount[one.i],
                           item_name: one.title,
                         };
                         arrayItems.push(objItem);
                       }
                     });
 
-                    await db.collection("invoice").add({
-                      invoice_number: invoiceNumber,
-                      items: arrayItems,
-                      customer_id: cust.id,
-                      nic: tablerows[0].customer.customerNic,
-                      mid: tablerows[0].customer.mid,
-                      installemtnDay: days,
-                      installemtnDate: dates,
-                      gamisarani: gamisarani,
-                      gamisarani_amount: gamisaraniamount,
-                      paymentWay: isFullPayment ? "FullPayment" : "PayandGo",
-                      downpayment: dpayment,
-                      noOfInstallment: itemNOI,
-                      amountPerInstallment: itemAPI,
-                      balance: balance,
-                      deadlineTimestamp: deadlineTimestamp,
-                      selectedType: selectedType,
-                      discount: totalDiscount === "" ? 0 : totalDiscount,
-                      total: subTotalFunc() - (totalDiscount === "" ? 0 : totalDiscount),
-                      status_of_payandgo: "onGoing",
-                      date: intialTimestamp,
-                    })
+                    db.collection("invoice")
+                      .add({
+                        invoice_number: invoiceNumber,
+                        items: arrayItems,
+                        customer_id: cust.id,
+                        nic: tablerows[0].customer.customerNic,
+                        mid: tablerows[0].customer.mid,
+                        installemtnDay: days,
+                        installemtnDate: dates,
+                        gamisarani: gamisarani,
+                        gamisarani_amount: gamisaraniamount,
+                        paymentWay: isFullPayment ? "FullPayment" : "PayandGo",
+                        downpayment: dpayment,
+                        noOfInstallment: itemNOI,
+                        amountPerInstallment: itemAPI,
+                        balance: balance,
+                        deadlineTimestamp: deadlineTimestamp,
+                        selectedType: selectedType,
+                        discount: totalDiscount === "" ? 0 : totalDiscount,
+                        total:
+                          subTotalFunc() -
+                          (totalDiscount === "" ? 0 : totalDiscount),
+                        status_of_payandgo: "onGoing",
+                        date: intialTimestamp,
+                      })
                       .then((invDoc) => {
                         if (tablerows[0].customer.trustee1Id !== null) {
                           db.collection("trustee")
@@ -658,7 +667,10 @@ function Make_invoice() {
                         }
 
                         tablerows.forEach(async (itemUDoc) => {
-                          let newArray = await await db.collection("item").doc(itemUDoc.id).get();
+                          let newArray = await await db
+                            .collection("item")
+                            .doc(itemUDoc.id)
+                            .get();
 
                           let serialNoList = [];
                           let modelNoList = [];
@@ -676,7 +688,9 @@ function Make_invoice() {
                             .collection("item")
                             .doc(itemUDoc.id)
                             .update({
-                              qty: Math.round(newArray.data().qty) - itemQty[itemUDoc.i],
+                              qty:
+                                Math.round(newArray.data().qty) -
+                                itemQty[itemUDoc.i],
                               serialNo: serialNoList,
                               modelNo: modelNoList,
                               chassisNo: chassisiNoList,
@@ -708,9 +722,6 @@ function Make_invoice() {
               .then((cust) => {
                 let arrayItems = [];
 
-
-
-
                 tablerows.forEach((one) => {
                   let listOfSerilNo = [];
                   let listOfModelNo = [];
@@ -727,35 +738,39 @@ function Make_invoice() {
                       modelNo: listOfModelNo,
                       chassisNo: listOfChassisNo,
                       qty: parseInt(itemQty[one.i]),
-                      discount: itemDiscount[one.i] === "" ? 0 : itemDiscount[one.i],
+                      discount:
+                        itemDiscount[one.i] === "" ? 0 : itemDiscount[one.i],
                       item_name: one.title,
                     };
                     arrayItems.push(objItem);
                   }
                 });
 
-                await db.collection("invoice").add({
-                  invoice_number: invoiceNumber,
-                  items: arrayItems,
-                  customer_id: cust.id,
-                  nic: tablerows[0].customer.customerNic,
-                  mid: tablerows[0].customer.mid,
-                  installemtnDay: days,
-                  installemtnDate: dates,
-                  gamisarani: gamisarani,
-                  gamisarani_amount: gamisaraniamount,
-                  paymentWay: isFullPayment ? "FullPayment" : "PayandGo",
-                  downpayment: dpayment,
-                  noOfInstallment: itemNOI,
-                  amountPerInstallment: itemAPI,
-                  balance: balance,
-                  deadlineTimestamp: deadlineTimestamp,
-                  selectedType: selectedType,
-                  discount: totalDiscount === "" ? 0 : totalDiscount,
-                  total: subTotalFunc() - (totalDiscount === "" ? 0 : totalDiscount),
-                  status_of_payandgo: "onGoing",
-                  date: intialTimestamp,
-                })
+                db.collection("invoice")
+                  .add({
+                    invoice_number: invoiceNumber,
+                    items: arrayItems,
+                    customer_id: cust.id,
+                    nic: tablerows[0].customer.customerNic,
+                    mid: tablerows[0].customer.mid,
+                    installemtnDay: days,
+                    installemtnDate: dates,
+                    gamisarani: gamisarani,
+                    gamisarani_amount: gamisaraniamount,
+                    paymentWay: isFullPayment ? "FullPayment" : "PayandGo",
+                    downpayment: dpayment,
+                    noOfInstallment: itemNOI,
+                    amountPerInstallment: itemAPI,
+                    balance: balance,
+                    deadlineTimestamp: deadlineTimestamp,
+                    selectedType: selectedType,
+                    discount: totalDiscount === "" ? 0 : totalDiscount,
+                    total:
+                      subTotalFunc() -
+                      (totalDiscount === "" ? 0 : totalDiscount),
+                    status_of_payandgo: "onGoing",
+                    date: intialTimestamp,
+                  })
                   .then((invDoc) => {
                     if (tablerows[0].customer.trustee1Id !== null) {
                       db.collection("trustee")
@@ -820,7 +835,10 @@ function Make_invoice() {
                     }
 
                     tablerows.forEach(async (itemUDoc) => {
-                      let newArray = await await db.collection("item").doc(itemUDoc.id).get();
+                      let newArray = await await db
+                        .collection("item")
+                        .doc(itemUDoc.id)
+                        .get();
 
                       let serialNoList = [];
                       let modelNoList = [];
@@ -838,7 +856,9 @@ function Make_invoice() {
                         .collection("item")
                         .doc(itemUDoc.id)
                         .update({
-                          qty: Math.round(newArray.data().qty) - itemQty[itemUDoc.i],
+                          qty:
+                            Math.round(newArray.data().qty) -
+                            itemQty[itemUDoc.i],
                           serialNo: serialNoList,
                           modelNo: modelNoList,
                           chassisNo: chassisiNoList,
@@ -868,9 +888,6 @@ function Make_invoice() {
               .then((cust) => {
                 let arrayItems = [];
 
-
-
-
                 tablerows.forEach((one) => {
                   let listOfSerilNo = [];
                   let listOfModelNo = [];
@@ -887,35 +904,39 @@ function Make_invoice() {
                       modelNo: listOfModelNo,
                       chassisNo: listOfChassisNo,
                       qty: parseInt(itemQty[one.i]),
-                      discount: itemDiscount[one.i] === "" ? 0 : itemDiscount[one.i],
+                      discount:
+                        itemDiscount[one.i] === "" ? 0 : itemDiscount[one.i],
                       item_name: one.title,
                     };
                     arrayItems.push(objItem);
                   }
                 });
 
-                await db.collection("invoice").add({
-                  invoice_number: invoiceNumber,
-                  items: arrayItems,
-                  customer_id: cust.id,
-                  nic: tablerows[0].customer.customerNic,
-                  mid: tablerows[0].customer.mid,
-                  installemtnDay: days,
-                  installemtnDate: dates,
-                  gamisarani: gamisarani,
-                  gamisarani_amount: gamisaraniamount,
-                  paymentWay: isFullPayment ? "FullPayment" : "PayandGo",
-                  downpayment: dpayment,
-                  noOfInstallment: itemNOI,
-                  amountPerInstallment: itemAPI,
-                  balance: balance,
-                  deadlineTimestamp: deadlineTimestamp,
-                  selectedType: selectedType,
-                  discount: totalDiscount === "" ? 0 : totalDiscount,
-                  total: subTotalFunc() - (totalDiscount === "" ? 0 : totalDiscount),
-                  status_of_payandgo: "onGoing",
-                  date: intialTimestamp,
-                })
+                db.collection("invoice")
+                  .add({
+                    invoice_number: invoiceNumber,
+                    items: arrayItems,
+                    customer_id: cust.id,
+                    nic: tablerows[0].customer.customerNic,
+                    mid: tablerows[0].customer.mid,
+                    installemtnDay: days,
+                    installemtnDate: dates,
+                    gamisarani: gamisarani,
+                    gamisarani_amount: gamisaraniamount,
+                    paymentWay: isFullPayment ? "FullPayment" : "PayandGo",
+                    downpayment: dpayment,
+                    noOfInstallment: itemNOI,
+                    amountPerInstallment: itemAPI,
+                    balance: balance,
+                    deadlineTimestamp: deadlineTimestamp,
+                    selectedType: selectedType,
+                    discount: totalDiscount === "" ? 0 : totalDiscount,
+                    total:
+                      subTotalFunc() -
+                      (totalDiscount === "" ? 0 : totalDiscount),
+                    status_of_payandgo: "onGoing",
+                    date: intialTimestamp,
+                  })
                   .then((invDoc) => {
                     if (tablerows[0].customer.trustee1Id !== null) {
                       db.collection("trustee")
@@ -980,7 +1001,10 @@ function Make_invoice() {
                     }
 
                     tablerows.forEach(async (itemUDoc) => {
-                      let newArray = await await db.collection("item").doc(itemUDoc.id).get();
+                      let newArray = await await db
+                        .collection("item")
+                        .doc(itemUDoc.id)
+                        .get();
 
                       let serialNoList = [];
                       let modelNoList = [];
@@ -998,7 +1022,9 @@ function Make_invoice() {
                         .collection("item")
                         .doc(itemUDoc.id)
                         .update({
-                          qty: Math.round(newArray.data().qty) - itemQty[itemUDoc.i],
+                          qty:
+                            Math.round(newArray.data().qty) -
+                            itemQty[itemUDoc.i],
                           serialNo: serialNoList,
                           modelNo: modelNoList,
                           chassisNo: chassisiNoList,
@@ -1103,7 +1129,7 @@ function Make_invoice() {
           setLoadingNicSubmit(false);
           if (
             reGami.docs[0].data().currentDeposit -
-            (subTotalFunc() - totalDiscount) <
+              (subTotalFunc() - totalDiscount) <
             0
           ) {
             NotificationManager.warning(
@@ -1413,7 +1439,11 @@ function Make_invoice() {
                               ? false
                               : true
                           }
-                          value={itemAPI * itemNOI === 0 ? subTotalFunc() - totalDiscount : balance}
+                          value={
+                            itemAPI * itemNOI === 0
+                              ? subTotalFunc() - totalDiscount
+                              : balance
+                          }
                           onChange={(e) => {
                             setBalance(parseInt(e.target.value));
                           }}
@@ -1573,8 +1603,8 @@ function Make_invoice() {
                           color="primary"
                           disabled={
                             !gamisarani ||
-                              loadingNicsubmit ||
-                              gamisaraniNic.length === 0
+                            loadingNicsubmit ||
+                            gamisaraniNic.length === 0
                               ? true
                               : false
                           }
@@ -1719,8 +1749,8 @@ function Make_invoice() {
                     className="btn_addCustomer"
                     disabled={
                       loadingsubmit ||
-                        tablerows.length === 0 ||
-                        intialTimestamp === null
+                      tablerows.length === 0 ||
+                      intialTimestamp === null
                         ? true
                         : false
                     }

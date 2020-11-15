@@ -62,34 +62,59 @@ export default function Add_Customer({ close_model }) {
                   setLoadingSubmit(false);
                   setValidation("Customer already exists by MID");
                 } else {
-                  await storage.ref(`images/${imageFile.name}`).put(imageFile);
+                  if (imageFile === null) {
+                    db.collection("gami_sarani")
+                      .add({
+                        mid: mid,
+                        nic: nic,
+                        fname: fname,
+                        lname: lname,
+                        address1: addres1,
+                        addres2: addres2,
+                        mobile1: mobile1,
+                        mobile2: mobile2,
+                        root: root,
+                        currentDeposit: 0,
+                        photo: null,
+                        date: firebase.firestore.FieldValue.serverTimestamp(),
+                      })
+                      .then((_) => {
+                        setLoadingSubmit(false);
+                        close_model();
+                        window.location.reload();
+                      });
+                  } else {
+                    await storage
+                      .ref(`images/${imageFile.name}`)
+                      .put(imageFile);
 
-                  storage
-                    .ref("images")
-                    .child(imageFile.name)
-                    .getDownloadURL()
-                    .then((url) => {
-                      db.collection("gami_sarani")
-                        .add({
-                          mid: mid,
-                          nic: nic,
-                          fname: fname,
-                          lname: lname,
-                          address1: addres1,
-                          addres2: addres2,
-                          mobile1: mobile1,
-                          mobile2: mobile2,
-                          root: root,
-                          currentDeposit: 0,
-                          photo: url,
-                          date: firebase.firestore.FieldValue.serverTimestamp(),
-                        })
-                        .then((_) => {
-                          setLoadingSubmit(false);
-                          close_model();
-                          window.location.reload();
-                        });
-                    });
+                    storage
+                      .ref("images")
+                      .child(imageFile.name)
+                      .getDownloadURL()
+                      .then((url) => {
+                        db.collection("gami_sarani")
+                          .add({
+                            mid: mid,
+                            nic: nic,
+                            fname: fname,
+                            lname: lname,
+                            address1: addres1,
+                            addres2: addres2,
+                            mobile1: mobile1,
+                            mobile2: mobile2,
+                            root: root,
+                            currentDeposit: 0,
+                            photo: url,
+                            date: firebase.firestore.FieldValue.serverTimestamp(),
+                          })
+                          .then((_) => {
+                            setLoadingSubmit(false);
+                            close_model();
+                            window.location.reload();
+                          });
+                      });
+                  }
                 }
               });
           }

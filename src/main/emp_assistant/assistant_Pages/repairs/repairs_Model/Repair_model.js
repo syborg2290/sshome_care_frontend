@@ -26,7 +26,6 @@ export default function Repair_model({ closeModel }) {
   const [model_no, setModel_no] = useState("");
   const [cust_name, setCust_name] = useState("");
   // eslint-disable-next-line
-  const [mid, setMid] = useState("");
   const [nic, setNic] = useState("");
   const [mobil_no1, setMobil_no1] = useState("");
   const [mobil_no2, setMobil_no2] = useState("");
@@ -41,9 +40,9 @@ export default function Repair_model({ closeModel }) {
       onOk() {
         db.collection("repair")
           .add({
-            // invoice_no: invoice.trim(),
+            invoice_no: invoice.trim(),
+            serail_no: serialNo.trim(),
             model_no: model_no.trim(),
-            // mid: mid,
             nic: nic,
             cust_name: cust_name.trim(),
             mobil_no1: mobil_no1.trim(),
@@ -55,9 +54,8 @@ export default function Repair_model({ closeModel }) {
           })
           .then(() => {
             var passingWithCustomerObj = {
-              invoice_no: invoice.trim(),
+              serail_no: serialNo.trim(),
               model_no: model_no.trim(),
-              mid: mid,
               nic: nic,
               item_name: item_name,
             };
@@ -72,9 +70,9 @@ export default function Repair_model({ closeModel }) {
       onCancel() {
         db.collection("repair")
           .add({
-            // invoice_no: invoice.trim(),
+            invoice_no: invoice.trim(),
+            serail_no: serialNo.trim(),
             model_no: model_no.trim(),
-            // mid: mid,
             nic: nic,
             cust_name: cust_name.trim(),
             mobil_no1: mobil_no1.trim(),
@@ -91,78 +89,95 @@ export default function Repair_model({ closeModel }) {
     });
   };
 
-  const addRepair = async () => {
-    setLoading(true);
-
-    let statusOfBlacklist = await db
-      .collection("blacklist")
-      .where("InvoiceNo", "==", invoice.trim())
-      .get();
-    let statusOfSeized = await db
-      .collection("seized")
-      .where("invoice_number", "==", invoice.trim())
-      .get();
-    if (statusOfBlacklist.docs.length > 0) {
-      setLoading(false);
-      setError("Invoice number you entered is in the blacklist!");
-    } else {
-      if (statusOfSeized.docs.length > 0) {
-        setLoading(false);
-        setError("Invoice number you entered is in the seized list!");
-      } else {
-        db.collection("invoice")
-          .where("invoice_number", "==", invoice.trim())
-          .get()
-          .then((reThen) => {
-            if (reThen.docs.length > 0) {
-              reThen.docs.forEach((reInvo) => {
-                reInvo.data().items.forEach((reI) => {
-                  db.collection("item")
-                    .doc(reI.item_id)
-                    .get()
-                    .then((itRe) => {
-                      if (itRe.data().modelNo === model_no.trim()) {
-                        let daysCountInitial =
-                          (new Date().getTime() -
-                            new Date(
-                              reInvo.data()?.date?.seconds * 1000
-                            ).getTime()) /
-                          (1000 * 3600 * 24);
-
-                        if (itRe.data().guarantee.value === "Months") {
-                          if (
-                            Math.round(daysCountInitial / 30) <=
-                            itRe.data().guaranteePeriod
-                          ) {
-                            setLoading(false);
-                            showConfirm(itRe.data().itemName);
-                          } else {
-                            setLoading(false);
-                            setError("Item's garuntee period is expired!");
-                          }
-                        } else {
-                          if (
-                            Math.round(daysCountInitial / 365) <=
-                            itRe.data().guaranteePeriod
-                          ) {
-                            setLoading(false);
-                            showConfirm(itRe.data().itemName);
-                          } else {
-                            setLoading(false);
-                            setError("Item's garuntee period is expired!");
-                          }
-                        }
-                      }
-                    });
-                });
-              });
-            } else {
-              setLoading(false);
-              setError("Invoice number you entered is not found!");
+  const getInvoiceAndItem = async () => {
+    await db
+      .collection("invoice")
+      .get().then((re) => {
+        re.docs.forEach((eachReturn) => {
+          eachReturn.data().items.forEach((reItem) => {
+            if (reItem.serialNo === serialNo.trim()) {
+              if (reItem.modelNo === model_no.trim()) {
+                setInvoice(eachReturn.data().invoice_number);
+              }
             }
           });
+        });
+      });
+  }
+
+  const addRepair = async () => {
+    setLoading(true);
+    await getInvoiceAndItem().then(async (_) => {
+      let statusOfBlacklist = await db
+        .collection("blacklist")
+        .where("InvoiceNo", "==", invoice.trim())
+        .get();
+      let statusOfSeized = await db
+        .collection("seized")
+        .where("invoice_number", "==", invoice.trim())
+        .get();
+      if (statusOfBlacklist.docs.length > 0) {
+        setLoading(false);
+        setError("Invoice number you entered is in the blacklist!");
+      } else {
+        if (statusOfSeized.docs.length > 0) {
+          setLoading(false);
+          setError("Invoice number you entered is in the seized list!");
+        } else {
+          db.collection("invoice")
+            .where("invoice_number", "==", invoice.trim())
+            .get()
+            .then((reThen) => {
+              if (reThen.docs.length > 0) {
+                reThen.docs.forEach((reInvo) => {
+                  reInvo.data().items.forEach((reI) => {
+                    db.collection("item")
+                      .doc(reI.item_id)
+                      .get()
+                      .then((itRe) => {
+                        if (itRe.data().modelNo === model_no.trim()) {
+                          let daysCountInitial =
+                            (new Date().getTime() -
+                              new Date(
+                                reInvo.data()?.date?.seconds * 1000
+                              ).getTime()) /
+                            (1000 * 3600 * 24);
+
+                          if (itRe.data().guarantee.value === "Months") {
+                            if (
+                              Math.round(daysCountInitial / 30) <=
+                              itRe.data().guaranteePeriod
+                            ) {
+                              setLoading(false);
+                              showConfirm(itRe.data().itemName);
+                            } else {
+                              setLoading(false);
+                              setError("Item's garuntee period is expired!");
+                            }
+                          } else {
+                            if (
+                              Math.round(daysCountInitial / 365) <=
+                              itRe.data().guaranteePeriod
+                            ) {
+                              setLoading(false);
+                              showConfirm(itRe.data().itemName);
+                            } else {
+                              setLoading(false);
+                              setError("Item's garuntee period is expired!");
+                            }
+                          }
+                        }
+                      });
+                  });
+                });
+              } else {
+                setLoading(false);
+                setError("Invoice number you entered is not found!");
+              }
+            });
+        }
       }
-    }
+    });
   };
 
   return (
@@ -380,11 +395,11 @@ export default function Repair_model({ closeModel }) {
                 onClick={addRepair}
                 disabled={
                   loading ||
-                  invoice.length === 0 ||
-                  model_no.length === 0 ||
-                  cust_name.length === 0 ||
-                  nic.length === 0 ||
-                  mobil_no1.length === 0
+                    serialNo.length === 0 ||
+                    model_no.length === 0 ||
+                    cust_name.length === 0 ||
+                    nic.length === 0 ||
+                    mobil_no1.length === 0
                     ? true
                     : false
                 }

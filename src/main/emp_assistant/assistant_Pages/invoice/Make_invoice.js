@@ -52,6 +52,7 @@ function Make_invoice() {
   const [itemNOI, setItemNOI] = useState({});
   const [itemAPI, setItemAPI] = useState({});
   const [balance, setBalance] = useState({});
+  const [dpayment, setDpayment] = useState({});
   const [itemDiscount, setItemDiscount] = useState({});
   const [totalDiscount, setTotalDiscount] = useState(0);
   const [gamisaraniInitialAmount, setGamisaraniInitialAmount] = useState(0);
@@ -1513,8 +1514,27 @@ function Make_invoice() {
                             />
                         </Grid>
                       <Grid className="noi" item xs={12} sm={2}></Grid>
-                    
-
+                      <Grid className="lbl_MI" item xs={12} sm={6}>
+                         Down Payment(LKR):
+                        </Grid>
+                         <Grid className="lbl_MI" item xs={12} sm={4}>
+                          <TextField
+                              className="txt_dpayment"
+                              variant="outlined"
+                              size="small"
+                              label="Down Payment"
+                              InputProps={{ inputProps: { min: 0 } }}
+                              type="number"
+                              fullWidth
+                              value={dpayment}
+                              onChange={(e) => {
+                                setDpayment(e.target.value); 
+                              }}
+                            
+                            />
+                        </Grid>
+                      <Grid className="noi" item xs={12} sm={2}></Grid>
+<hr />
                    <Grid className="lbl_MI" item xs={12} sm={3}>
                      Days :   
                   </Grid>

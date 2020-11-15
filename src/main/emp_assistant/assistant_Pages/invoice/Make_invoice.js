@@ -1153,17 +1153,7 @@ function Make_invoice() {
                         >
                          Sale Price(LKR)
                         </TableCell>
-                        {/* <TableCell
-                          className="tbl_Cell"
-                          align="right"
-                          colSpan={1}
-                        >
-                          NOI
-                        </TableCell>
-
-                        <TableCell className="tbl_Cell" align="right">
-                          API(LKR)
-                        </TableCell> */}
+                       
                         <TableCell className="tbl_Cell" align="right">
                           Discount(LKR)
                         </TableCell>
@@ -1203,9 +1193,7 @@ function Make_invoice() {
                               }}
                             />
                           </TableCell>
-                          {/* <TableCell align="right" colSpan={1}>
-                            {row.paymentWay === "PayandGo" ? "P" : "F"}
-                          </TableCell> */}
+                        
                           <TableCell align="right">
                             {" "}
                             <TextField
@@ -1226,52 +1214,7 @@ function Make_invoice() {
                               }}
                             />
                           </TableCell>
-                          {/* <TableCell align="right">
-                            {" "}
-                            <TextField
-                              className="txt_dpayment"
-                              variant="outlined"
-                              size="small"
-                              InputProps={{ inputProps: { min: 0 } }}
-                              type="number"
-                              fullWidth
-                              disabled={
-                                row.paymentWay === "PayandGo" ? false : true
-                              }
-                              key={row.i}
-                              id={row.i.toString()}
-                              value={itemNOI[row.i]}
-                              onChange={(e) => {
-                                setItemNOI({
-                                  ...itemNOI,
-                                  [row.i]: e.target.value,
-                                });
-                              }}
-                            />
-                          </TableCell> */}
-                          {/* <TableCell align="right">
-                            {" "}
-                            <TextField
-                              className="txt_dpayment"
-                              variant="outlined"
-                              size="small"
-                              InputProps={{ inputProps: { min: 0 } }}
-                              type="number"
-                              fullWidth
-                              key={row.i}
-                              disabled={
-                                row.paymentWay === "PayandGo" ? false : true
-                              }
-                              id={row.i.toString()}
-                              value={itemAPI[row.i]}
-                              onChange={(e) => {
-                                setItemAPI({
-                                  ...itemAPI,
-                                  [row.i]: e.target.value,
-                                });
-                              }}
-                            />
-                          </TableCell> */}
+                        
                           <TableCell align="right">
                             {" "}
                             <TextField
@@ -1378,27 +1321,7 @@ function Make_invoice() {
                         </TableCell>
                      
                       </TableRow>
-                      {/* <TableRow>
-                        <TableCell align="right" colSpan={5}>
-                          Balance(LKR)
-                        </TableCell>
-                        <TableCell align="right" colSpan={2}>
-                          <CurrencyFormat
-                            value={
-                              tablerows.some(
-                                (ob) => ob.paymentWay === "PayandGo"
-                              )
-                                ? itemNOI[tablerows[0].i] *
-                                    itemAPI[tablerows[0].i] -
-                                  gamisaraniamount
-                                : 0
-                            }
-                            displayType={"text"}
-                            thousandSeparator={true}
-                            prefix={" Rs. "}
-                          />
-                        </TableCell>
-                      </TableRow> */}
+                     
                       <TableRow>
                         <TableCell align="right" colSpan={3}>
                           Total(LKR)

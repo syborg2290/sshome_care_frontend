@@ -367,8 +367,8 @@ export default function Update_Model({
 
   const dueInstallmentsCount = () => {
     let allPlusss = 1 + installments;
-    let againallPlusss = allPlusss + Math.round(allInstallment);
-    let rest = instCount - againallPlusss;
+    //let againallPlusss = allPlusss + Math.round(allInstallment);
+    let rest = instCount - allPlusss;
     return rest < 0 ? 0 : rest;
   };
 

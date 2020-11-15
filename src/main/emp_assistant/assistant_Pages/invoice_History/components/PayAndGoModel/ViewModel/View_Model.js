@@ -4,6 +4,14 @@ import CurrencyFormat from "react-currency-format";
 import { Spin } from "antd";
 import moment from "moment";
 
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import Paper from "@material-ui/core/Paper";
+
 import db from "../../../../../../../config/firebase.js";
 
 // styles
@@ -49,6 +57,19 @@ export default function View_Model({ items_list_props, data }) {
       });
 
     items_list_props.forEach((each) => {
+      let itemDataSeMo = [];
+      let listOfSerilNo = [];
+      let listOfModelNo = [];
+      let listOfChassisNo = [];
+      listOfSerilNo = each.serialNo;
+      listOfModelNo = each.modelNo;
+      listOfChassisNo = each.chassisNo;
+
+      itemDataSeMo.push({
+        serialNo: listOfSerilNo,
+        modelNo: listOfModelNo,
+        chassisNo: listOfChassisNo,
+      });
       db.collection("item")
         .doc(each.item_id)
         .get()
@@ -58,6 +79,7 @@ export default function View_Model({ items_list_props, data }) {
             {
               item_name: th.data().itemName,
               dp: data.total,
+              listSe: itemDataSeMo,
               discount: each.discount,
               qty: each.qty,
               color: th.data().color,
@@ -366,7 +388,7 @@ export default function View_Model({ items_list_props, data }) {
                     <Grid item xs={12} sm={7}>
                       <p>{eachItem.color}</p>
                     </Grid>
-                    <Grid className="lbl_topis" item xs={12} sm={4}>
+                    {/* <Grid className="lbl_topis" item xs={12} sm={4}>
                       Model No.
                   </Grid>
                     <Grid item xs={12} sm={1}>
@@ -374,7 +396,7 @@ export default function View_Model({ items_list_props, data }) {
                   </Grid>
                     <Grid item xs={12} sm={7}>
                       <p>{eachItem.model_no}</p>
-                    </Grid>
+                    </Grid> */}
                     <Grid className="lbl_topis" item xs={12} sm={4}>
                       Guarantee Period
                   </Grid>
@@ -388,6 +410,63 @@ export default function View_Model({ items_list_props, data }) {
                           eachItem.gurantee_type.value.toString()}
                       </p>
                     </Grid>
+                    <TableContainer
+                      component={Paper}
+                      className="main_containerNom"
+                    >
+                      
+                      <Table  className="gass_Table"
+                        size="small"
+                        aria-label="a dense table"
+                      >
+                        <TableHead className="No_Table_head">
+                          <TableRow>
+                             <TableCell className="tbl_cell">SerialNo</TableCell>
+                            <TableCell className="tbl_cell" align="right">
+                              ModelNo
+                          </TableCell>
+                            <TableCell className="tbl_cell" align="right">
+                              ChasisseNo
+                          </TableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          {eachItem.listSe.length > 0
+                            ? eachItem?.listSe?.map((row) => (
+                              <TableRow key={0}>
+                                <TableCell component="th" scope="row">
+                                  {eachItem.listSe[0]?.serialNo?.map(
+                                    (serailNoT) => (
+                                      <h5 key={serailNoT}>{serailNoT}</h5>
+                                    )
+                                  )}
+                                </TableCell>
+                                <TableCell component="th" scope="row">
+                                  {eachItem.listSe[0]?.modelNo?.map(
+                                    (modelNoT) => (
+                                      <h5 key={modelNoT}>{modelNoT}</h5>
+                                    )
+                                  )}
+                                </TableCell>
+                                <TableCell component="th" scope="row">
+                                  {eachItem.listSe[0]?.chassisNo?.map(
+                                    (chassisNoT) => (
+                                      <h5 key={chassisNoT}>{chassisNoT}</h5>
+                                    )
+                                  )}
+                                </TableCell>
+                              </TableRow>
+                               ))
+                            : ""}
+                            </TableBody>
+
+                      </Table>
+
+                      </TableContainer>
+                    <Grid item xs={12} sm={12}>
+                      <hr />
+                      </Grid>
+
                   </Grid>
                 );
               })}

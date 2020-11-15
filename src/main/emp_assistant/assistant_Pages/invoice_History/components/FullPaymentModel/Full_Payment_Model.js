@@ -91,7 +91,7 @@ export default function Full_Payment_Model({ items_list_props, data }) {
             </Grid>
           </Grid>
         </form>
-
+         
         {itemsList.length === 0 ? (
           <Spin
             size="large"
@@ -105,6 +105,15 @@ export default function Full_Payment_Model({ items_list_props, data }) {
               return (
                 <div key={eachItem.item_name} className="paper">
                   <form className="form1" noValidate>
+                    <Grid className="lbl_topiSub" item xs={12} sm={12}>
+                Item
+            </Grid>
+              <br />
+              <Grid item xs={12} sm={6}>
+                <hr className="hr_topiSub" />
+                <br />
+              </Grid>
+              <Grid item xs={12} sm={6}></Grid>
                     <Grid container spacing={2}>
                       {" "}
                       <Grid className="lbl_topis" item xs={12} sm={4}>

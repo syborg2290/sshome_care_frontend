@@ -1534,7 +1534,7 @@ function Make_invoice() {
                             />
                         </Grid>
                       <Grid className="noi" item xs={12} sm={2}></Grid>
-<hr />
+
                    <Grid className="lbl_MI" item xs={12} sm={3}>
                      Days :   
                   </Grid>

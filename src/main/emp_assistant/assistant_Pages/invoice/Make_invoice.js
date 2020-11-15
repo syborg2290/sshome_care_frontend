@@ -201,27 +201,28 @@ function Make_invoice() {
           .doc(gamisaraniId)
           .get()
           .then((getRe) => {
+            let toto1 = gamisaraniamount === ""
+              ? 0
+              : parseInt(gamisaraniamount);
+            let totoF = getRe.data().currentDeposit - toto1;
             db.collection("gami_sarani")
               .doc(gamisaraniId)
               .update({
                 currentDeposit:
-                  getRe.data().currentDeposit - parseInt(gamisaraniamount) === ""
+                  totoF <= 0
                     ? 0
-                    : parseInt(gamisaraniamount) < 0
-                      ? 0
-                      : getRe.data().currentDeposit - parseInt(gamisaraniamount) === ""
-                        ? 0
-                        : parseInt(gamisaraniamount),
+                    : totoF,
               })
               .then((re) => {
+                let toto = gamisaraniamount === ""
+                  ? 0
+                  : parseInt(gamisaraniamount);
                 db.collection("gami_sarani_withdrawhistory").add({
                   gami_nic: gamisaraniNic,
                   docId: gamisaraniId,
-                  withdraw: parseInt(gamisaraniamount) === "" ? 0 : parseInt(gamisaraniamount),
+                  withdraw: toto,
                   balance:
-                    getRe.data().currentDeposit - parseInt(gamisaraniamount) === ""
-                      ? 0
-                      : parseInt(gamisaraniamount),
+                    getRe.data().currentDeposit - toto,
                   date: intialTimestamp,
                 });
 

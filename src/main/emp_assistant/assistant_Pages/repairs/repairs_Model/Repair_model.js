@@ -208,7 +208,7 @@ export default function Repair_model({ closeModel }) {
                 variant="outlined"
                 required
                 fullWidth
-                label="Invoice No"
+                label=" Serial No"
                 size="small"
                 value={serialNo}
                 onChange={(e) => {

@@ -39,15 +39,15 @@ export default function Seized_item() {
 
   //START pay And Go Columns
   const seizedTableColomns = [
-    {
-      name: "InvoiceNo",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
+    // {
+    //   name: "InvoiceNo",
+    //   options: {
+    //     filter: true,
+    //     setCellHeaderProps: (value) => ({
+    //       style: { fontSize: "15px", color: "black", fontWeight: "600" },
+    //     }),
+    //   },
+    // },
     {
       name: "Serial_number",
       options: {
@@ -158,7 +158,7 @@ export default function Seized_item() {
           });
 
           rowData.push({
-            InvoiceNo: RESnap.data()?.invoice_number,
+            // InvoiceNo: RESnap.data()?.invoice_number,
             SerialNo: RESnap.data()?.serialNo,
             Type: RESnap.data()?.type,
             Model_No: RESnap.data()?.model_no,

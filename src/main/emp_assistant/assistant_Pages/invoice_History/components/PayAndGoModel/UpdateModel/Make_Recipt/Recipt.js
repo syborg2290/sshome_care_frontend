@@ -95,13 +95,6 @@ class Recipt extends React.Component {
                   )}
                 </Col>
                 <Col className="tiles" span={6}>
-                  Serial No.
-                </Col>
-                <Col className="tiles_details" span={8}>
-                  {this.state.serial_num}
-                </Col>
-                <Col span={10}></Col>
-                <Col className="tiles" span={6}>
                   Customer Name
                 </Col>
                 <Col className="tiles_details" span={4}>

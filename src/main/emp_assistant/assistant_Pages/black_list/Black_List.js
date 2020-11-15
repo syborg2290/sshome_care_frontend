@@ -50,15 +50,15 @@ export default function Black_List() {
         }),
       },
     },
-    {
-      name: "SerialNo",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
+    // {
+    //   name: "SerialNo",
+    //   options: {
+    //     filter: true,
+    //     setCellHeaderProps: (value) => ({
+    //       style: { fontSize: "15px", color: "black", fontWeight: "600" },
+    //     }),
+    //   },
+    // },
         {
       name: "Type",
       options: {
@@ -156,7 +156,7 @@ export default function Black_List() {
         });
         allTableRaw.push({
           InvoiceNo: each.data().InvoiceNo,
-          SerialNo: each.data().serialNo,
+          // SerialNo: each.data().serialNo,
           Type: each.data().type,
           FirstName: each.data().FirstName,
           LastName: each.data().LastName,

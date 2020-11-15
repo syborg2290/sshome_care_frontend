@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { List, Radio, Row, Col, Divider, Spin } from "antd";
 import { ShoppingCartOutlined, CloseOutlined } from "@ant-design/icons";
-import { Button } from "@material-ui/core";
+import { Button,Grid } from "@material-ui/core";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import { useHistory } from "react-router-dom";
+import Typography from "@material-ui/core/Typography";
 
 // styles
 import "./SelectedItem_model.css";
@@ -106,11 +107,16 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
 
   return (
     <>
+      <Grid container spacing={2}>
+        <Typography className="method_title" variant="h5" gutterBottom>
+        Select a Payment Method :
+      </Typography>
+      <Grid className="radioGrid_main" item xs={12} sm={12}>
       <Radio.Group
         className="radio_btn"
         defaultValue="PayandGo"
         buttonStyle="solid"
-        size="small"
+        size="large"
         onChange={(e) => {
           setpaymentWay(e.target.value);
         }}
@@ -121,8 +127,13 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
         <Radio.Button className="btn_radio" value="FullPayment">
           Full Payment
         </Radio.Button>
-      </Radio.Group>
-
+          </Radio.Group>
+        </Grid>
+        <Grid item xs={12} sm={12}>
+          <hr />
+        </Grid>
+     
+</Grid>
       <List
         className="model_List"
         footer={

@@ -27,12 +27,39 @@ export default function Dashboard() {
 
   useEffect(() => {
     db.collection("invoice")
-      .where("status_of_payandgo", "==", "expired")
       .where("status_of_payandgo", "==", "onGoing")
       .get()
       .then((onSnap) => {
         onSnap.docs.forEach((eachRe) => {
+          let isBeforeDate = isDateBeforeToday(
+            new Date(eachRe.data()?.deadlineTimestamp?.seconds * 1000)
+          );
+          if (isBeforeDate) {
+            db.collection("invoice").doc(eachRe.id).update({
+              status_of_payandgo: "expired",
+            });
+          }
           checkInstallmentsStatus(eachRe);
+        });
+      });
+
+    db.collection("invoice")
+      .where("status_of_payandgo", "==", "expired")
+      .get()
+      .then((onSnap) => {
+        onSnap.docs.forEach((each) => {
+          let isBeforeDate = isDateBeforeToday(
+            new Date(each.data()?.deadlineTimestamp?.seconds * 1000)
+          );
+          if (isBeforeDate) {
+            setExpiredList([
+              ...expiredList,
+              {
+                invoice_number: each.data().invoice_number,
+                nic: each.data()?.nic,
+              },
+            ]);
+          }
         });
       });
     // eslint-disable-next-line
@@ -108,6 +135,8 @@ export default function Dashboard() {
               } else {
                 db.collection("arrears").add({
                   invoice_number: eachRe.data().invoice_number,
+                  type: eachRe.data().selectedType,
+                  mid: eachRe.data().mid,
                   customer_id: eachRe.data().customer_id,
                   nic: eachRe.data().nic,
                   delayed_days: Math.round(daysCountInitial) - 7,
@@ -192,6 +221,8 @@ export default function Dashboard() {
                 db.collection("arrears").add({
                   invoice_number: eachRe.data().invoice_number,
                   customer_id: eachRe.data().customer_id,
+                  type: eachRe.data().selectedType,
+                  mid: eachRe.data().mid,
                   nic: eachRe.data().nic,
                   delayed_days: Math.round(daysCountInitial) - 7,
                   delayed_charges:
@@ -226,18 +257,7 @@ export default function Dashboard() {
       }
     }
 
-    let isBeforeDate = isDateBeforeToday(
-      new Date(eachRe.data()?.deadlineTimestamp?.seconds * 1000)
-    );
-    if (isBeforeDate) {
-      setExpiredList([
-        ...expiredList,
-        {
-          invoice_number: eachRe.data().invoice_number,
-          nic: eachRe.data()?.nic,
-        },
-      ]);
-    }
+
   };
 
   // const getDateCheck = (value, arr, prop) => {
@@ -323,6 +343,8 @@ export default function Dashboard() {
             db.collection("arrears").add({
               invoice_number: eachRe.data().invoice_number,
               customer_id: eachRe.data().customer_id,
+              type: eachRe.data().selectedType,
+              mid: eachRe.data().mid,
               nic: eachRe.data().nic,
               delayed_days: Math.round(daysCount) - 7,
               delayed_charges:
@@ -395,6 +417,8 @@ export default function Dashboard() {
             db.collection("arrears").add({
               invoice_number: eachRe.data().invoice_number,
               customer_id: eachRe.data().customer_id,
+              type: eachRe.data().selectedType,
+              mid: eachRe.data().mid,
               nic: eachRe.data().nic,
               delayed_days: Math.round(daysCount) - 14,
               delayed_charges:
@@ -422,18 +446,7 @@ export default function Dashboard() {
       }
     }
 
-    let isBeforeDate = isDateBeforeToday(
-      new Date(eachRe.data()?.deadlineTimestamp?.seconds * 1000)
-    );
-    if (isBeforeDate) {
-      setExpiredList([
-        ...expiredList,
-        {
-          invoice_number: eachRe.data().invoice_number,
-          nic: eachRe.data()?.nic,
-        },
-      ]);
-    }
+
   };
 
   return (

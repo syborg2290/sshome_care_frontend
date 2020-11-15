@@ -53,16 +53,7 @@ export default function Areas() {
         }),
       },
     },
-       {
-      name: "SerialNo",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
-      {
+    {
       name: "Type",
       options: {
         filter: true,
@@ -151,8 +142,7 @@ export default function Areas() {
 
         rawData.push({
           InvoiceNo: eachRe.data().invoice_number,
-          SerialNo: eachRe.data().serialNo,
-           Type: eachRe.data().displayType,
+          Type: eachRe.data().type,
           MID: eachRe.data().mid,
           NIC: eachRe.data().nic,
           Delayed_Days: Math.round(eachRe.data().delayed_days),
@@ -258,7 +248,7 @@ export default function Areas() {
                 };
               },
               selectableRows: false,
-              customToolbarSelect: () => {},
+              customToolbarSelect: () => { },
               filterType: "textfield",
               download: false,
               print: false,
@@ -273,8 +263,8 @@ export default function Areas() {
                   noMatch: isLoading ? (
                     <Spin className="tblSpinner" size="large" spinning="true" />
                   ) : (
-                    ""
-                  ),
+                      ""
+                    ),
                 },
               },
             }}

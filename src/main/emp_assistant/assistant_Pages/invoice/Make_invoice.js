@@ -1413,7 +1413,7 @@ function Make_invoice() {
                               ? false
                               : true
                           }
-                          value={dpayment === 0 ? subTotalFunc() - totalDiscount : balance}
+                          value={itemAPI * itemNOI === 0 ? subTotalFunc() - totalDiscount : balance}
                           onChange={(e) => {
                             setBalance(parseInt(e.target.value));
                           }}

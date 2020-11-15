@@ -136,9 +136,9 @@ function Make_invoice() {
       subTotalValue =
         subTotalValue +
         (itemDP[tablerows[a].i] - itemDiscount[tablerows[a].i]) *
-          itemQty[tablerows[a].i];
+        itemQty[tablerows[a].i];
     }
-    let gamiam = gamisaraniamount === "" ? 0 : gamisaraniamount;
+    let gamiam = gamisaraniamount === "" ? 0 : parseInt(gamisaraniamount);
     let fTotoS = subTotalValue - gamiam <= 0 ? 0 : subTotalValue - gamiam;
     return fTotoS;
   };
@@ -196,7 +196,7 @@ function Make_invoice() {
         "Issue with your calculations Pleace check again (May be Included minus values ! )"
       );
     } else {
-      if (gamisarani && (gamisaraniamount === "" ? 0 : gamisaraniamount) > 0) {
+      if (gamisarani && (parseInt(gamisaraniamount) === "" ? 0 : parseInt(gamisaraniamount)) > 0) {
         db.collection("gami_sarani")
           .doc(gamisaraniId)
           .get()
@@ -205,23 +205,23 @@ function Make_invoice() {
               .doc(gamisaraniId)
               .update({
                 currentDeposit:
-                  getRe.data().currentDeposit - gamisaraniamount === ""
+                  getRe.data().currentDeposit - parseInt(gamisaraniamount) === ""
                     ? 0
-                    : gamisaraniamount < 0
-                    ? 0
-                    : getRe.data().currentDeposit - gamisaraniamount === ""
-                    ? 0
-                    : gamisaraniamount,
+                    : parseInt(gamisaraniamount) < 0
+                      ? 0
+                      : getRe.data().currentDeposit - parseInt(gamisaraniamount) === ""
+                        ? 0
+                        : parseInt(gamisaraniamount),
               })
               .then((re) => {
                 db.collection("gami_sarani_withdrawhistory").add({
                   gami_nic: gamisaraniNic,
                   docId: gamisaraniId,
-                  withdraw: gamisaraniamount === "" ? 0 : gamisaraniamount,
+                  withdraw: parseInt(gamisaraniamount) === "" ? 0 : parseInt(gamisaraniamount),
                   balance:
-                    getRe.data().currentDeposit - gamisaraniamount === ""
+                    getRe.data().currentDeposit - parseInt(gamisaraniamount) === ""
                       ? 0
-                      : gamisaraniamount,
+                      : parseInt(gamisaraniamount),
                   date: intialTimestamp,
                 });
 
@@ -472,7 +472,7 @@ function Make_invoice() {
                         installemtnDate: dates === "" ? 1 : dates,
                         gamisarani: gamisarani,
                         gamisarani_amount:
-                          gamisaraniamount === "" ? 0 : gamisaraniamount,
+                          gamisaraniamount === "" ? 0 : parseInt(gamisaraniamount),
                         paymentWay: isFullPayment ? "FullPayment" : "PayandGo",
                         downpayment: dpayment,
                         noOfInstallment: itemNOI,
@@ -645,7 +645,7 @@ function Make_invoice() {
                         installemtnDate: dates === "" ? 1 : dates,
                         gamisarani: gamisarani,
                         gamisarani_amount:
-                          gamisaraniamount === "" ? 0 : gamisaraniamount,
+                          gamisaraniamount === "" ? 0 : parseInt(gamisaraniamount),
                         paymentWay: isFullPayment ? "FullPayment" : "PayandGo",
                         downpayment: dpayment,
                         noOfInstallment: itemNOI,
@@ -818,7 +818,7 @@ function Make_invoice() {
                     installemtnDate: dates === "" ? 1 : dates,
                     gamisarani: gamisarani,
                     gamisarani_amount:
-                      gamisaraniamount === "" ? 0 : gamisaraniamount,
+                      gamisaraniamount === "" ? 0 : parseInt(gamisaraniamount),
                     paymentWay: isFullPayment ? "FullPayment" : "PayandGo",
                     downpayment: dpayment,
                     noOfInstallment: itemNOI,
@@ -987,7 +987,7 @@ function Make_invoice() {
                     installemtnDate: dates === "" ? 1 : dates,
                     gamisarani: gamisarani,
                     gamisarani_amount:
-                      gamisaraniamount === "" ? 0 : gamisaraniamount,
+                      gamisaraniamount === "" ? 0 : parseInt(gamisaraniamount),
                     paymentWay: isFullPayment ? "FullPayment" : "PayandGo",
                     downpayment: dpayment,
                     noOfInstallment: itemNOI,
@@ -1138,7 +1138,7 @@ function Make_invoice() {
         installemtnDay: null,
         installemtnDate: null,
         gamisarani: gamisarani,
-        gamisarani_amount: gamisaraniamount === "" ? 0 : gamisaraniamount,
+        gamisarani_amount: gamisaraniamount === "" ? 0 : parseInt(gamisaraniamount),
         paymentWay: isFullPayment ? "FullPayment" : "PayandGo",
         downpayment: dpayment,
         noOfInstallment: itemNOI,
@@ -1195,7 +1195,7 @@ function Make_invoice() {
           setLoadingNicSubmit(false);
           if (
             reGami.docs[0].data().currentDeposit -
-              (subTotalFunc() - totalDiscount) <
+            (subTotalFunc() - totalDiscount) <
             0
           ) {
             NotificationManager.warning(
@@ -1685,8 +1685,8 @@ function Make_invoice() {
                           color="primary"
                           disabled={
                             !gamisarani ||
-                            loadingNicsubmit ||
-                            gamisaraniNic.length === 0
+                              loadingNicsubmit ||
+                              gamisaraniNic.length === 0
                               ? true
                               : false
                           }
@@ -1831,8 +1831,8 @@ function Make_invoice() {
                     className="btn_addCustomer"
                     disabled={
                       loadingsubmit ||
-                      tablerows.length === 0 ||
-                      intialTimestamp === null
+                        tablerows.length === 0 ||
+                        intialTimestamp === null
                         ? true
                         : false
                     }

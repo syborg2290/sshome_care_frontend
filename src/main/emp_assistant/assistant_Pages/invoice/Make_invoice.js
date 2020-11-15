@@ -1160,7 +1160,7 @@ function Make_invoice() {
                         <TableCell className="tbl_Cell" align="right">
                           Sum(LKR)
                         </TableCell>
-                        <TableCell className="tbl_Cell" align="right">
+                        <TableCell className="tbl_Cell_Ac" align="right">
                           Action
                         </TableCell>
                       </TableRow>
@@ -1337,7 +1337,7 @@ function Make_invoice() {
                         <TableCell align="right" colSpan={3}>
                           Subtotal(LKR)
                         </TableCell>
-                        <TableCell align="right" colSpan={2}>
+                        <TableCell align="right" colSpan={1}>
                           <CurrencyFormat
                             value={subTotalFunc()}
                             displayType={"text"}
@@ -1350,7 +1350,7 @@ function Make_invoice() {
                         <TableCell align="right" colSpan={3}>
                           Discount(LKR)
                         </TableCell>
-                        <TableCell className="cel" align="right" colSpan={2}>
+                        <TableCell className="cel" align="right" colSpan={1}>
                           <TextField
                             className="txt_distg"
                             variant="outlined"
@@ -1393,7 +1393,7 @@ function Make_invoice() {
                         <TableCell align="right" colSpan={3}>
                           Total(LKR)
                         </TableCell>
-                        <TableCell align="right" colSpan={2}>
+                        <TableCell align="right" colSpan={1}>
                           <CurrencyFormat
                             value={subTotalFunc() - totalDiscount}
                             displayType={"text"}

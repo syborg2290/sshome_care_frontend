@@ -63,6 +63,12 @@ label {
   border-top: brown !important;
 }
 
+.tbl_Cell_Ac {
+  border-color: brown !important;
+  border-top: brown !important;
+  width: 5px !important;
+}
+
 .txt_discount {
   width: 90px !important;
 }

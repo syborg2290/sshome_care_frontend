@@ -1424,6 +1424,32 @@ function Make_invoice() {
                         />
                       </Grid>
                       <Grid className="noi" item xs={12} sm={2}></Grid>
+                      
+                      <Grid className="lbl_MI" item xs={12} sm={6}>
+                        Down Payment(LKR):
+                      </Grid>
+                      <Grid className="lbl_MI" item xs={12} sm={4}>
+                        <TextField
+                          className="txt_dpayment"
+                          variant="outlined"
+                          size="small"
+                          label="Down Payment"
+                          InputProps={{ inputProps: { min: 0 } }}
+                          type="number"
+                          fullWidth
+                          value={dpayment}
+                          disabled={
+                            tablerows.some((ob) => ob.paymentWay === "PayandGo")
+                              ? false
+                              : true
+                          }
+                          onChange={(e) => {
+                            setDpayment(parseInt(e.target.value));
+                          }}
+                        />
+                      </Grid>
+                      <Grid className="noi" item xs={12} sm={2}></Grid>
+
                       <Grid className="lbl_MI" item xs={12} sm={6}>
                         Balance(LKR):
                       </Grid>
@@ -1452,31 +1478,9 @@ function Make_invoice() {
                         />
                       </Grid>
                       <Grid className="noi" item xs={12} sm={2}></Grid>
-                      <Grid className="lbl_MI" item xs={12} sm={6}>
-                        Down Payment(LKR):
-                      </Grid>
-                      <Grid className="lbl_MI" item xs={12} sm={4}>
-                        <TextField
-                          className="txt_dpayment"
-                          variant="outlined"
-                          size="small"
-                          label="Down Payment"
-                          InputProps={{ inputProps: { min: 0 } }}
-                          type="number"
-                          fullWidth
-                          value={dpayment}
-                          disabled={
-                            tablerows.some((ob) => ob.paymentWay === "PayandGo")
-                              ? false
-                              : true
-                          }
-                          onChange={(e) => {
-                            setDpayment(parseInt(e.target.value));
-                          }}
-                        />
-                      </Grid>
-                      <Grid className="noi" item xs={12} sm={2}></Grid>
+                      <Grid className="noi" item xs={12} sm={12}><hr /></Grid>
 
+                      
                       <Grid className="lbl_MI" item xs={12} sm={3}>
                         Days :
                       </Grid>

@@ -164,7 +164,7 @@ class PrintInvoiceClass extends React.Component {
                             align="right"
                             colSpan={1}
                           >
-                            BP(LKR)
+                            Sale Price(LKR)
                           </TableCell>
 
                           <TableCell className="tbl_Cell" align="right">

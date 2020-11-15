@@ -61,7 +61,7 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
         title: itemsData[i].title,
         unitprice: itemsData[i].unitprice,
         qty: itemsData[i].qty,
-        paymentWay: itemsData.length === 1 ? paymentWay : "FullPayment",
+        paymentWay: paymentWay,
         item: itemsData[i].item,
         customer: null,
       };
@@ -105,75 +105,73 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
   };
 
   return (
-    <List
-      className="model_List"
-      footer={
-        <Button
-          size="small"
-          variant="contained"
-          color="primary"
-          className="btn_ModelSelectedItem"
-          endIcon={<ArrowForwardIcon />}
-          onClick={nextclick}
-          disabled={isLoading ? true : false}
-        >
-          {isLoading ? (
-            <Spin className="tblSpinner" size="large" spinning="true" />
-          ) : (
-            "Next"
-          )}
-        </Button>
-      }
-      itemLayout="horizontal"
-      dataSource={itemsData}
-      renderItem={(item) => (
-        <div className="selcted_model">
-          <List.Item>
-            <span className="icons_List">
-              <ShoppingCartOutlined twoToneColor="#52c41a" />
-            </span>
-            <List.Item.Meta
-              title={
-                <Row>
-                  <Col span={5}> {item.title}</Col>
-                  <Col span={2}></Col>
-                  <Col span={12}>
-                    {itemsData.length === 1 ? (
-                      <Radio.Group
-                        className="radio_btn"
-                        defaultValue="PayandGo"
-                        buttonStyle="solid"
-                        size="small"
-                        onChange={(e) => {
-                          setpaymentWay(e.target.value);
-                        }}
-                      >
-                        <Radio.Button className="btn_radio" value="PayandGo">
-                          Pay and Go
-                        </Radio.Button>
-                        <Radio.Button className="btn_radio" value="FullPayment">
-                          Full Payment
-                        </Radio.Button>
-                      </Radio.Group>
-                    ) : (
-                      ""
-                    )}
-                  </Col>
-                  <Col span={5}>
-                    <span className="icons_Close">
-                      <CloseOutlined
-                        onClick={() => removeItems(item.i, item.id)}
-                      />
-                    </span>
-                  </Col>
-                </Row>
-              }
-              description={<span>LKR {item.unitprice}</span>}
-            />
-          </List.Item>
-          <Divider />
-        </div>
-      )}
-    ></List>
+    <>
+      <Radio.Group
+        className="radio_btn"
+        defaultValue="PayandGo"
+        buttonStyle="solid"
+        size="small"
+        onChange={(e) => {
+          setpaymentWay(e.target.value);
+        }}
+      >
+        <Radio.Button className="btn_radio" value="PayandGo">
+          Pay and Go
+        </Radio.Button>
+        <Radio.Button className="btn_radio" value="FullPayment">
+          Full Payment
+        </Radio.Button>
+      </Radio.Group>
+
+      <List
+        className="model_List"
+        footer={
+          <Button
+            size="small"
+            variant="contained"
+            color="primary"
+            className="btn_ModelSelectedItem"
+            endIcon={<ArrowForwardIcon />}
+            onClick={nextclick}
+            disabled={isLoading ? true : false}
+          >
+            {isLoading ? (
+              <Spin className="tblSpinner" size="large" spinning="true" />
+            ) : (
+              "Next"
+            )}
+          </Button>
+        }
+        itemLayout="horizontal"
+        dataSource={itemsData}
+        renderItem={(item) => (
+          <div className="selcted_model">
+            <List.Item>
+              <span className="icons_List">
+                <ShoppingCartOutlined twoToneColor="#52c41a" />
+              </span>
+              <List.Item.Meta
+                title={
+                  <Row>
+                    <Col span={5}> {item.title}</Col>
+                    <Col span={2}></Col>
+                    <Col span={12}></Col>
+                    <Col span={5}>
+                      <span className="icons_Close">
+                        <CloseOutlined
+                          onClick={() => removeItems(item.i, item.id)}
+                        />
+                      </span>
+                    </Col>
+                  </Row>
+                }
+                description={<span>LKR {item.unitprice}</span>}
+              />
+            </List.Item>
+            <Divider />
+          </div>
+        )}
+      ></List>
+    </>
   );
 }

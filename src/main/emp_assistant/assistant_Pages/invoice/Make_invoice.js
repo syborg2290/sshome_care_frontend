@@ -56,7 +56,6 @@ function Make_invoice() {
   const [gamisaraniNic, setGamisaraniNic] = useState("");
   const [days, setDays] = useState(new Date().getDay());
   const [dates, setDates] = useState(new Date().getDate());
-  // eslint-disable-next-line
   const [selectedType, setSelectedType] = useState("shop");
   const [gamisarani, setGamisarani] = useState(false);
   const [intialTimestamp, setInititialTimestamp] = useState(null);
@@ -83,7 +82,7 @@ function Make_invoice() {
         keepDataQTY[obj.i] = obj.qty;
         keepDataDP[obj.i] =
           obj.paymentWay === "PayandGo"
-            ? obj.item.downPayment
+            ? obj.item.salePrice
             : obj.item.salePrice;
         keepDataNOI[obj.i] =
           obj.paymentWay === "PayandGo" ? obj.item.noOfInstallments : 0;
@@ -130,7 +129,7 @@ function Make_invoice() {
       ? subTotalValue - gamisaraniamount <= 0
         ? 0
         : subTotalValue - gamisaraniamount
-      : gamisaraniamount + subTotalValue;
+      : gamisaraniamount - subTotalValue;
     return fTotoS;
   };
 

@@ -115,7 +115,7 @@ function Make_invoice() {
       subTotalValue =
         subTotalValue +
         (itemDP[tablerows[a].i] - itemDiscount[tablerows[a].i]) *
-          itemQty[tablerows[a].i];
+        itemQty[tablerows[a].i];
     }
     let fTotoS = isFullPayment
       ? subTotalValue - gamisaraniamount <= 0
@@ -191,7 +191,7 @@ function Make_invoice() {
                         item_id: one.id,
                         item_name: one.title,
                         qty: itemQty[one.i],
-
+                        downpayment: itemDP[one.i],
                         discount:
                           itemDiscount[one.i] === "" ? 0 : itemDiscount[one.i],
                       };
@@ -277,7 +277,7 @@ function Make_invoice() {
                 item_id: one.id,
                 item_name: one.title,
                 qty: itemQty[one.i],
-
+                downpayment: itemDP[one.i],
                 discount: itemDiscount[one.i] === "" ? 0 : itemDiscount[one.i],
               };
               arrayPassingItems.push(objItem);
@@ -1131,7 +1131,7 @@ function Make_invoice() {
           setLoadingNicSubmit(false);
           if (
             reGami.docs[0].data().currentDeposit -
-              (subTotalFunc() - totalDiscount) <
+            (subTotalFunc() - totalDiscount) <
             0
           ) {
             NotificationManager.warning(
@@ -1171,7 +1171,7 @@ function Make_invoice() {
                     <TableHead>
                       <TableRow>
                         <TableCell className="tbl_Cell">Item</TableCell>
-                        <TableCell className="tbl_Cell" colSpan={1}>
+                        <TableCell className="tbl_Cell" align="right" colSpan={1}>
                           Qty
                         </TableCell>
 
@@ -1182,14 +1182,13 @@ function Make_invoice() {
                         >
                           Sale Price(LKR)
                         </TableCell>
-
                         <TableCell className="tbl_Cell" align="right">
                           Discount(LKR)
                         </TableCell>
                         <TableCell className="tbl_Cell" align="right">
                           Sum(LKR)
                         </TableCell>
-                        <TableCell className="tbl_Cell" align="right">
+                        <TableCell className="tbl_Cell_Ac" align="right">
                           Action
                         </TableCell>
                       </TableRow>
@@ -1313,7 +1312,7 @@ function Make_invoice() {
                         <TableCell align="right" colSpan={3}>
                           Subtotal(LKR)
                         </TableCell>
-                        <TableCell align="right" colSpan={2}>
+                        <TableCell align="right" colSpan={1}>
                           <CurrencyFormat
                             value={subTotalFunc()}
                             displayType={"text"}
@@ -1326,7 +1325,7 @@ function Make_invoice() {
                         <TableCell align="right" colSpan={3}>
                           Discount(LKR)
                         </TableCell>
-                        <TableCell className="cel" align="right" colSpan={2}>
+                        <TableCell className="cel" align="right" colSpan={1}>
                           <TextField
                             className="txt_distg"
                             variant="outlined"
@@ -1348,7 +1347,7 @@ function Make_invoice() {
                         <TableCell align="right" colSpan={3}>
                           Total(LKR)
                         </TableCell>
-                        <TableCell align="right" colSpan={2}>
+                        <TableCell align="right" colSpan={1}>
                           <CurrencyFormat
                             value={subTotalFunc() - totalDiscount}
                             displayType={"text"}
@@ -1605,8 +1604,8 @@ function Make_invoice() {
                           color="primary"
                           disabled={
                             !gamisarani ||
-                            loadingNicsubmit ||
-                            gamisaraniNic.length === 0
+                              loadingNicsubmit ||
+                              gamisaraniNic.length === 0
                               ? true
                               : false
                           }
@@ -1751,8 +1750,8 @@ function Make_invoice() {
                     className="btn_addCustomer"
                     disabled={
                       loadingsubmit ||
-                      tablerows.length === 0 ||
-                      intialTimestamp === null
+                        tablerows.length === 0 ||
+                        intialTimestamp === null
                         ? true
                         : false
                     }

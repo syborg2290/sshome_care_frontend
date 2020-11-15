@@ -397,6 +397,7 @@ function Make_invoice() {
                           serialNo: listOfSerilNo,
                           modelNo: listOfModelNo,
                           chassisNo: listOfChassisNo,
+                          downpayment: parseInt(itemDP[one.i]),
                           qty: parseInt(itemQty[one.i]),
                           discount:
                             itemDiscount[one.i] === ""
@@ -567,6 +568,7 @@ function Make_invoice() {
                           serialNo: listOfSerilNo,
                           modelNo: listOfModelNo,
                           chassisNo: listOfChassisNo,
+                          downpayment: parseInt(itemDP[one.i]),
                           qty: parseInt(itemQty[one.i]),
                           discount:
                             itemDiscount[one.i] === ""
@@ -739,6 +741,7 @@ function Make_invoice() {
                       serialNo: listOfSerilNo,
                       modelNo: listOfModelNo,
                       chassisNo: listOfChassisNo,
+                      downpayment: parseInt(itemDP[one.i]),
                       qty: parseInt(itemQty[one.i]),
                       discount:
                         itemDiscount[one.i] === "" ? 0 : itemDiscount[one.i],
@@ -904,6 +907,7 @@ function Make_invoice() {
                       item_id: one.id,
                       serialNo: listOfSerilNo,
                       modelNo: listOfModelNo,
+                      downpayment: parseInt(itemDP[one.i]),
                       chassisNo: listOfChassisNo,
                       qty: parseInt(itemQty[one.i]),
                       discount:
@@ -1059,6 +1063,7 @@ function Make_invoice() {
             serialNo: listOfSerilNo,
             modelNo: listOfModelNo,
             chassisNo: listOfChassisNo,
+            downpayment: parseInt(itemDP[one.i]),
             qty: parseInt(itemQty[one.i]),
             discount: itemDiscount[one.i] === "" ? 0 : itemDiscount[one.i],
             item_name: one.title,
@@ -1423,7 +1428,7 @@ function Make_invoice() {
                         />
                       </Grid>
                       <Grid className="noi" item xs={12} sm={2}></Grid>
-                      
+
                       <Grid className="lbl_MI" item xs={12} sm={6}>
                         Down Payment(LKR):
                       </Grid>
@@ -1479,7 +1484,7 @@ function Make_invoice() {
                       <Grid className="noi" item xs={12} sm={2}></Grid>
                       <Grid className="noi" item xs={12} sm={12}><hr /></Grid>
 
-                      
+
                       <Grid className="lbl_MI" item xs={12} sm={3}>
                         Days :
                       </Grid>

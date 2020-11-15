@@ -444,34 +444,34 @@ export default function Invoice_history() {
                   Expired
                 </span>
               ) : (
-                <span
-                  style={{
-                    color: "white",
-                    backgroundColor: "red",
-                    padding: "6px",
-                    borderRadius: "20px",
-                    width: "100%",
-                  }}
-                >
-                  Blacklist
-                </span>
-              ),
+                      <span
+                        style={{
+                          color: "white",
+                          backgroundColor: "red",
+                          padding: "6px",
+                          borderRadius: "20px",
+                          width: "100%",
+                        }}
+                      >
+                        Blacklist
+                      </span>
+                    ),
             Action: (
               <div>
                 {siDoc.data().status_of_payandgo === "onGoing" ||
-                siDoc.data().status_of_payandgo === "expired" ? (
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    size="small"
-                    className="btn_pay"
-                    onClick={showModalUpdate}
-                  >
-                    Update
-                  </Button>
-                ) : (
-                  ""
-                )}
+                  siDoc.data().status_of_payandgo === "expired" ? (
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      size="small"
+                      className="btn_pay"
+                      onClick={showModalUpdate}
+                    >
+                      Update
+                    </Button>
+                  ) : (
+                    ""
+                  )}
                 <span className="icon_visibl">
                   <HistoryIcon onClick={showModalHistory} />
                 </span>
@@ -597,7 +597,7 @@ export default function Invoice_history() {
                 balanceProp={payangoAllData[currentIndx]?.data?.balance}
                 isEx={
                   payangoAllData[currentIndx]?.data?.status_of_payandgo ===
-                  "expired"
+                    "expired"
                     ? true
                     : false
                 }
@@ -667,6 +667,7 @@ export default function Invoice_history() {
               <InstallmentFullPayment
                 key={fullPaymentAllData[currentIndx]?.id}
                 items_list_props={fullPaymentAllData[currentIndx]?.data?.items}
+                data={fullPaymentAllData[currentIndx]?.data}
               />
             </div>
           </div>
@@ -694,7 +695,7 @@ export default function Invoice_history() {
                 columns={payAndGoColumns}
                 options={{
                   selectableRows: false,
-                  customToolbarSelect: () => {},
+                  customToolbarSelect: () => { },
                   filterType: "textField",
                   download: false,
                   print: false,
@@ -713,8 +714,8 @@ export default function Invoice_history() {
                           spinning="true"
                         />
                       ) : (
-                        ""
-                      ),
+                          ""
+                        ),
                     },
                   },
                 }}
@@ -732,7 +733,7 @@ export default function Invoice_history() {
                 columns={fullPaymentColumns}
                 options={{
                   selectableRows: false,
-                  customToolbarSelect: () => {},
+                  customToolbarSelect: () => { },
                   filterType: "textField",
                   download: false,
                   print: false,
@@ -751,8 +752,8 @@ export default function Invoice_history() {
                           spinning="true"
                         />
                       ) : (
-                        ""
-                      ),
+                          ""
+                        ),
                     },
                   },
                 }}

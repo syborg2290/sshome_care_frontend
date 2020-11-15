@@ -78,7 +78,13 @@ export default function Full_Payment_Model({ items_list_props, data }) {
               :
             </Grid>
             <Grid item xs={12} sm={6}>
-              {data.gamisarani_amount}
+              <CurrencyFormat
+                value={data.gamisarani_amount}
+                displayType={"text"}
+                thousandSeparator={true}
+                prefix={" "}
+              />
+
             </Grid>
             <Grid className="lbl_topis" item xs={12} sm={12}>
               <hr />
@@ -95,95 +101,95 @@ export default function Full_Payment_Model({ items_list_props, data }) {
             }}
           />
         ) : (
-          itemsList.map((eachItem) => {
-            return (
-              <div key={eachItem.item_name} className="paper">
-                <form className="form1" noValidate>
-                  <Grid container spacing={2}>
-                    {" "}
-                    <Grid className="lbl_topis" item xs={12} sm={4}>
-                      Item Name
+            itemsList.map((eachItem) => {
+              return (
+                <div key={eachItem.item_name} className="paper">
+                  <form className="form1" noValidate>
+                    <Grid container spacing={2}>
+                      {" "}
+                      <Grid className="lbl_topis" item xs={12} sm={4}>
+                        Item Name
                     </Grid>
-                    <Grid item xs={12} sm={1}>
-                      :
+                      <Grid item xs={12} sm={1}>
+                        :
                     </Grid>
-                    <Grid item xs={12} sm={7}>
-                      <p>{eachItem.item_name}</p>
+                      <Grid item xs={12} sm={7}>
+                        <p>{eachItem.item_name}</p>
+                      </Grid>
+                      <Grid className="lbl_topis" item xs={12} sm={4}>
+                        Item Discount(LKR)
                     </Grid>
-                    <Grid className="lbl_topis" item xs={12} sm={4}>
-                      Item Discount(LKR)
+                      <Grid item xs={12} sm={1}>
+                        :
                     </Grid>
-                    <Grid item xs={12} sm={1}>
-                      :
+                      <Grid item xs={12} sm={7}>
+                        <CurrencyFormat
+                          value={eachItem.discount}
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          prefix={" "}
+                        />
+                      </Grid>
+                      <Grid className="lbl_topis" item xs={12} sm={4}>
+                        Qty
                     </Grid>
-                    <Grid item xs={12} sm={7}>
-                      <CurrencyFormat
-                        value={eachItem.discount}
-                        displayType={"text"}
-                        thousandSeparator={true}
-                        prefix={" "}
-                      />
+                      <Grid item xs={12} sm={1}>
+                        :
                     </Grid>
-                    <Grid className="lbl_topis" item xs={12} sm={4}>
-                      Qty
+                      <Grid item xs={12} sm={7}>
+                        <p>{eachItem.qty}</p>
+                      </Grid>
+                      <Grid className="lbl_topis" item xs={12} sm={4}>
+                        Color
                     </Grid>
-                    <Grid item xs={12} sm={1}>
-                      :
+                      <Grid item xs={12} sm={1}>
+                        :
                     </Grid>
-                    <Grid item xs={12} sm={7}>
-                      <p>{eachItem.qty}</p>
+                      <Grid item xs={12} sm={7}>
+                        <p>{eachItem.color}</p>
+                      </Grid>
+                      <Grid className="lbl_topis" item xs={12} sm={4}>
+                        Guarantee Period
                     </Grid>
-                    <Grid className="lbl_topis" item xs={12} sm={4}>
-                      Color
+                      <Grid item xs={12} sm={1}>
+                        :
                     </Grid>
-                    <Grid item xs={12} sm={1}>
-                      :
-                    </Grid>
-                    <Grid item xs={12} sm={7}>
-                      <p>{eachItem.color}</p>
-                    </Grid>
-                    <Grid className="lbl_topis" item xs={12} sm={4}>
-                      Guarantee Period
-                    </Grid>
-                    <Grid item xs={12} sm={1}>
-                      :
-                    </Grid>
-                    <Grid item xs={12} sm={7}>
-                      <p>
-                        {eachItem.gurantee_period.toString() +
-                          " " +
-                          eachItem.gurantee_type.value.toString()}
-                      </p>
-                    </Grid>
-                    {/* <Grid className="lbl_topis" item xs={12} sm={12}>
+                      <Grid item xs={12} sm={7}>
+                        <p>
+                          {eachItem.gurantee_period.toString() +
+                            " " +
+                            eachItem.gurantee_type.value.toString()}
+                        </p>
+                      </Grid>
+                      {/* <Grid className="lbl_topis" item xs={12} sm={12}>
                     <hr />
                   </Grid> */}
-                  </Grid>
+                    </Grid>
 
-                  <TableContainer
-                    component={Paper}
-                    className="main_containerNo"
-                  >
-                    <hr />
-                    <Table
-                      className="gass_Table"
-                      size="small"
-                      aria-label="a dense table"
+                    <TableContainer
+                      component={Paper}
+                      className="main_containerNo"
                     >
-                      <TableHead className="No_Table_head">
-                        <TableRow>
-                          <TableCell className="tbl_cell">SerialNo</TableCell>
-                          <TableCell className="tbl_cell" align="right">
-                            ModelNo
+                      <hr />
+                      <Table
+                        className="gass_Table"
+                        size="small"
+                        aria-label="a dense table"
+                      >
+                        <TableHead className="No_Table_head">
+                          <TableRow>
+                            <TableCell className="tbl_cell">SerialNo</TableCell>
+                            <TableCell className="tbl_cell" align="right">
+                              ModelNo
                           </TableCell>
-                          <TableCell className="tbl_cell" align="right">
-                            ChasisseNo
+                            <TableCell className="tbl_cell" align="right">
+                              ChasisseNo
                           </TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {eachItem.listSe.length > 0
-                          ? eachItem?.listSe?.map((row) => (
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          {eachItem.listSe.length > 0
+                            ? eachItem?.listSe?.map((row) => (
                               <TableRow key={0}>
                                 <TableCell component="th" scope="row">
                                   {eachItem.listSe[0]?.serialNo?.map(
@@ -208,16 +214,16 @@ export default function Full_Payment_Model({ items_list_props, data }) {
                                 </TableCell>
                               </TableRow>
                             ))
-                          : ""}
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
-                </form>
-                <hr />
-              </div>
-            );
-          })
-        )}
+                            : ""}
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+                  </form>
+                  <hr />
+                </div>
+              );
+            })
+          )}
       </Container>
     </>
   );

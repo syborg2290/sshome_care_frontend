@@ -136,7 +136,7 @@ function Make_invoice() {
       subTotalValue =
         subTotalValue +
         (itemDP[tablerows[a].i] - itemDiscount[tablerows[a].i]) *
-        itemQty[tablerows[a].i];
+          itemQty[tablerows[a].i];
     }
     let gamiam = gamisaraniamount === "" ? 0 : parseInt(gamisaraniamount);
     let fTotoS = subTotalValue - gamiam <= 0 ? 0 : subTotalValue - gamiam;
@@ -196,33 +196,30 @@ function Make_invoice() {
         "Issue with your calculations Pleace check again (May be Included minus values ! )"
       );
     } else {
-      if (gamisarani && (parseInt(gamisaraniamount) === "" ? 0 : parseInt(gamisaraniamount)) > 0) {
+      if (
+        gamisarani &&
+        (parseInt(gamisaraniamount) === "" ? 0 : parseInt(gamisaraniamount)) > 0
+      ) {
         db.collection("gami_sarani")
           .doc(gamisaraniId)
           .get()
           .then((getRe) => {
-            let toto1 = gamisaraniamount === ""
-              ? 0
-              : parseInt(gamisaraniamount);
+            let toto1 =
+              gamisaraniamount === "" ? 0 : parseInt(gamisaraniamount);
             let totoF = getRe.data().currentDeposit - toto1;
             db.collection("gami_sarani")
               .doc(gamisaraniId)
               .update({
-                currentDeposit:
-                  totoF <= 0
-                    ? 0
-                    : totoF,
+                currentDeposit: totoF <= 0 ? 0 : totoF,
               })
               .then((re) => {
-                let toto = gamisaraniamount === ""
-                  ? 0
-                  : parseInt(gamisaraniamount);
+                let toto =
+                  gamisaraniamount === "" ? 0 : parseInt(gamisaraniamount);
                 db.collection("gami_sarani_withdrawhistory").add({
                   gami_nic: gamisaraniNic,
                   docId: gamisaraniId,
                   withdraw: toto,
-                  balance:
-                    getRe.data().currentDeposit - toto,
+                  balance: getRe.data().currentDeposit - toto,
                   date: intialTimestamp,
                 });
 
@@ -473,7 +470,9 @@ function Make_invoice() {
                         installemtnDate: dates === "" ? 1 : dates,
                         gamisarani: gamisarani,
                         gamisarani_amount:
-                          gamisaraniamount === "" ? 0 : parseInt(gamisaraniamount),
+                          gamisaraniamount === ""
+                            ? 0
+                            : parseInt(gamisaraniamount),
                         paymentWay: isFullPayment ? "FullPayment" : "PayandGo",
                         downpayment: dpayment,
                         noOfInstallment: itemNOI,
@@ -646,7 +645,9 @@ function Make_invoice() {
                         installemtnDate: dates === "" ? 1 : dates,
                         gamisarani: gamisarani,
                         gamisarani_amount:
-                          gamisaraniamount === "" ? 0 : parseInt(gamisaraniamount),
+                          gamisaraniamount === ""
+                            ? 0
+                            : parseInt(gamisaraniamount),
                         paymentWay: isFullPayment ? "FullPayment" : "PayandGo",
                         downpayment: dpayment,
                         noOfInstallment: itemNOI,
@@ -1139,7 +1140,8 @@ function Make_invoice() {
         installemtnDay: null,
         installemtnDate: null,
         gamisarani: gamisarani,
-        gamisarani_amount: gamisaraniamount === "" ? 0 : parseInt(gamisaraniamount),
+        gamisarani_amount:
+          gamisaraniamount === "" ? 0 : parseInt(gamisaraniamount),
         paymentWay: isFullPayment ? "FullPayment" : "PayandGo",
         downpayment: dpayment,
         noOfInstallment: itemNOI,
@@ -1196,7 +1198,7 @@ function Make_invoice() {
           setLoadingNicSubmit(false);
           if (
             reGami.docs[0].data().currentDeposit -
-            (subTotalFunc() - totalDiscount) <
+              (subTotalFunc() - totalDiscount) <
             0
           ) {
             NotificationManager.warning(
@@ -1686,8 +1688,8 @@ function Make_invoice() {
                           color="primary"
                           disabled={
                             !gamisarani ||
-                              loadingNicsubmit ||
-                              gamisaraniNic.length === 0
+                            loadingNicsubmit ||
+                            gamisaraniNic.length === 0
                               ? true
                               : false
                           }
@@ -1832,8 +1834,8 @@ function Make_invoice() {
                     className="btn_addCustomer"
                     disabled={
                       loadingsubmit ||
-                        tablerows.length === 0 ||
-                        intialTimestamp === null
+                      tablerows.length === 0 ||
+                      intialTimestamp === null
                         ? true
                         : false
                     }

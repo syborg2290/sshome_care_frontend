@@ -1442,10 +1442,20 @@ function Make_invoice() {
                               InputProps={{ inputProps: { min: 0 } }}
                               type="number"
                               fullWidth
-                              label="NOI"
-                              // disabled={
-                              //   row.paymentWay === "PayandGo" ? false : true
-                              // }
+                          label="NOI"
+                          disabled={
+                            tablerows.some((ob) => ob.paymentWay === "PayandGo")
+                               ? false
+                               : true
+                    }
+                              //    key={row.i}
+                              // id={row.i.toString()}
+                              // value={itemNOI[row.i]}
+                              // onChange={(e) => {
+                              //   setItemNOI({
+                              //     ...itemNOI,
+                              //     [row.i]: e.target.value,
+                              //   });
                               value={itemNOI}
                               onChange={(e) => {
                                 setItemNOI(e.target.value); 
@@ -1470,6 +1480,11 @@ function Make_invoice() {
                               //   row.paymentWay === "PayandGo" ? false : true
                               // }
                               // id={row.i.toString()}
+                               disabled={
+                               tablerows.some((ob) => ob.paymentWay === "PayandGo")
+                               ? false
+                              : true
+                    }
                           value={itemAPI}
                            onChange={(e) => {
                                 setItemAPI(e.target.value); 

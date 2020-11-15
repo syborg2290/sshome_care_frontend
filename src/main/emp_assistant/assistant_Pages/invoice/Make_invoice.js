@@ -3,6 +3,7 @@ import { Modal, Spin, DatePicker, Space, Checkbox } from "antd";
 import { PrinterFilled } from "@ant-design/icons";
 import { useLocation, useHistory } from "react-router-dom";
 
+
 import {
   Button,
   TextField,
@@ -20,6 +21,8 @@ import {
   InputLabel,
   FormControl,
   Select,
+  Card,
+
 } from "@material-ui/core";
 
 import firebase from "firebase";
@@ -48,6 +51,7 @@ function Make_invoice() {
   const [itemDP, setItemDP] = useState({});
   const [itemNOI, setItemNOI] = useState({});
   const [itemAPI, setItemAPI] = useState({});
+  const [balance, setBalance] = useState({});
   const [itemDiscount, setItemDiscount] = useState({});
   const [totalDiscount, setTotalDiscount] = useState(0);
   const [gamisaraniInitialAmount, setGamisaraniInitialAmount] = useState(0);
@@ -1141,17 +1145,15 @@ function Make_invoice() {
                         <TableCell className="tbl_Cell" colSpan={1}>
                           Qty
                         </TableCell>
-                        <TableCell className="tbl_Cell" align="right">
-                          Type
-                        </TableCell>
+                      
                         <TableCell
                           className="tbl_Cell"
                           align="right"
                           colSpan={1}
                         >
-                          DP(LKR)
+                         Sale Price(LKR)
                         </TableCell>
-                        <TableCell
+                        {/* <TableCell
                           className="tbl_Cell"
                           align="right"
                           colSpan={1}
@@ -1161,7 +1163,7 @@ function Make_invoice() {
 
                         <TableCell className="tbl_Cell" align="right">
                           API(LKR)
-                        </TableCell>
+                        </TableCell> */}
                         <TableCell className="tbl_Cell" align="right">
                           Discount(LKR)
                         </TableCell>
@@ -1201,9 +1203,9 @@ function Make_invoice() {
                               }}
                             />
                           </TableCell>
-                          <TableCell align="right" colSpan={1}>
+                          {/* <TableCell align="right" colSpan={1}>
                             {row.paymentWay === "PayandGo" ? "P" : "F"}
-                          </TableCell>
+                          </TableCell> */}
                           <TableCell align="right">
                             {" "}
                             <TextField
@@ -1224,7 +1226,7 @@ function Make_invoice() {
                               }}
                             />
                           </TableCell>
-                          <TableCell align="right">
+                          {/* <TableCell align="right">
                             {" "}
                             <TextField
                               className="txt_dpayment"
@@ -1246,8 +1248,8 @@ function Make_invoice() {
                                 });
                               }}
                             />
-                          </TableCell>
-                          <TableCell align="right">
+                          </TableCell> */}
+                          {/* <TableCell align="right">
                             {" "}
                             <TextField
                               className="txt_dpayment"
@@ -1269,7 +1271,7 @@ function Make_invoice() {
                                 });
                               }}
                             />
-                          </TableCell>
+                          </TableCell> */}
                           <TableCell align="right">
                             {" "}
                             <TextField
@@ -1341,8 +1343,8 @@ function Make_invoice() {
                       ))}
 
                       <TableRow>
-                        <TableCell rowSpan={4} />
-                        <TableCell align="right" colSpan={5}>
+                        <TableCell rowSpan={3} />
+                        <TableCell align="right" colSpan={3}>
                           Subtotal(LKR)
                         </TableCell>
                         <TableCell align="right" colSpan={2}>
@@ -1355,7 +1357,7 @@ function Make_invoice() {
                         </TableCell>
                       </TableRow>
                       <TableRow>
-                        <TableCell align="right" colSpan={5}>
+                        <TableCell align="right" colSpan={3}>
                           Discount(LKR)
                         </TableCell>
                         <TableCell className="cel" align="right" colSpan={2}>
@@ -1374,9 +1376,9 @@ function Make_invoice() {
                             }}
                           />
                         </TableCell>
-                        {/* <TableCell align="right">555</TableCell> */}
+                     
                       </TableRow>
-                      <TableRow>
+                      {/* <TableRow>
                         <TableCell align="right" colSpan={5}>
                           Balance(LKR)
                         </TableCell>
@@ -1396,9 +1398,9 @@ function Make_invoice() {
                             prefix={" Rs. "}
                           />
                         </TableCell>
-                      </TableRow>
+                      </TableRow> */}
                       <TableRow>
-                        <TableCell align="right" colSpan={5}>
+                        <TableCell align="right" colSpan={3}>
                           Total(LKR)
                         </TableCell>
                         <TableCell align="right" colSpan={2}>
@@ -1414,59 +1416,96 @@ function Make_invoice() {
                   </Table>
                 </TableContainer>
               </Grid>
-              <Grid container spacing={2}>
-                <Grid className="txt_ip_setting" item xs={12} sm={7}>
-                  Invoice Dates :
-                </Grid>
-                <Grid className="txt_ip_setting" item xs={12} sm={5}>
-                  Choose Installment Repayment Plan:
-                </Grid>
-                <Grid className="txt_description" item xs={12} sm={2}>
-                  Initial date
-                  <br />
-                  <div
-                    hidden={
-                      tablerows.some((ob) => ob.paymentWay === "PayandGo")
-                        ? false
-                        : true
-                    }
-                    className="deadline"
-                  >
-                    Installment deadline
-                  </div>
-                </Grid>
-                <Grid item xs={12} sm={4}>
-                  <Space direction="vertical">
-                    <DatePicker
-                      onChange={(e) => {
-                        setInititialTimestamp(
-                          firebase.firestore.Timestamp.fromDate(e.toDate())
-                        );
-                      }}
-                    />
 
-                    <br />
-                    <div
-                      hidden={
-                        tablerows.some((ob) => ob.paymentWay === "PayandGo")
-                          ? false
-                          : true
-                      }
-                    >
-                      <DatePicker
-                        onChange={(e) => {
-                          setDeadlineTimestamp(
-                            firebase.firestore.Timestamp.fromDate(e.toDate())
-                          );
-                        }}
-                      />
-                    </div>
-                  </Space>
-                </Grid>
-                <Grid className="xxx" item xs={12} sm={1}></Grid>
-                <Grid className="radio_dayDate" item xs={12} sm={3}>
+
+
+                  {/* //     */}
+
+
+              
+              <Grid container spacing={2}>    
+                 <Grid item xs={12} sm={6}>
+               <Card className="gami_card">
+               <Grid className="gami_card-grid" container spacing={2}> 
+                  <Grid item xs={12} sm={8}>
+                  <p className="gami_cust">Choose Installment Repayment Plan:</p>
+                  </Grid>
+                    <Grid item xs={12} sm={4}></Grid>
+                        <Grid className="lbl_MI" item xs={12} sm={6}>
+                          NO. of Installments(LKR):
+                          </Grid>
+                         <Grid className="noi" item xs={12} sm={4}>
+                     <TextField
+                       className="txt_dpayment"
+                          variant="outlined"
+                             size="small"
+                              InputProps={{ inputProps: { min: 0 } }}
+                              type="number"
+                              fullWidth
+                              label="NOI"
+                              // disabled={
+                              //   row.paymentWay === "PayandGo" ? false : true
+                              // }
+                              value={itemNOI}
+                              onChange={(e) => {
+                                setItemNOI(e.target.value); 
+                              }}
+                          />
+                        </Grid>
+                          <Grid className="noi" item xs={12} sm={2}></Grid>
+                        <Grid className="lbl_MI" item xs={12} sm={6}>
+                          Amount per Installments(LKR):
+                          </Grid>
+                          <Grid className="lbl_MI" item xs={12} sm={4}>
+                          <TextField
+                              className="txt_dpayment"
+                              variant="outlined"
+                              size="small"
+                              InputProps={{ inputProps: { min: 0 } }}
+                              type="number"
+                              label=" API"
+                              fullWidth
+                              // key={row.i}
+                              // disabled={
+                              //   row.paymentWay === "PayandGo" ? false : true
+                              // }
+                              // id={row.i.toString()}
+                          value={itemAPI}
+                           onChange={(e) => {
+                                setItemAPI(e.target.value); 
+                              }}
+                            
+                            />
+                        </Grid>
+                          <Grid className="noi" item xs={12} sm={2}></Grid>
+                        <Grid className="lbl_MI" item xs={12} sm={6}>
+                          Balance(LKR):
+                        </Grid>
+                         <Grid className="lbl_MI" item xs={12} sm={4}>
+                          <TextField
+                              className="txt_dpayment"
+                              variant="outlined"
+                              size="small"
+                              label="Balance"
+                              InputProps={{ inputProps: { min: 0 } }}
+                              type="number"
+                              fullWidth
+                              value={balance}
+                              onChange={(e) => {
+                                setBalance(e.target.value); 
+                              }}
+                            
+                            />
+                        </Grid>
+                      <Grid className="noi" item xs={12} sm={2}></Grid>
+                    
+
+                   <Grid className="lbl_MI" item xs={12} sm={3}>
+                     Days :   
+                  </Grid>
+                  <Grid  item xs={12} sm={4}>
                   <TextField
-                    className="txt_day"
+                    className="txt_dpayment"
                     variant="outlined"
                     size="small"
                     disabled={
@@ -1484,9 +1523,14 @@ function Make_invoice() {
                         setDates(e.target.value.trim());
                       }
                     }}
-                  />
-                  <br />
-                  <FormControl size="small" className="select">
+                        />
+                       
+                      </Grid> 
+                      <Grid item xs={12} sm={5}></Grid>
+
+                 <Grid className="lbl_MI" item xs={12} sm={3}>Dates</Grid>
+                      <Grid className="radio_dayDate" item xs={12} sm={4}>
+                         <FormControl size="small" className="select">
                     <InputLabel
                       className="select_label"
                       id="demo-controlled-open-select-label"
@@ -1520,48 +1564,24 @@ function Make_invoice() {
                       <option value={0}>Sunday</option>
                     </Select>
                   </FormControl>
-                </Grid>
-                <Grid item xs={12} sm={2}></Grid>
-                <Grid item xs={12} sm={2}>
-                  Select a type
-                </Grid>
-                <Grid item xs={12} sm={4}>
-                  <Space direction="vertical">
-                    <FormControl variant="outlined" className="fcontrol">
-                      <Select
-                        className="roll_selector"
-                        size="small"
-                        native
-                        onChange={handleChange}
-                        value={selectedType}
-                      >
-                        <option onChange={handleChange} value={"shop"}>
-                          shop
-                        </option>
-                        {allRoot.map((each) => (
-                          <option
-                            onChange={handleChange}
-                            key={each}
-                            value={each}
-                          >
-                            {each}
-                          </option>
-                        ))}
-                      </Select>
-                    </FormControl>
-                  </Space>
-                </Grid>
-                <Grid item xs={12} sm={6}></Grid>
-                <Grid item xs={12} sm={6}>
-                  <hr />
-                  <br />
-                  <p className="gami_cust">Gamisarani Customers :</p>
-                </Grid>
-                <Grid item xs={12} sm={6}></Grid>
+                      </Grid>
+                        <Grid item xs={12} sm={5}></Grid>
 
-                <Grid item xs={12} sm={2}>
-                  Gamisarani
+                      
+                 </Grid> 
+                 </Card>
                 </Grid>
+
+                  <Grid item xs={12} sm={6}>
+                  <Card className="gami_card">
+                  <Grid  className="gami_card-grid" container spacing={2}> 
+                  <Grid item xs={12} sm={6}>
+                  <p className="gami_cust">Gamisarani Customers :</p>
+                  </Grid>
+                    <Grid item xs={12} sm={6}></Grid>
+                   <Grid item xs={12} sm={4}>
+                  Gamisarani
+                    </Grid>
                 <Grid item xs={12} sm={4}>
                   <Checkbox
                     checked={gamisarani}
@@ -1578,11 +1598,11 @@ function Make_invoice() {
                     }}
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}></Grid>
-                <Grid className="lbl_MI" item xs={12} sm={2}>
+                <Grid item xs={12} sm={4}></Grid>
+                <Grid className="lbl_MI" item xs={12} sm={4}>
                   NIC
                 </Grid>
-                <Grid className="nIc" item xs={12} sm={3}>
+                <Grid className="nIc" item xs={12} sm={4}>
                   <TextField
                     className="nic_"
                     variant="outlined"
@@ -1617,11 +1637,11 @@ function Make_invoice() {
                     {loadingNicsubmit ? <Spin size="large" /> : "Fetch"}
                   </Button>
                 </Grid>
-                <Grid item xs={12} sm={6}></Grid>
-                <Grid className="lbl_MI" item xs={12} sm={2}>
+                <Grid item xs={12} sm={3}></Grid>
+                <Grid className="lbl_MI" item xs={12} sm={4}>
                   Amount
                 </Grid>
-                <Grid className="amouNt" item xs={12} sm={3}>
+                <Grid className="amouNt" item xs={12} sm={4}>
                   <TextField
                     className="amouNT"
                     variant="outlined"
@@ -1649,9 +1669,98 @@ function Make_invoice() {
                     }}
                   />
                 </Grid>
-                <Grid item xs={12} sm={7}></Grid>
-                <Grid item xs={12} sm={6}>
-                  <hr />
+                <Grid item xs={12} sm={4}></Grid>
+                  </Grid>
+                 </Card>
+
+                  <br/>
+
+                  <Grid container spacing={2}>
+                <Grid className="txt_ip_setting" item xs={12} sm={7}>
+                  Invoice Dates :
+                </Grid>
+                <Grid className="txt_ip_setting" item xs={12} sm={5}></Grid>
+                
+                <Grid className="txt_description" item xs={12} sm={4}>
+                  Initial date
+                  <br />
+                  <div
+                    hidden={
+                      tablerows.some((ob) => ob.paymentWay === "PayandGo")
+                        ? false
+                        : true
+                    }
+                    className="deadline"
+                  >
+                    Installment deadline
+                  </div>
+                    </Grid>
+                     <Grid item xs={12} sm={4}>
+                  <Space direction="vertical">
+                    <DatePicker
+                      onChange={(e) => {
+                        setInititialTimestamp(
+                          firebase.firestore.Timestamp.fromDate(e.toDate())
+                        );
+                      }}
+                    />
+
+                    <br />
+                    <div
+                      hidden={
+                        tablerows.some((ob) => ob.paymentWay === "PayandGo")
+                          ? false
+                          : true
+                      }
+                    >
+                      <DatePicker
+                        onChange={(e) => {
+                          setDeadlineTimestamp(
+                            firebase.firestore.Timestamp.fromDate(e.toDate())
+                          );
+                        }}
+                      />
+                    </div>
+                  </Space>
+                </Grid>
+                  <Grid className="xxx" item xs={12} sm={4}></Grid>
+                  <Grid item xs={12} sm={4}>
+                  Select a type
+                </Grid>
+                <Grid item xs={12} sm={4}>
+                  <Space direction="vertical">
+                    <FormControl variant="outlined" className="fcontrol">
+                      <Select
+                        className="roll_selector"
+                        size="small"
+                        native
+                        onChange={handleChange}
+                        value={selectedType}
+                      >
+                        <option onChange={handleChange} value={"shop"}>
+                          shop
+                        </option>
+                        {allRoot.map((each) => (
+                          <option
+                            onChange={handleChange}
+                            key={each}
+                            value={each}
+                          >
+                            {each}
+                          </option>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Space>
+                </Grid>
+                  <Grid item xs={12} sm={4}></Grid>
+                  </Grid> 
+                </Grid>
+                </Grid>
+               {/* //     */}
+
+          <Grid container spacing={2}>    
+                <Grid item xs={12} sm={6}> 
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <Button
@@ -1673,7 +1782,8 @@ function Make_invoice() {
                     {loadingsubmit ? <Spin size="large" /> : "Next"}
                   </Button>
                 </Grid>
-              </Grid>
+                </Grid>
+              
             </form>
           </div>
           <Box mt={5}></Box>

@@ -104,7 +104,7 @@ label {
 }
 
 .btn_addCustomer {
-  /* margin-top: 40px !important; */
+  margin-top: 40px !important;
   margin-bottom: 40px !important;
   width: 20% !important;
   float: right !important;
@@ -125,7 +125,7 @@ label {
 }
 
 .txt_dpayment {
-  width: 90px !important;
+  width: 120px !important;
 }
 
 .txt_description {
@@ -171,7 +171,7 @@ label {
 .deadline {
   margin-top: 43px !important;
 }
-
+/* 
 .gamiCrd {
   margin-top: 20px !important;
   background-color: white !important;
@@ -179,11 +179,18 @@ label {
   height: 100% !important;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
   border-radius: 5px !important;
+} */
+.gami_card-grid {
+  padding-bottom: 20px !important;
+  margin: auto !important;
+}
+.gami_card {
+  margin-top: 30px !important;
 }
 
 .gami_cust {
   font-weight: 600 !important;
-  margin-top: -20px !important;
+  margin-top: 20px !important;
 }
 
 .lbl_MI {

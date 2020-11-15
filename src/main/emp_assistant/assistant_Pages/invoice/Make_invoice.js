@@ -136,12 +136,16 @@ function Make_invoice() {
       subTotalValue =
         subTotalValue +
         (itemDP[tablerows[a].i] - itemDiscount[tablerows[a].i]) *
-        itemQty[tablerows[a].i];
+          itemQty[tablerows[a].i];
     }
     let fTotoS =
-      subTotalValue - gamisaraniamount <= 0
+      subTotalValue - gamisaraniamount === ""
         ? 0
-        : subTotalValue - gamisaraniamount;
+        : gamisaraniamount <= 0
+        ? 0
+        : subTotalValue - gamisaraniamount === ""
+        ? 0
+        : gamisaraniamount;
     return fTotoS;
   };
 
@@ -172,7 +176,7 @@ function Make_invoice() {
         "Issue with your calculations Pleace check again (May be Included minus values ! )"
       );
     } else {
-      if (gamisarani && gamisaraniamount > 0) {
+      if (gamisarani && (gamisaraniamount === "" ? 0 : gamisaraniamount) > 0) {
         db.collection("gami_sarani")
           .doc(gamisaraniId)
           .get()
@@ -181,16 +185,23 @@ function Make_invoice() {
               .doc(gamisaraniId)
               .update({
                 currentDeposit:
-                  getRe.data().currentDeposit - gamisaraniamount < 0
+                  getRe.data().currentDeposit - gamisaraniamount === ""
                     ? 0
-                    : getRe.data().currentDeposit - gamisaraniamount,
+                    : gamisaraniamount < 0
+                    ? 0
+                    : getRe.data().currentDeposit - gamisaraniamount === ""
+                    ? 0
+                    : gamisaraniamount,
               })
               .then((re) => {
                 db.collection("gami_sarani_withdrawhistory").add({
                   gami_nic: gamisaraniNic,
                   docId: gamisaraniId,
-                  withdraw: gamisaraniamount,
-                  balance: getRe.data().currentDeposit - gamisaraniamount,
+                  withdraw: gamisaraniamount === "" ? 0 : gamisaraniamount,
+                  balance:
+                    getRe.data().currentDeposit - gamisaraniamount === ""
+                      ? 0
+                      : gamisaraniamount,
                   date: intialTimestamp,
                 });
 
@@ -211,7 +222,7 @@ function Make_invoice() {
                         item_id: one.id,
                         item_name: one.title,
                         qty: itemQty[one.i],
-                        downpayment: itemDP[one.i],
+                        downpayment: itemDP[one.i] === "" ? 0 : itemDP[one.i],
                         discount:
                           itemDiscount[one.i] === "" ? 0 : itemDiscount[one.i],
                       };
@@ -223,7 +234,7 @@ function Make_invoice() {
                         invoice_number: invoiceNumber,
                         customerDetails: tablerows[0].customer,
                         installemtnDay: days,
-                        installemtnDate: dates,
+                        installemtnDate: dates === "" ? 1 : dates,
                         discount: totalDiscount,
                         subTotal: subTotalFunc(),
                         paymentWay: isFullPayment ? "FullPayment" : "PayandGo",
@@ -297,7 +308,7 @@ function Make_invoice() {
                 item_id: one.id,
                 item_name: one.title,
                 qty: itemQty[one.i],
-                downpayment: itemDP[one.i],
+                downpayment: itemDP[one.i] === "" ? 0 : itemDP[one.i],
                 discount: itemDiscount[one.i] === "" ? 0 : itemDiscount[one.i],
               };
               arrayPassingItems.push(objItem);
@@ -308,7 +319,7 @@ function Make_invoice() {
                 invoice_number: invoiceNumber,
                 customerDetails: tablerows[0].customer,
                 installemtnDay: days,
-                installemtnDate: dates,
+                installemtnDate: dates === "" ? 1 : dates,
                 discount: totalDiscount,
                 subTotal: subTotalFunc(),
                 paymentWay: isFullPayment ? "FullPayment" : "PayandGo",
@@ -417,7 +428,8 @@ function Make_invoice() {
                           serialNo: listOfSerilNo,
                           modelNo: listOfModelNo,
                           chassisNo: listOfChassisNo,
-                          downpayment: parseInt(itemDP[one.i]),
+                          downpayment:
+                            itemDP[one.i] === "" ? 0 : parseInt(itemDP[one.i]),
                           qty: parseInt(itemQty[one.i]),
                           discount:
                             itemDiscount[one.i] === ""
@@ -437,9 +449,10 @@ function Make_invoice() {
                         nic: tablerows[0].customer.customerNic,
                         mid: tablerows[0].customer.mid,
                         installemtnDay: days,
-                        installemtnDate: dates,
+                        installemtnDate: dates === "" ? 1 : dates,
                         gamisarani: gamisarani,
-                        gamisarani_amount: gamisaraniamount,
+                        gamisarani_amount:
+                          gamisaraniamount === "" ? 0 : gamisaraniamount,
                         paymentWay: isFullPayment ? "FullPayment" : "PayandGo",
                         downpayment: dpayment,
                         noOfInstallment: itemNOI,
@@ -588,7 +601,8 @@ function Make_invoice() {
                           serialNo: listOfSerilNo,
                           modelNo: listOfModelNo,
                           chassisNo: listOfChassisNo,
-                          downpayment: parseInt(itemDP[one.i]),
+                          downpayment:
+                            itemDP[one.i] === "" ? 0 : parseInt(itemDP[one.i]),
                           qty: parseInt(itemQty[one.i]),
                           discount:
                             itemDiscount[one.i] === ""
@@ -608,9 +622,10 @@ function Make_invoice() {
                         nic: tablerows[0].customer.customerNic,
                         mid: tablerows[0].customer.mid,
                         installemtnDay: days,
-                        installemtnDate: dates,
+                        installemtnDate: dates === "" ? 1 : dates,
                         gamisarani: gamisarani,
-                        gamisarani_amount: gamisaraniamount,
+                        gamisarani_amount:
+                          gamisaraniamount === "" ? 0 : gamisaraniamount,
                         paymentWay: isFullPayment ? "FullPayment" : "PayandGo",
                         downpayment: dpayment,
                         noOfInstallment: itemNOI,
@@ -761,7 +776,8 @@ function Make_invoice() {
                       serialNo: listOfSerilNo,
                       modelNo: listOfModelNo,
                       chassisNo: listOfChassisNo,
-                      downpayment: parseInt(itemDP[one.i]),
+                      downpayment:
+                        itemDP[one.i] === "" ? 0 : parseInt(itemDP[one.i]),
                       qty: parseInt(itemQty[one.i]),
                       discount:
                         itemDiscount[one.i] === "" ? 0 : itemDiscount[one.i],
@@ -779,9 +795,10 @@ function Make_invoice() {
                     nic: tablerows[0].customer.customerNic,
                     mid: tablerows[0].customer.mid,
                     installemtnDay: days,
-                    installemtnDate: dates,
+                    installemtnDate: dates === "" ? 1 : dates,
                     gamisarani: gamisarani,
-                    gamisarani_amount: gamisaraniamount,
+                    gamisarani_amount:
+                      gamisaraniamount === "" ? 0 : gamisaraniamount,
                     paymentWay: isFullPayment ? "FullPayment" : "PayandGo",
                     downpayment: dpayment,
                     noOfInstallment: itemNOI,
@@ -927,7 +944,8 @@ function Make_invoice() {
                       item_id: one.id,
                       serialNo: listOfSerilNo,
                       modelNo: listOfModelNo,
-                      downpayment: parseInt(itemDP[one.i]),
+                      downpayment:
+                        itemDP[one.i] === "" ? 0 : parseInt(itemDP[one.i]),
                       chassisNo: listOfChassisNo,
                       qty: parseInt(itemQty[one.i]),
                       discount:
@@ -946,9 +964,10 @@ function Make_invoice() {
                     nic: tablerows[0].customer.customerNic,
                     mid: tablerows[0].customer.mid,
                     installemtnDay: days,
-                    installemtnDate: dates,
+                    installemtnDate: dates === "" ? 1 : dates,
                     gamisarani: gamisarani,
-                    gamisarani_amount: gamisaraniamount,
+                    gamisarani_amount:
+                      gamisaraniamount === "" ? 0 : gamisaraniamount,
                     paymentWay: isFullPayment ? "FullPayment" : "PayandGo",
                     downpayment: dpayment,
                     noOfInstallment: itemNOI,
@@ -1083,7 +1102,7 @@ function Make_invoice() {
             serialNo: listOfSerilNo,
             modelNo: listOfModelNo,
             chassisNo: listOfChassisNo,
-            downpayment: parseInt(itemDP[one.i]),
+            downpayment: itemDP[one.i] === "" ? 0 : parseInt(itemDP[one.i]),
             qty: parseInt(itemQty[one.i]),
             discount: itemDiscount[one.i] === "" ? 0 : itemDiscount[one.i],
             item_name: one.title,
@@ -1099,7 +1118,7 @@ function Make_invoice() {
         installemtnDay: null,
         installemtnDate: null,
         gamisarani: gamisarani,
-        gamisarani_amount: gamisaraniamount,
+        gamisarani_amount: gamisaraniamount === "" ? 0 : gamisaraniamount,
         paymentWay: isFullPayment ? "FullPayment" : "PayandGo",
         downpayment: dpayment,
         noOfInstallment: itemNOI,
@@ -1156,7 +1175,7 @@ function Make_invoice() {
           setLoadingNicSubmit(false);
           if (
             reGami.docs[0].data().currentDeposit -
-            (subTotalFunc() - totalDiscount) <
+              (subTotalFunc() - totalDiscount) <
             0
           ) {
             NotificationManager.warning(
@@ -1646,8 +1665,8 @@ function Make_invoice() {
                           color="primary"
                           disabled={
                             !gamisarani ||
-                              loadingNicsubmit ||
-                              gamisaraniNic.length === 0
+                            loadingNicsubmit ||
+                            gamisaraniNic.length === 0
                               ? true
                               : false
                           }
@@ -1792,8 +1811,8 @@ function Make_invoice() {
                     className="btn_addCustomer"
                     disabled={
                       loadingsubmit ||
-                        tablerows.length === 0 ||
-                        intialTimestamp === null
+                      tablerows.length === 0 ||
+                      intialTimestamp === null
                         ? true
                         : false
                     }

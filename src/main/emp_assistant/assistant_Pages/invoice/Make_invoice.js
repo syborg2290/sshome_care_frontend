@@ -1472,9 +1472,7 @@ function Make_invoice() {
                               : true
                           }
                           value={
-                            itemAPI * itemNOI === 0
-                              ? subTotalFunc() - totalDiscount
-                              : balance
+                            balance
                           }
                           onChange={(e) => {
                             setBalance(parseInt(e.target.value));

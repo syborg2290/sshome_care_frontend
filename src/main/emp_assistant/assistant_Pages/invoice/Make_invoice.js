@@ -3,7 +3,6 @@ import { Modal, Spin, DatePicker, Space, Checkbox } from "antd";
 import { PrinterFilled } from "@ant-design/icons";
 import { useLocation, useHistory } from "react-router-dom";
 
-
 import {
   Button,
   TextField,
@@ -22,7 +21,6 @@ import {
   FormControl,
   Select,
   Card,
-
 } from "@material-ui/core";
 
 import firebase from "firebase";
@@ -48,10 +46,10 @@ function Make_invoice() {
   const [invoiceNumber, setInvoiceNumber] = useState("");
   const [tablerows, setTableRows] = useState([]);
   const [itemQty, setItemQty] = useState({});
-  const [itemDP, setItemDP] = useState({});
-  const [itemNOI, setItemNOI] = useState({});
-  const [itemAPI, setItemAPI] = useState({});
-  const [balance, setBalance] = useState({});
+  const [itemDP, setItemDP] = useState(0);
+  const [itemNOI, setItemNOI] = useState(0);
+  const [itemAPI, setItemAPI] = useState(0);
+  const [balance, setBalance] = useState(0);
   const [itemDiscount, setItemDiscount] = useState({});
   const [totalDiscount, setTotalDiscount] = useState(0);
   const [gamisaraniInitialAmount, setGamisaraniInitialAmount] = useState(0);
@@ -78,20 +76,10 @@ function Make_invoice() {
     if (location.state != null) {
       var tableData = [];
       var keepDataQTY = {};
-      var keepDataDP = {};
-      var keepDataNOI = {};
-      var keepDataAPI = {};
       var keepDataDiscount = {};
       location.state.detail.forEach((obj) => {
         keepDataQTY[obj.i] = obj.qty;
-        keepDataDP[obj.i] =
-          obj.paymentWay === "PayandGo"
-            ? obj.item.salePrice
-            : obj.item.salePrice;
-        keepDataNOI[obj.i] =
-          obj.paymentWay === "PayandGo" ? obj.item.noOfInstallments : 0;
-        keepDataAPI[obj.i] =
-          obj.paymentWay === "PayandGo" ? obj.item.amountPerInstallment : 0;
+
         keepDataDiscount[obj.i] = obj.item.discount;
         tableData.push(obj);
         if (obj.paymentWay === "PayandGo") {
@@ -101,10 +89,7 @@ function Make_invoice() {
         }
       });
       setItemDiscount(keepDataDiscount);
-      setItemAPI(keepDataAPI);
-      setItemNOI(keepDataNOI);
       setItemQty(keepDataQTY);
-      setItemDP(keepDataDP);
       setTableRows(tableData);
     }
 
@@ -1145,15 +1130,15 @@ function Make_invoice() {
                         <TableCell className="tbl_Cell" colSpan={1}>
                           Qty
                         </TableCell>
-                      
+
                         <TableCell
                           className="tbl_Cell"
                           align="right"
                           colSpan={1}
                         >
-                         Sale Price(LKR)
+                          Sale Price(LKR)
                         </TableCell>
-                       
+
                         <TableCell className="tbl_Cell" align="right">
                           Discount(LKR)
                         </TableCell>
@@ -1182,18 +1167,12 @@ function Make_invoice() {
                               value={itemQty[row.i]}
                               onChange={(e) => {
                                 if (e.target.value !== "") {
-                                  if (row.paymentWay === "PayandGo") {
-                                    if (Math.round(e.target.value) === 1) {
-                                      handleQTYChange(e, row.id, row);
-                                    }
-                                  } else {
-                                    handleQTYChange(e, row.id, row);
-                                  }
+                                  handleQTYChange(e, row.id, row);
                                 }
                               }}
                             />
                           </TableCell>
-                        
+
                           <TableCell align="right">
                             {" "}
                             <TextField
@@ -1214,7 +1193,7 @@ function Make_invoice() {
                               }}
                             />
                           </TableCell>
-                        
+
                           <TableCell align="right">
                             {" "}
                             <TextField
@@ -1319,9 +1298,8 @@ function Make_invoice() {
                             }}
                           />
                         </TableCell>
-                     
                       </TableRow>
-                     
+
                       <TableRow>
                         <TableCell align="right" colSpan={3}>
                           Total(LKR)
@@ -1340,366 +1318,357 @@ function Make_invoice() {
                 </TableContainer>
               </Grid>
 
+              {/* //     */}
 
-
-                  {/* //     */}
-
-
-              
-              <Grid container spacing={2}>    
-                 <Grid item xs={12} sm={6}>
-               <Card className="gami_card">
-               <Grid className="gami_card-grid" container spacing={2}> 
-                  <Grid item xs={12} sm={8}>
-                  <p className="gami_cust">Choose Installment Repayment Plan:</p>
-                  </Grid>
-                    <Grid item xs={12} sm={4}></Grid>
-                        <Grid className="lbl_MI" item xs={12} sm={6}>
-                          NO. of Installments(LKR):
-                          </Grid>
-                         <Grid className="noi" item xs={12} sm={4}>
-                     <TextField
-                       className="txt_dpayment"
+              <Grid container spacing={2}>
+                <Grid item xs={12} sm={6}>
+                  <Card className="gami_card">
+                    <Grid className="gami_card-grid" container spacing={2}>
+                      <Grid item xs={12} sm={8}>
+                        <p className="gami_cust">
+                          Choose Installment Repayment Plan:
+                        </p>
+                      </Grid>
+                      <Grid item xs={12} sm={4}></Grid>
+                      <Grid className="lbl_MI" item xs={12} sm={6}>
+                        NO. of Installments(LKR):
+                      </Grid>
+                      <Grid className="noi" item xs={12} sm={4}>
+                        <TextField
+                          className="txt_dpayment"
                           variant="outlined"
-                             size="small"
-                              InputProps={{ inputProps: { min: 0 } }}
-                              type="number"
-                              fullWidth
+                          size="small"
+                          InputProps={{ inputProps: { min: 0 } }}
+                          type="number"
+                          fullWidth
                           label="NOI"
                           disabled={
                             tablerows.some((ob) => ob.paymentWay === "PayandGo")
-                               ? false
-                               : true
-                    }
-                              //    key={row.i}
-                              // id={row.i.toString()}
-                              // value={itemNOI[row.i]}
-                              // onChange={(e) => {
-                              //   setItemNOI({
-                              //     ...itemNOI,
-                              //     [row.i]: e.target.value,
-                              //   });
-                              value={itemNOI}
-                              onChange={(e) => {
-                                setItemNOI(e.target.value); 
-                              }}
-                          />
-                        </Grid>
-                          <Grid className="noi" item xs={12} sm={2}></Grid>
-                        <Grid className="lbl_MI" item xs={12} sm={6}>
-                          Amount per Installments(LKR):
-                          </Grid>
-                          <Grid className="lbl_MI" item xs={12} sm={4}>
-                          <TextField
-                              className="txt_dpayment"
-                              variant="outlined"
-                              size="small"
-                              InputProps={{ inputProps: { min: 0 } }}
-                              type="number"
-                              label=" API"
-                              fullWidth
-                              // key={row.i}
-                              // disabled={
-                              //   row.paymentWay === "PayandGo" ? false : true
-                              // }
-                              // id={row.i.toString()}
-                               disabled={
-                               tablerows.some((ob) => ob.paymentWay === "PayandGo")
-                               ? false
+                              ? false
                               : true
-                    }
-                          value={itemAPI}
-                           onChange={(e) => {
-                                setItemAPI(e.target.value); 
-                              }}
-                            
-                            />
-                        </Grid>
-                          <Grid className="noi" item xs={12} sm={2}></Grid>
-                        <Grid className="lbl_MI" item xs={12} sm={6}>
-                          Balance(LKR):
-                        </Grid>
-                         <Grid className="lbl_MI" item xs={12} sm={4}>
-                          <TextField
-                              className="txt_dpayment"
-                              variant="outlined"
-                              size="small"
-                              label="Balance"
-                              InputProps={{ inputProps: { min: 0 } }}
-                              type="number"
-                              fullWidth
-                              value={balance}
-                              onChange={(e) => {
-                                setBalance(e.target.value); 
-                              }}
-                            
-                            />
-                        </Grid>
-                      <Grid className="noi" item xs={12} sm={2}></Grid>
-                    
-
-                   <Grid className="lbl_MI" item xs={12} sm={3}>
-                     Days :   
-                  </Grid>
-                  <Grid  item xs={12} sm={4}>
-                  <TextField
-                    className="txt_dpayment"
-                    variant="outlined"
-                    size="small"
-                    disabled={
-                      tablerows.some((ob) => ob.paymentWay === "PayandGo")
-                        ? false
-                        : true
-                    }
-                    placeholder="date"
-                    type="number"
-                    InputProps={{ inputProps: { min: 1, max: 31 } }}
-                    fullWidth
-                    value={dates}
-                    onChange={(e) => {
-                      if (e.target.value <= 31 || e.target.value < 0) {
-                        setDates(e.target.value.trim());
-                      }
-                    }}
+                          }
+                          value={itemNOI}
+                          onChange={(e) => {
+                            setItemNOI(parseInt(e.target.value));
+                          }}
                         />
-                       
-                      </Grid> 
+                      </Grid>
+                      <Grid className="noi" item xs={12} sm={2}></Grid>
+                      <Grid className="lbl_MI" item xs={12} sm={6}>
+                        Amount per Installments(LKR):
+                      </Grid>
+                      <Grid className="lbl_MI" item xs={12} sm={4}>
+                        <TextField
+                          className="txt_dpayment"
+                          variant="outlined"
+                          size="small"
+                          InputProps={{ inputProps: { min: 0 } }}
+                          type="number"
+                          label=" API"
+                          fullWidth
+                          disabled={
+                            tablerows.some((ob) => ob.paymentWay === "PayandGo")
+                              ? false
+                              : true
+                          }
+                          value={itemAPI}
+                          onChange={(e) => {
+                            setItemAPI(parseInt(e.target.value));
+                          }}
+                        />
+                      </Grid>
+                      <Grid className="noi" item xs={12} sm={2}></Grid>
+                      <Grid className="lbl_MI" item xs={12} sm={6}>
+                        Balance(LKR):
+                      </Grid>
+                      <Grid className="lbl_MI" item xs={12} sm={4}>
+                        <TextField
+                          className="txt_dpayment"
+                          variant="outlined"
+                          size="small"
+                          label="Balance"
+                          InputProps={{ inputProps: { min: 0 } }}
+                          type="number"
+                          fullWidth
+                          disabled={
+                            tablerows.some((ob) => ob.paymentWay === "PayandGo")
+                              ? false
+                              : true
+                          }
+                          value={balance}
+                          onChange={(e) => {
+                            setBalance(parseInt(e.target.value));
+                          }}
+                        />
+                      </Grid>
+                      <Grid className="noi" item xs={12} sm={2}></Grid>
+
+                      <Grid className="lbl_MI" item xs={12} sm={3}>
+                        Days :
+                      </Grid>
+                      <Grid item xs={12} sm={4}>
+                        <TextField
+                          className="txt_dpayment"
+                          variant="outlined"
+                          size="small"
+                          disabled={
+                            tablerows.some((ob) => ob.paymentWay === "PayandGo")
+                              ? false
+                              : true
+                          }
+                          placeholder="date"
+                          type="number"
+                          InputProps={{ inputProps: { min: 1, max: 31 } }}
+                          fullWidth
+                          value={dates}
+                          onChange={(e) => {
+                            if (e.target.value <= 31 || e.target.value < 0) {
+                              setDates(e.target.value.trim());
+                            }
+                          }}
+                        />
+                      </Grid>
                       <Grid item xs={12} sm={5}></Grid>
 
-                 <Grid className="lbl_MI" item xs={12} sm={3}>Dates</Grid>
-                      <Grid className="radio_dayDate" item xs={12} sm={4}>
-                         <FormControl size="small" className="select">
-                    <InputLabel
-                      className="select_label"
-                      id="demo-controlled-open-select-label"
-                    >
-                      Days
-                    </InputLabel>
-                    <Select
-                      value={days}
-                      disabled={
-                        tablerows.some((ob) => ob.paymentWay === "PayandGo")
-                          ? false
-                          : true
-                      }
-                      onChange={(e) => {
-                        setDays(e.target.value);
-                      }}
-                      native
-                      variant="outlined"
-                      label="day"
-                      inputProps={{
-                        name: "day",
-                        id: "outlined-day-native-simple",
-                      }}
-                    >
-                      <option value={1}>Monday</option>
-                      <option value={2}>Tuesday</option>
-                      <option value={3}>Wednesday</option>
-                      <option value={4}>Thursday</option>
-                      <option value={5}>Friday</option>
-                      <option value={6}>Saturday</option>
-                      <option value={0}>Sunday</option>
-                    </Select>
-                  </FormControl>
+                      <Grid className="lbl_MI" item xs={12} sm={3}>
+                        Dates
                       </Grid>
-                        <Grid item xs={12} sm={5}></Grid>
-
-                      
-                 </Grid> 
-                 </Card>
-                </Grid>
-
-                  <Grid item xs={12} sm={6}>
-                  <Card className="gami_card">
-                  <Grid  className="gami_card-grid" container spacing={2}> 
-                  <Grid item xs={12} sm={6}>
-                  <p className="gami_cust">Gamisarani Customers :</p>
-                  </Grid>
-                    <Grid item xs={12} sm={6}></Grid>
-                   <Grid item xs={12} sm={4}>
-                  Gamisarani
+                      <Grid className="radio_dayDate" item xs={12} sm={4}>
+                        <FormControl size="small" className="select">
+                          <InputLabel
+                            className="select_label"
+                            id="demo-controlled-open-select-label"
+                          >
+                            Days
+                          </InputLabel>
+                          <Select
+                            value={days}
+                            disabled={
+                              tablerows.some(
+                                (ob) => ob.paymentWay === "PayandGo"
+                              )
+                                ? false
+                                : true
+                            }
+                            onChange={(e) => {
+                              setDays(e.target.value);
+                            }}
+                            native
+                            variant="outlined"
+                            label="day"
+                            inputProps={{
+                              name: "day",
+                              id: "outlined-day-native-simple",
+                            }}
+                          >
+                            <option value={1}>Monday</option>
+                            <option value={2}>Tuesday</option>
+                            <option value={3}>Wednesday</option>
+                            <option value={4}>Thursday</option>
+                            <option value={5}>Friday</option>
+                            <option value={6}>Saturday</option>
+                            <option value={0}>Sunday</option>
+                          </Select>
+                        </FormControl>
+                      </Grid>
+                      <Grid item xs={12} sm={5}></Grid>
                     </Grid>
-                <Grid item xs={12} sm={4}>
-                  <Checkbox
-                    checked={gamisarani}
-                    onChange={(e) => {
-                      if (gamisarani) {
-                        setGamisarani(false);
-                        setGamisaraniId("");
-                        setGamisaraniInitialAmount(0);
-                        setGamisaraniamount(0);
-                        setGamisaraniNic("");
-                      } else {
-                        setGamisarani(true);
-                      }
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={4}></Grid>
-                <Grid className="lbl_MI" item xs={12} sm={4}>
-                  NIC
-                </Grid>
-                <Grid className="nIc" item xs={12} sm={4}>
-                  <TextField
-                    className="nic_"
-                    variant="outlined"
-                    required
-                    fullWidth
-                    label="NIC"
-                    name="nic"
-                    autoComplete="nic"
-                    size="small"
-                    disabled={!gamisarani ? true : false}
-                    value={gamisaraniNic}
-                    onChange={(e) => {
-                      setGamisaraniNic(e.target.value.trim());
-                    }}
-                  />
+                  </Card>
                 </Grid>
 
-                <Grid item xs={12} sm={1}>
-                  <Button
-                    fullWidth
-                    variant="contained"
-                    color="primary"
-                    disabled={
-                      !gamisarani ||
-                      loadingNicsubmit ||
-                      gamisaraniNic.length === 0
-                        ? true
-                        : false
-                    }
-                    onClick={getCurrentBalanceFromGami}
-                  >
-                    {loadingNicsubmit ? <Spin size="large" /> : "Fetch"}
-                  </Button>
-                </Grid>
-                <Grid item xs={12} sm={3}></Grid>
-                <Grid className="lbl_MI" item xs={12} sm={4}>
-                  Amount
-                </Grid>
-                <Grid className="amouNt" item xs={12} sm={4}>
-                  <TextField
-                    className="amouNT"
-                    variant="outlined"
-                    required
-                    fullWidth
-                    label="Amount"
-                    name="amount"
-                    autoComplete="amount"
-                    size="small"
-                    type="number"
-                    disabled={
-                      !gamisarani || gamisaraniInitialAmount === 0
-                        ? true
-                        : false
-                    }
-                    InputProps={{ inputProps: { min: 0 } }}
-                    value={gamisaraniamount}
-                    onChange={(e) => {
-                      if (
-                        gamisaraniInitialAmount >=
-                        parseInt(e.target.value.trim())
-                      ) {
-                        setGamisaraniamount(parseInt(e.target.value.trim()));
-                      }
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={4}></Grid>
-                  </Grid>
-                 </Card>
+                <Grid item xs={12} sm={6}>
+                  <Card className="gami_card">
+                    <Grid className="gami_card-grid" container spacing={2}>
+                      <Grid item xs={12} sm={6}>
+                        <p className="gami_cust">Gamisarani Customers :</p>
+                      </Grid>
+                      <Grid item xs={12} sm={6}></Grid>
+                      <Grid item xs={12} sm={4}>
+                        Gamisarani
+                      </Grid>
+                      <Grid item xs={12} sm={4}>
+                        <Checkbox
+                          checked={gamisarani}
+                          onChange={(e) => {
+                            if (gamisarani) {
+                              setGamisarani(false);
+                              setGamisaraniId("");
+                              setGamisaraniInitialAmount(0);
+                              setGamisaraniamount(0);
+                              setGamisaraniNic("");
+                            } else {
+                              setGamisarani(true);
+                            }
+                          }}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={4}></Grid>
+                      <Grid className="lbl_MI" item xs={12} sm={4}>
+                        NIC
+                      </Grid>
+                      <Grid className="nIc" item xs={12} sm={4}>
+                        <TextField
+                          className="nic_"
+                          variant="outlined"
+                          required
+                          fullWidth
+                          label="NIC"
+                          name="nic"
+                          autoComplete="nic"
+                          size="small"
+                          disabled={!gamisarani ? true : false}
+                          value={gamisaraniNic}
+                          onChange={(e) => {
+                            setGamisaraniNic(e.target.value.trim());
+                          }}
+                        />
+                      </Grid>
 
-                  <br/>
+                      <Grid item xs={12} sm={1}>
+                        <Button
+                          fullWidth
+                          variant="contained"
+                          color="primary"
+                          disabled={
+                            !gamisarani ||
+                            loadingNicsubmit ||
+                            gamisaraniNic.length === 0
+                              ? true
+                              : false
+                          }
+                          onClick={getCurrentBalanceFromGami}
+                        >
+                          {loadingNicsubmit ? <Spin size="large" /> : "Fetch"}
+                        </Button>
+                      </Grid>
+                      <Grid item xs={12} sm={3}></Grid>
+                      <Grid className="lbl_MI" item xs={12} sm={4}>
+                        Amount
+                      </Grid>
+                      <Grid className="amouNt" item xs={12} sm={4}>
+                        <TextField
+                          className="amouNT"
+                          variant="outlined"
+                          required
+                          fullWidth
+                          label="Amount"
+                          name="amount"
+                          autoComplete="amount"
+                          size="small"
+                          type="number"
+                          disabled={
+                            !gamisarani || gamisaraniInitialAmount === 0
+                              ? true
+                              : false
+                          }
+                          InputProps={{ inputProps: { min: 0 } }}
+                          value={gamisaraniamount}
+                          onChange={(e) => {
+                            if (
+                              gamisaraniInitialAmount >=
+                              parseInt(e.target.value.trim())
+                            ) {
+                              setGamisaraniamount(
+                                parseInt(e.target.value.trim())
+                              );
+                            }
+                          }}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={4}></Grid>
+                    </Grid>
+                  </Card>
+
+                  <br />
 
                   <Grid container spacing={2}>
-                <Grid className="txt_ip_setting" item xs={12} sm={7}>
-                  Invoice Dates :
-                </Grid>
-                <Grid className="txt_ip_setting" item xs={12} sm={5}></Grid>
-                
-                <Grid className="txt_description" item xs={12} sm={4}>
-                  Initial date
-                  <br />
-                  <div
-                    hidden={
-                      tablerows.some((ob) => ob.paymentWay === "PayandGo")
-                        ? false
-                        : true
-                    }
-                    className="deadline"
-                  >
-                    Installment deadline
-                  </div>
+                    <Grid className="txt_ip_setting" item xs={12} sm={7}>
+                      Invoice Dates :
                     </Grid>
-                     <Grid item xs={12} sm={4}>
-                  <Space direction="vertical">
-                    <DatePicker
-                      onChange={(e) => {
-                        setInititialTimestamp(
-                          firebase.firestore.Timestamp.fromDate(e.toDate())
-                        );
-                      }}
-                    />
+                    <Grid className="txt_ip_setting" item xs={12} sm={5}></Grid>
 
-                    <br />
-                    <div
-                      hidden={
-                        tablerows.some((ob) => ob.paymentWay === "PayandGo")
-                          ? false
-                          : true
-                      }
-                    >
-                      <DatePicker
-                        onChange={(e) => {
-                          setDeadlineTimestamp(
-                            firebase.firestore.Timestamp.fromDate(e.toDate())
-                          );
-                        }}
-                      />
-                    </div>
-                  </Space>
-                </Grid>
-                  <Grid className="xxx" item xs={12} sm={4}></Grid>
-                  <Grid item xs={12} sm={4}>
-                  Select a type
-                </Grid>
-                <Grid item xs={12} sm={4}>
-                  <Space direction="vertical">
-                    <FormControl variant="outlined" className="fcontrol">
-                      <Select
-                        className="roll_selector"
-                        size="small"
-                        native
-                        onChange={handleChange}
-                        value={selectedType}
+                    <Grid className="txt_description" item xs={12} sm={4}>
+                      Initial date
+                      <br />
+                      <div
+                        hidden={
+                          tablerows.some((ob) => ob.paymentWay === "PayandGo")
+                            ? false
+                            : true
+                        }
+                        className="deadline"
                       >
-                        <option onChange={handleChange} value={"shop"}>
-                          shop
-                        </option>
-                        {allRoot.map((each) => (
-                          <option
-                            onChange={handleChange}
-                            key={each}
-                            value={each}
-                          >
-                            {each}
-                          </option>
-                        ))}
-                      </Select>
-                    </FormControl>
-                  </Space>
-                </Grid>
-                  <Grid item xs={12} sm={4}></Grid>
-                  </Grid> 
-                </Grid>
-                </Grid>
-               {/* //     */}
+                        Installment deadline
+                      </div>
+                    </Grid>
+                    <Grid item xs={12} sm={4}>
+                      <Space direction="vertical">
+                        <DatePicker
+                          onChange={(e) => {
+                            setInititialTimestamp(
+                              firebase.firestore.Timestamp.fromDate(e.toDate())
+                            );
+                          }}
+                        />
 
-          <Grid container spacing={2}>    
-                <Grid item xs={12} sm={6}> 
+                        <br />
+                        <div
+                          hidden={
+                            tablerows.some((ob) => ob.paymentWay === "PayandGo")
+                              ? false
+                              : true
+                          }
+                        >
+                          <DatePicker
+                            onChange={(e) => {
+                              setDeadlineTimestamp(
+                                firebase.firestore.Timestamp.fromDate(
+                                  e.toDate()
+                                )
+                              );
+                            }}
+                          />
+                        </div>
+                      </Space>
+                    </Grid>
+                    <Grid className="xxx" item xs={12} sm={4}></Grid>
+                    <Grid item xs={12} sm={4}>
+                      Select a type
+                    </Grid>
+                    <Grid item xs={12} sm={4}>
+                      <Space direction="vertical">
+                        <FormControl variant="outlined" className="fcontrol">
+                          <Select
+                            className="roll_selector"
+                            size="small"
+                            native
+                            onChange={handleChange}
+                            value={selectedType}
+                          >
+                            <option onChange={handleChange} value={"shop"}>
+                              shop
+                            </option>
+                            {allRoot.map((each) => (
+                              <option
+                                onChange={handleChange}
+                                key={each}
+                                value={each}
+                              >
+                                {each}
+                              </option>
+                            ))}
+                          </Select>
+                        </FormControl>
+                      </Space>
+                    </Grid>
+                    <Grid item xs={12} sm={4}></Grid>
+                  </Grid>
                 </Grid>
+              </Grid>
+              {/* //     */}
+
+              <Grid container spacing={2}>
+                <Grid item xs={12} sm={6}></Grid>
                 <Grid item xs={12} sm={6}>
                   <Button
                     fullWidth
@@ -1714,14 +1683,12 @@ function Make_invoice() {
                         : false
                     }
                     onClick={showConfirm}
-                    // onClick={printInvoice}
                     endIcon={<ArrowForwardIcon />}
                   >
                     {loadingsubmit ? <Spin size="large" /> : "Next"}
                   </Button>
                 </Grid>
-                </Grid>
-              
+              </Grid>
             </form>
           </div>
           <Box mt={5}></Box>

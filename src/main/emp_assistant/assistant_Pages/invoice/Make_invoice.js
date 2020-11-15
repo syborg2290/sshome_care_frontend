@@ -1143,7 +1143,7 @@ function Make_invoice() {
                     <TableHead>
                       <TableRow>
                         <TableCell className="tbl_Cell">Item</TableCell>
-                        <TableCell className="tbl_Cell" colSpan={1}>
+                        <TableCell className="tbl_Cell"  align="right" colSpan={1}>
                           Qty
                         </TableCell>
                       
@@ -1154,17 +1154,6 @@ function Make_invoice() {
                         >
                          Sale Price(LKR)
                         </TableCell>
-                        {/* <TableCell
-                          className="tbl_Cell"
-                          align="right"
-                          colSpan={1}
-                        >
-                          NOI
-                        </TableCell>
-
-                        <TableCell className="tbl_Cell" align="right">
-                          API(LKR)
-                        </TableCell> */}
                         <TableCell className="tbl_Cell" align="right">
                           Discount(LKR)
                         </TableCell>

@@ -46,7 +46,7 @@ function Make_invoice() {
   const [invoiceNumber, setInvoiceNumber] = useState("");
   const [tablerows, setTableRows] = useState([]);
   const [itemQty, setItemQty] = useState({});
-  const [itemDP, setItemDP] = useState(0);
+  const [itemDP, setItemDP] = useState({});
   const [itemNOI, setItemNOI] = useState(0);
   const [itemAPI, setItemAPI] = useState(0);
   const [balance, setBalance] = useState(0);
@@ -77,10 +77,11 @@ function Make_invoice() {
     if (location.state != null) {
       var tableData = [];
       var keepDataQTY = {};
+      var keepDataDP = {};
       var keepDataDiscount = {};
       location.state.detail.forEach((obj) => {
         keepDataQTY[obj.i] = obj.qty;
-
+        keepDataDP[obj.i] = obj.item.salePrice;
         keepDataDiscount[obj.i] = obj.item.discount;
         tableData.push(obj);
         if (obj.paymentWay === "PayandGo") {
@@ -91,6 +92,7 @@ function Make_invoice() {
       });
       setItemDiscount(keepDataDiscount);
       setItemQty(keepDataQTY);
+      setItemDP(keepDataDP);
       setTableRows(tableData);
     }
 

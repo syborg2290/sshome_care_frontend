@@ -115,7 +115,7 @@ function Make_invoice() {
       subTotalValue =
         subTotalValue +
         (itemDP[tablerows[a].i] - itemDiscount[tablerows[a].i]) *
-          itemQty[tablerows[a].i];
+        itemQty[tablerows[a].i];
     }
     let fTotoS = isFullPayment
       ? subTotalValue - gamisaraniamount <= 0
@@ -191,7 +191,7 @@ function Make_invoice() {
                         item_id: one.id,
                         item_name: one.title,
                         qty: itemQty[one.i],
-
+                        downpayment: itemDP[one.i],
                         discount:
                           itemDiscount[one.i] === "" ? 0 : itemDiscount[one.i],
                       };
@@ -277,7 +277,7 @@ function Make_invoice() {
                 item_id: one.id,
                 item_name: one.title,
                 qty: itemQty[one.i],
-
+                downpayment: itemDP[one.i],
                 discount: itemDiscount[one.i] === "" ? 0 : itemDiscount[one.i],
               };
               arrayPassingItems.push(objItem);
@@ -1131,7 +1131,7 @@ function Make_invoice() {
           setLoadingNicSubmit(false);
           if (
             reGami.docs[0].data().currentDeposit -
-              (subTotalFunc() - totalDiscount) <
+            (subTotalFunc() - totalDiscount) <
             0
           ) {
             NotificationManager.warning(
@@ -1171,7 +1171,7 @@ function Make_invoice() {
                     <TableHead>
                       <TableRow>
                         <TableCell className="tbl_Cell">Item</TableCell>
-                        <TableCell className="tbl_Cell"  align="right" colSpan={1}>
+                        <TableCell className="tbl_Cell" align="right" colSpan={1}>
                           Qty
                         </TableCell>
 
@@ -1182,7 +1182,6 @@ function Make_invoice() {
                         >
                           Sale Price(LKR)
                         </TableCell>
-
                         <TableCell className="tbl_Cell" align="right">
                           Discount(LKR)
                         </TableCell>
@@ -1609,8 +1608,8 @@ function Make_invoice() {
                           color="primary"
                           disabled={
                             !gamisarani ||
-                            loadingNicsubmit ||
-                            gamisaraniNic.length === 0
+                              loadingNicsubmit ||
+                              gamisaraniNic.length === 0
                               ? true
                               : false
                           }
@@ -1755,8 +1754,8 @@ function Make_invoice() {
                     className="btn_addCustomer"
                     disabled={
                       loadingsubmit ||
-                      tablerows.length === 0 ||
-                      intialTimestamp === null
+                        tablerows.length === 0 ||
+                        intialTimestamp === null
                         ? true
                         : false
                     }

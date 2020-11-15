@@ -16,6 +16,8 @@ import db from "../../../../config/firebase.js";
 // styles
 import "./Dashboard.css";
 
+import { useHistory } from "react-router-dom";
+
 function isDateBeforeToday(date) {
   return new Date(date.toDateString()) < new Date(new Date().toDateString());
 }
@@ -24,8 +26,22 @@ export default function Dashboard() {
   // eslint-disable-next-line
   const [pendingBlackList, setPendingBlackList] = useState([]);
   const [expiredList, setExpiredList] = useState([]);
+  let history = useHistory();
 
   useEffect(() => {
+   
+    window.addEventListener("offline", function (e) {
+      // let moveWith = {
+      //   pathname: "/assistant/invoice/printInvoice",
+      //   search: "?query=abc",
+      //   state: { detail: {} },
+      // };
+      // history.push(moveWith);
+    });
+
+   
+    window.addEventListener("online", function (e) {});
+
     db.collection("invoice")
       .where("status_of_payandgo", "==", "onGoing")
       .get()

@@ -187,15 +187,15 @@ export default function Invoice_history() {
         }),
       },
     },
-    {
-      name: "SerialNo",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
+    // {
+    //   name: "SerialNo",
+    //   options: {
+    //     filter: true,
+    //     setCellHeaderProps: (value) => ({
+    //       style: { fontSize: "15px", color: "black", fontWeight: "600" },
+    //     }),
+    //   },
+    // },
     {
       name: "Type",
       options: {
@@ -382,7 +382,7 @@ export default function Invoice_history() {
 
           rawData.push({
             InvoiceNo: siDoc.data().invoice_number,
-            SerialNo: siDoc.data().items[0].serialNo,
+            // SerialNo: siDoc.data().items[0].serialNo,
             Type: siDoc.data().selectedType,
             Date: moment(siDoc.data()?.date?.toDate()).format(
               "dddd, MMMM Do YYYY"

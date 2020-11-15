@@ -415,15 +415,7 @@ export default function Update_Model({
         <div className="paper">
           <form className="form" noValidate>
             <Grid container spacing={2}>
-              <Grid className="lbl_topi" item xs={12} sm={4}>
-                Serial No
-              </Grid>
-              <Grid item xs={12} sm={2}>
-                :
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <p>{serialNo}</p>
-              </Grid>
+           
 
               <Grid className="lbl_topi-gami" item xs={12} sm={12}>
                 -Gamisarani Customers-

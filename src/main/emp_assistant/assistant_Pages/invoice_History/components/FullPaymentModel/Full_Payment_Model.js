@@ -78,7 +78,13 @@ export default function Full_Payment_Model({ items_list_props, data }) {
               :
             </Grid>
             <Grid item xs={12} sm={6}>
-              {data.gamisarani_amount}
+              <CurrencyFormat
+                value={data.gamisarani_amount}
+                displayType={"text"}
+                thousandSeparator={true}
+                prefix={" "}
+              />
+
             </Grid>
             <Grid className="lbl_topis" item xs={12} sm={12}>
               <hr />

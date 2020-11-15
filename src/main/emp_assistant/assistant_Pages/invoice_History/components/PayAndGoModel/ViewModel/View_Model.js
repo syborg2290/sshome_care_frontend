@@ -87,308 +87,313 @@ export default function View_Model({ items_list_props, data }) {
           }}
         />
       ) : (
-        <div className="paper">
-          <form className="form" noValidate>
-            <Grid container spacing={2}>
-              <Grid className="contine" container spacing={2}>
-                <Grid className="lbl_topis" item xs={12} sm={4}>
-                  Installmanet Type
+          <div className="paper">
+            <form className="form" noValidate>
+              <Grid container spacing={2}>
+                <Grid className="contine" container spacing={2}>
+                  <Grid className="lbl_topis" item xs={12} sm={4}>
+                    Installmanet Type
                 </Grid>
-                <Grid item xs={12} sm={1}>
-                  :
+                  <Grid item xs={12} sm={1}>
+                    :
                 </Grid>
-                <Grid item xs={12} sm={7}>
-                  <p>{data.selectedType}</p>
+                  <Grid item xs={12} sm={7}>
+                    <p>{data.selectedType}</p>
+                  </Grid>
+                  <Grid className="lbl_topis" item xs={12} sm={4}>
+                    Installmanet day
                 </Grid>
-                <Grid className="lbl_topis" item xs={12} sm={4}>
-                  Installmanet day
+                  <Grid item xs={12} sm={1}>
+                    :
                 </Grid>
-                <Grid item xs={12} sm={1}>
-                  :
+                  <Grid item xs={12} sm={7}>
+                    {parseInt(data.installemtnDay) === 1
+                      ? "Monday"
+                      : parseInt(data.installemtnDay) === 2
+                        ? "Tuesday"
+                        : parseInt(data.installemtnDay) === 3
+                          ? "Wednesday"
+                          : parseInt(data.installemtnDay) === 4
+                            ? "Thursday"
+                            : parseInt(data.installemtnDay) === 5
+                              ? "Friday"
+                              : parseInt(data.installemtnDay) === 6
+                                ? "Saturday"
+                                : parseInt(data.installemtnDay) === 0
+                                  ? "Sunday"
+                                  : ""}
+                  </Grid>
+                  <Grid className="lbl_topis" item xs={12} sm={4}>
+                    Installmanet Date
                 </Grid>
-                <Grid item xs={12} sm={7}>
-                  {parseInt(data.installemtnDay) === 1
-                    ? "Monday"
-                    : parseInt(data.installemtnDay) === 2
-                    ? "Tuesday"
-                    : parseInt(data.installemtnDay) === 3
-                    ? "Wednesday"
-                    : parseInt(data.installemtnDay) === 4
-                    ? "Thursday"
-                    : parseInt(data.installemtnDay) === 5
-                    ? "Friday"
-                    : parseInt(data.installemtnDay) === 6
-                    ? "Saturday"
-                    : parseInt(data.installemtnDay) === 0
-                    ? "Sunday"
-                    : ""}
+                  <Grid item xs={12} sm={1}>
+                    :
                 </Grid>
-                <Grid className="lbl_topis" item xs={12} sm={4}>
-                  Installmanet Date
+                  <Grid item xs={12} sm={7}>
+                    {data.installemtnDate}
+                  </Grid>
+                  <Grid className="lbl_topis" item xs={12} sm={12}>
+                    <hr />
+                  </Grid>
+                  <Grid className="lbl_topis" item xs={12} sm={5}>
+                    Purchase date
                 </Grid>
-                <Grid item xs={12} sm={1}>
-                  :
+                  <Grid item xs={12} sm={1}>
+                    :
                 </Grid>
-                <Grid item xs={12} sm={7}>
-                  {data.installemtnDate}
+                  <Grid item xs={12} sm={6}>
+                    {moment(data.date.toDate()).format("dddd, MMMM Do YYYY")}
+                  </Grid>
+                  <Grid className="lbl_topis" item xs={12} sm={5}>
+                    Installment deadline
                 </Grid>
-                <Grid className="lbl_topis" item xs={12} sm={12}>
-                  <hr />
+                  <Grid item xs={12} sm={1}>
+                    :
                 </Grid>
-                <Grid className="lbl_topis" item xs={12} sm={5}>
-                  Purchase date
+                  <Grid item xs={12} sm={6}>
+                    {moment(data.deadlineTimestamp.toDate()).format("dddd, MMMM Do YYYY")}
+                  </Grid>
+                  <Grid className="lbl_topis" item xs={12} sm={5}>
+                    Gamisarani
                 </Grid>
-                <Grid item xs={12} sm={1}>
-                  :
+                  <Grid item xs={12} sm={1}>
+                    :
                 </Grid>
-                <Grid item xs={12} sm={6}>
-                  {moment(data.date.toDate()).format("dddd, MMMM Do YYYY")}
+                  <Grid item xs={12} sm={6}>
+                    {data.gamisarani ? "Yes" : "No"}
+                  </Grid>
+                  <Grid className="lbl_topis" item xs={12} sm={5}>
+                    Gamisarani withdrawal Amount
                 </Grid>
-                <Grid className="lbl_topis" item xs={12} sm={5}>
-                  Installment deadline
+                  <Grid item xs={12} sm={1}>
+                    :
                 </Grid>
-                <Grid item xs={12} sm={1}>
-                  :
+                  <Grid item xs={12} sm={6}>
+                    <CurrencyFormat
+                      value={data.gamisarani_amount}
+                      displayType={"text"}
+                      thousandSeparator={true}
+                      prefix={" "}
+                    />
+                  </Grid>
                 </Grid>
-                <Grid item xs={12} sm={6}>
-                  {moment(data.deadlineTimestamp.toDate()).format("dddd, MMMM Do YYYY")}
-                </Grid>
-                <Grid className="lbl_topis" item xs={12} sm={5}>
-                  Gamisarani
-                </Grid>
-                <Grid item xs={12} sm={1}>
-                  :
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  {data.gamisarani ? "Yes" : "No"}
-                </Grid>
-                 <Grid className="lbl_topis" item xs={12} sm={5}>
-                  Gamisarani withdrawal Amount
-                </Grid>
-                <Grid item xs={12} sm={1}>
-                  :
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  {data.gamisarani_amount}
-                </Grid>
+                <Grid className="lbl_topiSub" item xs={12} sm={12}>
+                  Customer
               </Grid>
+                <Grid item xs={12} sm={6}>
+                  <hr className="hr_topiSub" />
+                </Grid>
+                <Grid item xs={12} sm={6}></Grid>
+                <Grid className="lbl_topis" item xs={12} sm={3}>
+                  Full Name
+              </Grid>
+                <Grid item xs={12} sm={1}>
+                  :
+              </Grid>
+                <Grid item xs={12} sm={3}>
+                  <p>
+                    {customer.fname} {customer.lname}
+                  </p>
+                </Grid>
+                <Grid item xs={12} sm={3}>
+                  <p></p>
+                </Grid>
+                <Grid className="lbl_topis" item xs={12} sm={3}>
+                  MID
+              </Grid>
+                <Grid item xs={12} sm={1}>
+                  :
+              </Grid>
+                <Grid item xs={12} sm={8}>
+                  <p>{customer.mid}</p>
+                </Grid>
+                <Grid className="lbl_topis" item xs={12} sm={3}>
+                  NIC
+              </Grid>
+                <Grid item xs={12} sm={1}>
+                  :
+              </Grid>
+                <Grid item xs={12} sm={8}>
+                  <p>{customer.nic}</p>
+                </Grid>
+                <Grid className="lbl_topis" item xs={12} sm={3}>
+                  Address
+              </Grid>
+                <Grid item xs={12} sm={1}>
+                  :
+              </Grid>
+                <Grid item xs={12} sm={8}>
+                  <p>{customer.address1}</p>
+                </Grid>
+                <Grid className="lbl_topis" item xs={12} sm={3}>
+                  Tele.
+              </Grid>
+                <Grid item xs={12} sm={1}>
+                  :
+              </Grid>
+                <Grid item xs={12} sm={8}>
+                  <p>{customer.mobile1}</p>
+                </Grid>
+                <Grid className="lbl_topiSub" item xs={12} sm={12}>
+                  Trustee
+              </Grid>
+                <Grid item xs={12} sm={6}>
+                  <hr className="hr_topiSub" />
+                  <br />
+                </Grid>
+                <Grid item xs={12} sm={6}></Grid>
+              </Grid>
+              {trustees.map((si) => {
+                return (
+                  <Grid key={si.fname.toString() + "33333"} container spacing={2}>
+                    <Grid className="lbl_topis" item xs={12} sm={3}>
+                      Full Name
+                  </Grid>
+                    <Grid item xs={12} sm={1}>
+                      :
+                  </Grid>
+                    <Grid item xs={12} sm={3}>
+                      <p>
+                        {si.fname} {si.lname}
+                      </p>
+                    </Grid>
+
+                    <Grid item xs={12} sm={3}>
+                      <p></p>
+                    </Grid>
+
+                    <Grid className="lbl_topis" item xs={12} sm={3}>
+                      NIC
+                  </Grid>
+                    <Grid item xs={12} sm={1}>
+                      :
+                  </Grid>
+                    <Grid item xs={12} sm={8}>
+                      <p>{si.nic}</p>
+                    </Grid>
+
+                    <Grid className="lbl_topis" item xs={12} sm={3}>
+                      Address
+                  </Grid>
+                    <Grid item xs={12} sm={1}>
+                      :
+                  </Grid>
+                    <Grid item xs={12} sm={8}>
+                      <p>{si.address}</p>
+                    </Grid>
+
+                    <Grid className="lbl_topis" item xs={12} sm={3}>
+                      Tele.
+                  </Grid>
+                    <Grid item xs={12} sm={1}>
+                      :
+                  </Grid>
+                    <Grid item xs={12} sm={8}>
+                      <p>{si.mobile}</p>
+                    </Grid>
+                    <Grid item xs={12} sm={12}>
+                      <hr />
+                      <br />
+                    </Grid>
+                  </Grid>
+                );
+              })}
               <Grid className="lbl_topiSub" item xs={12} sm={12}>
-                Customer
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <hr className="hr_topiSub" />
-              </Grid>
-              <Grid item xs={12} sm={6}></Grid>
-              <Grid className="lbl_topis" item xs={12} sm={3}>
-                Full Name
-              </Grid>
-              <Grid item xs={12} sm={1}>
-                :
-              </Grid>
-              <Grid item xs={12} sm={3}>
-                <p>
-                  {customer.fname} {customer.lname}
-                </p>
-              </Grid>
-              <Grid item xs={12} sm={3}>
-                <p></p>
-              </Grid>
-              <Grid className="lbl_topis" item xs={12} sm={3}>
-                MID
-              </Grid>
-              <Grid item xs={12} sm={1}>
-                :
-              </Grid>
-              <Grid item xs={12} sm={8}>
-                <p>{customer.mid}</p>
-              </Grid>
-              <Grid className="lbl_topis" item xs={12} sm={3}>
-                NIC
-              </Grid>
-              <Grid item xs={12} sm={1}>
-                :
-              </Grid>
-              <Grid item xs={12} sm={8}>
-                <p>{customer.nic}</p>
-              </Grid>
-              <Grid className="lbl_topis" item xs={12} sm={3}>
-                Address
-              </Grid>
-              <Grid item xs={12} sm={1}>
-                :
-              </Grid>
-              <Grid item xs={12} sm={8}>
-                <p>{customer.address1}</p>
-              </Grid>
-              <Grid className="lbl_topis" item xs={12} sm={3}>
-                Tele.
-              </Grid>
-              <Grid item xs={12} sm={1}>
-                :
-              </Grid>
-              <Grid item xs={12} sm={8}>
-                <p>{customer.mobile1}</p>
-              </Grid>
-              <Grid className="lbl_topiSub" item xs={12} sm={12}>
-                Trustee
-              </Grid>
+                Item
+            </Grid>
+              <br />
               <Grid item xs={12} sm={6}>
                 <hr className="hr_topiSub" />
                 <br />
               </Grid>
               <Grid item xs={12} sm={6}></Grid>
-            </Grid>
-            {trustees.map((si) => {
-              return (
-                <Grid key={si.fname.toString() + "33333"} container spacing={2}>
-                  <Grid className="lbl_topis" item xs={12} sm={3}>
-                    Full Name
+              {itemsList.map((eachItem) => {
+                return (
+                  <Grid key={eachItem.item_name} container spacing={2}>
+                    {" "}
+                    <Grid className="lbl_topis" item xs={12} sm={4}>
+                      Item Name
                   </Grid>
-                  <Grid item xs={12} sm={1}>
-                    :
+                    <Grid item xs={12} sm={1}>
+                      :
                   </Grid>
-                  <Grid item xs={12} sm={3}>
-                    <p>
-                      {si.fname} {si.lname}
-                    </p>
+                    <Grid item xs={12} sm={7}>
+                      <p>{eachItem.item_name}</p>
+                    </Grid>
+                    <Grid className="lbl_topis" item xs={12} sm={4}>
+                      Basic Payment(LKR)
                   </Grid>
-
-                  <Grid item xs={12} sm={3}>
-                    <p></p>
+                    <Grid item xs={12} sm={1}>
+                      :
                   </Grid>
-
-                  <Grid className="lbl_topis" item xs={12} sm={3}>
-                    NIC
+                    <Grid item xs={12} sm={7}>
+                      <CurrencyFormat
+                        value={eachItem.dp}
+                        displayType={"text"}
+                        thousandSeparator={true}
+                        prefix={" "}
+                      />
+                    </Grid>
+                    <Grid className="lbl_topis" item xs={12} sm={4}>
+                      Discount(LKR)
                   </Grid>
-                  <Grid item xs={12} sm={1}>
-                    :
+                    <Grid item xs={12} sm={1}>
+                      :
                   </Grid>
-                  <Grid item xs={12} sm={8}>
-                    <p>{si.nic}</p>
+                    <Grid item xs={12} sm={7}>
+                      <CurrencyFormat
+                        value={eachItem.discount}
+                        displayType={"text"}
+                        thousandSeparator={true}
+                        prefix={" "}
+                      />
+                    </Grid>
+                    <Grid className="lbl_topis" item xs={12} sm={4}>
+                      Qty
                   </Grid>
-
-                  <Grid className="lbl_topis" item xs={12} sm={3}>
-                    Address
+                    <Grid item xs={12} sm={1}>
+                      :
                   </Grid>
-                  <Grid item xs={12} sm={1}>
-                    :
+                    <Grid item xs={12} sm={7}>
+                      <p>{eachItem.qty}</p>
+                    </Grid>
+                    <Grid className="lbl_topis" item xs={12} sm={4}>
+                      Color
                   </Grid>
-                  <Grid item xs={12} sm={8}>
-                    <p>{si.address}</p>
+                    <Grid item xs={12} sm={1}>
+                      :
                   </Grid>
-
-                  <Grid className="lbl_topis" item xs={12} sm={3}>
-                    Tele.
+                    <Grid item xs={12} sm={7}>
+                      <p>{eachItem.color}</p>
+                    </Grid>
+                    <Grid className="lbl_topis" item xs={12} sm={4}>
+                      Model No.
                   </Grid>
-                  <Grid item xs={12} sm={1}>
-                    :
+                    <Grid item xs={12} sm={1}>
+                      :
                   </Grid>
-                  <Grid item xs={12} sm={8}>
-                    <p>{si.mobile}</p>
+                    <Grid item xs={12} sm={7}>
+                      <p>{eachItem.model_no}</p>
+                    </Grid>
+                    <Grid className="lbl_topis" item xs={12} sm={4}>
+                      Guarantee Period
                   </Grid>
-                  <Grid item xs={12} sm={12}>
-                    <hr />
-                    <br />
+                    <Grid item xs={12} sm={1}>
+                      :
                   </Grid>
-                </Grid>
-              );
-            })}
-            <Grid className="lbl_topiSub" item xs={12} sm={12}>
-              Item
-            </Grid>
-            <br />
-            <Grid item xs={12} sm={6}>
-              <hr className="hr_topiSub" />
-              <br />
-            </Grid>
-            <Grid item xs={12} sm={6}></Grid>
-            {itemsList.map((eachItem) => {
-              return (
-                <Grid key={eachItem.item_name} container spacing={2}>
-                  {" "}
-                  <Grid className="lbl_topis" item xs={12} sm={4}>
-                    Item Name
+                    <Grid item xs={12} sm={7}>
+                      <p>
+                        {eachItem.gurantee_period.toString() +
+                          " " +
+                          eachItem.gurantee_type.value.toString()}
+                      </p>
+                    </Grid>
                   </Grid>
-                  <Grid item xs={12} sm={1}>
-                    :
-                  </Grid>
-                  <Grid item xs={12} sm={7}>
-                    <p>{eachItem.item_name}</p>
-                  </Grid>
-                  <Grid className="lbl_topis" item xs={12} sm={4}>
-                    Basic Payment(LKR)
-                  </Grid>
-                  <Grid item xs={12} sm={1}>
-                    :
-                  </Grid>
-                  <Grid item xs={12} sm={7}>
-                    <CurrencyFormat
-                      value={eachItem.dp}
-                      displayType={"text"}
-                      thousandSeparator={true}
-                      prefix={" "}
-                    />
-                  </Grid>
-                  <Grid className="lbl_topis" item xs={12} sm={4}>
-                    Discount(LKR)
-                  </Grid>
-                  <Grid item xs={12} sm={1}>
-                    :
-                  </Grid>
-                  <Grid item xs={12} sm={7}>
-                    <CurrencyFormat
-                      value={eachItem.discount}
-                      displayType={"text"}
-                      thousandSeparator={true}
-                      prefix={" "}
-                    />
-                  </Grid>
-                  <Grid className="lbl_topis" item xs={12} sm={4}>
-                    Qty
-                  </Grid>
-                  <Grid item xs={12} sm={1}>
-                    :
-                  </Grid>
-                  <Grid item xs={12} sm={7}>
-                    <p>{eachItem.qty}</p>
-                  </Grid>
-                  <Grid className="lbl_topis" item xs={12} sm={4}>
-                    Color
-                  </Grid>
-                  <Grid item xs={12} sm={1}>
-                    :
-                  </Grid>
-                  <Grid item xs={12} sm={7}>
-                    <p>{eachItem.color}</p>
-                  </Grid>
-                  <Grid className="lbl_topis" item xs={12} sm={4}>
-                    Model No.
-                  </Grid>
-                  <Grid item xs={12} sm={1}>
-                    :
-                  </Grid>
-                  <Grid item xs={12} sm={7}>
-                    <p>{eachItem.model_no}</p>
-                  </Grid>
-                  <Grid className="lbl_topis" item xs={12} sm={4}>
-                    Guarantee Period
-                  </Grid>
-                  <Grid item xs={12} sm={1}>
-                    :
-                  </Grid>
-                  <Grid item xs={12} sm={7}>
-                    <p>
-                      {eachItem.gurantee_period.toString() +
-                        " " +
-                        eachItem.gurantee_type.value.toString()}
-                    </p>
-                  </Grid>
-                </Grid>
-              );
-            })}
-          </form>
-        </div>
-      )}
+                );
+              })}
+            </form>
+          </div>
+        )}
     </Container>
   );
 }

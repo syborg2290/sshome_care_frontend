@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { List, Radio, Row, Col, Divider, Spin } from "antd";
 import { ShoppingCartOutlined, CloseOutlined } from "@ant-design/icons";
-import { Button,Grid } from "@material-ui/core";
+import { Button, Grid } from "@material-ui/core";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import { useHistory } from "react-router-dom";
 import Typography from "@material-ui/core/Typography";
@@ -69,7 +69,17 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
       nextData.push(obj);
     }
     if (nextData.length === itemsData.length) {
-      if (itemsData.length > 1) {
+      if (paymentWay === "PayandGo") {
+        setLoading(false);
+        //sent to add customer
+        let moveWith = {
+          pathname: "/assistant/ui/addCustomer",
+          search: "?query=abc",
+          state: { detail: nextData },
+        };
+
+        history.push(moveWith);
+      } else {
         setLoading(false);
         //sent to direct invoice
         let moveWith = {
@@ -79,28 +89,6 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
         };
 
         history.push(moveWith);
-      } else {
-        if (paymentWay === "PayandGo") {
-          setLoading(false);
-          //sent to add customer
-          let moveWith = {
-            pathname: "/assistant/ui/addCustomer",
-            search: "?query=abc",
-            state: { detail: nextData },
-          };
-
-          history.push(moveWith);
-        } else {
-          setLoading(false);
-          //sent to direct invoice
-          let moveWith = {
-            pathname: "/assistant/ui/makeInvoice",
-            search: "?query=abc",
-            state: { detail: nextData },
-          };
-
-          history.push(moveWith);
-        }
       }
     }
   };
@@ -109,31 +97,30 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
     <>
       <Grid container spacing={2}>
         <Typography className="method_title" variant="h5" gutterBottom>
-        Select a Payment Method :
-      </Typography>
-      <Grid className="radioGrid_main" item xs={12} sm={12}>
-      <Radio.Group
-        className="radio_btn"
-        defaultValue="PayandGo"
-        buttonStyle="solid"
-        size="large"
-        onChange={(e) => {
-          setpaymentWay(e.target.value);
-        }}
-      >
-        <Radio.Button className="btn_radio" value="PayandGo">
-          Pay and Go
-        </Radio.Button>
-        <Radio.Button className="btn_radio" value="FullPayment">
-          Full Payment
-        </Radio.Button>
+          Select a Payment Method :
+        </Typography>
+        <Grid className="radioGrid_main" item xs={12} sm={12}>
+          <Radio.Group
+            className="radio_btn"
+            defaultValue="PayandGo"
+            buttonStyle="solid"
+            size="large"
+            onChange={(e) => {
+              setpaymentWay(e.target.value);
+            }}
+          >
+            <Radio.Button className="btn_radio" value="PayandGo">
+              Pay and Go
+            </Radio.Button>
+            <Radio.Button className="btn_radio" value="FullPayment">
+              Full Payment
+            </Radio.Button>
           </Radio.Group>
         </Grid>
         <Grid item xs={12} sm={12}>
           <hr />
         </Grid>
-     
-</Grid>
+      </Grid>
       <List
         className="model_List"
         footer={

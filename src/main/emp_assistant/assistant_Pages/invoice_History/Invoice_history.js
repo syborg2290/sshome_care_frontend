@@ -187,15 +187,7 @@ export default function Invoice_history() {
         }),
       },
     },
-    // {
-    //   name: "SerialNo",
-    //   options: {
-    //     filter: true,
-    //     setCellHeaderProps: (value) => ({
-    //       style: { fontSize: "15px", color: "black", fontWeight: "600" },
-    //     }),
-    //   },
-    // },
+
     {
       name: "Type",
       options: {
@@ -586,11 +578,10 @@ export default function Invoice_history() {
                 key={payangoAllData[currentIndx2]?.id}
                 invoice_no={payangoAllData[currentIndx2]?.data?.invoice_number}
                 instAmountProp={
-                  payangoAllData[currentIndx2]?.data?.items[0]
-                    .amountPerInstallment
+                  payangoAllData[currentIndx2]?.data?.amountPerInstallment
                 }
                 instCount={
-                  payangoAllData[currentIndx2]?.data?.items[0].noOfInstallment
+                  payangoAllData[currentIndx2]?.data?.noOfInstallment
                 }
                 customer_id={payangoAllData[currentIndx]?.data?.customer_id}
                 closeModal={closeModalUpdate}

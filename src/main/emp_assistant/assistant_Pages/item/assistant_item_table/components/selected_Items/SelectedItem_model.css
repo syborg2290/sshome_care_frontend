@@ -15,10 +15,17 @@
   text-align: center !important;
 }
 
+.method_title {
+  font-weight: 700 !important;
+  font-size: 15px !important;
+  color: #222a44 !important;
+}
+
 .radio_btn {
   margin: auto !important;
   text-align: center !important;
-  float: right !important;
+  margin-left: 90px !important;
+  margin-bottom: 10px !important;
 }
 .btn_radio {
   font-size: 11px !important;
@@ -26,7 +33,7 @@
 
 .btn_ModelSelectedItem {
   display: flex !important;
-  width: 20% !important;
+  width: 30% !important;
   border-radius: 6px !important;
   float: right;
 }

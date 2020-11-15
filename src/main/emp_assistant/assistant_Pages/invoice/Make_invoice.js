@@ -1442,7 +1442,7 @@ function Make_invoice() {
                       </Grid>
                       <Grid item xs={12} sm={4}></Grid>
                       <Grid className="lbl_MI" item xs={12} sm={6}>
-                        NO. of Installments(LKR):
+                        NO. of Installments:
                       </Grid>
                       <Grid className="noi" item xs={12} sm={4}>
                         <TextField

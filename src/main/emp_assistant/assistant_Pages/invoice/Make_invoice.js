@@ -72,6 +72,27 @@ function Make_invoice() {
   };
 
   useEffect(() => {
+    window.addEventListener(
+      "popstate",
+      (event) => {
+        if (event.state) {
+          history.push("/assistant/ui/ItemTable");
+        }
+      },
+      false
+    );
+
+    window.history.pushState(
+      { name: "browserBack" },
+      "on browser back click",
+      window.location.href
+    );
+    window.history.pushState(
+      { name: "browserBack" },
+      "on browser back click",
+      window.location.href
+    );
+
     setInvoiceNumber("IN-" + Math.floor(Math.random() * 1000000000 + 1));
 
     if (location.state != null) {
@@ -117,11 +138,10 @@ function Make_invoice() {
         (itemDP[tablerows[a].i] - itemDiscount[tablerows[a].i]) *
         itemQty[tablerows[a].i];
     }
-    let fTotoS = isFullPayment
-      ? subTotalValue - gamisaraniamount <= 0
+    let fTotoS =
+      subTotalValue - gamisaraniamount <= 0
         ? 0
-        : subTotalValue - gamisaraniamount
-      : gamisaraniamount - subTotalValue;
+        : subTotalValue - gamisaraniamount;
     return fTotoS;
   };
 
@@ -1176,7 +1196,11 @@ function Make_invoice() {
                     <TableHead>
                       <TableRow>
                         <TableCell className="tbl_Cell">Item</TableCell>
-                        <TableCell className="tbl_Cell" align="right" colSpan={1}>
+                        <TableCell
+                          className="tbl_Cell"
+                          align="right"
+                          colSpan={1}
+                        >
                           Qty
                         </TableCell>
 
@@ -1397,8 +1421,12 @@ function Make_invoice() {
                           }
                           value={itemNOI}
                           onChange={(e) => {
-                            setItemNOI(parseInt(e.target.value));
-                            setBalance(parseInt(e.target.value) * itemAPI);
+                            if (e.target.value !== "") {
+                              setItemNOI(parseInt(e.target.value.trim()));
+                              setBalance(
+                                parseInt(e.target.value.trim()) * itemAPI
+                              );
+                            }
                           }}
                         />
                       </Grid>
@@ -1422,8 +1450,12 @@ function Make_invoice() {
                           }
                           value={itemAPI}
                           onChange={(e) => {
-                            setItemAPI(parseInt(e.target.value));
-                            setBalance(parseInt(e.target.value) * itemNOI);
+                            if (e.target.value !== "") {
+                              setItemAPI(parseInt(e.target.value.trim()));
+                              setBalance(
+                                parseInt(e.target.value.trim()) * itemNOI
+                              );
+                            }
                           }}
                         />
                       </Grid>
@@ -1448,7 +1480,9 @@ function Make_invoice() {
                               : true
                           }
                           onChange={(e) => {
-                            setDpayment(parseInt(e.target.value));
+                            if (e.target.value !== "") {
+                              setDpayment(parseInt(e.target.value.trim()));
+                            }
                           }}
                         />
                       </Grid>
@@ -1471,17 +1505,18 @@ function Make_invoice() {
                               ? false
                               : true
                           }
-                          value={
-                            balance
-                          }
+                          value={balance}
                           onChange={(e) => {
-                            setBalance(parseInt(e.target.value));
+                            if (e.target.value !== "") {
+                              setBalance(parseInt(e.target.value.trim()));
+                            }
                           }}
                         />
                       </Grid>
                       <Grid className="noi" item xs={12} sm={2}></Grid>
-                      <Grid className="noi" item xs={12} sm={12}><hr /></Grid>
-
+                      <Grid className="noi" item xs={12} sm={12}>
+                        <hr />
+                      </Grid>
 
                       <Grid className="lbl_MI" item xs={12} sm={3}>
                         Days :

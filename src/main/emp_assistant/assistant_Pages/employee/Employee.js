@@ -4,7 +4,7 @@ import { Button } from "@material-ui/core";
 import { Modal } from "antd";
 import Grid from "@material-ui/core/Grid";
 import MUIDataTable from "mui-datatables";
-
+import { useHistory } from "react-router-dom";
 // styles
 import "./Employee.css";
 
@@ -27,7 +27,7 @@ export default function Employee() {
   const [currentIndx, setCurrentIndx] = useState(0);
   const [tableData, setTableData] = useState([]);
   const [allData, setallData] = useState([]);
-
+let history = useHistory();
   const EmployeeAdd = () => {
     setEmployeeAddModel(true);
   };
@@ -93,6 +93,11 @@ export default function Employee() {
   ];
 
   useEffect(() => {
+
+     window.addEventListener("offline", function (e) {
+      history.push("/assistant/connection/error/lost_connection");
+    });
+
     db.collection("employee").onSnapshot((snap) => {
       var raw = [];
       var rawAlldata = [];
@@ -120,6 +125,7 @@ export default function Employee() {
       setTableData(raw);
       setallData(rawAlldata);
     });
+      // eslint-disable-next-line
   }, []);
 
   return (

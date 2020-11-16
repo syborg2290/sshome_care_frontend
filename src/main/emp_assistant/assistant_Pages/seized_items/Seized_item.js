@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import MUIDataTable from "mui-datatables";
 import { Grid, Button } from "@material-ui/core";
 import { Spin, Modal } from "antd";
+import { useHistory } from "react-router-dom";
 
 import db from "../../../../config/firebase.js";
 
@@ -25,6 +26,8 @@ export default function Seized_item() {
   const [seizedViewModel, setSeizedViewModel] = useState(false); //  table models
   const [seizedAddModel, setSeizedAddModel] = useState(false); //  table models
 
+  let history = useHistory();
+  
   const showModalView = () => {
     setSeizedViewModel(true);
   };
@@ -146,6 +149,11 @@ export default function Seized_item() {
   const [seizedAllData, setSeizedAllData] = useState([]);
 
   useEffect(() => {
+
+     window.addEventListener("offline", function (e) {
+      history.push("/assistant/connection/error/lost_connection");
+     });
+
     var rowData = [];
     var rowAllData = [];
     db.collection("seized")
@@ -177,6 +185,7 @@ export default function Seized_item() {
         setSeizedAllData(rowAllData);
         setIsLoading(false);
       });
+      // eslint-disable-next-line
   }, []);
 
   return (

@@ -64,7 +64,7 @@ export default function Add_Customer() {
     window.addEventListener("offline", function (e) {
       history.push("/assistant/connection/error/lost_connection");
     });
-    // eslint-disable-next-line
+     // eslint-disable-next-line
   }, [])
 
   const loaderModalClose = () => {

@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import MUIDataTable from "mui-datatables";
  // eslint-disable-next-line
 import { Grid,Button } from "@material-ui/core";
@@ -11,7 +12,7 @@ import "./Mark_Attendance.css";
 export default function Mark_Attendance() {
      // eslint-disable-next-line
     const [currentIndx, setCurrentIndx] = useState(0);
-    
+    let history = useHistory();
      const attendanceMarkTableColomns = [
     {
       name: "FirstName",
@@ -83,6 +84,15 @@ export default function Mark_Attendance() {
     ],
 
   ];
+
+
+   useEffect(() => {
+
+    window.addEventListener("offline", function (e) {
+      history.push("/assistant/connection/error/lost_connection");
+    });
+  });
+
     return (
         <>
             

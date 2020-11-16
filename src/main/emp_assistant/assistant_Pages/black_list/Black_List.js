@@ -3,7 +3,7 @@ import MUIDataTable from "mui-datatables";
 import { Grid } from "@material-ui/core";
 import { Modal } from "antd";
 import { Button } from "@material-ui/core";
-
+import { useHistory } from "react-router-dom";
 // components
 import BlackListCustomers from "../black_list/customer_model/BlackList_Customers";
 import BlackListHistory from "./histry_model/History_Model";
@@ -27,7 +27,7 @@ export default function Black_List() {
   const [confirmVisible, setConfirmVisible] = useState(false);
   const [blacklistTableRow, setBlackListTableRow] = useState([]);
   const [allDataBlacklist, setAllData] = useState([]);
-
+ let history = useHistory();
   const showModalConfirmModal = () => {
     setConfirmVisible(true);
   };
@@ -146,6 +146,11 @@ export default function Black_List() {
   ];
 
   useEffect(() => {
+
+     window.addEventListener("offline", function (e) {
+      history.push("/assistant/connection/error/lost_connection");
+    });
+
     db.collection("blacklist").onSnapshot((reBlack) => {
       var allTableRaw = [];
       var allData = [];
@@ -186,6 +191,7 @@ export default function Black_List() {
       setBlackListTableRow(allTableRaw);
       setAllData(allData);
     });
+      // eslint-disable-next-line
   }, []);
 
   const onOkConfirm = () => {

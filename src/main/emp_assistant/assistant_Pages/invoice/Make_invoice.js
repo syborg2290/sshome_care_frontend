@@ -65,6 +65,7 @@ function Make_invoice() {
   const [deadlineTimestamp, setDeadlineTimestamp] = useState(null);
   const [isFullPayment, setIsFullPayment] = useState(false);
   let history = useHistory();
+  let history2 = useHistory();
   const { confirm } = Modal;
 
   const handleChange = (event) => {
@@ -72,6 +73,11 @@ function Make_invoice() {
   };
 
   useEffect(() => {
+    
+     window.addEventListener("offline", function (e) {
+      history2.push("/assistant/connection/error/lost_connection");
+     });
+    
     window.addEventListener(
       "popstate",
       (event) => {

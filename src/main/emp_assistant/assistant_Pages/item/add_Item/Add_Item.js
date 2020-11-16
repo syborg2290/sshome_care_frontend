@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { Radio, Button, Spin } from "antd";
 import { TextField } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
@@ -6,6 +6,7 @@ import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import firebase from "firebase";
 import "antd/dist/antd.css";
+import { useHistory } from "react-router-dom";
 
 import {
   NotificationContainer,
@@ -42,6 +43,15 @@ export default function Add_Item() {
   const [inputsChassisNo, setInputsChassisNo] = useState({});
   const [isInAlreadySerial, setIsInAlreadySerial] = useState(false);
   const [isInAlreadyModel, setIsInAlreadyModel] = useState(false);
+
+  let history = useHistory();
+  
+  useEffect(() => {
+    
+    window.addEventListener("offline", function (e) {
+      history.push("/assistant/connection/error/lost_connection");
+    });
+  });
 
   //add InputSerial No
   const addInputSerialNo = () => {

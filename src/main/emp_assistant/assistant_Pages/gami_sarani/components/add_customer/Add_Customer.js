@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState , useEffect } from "react";
 import { TextField, Button } from "@material-ui/core";
 import { Spin } from "antd";
 
@@ -7,7 +7,7 @@ import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 
 import "react-notifications/lib/notifications.css";
-
+import { useHistory } from "react-router-dom";
 // styles
 import "./Add_Customer.css";
 
@@ -29,6 +29,15 @@ export default function Add_Customer({ close_model }) {
   const [isLoadingSubmit, setLoadingSubmit] = useState(false);
   const [imageFile, setImageFile] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
+  let history = useHistory();
+  
+
+   useEffect(() => {
+
+    window.addEventListener("offline", function (e) {
+      history.push("/assistant/connection/error/lost_connection");
+    });
+  });
 
   const onImageChange = (event) => {
     if (event.target.files && event.target.files[0]) {
@@ -40,6 +49,9 @@ export default function Add_Customer({ close_model }) {
       reader.readAsDataURL(event.target.files[0]);
     }
   };
+
+
+   
 
   const submit = () => {
     setLoadingSubmit(true);
@@ -124,6 +136,8 @@ export default function Add_Customer({ close_model }) {
       setValidation("Customer's NIC format is invalid!");
     }
   };
+
+
 
   return (
     <Container component="main" className="main_container_sarani">

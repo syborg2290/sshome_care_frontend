@@ -20,7 +20,7 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
-
+import { useHistory } from "react-router-dom";
 // components
 import EditModel from "./components/Edit_model";
 // eslint-disable-next-line
@@ -60,6 +60,8 @@ export default function Item_table_assistant() {
 
   const [itemListSeMoCon, setItemListSeMoCon] = useState([]);
 
+  let history = useHistory();
+  
   const showModal = () => {
     setVisible(true);
   };
@@ -78,6 +80,11 @@ export default function Item_table_assistant() {
   };
 
   useEffect(() => {
+
+       window.addEventListener("offline", function (e) {
+      history.push("/assistant/connection/error/lost_connection");
+     });
+
     db.collection("item")
       .orderBy("timestamp", "desc")
       .onSnapshot((snapshot) => {

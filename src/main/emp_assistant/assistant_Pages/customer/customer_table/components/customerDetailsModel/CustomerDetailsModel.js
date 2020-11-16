@@ -1,7 +1,9 @@
 import React from "react";
+
 import { Row, Col } from "antd";
 import Typography from "@material-ui/core/Typography";
 import moment from "moment";
+
 // styles
 import "./CustomerDetailsModel.css";
 
@@ -19,6 +21,8 @@ export default function customerDetailsModel({
   status,
   createdAt,
 }) {
+
+ 
   return (
     <Row>
       <Col className="space_col" span={12}>

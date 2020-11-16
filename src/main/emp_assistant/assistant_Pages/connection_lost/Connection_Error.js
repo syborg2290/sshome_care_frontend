@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { Grid, Paper, Typography, Button } from "@material-ui/core";
+// eslint-disable-next-line
 import { Link } from "react-router-dom";
 import classnames from "classnames";
 
@@ -44,10 +45,13 @@ export default function Connection_Error() {
         <Button
           variant="contained"
           color="primary"
-          component={Link}
-          to="/"
+          // component={Link}
+          // to="/"
           size="large"
           className={classes.backButton}
+          onClick={(e) => {
+            window.location.reload();
+          }}
         >
           Refesh
         </Button>

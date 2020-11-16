@@ -7,6 +7,7 @@ import moment from "moment";
 import CurrencyFormat from "react-currency-format";
 import { Button, Box, Tab, Tabs, AppBar, Grid } from "@material-ui/core";
 
+
 import { useHistory } from "react-router-dom";
 import db from "../../../../config/firebase.js";
 
@@ -89,6 +90,7 @@ export default function Invoice_history() {
   const [printType, setPrintType] = useState("fullpayment");
 
   let history = useHistory();
+  let history2 = useHistory();
 
   const showVisibleConfirmPrintModal = (type) => {
     setPrintType(type);
@@ -346,6 +348,11 @@ export default function Invoice_history() {
   //START pay And Go Rows
 
   useEffect(() => {
+
+      window.addEventListener("offline", function (e) {
+      history2.push("/assistant/connection/error/lost_connection");
+     });
+
     db.collection("invoice")
       .where("status_of_payandgo", "==", "onGoing")
       .onSnapshot((custIn) => {

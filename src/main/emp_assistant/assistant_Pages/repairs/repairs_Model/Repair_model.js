@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
+
 import {
   TextField,
   Grid,
@@ -20,6 +21,7 @@ import "./Repair_model.css";
 export default function Repair_model({ closeModel }) {
   const { confirm } = Modal;
   let history = useHistory();
+  let history2 = useHistory();
   // eslint-disable-next-line
   const [invoice, setInvoice] = useState("");
   const [serialNo, setSerialNo] = useState("");
@@ -32,6 +34,14 @@ export default function Repair_model({ closeModel }) {
   const [description, setDescription] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+
+    useEffect(() => {
+
+    window.addEventListener("offline", function (e) {
+      history2.push("/assistant/connection/error/lost_connection");
+    });
+  });
 
   const showConfirm = (item_name) => {
     confirm({

@@ -19,16 +19,13 @@ import "./Expire_Invoice.css";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import HistoryIcon from "@material-ui/icons/History";
 
-
 export default function Expire_invoice({ expire_list }) {
-
   const [currentIndx, setCurrentIndx] = useState(0);
   const [payangoTableData, setpayangoTableData] = useState([]);
   const [payangoAllData, setpayangoAllData] = useState([]);
   const [installmentUpdate, setInstallmentUpdate] = useState(false); //  table models
   const [installmentvisible, setInstallmentVisible] = useState(false); //  table models
   const [installmentHistory, setInstallmentHistory] = useState(false); //  table models
-
 
   const showModalUpdate = () => {
     setInstallmentUpdate(true);
@@ -45,8 +42,6 @@ export default function Expire_invoice({ expire_list }) {
   const showInstallmentView = () => {
     setInstallmentVisible(true);
   };
-
-
 
   //START pay And Go EX Columns
   const payAndGoColumns = [
@@ -150,8 +145,6 @@ export default function Expire_invoice({ expire_list }) {
   ];
   //END pay And Go EX Columns
 
-
-
   //START pay And Go Rows
 
   useEffect(() => {
@@ -187,19 +180,24 @@ export default function Expire_invoice({ expire_list }) {
                 Telephone: siDoc.data().mobile1,
                 Action: (
                   <div>
-                    {siDoc.data().status_of_payandgo === "onGoing" ? (
+                    {siDoc.data().status_of_payandgo === "onGoing" ||
+                    siDoc.data().status_of_payandgo === "expired" ? (
                       <Button
                         variant="contained"
                         color="primary"
                         size="small"
                         className="btn_pay"
                         onClick={showModalUpdate}
+                        style={{
+                          color: "white",
+                          backgroundColor: "#ff8c00",
+                        }}
                       >
                         Update
                       </Button>
                     ) : (
-                        ""
-                      )}
+                      ""
+                    )}
                     <span className="icon_visibl">
                       <HistoryIcon onClick={showModalHistory} />
                     </span>
@@ -218,12 +216,9 @@ export default function Expire_invoice({ expire_list }) {
   }, [expire_list]);
   //End pay And Go Rows
 
-
-
   return (
     <>
       {/*Start Installment Model Update */}
-
 
       <Modal
         visible={installmentUpdate}
@@ -248,6 +243,8 @@ export default function Expire_invoice({ expire_list }) {
                 }
                 customer_id={payangoAllData[currentIndx]?.data?.customer_id}
                 closeModal={closeModalUpdate}
+                balanceProp={payangoAllData[currentIndx]?.data?.balance}
+                isEx={true}
               />
             </div>
           </div>
@@ -299,7 +296,6 @@ export default function Expire_invoice({ expire_list }) {
       </Modal>
       {/*End Installment Model View */}
 
-
       <Grid container spacing={4}>
         <Grid item xs={12}>
           <MUIDataTable
@@ -309,7 +305,7 @@ export default function Expire_invoice({ expire_list }) {
             columns={payAndGoColumns}
             options={{
               selectableRows: false,
-              customToolbarSelect: () => { },
+              customToolbarSelect: () => {},
               filterType: "textField",
               download: false,
               print: false,
@@ -323,9 +319,6 @@ export default function Expire_invoice({ expire_list }) {
           />
         </Grid>
       </Grid>
-
     </>
-
-
   );
 }

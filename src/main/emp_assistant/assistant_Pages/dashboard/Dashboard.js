@@ -114,6 +114,8 @@ export default function Dashboard() {
                   .doc(reArreas.docs[0].id)
                   .update({
                     delayed_days: Math.round(daysCountInitial) - 7,
+                    status_of_payandgo: eachRe.data().status_of_payandgo,
+                    balance: eachRe.data().balance,
                     delayed_charges:
                       daysCountInitial - 7 <= 7
                         ? 0
@@ -203,6 +205,8 @@ export default function Dashboard() {
                   .doc(reArreas.docs[0].id)
                   .update({
                     delayed_days: Math.round(daysCountInitial) - 14,
+                    status_of_payandgo: eachRe.data().status_of_payandgo,
+                    balance: eachRe.data().balance,
                     delayed_charges:
                       daysCountInitial - 14 <= 7
                         ? 0
@@ -333,6 +337,8 @@ export default function Dashboard() {
               .doc(statusMonth.docs[0].id)
               .update({
                 delayed_days: daysCount - 7,
+                status_of_payandgo: eachRe.data().status_of_payandgo,
+                balance: eachRe.data().balance,
                 delayed_charges:
                   daysCount - 7 <= 7
                     ? 0
@@ -411,6 +417,8 @@ export default function Dashboard() {
               .doc(statusWeek.docs[0].id)
               .update({
                 delayed_days: Math.round(daysCount) - 14,
+                status_of_payandgo: eachRe.data().status_of_payandgo,
+                balance: eachRe.data().balance,
                 delayed_charges:
                   daysCount - 14 <= 7
                     ? 0

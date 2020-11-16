@@ -69,9 +69,8 @@ function isDateBeforeToday(date) {
 }
 
 export default function Invoice_history() {
-  // eslint-disable-next-line
+  
   const [isLoading, setIsLoading] = useState(true);
-  // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
   const [currentIndx2, setCurrentIndx2] = useState(0);
   const classes = useStyles();
@@ -79,7 +78,6 @@ export default function Invoice_history() {
   const [payangoTableData, setpayangoTableData] = useState([]);
   const [payangoAllData, setpayangoAllData] = useState([]);
   const [fullPaymentTableData, setFullPaymentTableData] = useState([]);
-  // eslint-disable-next-line
   const [fullPaymentAllData, setFullPaymentAllData] = useState([]);
 
   const [installmentUpdate, setInstallmentUpdate] = useState(false); //  table models

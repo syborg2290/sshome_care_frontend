@@ -11,14 +11,13 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Button from "@material-ui/core/Button";
-import firebase from "firebase";
 import moment from "moment";
 import { useLocation, useHistory } from "react-router-dom";
 
 import "./Arreas_recipt.css";
 
-function createData(description, delayed, amount) {
-  return { description, delayed, amount };
+function createData(description, delayed, balance, amount) {
+  return { description, delayed, balance, amount };
 }
 
 class ArreasRecipt extends React.Component {
@@ -29,12 +28,17 @@ class ArreasRecipt extends React.Component {
     delayed: 0,
     customer_nic: "",
     customer_name: "",
+    date: null,
+    serial_num: "",
   };
 
   constructor(props) {
     super(props);
     this.state.invoice_number = this.props.prop?.invoice_number;
+    this.state.serial_number = this.props.prop?.serial_number;
     this.state.total = this.props.prop?.total;
+    this.state.date = this.props.prop?.date;
+    this.state.serial_num = this.props.prop?.serialNo;
     this.state.delayed = this.props.prop?.delayedCharges;
     this.state.customer_nic = this.props.prop?.customerDetails?.nic;
     this.state.customer_name =
@@ -46,6 +50,12 @@ class ArreasRecipt extends React.Component {
       createData(
         "Installment Payment",
         this.props.prop?.delayedCharges,
+        <CurrencyFormat
+          value={this.props.prop?.balance}
+          displayType={"text"}
+          thousandSeparator={true}
+          prefix={" "}
+        />,
         <CurrencyFormat
           value={this.props.prop?.total}
           displayType={"text"}
@@ -80,9 +90,9 @@ class ArreasRecipt extends React.Component {
                   Date
                 </Col>
                 <Col className="tiles_details" span={6}>
-                  {moment(
-                    firebase.firestore.FieldValue.serverTimestamp()
-                  ).format("dddd, MMMM Do YYYY, h:mm:ss a")}
+                  {moment(this.state.date?.toDate()).format(
+                    "dddd, MMMM Do YYYY"
+                  )}
                 </Col>
                 <Col className="tiles" span={6}>
                   Customer Name
@@ -122,7 +132,11 @@ class ArreasRecipt extends React.Component {
                           <TableCell className="tbl_row">Description</TableCell>
                           <TableCell className="tbl_row" align="right">
                             {" "}
-                            Delayed Count
+                            Delayed Dates
+                          </TableCell>
+                          <TableCell className="tbl_row" align="right">
+                            {" "}
+                            Current Balance
                           </TableCell>
                           <TableCell className="tbl_row" align="right">
                             {" "}
@@ -137,6 +151,7 @@ class ArreasRecipt extends React.Component {
                               {row.description}
                             </TableCell>
                             <TableCell align="right">{row.delayed}</TableCell>
+                            <TableCell align="right">{row.balance}</TableCell>
                             <TableCell align="right">{row.amount}</TableCell>
                           </TableRow>
                         ))}

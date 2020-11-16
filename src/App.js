@@ -37,7 +37,7 @@ export default function App() {
           component={LayoutAssistant}
         />
         <PublicRoute path="/login" component={Login} />
-        <Route path="/connection_lost" component={ConnectionLost} sensitive />
+        <Route path="/connection_lost" component={ConnectionLost} />
         <Route component={Error} />
       </Switch>
     </HashRouter>

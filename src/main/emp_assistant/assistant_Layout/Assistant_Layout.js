@@ -90,7 +90,6 @@ function LayoutAssistant(props) {
             <Route
               path="/assistant/connection/error/lost_connection"
               component={LostConnection}
-              sensitive
             />
           </Switch>
         </div>

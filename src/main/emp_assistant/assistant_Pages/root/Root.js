@@ -131,7 +131,7 @@ export default function Root() {
   useEffect(() => {
 
         window.addEventListener("offline", function (e) {
-      history.push("/assistant/connection/error/lost_connection");
+      history.push("/connection_lost");
      });
 
     db.collection("root").onSnapshot((snap) => {

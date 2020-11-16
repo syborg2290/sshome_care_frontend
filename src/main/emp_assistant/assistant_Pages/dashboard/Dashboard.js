@@ -29,8 +29,7 @@ export default function Dashboard() {
   let history = useHistory();
 
   useEffect(() => {
-   
-    window.addEventListener("offline", function (e) {  
+    window.addEventListener("offline", function (e) {
       history.push("/connection_lost");
     });
 
@@ -147,6 +146,10 @@ export default function Dashboard() {
                   mid: eachRe.data().mid,
                   customer_id: eachRe.data().customer_id,
                   nic: eachRe.data().nic,
+                  balance: eachRe.data().balance,
+                  amountPerInstallment: eachRe.data().amountPerInstallment,
+                  noOfInstallment: eachRe.data().noOfInstallment,
+                  status_of_payandgo: eachRe.data().status_of_payandgo,
                   delayed_days: Math.round(daysCountInitial) - 7,
                   delayed_charges:
                     daysCountInitial - 7 <= 7
@@ -232,6 +235,10 @@ export default function Dashboard() {
                   type: eachRe.data().selectedType,
                   mid: eachRe.data().mid,
                   nic: eachRe.data().nic,
+                  balance: eachRe.data().balance,
+                  amountPerInstallment: eachRe.data().amountPerInstallment,
+                  noOfInstallment: eachRe.data().noOfInstallment,
+                  status_of_payandgo: eachRe.data().status_of_payandgo,
                   delayed_days: Math.round(daysCountInitial) - 7,
                   delayed_charges:
                     daysCountInitial - 14 <= 7
@@ -352,6 +359,10 @@ export default function Dashboard() {
               type: eachRe.data().selectedType,
               mid: eachRe.data().mid,
               nic: eachRe.data().nic,
+              balance: eachRe.data().balance,
+              amountPerInstallment: eachRe.data().amountPerInstallment,
+              noOfInstallment: eachRe.data().noOfInstallment,
+              status_of_payandgo: eachRe.data().status_of_payandgo,
               delayed_days: Math.round(daysCount) - 7,
               delayed_charges:
                 daysCount - 7 <= 7
@@ -426,6 +437,10 @@ export default function Dashboard() {
               type: eachRe.data().selectedType,
               mid: eachRe.data().mid,
               nic: eachRe.data().nic,
+              balance: eachRe.data().balance,
+              amountPerInstallment: eachRe.data().amountPerInstallment,
+              noOfInstallment: eachRe.data().noOfInstallment,
+              status_of_payandgo: eachRe.data().status_of_payandgo,
               delayed_days: Math.round(daysCount) - 14,
               delayed_charges:
                 daysCount - 14 <= 7

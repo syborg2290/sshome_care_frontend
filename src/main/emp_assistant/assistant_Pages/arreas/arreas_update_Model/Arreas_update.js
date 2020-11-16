@@ -573,7 +573,7 @@ export default function Arreas_update({
                 <p>{dueInstallmentsCount()}</p>
               </Grid>
 
-              <Grid className="lbl_topi" item xs={12} sm={4}>
+              {/* <Grid className="lbl_topi" item xs={12} sm={4}>
                 Balance(LKR)
               </Grid>
               <Grid item xs={12} sm={2}>
@@ -591,6 +591,34 @@ export default function Arreas_update({
                   displayType={"text"}
                   thousandSeparator={true}
                   prefix={" "}
+                />
+              </Grid> */}
+                 <Grid className="lbl_topi" item xs={12} sm={4}>
+                Balance(LKR)
+              </Grid>
+              <Grid item xs={12} sm={2}>
+                :
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  type="number"
+                  autoComplete="delayed"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  label="Balance"
+                  size="small"
+                   value={ 
+                      gamisaraniamount + installmentAmount === 0
+                      ? intialBalance
+                      : balance - (gamisaraniamount + installmentAmount) <= 0
+                      ? 0
+                      : balance - (gamisaraniamount + installmentAmount)
+                  }
+                  
+                 onChange={(e) => {
+                  setBalance(e.target.value.trim());
+                }}
                 />
               </Grid>
 

@@ -55,15 +55,6 @@ export default function Expire_invoice({ expire_list }) {
       },
     },
     {
-      name: "SerialNo",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
-    {
       name: "Type",
       options: {
         filter: true,
@@ -168,8 +159,7 @@ export default function Expire_invoice({ expire_list }) {
 
               rawData.push({
                 InvoiceNo: siDoc.data().invoice_number,
-                SerialNo: siDoc.data().items[0].serialNo,
-                Type: siDoc.data().items[0].type,
+                Type: siDoc.data().selectedType,
                 Date: moment(siDoc.data()?.date?.toDate()).format(
                   "dddd, MMMM Do YYYY"
                 ),

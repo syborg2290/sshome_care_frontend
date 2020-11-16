@@ -214,7 +214,7 @@ export default function Areas() {
                 instCount={arreasAllData[currentIndx]?.data?.noOfInstallment}
                 isEx={
                   arreasAllData[currentIndx]?.data?.status_of_payandgo ===
-                  "expired"
+                    "expired"
                     ? true
                     : false
                 }
@@ -265,7 +265,7 @@ export default function Areas() {
                 };
               },
               selectableRows: false,
-              customToolbarSelect: () => {},
+              customToolbarSelect: () => { },
               filterType: "textfield",
               download: false,
               print: false,
@@ -280,8 +280,8 @@ export default function Areas() {
                   noMatch: isLoading ? (
                     <Spin className="tblSpinner" size="large" spinning="true" />
                   ) : (
-                    ""
-                  ),
+                      ""
+                    ),
                 },
               },
             }}

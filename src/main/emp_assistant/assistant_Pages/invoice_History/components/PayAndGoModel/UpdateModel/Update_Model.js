@@ -247,35 +247,102 @@ export default function Update_Model({
     db.collection("invoice")
       .where("invoice_number", "==", invoice_no)
       .get()
-      .then(async (reInvoice) => {
+      .then((reInvoice) => {
         // var isBeforeNe = isDateBeforeNextDate(
         //   new Date(reInvoice.docs[0].data()?.nextDate.seconds * 1000)
         // );
-        // if (isBeforeNe) {
-        await db
-          .collection("invoice")
-          .doc(reInvoice.docs[0].id)
-          .update({
-            nextDate: firebase.firestore.Timestamp.fromDate(
-              new Date(
+
+        let reTotCal = parseInt(installmentAmount) + parseInt(gamisaraniamount);
+
+        let reCalMult =
+          reTotCal / parseInt(reInvoice.docs[0].data()?.amountPerInstallment);
+        if (reCalMult > 0) {
+          for (var t = 0; t < Math.round(reCalMult); t++) {
+            db.collection("invoice")
+              .doc(reInvoice.docs[0].id)
+              .update({
+                nextDate: firebase.firestore.Timestamp.fromDate(
+                  new Date(
+                    new Date(
+                      reInvoice.docs[0].data()?.nextDate.seconds * 1000
+                    ).setDate(
+                      new Date(
+                        reInvoice.docs[0].data()?.nextDate.seconds * 1000
+                      ).getDate() + 31
+                    )
+                  )
+                ),
+              })
+              .then((_) => {});
+          }
+        } else {
+          db.collection("installment")
+            .where("invoice_number", "==", invoice_no)
+            .get()
+            .then((reInst) => {
+              let totalPlusInsAmount = 0;
+              let countRe = 0;
+
+              let last31 = new Date(
                 new Date(
                   reInvoice.docs[0].data()?.nextDate.seconds * 1000
                 ).setDate(
                   new Date(
                     reInvoice.docs[0].data()?.nextDate.seconds * 1000
-                  ).getDate() + 31
+                  ).getDate() - 31
                 )
-              )
-            ),
-          });
-        // }
+              );
+              reInst.docs.forEach((reInstallmentCom) => {
+                countRe++;
+                let reDateC = reInstallmentCom.data()?.date.seconds * 1000;
+                let reDateNextC =
+                  reInvoice.docs[0].data()?.nextDate.seconds * 1000;
+                if (
+                  new Date(last31.toDateString()) <
+                  new Date(reDateC.toDateString())
+                ) {
+                  if (
+                    new Date(reDateC.toDateString()) <=
+                    new Date(reDateNextC.toDateString())
+                  ) {
+                    totalPlusInsAmount =
+                      totalPlusInsAmount +
+                      parseInt(reInstallmentCom.data()?.amount);
+                  }
+                }
+              });
+
+              if (countRe >= reInst.docs.length) {
+                if (
+                  totalPlusInsAmount >=
+                  parseInt(reInvoice.docs[0].data()?.amountPerInstallment)
+                ) {
+                  db.collection("invoice")
+                    .doc(reInvoice.docs[0].id)
+                    .update({
+                      nextDate: firebase.firestore.Timestamp.fromDate(
+                        new Date(
+                          new Date(
+                            reInvoice.docs[0].data()?.nextDate.seconds * 1000
+                          ).setDate(
+                            new Date(
+                              reInvoice.docs[0].data()?.nextDate.seconds * 1000
+                            ).getDate() + 31
+                          )
+                        )
+                      ),
+                    })
+                    .then((_) => {});
+                }
+              }
+            });
+        }
       });
 
     await db
       .collection("installment")
       .where("invoice_number", "==", invoice_no)
       .get()
-      // eslint-disable-next-line
       .then(async (reInst) => {
         let tot = parseInt(installmentAmount) + parseInt(gamisaraniamount);
         await db.collection("installment").add({

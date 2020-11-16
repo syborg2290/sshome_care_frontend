@@ -331,6 +331,7 @@ export default function Repair_model({ closeModel }) {
             <Grid item xs={12} sm={6}>
               <TextField
                 autoComplete="mobile"
+                type="number"
                 variant="outlined"
                 required
                 fullWidth
@@ -339,6 +340,7 @@ export default function Repair_model({ closeModel }) {
                 value={mobil_no1}
                 onChange={(e) => {
                   setMobil_no1(e.target.value);
+                  
                 }}
               />
             </Grid>
@@ -349,6 +351,7 @@ export default function Repair_model({ closeModel }) {
                 variant="outlined"
                 fullWidth
                 label="Mobil 2"
+                 type="number"
                 size="small"
                 value={mobil_no2}
                 onChange={(e) => {

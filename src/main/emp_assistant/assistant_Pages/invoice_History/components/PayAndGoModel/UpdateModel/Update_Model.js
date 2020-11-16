@@ -699,27 +699,6 @@ export default function Update_Model({
                 />
               </Grid>
 
-              {/* <Grid className="lbl_topi" item xs={12} sm={4}>
-                  Balance(LKR)
-              </Grid>
-                <Grid item xs={12} sm={2}>
-                  :
-              </Grid>
-                <Grid item xs={12} sm={6}>
-                  <CurrencyFormat
-                    value={
-                      gamisaraniamount + installmentAmount === 0
-                        ? intialBalance
-                        : balance - (gamisaraniamount + installmentAmount) <= 0
-                          ? 0
-                          : balance - (gamisaraniamount + installmentAmount)
-                    }
-                    displayType={"text"}
-                    thousandSeparator={true}
-                    prefix={" "}
-                  />
-                </Grid> */}
-
               <Grid className="lbl_topi" item xs={12} sm={4}>
                 Date
               </Grid>
@@ -784,6 +763,23 @@ export default function Update_Model({
                   <p>{Math.round(delayedDays)} days delayed !</p>
                 )}
               </Grid>
+
+                <Grid className="lbl_topi" item xs={12} sm={12}>
+                  <hr />
+                </Grid>
+                 {/* <Grid className="lbl_topi" item xs={12} sm={6}></Grid> */}
+                
+
+            <Grid className="lbl_topi" item xs={12} sm={6}>
+                 Next Installment Date :
+              </Grid>
+                <Grid item xs={12} sm={2}>
+                  :
+              </Grid>
+                <Grid item xs={12} sm={4}>
+                 <p>2020/02/15</p>
+                </Grid> 
+
               <Grid item xs={12} sm={12}>
                 <hr />
               </Grid>

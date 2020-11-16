@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Radio, Spin } from "antd";
+import { Spin, Checkbox, DatePicker } from "antd";
 import {
   TextField,
   Grid,
@@ -9,7 +9,6 @@ import {
 } from "@material-ui/core";
 import CurrencyFormat from "react-currency-format";
 import firebase from "firebase";
-import moment from "moment";
 
 import db from "../../../../../config/firebase.js";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
@@ -19,40 +18,61 @@ import { Modal } from "antd";
 // styles
 import "./Arreas_update.css";
 
-export default function Arreas_update({ invoice_no, nic, close }) {
+export default function Arreas_update({
+  invoice_no,
+  instAmountProp,
+  instCount,
+  customer_id,
+  closeModal,
+  balanceProp,
+  isEx,
+}) {
   const [installments, setInstallments] = useState(0);
+  // eslint-disable-next-line
+  const [intialBalance, setInitialBalance] = useState(balanceProp);
+  // eslint-disable-next-line
+  const [balance, setBalance] = useState(balanceProp);
+  const [serialNo, setSerialNo] = useState("");
   const [delayedDays, setDelayedDays] = useState(0);
+  const [installmentAmount, setInstallmentAmount] = useState(instAmountProp);
+  // eslint-disable-next-line
   const [allInstallment, setAllInstallment] = useState(0);
   const [delayedCharges, setDelayedCharges] = useState(0);
-  const [updatingInstallmentCount, setUpdatingInstallmentCount] = useState(1);
   const [customer, setCustomer] = useState({});
-  const [currentStatus, setCurrentStatus] = useState("a");
-  const [instCount, setInstCount] = useState(0);
-  const [instAmountProp, setInstAmountProp] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [gamisarani, setGamisarani] = useState(false);
+  const [gamisaraniInitialAmount, setGamisaraniInitialAmount] = useState(0);
+  const [gamisaraniamount, setGamisaraniamount] = useState(0);
+  // eslint-disable-next-line
+  const [gamisaraniId, setGamisaraniId] = useState("");
+  const [gamisaraniNic, setGamisaraniNic] = useState("");
+
+  const [loadingNicsubmit, setLoadingNicSubmit] = useState(false);
+  const [updateTimestamp, setTimestamp] = useState(null);
+
+  const [validation, setValidation] = useState("");
+  const [validationDate, setValidationDate] = useState("");
 
   const { confirm } = Modal;
-  let history2 = useHistory();
   let history = useHistory();
 
   useEffect(() => {
-
-       window.addEventListener("offline", function (e) {
-      history2.push("/assistant/connection/error/lost_connection");
+    window.addEventListener("offline", function (e) {
+      history.push("/assistant/connection/error/lost_connection");
     });
 
-    db.collection("customer")
-      .where("nic", "==", nic)
+    db.collection("invoice")
+      .where("invoice_number", "==", invoice_no)
       .get()
-      .then((th) => {
-        if (th.docs.length > 0) {
-          db.collection("customer")
-            .doc(th.docs[0]?.id)
-            .get()
-            .then((custDocRe) => {
-              setCustomer(custDocRe.data());
-            });
-        }
+      .then((reInvoice) => {
+        setSerialNo(reInvoice.docs[0].data().items[0].serialNo);
+      });
+
+    db.collection("customer")
+      .doc(customer_id)
+      .get()
+      .then((custDocRe) => {
+        setCustomer(custDocRe.data());
       });
 
     db.collection("installment")
@@ -66,63 +86,28 @@ export default function Arreas_update({ invoice_no, nic, close }) {
       .where("invoice_number", "==", invoice_no)
       .get()
       .then((inReDoc) => {
-        setInstCount(inReDoc.docs[0].data().items[0].noOfInstallment);
-        setInstAmountProp(inReDoc.docs[0].data().items[0].amountPerInstallment);
         db.collection("installment")
           .where("invoice_number", "==", invoice_no)
           .get()
           .then((instReDoc) => {
             if (instReDoc.docs.length === 0) {
-              let daysCountInitial =
+              let daysCountNode1 =
                 (new Date().getTime() -
                   new Date(
                     inReDoc.docs[0].data().date.seconds * 1000
                   ).getTime()) /
                 (1000 * 3600 * 24);
+              let daysCountInitial = daysCountNode1 - 31;
 
-              if (inReDoc.docs[0].data().installmentType === "Monthly") {
-                if (30 - daysCountInitial >= 0) {
-                  setDelayedDays(0);
-                } else {
-                  setDelayedDays(daysCountInitial - 31);
-                  if (daysCountInitial / 31 > 0) {
-                    setAllInstallment((daysCountInitial - 7) / 31);
-                  }
-
-                  setDelayedCharges(
-                    daysCountInitial - 31 <= 7
-                      ? 0
-                      : (daysCountInitial - 31) / 7 < 2
-                      ? 99
-                      : (daysCountInitial - 31) / 7 > 2 &&
-                        (daysCountInitial - 31) / 7 < 3
-                      ? 198
-                      : (daysCountInitial - 31) / 7 > 3 &&
-                        (daysCountInitial - 31) / 7 < 4
-                      ? 297
-                      : (daysCountInitial - 31) / 7 > 4 &&
-                        (daysCountInitial - 31) / 7 < 5
-                      ? 396
-                      : (daysCountInitial - 31) / 7 > 5 &&
-                        (daysCountInitial - 31) / 7 < 6
-                      ? 495
-                      : (daysCountInitial - 31) / 7 > 6 &&
-                        (daysCountInitial - 31) / 7 < 7
-                      ? 594
-                      : (daysCountInitial - 31) / 7 > 7 &&
-                        (daysCountInitial - 31) / 7 < 8
-                      ? 693
-                      : 693
-                  );
-                }
-              } else {
+              if (inReDoc.docs[0].data().selectedType === "shop") {
                 if (7 - daysCountInitial >= 0) {
                   setDelayedDays(0);
                 } else {
                   setDelayedDays(daysCountInitial - 7);
                   if (daysCountInitial / 7 > 0) {
-                    setAllInstallment(Math.round((daysCountInitial - 7) / 7));
+                    setAllInstallment((daysCountInitial - 7) / 7);
                   }
+
                   setDelayedCharges(
                     daysCountInitial - 7 <= 7
                       ? 0
@@ -149,51 +134,58 @@ export default function Arreas_update({ invoice_no, nic, close }) {
                       : 693
                   );
                 }
+              } else {
+                if (14 - daysCountInitial >= 0) {
+                  setDelayedDays(0);
+                } else {
+                  setDelayedDays(daysCountInitial - 14);
+                  if (daysCountInitial / 7 > 0) {
+                    setAllInstallment(Math.round((daysCountInitial - 14) / 7));
+                  }
+                  setDelayedCharges(
+                    daysCountInitial - 14 <= 7
+                      ? 0
+                      : (daysCountInitial - 14) / 7 < 2
+                      ? 99
+                      : (daysCountInitial - 14) / 7 > 2 &&
+                        (daysCountInitial - 14) / 7 < 3
+                      ? 198
+                      : (daysCountInitial - 14) / 7 > 3 &&
+                        (daysCountInitial - 14) / 7 < 4
+                      ? 297
+                      : (daysCountInitial - 14) / 7 > 4 &&
+                        (daysCountInitial - 14) / 7 < 5
+                      ? 396
+                      : (daysCountInitial - 14) / 7 > 5 &&
+                        (daysCountInitial - 14) / 7 < 6
+                      ? 495
+                      : (daysCountInitial - 14) / 7 > 6 &&
+                        (daysCountInitial - 14) / 7 < 7
+                      ? 594
+                      : (daysCountInitial - 14) / 7 > 7 &&
+                        (daysCountInitial - 14) / 7 < 8
+                      ? 693
+                      : 693
+                  );
+                }
               }
             } else {
-              let daysCount =
+              let daysCountNode2 =
                 (new Date().getTime() -
                   new Date(
                     instReDoc.docs[instReDoc.docs.length - 1].data()?.date
                       ?.seconds * 1000
                   ).getTime()) /
                 (1000 * 3600 * 24);
+              let daysCount = daysCountNode2 - 31;
 
-              if (inReDoc.docs[0].data().installmentType === "Monthly") {
-                if (30 - daysCount >= 0) {
-                  setDelayedDays(0);
-                } else {
-                  setDelayedDays(daysCount - 31);
-                  if (daysCount / 31 > 0) {
-                    setAllInstallment((daysCount - 7) / 31);
-                  }
-                  setDelayedCharges(
-                    daysCount - 31 <= 7
-                      ? 0
-                      : (daysCount - 31) / 7 < 2
-                      ? 99
-                      : (daysCount - 31) / 7 > 2 && (daysCount - 31) / 7 < 3
-                      ? 198
-                      : (daysCount - 31) / 7 > 3 && (daysCount - 31) / 7 < 4
-                      ? 297
-                      : (daysCount - 31) / 7 > 4 && (daysCount - 31) / 7 < 5
-                      ? 396
-                      : (daysCount - 31) / 7 > 5 && (daysCount - 31) / 7 < 6
-                      ? 495
-                      : (daysCount - 31) / 7 > 6 && (daysCount - 31) / 7 < 7
-                      ? 594
-                      : (daysCount - 31) / 7 > 7 && (daysCount - 31) / 7 < 8
-                      ? 693
-                      : 693
-                  );
-                }
-              } else {
+              if (inReDoc.docs[0].data().selectedType === "shop") {
                 if (7 - daysCount >= 0) {
                   setDelayedDays(0);
                 } else {
                   setDelayedDays(daysCount - 7);
                   if (daysCount / 7 > 0) {
-                    setAllInstallment(Math.round((daysCount - 7) / 7));
+                    setAllInstallment((daysCount - 7) / 7);
                   }
                   setDelayedCharges(
                     daysCount - 7 <= 7
@@ -215,6 +207,34 @@ export default function Arreas_update({ invoice_no, nic, close }) {
                       : 693
                   );
                 }
+              } else {
+                if (14 - daysCount >= 0) {
+                  setDelayedDays(0);
+                } else {
+                  setDelayedDays(daysCount - 14);
+                  if (daysCount / 7 > 0) {
+                    setAllInstallment(Math.round((daysCount - 14) / 7));
+                  }
+                  setDelayedCharges(
+                    daysCount - 14 <= 7
+                      ? 0
+                      : (daysCount - 14) / 7 < 2
+                      ? 99
+                      : (daysCount - 14) / 7 > 2 && (daysCount - 14) / 7 < 3
+                      ? 198
+                      : (daysCount - 14) / 7 > 3 && (daysCount - 14) / 7 < 4
+                      ? 297
+                      : (daysCount - 14) / 7 > 4 && (daysCount - 14) / 7 < 5
+                      ? 396
+                      : (daysCount - 14) / 7 > 5 && (daysCount - 14) / 7 < 6
+                      ? 495
+                      : (daysCount - 14) / 7 > 6 && (daysCount - 14) / 7 < 7
+                      ? 594
+                      : (daysCount - 14) / 7 > 7 && (daysCount - 14) / 7 < 8
+                      ? 693
+                      : 693
+                  );
+                }
               }
             }
           });
@@ -224,35 +244,77 @@ export default function Arreas_update({ invoice_no, nic, close }) {
   }, [invoice_no]);
 
   const updateInstallment = async () => {
-    var j = 0;
-    let plussForLoop = allInstallment + Math.round(updatingInstallmentCount);
-
-    for (var i = 1; i <= plussForLoop; i++) {
-      await db
-        .collection("installment")
-        .where("invoice_number", "==", invoice_no)
-        .get()
-        // eslint-disable-next-line
-        .then(async (reInst) => {
-          await db.collection("installment").add({
-            invoice_number: invoice_no,
-            amount: Math.round(instAmountProp),
-            delayed:
-              delayedCharges === ""
-                ? 0
-                : j === 0
-                ? Math.round(delayedCharges)
-                : 0,
-            balance:
-              Math.round(instAmountProp) *
-              (Math.round(instCount) - (reInst.docs.length + 1)),
-            date: firebase.firestore.FieldValue.serverTimestamp(),
-          });
+    await db
+      .collection("installment")
+      .where("invoice_number", "==", invoice_no)
+      .get()
+      // eslint-disable-next-line
+      .then(async (reInst) => {
+        let tot = parseInt(installmentAmount) + parseInt(gamisaraniamount);
+        await db.collection("installment").add({
+          invoice_number: invoice_no,
+          serialNo: serialNo,
+          amount: parseInt(installmentAmount) + parseInt(gamisaraniamount),
+          delayed: delayedCharges === "" ? 0 : parseInt(delayedCharges),
+          isExpired: isEx,
+          balance: balance - tot <= 0 ? 0 : balance - tot,
+          gamisarani_amount: parseInt(gamisaraniamount),
+          date: updateTimestamp,
         });
-      j++;
+      });
+
+    await db
+      .collection("invoice")
+      .where("invoice_number", "==", invoice_no)
+      .get()
+      .then(async (reBalance) => {
+        let totot = parseInt(installmentAmount) + parseInt(gamisaraniamount);
+        await db
+          .collection("invoice")
+          .doc(reBalance.docs[0].id)
+          .update({
+            balance:
+              reBalance.docs[0].data().balance - totot <= 0
+                ? 0
+                : reBalance.docs[0].data().balance - totot,
+          });
+      });
+
+    if (gamisarani && parseInt(gamisaraniamount) > 0) {
+      db.collection("gami_sarani")
+        .doc(gamisaraniId)
+        .get()
+        .then((getRe) => {
+          db.collection("gami_sarani")
+            .doc(gamisaraniId)
+            .update({
+              currentDeposit:
+                parseInt(getRe.data().currentDeposit) -
+                  parseInt(gamisaraniamount) <
+                0
+                  ? 0
+                  : parseInt(getRe.data().currentDeposit) -
+                    parseInt(gamisaraniamount),
+            })
+            .then((re) => {
+              db.collection("gami_sarani_withdrawhistory").add({
+                gami_nic: gamisaraniNic,
+                docId: gamisaraniId,
+                withdraw: parseInt(gamisaraniamount),
+                balance:
+                  parseInt(getRe.data().currentDeposit) -
+                  parseInt(gamisaraniamount),
+                date: updateTimestamp,
+              });
+            });
+        });
     }
 
-    if (allInstallment > 0) {
+    if (
+      parseInt(balance) -
+        (parseInt(installmentAmount) + parseInt(gamisaraniamount)) >
+      0
+    ) {
       await db
         .collection("arrears")
         .where("invoice_number", "==", invoice_no)
@@ -264,10 +326,11 @@ export default function Arreas_update({ invoice_no, nic, close }) {
         });
     }
 
-    let allPlus =
-      Math.round(updatingInstallmentCount) + installments + allInstallment;
-
-    if (instCount - allPlus <= 0) {
+    if (
+      parseInt(balance) -
+        (parseInt(installmentAmount) + parseInt(gamisaraniamount)) <=
+      0
+    ) {
       await db
         .collection("invoice")
         .where("invoice_number", "==", invoice_no)
@@ -281,67 +344,77 @@ export default function Arreas_update({ invoice_no, nic, close }) {
   };
 
   const showConfirm = async () => {
-    confirm({
-      title: "Do you Want to Print a Recipt?",
-      icon: <ExclamationCircleOutlined />,
+    if (updateTimestamp === null) {
+      setValidationDate("Please select the date of installment!");
+    } else {
+      confirm({
+        title: "Do you Want to Print a Recipt?",
+        icon: <ExclamationCircleOutlined />,
 
-      async onOk() {
-        await updateInstallment();
+        async onOk() {
+          await updateInstallment();
+          let toto = parseInt(installmentAmount) + parseInt(gamisaraniamount);
+          let passingWithCustomerObj = {
+            invoice_number: invoice_no,
+            serialNo: serialNo,
+            customerDetails: customer,
+            total: totalPlusRed(),
+            balance: balance - toto <= 0 ? 0 : balance - toto,
+            gamisarani_amount: parseInt(gamisaraniamount),
+            date: updateTimestamp,
+            delayedCharges: Math.round(delayedCharges),
+          };
 
-        let passingWithCustomerObj = {
-          invoice_number: invoice_no,
-          customerDetails: customer,
-          total: totalPlusRed(),
-
-          delayedCharges: Math.round(delayedCharges),
-        };
-
-        let moveWith = {
-          pathname:
-            "/assistant/invoice_history/payAndGo/updateModel/PrintReceipt",
-          search: "?query=abc",
-          state: { detail: passingWithCustomerObj },
-        };
-        history.push(moveWith);
-      },
-      async onCancel() {
-        await updateInstallment();
-        close();
-        window.location.reload();
-      },
-    });
+          let moveWith = {
+            pathname:
+              "/assistant/invoice_history/payAndGo/updateModel/PrintReceipt",
+            search: "?query=abc",
+            state: { detail: passingWithCustomerObj },
+          };
+          history.push(moveWith);
+        },
+        async onCancel() {
+          await updateInstallment();
+          closeModal();
+          window.location.reload();
+        },
+      });
+    }
   };
 
   const dueInstallmentsCount = () => {
-    let allPlusss = Math.round(updatingInstallmentCount) + installments;
-    let againallPlusss = allPlusss + Math.round(allInstallment);
-    let rest = instCount - againallPlusss;
+    let allPlusss = 1 + installments;
+    //let againallPlusss = allPlusss + Math.round(allInstallment);
+    let rest = instCount - allPlusss;
     return rest < 0 ? 0 : rest;
   };
 
   const totalPlusRed = () => {
-    let allPlusss = Math.round(updatingInstallmentCount);
-    let countAllPrevInstallments =
-      (allInstallment < 0 || allInstallment) < 1
-        ? 0
-        : (allInstallment < 1 || allInstallment) < 2
-        ? 1
-        : (allInstallment < 2 || allInstallment) < 3
-        ? 2
-        : allInstallment;
-
-    let againPreve =
-      countAllPrevInstallments <= instCount
-        ? countAllPrevInstallments
-        : instCount;
-
-    let agianSo = countAllPrevInstallments >= instCount ? 0 : allPlusss;
-
-    let againallPlusss = agianSo + againPreve;
-    let rest = instAmountProp * againallPlusss;
     let totFinalRe = delayedCharges >= 693 ? 693 : delayedCharges;
-    let finalTot = rest + totFinalRe;
+
+    let finalTot =
+      balance <= installmentAmount + gamisaraniamount
+        ? balance + totFinalRe
+        : installmentAmount + gamisaraniamount + totFinalRe;
     return finalTot;
+  };
+
+  const getCurrentBalanceFromGami = () => {
+    setLoadingNicSubmit(true);
+    db.collection("gami_sarani")
+      .where("nic", "==", gamisaraniNic)
+      .get()
+      .then((reGami) => {
+        if (reGami.docs.length > 0) {
+          setGamisaraniId(reGami.docs[0].id);
+          setGamisaraniInitialAmount(reGami.docs[0].data().currentDeposit);
+          setGamisaraniamount(reGami.docs[0].data().currentDeposit);
+          setLoadingNicSubmit(false);
+        } else {
+          setLoadingNicSubmit(false);
+          setValidation("Any gamisarani customer not found from this NIC!");
+        }
+      });
   };
 
   return (
@@ -358,97 +431,138 @@ export default function Arreas_update({ invoice_no, nic, close }) {
         <div className="paper">
           <form className="form" noValidate>
             <Grid container spacing={2}>
-              <Grid className="lbl_topi" item xs={12} sm={4}>
-                Invoice No
+              <Grid className="lbl_topi-gami" item xs={12} sm={12}>
+                -Gamisarani Customers-
+                <br />
+                <hr />
               </Grid>
+              <Grid className="lbl_topi" item xs={12} sm={4}>
+                Gamisarani
+              </Grid>
+
               <Grid item xs={12} sm={2}>
                 :
               </Grid>
               <Grid item xs={12} sm={6}>
-                <p>{invoice_no}</p>
+                <Checkbox
+                  checked={gamisarani}
+                  onChange={(e) => {
+                    if (gamisarani) {
+                      setGamisarani(false);
+                      setGamisaraniId("");
+                      setGamisaraniInitialAmount(0);
+                      setGamisaraniamount(0);
+                      setGamisaraniNic("");
+                    } else {
+                      setGamisarani(true);
+                    }
+                  }}
+                />
+              </Grid>
+              <Grid className="lbl_topi" item xs={12} sm={4}>
+                NIC
+              </Grid>
+              <Grid item xs={12} sm={2}>
+                :
+              </Grid>
+              <Grid className="nIc" item xs={12} sm={4}>
+                <TextField
+                  className="nic_"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  label="NIC"
+                  name="nic"
+                  autoComplete="nic"
+                  size="small"
+                  disabled={!gamisarani ? true : false}
+                  value={gamisaraniNic}
+                  onChange={(e) => {
+                    setGamisaraniNic(e.target.value.trim());
+                  }}
+                />
               </Grid>
 
+              <Grid item xs={12} sm={2}>
+                <Button
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  disabled={
+                    !gamisarani ||
+                    loadingNicsubmit ||
+                    gamisaraniNic.length === 0
+                      ? true
+                      : false
+                  }
+                  onClick={getCurrentBalanceFromGami}
+                >
+                  {loadingNicsubmit ? <Spin size="large" /> : "Fetch"}
+                </Button>
+              </Grid>
+              <Grid className="lbl_topi" item xs={12} sm={4}>
+                Amount
+              </Grid>
+              <Grid item xs={12} sm={2}>
+                :
+              </Grid>
+              <Grid className="amouNt" item xs={12} sm={5}>
+                <TextField
+                  className="amouNT"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  label="Amount"
+                  name="amount"
+                  autoComplete="amount"
+                  size="small"
+                  type="number"
+                  disabled={
+                    !gamisarani || gamisaraniInitialAmount === 0 ? true : false
+                  }
+                  InputProps={{ inputProps: { min: 0 } }}
+                  value={gamisaraniamount}
+                  onChange={(e) => {
+                    if (
+                      gamisaraniInitialAmount >= parseInt(e.target.value.trim())
+                    ) {
+                      setGamisaraniamount(parseInt(e.target.value.trim()));
+                    }
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12} sm={1}></Grid>
+              <Grid item xs={12} sm={12}>
+                <p className="validate_updateEmployee">{validation}</p>
+                <hr />
+              </Grid>
               <Grid className="lbl_topi" item xs={12} sm={4}>
                 Amount of Installment(LKR)
               </Grid>
               <Grid item xs={12} sm={2}>
                 :
               </Grid>
+
               <Grid item xs={12} sm={6}>
-                <CurrencyFormat
-                  value={Math.round(instAmountProp)}
-                  displayType={"text"}
-                  thousandSeparator={true}
-                  prefix={" "}
-                />
-              </Grid>
-
-              {delayedDays > 7 ? (
-                <Grid className="lbl_topi_radio" item xs={12} sm={4}>
-                  Current Installment
-                </Grid>
-              ) : (
-                <Grid className="lbl_topi_radio_not" item xs={12} sm={4}></Grid>
-              )}
-              {delayedDays > 7 ? (
-                <Grid className="lbl_topi_radio" item xs={12} sm={2}>
-                  :
-                </Grid>
-              ) : (
-                <Grid className="lbl_topi_radio_not" item xs={12} sm={2}></Grid>
-              )}
-              {delayedDays > 7 ? (
-                <Grid className="invoHisty_radio" item xs={12} sm={6}>
-                  <Radio.Group
-                    value={currentStatus}
-                    onChange={(e) => {
-                      if (e.target.value === "b") {
-                        setUpdatingInstallmentCount(0);
-                        setCurrentStatus("b");
-                      } else {
-                        setUpdatingInstallmentCount(1);
-                        setCurrentStatus("a");
-                      }
-                    }}
-                    defaultValue="a"
-                    buttonStyle="solid"
-                  >
-                    <Radio.Button value="a">Include</Radio.Button>
-                    <Radio.Button value="b">Not Include</Radio.Button>
-                  </Radio.Group>
-                </Grid>
-              ) : (
-                <Grid className="lbl_topi_radio_not" item xs={12} sm={4}></Grid>
-              )}
-
-              <Grid className="lbl_topi" item xs={12} sm={4}>
-                Updating Installment Count
-              </Grid>
-              <Grid item xs={12} sm={2}>
-                :
-              </Grid>
-              <Grid item xs={12} sm={3}>
                 <TextField
                   type="number"
-                  InputProps={{ inputProps: { min: 1 } }}
+                  autoComplete="delayed"
                   variant="outlined"
                   required
                   fullWidth
-                  disabled={currentStatus === "a" ? false : true}
-                  label="Count"
+                  label="Installment Amount"
                   size="small"
-                  value={updatingInstallmentCount}
+                  value={installmentAmount}
+                  InputProps={{ inputProps: { min: 0 } }}
                   onChange={(e) => {
-                    if (
-                      instCount - (allInstallment + installments) >=
-                      e.target.value
-                    ) {
-                      setUpdatingInstallmentCount(e.target.value);
+                    if (balance >= parseInt(e.target.value.trim())) {
+                      setInstallmentAmount(parseInt(e.target.value));
                     }
                   }}
                 />
               </Grid>
-              <Grid item xs={12} sm={3}></Grid>
+
+              {/* <Grid item xs={12} sm={3}></Grid> */}
               <Grid className="lbl_topi" item xs={12} sm={4}>
                 Due Installment Count
               </Grid>
@@ -460,7 +574,7 @@ export default function Arreas_update({ invoice_no, nic, close }) {
               </Grid>
 
               <Grid className="lbl_topi" item xs={12} sm={4}>
-                Paid Amount(LKR)
+                Balance(LKR)
               </Grid>
               <Grid item xs={12} sm={2}>
                 :
@@ -468,8 +582,11 @@ export default function Arreas_update({ invoice_no, nic, close }) {
               <Grid item xs={12} sm={6}>
                 <CurrencyFormat
                   value={
-                    Math.round(instAmountProp) *
-                    Math.round(Math.round(installments))
+                    gamisaraniamount + installmentAmount === 0
+                      ? intialBalance
+                      : balance - (gamisaraniamount + installmentAmount) <= 0
+                      ? 0
+                      : balance - (gamisaraniamount + installmentAmount)
                   }
                   displayType={"text"}
                   thousandSeparator={true}
@@ -484,12 +601,16 @@ export default function Arreas_update({ invoice_no, nic, close }) {
                 :
               </Grid>
               <Grid item xs={12} sm={6}>
-                <p>
-                  {" "}
-                  {moment(
-                    firebase.firestore.FieldValue.serverTimestamp()
-                  ).format("dddd, MMMM Do YYYY, h:mm:ss a")}
-                </p>
+                <DatePicker
+                  onChange={(e) => {
+                    setTimestamp(
+                      firebase.firestore.Timestamp.fromDate(e.toDate())
+                    );
+                    console.log(
+                      firebase.firestore.Timestamp.fromDate(e.toDate())
+                    );
+                  }}
+                />
               </Grid>
 
               <Grid className="lbl_topi" item xs={12} sm={4}>
@@ -568,35 +689,18 @@ export default function Arreas_update({ invoice_no, nic, close }) {
                   }}
                 >
                   (
-                  {delayedDays > 0
-                    ? "  " +
-                      Math.round(instAmountProp) +
-                      " X (" +
-                      (allInstallment < 0 || allInstallment < 1
-                        ? 0
-                        : allInstallment < 1 || allInstallment < 2
-                        ? 1
-                        : allInstallment < 2 || allInstallment < 3
-                        ? 2
-                        : allInstallment) +
-                      " + " +
-                      (dueInstallmentsCount() > 0
-                        ? updatingInstallmentCount
-                        : 0) +
-                      ") + " +
-                      Math.round(delayedCharges) +
-                      " "
-                    : "  " +
-                      Math.round(instAmountProp) +
-                      " X " +
-                      (updatingInstallmentCount +
-                        " + " +
-                        Math.round(delayedCharges)) +
-                      " "}
+                  {"  " +
+                    Math.round(instAmountProp) +
+                    " + " +
+                    gamisaraniamount +
+                    " + " +
+                    Math.round(delayedCharges) +
+                    " "}
                   )
                 </div>
               </Grid>
             </Grid>
+            <p className="validate_updateEmployee">{validationDate}</p>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={9}></Grid>
               <Grid item xs={12} sm={3}>

@@ -21,7 +21,6 @@ import HistoryIcon from "@material-ui/icons/History";
 import { useHistory } from "react-router-dom";
 
 export default function Areas() {
-
   const [isLoading, setIsLoading] = useState(true);
   const [currentIndx, setCurrentIndx] = useState(0);
   const [arreasUpdate, setArreasUpdate] = useState(false); //  table models
@@ -133,7 +132,6 @@ export default function Areas() {
   ];
 
   useEffect(() => {
-
     window.addEventListener("offline", function (e) {
       history.push("/assistant/connection/error/lost_connection");
     });
@@ -208,8 +206,19 @@ export default function Areas() {
               <UpdateArreas
                 key={arreasAllData[currentIndx]?.id}
                 invoice_no={arreasAllData[currentIndx]?.data?.invoice_number}
-                nic={arreasAllData[currentIndx]?.data?.nic}
-                close={cancelModalArreasUpdate}
+                customer_id={arreasAllData[currentIndx]?.data?.customer_id}
+                instAmountProp={
+                  arreasAllData[currentIndx]?.data?.amountPerInstallment
+                }
+                balanceProp={arreasAllData[currentIndx]?.data?.balance}
+                instCount={arreasAllData[currentIndx]?.data?.noOfInstallment}
+                isEx={
+                  arreasAllData[currentIndx]?.data?.status_of_payandgo ===
+                  "expired"
+                    ? true
+                    : false
+                }
+                closeModal={cancelModalArreasUpdate}
               />
             </div>
           </div>
@@ -256,7 +265,7 @@ export default function Areas() {
                 };
               },
               selectableRows: false,
-              customToolbarSelect: () => { },
+              customToolbarSelect: () => {},
               filterType: "textfield",
               download: false,
               print: false,
@@ -271,8 +280,8 @@ export default function Areas() {
                   noMatch: isLoading ? (
                     <Spin className="tblSpinner" size="large" spinning="true" />
                   ) : (
-                      ""
-                    ),
+                    ""
+                  ),
                 },
               },
             }}

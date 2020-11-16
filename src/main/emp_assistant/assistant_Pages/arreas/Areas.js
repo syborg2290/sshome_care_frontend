@@ -187,7 +187,9 @@ export default function Areas() {
     });
 
     setIsLoading(false);
-  }, []);
+  },
+  // eslint-disable-next-line
+    []);
 
   return (
     <div>

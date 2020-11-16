@@ -32,10 +32,15 @@ export default function Arreas_update({ invoice_no, nic, close }) {
   const [isLoading, setIsLoading] = useState(true);
 
   const { confirm } = Modal;
-
+  let history2 = useHistory();
   let history = useHistory();
 
   useEffect(() => {
+
+       window.addEventListener("offline", function (e) {
+      history2.push("/assistant/connection/error/lost_connection");
+    });
+
     db.collection("customer")
       .where("nic", "==", nic)
       .get()

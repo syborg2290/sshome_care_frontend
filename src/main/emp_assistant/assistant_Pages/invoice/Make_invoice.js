@@ -73,11 +73,10 @@ function Make_invoice() {
   };
 
   useEffect(() => {
-    
-     window.addEventListener("offline", function (e) {
+    window.addEventListener("offline", function (e) {
       history2.push("/assistant/connection/error/lost_connection");
-     });
-    
+    });
+
     window.addEventListener(
       "popstate",
       (event) => {
@@ -1768,9 +1767,15 @@ function Make_invoice() {
                       <Space direction="vertical">
                         <DatePicker
                           onChange={(e) => {
-                            setInititialTimestamp(
-                              firebase.firestore.Timestamp.fromDate(e.toDate())
-                            );
+                            if (e !== null) {
+                              setInititialTimestamp(
+                                firebase.firestore.Timestamp.fromDate(
+                                  e.toDate()
+                                )
+                              );
+                            } else {
+                              setInititialTimestamp(null);
+                            }
                           }}
                         />
 
@@ -1784,11 +1789,15 @@ function Make_invoice() {
                         >
                           <DatePicker
                             onChange={(e) => {
-                              setDeadlineTimestamp(
-                                firebase.firestore.Timestamp.fromDate(
-                                  e.toDate()
-                                )
-                              );
+                              if (e !== null) {
+                                setDeadlineTimestamp(
+                                  firebase.firestore.Timestamp.fromDate(
+                                    e.toDate()
+                                  )
+                                );
+                              } else {
+                                setDeadlineTimestamp(null);
+                              }
                             }}
                           />
                         </div>

@@ -149,9 +149,13 @@ export default function Deposit_Model({ midProp, nicProp, close_model }) {
               <Space direction="vertical">
                 <DatePicker
                   onChange={(e) => {
-                    setTimestamp(
-                      firebase.firestore.Timestamp.fromDate(e.toDate())
-                    );
+                    if (e !== null) {
+                      setTimestamp(
+                        firebase.firestore.Timestamp.fromDate(e.toDate())
+                      );
+                    } else {
+                      setTimestamp(null);
+                    }
                   }}
                 />
               </Space>

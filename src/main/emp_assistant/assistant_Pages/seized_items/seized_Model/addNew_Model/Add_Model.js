@@ -44,7 +44,6 @@ export default function Add_Model({ closeModel }) {
   let history = useHistory();
 
   useEffect(() => {
-
     window.addEventListener("offline", function (e) {
       history.push("/assistant/connection/error/lost_connection");
     });
@@ -171,7 +170,10 @@ export default function Add_Model({ closeModel }) {
                 className="btn_add"
                 onClick={addSeized}
                 disabled={
-                  loading || serial.length === 0 || date.length === 0
+                  loading ||
+                  serial.length === 0 ||
+                  date.length === 0 ||
+                  date === null
                     ? true
                     : false
                 }

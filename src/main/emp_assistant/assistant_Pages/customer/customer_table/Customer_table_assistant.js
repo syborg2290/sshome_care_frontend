@@ -153,6 +153,7 @@ export default function ItemTable() {
         setCustomerAllData(rawAllData);
         setIsLoading(false);
       });
+    // eslint-disable-next-line
   }, []);
 
   return (

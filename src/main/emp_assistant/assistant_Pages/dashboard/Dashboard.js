@@ -30,17 +30,9 @@ export default function Dashboard() {
 
   useEffect(() => {
    
-    window.addEventListener("offline", function (e) {
-      // let moveWith = {
-      //   pathname: "/assistant/invoice/printInvoice",
-      //   search: "?query=abc",
-      //   state: { detail: {} },
-      // };
-      // history.push(moveWith);
+    window.addEventListener("offline", function (e) {  
+      history.push("/assistant/connection/error/lost_connection");
     });
-
-   
-    window.addEventListener("online", function (e) {});
 
     db.collection("invoice")
       .where("status_of_payandgo", "==", "onGoing")

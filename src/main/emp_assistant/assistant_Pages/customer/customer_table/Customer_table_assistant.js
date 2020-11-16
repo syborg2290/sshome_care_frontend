@@ -29,7 +29,7 @@ export default function ItemTable() {
   const [customerTableData, setCustomerTableData] = useState([]);
   const [customerAllData, setCustomerAllData] = useState([]);
 
-  let history = useHistory();
+  let history2 = useHistory();
 
   const showModal = () => {
     setVisible(true);
@@ -109,7 +109,7 @@ export default function ItemTable() {
   useEffect(() => {
 
     window.addEventListener("offline", function (e) {
-      history.push("/assistant/connection/error/lost_connection");
+      history2.push("/assistant/connection/error/lost_connection");
     });
 
     db.collection("customer")

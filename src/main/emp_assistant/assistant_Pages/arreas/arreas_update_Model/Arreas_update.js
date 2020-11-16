@@ -18,9 +18,9 @@ import { Modal } from "antd";
 // styles
 import "./Arreas_update.css";
 
-// function isDateBeforeNextDate(date) {
-//   return new Date(date.toDateString()) > new Date(new Date().toDateString());
-// }
+function isDateBeforeNextDate(date) {
+  return new Date(date.toDateString()) > new Date(new Date().toDateString());
+}
 
 export default function Arreas_update({
   invoice_no,
@@ -58,31 +58,30 @@ export default function Arreas_update({
 
   const { confirm } = Modal;
   let history = useHistory();
-  let history2 = useHistory();
 
   useEffect(() => {
     window.addEventListener("offline", function (e) {
-      history2.push("/connection_lost");
+      history.push("/connection_lost");
     });
 
-    // db.collection("invoice")
-    //   .where("invoice_number", "==", invoice_no)
-    //   .get()
-    //   .then(async (reInvoice) => {
-    //     var isBeforeNe = isDateBeforeNextDate(
-    //       new Date(reInvoice.docs[0].data()?.nextDate)
-    //     );
-    //     if (isBeforeNe) {
-    //       await db
-    //         .collection("invoice")
-    //         .doc(reInvoice.docs[0].id)
-    //         .update({
-    //           nextDate: new Date(reInvoice.docs[0].data()?.nextDate).setDate(
-    //             new Date(reInvoice.docs[0].data()?.nextDate).getDate() + 31
-    //           ),
-    //         });
-    //     }
-    //   });
+    db.collection("invoice")
+      .where("invoice_number", "==", invoice_no)
+      .get()
+      .then(async (reInvoice) => {
+        var isBeforeNe = isDateBeforeNextDate(
+          new Date(reInvoice.docs[0].data()?.nextDate)
+        );
+        if (isBeforeNe) {
+          await db
+            .collection("invoice")
+            .doc(reInvoice.docs[0].id)
+            .update({
+              nextDate: new Date(reInvoice.docs[0].data()?.nextDate).setDate(
+                new Date(reInvoice.docs[0].data()?.nextDate).getDate() + 31
+              ),
+            });
+        }
+      });
 
     db.collection("customer")
       .doc(customer_id)
@@ -373,7 +372,7 @@ export default function Arreas_update({
         icon: <ExclamationCircleOutlined />,
 
         async onOk() {
-          await updateInstallment();
+          // await updateInstallment().then((_) => {
           let toto = parseInt(installmentAmount) + parseInt(gamisaraniamount);
           let passingWithCustomerObj = {
             invoice_number: invoice_no,
@@ -392,12 +391,14 @@ export default function Arreas_update({
             state: { detail: passingWithCustomerObj },
           };
           history.push(moveWith);
+          // });
+
         },
         async onCancel() {
-          await updateInstallment().then((_) => {
-            // closeModal();
-            window.location.reload();
-          });
+          // await updateInstallment().then((_) => {
+          // closeModal();
+          window.location.reload();
+          // });
         },
       });
     }

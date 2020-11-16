@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import MUIDataTable from "mui-datatables";
-import { Grid, Button } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import { Spin, Modal } from "antd";
 // eslint-disable-next-line
 import CurrencyFormat from "react-currency-format";
@@ -10,7 +10,7 @@ import db from "../../../../config/firebase.js";
 import firebase from "firebase";
 
 // components
-import UpdateArreas from "../arreas/arreas_update_Model/Arreas_update";
+
 import ArreasHistory from "../arreas/arreas_history_Model/Arreas_History";
 
 //styles
@@ -24,7 +24,7 @@ import { useHistory } from "react-router-dom";
 export default function Areas() {
   const [isLoading, setIsLoading] = useState(true);
   const [currentIndx, setCurrentIndx] = useState(0);
-  const [arreasUpdate, setArreasUpdate] = useState(false); //  table models
+
   const [arresHistory, setArresHistory] = useState(false); //  table models
   const [arreasTableData, setArreasTableData] = useState([]);
   // eslint-disable-next-line
@@ -32,13 +32,7 @@ export default function Areas() {
 
   let history = useHistory();
 
-  const showModalArreasUpdate = () => {
-    setArreasUpdate(true);
-  };
-
-  const cancelModalArreasUpdate = () => {
-    setArreasUpdate(false);
-  };
+ 
 
   const showModalArresHistory = () => {
     setArresHistory(true);
@@ -114,7 +108,7 @@ export default function Areas() {
       },
     },
 
-    {
+       {
       name: "Action",
 
       options: {
@@ -130,6 +124,8 @@ export default function Areas() {
         }),
       },
     },
+
+  
   ];
 
   useEffect(() => {
@@ -173,20 +169,11 @@ export default function Areas() {
             "dddd, MMMM Do YYYY"
           ),
           Action: (
-            <div>
-              <Button
-                variant="contained"
-                color="primary"
-                size="small"
-                className="btnpay"
-                onClick={showModalArreasUpdate}
-              >
-                Update
-              </Button>
-              <span className="icon_hist">
+           
+            
+              
                 <HistoryIcon onClick={showModalArresHistory} />
-              </span>
-            </div>
+            
           ),
         });
       });
@@ -557,42 +544,7 @@ export default function Areas() {
 
   return (
     <div>
-      {/*Start Arreas Model Update */}
-
-      <Modal
-        visible={arreasUpdate}
-        className="arreas_update_Model"
-        footer={null}
-        onCancel={() => {
-          setArreasUpdate(false);
-        }}
-      >
-        <div className="arreas_Model">
-          <div className="arreas_update_Model_Main">
-            <div className="arreas_update_Modell_Detail">
-              <UpdateArreas
-                key={arreasAllData[currentIndx]?.id}
-                invoice_no={arreasAllData[currentIndx]?.data?.invoice_number}
-                customer_id={arreasAllData[currentIndx]?.data?.customer_id}
-                instAmountProp={
-                  arreasAllData[currentIndx]?.data?.amountPerInstallment
-                }
-                balanceProp={arreasAllData[currentIndx]?.data?.balance}
-                instCount={arreasAllData[currentIndx]?.data?.noOfInstallment}
-                isEx={
-                  arreasAllData[currentIndx]?.data?.status_of_payandgo ===
-                  "expired"
-                    ? true
-                    : false
-                }
-                closeModal={cancelModalArreasUpdate}
-              />
-            </div>
-          </div>
-        </div>
-      </Modal>
-
-      {/*END Arreas Model Update */}
+    
 
       {/*Start Arreas Model History */}
 

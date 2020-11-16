@@ -141,7 +141,7 @@ function Make_invoice() {
       subTotalValue =
         subTotalValue +
         (itemDP[tablerows[a].i] - itemDiscount[tablerows[a].i]) *
-        itemQty[tablerows[a].i];
+          itemQty[tablerows[a].i];
     }
     let gamiam = gamisaraniamount === "" ? 0 : parseInt(gamisaraniamount);
     let fTotoS = subTotalValue - gamiam <= 0 ? 0 : subTotalValue - gamiam;
@@ -501,7 +501,7 @@ function Make_invoice() {
                           intialTimestamp?.seconds * 1000
                         ).setDate(
                           new Date(intialTimestamp?.seconds * 1000).getDate() +
-                          31
+                            31
                         ),
                       })
                       .then((invDoc) => {
@@ -682,7 +682,7 @@ function Make_invoice() {
                           intialTimestamp?.seconds * 1000
                         ).setDate(
                           new Date(intialTimestamp?.seconds * 1000).getDate() +
-                          31
+                            31
                         ),
                       })
                       .then((invDoc) => {
@@ -857,11 +857,8 @@ function Make_invoice() {
                       (totalDiscount === "" ? 0 : totalDiscount),
                     status_of_payandgo: "onGoing",
                     date: intialTimestamp,
-                    nextDate: new Date(
-                      intialTimestamp?.seconds * 1000
-                    ).setDate(
-                      new Date(intialTimestamp?.seconds * 1000).getDate() +
-                      31
+                    nextDate: new Date(intialTimestamp?.seconds * 1000).setDate(
+                      new Date(intialTimestamp?.seconds * 1000).getDate() + 31
                     ),
                   })
                   .then((invDoc) => {
@@ -1032,11 +1029,8 @@ function Make_invoice() {
                       (totalDiscount === "" ? 0 : totalDiscount),
                     status_of_payandgo: "onGoing",
                     date: intialTimestamp,
-                    nextDate: new Date(
-                      intialTimestamp?.seconds * 1000
-                    ).setDate(
-                      new Date(intialTimestamp?.seconds * 1000).getDate() +
-                      31
+                    nextDate: new Date(intialTimestamp?.seconds * 1000).setDate(
+                      new Date(intialTimestamp?.seconds * 1000).getDate() + 31
                     ),
                   })
                   .then((invDoc) => {
@@ -1234,7 +1228,7 @@ function Make_invoice() {
           setLoadingNicSubmit(false);
           if (
             reGami.docs[0].data().currentDeposit -
-            (subTotalFunc() - totalDiscount) <
+              (subTotalFunc() - totalDiscount) <
             0
           ) {
             NotificationManager.warning(
@@ -1726,8 +1720,8 @@ function Make_invoice() {
                           color="primary"
                           disabled={
                             !gamisarani ||
-                              loadingNicsubmit ||
-                              gamisaraniNic.length === 0
+                            loadingNicsubmit ||
+                            gamisaraniNic.length === 0
                               ? true
                               : false
                           }
@@ -1806,9 +1800,20 @@ function Make_invoice() {
                                   e.toDate()
                                 )
                               );
-                              setDates(new Date(intialTimestamp?.seconds * 1000).getDate());
-                              setDays(new Date(intialTimestamp?.seconds * 1000).getDay())
-                             
+                              setDates(
+                                new Date(
+                                  firebase.firestore.Timestamp.fromDate(
+                                    e.toDate()
+                                  )?.seconds * 1000
+                                ).getDate()
+                              );
+                              setDays(
+                                new Date(
+                                  firebase.firestore.Timestamp.fromDate(
+                                    e.toDate()
+                                  )?.seconds * 1000
+                                ).getDay()
+                              );
                             } else {
                               setInititialTimestamp(null);
                               setDates(new Date().getDate());
@@ -1887,8 +1892,8 @@ function Make_invoice() {
                     className="btn_addCustomer"
                     disabled={
                       loadingsubmit ||
-                        tablerows.length === 0 ||
-                        intialTimestamp === null
+                      tablerows.length === 0 ||
+                      intialTimestamp === null
                         ? true
                         : false
                     }

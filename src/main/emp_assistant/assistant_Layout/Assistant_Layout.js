@@ -33,6 +33,7 @@ import Employee from "../assistant_Pages/employee/Employee";
 import Salary from "../assistant_Pages/salary/Salary";
 import Attendance from "../assistant_Pages/attendance/Attendance";
 import Root from "../assistant_Pages/root/Root";
+import LostConnection from "../assistant_Pages/connection_lost/Connection_Error";
 
 function LayoutAssistant(props) {
   return (
@@ -84,6 +85,11 @@ function LayoutAssistant(props) {
             <Route
               path="/assistant/gass/gass_Model/make_recipt/Gass_recipt"
               component={GassRecipt}
+            />
+
+            <Route
+              path="/assistant/connection/error/lost_connection"
+              component={LostConnection}
             />
           </Switch>
         </div>

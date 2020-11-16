@@ -58,10 +58,11 @@ export default function Arreas_update({
 
   const { confirm } = Modal;
   let history = useHistory();
+  let history2 = useHistory();
 
   useEffect(() => {
     window.addEventListener("offline", function (e) {
-      history.push("/connection_lost");
+      history2.push("/connection_lost");
     });
 
     db.collection("invoice")
@@ -372,26 +373,25 @@ export default function Arreas_update({
         icon: <ExclamationCircleOutlined />,
 
         async onOk() {
-          await updateInstallment().then((_) => {
-            let toto = parseInt(installmentAmount) + parseInt(gamisaraniamount);
-            let passingWithCustomerObj = {
-              invoice_number: invoice_no,
-              customerDetails: customer,
-              total: totalPlusRed(),
-              balance: balance - toto <= 0 ? 0 : balance - toto,
-              gamisarani_amount: parseInt(gamisaraniamount),
-              date: updateTimestamp,
-              delayedCharges: Math.round(delayedCharges),
-            };
+          await updateInstallment();
+          let toto = parseInt(installmentAmount) + parseInt(gamisaraniamount);
+          let passingWithCustomerObj = {
+            invoice_number: invoice_no,
+            customerDetails: customer,
+            total: totalPlusRed(),
+            balance: balance - toto <= 0 ? 0 : balance - toto,
+            gamisarani_amount: parseInt(gamisaraniamount),
+            date: updateTimestamp,
+            delayedCharges: Math.round(delayedCharges),
+          };
 
-            let moveWith = {
-              pathname:
-                "/assistant/invoice_history/payAndGo/updateModel/PrintReceipt",
-              search: "?query=abc",
-              state: { detail: passingWithCustomerObj },
-            };
-            history.push(moveWith);
-          });
+          let moveWith = {
+            pathname:
+              "/assistant/arreas/arreasUpdate/ArreasRecipt",
+            search: "?query=abc",
+            state: { detail: passingWithCustomerObj },
+          };
+          history.push(moveWith);
         },
         async onCancel() {
           await updateInstallment().then((_) => {

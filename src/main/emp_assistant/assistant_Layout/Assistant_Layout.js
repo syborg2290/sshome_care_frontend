@@ -18,7 +18,6 @@ import PrintReceipt from "../assistant_Pages/invoice_History/components/PayAndGo
 import RepairRecipt from "../assistant_Pages/repairs/repairs_Model/repair_update_Recipt/Repair_recipt";
 import PrintInvoice from "../assistant_Pages/invoice/printInvoice/Print_invoice";
 import GassRecipt from "../assistant_Pages/gass/components/Make_Recipt/Gass_Recipt";
-import ArreasRecipt from "../assistant_Pages/arreas/arreas_update_Model/arreas_update_Recipt/Arreas_recipt";
 
 // pages
 import Dashboard from "../assistant_Pages/dashboard/Dashboard";
@@ -83,10 +82,7 @@ function LayoutAssistant(props) {
               component={PrintReceipt}
             />
 
-            <Route
-              path="/assistant/arreas/arreasUpdate/ArreasRecipt"
-              component={ArreasRecipt}
-            />
+            
 
             <Route
               path="/assistant/gass/gass_Model/make_recipt/Gass_recipt"

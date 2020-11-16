@@ -743,10 +743,10 @@ export default function Add_Customer() {
                   variant="outlined"
                   required
                   fullWidth
-                  id="fName"
-                  label="First Name"
-                  name="fName"
-                  autoComplete="fname"
+                  id="mid"
+                  label="MID"
+                  name="mid"
+                  autoComplete="mid"
                   size="small"
                   value={mid}
                   onChange={(e) => {

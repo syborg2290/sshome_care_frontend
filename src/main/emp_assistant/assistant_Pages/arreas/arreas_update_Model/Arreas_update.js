@@ -55,10 +55,11 @@ export default function Arreas_update({
 
   const { confirm } = Modal;
   let history = useHistory();
+  let history2 = useHistory();
 
   useEffect(() => {
     window.addEventListener("offline", function (e) {
-      history.push("/connection_lost");
+      history2.push("/connection_lost");
     });
 
     db.collection("invoice")
@@ -367,7 +368,7 @@ export default function Arreas_update({
 
           let moveWith = {
             pathname:
-              "/assistant/invoice_history/payAndGo/updateModel/PrintReceipt",
+              "/assistant/arreas/arreasUpdate/ArreasRecipt",
             search: "?query=abc",
             state: { detail: passingWithCustomerObj },
           };

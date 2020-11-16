@@ -57,15 +57,19 @@ export default function Add_Customer() {
   const [customerId, setCustomerId] = useState(null);
   const [trustee1Id, setTrustee1Id] = useState(null);
   const [trustee2Id, setTrustee2Id] = useState(null);
+  const [isItNull, setIsItNull] = useState(null);
 
   let history = useHistory();
-  
+
   useEffect(() => {
+    var passedObj = location.state?.detail;
+    setIsItNull(passedObj);
+
     window.addEventListener("offline", function (e) {
-      history.push("/assistant/connection/error/lost_connection");
+      history.push("/assistant/ui/ItemTable");
     });
-     // eslint-disable-next-line
-  }, [])
+    // eslint-disable-next-line
+  }, []);
 
   const loaderModalClose = () => {
     setloaderModalOpen(false);
@@ -1305,6 +1309,7 @@ export default function Add_Customer() {
                   className="btn_MakeCustomer"
                   endIcon={<DoneIcon />}
                   onClick={submit}
+                  disabled={isItNull === undefined ? true : false}
                 >
                   Submit
                 </Button>

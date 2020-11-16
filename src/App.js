@@ -9,6 +9,7 @@ import LayoutAssistant from "../src/main/emp_assistant/assistant_Layout/Assistan
 // pages
 import Error from "./main/error/Error";
 import Login from "./main/login/Login";
+import ConnectionLost from "./main/connection_lost_main/Connection_Error";
 
 // context
 import { useUserState } from "./context/UserContext";
@@ -36,6 +37,7 @@ export default function App() {
           component={LayoutAssistant}
         />
         <PublicRoute path="/login" component={Login} />
+        <Route path="/connection_lost" component={ConnectionLost} />
         <Route component={Error} />
       </Switch>
     </HashRouter>
@@ -51,15 +53,15 @@ export default function App() {
           isAuthenticated ? (
             React.createElement(component, props)
           ) : (
-            <Redirect
-              to={{
-                pathname: "/login",
-                state: {
-                  from: props.location,
-                },
-              }}
-            />
-          )
+              <Redirect
+                to={{
+                  pathname: "/login",
+                  state: {
+                    from: props.location,
+                  },
+                }}
+              />
+            )
         }
       />
     );
@@ -78,13 +80,13 @@ export default function App() {
                   role === "admin"
                     ? "/admin/dashboard"
                     : role === "assistant"
-                    ? "/assistant/dashboard"
-                    : "/showroom/dashboard",
+                      ? "/assistant/dashboard"
+                      : "/showroom/dashboard",
               }}
             />
           ) : (
-            React.createElement(component, props)
-          )
+              React.createElement(component, props)
+            )
         }
       />
     );

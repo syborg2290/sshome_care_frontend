@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { TextField, Button } from "@material-ui/core";
 import { Modal, Spin } from "antd";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
@@ -59,6 +59,12 @@ export default function Add_Customer() {
   const [trustee2Id, setTrustee2Id] = useState(null);
 
   let history = useHistory();
+  
+  useEffect(() => {
+    window.addEventListener("offline", function (e) {
+      history.push("/assistant/connection/error/lost_connection");
+    });
+  }, [])
 
   const loaderModalClose = () => {
     setloaderModalOpen(false);

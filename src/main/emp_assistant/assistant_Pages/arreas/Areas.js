@@ -18,17 +18,19 @@ import "./Arreas.css";
 // icons
 import HistoryIcon from "@material-ui/icons/History";
 
-export default function Areas() {
-  // eslint-disable-next-line
-  const [isLoading, setIsLoading] = useState(true);
+import { useHistory } from "react-router-dom";
 
-  // eslint-disable-next-line
+export default function Areas() {
+  
+  const [isLoading, setIsLoading] = useState(true);
   const [currentIndx, setCurrentIndx] = useState(0);
   const [arreasUpdate, setArreasUpdate] = useState(false); //  table models
   const [arresHistory, setArresHistory] = useState(false); //  table models
   const [arreasTableData, setArreasTableData] = useState([]);
   // eslint-disable-next-line
   const [arreasAllData, setArreasAllData] = useState([]);
+  
+  let history = useHistory();
 
   const showModalArreasUpdate = () => {
     setArreasUpdate(true);
@@ -131,6 +133,11 @@ export default function Areas() {
   ];
 
   useEffect(() => {
+    
+    window.addEventListener("offline", function (e) {
+      history.push("/assistant/connection/error/lost_connection");
+    });
+    
     db.collection("arrears").onSnapshot((onSnap) => {
       var rawData = [];
       var rawAllData = [];

@@ -16,6 +16,8 @@ import CustomerHistory from "./components/customerHistoryModel/CustomerHistoryMo
 // styles
 import "./Customer_table_assistant.css";
 
+import { useHistory } from "react-router-dom";
+
 export default function ItemTable() {
   // eslint-disable-next-line
   const [isLoading, setIsLoading] = useState(true);
@@ -26,6 +28,8 @@ export default function ItemTable() {
   const [currentIndx, setCurrentIndx] = useState(0);
   const [customerTableData, setCustomerTableData] = useState([]);
   const [customerAllData, setCustomerAllData] = useState([]);
+
+  let history = useHistory();
 
   const showModal = () => {
     setVisible(true);
@@ -103,6 +107,11 @@ export default function ItemTable() {
   ];
 
   useEffect(() => {
+
+    window.addEventListener("offline", function (e) {
+      history.push("/assistant/connection/error/lost_connection");
+    });
+
     db.collection("customer")
       .orderBy("date", "desc")
       .onSnapshot((custDoc) => {
@@ -234,7 +243,7 @@ export default function ItemTable() {
                 }
               },
               selectableRows: false,
-              customToolbarSelect: () => {},
+              customToolbarSelect: () => { },
               filterType: "textField",
               download: false,
               print: false,
@@ -249,8 +258,8 @@ export default function ItemTable() {
                   noMatch: isLoading ? (
                     <Spin className="tblSpinner" size="large" spinning="true" />
                   ) : (
-                    ""
-                  ),
+                      ""
+                    ),
                 },
               },
             }}

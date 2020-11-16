@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Grid, Paper, Typography, Button } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import classnames from "classnames";
@@ -8,6 +8,12 @@ import useStyles from "./Style";
 
 export default function Connection_Error() {
   var classes = useStyles();
+
+  useEffect(() => {
+    window.addEventListener("online", function (e) {
+      window.history.back();
+    });
+  }, []);
 
   return (
     <Grid container className={classes.container}>
@@ -43,7 +49,7 @@ export default function Connection_Error() {
           size="large"
           className={classes.backButton}
         >
-         Refesh
+          Refesh
         </Button>
       </Paper>
     </Grid>

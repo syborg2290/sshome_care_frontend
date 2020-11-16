@@ -7,6 +7,7 @@ import classnames from "classnames";
 // styles
 import useStyles from "./Style";
 
+
 export default function Connection_Error() {
   var classes = useStyles();
 
@@ -22,7 +23,7 @@ export default function Connection_Error() {
   return (
     <Grid container className={classes.container}>
       <div className={classes.logotype}>
-        <Typography variant="h1" color="white" className={classes.logotypeText}>
+        <Typography variant="h1"  className={classes.logotypeText}>
           S S HOME CARE CITY
         </Typography>
       </div>
@@ -39,8 +40,8 @@ export default function Connection_Error() {
         </Typography>
         <Typography
           variant="h6"
-          color="text"
-          colorBrightness="secondary"
+          color="textPrimary"
+          colorbrightness="secondary"
           className={classnames(classes.textRow, classes.safetyText)}
         >
           But we're here to bring you back to safety

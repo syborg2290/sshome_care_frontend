@@ -17,7 +17,7 @@ import { useHistory } from "react-router-dom";
 import ViewEmployee from "./components/view_Employee_Model/View_Employee";
 import UpdateStatus from "./components/status_Update_Model/Update_Status";
 import MarkAttendance from "./components/mark_Attendance_Model/Mark_Attendance";
-import HistoryAttendance from "./components/attedance_History_Model/History_Attendance";
+// import HistoryAttendance from "./components/attedance_History_Model/History_Attendance";
 
 // styles
 import "./Attendance.css";
@@ -30,8 +30,10 @@ export default function Attendance() {
   const [statusUpdateModel, setStatusUpdateModel] = useState(false); // Table models
 
   const [markAttendanceModel, setMarkAttendanceModel] = useState(false);
+   // eslint-disable-next-line
   const [historyAttendanceModel, setHistoryAttendanceModel] = useState(false);
   let history = useHistory();
+   let history2 = useHistory();
 
    const showModalView = () => {
     setviewEmployeesModel(true);
@@ -46,7 +48,8 @@ export default function Attendance() {
   };
 
     const showModalHistoryAttendance = () => {
-    setHistoryAttendanceModel(true);
+      setHistoryAttendanceModel(true);
+      history2.push("/assistant/attendant/attendat_history");
   };
 
   //START Attendance Table Colomns
@@ -167,7 +170,7 @@ export default function Attendance() {
       {/* END Mark model */}
 
       {/* START History model */}
-      
+{/*       
         <Modal
         className="confo_model"
         visible={historyAttendanceModel}
@@ -179,7 +182,7 @@ export default function Attendance() {
         <div className="history_body">
           <HistoryAttendance />
         </div>
-      </Modal>
+      </Modal> */}
 
       {/* END History model */}
       

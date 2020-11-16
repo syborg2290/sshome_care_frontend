@@ -141,7 +141,7 @@ function Make_invoice() {
       subTotalValue =
         subTotalValue +
         (itemDP[tablerows[a].i] - itemDiscount[tablerows[a].i]) *
-          itemQty[tablerows[a].i];
+        itemQty[tablerows[a].i];
     }
     let gamiam = gamisaraniamount === "" ? 0 : parseInt(gamisaraniamount);
     let fTotoS = subTotalValue - gamiam <= 0 ? 0 : subTotalValue - gamiam;
@@ -171,24 +171,28 @@ function Make_invoice() {
 
   const showConfirm = () => {
     if (!isFullPayment) {
-      if (balance === 0) {
-        NotificationManager.warning("Balance amount is required ! )");
-      } else {
-        if (itemAPI === 0) {
-          NotificationManager.warning(
-            "Amount per installment amount is required ! )"
-          );
+      if (deadlineTimestamp !== null) {
+        if (balance === 0) {
+          NotificationManager.warning("Balance amount is required ! )");
         } else {
-          if (itemNOI === 0) {
-            NotificationManager.warning("No of installment is required ! )");
+          if (itemAPI === 0) {
+            NotificationManager.warning(
+              "Amount per installment amount is required ! )"
+            );
           } else {
-            if (dpayment === 0) {
-              NotificationManager.warning("Downpayment amount is required ! )");
+            if (itemNOI === 0) {
+              NotificationManager.warning("No of installment is required ! )");
             } else {
-              seFunc();
+              if (dpayment === 0) {
+                NotificationManager.warning("Downpayment amount is required ! )");
+              } else {
+                seFunc();
+              }
             }
           }
         }
+      } else {
+        NotificationManager.warning("Deadline date is not selected ! )");
       }
     } else {
       seFunc();
@@ -196,6 +200,7 @@ function Make_invoice() {
   };
 
   const seFunc = () => {
+
     if (subTotalFunc() - totalDiscount < 0) {
       NotificationManager.warning(
         "Issue with your calculations Pleace check again (May be Included minus values ! )"
@@ -1203,7 +1208,7 @@ function Make_invoice() {
           setLoadingNicSubmit(false);
           if (
             reGami.docs[0].data().currentDeposit -
-              (subTotalFunc() - totalDiscount) <
+            (subTotalFunc() - totalDiscount) <
             0
           ) {
             NotificationManager.warning(
@@ -1693,8 +1698,8 @@ function Make_invoice() {
                           color="primary"
                           disabled={
                             !gamisarani ||
-                            loadingNicsubmit ||
-                            gamisaraniNic.length === 0
+                              loadingNicsubmit ||
+                              gamisaraniNic.length === 0
                               ? true
                               : false
                           }
@@ -1849,8 +1854,8 @@ function Make_invoice() {
                     className="btn_addCustomer"
                     disabled={
                       loadingsubmit ||
-                      tablerows.length === 0 ||
-                      intialTimestamp === null
+                        tablerows.length === 0 ||
+                        intialTimestamp === null
                         ? true
                         : false
                     }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import MUIDataTable from "mui-datatables";
 import { Grid, Button } from "@material-ui/core";
-import { Modal } from "antd";
+import { Modal, Spin } from "antd";
 import CurrencyFormat from "react-currency-format";
 import moment from "moment";
 
@@ -16,18 +16,18 @@ import "./Arreas_Table.css";
 //icone
 
 import HistoryIcon from "@material-ui/icons/History";
+import { useHistory } from "react-router-dom";
 
 export default function Arreas_Table() {
-  // eslint-disable-next-line
   const [isLoading, setIsLoading] = useState(true);
-
-  // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
   const [arreasUpdate, setArreasUpdate] = useState(false); //  table models
   const [arresHistory, setArresHistory] = useState(false); //  table models
   const [arreasTableData, setArreasTableData] = useState([]);
   // eslint-disable-next-line
   const [arreasAllData, setArreasAllData] = useState([]);
+
+  let history = useHistory();
 
   const showModalArreasUpdate = () => {
     setArreasUpdate(true);
@@ -53,7 +53,7 @@ export default function Arreas_Table() {
       },
     },
     {
-      name: "NIC",
+      name: "Type",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -71,16 +71,7 @@ export default function Arreas_Table() {
       },
     },
     {
-      name: "Serial_No",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
-      {
-      name: "Type",
+      name: "NIC",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -139,6 +130,10 @@ export default function Arreas_Table() {
   ];
 
   useEffect(() => {
+    window.addEventListener("offline", function (e) {
+      history.push("/assistant/connection/error/lost_connection");
+    });
+
     db.collection("arrears").onSnapshot((onSnap) => {
       var rawData = [];
       var rawAllData = [];
@@ -150,11 +145,9 @@ export default function Arreas_Table() {
 
         rawData.push({
           InvoiceNo: eachRe.data().invoice_number,
-
-          NIC: eachRe.data().nic,
-          MID: eachRe.data().mid,
-          SerialNo: eachRe.data().serialNo,
           Type: eachRe.data().type,
+          MID: eachRe.data().mid,
+          NIC: eachRe.data().nic,
           Delayed_Days: Math.round(eachRe.data().delayed_days),
           Delayed_Charges: (
             <CurrencyFormat
@@ -190,6 +183,7 @@ export default function Arreas_Table() {
     });
 
     setIsLoading(false);
+    // eslint-disable-next-line
   }, []);
 
   return (
@@ -210,8 +204,19 @@ export default function Arreas_Table() {
               <UpdateArreas
                 key={arreasAllData[currentIndx]?.id}
                 invoice_no={arreasAllData[currentIndx]?.data?.invoice_number}
-                nic={arreasAllData[currentIndx]?.data?.nic}
-                close={cancelModalArreasUpdate}
+                customer_id={arreasAllData[currentIndx]?.data?.customer_id}
+                instAmountProp={
+                  arreasAllData[currentIndx]?.data?.amountPerInstallment
+                }
+                balanceProp={arreasAllData[currentIndx]?.data?.balance}
+                instCount={arreasAllData[currentIndx]?.data?.noOfInstallment}
+                isEx={
+                  arreasAllData[currentIndx]?.data?.status_of_payandgo ===
+                    "expired"
+                    ? true
+                    : false
+                }
+                closeModal={cancelModalArreasUpdate}
               />
             </div>
           </div>
@@ -247,9 +252,7 @@ export default function Arreas_Table() {
       <Grid container spacing={4}>
         <Grid item xs={12}>
           <MUIDataTable
-            title={
-              <span className="title_Span_arries">Current arreas list</span>
-            }
+            title={<span className="title_Span_arries">ARREAS LIST</span>}
             className="arreas_Table"
             data={arreasTableData}
             columns={arreasTableColomns}
@@ -260,7 +263,7 @@ export default function Arreas_Table() {
                 };
               },
               selectableRows: false,
-              customToolbarSelect: () => {},
+              customToolbarSelect: () => { },
               filterType: "textfield",
               download: false,
               print: false,
@@ -269,6 +272,15 @@ export default function Arreas_Table() {
               sort: true,
               onRowClick: (rowData, rowMeta) => {
                 setCurrentIndx(rowMeta.dataIndex);
+              },
+              textLabels: {
+                body: {
+                  noMatch: isLoading ? (
+                    <Spin className="tblSpinner" size="large" spinning="true" />
+                  ) : (
+                      ""
+                    ),
+                },
               },
             }}
           />

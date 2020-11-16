@@ -184,7 +184,9 @@ function Make_invoice() {
               NotificationManager.warning("No of installment is required ! )");
             } else {
               if (dpayment === 0) {
-                NotificationManager.warning("Downpayment amount is required ! )");
+                NotificationManager.warning(
+                  "Downpayment amount is required ! )"
+                );
               } else {
                 seFunc();
               }
@@ -200,7 +202,6 @@ function Make_invoice() {
   };
 
   const seFunc = () => {
-
     if (subTotalFunc() - totalDiscount < 0) {
       NotificationManager.warning(
         "Issue with your calculations Pleace check again (May be Included minus values ! )"
@@ -496,6 +497,12 @@ function Make_invoice() {
                           (totalDiscount === "" ? 0 : totalDiscount),
                         status_of_payandgo: "onGoing",
                         date: intialTimestamp,
+                        nextDate: new Date(
+                          intialTimestamp?.seconds * 1000
+                        ).setDate(
+                          new Date(intialTimestamp?.seconds * 1000).getDay() +
+                          31
+                        ),
                       })
                       .then((invDoc) => {
                         if (tablerows[0].customer.trustee1Id !== null) {
@@ -671,6 +678,12 @@ function Make_invoice() {
                           (totalDiscount === "" ? 0 : totalDiscount),
                         status_of_payandgo: "onGoing",
                         date: intialTimestamp,
+                        nextDate: new Date(
+                          intialTimestamp?.seconds * 1000
+                        ).setDate(
+                          new Date(intialTimestamp?.seconds * 1000).getDay() +
+                          31
+                        ),
                       })
                       .then((invDoc) => {
                         if (tablerows[0].customer.trustee1Id !== null) {
@@ -844,6 +857,12 @@ function Make_invoice() {
                       (totalDiscount === "" ? 0 : totalDiscount),
                     status_of_payandgo: "onGoing",
                     date: intialTimestamp,
+                    nextDate: new Date(
+                      intialTimestamp?.seconds * 1000
+                    ).setDate(
+                      new Date(intialTimestamp?.seconds * 1000).getDay() +
+                      31
+                    ),
                   })
                   .then((invDoc) => {
                     if (tablerows[0].customer.trustee1Id !== null) {
@@ -1013,6 +1032,12 @@ function Make_invoice() {
                       (totalDiscount === "" ? 0 : totalDiscount),
                     status_of_payandgo: "onGoing",
                     date: intialTimestamp,
+                    nextDate: new Date(
+                      intialTimestamp?.seconds * 1000
+                    ).setDate(
+                      new Date(intialTimestamp?.seconds * 1000).getDay() +
+                      31
+                    ),
                   })
                   .then((invDoc) => {
                     if (tablerows[0].customer.trustee1Id !== null) {
@@ -1164,6 +1189,7 @@ function Make_invoice() {
         status_of_payandgo: "Done",
         // description: discription,
         date: intialTimestamp,
+        nextDate: null,
       });
 
       tablerows.forEach(async (itemUDoc) => {

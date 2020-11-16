@@ -629,15 +629,22 @@ export default function Arreas_update({
                     fullWidth
                     label="Balance"
                     size="small"
-                    value={
-                      gamisaraniamount + installmentAmount === 0
-                        ? intialBalance
-                        : balance - (gamisaraniamount + installmentAmount) <= 0
-                          ? 0
-                          : balance - (gamisaraniamount + installmentAmount)
-                    }
+                    value={balance}
                     onChange={(e) => {
-                      setBalance(e.target.value.trim());
+                      if (gamisaraniamount + installmentAmount === 0) {
+                        setBalance(intialBalance);
+                      } else {
+                        if (
+                          balance - (gamisaraniamount + installmentAmount) <=
+                          0
+                        ) {
+                          setBalance(0);
+                        } else {
+                          setBalance(
+                            balance - (gamisaraniamount + installmentAmount)
+                          );
+                        }
+                      }
                     }}
                   />
                 </Grid>

@@ -1,4 +1,4 @@
-import React, { useState , useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import {
   Grid,
@@ -27,14 +27,6 @@ export default function Add_Model({ closeModel }) {
     setDate(dateString);
   };
 
-  let history = useHistory();
-
-   useEffect(() => {
-
-    window.addEventListener("offline", function (e) {
-      history.push("/assistant/connection/error/lost_connection");
-    });
-  });
   const getInvoiceAndItem = async () => {
     await db
       .collection("invoice")
@@ -49,6 +41,13 @@ export default function Add_Model({ closeModel }) {
         });
       });
   };
+  let history = useHistory();
+
+  useEffect(() => {
+    window.addEventListener("offline", function (e) {
+      history.push("/assistant/connection/error/lost_connection");
+    });
+  });
 
   const addSeized = async () => {
     setLoading(true);
@@ -171,7 +170,10 @@ export default function Add_Model({ closeModel }) {
                 className="btn_add"
                 onClick={addSeized}
                 disabled={
-                  loading || serial.length === 0 || date.length === 0
+                  loading ||
+                  serial.length === 0 ||
+                  date.length === 0 ||
+                  date === null
                     ? true
                     : false
                 }

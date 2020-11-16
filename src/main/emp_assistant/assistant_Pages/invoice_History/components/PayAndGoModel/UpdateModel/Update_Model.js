@@ -600,12 +600,13 @@ export default function Update_Model({
               <Grid item xs={12} sm={6}>
                 <DatePicker
                   onChange={(e) => {
-                    setTimestamp(
-                      firebase.firestore.Timestamp.fromDate(e.toDate())
-                    );
-                    console.log(
-                      firebase.firestore.Timestamp.fromDate(e.toDate())
-                    );
+                    if (e !== null) {
+                      setTimestamp(
+                        firebase.firestore.Timestamp.fromDate(e.toDate())
+                      );
+                    } else {
+                      setTimestamp(null);
+                    }
                   }}
                 />
               </Grid>

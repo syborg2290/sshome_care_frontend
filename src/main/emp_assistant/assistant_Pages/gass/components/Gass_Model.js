@@ -78,8 +78,8 @@ export default function Gass_Model() {
   const handleChangeType = (event) => {
     setSelectedType(event.target.value);
   };
-  
-    const submit = () => {
+
+  const submit = () => {
     db.collection("gas")
       .where("weight", "==", selectedWeight)
       .get()
@@ -249,9 +249,16 @@ export default function Gass_Model() {
               <Space direction="vertical">
                 <DatePicker
                   onChange={(e) => {
-                    setTimestamp(
-                      firebase.firestore.Timestamp.fromDate(e.toDate())
-                    );
+                    if (e !== null) {
+                      setTimestamp(
+                        firebase.firestore.Timestamp.fromDate(e.toDate())
+                      );
+                    } else {
+                      setTimestamp(
+                        null
+                      );
+                    }
+
                   }}
                 />
               </Space>

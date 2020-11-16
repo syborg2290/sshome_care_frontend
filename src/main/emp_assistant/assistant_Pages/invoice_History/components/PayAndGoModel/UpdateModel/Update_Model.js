@@ -583,12 +583,54 @@ export default function Update_Model({
                   />
                 </Grid>
 
-                {/* <Grid item xs={12} sm={3}></Grid> */}
-                <Grid className="lbl_topi" item xs={12} sm={4}>
-                  Due Installment Count
+              {/* <Grid className="lbl_topi" item xs={12} sm={4}>
+                Balance(LKR)
               </Grid>
-                <Grid item xs={12} sm={2}>
-                  :
+              <Grid item xs={12} sm={2}>
+                :
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <CurrencyFormat
+                  value={
+                    gamisaraniamount + installmentAmount === 0
+                      ? intialBalance
+                      : balance - (gamisaraniamount + installmentAmount) <= 0
+                      ? 0
+                      : balance - (gamisaraniamount + installmentAmount)
+                  }
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              </Grid> */}
+               <Grid className="lbl_topi" item xs={12} sm={4}>
+                Balance(LKR)
+              </Grid>
+              <Grid item xs={12} sm={2}>
+                :
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  type="number"
+                  autoComplete="delayed"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  label="Balance"
+                  size="small"
+                   value={ 
+                      gamisaraniamount + installmentAmount === 0
+                      ? intialBalance
+                      : balance - (gamisaraniamount + installmentAmount) <= 0
+                      ? 0
+                        : balance - (gamisaraniamount + installmentAmount)
+               
+                  }
+                  
+                 onChange={(e) => {
+                  setBalance(e.target.value.trim());
+                }}
+                />
               </Grid>
                 <Grid item xs={12} sm={6}>
                   <p>{dueInstallmentsCount()}</p>

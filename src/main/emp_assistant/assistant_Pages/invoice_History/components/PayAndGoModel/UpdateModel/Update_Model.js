@@ -18,9 +18,9 @@ import { Modal } from "antd";
 // styles
 import "./Update_Model.css";
 
-function isDateBeforeNextDate(date) {
-  return new Date(date.toDateString()) > new Date(new Date().toDateString());
-}
+// function isDateBeforeNextDate(date) {
+//   return new Date(date.toDateString()) > new Date(new Date().toDateString());
+// }
 
 export default function Update_Model({
   invoice_no,
@@ -61,27 +61,6 @@ export default function Update_Model({
   let history = useHistory();
 
   useEffect(() => {
-    db.collection("invoice")
-      .where("invoice_number", "==", invoice_no)
-      .get()
-      .then(async (reInvoice) => {
-        var isBeforeNe = isDateBeforeNextDate(
-          new Date(reInvoice.docs[0].data()?.nextDate.seconds * 1000)
-        );
-        if (isBeforeNe) {
-          await db
-            .collection("invoice")
-            .doc(reInvoice.docs[0].id)
-            .update({
-              nextDate: firebase.firestore.Timestamp.fromDate(
-                new Date(new Date(reInvoice.docs[0].data()?.nextDate.seconds * 1000).setDate(
-                  new Date(reInvoice.docs[0].data()?.nextDate.seconds * 1000).getDate() + 31
-                ))
-              ),
-            });
-        }
-      });
-
     db.collection("customer")
       .doc(customer_id)
       .get()
@@ -198,7 +177,7 @@ export default function Update_Model({
                     inReDoc.docs[0].data()?.nextDate?.seconds * 1000
                   ).getTime()) /
                 (1000 * 3600 * 24);
-              let daysCount = daysCountNode2 - 31;
+              let daysCount = daysCountNode2;
 
               if (inReDoc.docs[0].data().selectedType === "shop") {
                 if (7 - daysCount >= 0) {
@@ -265,6 +244,33 @@ export default function Update_Model({
   }, [invoice_no]);
 
   const updateInstallment = async () => {
+    db.collection("invoice")
+      .where("invoice_number", "==", invoice_no)
+      .get()
+      .then(async (reInvoice) => {
+        // var isBeforeNe = isDateBeforeNextDate(
+        //   new Date(reInvoice.docs[0].data()?.nextDate.seconds * 1000)
+        // );
+        // if (isBeforeNe) {
+        await db
+          .collection("invoice")
+          .doc(reInvoice.docs[0].id)
+          .update({
+            nextDate: firebase.firestore.Timestamp.fromDate(
+              new Date(
+                new Date(
+                  reInvoice.docs[0].data()?.nextDate.seconds * 1000
+                ).setDate(
+                  new Date(
+                    reInvoice.docs[0].data()?.nextDate.seconds * 1000
+                  ).getDate() + 31
+                )
+              )
+            ),
+          });
+        // }
+      });
+
     await db
       .collection("installment")
       .where("invoice_number", "==", invoice_no)

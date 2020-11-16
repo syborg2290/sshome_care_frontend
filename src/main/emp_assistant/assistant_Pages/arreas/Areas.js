@@ -373,7 +373,7 @@ export default function Areas() {
           instReDoc.docs[0].data()?.nextDate?.seconds * 1000
         ).getTime()) /
       (1000 * 3600 * 24);
-    let daysCount = daysCountNode2 - 31;
+    let daysCount = daysCountNode2;
 
     let instRECheckCount = 0;
 

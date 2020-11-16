@@ -22,9 +22,9 @@ function isDateBeforeToday(date) {
   return new Date(date.toDateString()) < new Date(new Date().toDateString());
 }
 
-function isDateBeforeNextDate(date) {
-  return new Date(date.toDateString()) > new Date(new Date().toDateString());
-}
+// function isDateBeforeNextDate(date) {
+//   return new Date(date.toDateString()) > new Date(new Date().toDateString());
+// }
 
 export default function Dashboard() {
   // eslint-disable-next-line
@@ -42,21 +42,25 @@ export default function Dashboard() {
       .get()
       .then((onSnap) => {
         onSnap.docs.forEach(async (eachRe) => {
-          var isBeforeNe = isDateBeforeNextDate(
-            new Date(eachRe.data()?.nextDate.seconds * 1000)
-          );
-          if (isBeforeNe) {
-            await db
-              .collection("invoice")
-              .doc(eachRe.id)
-              .update({
-                nextDate: firebase.firestore.Timestamp.fromDate(
-                 new Date(new Date(eachRe.data()?.nextDate.seconds * 1000).setDate(
-                    new Date(eachRe.data()?.nextDate.seconds * 1000).getDate() + 31
-                  )
-                )),
-              });
-          }
+          // var isBeforeNe = isDateBeforeNextDate(
+          //   new Date(eachRe.data()?.nextDate.seconds * 1000)
+          // );
+          // if (isBeforeNe) {
+          //   await db
+          //     .collection("invoice")
+          //     .doc(eachRe.id)
+          //     .update({
+          //       nextDate: firebase.firestore.Timestamp.fromDate(
+          //         new Date(
+          //           new Date(eachRe.data()?.nextDate.seconds * 1000).setDate(
+          //             new Date(
+          //               eachRe.data()?.nextDate.seconds * 1000
+          //             ).getDate() + 31
+          //           )
+          //         )
+          //       ),
+          //     });
+          // }
           let isBeforeDate = isDateBeforeToday(
             new Date(eachRe.data()?.deadlineTimestamp?.seconds * 1000)
           );
@@ -74,22 +78,6 @@ export default function Dashboard() {
       .get()
       .then((onSnap) => {
         onSnap.docs.forEach(async (each) => {
-          var isBeforeNe = isDateBeforeNextDate(
-            new Date(each.data()?.nextDate.seconds * 1000)
-          );
-          if (isBeforeNe) {
-            await db
-              .collection("invoice")
-              .doc(each.id)
-              .update({
-                nextDate: firebase.firestore.Timestamp.fromDate(
-                 new Date(new Date(each.data()?.nextDate.seconds * 1000).setDate(
-                    new Date(each.data()?.nextDate.seconds * 1000).getDate() + 31
-                  ))
-                ),
-              });
-          }
-
           let isBeforeDate = isDateBeforeToday(
             new Date(each.data()?.deadlineTimestamp?.seconds * 1000)
           );
@@ -332,9 +320,11 @@ export default function Dashboard() {
 
     let daysCountNode2 =
       (new Date().getTime() -
-        new Date(instReDoc.docs[0].data()?.nextDate?.seconds * 1000).getTime()) /
+        new Date(
+          instReDoc.docs[0].data()?.nextDate?.seconds * 1000
+        ).getTime()) /
       (1000 * 3600 * 24);
-    let daysCount = daysCountNode2 - 31;
+    let daysCount = daysCountNode2;
 
     let instRECheckCount = 0;
 

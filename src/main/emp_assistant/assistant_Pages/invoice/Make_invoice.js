@@ -411,6 +411,8 @@ function Make_invoice() {
   // eslint-disable-next-line
   const invoiceIntoDb = async () => {
     setLoadingSubmit(true);
+    var times =new Date(new Date(intialTimestamp?.seconds * 1000).setDate(
+      new Date(intialTimestamp?.seconds * 1000).getDate() + 31));
     if (tablerows.some((ob) => ob.customer !== null)) {
       if (deadlineTimestamp !== null) {
         if (tablerows[0].customer.customerImageFile) {
@@ -498,11 +500,7 @@ function Make_invoice() {
                         status_of_payandgo: "onGoing",
                         date: intialTimestamp,
                         nextDate: firebase.firestore.Timestamp.fromDate(
-                          new Date(intialTimestamp?.seconds * 1000).setDate(
-                            new Date(
-                              intialTimestamp?.seconds * 1000
-                            ).getDate() + 31
-                          )
+                          times
                         ),
                       })
                       .then((invDoc) => {
@@ -680,11 +678,7 @@ function Make_invoice() {
                         status_of_payandgo: "onGoing",
                         date: intialTimestamp,
                         nextDate: firebase.firestore.Timestamp.fromDate(
-                          new Date(intialTimestamp?.seconds * 1000).setDate(
-                            new Date(
-                              intialTimestamp?.seconds * 1000
-                            ).getDate() + 31
-                          )
+                          times
                         ),
                       })
                       .then((invDoc) => {
@@ -860,9 +854,7 @@ function Make_invoice() {
                     status_of_payandgo: "onGoing",
                     date: intialTimestamp,
                     nextDate: firebase.firestore.Timestamp.fromDate(
-                      new Date(intialTimestamp?.seconds * 1000).setDate(
-                        new Date(intialTimestamp?.seconds * 1000).getDate() + 31
-                      )
+                      times
                     ),
                   })
                   .then((invDoc) => {
@@ -1034,9 +1026,7 @@ function Make_invoice() {
                     status_of_payandgo: "onGoing",
                     date: intialTimestamp,
                     nextDate: firebase.firestore.Timestamp.fromDate(
-                      new Date(intialTimestamp?.seconds * 1000).setDate(
-                        new Date(intialTimestamp?.seconds * 1000).getDate() + 31
-                      )
+                      times
                     ),
                   })
                   .then((invDoc) => {

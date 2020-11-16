@@ -43,7 +43,7 @@ export default function Dashboard() {
       .then((onSnap) => {
         onSnap.docs.forEach(async (eachRe) => {
           var isBeforeNe = isDateBeforeNextDate(
-            new Date(eachRe.data()?.nextDate)
+            new Date(eachRe.data()?.nextDate.seconds * 1000)
           );
           if (isBeforeNe) {
             await db
@@ -51,10 +51,10 @@ export default function Dashboard() {
               .doc(eachRe.id)
               .update({
                 nextDate: firebase.firestore.Timestamp.fromDate(
-                  new Date(eachRe.data()?.nextDate).setDate(
-                    new Date(eachRe.data()?.nextDate).getDate() + 31
+                 new Date(new Date(eachRe.data()?.nextDate.seconds * 1000).setDate(
+                    new Date(eachRe.data()?.nextDate.seconds * 1000).getDate() + 31
                   )
-                ),
+                )),
               });
           }
           let isBeforeDate = isDateBeforeToday(
@@ -75,7 +75,7 @@ export default function Dashboard() {
       .then((onSnap) => {
         onSnap.docs.forEach(async (each) => {
           var isBeforeNe = isDateBeforeNextDate(
-            new Date(each.data()?.nextDate)
+            new Date(each.data()?.nextDate.seconds * 1000)
           );
           if (isBeforeNe) {
             await db
@@ -83,9 +83,9 @@ export default function Dashboard() {
               .doc(each.id)
               .update({
                 nextDate: firebase.firestore.Timestamp.fromDate(
-                  new Date(each.data()?.nextDate).setDate(
-                    new Date(each.data()?.nextDate).getDate() + 31
-                  )
+                 new Date(new Date(each.data()?.nextDate.seconds * 1000).setDate(
+                    new Date(each.data()?.nextDate.seconds * 1000).getDate() + 31
+                  ))
                 ),
               });
           }

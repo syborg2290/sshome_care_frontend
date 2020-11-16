@@ -66,7 +66,7 @@ export default function Update_Model({
       .get()
       .then(async (reInvoice) => {
         var isBeforeNe = isDateBeforeNextDate(
-          new Date(reInvoice.docs[0].data()?.nextDate)
+          new Date(reInvoice.docs[0].data()?.nextDate.seconds * 1000)
         );
         if (isBeforeNe) {
           await db
@@ -74,9 +74,9 @@ export default function Update_Model({
             .doc(reInvoice.docs[0].id)
             .update({
               nextDate: firebase.firestore.Timestamp.fromDate(
-                new Date(reInvoice.docs[0].data()?.nextDate).setDate(
-                  new Date(reInvoice.docs[0].data()?.nextDate).getDate() + 31
-                )
+                new Date(new Date(reInvoice.docs[0].data()?.nextDate.seconds * 1000).setDate(
+                  new Date(reInvoice.docs[0].data()?.nextDate.seconds * 1000).getDate() + 31
+                ))
               ),
             });
         }

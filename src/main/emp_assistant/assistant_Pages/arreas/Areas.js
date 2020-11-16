@@ -219,6 +219,7 @@ export default function Areas() {
                     : false
                 }
                 closeModal={cancelModalArreasUpdate}
+                
               />
             </div>
           </div>

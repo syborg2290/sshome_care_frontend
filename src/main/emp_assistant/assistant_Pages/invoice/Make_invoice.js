@@ -500,7 +500,7 @@ function Make_invoice() {
                         nextDate: new Date(
                           intialTimestamp?.seconds * 1000
                         ).setDate(
-                          new Date(intialTimestamp?.seconds * 1000).getDay() +
+                          new Date(intialTimestamp?.seconds * 1000).getDate() +
                           31
                         ),
                       })
@@ -681,7 +681,7 @@ function Make_invoice() {
                         nextDate: new Date(
                           intialTimestamp?.seconds * 1000
                         ).setDate(
-                          new Date(intialTimestamp?.seconds * 1000).getDay() +
+                          new Date(intialTimestamp?.seconds * 1000).getDate() +
                           31
                         ),
                       })
@@ -860,7 +860,7 @@ function Make_invoice() {
                     nextDate: new Date(
                       intialTimestamp?.seconds * 1000
                     ).setDate(
-                      new Date(intialTimestamp?.seconds * 1000).getDay() +
+                      new Date(intialTimestamp?.seconds * 1000).getDate() +
                       31
                     ),
                   })
@@ -1035,7 +1035,7 @@ function Make_invoice() {
                     nextDate: new Date(
                       intialTimestamp?.seconds * 1000
                     ).setDate(
-                      new Date(intialTimestamp?.seconds * 1000).getDay() +
+                      new Date(intialTimestamp?.seconds * 1000).getDate() +
                       31
                     ),
                   })
@@ -1597,7 +1597,7 @@ function Make_invoice() {
                       </Grid>
 
                       <Grid className="lbl_MI" item xs={12} sm={3}>
-                        Days :
+                        Date :
                       </Grid>
                       <Grid item xs={12} sm={4}>
                         <TextField
@@ -1605,9 +1605,10 @@ function Make_invoice() {
                           variant="outlined"
                           size="small"
                           disabled={
-                            tablerows.some((ob) => ob.paymentWay === "PayandGo")
-                              ? false
-                              : true
+                            // tablerows.some((ob) => ob.paymentWay === "PayandGo")
+                            //   ? false
+                            //   : true
+                            true
                           }
                           placeholder="date"
                           type="number"
@@ -1624,7 +1625,7 @@ function Make_invoice() {
                       <Grid item xs={12} sm={5}></Grid>
 
                       <Grid className="lbl_MI" item xs={12} sm={3}>
-                        Dates
+                        Day
                       </Grid>
                       <Grid className="radio_dayDate" item xs={12} sm={4}>
                         <FormControl size="small" className="select">
@@ -1637,11 +1638,12 @@ function Make_invoice() {
                           <Select
                             value={days}
                             disabled={
-                              tablerows.some(
-                                (ob) => ob.paymentWay === "PayandGo"
-                              )
-                                ? false
-                                : true
+                              // tablerows.some(
+                              //   (ob) => ob.paymentWay === "PayandGo"
+                              // )
+                              //   ? false
+                              //   : true
+                              true
                             }
                             onChange={(e) => {
                               setDays(e.target.value);
@@ -1804,8 +1806,13 @@ function Make_invoice() {
                                   e.toDate()
                                 )
                               );
+                              setDates(new Date(intialTimestamp?.seconds * 1000).getDate());
+                              setDays(new Date(intialTimestamp?.seconds * 1000).getDay())
+                             
                             } else {
                               setInititialTimestamp(null);
+                              setDates(new Date().getDate());
+                              setDays(new Date().getDay());
                             }
                           }}
                         />

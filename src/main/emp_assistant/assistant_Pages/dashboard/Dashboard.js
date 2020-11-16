@@ -22,6 +22,10 @@ function isDateBeforeToday(date) {
   return new Date(date.toDateString()) < new Date(new Date().toDateString());
 }
 
+function isDateBeforeNextDate(date) {
+  return new Date(date.toDateString()) > new Date(new Date().toDateString());
+}
+
 export default function Dashboard() {
   // eslint-disable-next-line
   const [pendingBlackList, setPendingBlackList] = useState([]);
@@ -37,7 +41,20 @@ export default function Dashboard() {
       .where("status_of_payandgo", "==", "onGoing")
       .get()
       .then((onSnap) => {
-        onSnap.docs.forEach((eachRe) => {
+        onSnap.docs.forEach(async (eachRe) => {
+          var isBeforeNe = isDateBeforeNextDate(
+            new Date(eachRe.data()?.nextDate)
+          );
+          if (isBeforeNe) {
+            await db
+              .collection("invoice")
+              .doc(eachRe.id)
+              .update({
+                nextDate: new Date(eachRe.data()?.nextDate).setDate(
+                  new Date(eachRe.data()?.nextDate).getDate() + 31
+                ),
+              });
+          }
           let isBeforeDate = isDateBeforeToday(
             new Date(eachRe.data()?.deadlineTimestamp?.seconds * 1000)
           );
@@ -54,7 +71,21 @@ export default function Dashboard() {
       .where("status_of_payandgo", "==", "expired")
       .get()
       .then((onSnap) => {
-        onSnap.docs.forEach((each) => {
+        onSnap.docs.forEach(async (each) => {
+          var isBeforeNe = isDateBeforeNextDate(
+            new Date(each.data()?.nextDate)
+          );
+          if (isBeforeNe) {
+            await db
+              .collection("invoice")
+              .doc(each.id)
+              .update({
+                nextDate: new Date(each.data()?.nextDate).setDate(
+                  new Date(each.data()?.nextDate).getDate() + 31
+                ),
+              });
+          }
+
           let isBeforeDate = isDateBeforeToday(
             new Date(each.data()?.deadlineTimestamp?.seconds * 1000)
           );
@@ -120,26 +151,26 @@ export default function Dashboard() {
                       daysCountInitial - 7 <= 7
                         ? 0
                         : (daysCountInitial - 7) / 7 < 2
-                        ? 99
-                        : (daysCountInitial - 7) / 7 > 2 &&
-                          (daysCountInitial - 7) / 7 < 3
-                        ? 198
-                        : (daysCountInitial - 7) / 7 > 3 &&
-                          (daysCountInitial - 7) / 7 < 4
-                        ? 297
-                        : (daysCountInitial - 7) / 7 > 4 &&
-                          (daysCountInitial - 7) / 7 < 5
-                        ? 396
-                        : (daysCountInitial - 7) / 7 > 5 &&
-                          (daysCountInitial - 7) / 7 < 6
-                        ? 495
-                        : (daysCountInitial - 7) / 7 > 6 &&
-                          (daysCountInitial - 7) / 7 < 7
-                        ? 594
-                        : (daysCountInitial - 7) / 7 > 7 &&
-                          (daysCountInitial - 7) / 7 < 8
-                        ? 693
-                        : 693,
+                          ? 99
+                          : (daysCountInitial - 7) / 7 > 2 &&
+                            (daysCountInitial - 7) / 7 < 3
+                            ? 198
+                            : (daysCountInitial - 7) / 7 > 3 &&
+                              (daysCountInitial - 7) / 7 < 4
+                              ? 297
+                              : (daysCountInitial - 7) / 7 > 4 &&
+                                (daysCountInitial - 7) / 7 < 5
+                                ? 396
+                                : (daysCountInitial - 7) / 7 > 5 &&
+                                  (daysCountInitial - 7) / 7 < 6
+                                  ? 495
+                                  : (daysCountInitial - 7) / 7 > 6 &&
+                                    (daysCountInitial - 7) / 7 < 7
+                                    ? 594
+                                    : (daysCountInitial - 7) / 7 > 7 &&
+                                      (daysCountInitial - 7) / 7 < 8
+                                      ? 693
+                                      : 693,
                   });
               } else {
                 db.collection("arrears").add({
@@ -157,26 +188,26 @@ export default function Dashboard() {
                     daysCountInitial - 7 <= 7
                       ? 0
                       : (daysCountInitial - 7) / 7 < 2
-                      ? 99
-                      : (daysCountInitial - 7) / 7 > 2 &&
-                        (daysCountInitial - 7) / 7 < 3
-                      ? 198
-                      : (daysCountInitial - 7) / 7 > 3 &&
-                        (daysCountInitial - 7) / 7 < 4
-                      ? 297
-                      : (daysCountInitial - 7) / 7 > 4 &&
-                        (daysCountInitial - 7) / 7 < 5
-                      ? 396
-                      : (daysCountInitial - 7) / 7 > 5 &&
-                        (daysCountInitial - 7) / 7 < 6
-                      ? 495
-                      : (daysCountInitial - 7) / 7 > 6 &&
-                        (daysCountInitial - 7) / 7 < 7
-                      ? 594
-                      : (daysCountInitial - 7) / 7 > 7 &&
-                        (daysCountInitial - 7) / 7 < 8
-                      ? 693
-                      : 693,
+                        ? 99
+                        : (daysCountInitial - 7) / 7 > 2 &&
+                          (daysCountInitial - 7) / 7 < 3
+                          ? 198
+                          : (daysCountInitial - 7) / 7 > 3 &&
+                            (daysCountInitial - 7) / 7 < 4
+                            ? 297
+                            : (daysCountInitial - 7) / 7 > 4 &&
+                              (daysCountInitial - 7) / 7 < 5
+                              ? 396
+                              : (daysCountInitial - 7) / 7 > 5 &&
+                                (daysCountInitial - 7) / 7 < 6
+                                ? 495
+                                : (daysCountInitial - 7) / 7 > 6 &&
+                                  (daysCountInitial - 7) / 7 < 7
+                                  ? 594
+                                  : (daysCountInitial - 7) / 7 > 7 &&
+                                    (daysCountInitial - 7) / 7 < 8
+                                    ? 693
+                                    : 693,
                   date: firebase.firestore.FieldValue.serverTimestamp(),
                 });
               }
@@ -211,26 +242,26 @@ export default function Dashboard() {
                       daysCountInitial - 14 <= 7
                         ? 0
                         : (daysCountInitial - 14) / 7 < 2
-                        ? 99
-                        : (daysCountInitial - 14) / 7 > 2 &&
-                          (daysCountInitial - 14) / 7 < 3
-                        ? 198
-                        : (daysCountInitial - 14) / 7 > 3 &&
-                          (daysCountInitial - 14) / 7 < 4
-                        ? 297
-                        : (daysCountInitial - 14) / 7 > 4 &&
-                          (daysCountInitial - 14) / 7 < 5
-                        ? 396
-                        : (daysCountInitial - 14) / 7 > 5 &&
-                          (daysCountInitial - 14) / 7 < 6
-                        ? 495
-                        : (daysCountInitial - 14) / 7 > 6 &&
-                          (daysCountInitial - 14) / 7 < 7
-                        ? 594
-                        : (daysCountInitial - 14) / 7 > 7 &&
-                          (daysCountInitial - 14) / 7 < 8
-                        ? 693
-                        : 693,
+                          ? 99
+                          : (daysCountInitial - 14) / 7 > 2 &&
+                            (daysCountInitial - 14) / 7 < 3
+                            ? 198
+                            : (daysCountInitial - 14) / 7 > 3 &&
+                              (daysCountInitial - 14) / 7 < 4
+                              ? 297
+                              : (daysCountInitial - 14) / 7 > 4 &&
+                                (daysCountInitial - 14) / 7 < 5
+                                ? 396
+                                : (daysCountInitial - 14) / 7 > 5 &&
+                                  (daysCountInitial - 14) / 7 < 6
+                                  ? 495
+                                  : (daysCountInitial - 14) / 7 > 6 &&
+                                    (daysCountInitial - 14) / 7 < 7
+                                    ? 594
+                                    : (daysCountInitial - 14) / 7 > 7 &&
+                                      (daysCountInitial - 14) / 7 < 8
+                                      ? 693
+                                      : 693,
                   });
               } else {
                 db.collection("arrears").add({
@@ -248,26 +279,26 @@ export default function Dashboard() {
                     daysCountInitial - 14 <= 7
                       ? 0
                       : (daysCountInitial - 14) / 7 < 2
-                      ? 99
-                      : (daysCountInitial - 14) / 7 > 2 &&
-                        (daysCountInitial - 14) / 7 < 3
-                      ? 198
-                      : (daysCountInitial - 14) / 7 > 3 &&
-                        (daysCountInitial - 14) / 7 < 4
-                      ? 297
-                      : (daysCountInitial - 14) / 7 > 4 &&
-                        (daysCountInitial - 14) / 7 < 5
-                      ? 396
-                      : (daysCountInitial - 14) / 7 > 5 &&
-                        (daysCountInitial - 14) / 7 < 6
-                      ? 495
-                      : (daysCountInitial - 14) / 7 > 6 &&
-                        (daysCountInitial - 14) / 7 < 7
-                      ? 594
-                      : (daysCountInitial - 14) / 7 > 7 &&
-                        (daysCountInitial - 14) / 7 < 8
-                      ? 693
-                      : 693,
+                        ? 99
+                        : (daysCountInitial - 14) / 7 > 2 &&
+                          (daysCountInitial - 14) / 7 < 3
+                          ? 198
+                          : (daysCountInitial - 14) / 7 > 3 &&
+                            (daysCountInitial - 14) / 7 < 4
+                            ? 297
+                            : (daysCountInitial - 14) / 7 > 4 &&
+                              (daysCountInitial - 14) / 7 < 5
+                              ? 396
+                              : (daysCountInitial - 14) / 7 > 5 &&
+                                (daysCountInitial - 14) / 7 < 6
+                                ? 495
+                                : (daysCountInitial - 14) / 7 > 6 &&
+                                  (daysCountInitial - 14) / 7 < 7
+                                  ? 594
+                                  : (daysCountInitial - 14) / 7 > 7 &&
+                                    (daysCountInitial - 14) / 7 < 8
+                                    ? 693
+                                    : 693,
                   date: firebase.firestore.FieldValue.serverTimestamp(),
                 });
               }
@@ -287,11 +318,17 @@ export default function Dashboard() {
   // };
 
   const afterStateOfArreasCheck = async (instReDoc, eachRe) => {
+    // let daysCountNode2 =
+    //   (new Date().getTime() -
+    //     new Date(
+    //       instReDoc.docs[instReDoc.docs.length - 1].data()?.date?.seconds * 1000
+    //     ).getTime()) /
+    //   (1000 * 3600 * 24);
+    // let daysCount = daysCountNode2 - 31;
+
     let daysCountNode2 =
       (new Date().getTime() -
-        new Date(
-          instReDoc.docs[instReDoc.docs.length - 1].data()?.date?.seconds * 1000
-        ).getTime()) /
+        new Date(instReDoc.docs[0].data()?.nextDate).getTime()) /
       (1000 * 3600 * 24);
     let daysCount = daysCountNode2 - 31;
 
@@ -343,20 +380,20 @@ export default function Dashboard() {
                   daysCount - 7 <= 7
                     ? 0
                     : (daysCount - 7) / 7 < 2
-                    ? 99
-                    : (daysCount - 7) / 7 > 2 && (daysCount - 7) / 7 < 3
-                    ? 198
-                    : (daysCount - 7) / 7 > 3 && (daysCount - 7) / 7 < 4
-                    ? 297
-                    : (daysCount - 7) / 7 > 4 && (daysCount - 7) / 7 < 5
-                    ? 396
-                    : (daysCount - 7) / 7 > 5 && (daysCount - 7) / 7 < 6
-                    ? 495
-                    : (daysCount - 7) / 7 > 6 && (daysCount - 7) / 7 < 7
-                    ? 594
-                    : (daysCount - 7) / 7 > 7 && (daysCount - 7) / 7 < 8
-                    ? 693
-                    : 99 * Math.round((daysCount - 7) / 7),
+                      ? 99
+                      : (daysCount - 7) / 7 > 2 && (daysCount - 7) / 7 < 3
+                        ? 198
+                        : (daysCount - 7) / 7 > 3 && (daysCount - 7) / 7 < 4
+                          ? 297
+                          : (daysCount - 7) / 7 > 4 && (daysCount - 7) / 7 < 5
+                            ? 396
+                            : (daysCount - 7) / 7 > 5 && (daysCount - 7) / 7 < 6
+                              ? 495
+                              : (daysCount - 7) / 7 > 6 && (daysCount - 7) / 7 < 7
+                                ? 594
+                                : (daysCount - 7) / 7 > 7 && (daysCount - 7) / 7 < 8
+                                  ? 693
+                                  : 99 * Math.round((daysCount - 7) / 7),
               });
           } else {
             db.collection("arrears").add({
@@ -374,20 +411,20 @@ export default function Dashboard() {
                 daysCount - 7 <= 7
                   ? 0
                   : (daysCount - 7) / 7 < 2
-                  ? 99
-                  : (daysCount - 7) / 7 > 2 && (daysCount - 7) / 7 < 3
-                  ? 198
-                  : (daysCount - 7) / 7 > 3 && (daysCount - 7) / 7 < 4
-                  ? 297
-                  : (daysCount - 7) / 7 > 4 && (daysCount - 7) / 7 < 5
-                  ? 396
-                  : (daysCount - 7) / 7 > 5 && (daysCount - 7) / 7 < 6
-                  ? 495
-                  : (daysCount - 7) / 7 > 6 && (daysCount - 7) / 7 < 7
-                  ? 594
-                  : (daysCount - 7) / 7 > 7 && (daysCount - 7) / 7 < 8
-                  ? 693
-                  : 99 * Math.round((daysCount - 7) / 7),
+                    ? 99
+                    : (daysCount - 7) / 7 > 2 && (daysCount - 7) / 7 < 3
+                      ? 198
+                      : (daysCount - 7) / 7 > 3 && (daysCount - 7) / 7 < 4
+                        ? 297
+                        : (daysCount - 7) / 7 > 4 && (daysCount - 7) / 7 < 5
+                          ? 396
+                          : (daysCount - 7) / 7 > 5 && (daysCount - 7) / 7 < 6
+                            ? 495
+                            : (daysCount - 7) / 7 > 6 && (daysCount - 7) / 7 < 7
+                              ? 594
+                              : (daysCount - 7) / 7 > 7 && (daysCount - 7) / 7 < 8
+                                ? 693
+                                : 99 * Math.round((daysCount - 7) / 7),
               date: firebase.firestore.FieldValue.serverTimestamp(),
             });
           }
@@ -423,20 +460,20 @@ export default function Dashboard() {
                   daysCount - 14 <= 7
                     ? 0
                     : (daysCount - 14) / 7 < 2
-                    ? 99
-                    : (daysCount - 14) / 7 > 2 && (daysCount - 14) / 7 < 3
-                    ? 198
-                    : (daysCount - 14) / 7 > 3 && (daysCount - 14) / 7 < 4
-                    ? 297
-                    : (daysCount - 14) / 7 > 4 && (daysCount - 14) / 7 < 5
-                    ? 396
-                    : (daysCount - 14) / 7 > 5 && (daysCount - 14) / 7 < 6
-                    ? 495
-                    : (daysCount - 14) / 7 > 6 && (daysCount - 14) / 7 < 7
-                    ? 594
-                    : (daysCount - 14) / 7 > 7 && (daysCount - 14) / 7 < 8
-                    ? 693
-                    : 99 * Math.round((daysCount - 14) / 7),
+                      ? 99
+                      : (daysCount - 14) / 7 > 2 && (daysCount - 14) / 7 < 3
+                        ? 198
+                        : (daysCount - 14) / 7 > 3 && (daysCount - 14) / 7 < 4
+                          ? 297
+                          : (daysCount - 14) / 7 > 4 && (daysCount - 14) / 7 < 5
+                            ? 396
+                            : (daysCount - 14) / 7 > 5 && (daysCount - 14) / 7 < 6
+                              ? 495
+                              : (daysCount - 14) / 7 > 6 && (daysCount - 14) / 7 < 7
+                                ? 594
+                                : (daysCount - 14) / 7 > 7 && (daysCount - 14) / 7 < 8
+                                  ? 693
+                                  : 99 * Math.round((daysCount - 14) / 7),
               });
           } else {
             db.collection("arrears").add({
@@ -454,20 +491,20 @@ export default function Dashboard() {
                 daysCount - 14 <= 7
                   ? 0
                   : (daysCount - 14) / 7 < 2
-                  ? 99
-                  : (daysCount - 14) / 7 > 2 && (daysCount - 14) / 7 < 3
-                  ? 198
-                  : (daysCount - 14) / 7 > 3 && (daysCount - 14) / 7 < 4
-                  ? 297
-                  : (daysCount - 14) / 7 > 4 && (daysCount - 14) / 7 < 5
-                  ? 396
-                  : (daysCount - 14) / 7 > 5 && (daysCount - 14) / 7 < 6
-                  ? 495
-                  : (daysCount - 14) / 7 > 6 && (daysCount - 14) / 7 < 7
-                  ? 594
-                  : (daysCount - 14) / 7 > 7 && (daysCount - 14) / 7 < 8
-                  ? 693
-                  : 99 * Math.round((daysCount - 14) / 7),
+                    ? 99
+                    : (daysCount - 14) / 7 > 2 && (daysCount - 14) / 7 < 3
+                      ? 198
+                      : (daysCount - 14) / 7 > 3 && (daysCount - 14) / 7 < 4
+                        ? 297
+                        : (daysCount - 14) / 7 > 4 && (daysCount - 14) / 7 < 5
+                          ? 396
+                          : (daysCount - 14) / 7 > 5 && (daysCount - 14) / 7 < 6
+                            ? 495
+                            : (daysCount - 14) / 7 > 6 && (daysCount - 14) / 7 < 7
+                              ? 594
+                              : (daysCount - 14) / 7 > 7 && (daysCount - 14) / 7 < 8
+                                ? 693
+                                : 99 * Math.round((daysCount - 14) / 7),
               date: firebase.firestore.FieldValue.serverTimestamp(),
             });
           }

@@ -29,16 +29,13 @@ class ArreasRecipt extends React.Component {
     customer_nic: "",
     customer_name: "",
     date: null,
-    serial_num: "",
   };
 
   constructor(props) {
     super(props);
     this.state.invoice_number = this.props.prop?.invoice_number;
-    this.state.serial_number = this.props.prop?.serial_number;
     this.state.total = this.props.prop?.total;
     this.state.date = this.props.prop?.date;
-    this.state.serial_num = this.props.prop?.serialNo;
     this.state.delayed = this.props.prop?.delayedCharges;
     this.state.customer_nic = this.props.prop?.customerDetails?.nic;
     this.state.customer_name =

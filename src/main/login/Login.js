@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Grid,
   CircularProgress,
@@ -26,18 +26,27 @@ import { useUserDispatch, loginUser } from "../../context/UserContext";
 import db from "../../config/firebase.js";
 import firebase from "firebase";
 
+import { useHistory } from "react-router-dom";
+
 function Login(props) {
   var classes = useStyles();
 
   // global
   var userDispatch = useUserDispatch();
-
-  // local
+  let history = useHistory();
 
   var [isLoading, setIsLoading] = useState(false);
-  var [, setError] = useState(null);
+  // eslint-disable-next-line
+  var [error, setError] = useState(null);
   var [loginValue, setLoginValue] = useState("");
   var [passwordValue, setPasswordValue] = useState("");
+
+  useEffect(() => {
+    window.addEventListener("offline", function (e) {
+      history.push("/connection_lost");
+    });
+    // eslint-disable-next-line
+  }, []);
 
   const onLogin = async (e) => {
     e.preventDefault();
@@ -91,8 +100,8 @@ function Login(props) {
 
   return (
     <>
-      <div style={{ position: 'absolute', background: "#000022"}}>
-        <Particles height="100vh" width="100vw" params={particlesConfig}/>
+      <div style={{ position: "absolute", background: "#000022" }}>
+        <Particles height="100vh" width="100vw" params={particlesConfig} />
       </div>
       <Grid container className="container">
         <div className="formContainer">

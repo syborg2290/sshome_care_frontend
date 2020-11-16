@@ -11,6 +11,7 @@ export default function Connection_Error() {
   var classes = useStyles();
 
   useEffect(() => {
+
     window.addEventListener("online", function (e) {
       window.history.back();
     });

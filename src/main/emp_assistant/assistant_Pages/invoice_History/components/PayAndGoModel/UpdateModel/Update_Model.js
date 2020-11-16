@@ -36,7 +36,6 @@ export default function Update_Model({
   const [intialBalance, setInitialBalance] = useState(balanceProp);
   // eslint-disable-next-line
   const [balance, setBalance] = useState(balanceProp);
-  const [serialNo, setSerialNo] = useState("");
   const [delayedDays, setDelayedDays] = useState(0);
   const [installmentAmount, setInstallmentAmount] = useState(instAmountProp);
   // eslint-disable-next-line
@@ -75,11 +74,10 @@ export default function Update_Model({
             .doc(reInvoice.docs[0].id)
             .update({
               nextDate: new Date(reInvoice.docs[0].data()?.nextDate).setDate(
-                new Date(reInvoice.docs[0].data()?.nextDate).getDay() + 31
+                new Date(reInvoice.docs[0].data()?.nextDate).getDate() + 31
               ),
             });
         }
-        setSerialNo(reInvoice.docs[0].data().items[0].serialNo);
       });
 
     db.collection("customer")
@@ -194,9 +192,7 @@ export default function Update_Model({
 
               let daysCountNode2 =
                 (new Date().getTime() -
-                  new Date(
-                    inReDoc.docs[0].data()?.nextDate
-                  ).getTime()) /
+                  new Date(inReDoc.docs[0].data()?.nextDate).getTime()) /
                 (1000 * 3600 * 24);
               let daysCount = daysCountNode2 - 31;
 
@@ -274,7 +270,6 @@ export default function Update_Model({
         let tot = parseInt(installmentAmount) + parseInt(gamisaraniamount);
         await db.collection("installment").add({
           invoice_number: invoice_no,
-          serialNo: serialNo,
           amount: parseInt(installmentAmount) + parseInt(gamisaraniamount),
           delayed: delayedCharges === "" ? 0 : parseInt(delayedCharges),
           isExpired: isEx,
@@ -377,7 +372,6 @@ export default function Update_Model({
           let toto = parseInt(installmentAmount) + parseInt(gamisaraniamount);
           let passingWithCustomerObj = {
             invoice_number: invoice_no,
-            serialNo: serialNo,
             customerDetails: customer,
             total: totalPlusRed(),
             balance: balance - toto <= 0 ? 0 : balance - toto,
@@ -583,60 +577,52 @@ export default function Update_Model({
                   />
                 </Grid>
 
-              {/* <Grid className="lbl_topi" item xs={12} sm={4}>
-                Balance(LKR)
+                <Grid className="lbl_topi" item xs={12} sm={4}>
+                  Due Installment Count
               </Grid>
-              <Grid item xs={12} sm={2}>
-                :
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <CurrencyFormat
-                  value={
-                    gamisaraniamount + installmentAmount === 0
-                      ? intialBalance
-                      : balance - (gamisaraniamount + installmentAmount) <= 0
-                      ? 0
-                      : balance - (gamisaraniamount + installmentAmount)
-                  }
-                  displayType={"text"}
-                  thousandSeparator={true}
-                  prefix={" "}
-                />
-              </Grid> */}
-               <Grid className="lbl_topi" item xs={12} sm={4}>
-                Balance(LKR)
-              </Grid>
-              <Grid item xs={12} sm={2}>
-                :
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  type="number"
-                  autoComplete="delayed"
-                  variant="outlined"
-                  required
-                  fullWidth
-                  label="Balance"
-                  size="small"
-                   value={ 
-                      gamisaraniamount + installmentAmount === 0
-                      ? intialBalance
-                      : balance - (gamisaraniamount + installmentAmount) <= 0
-                      ? 0
-                        : balance - (gamisaraniamount + installmentAmount)
-               
-                  }
-                  
-                 onChange={(e) => {
-                  setBalance(e.target.value.trim());
-                }}
-                />
+                <Grid item xs={12} sm={2}>
+                  :
               </Grid>
                 <Grid item xs={12} sm={6}>
                   <p>{dueInstallmentsCount()}</p>
                 </Grid>
 
                 <Grid className="lbl_topi" item xs={12} sm={4}>
+                  Balance(LKR)
+              </Grid>
+                <Grid item xs={12} sm={2}>
+                  :
+              </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    type="number"
+                    autoComplete="delayed"
+                    variant="outlined"
+                    required
+                    fullWidth
+                    label="Balance"
+                    size="small"
+                    value={balance}
+                    onChange={(e) => {
+                      if (gamisaraniamount + installmentAmount === 0) {
+                        setBalance(intialBalance);
+                      } else {
+                        if (
+                          balance - (gamisaraniamount + installmentAmount) <=
+                          0
+                        ) {
+                          setBalance(0);
+                        } else {
+                          setBalance(
+                            balance - (gamisaraniamount + installmentAmount)
+                          );
+                        }
+                      }
+                    }}
+                  />
+                </Grid>
+
+                {/* <Grid className="lbl_topi" item xs={12} sm={4}>
                   Balance(LKR)
               </Grid>
                 <Grid item xs={12} sm={2}>
@@ -655,7 +641,7 @@ export default function Update_Model({
                     thousandSeparator={true}
                     prefix={" "}
                   />
-                </Grid>
+                </Grid> */}
 
                 <Grid className="lbl_topi" item xs={12} sm={4}>
                   Date

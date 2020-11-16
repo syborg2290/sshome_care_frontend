@@ -50,8 +50,10 @@ export default function Dashboard() {
               .collection("invoice")
               .doc(eachRe.id)
               .update({
-                nextDate: new Date(eachRe.data()?.nextDate).setDate(
-                  new Date(eachRe.data()?.nextDate).getDate() + 31
+                nextDate: firebase.firestore.Timestamp.fromDate(
+                  new Date(eachRe.data()?.nextDate).setDate(
+                    new Date(eachRe.data()?.nextDate).getDate() + 31
+                  )
                 ),
               });
           }
@@ -80,8 +82,10 @@ export default function Dashboard() {
               .collection("invoice")
               .doc(each.id)
               .update({
-                nextDate: new Date(each.data()?.nextDate).setDate(
-                  new Date(each.data()?.nextDate).getDate() + 31
+                nextDate: firebase.firestore.Timestamp.fromDate(
+                  new Date(each.data()?.nextDate).setDate(
+                    new Date(each.data()?.nextDate).getDate() + 31
+                  )
                 ),
               });
           }
@@ -328,7 +332,7 @@ export default function Dashboard() {
 
     let daysCountNode2 =
       (new Date().getTime() -
-        new Date(instReDoc.docs[0].data()?.nextDate).getTime()) /
+        new Date(instReDoc.docs[0].data()?.nextDate?.seconds * 1000).getTime()) /
       (1000 * 3600 * 24);
     let daysCount = daysCountNode2 - 31;
 

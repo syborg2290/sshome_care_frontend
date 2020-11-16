@@ -32,8 +32,6 @@ export default function Areas() {
 
   let history = useHistory();
 
- 
-
   const showModalArresHistory = () => {
     setArresHistory(true);
   };
@@ -108,7 +106,7 @@ export default function Areas() {
       },
     },
 
-       {
+    {
       name: "Action",
 
       options: {
@@ -124,8 +122,6 @@ export default function Areas() {
         }),
       },
     },
-
-  
   ];
 
   useEffect(() => {
@@ -168,13 +164,7 @@ export default function Areas() {
           Date: moment(eachRe.data()?.date?.toDate()).format(
             "dddd, MMMM Do YYYY"
           ),
-          Action: (
-           
-            
-              
-                <HistoryIcon onClick={showModalArresHistory} />
-            
-          ),
+          Action: <HistoryIcon onClick={showModalArresHistory} />,
         });
       });
       setArreasTableData(rawData);
@@ -377,17 +367,11 @@ export default function Areas() {
   };
 
   const afterStateOfArreasCheck = async (instReDoc, eachRe) => {
-    // let daysCountNode2 =
-    //   (new Date().getTime() -
-    //     new Date(
-    //       instReDoc.docs[instReDoc.docs.length - 1].data()?.date?.seconds * 1000
-    //     ).getTime()) /
-    //   (1000 * 3600 * 24);
-    // let daysCount = daysCountNode2 - 31;
-
     let daysCountNode2 =
       (new Date().getTime() -
-        new Date(instReDoc.docs[0].data()?.nextDate).getTime()) /
+        new Date(
+          instReDoc.docs[0].data()?.nextDate?.seconds * 1000
+        ).getTime()) /
       (1000 * 3600 * 24);
     let daysCount = daysCountNode2 - 31;
 
@@ -544,8 +528,6 @@ export default function Areas() {
 
   return (
     <div>
-    
-
       {/*Start Arreas Model History */}
 
       <Modal

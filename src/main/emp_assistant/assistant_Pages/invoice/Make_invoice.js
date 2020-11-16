@@ -497,11 +497,12 @@ function Make_invoice() {
                           (totalDiscount === "" ? 0 : totalDiscount),
                         status_of_payandgo: "onGoing",
                         date: intialTimestamp,
-                        nextDate: new Date(
-                          intialTimestamp?.seconds * 1000
-                        ).setDate(
-                          new Date(intialTimestamp?.seconds * 1000).getDate() +
-                            31
+                        nextDate: firebase.firestore.Timestamp.fromDate(
+                          new Date(intialTimestamp?.seconds * 1000).setDate(
+                            new Date(
+                              intialTimestamp?.seconds * 1000
+                            ).getDate() + 31
+                          )
                         ),
                       })
                       .then((invDoc) => {
@@ -678,11 +679,12 @@ function Make_invoice() {
                           (totalDiscount === "" ? 0 : totalDiscount),
                         status_of_payandgo: "onGoing",
                         date: intialTimestamp,
-                        nextDate: new Date(
-                          intialTimestamp?.seconds * 1000
-                        ).setDate(
-                          new Date(intialTimestamp?.seconds * 1000).getDate() +
-                            31
+                        nextDate: firebase.firestore.Timestamp.fromDate(
+                          new Date(intialTimestamp?.seconds * 1000).setDate(
+                            new Date(
+                              intialTimestamp?.seconds * 1000
+                            ).getDate() + 31
+                          )
                         ),
                       })
                       .then((invDoc) => {
@@ -857,8 +859,10 @@ function Make_invoice() {
                       (totalDiscount === "" ? 0 : totalDiscount),
                     status_of_payandgo: "onGoing",
                     date: intialTimestamp,
-                    nextDate: new Date(intialTimestamp?.seconds * 1000).setDate(
-                      new Date(intialTimestamp?.seconds * 1000).getDate() + 31
+                    nextDate: firebase.firestore.Timestamp.fromDate(
+                      new Date(intialTimestamp?.seconds * 1000).setDate(
+                        new Date(intialTimestamp?.seconds * 1000).getDate() + 31
+                      )
                     ),
                   })
                   .then((invDoc) => {
@@ -1029,8 +1033,10 @@ function Make_invoice() {
                       (totalDiscount === "" ? 0 : totalDiscount),
                     status_of_payandgo: "onGoing",
                     date: intialTimestamp,
-                    nextDate: new Date(intialTimestamp?.seconds * 1000).setDate(
-                      new Date(intialTimestamp?.seconds * 1000).getDate() + 31
+                    nextDate: firebase.firestore.Timestamp.fromDate(
+                      new Date(intialTimestamp?.seconds * 1000).setDate(
+                        new Date(intialTimestamp?.seconds * 1000).getDate() + 31
+                      )
                     ),
                   })
                   .then((invDoc) => {

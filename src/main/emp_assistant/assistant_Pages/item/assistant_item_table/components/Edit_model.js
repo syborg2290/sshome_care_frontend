@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import { Form, Radio, Input, Layout, Button, Spin } from "antd";
 import Grid from "@material-ui/core/Grid";
 
@@ -66,6 +67,16 @@ export default function Edit_model({
   const [inputsSerialNo, setInputsSerialNo] = useState({});
   const [inputsModelNo, setInputsModelNo] = useState({});
   const [inputsChassisNo, setInputsChassisNo] = useState({});
+
+
+  let history = useHistory();
+  
+  useEffect(() => {
+    
+    window.addEventListener("offline", function (e) {
+      history.push("/connection_lost");
+    });
+  });
 
   //add InputSerial No
   const addInputSerialNo = () => {

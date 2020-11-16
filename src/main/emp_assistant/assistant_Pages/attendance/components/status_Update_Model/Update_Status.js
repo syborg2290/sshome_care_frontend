@@ -29,7 +29,7 @@ export default function Update_Status({
   useEffect(() => {
 
     window.addEventListener("offline", function (e) {
-      history.push("/assistant/connection/error/lost_connection");
+      history.push("/connection_lost");
     });
   });
 

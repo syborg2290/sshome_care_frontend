@@ -109,7 +109,7 @@ export default function ItemTable() {
   useEffect(() => {
 
     window.addEventListener("offline", function (e) {
-      history2.push("/assistant/connection/error/lost_connection");
+      history2.push("/connection_lost");
     });
 
     db.collection("customer")

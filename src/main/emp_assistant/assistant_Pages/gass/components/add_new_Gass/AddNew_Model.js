@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import { TextField, Button } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
@@ -16,6 +17,17 @@ export default function AddNew_Model({ close_model }) {
   const [qty, setQty] = useState(0);
   const [price, setPrice] = useState(0);
   const [purchesPrice, setPurchesPrice] = useState(0);
+
+
+  let history = useHistory();
+  
+
+   useEffect(() => {
+
+    window.addEventListener("offline", function (e) {
+      history.push("/connection_lost");
+    });
+  });
 
   const submit = () => {
     db.collection("gas")

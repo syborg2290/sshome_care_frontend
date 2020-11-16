@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import { TextField, Button } from "@material-ui/core";
 import { DatePicker, Space, Spin } from "antd";
 import CurrencyFormat from "react-currency-format";
@@ -22,13 +23,21 @@ export default function Deposit_Model({ midProp, nicProp, close_model }) {
   const [isLoadingSubmit, setLoadingSubmit] = useState(false);
   const [validation, setValidation] = useState("");
 
+  let history = useHistory();
+
   useEffect(() => {
+
+    window.addEventListener("offline", function (e) {
+      history.push("/connection_lost");
+    });
+
     db.collection("gami_sarani")
       .where("mid", "==", midProp)
       .get()
       .then((re) => {
         setCurrentBalance(re.docs[0].data().currentDeposit);
       });
+      // eslint-disable-next-line
   }, [midProp]);
 
   const depositSubmit = () => {

@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
 import { TextField, Button } from "@material-ui/core";
 import { Spin } from "antd";
 
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
-
+import { useHistory } from "react-router-dom";
 import "react-notifications/lib/notifications.css";
 
 // style
@@ -39,6 +39,14 @@ export default function Update_Model({
   // eslint-disable-next-line
   const [imageFile, setImageFile] = useState(null);
   const [imageUrl, setImageUrl] = useState(imageUrlProp);
+  let history = useHistory();
+
+   useEffect(() => {
+
+    window.addEventListener("offline", function (e) {
+      history.push("/assistant/connection/error/lost_connection");
+    });
+  });
 
   const updateCustomer = async (e) => {
     e.preventDefault();

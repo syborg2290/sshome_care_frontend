@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { TextField, Button } from "@material-ui/core";
 import { Spin } from "antd";
 
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
-
+import { useHistory } from "react-router-dom";
 import "react-notifications/lib/notifications.css";
 
 // styles
@@ -35,7 +35,8 @@ export default function Update_Employe({
   const [validation, setValidation] = useState("");
   // eslint-disable-next-line
   const [isLoadingSubmit, setLoadingSubmit] = useState(false);
-
+  let history = useHistory();
+  
   const updateEmployee = async (e) => {
     e.preventDefault();
     setLoadingSubmit(true);
@@ -92,6 +93,13 @@ export default function Update_Employe({
       }
     }
   };
+
+    useEffect(() => {
+
+    window.addEventListener("offline", function (e) {
+      history.push("/assistant/connection/error/lost_connection");
+    });
+  });
 
   return (
     <Container component="main" className="main_container_employee_update">

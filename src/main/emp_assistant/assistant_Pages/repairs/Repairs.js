@@ -38,6 +38,7 @@ export default function Repairs() {
   const [repairAllData, setRepairAllData] = useState([]);
 
   let history = useHistory();
+  let history2 = useHistory();
 
   const showVisibleConfirmPrintModal = () => {
     setVisibleConfirmPrint(true);
@@ -179,6 +180,11 @@ export default function Repairs() {
   ];
 
   useEffect(() => {
+
+       window.addEventListener("offline", function (e) {
+      history2.push("/assistant/connection/error/lost_connection");
+     });
+
     db.collection("repair").onSnapshot((snap) => {
       var rawData = [];
       var allRawData = [];

@@ -12,7 +12,7 @@ import {
 } from "@material-ui/core";
 import { Checkbox , Spin } from "antd";
 
-
+import { useHistory } from "react-router-dom";
 import db from "../../../../../../config/firebase.js";
 import "react-notifications/lib/notifications.css";
 
@@ -41,7 +41,14 @@ export default function Add_Root() {
 
   const [validation, setValidation] = useState("");
 
+  let history = useHistory();
+
   useEffect(() => {
+
+     window.addEventListener("offline", function (e) {
+      history.push("/assistant/connection/error/lost_connection");
+    });
+
     db.collection("employee")
       .get()
       .then((re) => {
@@ -53,6 +60,7 @@ export default function Add_Root() {
         setEmployee2(raw[0].nic);
         setAllEmployee(raw);
       });
+      // eslint-disable-next-line
   }, []);
 
   const handleChange1 = (event) => {

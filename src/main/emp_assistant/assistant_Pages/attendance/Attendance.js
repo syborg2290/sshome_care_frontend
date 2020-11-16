@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import MUIDataTable from "mui-datatables";
 import { Grid,Button } from "@material-ui/core";
 // eslint-disable-next-line
@@ -11,7 +11,7 @@ import VisibilityIcon from "@material-ui/icons/Visibility";
 import HistoryIcon from "@material-ui/icons/History";
 // eslint-disable-next-line
 import AutorenewIcon from "@material-ui/icons/Autorenew";
-
+import { useHistory } from "react-router-dom";
 
 // components
 import ViewEmployee from "./components/view_Employee_Model/View_Employee";
@@ -31,7 +31,7 @@ export default function Attendance() {
 
   const [markAttendanceModel, setMarkAttendanceModel] = useState(false);
   const [historyAttendanceModel, setHistoryAttendanceModel] = useState(false);
-
+  let history = useHistory();
 
    const showModalView = () => {
     setviewEmployeesModel(true);
@@ -139,6 +139,13 @@ export default function Attendance() {
     ],
 
   ];
+
+  useEffect(() => {
+
+    window.addEventListener("offline", function (e) {
+      history.push("/assistant/connection/error/lost_connection");
+    });
+  });
 
   return (
     <>

@@ -11,6 +11,7 @@ import { Modal } from "antd";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import CurrencyFormat from "react-currency-format";
+import { useHistory } from "react-router-dom";
 
 // styles
 import "./Gass.css";
@@ -43,6 +44,7 @@ export default function Gass() {
   const [addNewGassModal, setAddNewGassModal] = useState(false); // Table models
   const [purchaseHistory, setPurchaseHistory] = useState(false); // Table models
   const [gassHistory, setGassHistory] = useState(false); //models
+  let history = useHistory();
 
   const showModalGass = () => {
     setGassModal(true);
@@ -64,6 +66,11 @@ export default function Gass() {
   };
 
   useEffect(() => {
+    
+    window.addEventListener("offline", function (e) {
+      history.push("/assistant/connection/error/lost_connection");
+    });
+
     db.collection("gas").onSnapshot((snap) => {
       var raw = [];
       var rawAll = [];
@@ -89,6 +96,7 @@ export default function Gass() {
       setAllTableData(rawAll);
       setTableData(raw);
     });
+      // eslint-disable-next-line
   }, []);
 
   return (

@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+
+import { useHistory } from "react-router-dom";
 import {
   TextField,
   Button,
@@ -50,7 +52,14 @@ export default function Update_Root({
 
   const [validation, setValidation] = useState("");
 
+  let history = useHistory();
+  
   useEffect(() => {
+
+     window.addEventListener("offline", function (e) {
+      history.push("/assistant/connection/error/lost_connection");
+    });
+
     db.collection("employee")
       .get()
       .then((re) => {
@@ -60,6 +69,7 @@ export default function Update_Root({
         });
         setAllEmployee(raw);
       });
+    // eslint-disable-next-line
   }, []);
 
   const handleChange1 = (event) => {

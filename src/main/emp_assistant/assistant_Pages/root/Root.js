@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@material-ui/core";
-
+import { useHistory } from "react-router-dom";
 import { Modal } from "antd";
 import Grid from "@material-ui/core/Grid";
 import MUIDataTable from "mui-datatables";
@@ -26,6 +26,8 @@ export default function Root() {
   // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
 
+  let history = useHistory();
+  
   const RootAdd = () => {
     setRootAddModel(true);
   };
@@ -127,6 +129,11 @@ export default function Root() {
   ];
 
   useEffect(() => {
+
+        window.addEventListener("offline", function (e) {
+      history.push("/assistant/connection/error/lost_connection");
+     });
+
     db.collection("root").onSnapshot((snap) => {
       var raw = [];
       var rawAll = [];
@@ -185,6 +192,7 @@ export default function Root() {
       setTableData(raw);
       setAllTableData(rawAll);
     });
+      // eslint-disable-next-line
   }, []);
 
   return (

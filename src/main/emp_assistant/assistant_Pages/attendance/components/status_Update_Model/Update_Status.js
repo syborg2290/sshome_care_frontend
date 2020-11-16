@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import { Row, Col ,Spin} from "antd";
 import {
   TextField,
@@ -20,14 +21,21 @@ export default function Update_Status({
 //   reason,
 }) {
 
-   // eslint-disable-next-line
-    const [isLoadingSubmit, setLoadingSubmit] = useState(false);
-     const [reason, setReason] = useState("");
-    
+ // eslint-disable-next-line
+  const [isLoadingSubmit, setLoadingSubmit] = useState(false);
+  const [reason, setReason] = useState("");
+  let history = useHistory();
+  
+  useEffect(() => {
+
+    window.addEventListener("offline", function (e) {
+      history.push("/assistant/connection/error/lost_connection");
+    });
+  });
+
     return (
 
         <>
-
             <Container component="main" className="main_container_upStts">
                  <Typography className="title_root" variant="h5" gutterBottom>
                  Employee leaves

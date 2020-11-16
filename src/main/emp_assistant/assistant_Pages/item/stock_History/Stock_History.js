@@ -12,6 +12,7 @@ import Paper from "@material-ui/core/Paper";
 import { Row, Col } from "antd";
 import CurrencyFormat from "react-currency-format";
 import moment from "moment";
+import { useHistory } from "react-router-dom";
 
 // styles
 import "./Stock_History.css";
@@ -28,12 +29,18 @@ export default function Stock_History() {
   const [currentIndx, setCurrentIndx] = useState(0);
   const [itemListSeMo, setItemListSeMo] = useState([]);
   const [itemListSeMoCon, setItemListSeMoCon] = useState([]);
+  let history = useHistory();
 
   const showModal = () => {
     setVisible(true);
   };
 
   useEffect(() => {
+    
+       window.addEventListener("offline", function (e) {
+      history.push("/assistant/connection/error/lost_connection");
+       });
+    
     db.collection("item_history")
       .orderBy("timestamp", "desc")
       .onSnapshot((snapshot) => {

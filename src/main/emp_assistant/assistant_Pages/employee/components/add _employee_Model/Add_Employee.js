@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { TextField, Button } from "@material-ui/core";
 import { Spin } from "antd";
 
@@ -10,7 +10,7 @@ import { nicValidation } from "../../../../../../config/validation.js";
 import db from "../../../../../../config/firebase.js";
 import "react-notifications/lib/notifications.css";
 import firebase from "firebase";
-
+import { useHistory } from "react-router-dom";
 // styles
 import "./Add_Employee.css";
 
@@ -28,6 +28,8 @@ export default function Add_Employee({ close_model }) {
   // eslint-disable-next-line
   const [isLoadingSubmit, setLoadingSubmit] = useState(false);
 
+  let history = useHistory();
+  
   const submit = () => {
     setLoadingSubmit(true);
     var result = nicValidation(nic);
@@ -64,6 +66,13 @@ export default function Add_Employee({ close_model }) {
       setValidation("Employee's NIC format is invalid!");
     }
   };
+
+    useEffect(() => {
+
+    window.addEventListener("offline", function (e) {
+      history.push("/assistant/connection/error/lost_connection");
+    });
+  });
 
   return (
     <Container component="main" className="main_container_employee">

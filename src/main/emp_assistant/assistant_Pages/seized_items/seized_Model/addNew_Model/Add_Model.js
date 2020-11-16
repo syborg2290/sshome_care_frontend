@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import {
   Grid,
   Container,
@@ -40,6 +41,14 @@ export default function Add_Model({ closeModel }) {
         });
       });
   };
+  let history = useHistory();
+
+  useEffect(() => {
+
+    window.addEventListener("offline", function (e) {
+      history.push("/assistant/connection/error/lost_connection");
+    });
+  });
 
   const addSeized = async () => {
     setLoading(true);

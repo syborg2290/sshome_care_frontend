@@ -4,7 +4,7 @@ import { Grid, Button } from "@material-ui/core";
 import "react-notifications/lib/notifications.css";
 import CurrencyFormat from "react-currency-format";
 import MUIDataTable from "mui-datatables";
-
+import { useHistory } from "react-router-dom";
 // icons
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import AccountBalanceIcon from "@material-ui/icons/AccountBalance";
@@ -38,7 +38,7 @@ export default function Gami_Sarani() {
 
   // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
-
+let history = useHistory();
   const GamisaraniAddCustomer = () => {
     setGamisaraniModel(true);
   };
@@ -142,6 +142,9 @@ export default function Gami_Sarani() {
   ];
 
   useEffect(() => {
+     window.addEventListener("offline", function (e) {
+      history.push("/assistant/connection/error/lost_connection");
+    });
     db.collection("gami_sarani").onSnapshot((re) => {
       var rawAllData = [];
       var rawData = [];
@@ -216,6 +219,7 @@ export default function Gami_Sarani() {
       setAllTableData(rawAllData);
       setTableData(rawData);
     });
+      // eslint-disable-next-line
   }, []);
 
   return (

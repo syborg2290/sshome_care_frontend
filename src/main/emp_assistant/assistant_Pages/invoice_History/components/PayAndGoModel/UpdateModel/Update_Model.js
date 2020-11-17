@@ -772,14 +772,14 @@ export default function Update_Model({
                  {/* <Grid className="lbl_topi" item xs={12} sm={6}></Grid> */}
                 
 
-            <Grid className="lbl_topi" item xs={12} sm={6}>
-                 Next Installment Date :
+            <Grid className="lbl_topi" item xs={12} sm={4}>
+                 Next Installment Date
               </Grid>
                 <Grid item xs={12} sm={2}>
                   :
               </Grid>
-                <Grid item xs={12} sm={4}>
-                  <p>{moment(nextDate?.toDate()).format(
+                <Grid item xs={12} sm={6}>
+                  <p className="next_date">{moment(nextDate?.toDate()).format(
                     "dddd, MMMM Do YYYY"
                   )}</p>
                 </Grid> 

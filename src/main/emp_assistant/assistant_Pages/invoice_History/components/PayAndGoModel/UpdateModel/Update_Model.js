@@ -78,7 +78,11 @@ export default function Update_Model({
       .where("invoice_number", "==", invoice_no)
       .get()
       .then((inReDoc) => {
-        setBalance(inReDoc.docs[0].data().balance);
+        setBalance(
+          inReDoc.docs[0].data().balance - instAmountProp <= 0
+            ? 0
+            : inReDoc.docs[0].data().balance - instAmountProp
+        );
         setInitialBalance(inReDoc.docs[0].data().balance);
         setNextDate(inReDoc.docs[0].data().nextDate);
         db.collection("installment")
@@ -107,26 +111,26 @@ export default function Update_Model({
                     daysCountInitial - 7 <= 7
                       ? 0
                       : (daysCountInitial - 7) / 7 < 2
-                        ? 99
-                        : (daysCountInitial - 7) / 7 > 2 &&
-                          (daysCountInitial - 7) / 7 < 3
-                          ? 198
-                          : (daysCountInitial - 7) / 7 > 3 &&
-                            (daysCountInitial - 7) / 7 < 4
-                            ? 297
-                            : (daysCountInitial - 7) / 7 > 4 &&
-                              (daysCountInitial - 7) / 7 < 5
-                              ? 396
-                              : (daysCountInitial - 7) / 7 > 5 &&
-                                (daysCountInitial - 7) / 7 < 6
-                                ? 495
-                                : (daysCountInitial - 7) / 7 > 6 &&
-                                  (daysCountInitial - 7) / 7 < 7
-                                  ? 594
-                                  : (daysCountInitial - 7) / 7 > 7 &&
-                                    (daysCountInitial - 7) / 7 < 8
-                                    ? 693
-                                    : 693
+                      ? 99
+                      : (daysCountInitial - 7) / 7 > 2 &&
+                        (daysCountInitial - 7) / 7 < 3
+                      ? 198
+                      : (daysCountInitial - 7) / 7 > 3 &&
+                        (daysCountInitial - 7) / 7 < 4
+                      ? 297
+                      : (daysCountInitial - 7) / 7 > 4 &&
+                        (daysCountInitial - 7) / 7 < 5
+                      ? 396
+                      : (daysCountInitial - 7) / 7 > 5 &&
+                        (daysCountInitial - 7) / 7 < 6
+                      ? 495
+                      : (daysCountInitial - 7) / 7 > 6 &&
+                        (daysCountInitial - 7) / 7 < 7
+                      ? 594
+                      : (daysCountInitial - 7) / 7 > 7 &&
+                        (daysCountInitial - 7) / 7 < 8
+                      ? 693
+                      : 693
                   );
                 }
               } else {
@@ -141,26 +145,26 @@ export default function Update_Model({
                     daysCountInitial - 14 <= 7
                       ? 0
                       : (daysCountInitial - 14) / 7 < 2
-                        ? 99
-                        : (daysCountInitial - 14) / 7 > 2 &&
-                          (daysCountInitial - 14) / 7 < 3
-                          ? 198
-                          : (daysCountInitial - 14) / 7 > 3 &&
-                            (daysCountInitial - 14) / 7 < 4
-                            ? 297
-                            : (daysCountInitial - 14) / 7 > 4 &&
-                              (daysCountInitial - 14) / 7 < 5
-                              ? 396
-                              : (daysCountInitial - 14) / 7 > 5 &&
-                                (daysCountInitial - 14) / 7 < 6
-                                ? 495
-                                : (daysCountInitial - 14) / 7 > 6 &&
-                                  (daysCountInitial - 14) / 7 < 7
-                                  ? 594
-                                  : (daysCountInitial - 14) / 7 > 7 &&
-                                    (daysCountInitial - 14) / 7 < 8
-                                    ? 693
-                                    : 693
+                      ? 99
+                      : (daysCountInitial - 14) / 7 > 2 &&
+                        (daysCountInitial - 14) / 7 < 3
+                      ? 198
+                      : (daysCountInitial - 14) / 7 > 3 &&
+                        (daysCountInitial - 14) / 7 < 4
+                      ? 297
+                      : (daysCountInitial - 14) / 7 > 4 &&
+                        (daysCountInitial - 14) / 7 < 5
+                      ? 396
+                      : (daysCountInitial - 14) / 7 > 5 &&
+                        (daysCountInitial - 14) / 7 < 6
+                      ? 495
+                      : (daysCountInitial - 14) / 7 > 6 &&
+                        (daysCountInitial - 14) / 7 < 7
+                      ? 594
+                      : (daysCountInitial - 14) / 7 > 7 &&
+                        (daysCountInitial - 14) / 7 < 8
+                      ? 693
+                      : 693
                   );
                 }
               }
@@ -193,20 +197,20 @@ export default function Update_Model({
                     daysCount - 7 <= 7
                       ? 0
                       : (daysCount - 7) / 7 < 2
-                        ? 99
-                        : (daysCount - 7) / 7 > 2 && (daysCount - 7) / 7 < 3
-                          ? 198
-                          : (daysCount - 7) / 7 > 3 && (daysCount - 7) / 7 < 4
-                            ? 297
-                            : (daysCount - 7) / 7 > 4 && (daysCount - 7) / 7 < 5
-                              ? 396
-                              : (daysCount - 7) / 7 > 5 && (daysCount - 7) / 7 < 6
-                                ? 495
-                                : (daysCount - 7) / 7 > 6 && (daysCount - 7) / 7 < 7
-                                  ? 594
-                                  : (daysCount - 7) / 7 > 7 && (daysCount - 7) / 7 < 8
-                                    ? 693
-                                    : 693
+                      ? 99
+                      : (daysCount - 7) / 7 > 2 && (daysCount - 7) / 7 < 3
+                      ? 198
+                      : (daysCount - 7) / 7 > 3 && (daysCount - 7) / 7 < 4
+                      ? 297
+                      : (daysCount - 7) / 7 > 4 && (daysCount - 7) / 7 < 5
+                      ? 396
+                      : (daysCount - 7) / 7 > 5 && (daysCount - 7) / 7 < 6
+                      ? 495
+                      : (daysCount - 7) / 7 > 6 && (daysCount - 7) / 7 < 7
+                      ? 594
+                      : (daysCount - 7) / 7 > 7 && (daysCount - 7) / 7 < 8
+                      ? 693
+                      : 693
                   );
                 }
               } else {
@@ -221,25 +225,26 @@ export default function Update_Model({
                     daysCount - 14 <= 7
                       ? 0
                       : (daysCount - 14) / 7 < 2
-                        ? 99
-                        : (daysCount - 14) / 7 > 2 && (daysCount - 14) / 7 < 3
-                          ? 198
-                          : (daysCount - 14) / 7 > 3 && (daysCount - 14) / 7 < 4
-                            ? 297
-                            : (daysCount - 14) / 7 > 4 && (daysCount - 14) / 7 < 5
-                              ? 396
-                              : (daysCount - 14) / 7 > 5 && (daysCount - 14) / 7 < 6
-                                ? 495
-                                : (daysCount - 14) / 7 > 6 && (daysCount - 14) / 7 < 7
-                                  ? 594
-                                  : (daysCount - 14) / 7 > 7 && (daysCount - 14) / 7 < 8
-                                    ? 693
-                                    : 693
+                      ? 99
+                      : (daysCount - 14) / 7 > 2 && (daysCount - 14) / 7 < 3
+                      ? 198
+                      : (daysCount - 14) / 7 > 3 && (daysCount - 14) / 7 < 4
+                      ? 297
+                      : (daysCount - 14) / 7 > 4 && (daysCount - 14) / 7 < 5
+                      ? 396
+                      : (daysCount - 14) / 7 > 5 && (daysCount - 14) / 7 < 6
+                      ? 495
+                      : (daysCount - 14) / 7 > 6 && (daysCount - 14) / 7 < 7
+                      ? 594
+                      : (daysCount - 14) / 7 > 7 && (daysCount - 14) / 7 < 8
+                      ? 693
+                      : 693
                   );
                 }
               }
             }
           });
+
         setIsLoading(false);
       });
   }, [invoice_no, isEx, instAmountProp, instCount, customer_id]);
@@ -274,7 +279,7 @@ export default function Update_Model({
                   )
                 ),
               })
-              .then((_) => { });
+              .then((_) => {});
           }
         } else {
           db.collection("installment")
@@ -333,7 +338,7 @@ export default function Update_Model({
                         )
                       ),
                     })
-                    .then((_) => { });
+                    .then((_) => {});
                 }
               }
             });
@@ -385,10 +390,10 @@ export default function Update_Model({
               currentDeposit:
                 parseInt(getRe.data().currentDeposit) -
                   parseInt(gamisaraniamount) <
-                  0
+                0
                   ? 0
                   : parseInt(getRe.data().currentDeposit) -
-                  parseInt(gamisaraniamount),
+                    parseInt(gamisaraniamount),
             })
             .then((re) => {
               db.collection("gami_sarani_withdrawhistory").add({
@@ -406,7 +411,7 @@ export default function Update_Model({
 
     if (
       parseInt(balance) -
-      (parseInt(installmentAmount) + parseInt(gamisaraniamount)) >
+        (parseInt(installmentAmount) + parseInt(gamisaraniamount)) <=
       0
     ) {
       await db
@@ -422,7 +427,7 @@ export default function Update_Model({
 
     if (
       parseInt(balance) -
-      (parseInt(installmentAmount) + parseInt(gamisaraniamount)) <=
+        (parseInt(installmentAmount) + parseInt(gamisaraniamount)) <=
       0
     ) {
       await db
@@ -518,328 +523,337 @@ export default function Update_Model({
       {isLoading ? (
         <Spin className="spinner" />
       ) : (
-          <div className="paper">
-            <form className="form" noValidate>
-              <Grid container spacing={2}>
-                <Grid className="lbl_topi-gami" item xs={12} sm={12}>
-                  -Gamisarani Customers-
+        <div className="paper">
+          <form className="form" noValidate>
+            <Grid container spacing={2}>
+              <Grid className="lbl_topi-gami" item xs={12} sm={12}>
+                -Gamisarani Customers-
                 <br />
-                  <hr />
-                </Grid>
-                <Grid className="lbl_topi" item xs={12} sm={4}>
-                  Gamisarani
+                <hr />
+              </Grid>
+              <Grid className="lbl_topi" item xs={12} sm={4}>
+                Gamisarani
               </Grid>
 
-                <Grid item xs={12} sm={2}>
-                  :
+              <Grid item xs={12} sm={2}>
+                :
               </Grid>
-                <Grid item xs={12} sm={6}>
-                  <Checkbox
-                    checked={gamisarani}
-                    onChange={(e) => {
-                      if (gamisarani) {
-                        setGamisarani(false);
-                        setGamisaraniId("");
-                        setGamisaraniInitialAmount(0);
-                        setGamisaraniamount(0);
-                        setGamisaraniNic("");
-                      } else {
-                        setGamisarani(true);
-                      }
-                    }}
-                  />
-                </Grid>
-                <Grid className="lbl_topi" item xs={12} sm={4}>
-                  NIC
-              </Grid>
-                <Grid item xs={12} sm={2}>
-                  :
-              </Grid>
-                <Grid className="nIc" item xs={12} sm={4}>
-                  <TextField
-                    className="nic_"
-                    variant="outlined"
-                    required
-                    fullWidth
-                    label="NIC"
-                    name="nic"
-                    autoComplete="nic"
-                    size="small"
-                    disabled={!gamisarani ? true : false}
-                    value={gamisaraniNic}
-                    onChange={(e) => {
-                      setGamisaraniNic(e.target.value.trim());
-                    }}
-                  />
-                </Grid>
-
-                <Grid item xs={12} sm={2}>
-                  <Button
-                    fullWidth
-                    variant="contained"
-                    color="primary"
-                    disabled={
-                      !gamisarani ||
-                        loadingNicsubmit ||
-                        gamisaraniNic.length === 0
-                        ? true
-                        : false
+              <Grid item xs={12} sm={6}>
+                <Checkbox
+                  checked={gamisarani}
+                  onChange={(e) => {
+                    if (gamisarani) {
+                      setGamisarani(false);
+                      setGamisaraniId("");
+                      setGamisaraniInitialAmount(0);
+                      setGamisaraniamount(0);
+                      setGamisaraniNic("");
+                    } else {
+                      setGamisarani(true);
                     }
-                    onClick={getCurrentBalanceFromGami}
-                  >
-                    {loadingNicsubmit ? <Spin size="large" /> : "Fetch"}
-                  </Button>
-                </Grid>
-                <Grid className="lbl_topi" item xs={12} sm={4}>
-                  Amount
+                  }}
+                />
               </Grid>
-                <Grid item xs={12} sm={2}>
-                  :
+              <Grid className="lbl_topi" item xs={12} sm={4}>
+                NIC
               </Grid>
-                <Grid className="amouNt" item xs={12} sm={5}>
-                  <TextField
-                    className="amouNT"
-                    variant="outlined"
-                    required
-                    fullWidth
-                    label="Amount"
-                    name="amount"
-                    autoComplete="amount"
-                    size="small"
-                    type="number"
-                    disabled={
-                      !gamisarani || gamisaraniInitialAmount === 0 ? true : false
-                    }
-                    InputProps={{ inputProps: { min: 0 } }}
-                    value={gamisaraniamount}
-                    onChange={(e) => {
-                      if (Math.round(e.target.value) >= 0 && e.target.value !== "") {
-                        setGamisaraniamount(parseInt(e.target.value.trim()));
-                        if (parseInt(e.target.value) === 0) {
-                          setBalance(intialBalance);
-                        } else {
-                          setBalance(balance - parseInt(e.target.value));
-                        }
-                      }
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={1}></Grid>
-                <Grid item xs={12} sm={12}>
-                  <p className="validate_updateEmployee">{validation}</p>
-                  <hr />
-                </Grid>
-                <Grid className="lbl_topi" item xs={12} sm={4}>
-                  Amount of Installment(LKR)
+              <Grid item xs={12} sm={2}>
+                :
               </Grid>
-                <Grid item xs={12} sm={2}>
-                  :
+              <Grid className="nIc" item xs={12} sm={4}>
+                <TextField
+                  className="nic_"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  label="NIC"
+                  name="nic"
+                  autoComplete="nic"
+                  size="small"
+                  disabled={!gamisarani ? true : false}
+                  value={gamisaraniNic}
+                  onChange={(e) => {
+                    setGamisaraniNic(e.target.value.trim());
+                  }}
+                />
               </Grid>
 
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    type="number"
-                    autoComplete="delayed"
-                    variant="outlined"
-                    required
-                    fullWidth
-                    label="Installment Amount"
-                    size="small"
-                    value={installmentAmount}
-                    InputProps={{ inputProps: { min: 0 } }}
-                    onChange={(e) => {
-                      if (Math.round(e.target.value) >= 0 && e.target.value !== "") {
-                        setInstallmentAmount(parseInt(e.target.value));
-                        if (parseInt(e.target.value) === 0) {
-                          setBalance(intialBalance);
-                        } else {
-                          setBalance(balance - parseInt(e.target.value));
-                        }
-                      }
-                    }}
-                  />
-                </Grid>
-
-                <Grid className="lbl_topi" item xs={12} sm={4}>
-                  Due Installment Count
+              <Grid item xs={12} sm={2}>
+                <Button
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  disabled={
+                    !gamisarani ||
+                    loadingNicsubmit ||
+                    gamisaraniNic.length === 0
+                      ? true
+                      : false
+                  }
+                  onClick={getCurrentBalanceFromGami}
+                >
+                  {loadingNicsubmit ? <Spin size="large" /> : "Fetch"}
+                </Button>
               </Grid>
-                <Grid item xs={12} sm={2}>
-                  :
+              <Grid className="lbl_topi" item xs={12} sm={4}>
+                Amount
               </Grid>
-                <Grid item xs={12} sm={6}>
-                  <p>{dueInstallmentsCount()}</p>
-                </Grid>
-
-                <Grid className="lbl_topi" item xs={12} sm={4}>
-                  Balance(LKR)
+              <Grid item xs={12} sm={2}>
+                :
               </Grid>
-                <Grid item xs={12} sm={2}>
-                  :
-              </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    type="number"
-                    autoComplete="delayed"
-                    variant="outlined"
-                    required
-                    fullWidth
-                    label="Balance"
-                    size="small"
-                    value={balance <= 0 ? 0 : balance}
-                    onChange={(e) => {
-                      if (Math.round(e.target.value) >= 0 && e.target.value !== "") {
-                        if (installmentAmount + gamisaraniamount > 0) {
-                          setBalance(parseInt(e.target.value.trim()));
-                        }
-                      }
-                    }}
-                  />
-                </Grid>
-
-                <Grid className="lbl_topi" item xs={12} sm={4}>
-                  Date
-              </Grid>
-                <Grid item xs={12} sm={2}>
-                  :
-              </Grid>
-                <Grid item xs={12} sm={6}>
-                  <DatePicker
-                    onChange={(e) => {
-                      if (e !== null) {
-                        setTimestamp(
-                          firebase.firestore.Timestamp.fromDate(e.toDate())
-                        );
+              <Grid className="amouNt" item xs={12} sm={5}>
+                <TextField
+                  className="amouNT"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  label="Amount"
+                  name="amount"
+                  autoComplete="amount"
+                  size="small"
+                  type="number"
+                  disabled={
+                    !gamisarani || gamisaraniInitialAmount === 0 ? true : false
+                  }
+                  InputProps={{ inputProps: { min: 0 } }}
+                  value={gamisaraniamount}
+                  onChange={(e) => {
+                    if (
+                      Math.round(e.target.value) >= 0 &&
+                      e.target.value !== ""
+                    ) {
+                      setGamisaraniamount(parseInt(e.target.value.trim()));
+                      if (parseInt(e.target.value) === 0) {
+                        setBalance(intialBalance);
                       } else {
-                        setTimestamp(null);
+                        setBalance(balance - parseInt(e.target.value));
                       }
-                    }}
-                  />
-                </Grid>
+                    }
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12} sm={1}></Grid>
+              <Grid item xs={12} sm={12}>
+                <p className="validate_updateEmployee">{validation}</p>
+                <hr />
+              </Grid>
+              <Grid className="lbl_topi" item xs={12} sm={4}>
+                Amount of Installment(LKR)
+              </Grid>
+              <Grid item xs={12} sm={2}>
+                :
+              </Grid>
 
-                <Grid className="lbl_topi" item xs={12} sm={4}>
-                  Delayed Charges(LKR)
-              </Grid>
-                <Grid item xs={12} sm={2}>
-                  :
-              </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    type="number"
-                    autoComplete="delayed"
-                    variant="outlined"
-                    required
-                    fullWidth
-                    label="Delayed"
-                    size="small"
-                    value={Math.round(delayedCharges)}
-                    onChange={(e) => {
-                      if (Math.round(e.target.value) >= 0) {
-                        setDelayedCharges(Math.round(e.target.value));
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  type="number"
+                  autoComplete="delayed"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  label="Installment Amount"
+                  size="small"
+                  value={installmentAmount}
+                  InputProps={{ inputProps: { min: 0 } }}
+                  onChange={(e) => {
+                    if (
+                      Math.round(e.target.value) >= 0 &&
+                      e.target.value !== ""
+                    ) {
+                      setInstallmentAmount(parseInt(e.target.value));
+                      if (parseInt(e.target.value) === 0) {
+                        setBalance(intialBalance);
+                      } else {
+                        setBalance(balance - parseInt(e.target.value));
                       }
-                    }}
-                  />
-                </Grid>
-
-                <Grid className="lbl_topi" item xs={12} sm={4}>
-                  Delayed Days
-              </Grid>
-                <Grid item xs={12} sm={2}>
-                  :
-              </Grid>
-                <Grid item xs={12} sm={6}>
-                  {delayedDays > 7 ? (
-                    <p
-                      style={{
-                        color: "red",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      {Math.round(delayedDays)} days delayed !
-                    </p>
-                  ) : (
-                      <p>{Math.round(delayedDays)} days delayed !</p>
-                    )}
-                </Grid>
-
-                <Grid className="lbl_topi" item xs={12} sm={12}>
-                  <hr />
-                </Grid>
-                {/* <Grid className="lbl_topi" item xs={12} sm={6}></Grid> */}
-
-                <Grid className="lbl_topi" item xs={12} sm={4}>
-                  Next Installment Date
+                    }
+                  }}
+                />
               </Grid>
 
-                <Grid item xs={12} sm={6}>
-                  <p className="next_date">
-                    {" "}
-                    {nextDate === null
-                      ? ""
-                      : moment(nextDate?.toDate()).format("dddd, MMMM Do YYYY")}
-                  </p>
-                </Grid>
+              <Grid className="lbl_topi" item xs={12} sm={4}>
+                Due Installment Count
+              </Grid>
+              <Grid item xs={12} sm={2}>
+                :
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <p>{dueInstallmentsCount()}</p>
+              </Grid>
 
-                <Grid item xs={12} sm={12}>
-                  <hr />
-                </Grid>
-                <Grid className="lbl_topi" item xs={12} sm={4}>
-                  Total(LKR)
+              <Grid className="lbl_topi" item xs={12} sm={4}>
+                Balance(LKR)
               </Grid>
-                <Grid item xs={12} sm={2}>
-                  :
+              <Grid item xs={12} sm={2}>
+                :
               </Grid>
-                <Grid item xs={12} sm={6}>
-                  <div
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  type="number"
+                  autoComplete="delayed"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  label="Balance"
+                  size="small"
+                  value={balance <= 0 ? 0 : balance}
+                  onChange={(e) => {
+                    if (
+                      Math.round(e.target.value) >= 0 &&
+                      e.target.value !== ""
+                    ) {
+                      if (installmentAmount + gamisaraniamount > 0) {
+                        setBalance(parseInt(e.target.value.trim()));
+                      }
+                    }
+                  }}
+                />
+              </Grid>
+
+              <Grid className="lbl_topi" item xs={12} sm={4}>
+                Date
+              </Grid>
+              <Grid item xs={12} sm={2}>
+                :
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <DatePicker
+                  onChange={(e) => {
+                    if (e !== null) {
+                      setTimestamp(
+                        firebase.firestore.Timestamp.fromDate(e.toDate())
+                      );
+                    } else {
+                      setTimestamp(null);
+                    }
+                  }}
+                />
+              </Grid>
+
+              <Grid className="lbl_topi" item xs={12} sm={4}>
+                Delayed Charges(LKR)
+              </Grid>
+              <Grid item xs={12} sm={2}>
+                :
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  type="number"
+                  autoComplete="delayed"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  label="Delayed"
+                  size="small"
+                  value={Math.round(delayedCharges)}
+                  onChange={(e) => {
+                    if (Math.round(e.target.value) >= 0) {
+                      setDelayedCharges(Math.round(e.target.value));
+                    }
+                  }}
+                />
+              </Grid>
+
+              <Grid className="lbl_topi" item xs={12} sm={4}>
+                Delayed Days
+              </Grid>
+              <Grid item xs={12} sm={2}>
+                :
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                {delayedDays > 7 ? (
+                  <p
                     style={{
+                      color: "red",
                       fontWeight: "bold",
-                      fontSize: "20px",
                     }}
                   >
-                    <CurrencyFormat
-                      value={totalPlusRed()}
-                      displayType={"text"}
-                      thousandSeparator={true}
-                      prefix={" Rs. "}
-                    />
+                    {Math.round(delayedDays)} days delayed !
+                  </p>
+                ) : (
+                  <p>{Math.round(delayedDays)} days delayed !</p>
+                )}
+              </Grid>
+
+              <Grid className="lbl_topi" item xs={12} sm={12}>
+                <hr />
+              </Grid>
+              {/* <Grid className="lbl_topi" item xs={12} sm={6}></Grid> */}
+
+              <Grid className="lbl_topi" item xs={12} sm={4}>
+                Next Installment Date
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <p className="next_date">
+                  {" "}
+                  {nextDate === null
+                    ? ""
+                    : moment(nextDate?.toDate()).format("dddd, MMMM Do YYYY")}
+                </p>
+              </Grid>
+
+              <Grid item xs={12} sm={12}>
+                <hr />
+              </Grid>
+              <Grid className="lbl_topi" item xs={12} sm={4}>
+                Total(LKR)
+              </Grid>
+              <Grid item xs={12} sm={2}>
+                :
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <div
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: "20px",
+                  }}
+                >
+                  <CurrencyFormat
+                    value={totalPlusRed()}
+                    displayType={"text"}
+                    thousandSeparator={true}
+                    prefix={" Rs. "}
+                  />
                   /=
                 </div>
-                  <div
-                    style={{
-                      fontWeight: "bold",
-                      fontSize: "15px",
-                      color: "grey",
-                    }}
-                  >
-                    (
+                <div
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: "15px",
+                    color: "grey",
+                  }}
+                >
+                  (
                   {"  " +
-                      Math.round(instAmountProp) +
-                      " + " +
-                      gamisaraniamount +
-                      " + " +
-                      Math.round(delayedCharges) +
-                      " "}
+                    Math.round(instAmountProp) +
+                    " + " +
+                    gamisaraniamount +
+                    " + " +
+                    Math.round(delayedCharges) +
+                    " "}
                   )
                 </div>
-                </Grid>
               </Grid>
-              <p className="validate_updateEmployee">{validationDate}</p>
-              <Grid container spacing={2}>
-                <Grid item xs={12} sm={9}></Grid>
-                <Grid item xs={12} sm={3}>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    disabled={totalPlusRed() > 0 ? false : true}
-                    className="btn_update"
-                    onClick={showConfirm}
-                  >
-                    Done
+            </Grid>
+            <p className="validate_updateEmployee">{validationDate}</p>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={9}></Grid>
+              <Grid item xs={12} sm={3}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  disabled={totalPlusRed() > 0 ? false : true}
+                  className="btn_update"
+                  onClick={showConfirm}
+                >
+                  Done
                 </Button>
-                </Grid>
               </Grid>
-            </form>
-          </div>
-        )}
+            </Grid>
+          </form>
+        </div>
+      )}
     </Container>
   );
 }

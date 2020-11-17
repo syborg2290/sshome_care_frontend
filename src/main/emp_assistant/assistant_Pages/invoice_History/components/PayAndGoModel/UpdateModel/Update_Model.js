@@ -485,10 +485,7 @@ export default function Update_Model({
   const totalPlusRed = () => {
     let totFinalRe = delayedCharges >= 693 ? 693 : delayedCharges;
 
-    let finalTot =
-      balance <= installmentAmount + gamisaraniamount
-        ? balance + totFinalRe
-        : installmentAmount + gamisaraniamount + totFinalRe;
+    let finalTot = installmentAmount + gamisaraniamount + totFinalRe;
     return finalTot;
   };
 
@@ -616,10 +613,13 @@ export default function Update_Model({
                     InputProps={{ inputProps: { min: 0 } }}
                     value={gamisaraniamount}
                     onChange={(e) => {
-                      if (
-                        gamisaraniInitialAmount >= parseInt(e.target.value.trim())
-                      ) {
+                      if (Math.round(e.target.value) >= 0 && e.target.value !== "") {
                         setGamisaraniamount(parseInt(e.target.value.trim()));
+                        if (parseInt(e.target.value) === 0) {
+                          setBalance(intialBalance);
+                        } else {
+                          setBalance(balance - parseInt(e.target.value));
+                        }
                       }
                     }}
                   />
@@ -648,8 +648,13 @@ export default function Update_Model({
                     value={installmentAmount}
                     InputProps={{ inputProps: { min: 0 } }}
                     onChange={(e) => {
-                      if (balance >= parseInt(e.target.value.trim())) {
+                      if (Math.round(e.target.value) >= 0 && e.target.value !== "") {
                         setInstallmentAmount(parseInt(e.target.value));
+                        if (parseInt(e.target.value) === 0) {
+                          setBalance(intialBalance);
+                        } else {
+                          setBalance(balance - parseInt(e.target.value));
+                        }
                       }
                     }}
                   />
@@ -680,20 +685,11 @@ export default function Update_Model({
                     fullWidth
                     label="Balance"
                     size="small"
-                    value={balance}
+                    value={balance <= 0 ? 0 : balance}
                     onChange={(e) => {
-                      if (gamisaraniamount + installmentAmount === 0) {
-                        setBalance(intialBalance);
-                      } else {
-                        if (
-                          balance - (gamisaraniamount + installmentAmount) <=
-                          0
-                        ) {
-                          setBalance(0);
-                        } else {
-                          setBalance(
-                            balance - (gamisaraniamount + installmentAmount)
-                          );
+                      if (Math.round(e.target.value) >= 0 && e.target.value !== "") {
+                        if (installmentAmount + gamisaraniamount > 0) {
+                          setBalance(parseInt(e.target.value.trim()));
                         }
                       }
                     }}
@@ -775,9 +771,12 @@ export default function Update_Model({
               </Grid>
 
                 <Grid item xs={12} sm={6}>
-                  <p className="next_date"> {nextDate === null
-                    ? ""
-                    : moment(nextDate?.toDate()).format("dddd, MMMM Do YYYY")}</p>
+                  <p className="next_date">
+                    {" "}
+                    {nextDate === null
+                      ? ""
+                      : moment(nextDate?.toDate()).format("dddd, MMMM Do YYYY")}
+                  </p>
                 </Grid>
 
                 <Grid item xs={12} sm={12}>

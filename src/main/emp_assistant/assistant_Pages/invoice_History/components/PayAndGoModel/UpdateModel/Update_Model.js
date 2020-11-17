@@ -19,9 +19,13 @@ import moment from "moment";
 // styles
 import "./Update_Model.css";
 
-// function isDateBeforeNextDate(date) {
-//   return new Date(date.toDateString()) > new Date(new Date().toDateString());
-// }
+function isDateBeforeNextDate(date1, date2) {
+  return new Date(date1.toDateString()) <= new Date(date2.toDateString());
+}
+
+function isDateWithNextDate(date1, date2) {
+  return new Date(date1.toDateString()) >= new Date(date2.toDateString());
+}
 
 export default function Update_Model({
   invoice_no,
@@ -254,15 +258,12 @@ export default function Update_Model({
       .where("invoice_number", "==", invoice_no)
       .get()
       .then((reInvoice) => {
-        // var isBeforeNe = isDateBeforeNextDate(
-        //   new Date(reInvoice.docs[0].data()?.nextDate.seconds * 1000)
-        // );
+        var reTotCal = parseInt(installmentAmount) + parseInt(gamisaraniamount);
 
-        let reTotCal = parseInt(installmentAmount) + parseInt(gamisaraniamount);
-
-        let reCalMult =
+        var reCalMult =
           reTotCal / parseInt(reInvoice.docs[0].data()?.amountPerInstallment);
-        if (reCalMult > 0) {
+
+        if (reCalMult >= 1) {
           for (var t = 0; t < Math.round(reCalMult); t++) {
             db.collection("invoice")
               .doc(reInvoice.docs[0].id)
@@ -286,60 +287,59 @@ export default function Update_Model({
             .where("invoice_number", "==", invoice_no)
             .get()
             .then((reInst) => {
-              let totalPlusInsAmount = 0;
-              let countRe = 0;
+              var totalPlusInsAmount = 0;
 
-              let last31 = new Date(
+              var last31 = new Date().setDate(
                 new Date(
                   reInvoice.docs[0].data()?.nextDate.seconds * 1000
-                ).setDate(
-                  new Date(
-                    reInvoice.docs[0].data()?.nextDate.seconds * 1000
-                  ).getDate() - 31
-                )
+                ).getDate() - 0
               );
+
               reInst.docs.forEach((reInstallmentCom) => {
-                countRe++;
-                let reDateC = reInstallmentCom.data()?.date.seconds * 1000;
-                let reDateNextC =
-                  reInvoice.docs[0].data()?.nextDate.seconds * 1000;
                 if (
-                  new Date(last31.toDateString()) <
-                  new Date(reDateC.toDateString())
+                  isDateBeforeNextDate(
+                    new Date(last31),
+                    new Date(reInstallmentCom.data()?.date.seconds * 1000)
+                  )
                 ) {
                   if (
-                    new Date(reDateC.toDateString()) <=
-                    new Date(reDateNextC.toDateString())
+                    isDateWithNextDate(
+                      new Date(
+                        reInvoice.docs[0].data()?.nextDate.seconds * 1000
+                      ),
+                      new Date(
+                        new Date(reInstallmentCom.data()?.date.seconds * 1000)
+                      )
+                    )
                   ) {
                     totalPlusInsAmount =
-                      totalPlusInsAmount +
+                      parseInt(totalPlusInsAmount) +
                       parseInt(reInstallmentCom.data()?.amount);
                   }
                 }
               });
+              let seeToot = parseInt(totalPlusInsAmount) + reTotCal;
 
-              if (countRe >= reInst.docs.length) {
-                if (
-                  totalPlusInsAmount >=
-                  parseInt(reInvoice.docs[0].data()?.amountPerInstallment)
-                ) {
-                  db.collection("invoice")
-                    .doc(reInvoice.docs[0].id)
-                    .update({
-                      nextDate: firebase.firestore.Timestamp.fromDate(
+              if (
+                parseInt(seeToot) >=
+                parseInt(reInvoice.docs[0].data()?.amountPerInstallment)
+              ) {
+                db.collection("invoice")
+                  .doc(reInvoice.docs[0].id)
+                  .update({
+                    nextDate: firebase.firestore.Timestamp.fromDate(
+                      new Date(
                         new Date(
+                          reInvoice.docs[0].data()?.nextDate.seconds * 1000
+                        ).setDate(
                           new Date(
                             reInvoice.docs[0].data()?.nextDate.seconds * 1000
-                          ).setDate(
-                            new Date(
-                              reInvoice.docs[0].data()?.nextDate.seconds * 1000
-                            ).getDate() + 31
-                          )
+                          ).getDate() + 31
                         )
-                      ),
-                    })
-                    .then((_) => {});
-                }
+                      )
+                    ),
+                  })
+                  .then((_) => {});
               }
             });
         }
@@ -473,8 +473,7 @@ export default function Update_Model({
         },
         async onCancel() {
           await updateInstallment();
-          closeModal();
-          window.location.reload();
+          // window.location.reload();
         },
       });
     }
@@ -832,7 +831,7 @@ export default function Update_Model({
                 >
                   (
                   {"  " +
-                    Math.round(instAmountProp) +
+                    parseInt(installmentAmount) +
                     " + " +
                     gamisaraniamount +
                     " + " +

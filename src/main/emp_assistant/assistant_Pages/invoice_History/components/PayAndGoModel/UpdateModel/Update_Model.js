@@ -620,13 +620,16 @@ export default function Update_Model({
                   onChange={(e) => {
                     if (
                       Math.round(e.target.value) >= 0 &&
-                      e.target.value !== ""
+                      e.target.value !== "" &&
+                      intialBalance >=
+                        parseInt(e.target.value.trim()) + gamisaraniamount
                     ) {
                       setGamisaraniamount(parseInt(e.target.value.trim()));
                       if (parseInt(e.target.value) === 0) {
                         setBalance(intialBalance);
                       } else {
-                        setBalance(balance - parseInt(e.target.value));
+                        let reC2 = parseInt(e.target.value) + installmentAmount;
+                        setBalance(balance - reC2);
                       }
                     }
                   }}
@@ -658,13 +661,16 @@ export default function Update_Model({
                   onChange={(e) => {
                     if (
                       Math.round(e.target.value) >= 0 &&
-                      e.target.value !== ""
+                      e.target.value !== "" &&
+                      intialBalance >=
+                        parseInt(e.target.value.trim()) + gamisaraniamount
                     ) {
                       setInstallmentAmount(parseInt(e.target.value));
                       if (parseInt(e.target.value) === 0) {
                         setBalance(intialBalance);
                       } else {
-                        setBalance(balance - parseInt(e.target.value));
+                        let reCl = parseInt(e.target.value) + gamisaraniamount;
+                        setBalance(balance - reCl);
                       }
                     }
                   }}

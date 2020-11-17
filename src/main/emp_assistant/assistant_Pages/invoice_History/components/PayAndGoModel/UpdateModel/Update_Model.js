@@ -19,12 +19,23 @@ import moment from "moment";
 // styles
 import "./Update_Model.css";
 
-function isDateBeforeNextDate(date1, date2) {
-  return new Date(date1.toDateString()) <= new Date(date2.toDateString());
+function isDateBeforeNextDate(date1, date2, nextD) {
+  let seeBool =
+    new Date(date2) >= new Date(date1) && new Date(date2) <= new Date(nextD);
+
+  return seeBool;
 }
 
-function isDateWithNextDate(date1, date2) {
-  return new Date(date1.toDateString()) >= new Date(date2.toDateString());
+// function monthDiff(d1, d2) {
+//   var months;
+//   months = (d2.getFullYear() - d1.getFullYear()) * 12;
+//   months -= d1.getMonth();
+//   months += d2.getMonth();
+//   return months <= 0 ? 0 : months;
+// }
+
+function daysCountOfMonth(month, year) {
+  return new Date(year, month, 0).getDate();
 }
 
 export default function Update_Model({
@@ -100,7 +111,9 @@ export default function Update_Model({
                     inReDoc.docs[0].data().date.seconds * 1000
                   ).getTime()) /
                 (1000 * 3600 * 24);
-              let daysCountInitial = daysCountNode1 - 31;
+              let daysCountInitial =
+                daysCountNode1 -
+                daysCountOfMonth(new Date().getMonth, new Date().getFullYear());
 
               if (inReDoc.docs[0].data().selectedType === "shop") {
                 if (7 - daysCountInitial >= 0) {
@@ -173,14 +186,6 @@ export default function Update_Model({
                 }
               }
             } else {
-              // let daysCountNode2 =
-              //   (new Date().getTime() -
-              //     new Date(
-              //       instReDoc.docs[instReDoc.docs.length - 1].data()?.date
-              //         ?.seconds * 1000
-              //     ).getTime()) /
-              //   (1000 * 3600 * 24);
-
               let daysCountNode2 =
                 (new Date().getTime() -
                   new Date(
@@ -275,7 +280,11 @@ export default function Update_Model({
                     ).setDate(
                       new Date(
                         reInvoice.docs[0].data()?.nextDate.seconds * 1000
-                      ).getDate() + 31
+                      ).getDate() +
+                        daysCountOfMonth(
+                          new Date().getMonth,
+                          new Date().getFullYear()
+                        )
                     )
                   )
                 ),
@@ -288,36 +297,30 @@ export default function Update_Model({
             .get()
             .then((reInst) => {
               var totalPlusInsAmount = 0;
-
-              var last31 = new Date().setDate(
-                new Date(
-                  reInvoice.docs[0].data()?.nextDate.seconds * 1000
-                ).getDate() - 0
+              // var monthCount = monthDiff(
+              //   new Date(reInvoice.docs[0].data()?.date.seconds * 1000),
+              //   new Date(reInvoice.docs[0].data()?.nextDate.seconds * 1000)
+              // );
+              var nestSee = new Date(
+                reInvoice.docs[0].data()?.nextDate.seconds * 1000
               );
+
+              var last31 = nestSee.setMonth(nestSee.getMonth() - 1);
 
               reInst.docs.forEach((reInstallmentCom) => {
                 if (
                   isDateBeforeNextDate(
                     new Date(last31),
-                    new Date(reInstallmentCom.data()?.date.seconds * 1000)
+                    new Date(reInstallmentCom.data()?.date.seconds * 1000),
+                    new Date(reInvoice.docs[0].data()?.nextDate.seconds * 1000)
                   )
                 ) {
-                  if (
-                    isDateWithNextDate(
-                      new Date(
-                        reInvoice.docs[0].data()?.nextDate.seconds * 1000
-                      ),
-                      new Date(
-                        new Date(reInstallmentCom.data()?.date.seconds * 1000)
-                      )
-                    )
-                  ) {
-                    totalPlusInsAmount =
-                      parseInt(totalPlusInsAmount) +
-                      parseInt(reInstallmentCom.data()?.amount);
-                  }
+                  totalPlusInsAmount =
+                    parseInt(totalPlusInsAmount) +
+                    parseInt(reInstallmentCom.data()?.amount);
                 }
               });
+
               let seeToot = parseInt(totalPlusInsAmount) + reTotCal;
 
               if (
@@ -334,7 +337,11 @@ export default function Update_Model({
                         ).setDate(
                           new Date(
                             reInvoice.docs[0].data()?.nextDate.seconds * 1000
-                          ).getDate() + 31
+                          ).getDate() +
+                            daysCountOfMonth(
+                              new Date().getMonth,
+                              new Date().getFullYear()
+                            )
                         )
                       )
                     ),

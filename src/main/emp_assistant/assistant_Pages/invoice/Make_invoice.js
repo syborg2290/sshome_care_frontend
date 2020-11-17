@@ -38,6 +38,10 @@ import "./Make_invoice.css";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import CloseOutlinedIcon from "@material-ui/icons/CloseOutlined";
 
+function daysCountOfMonth(month, year) {
+  return new Date(year, month, 0).getDate();
+}
+
 function Make_invoice() {
   const location = useLocation();
   const [allRoot, setAllRoot] = useState([]);
@@ -411,8 +415,12 @@ function Make_invoice() {
   // eslint-disable-next-line
   const invoiceIntoDb = async () => {
     setLoadingSubmit(true);
-    var times =new Date(new Date(intialTimestamp?.seconds * 1000).setDate(
-      new Date(intialTimestamp?.seconds * 1000).getDate() + 31));
+    var times = new Date(
+      new Date(intialTimestamp?.seconds * 1000).setDate(
+        new Date(intialTimestamp?.seconds * 1000).getDate() +
+          daysCountOfMonth(new Date().getMonth, new Date().getFullYear())
+      )
+    );
     if (tablerows.some((ob) => ob.customer !== null)) {
       if (deadlineTimestamp !== null) {
         if (tablerows[0].customer.customerImageFile) {
@@ -499,9 +507,7 @@ function Make_invoice() {
                           (totalDiscount === "" ? 0 : totalDiscount),
                         status_of_payandgo: "onGoing",
                         date: intialTimestamp,
-                        nextDate: firebase.firestore.Timestamp.fromDate(
-                          times
-                        ),
+                        nextDate: firebase.firestore.Timestamp.fromDate(times),
                       })
                       .then((invDoc) => {
                         if (tablerows[0].customer.trustee1Id !== null) {
@@ -677,9 +683,7 @@ function Make_invoice() {
                           (totalDiscount === "" ? 0 : totalDiscount),
                         status_of_payandgo: "onGoing",
                         date: intialTimestamp,
-                        nextDate: firebase.firestore.Timestamp.fromDate(
-                          times
-                        ),
+                        nextDate: firebase.firestore.Timestamp.fromDate(times),
                       })
                       .then((invDoc) => {
                         if (tablerows[0].customer.trustee1Id !== null) {
@@ -853,9 +857,7 @@ function Make_invoice() {
                       (totalDiscount === "" ? 0 : totalDiscount),
                     status_of_payandgo: "onGoing",
                     date: intialTimestamp,
-                    nextDate: firebase.firestore.Timestamp.fromDate(
-                      times
-                    ),
+                    nextDate: firebase.firestore.Timestamp.fromDate(times),
                   })
                   .then((invDoc) => {
                     if (tablerows[0].customer.trustee1Id !== null) {
@@ -1025,9 +1027,7 @@ function Make_invoice() {
                       (totalDiscount === "" ? 0 : totalDiscount),
                     status_of_payandgo: "onGoing",
                     date: intialTimestamp,
-                    nextDate: firebase.firestore.Timestamp.fromDate(
-                      times
-                    ),
+                    nextDate: firebase.firestore.Timestamp.fromDate(times),
                   })
                   .then((invDoc) => {
                     if (tablerows[0].customer.trustee1Id !== null) {

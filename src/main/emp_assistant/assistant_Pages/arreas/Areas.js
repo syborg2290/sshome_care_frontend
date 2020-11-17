@@ -21,6 +21,10 @@ import HistoryIcon from "@material-ui/icons/History";
 
 import { useHistory } from "react-router-dom";
 
+function daysCountOfMonth(month, year) {
+  return new Date(year, month, 0).getDate();
+}
+
 export default function Areas() {
   const [isLoading, setIsLoading] = useState(true);
   const [currentIndx, setCurrentIndx] = useState(0);
@@ -193,7 +197,9 @@ export default function Areas() {
       (new Date().getTime() -
         new Date(eachRe.data()?.date?.seconds * 1000).getTime()) /
       (1000 * 3600 * 24);
-    let daysCountInitial = daysCountNode1 - 31;
+    let daysCountInitial =
+      daysCountNode1 -
+      daysCountOfMonth(new Date().getMonth, new Date().getFullYear());
     if (eachRe.data().selectedType === "shop") {
       if (7 - daysCountInitial >= 0) {
       } else {

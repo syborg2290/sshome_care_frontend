@@ -23,8 +23,7 @@ import Paper from "@material-ui/core/Paper";
 import { useHistory } from "react-router-dom";
 // components
 import EditModel from "./components/Edit_model";
-// eslint-disable-next-line
-import SelectedItem from "./components/selected_Items/SelectedItem_model";
+
 
 // icons
 import VisibilityIcon from "@material-ui/icons/Visibility";
@@ -38,7 +37,7 @@ import "./Item_table_assistant.css";
 import db from "../../../../../config/firebase.js";
 
 export default function Item_table_assistant() {
-  const [selectedItemtVisible, setSelectedItemtVisible] = useState(false);
+  // const [selectedItemtVisible, setSelectedItemtVisible] = useState(false);
   // eslint-disable-next-line
   const [itemTableData, setItemTableData] = useState([]);
   // eslint-disable-next-line
@@ -72,11 +71,6 @@ export default function Item_table_assistant() {
 
   const editModal = () => {
     setEditVisible(true);
-  };
-
-  const selectedModalClose = () => {
-    window.location.reload();
-    setSelectedItemtVisible(false);
   };
 
   useEffect(() => {
@@ -164,24 +158,7 @@ export default function Item_table_assistant() {
     // eslint-disable-next-line
   }, []);
 
-  const onMakeInvoid = () => {
-    if (selectedItems.length > 0) {
-      setLoaingToInvoice(true);
 
-      selectedItems.forEach((reItem) => {
-        itemList.push({
-          qty: 1,
-          item: reItem,
-          paymentWay: "PayandGo",
-        });
-      });
-      setLoaingToInvoice(false);
-
-      setSelectedItemtVisible(true);
-    } else {
-      NotificationManager.info("Please select items");
-    }
-  };
 
   const showDeleteItemsConfirm = async () => {
     await db
@@ -268,28 +245,7 @@ export default function Item_table_assistant() {
 
   return (
     <>
-      {/*Selected Item Model */}
 
-      <Modal
-        title="Selected Items"
-        visible={selectedItemtVisible}
-        footer={null}
-        className="model_selected_Item"
-        onCancel={selectedModalClose}
-      >
-        <div className="table_selected_Model">
-          <div className="model_selected_Main">
-            <div className="model_selected_Detail">
-              <SelectedItem
-                closeModel={selectedModalClose}
-                itemListProps={itemList}
-              />
-            </div>
-          </div>
-        </div>
-      </Modal>
-
-      {/*Selected Item Model */}
 
       <Modal
         className="confo_model"
@@ -706,19 +662,6 @@ export default function Item_table_assistant() {
         </div>
       </Modal>
 
-      <Button
-        variant="contained"
-        color="primary"
-        className="btn_MakeInvoice_itm"
-        endIcon={<DescriptionIcon />}
-        onClick={onMakeInvoid}
-      >
-        {isLoaingToInvoice ? (
-          <Spin spinning={isLoaingToInvoice} size="large" />
-        ) : (
-          "Make Invoice"
-        )}
-      </Button>
 
       <Grid className="tbl_Container" container spacing={4}>
         <Grid item xs={12}>
@@ -729,7 +672,7 @@ export default function Item_table_assistant() {
             columns={columns}
             options={{
               rowHover: true,
-              selectableRows: true,
+              selectableRows: false,
               customToolbarSelect: () => {},
               filterType: "textField",
               download: false,
@@ -737,20 +680,10 @@ export default function Item_table_assistant() {
               searchPlaceholder: "Search using any field",
               elevation: 4,
               sort: true,
-              onRowsSelect: (curRowSelected, allRowsSelected) => {
-                selectedItems = [];
-                allRowsSelected.forEach((single) => {
-                  if (allTtemData[single.dataIndex].data.qty > 0) {
-                    selectedItems.push(allTtemData[single.dataIndex]);
-                  } else {
-                    NotificationManager.warning("Out Of Stock");
-                  }
-                });
-              },
               selectableRowsHeader: false,
-              onRowClick: (rowData, rowMeta) => {
-                setCurrentIndx(rowMeta.dataIndex);
-              },
+              // onRowClick: (rowData, rowMeta) => {
+              //   setCurrentIndx(rowMeta.dataIndex);
+              // },
               textLabels: {
                 body: {
                   noMatch: isLoading ? (

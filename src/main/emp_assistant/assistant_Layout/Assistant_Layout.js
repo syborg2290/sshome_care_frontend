@@ -21,6 +21,7 @@ import GassRecipt from "../assistant_Pages/gass/components/Make_Recipt/Gass_Reci
 
 // pages
 import Dashboard from "../assistant_Pages/dashboard/Dashboard";
+import MakeInvoiceTable from "../assistant_Pages/make_invoice/Make_Invoice_table";
 import Arries from "../assistant_Pages/arreas/Areas";
 import BlackList from "../assistant_Pages/black_list/Black_List";
 import Customer from "../assistant_Pages/customer/customer_table/Customer_table_assistant";
@@ -45,6 +46,7 @@ function LayoutAssistant(props) {
           <div className="fakeToolbar" />
           <Switch>
             <Route path="/assistant/dashboard" component={Dashboard} />
+            <Route path="/assistant/ui/MakeInvoiceTable" component={MakeInvoiceTable} />
             <Route path="/assistant/ui/Customer" component={Customer} />
             <Route
               path="/assistant/ui/InvoiceHistory"

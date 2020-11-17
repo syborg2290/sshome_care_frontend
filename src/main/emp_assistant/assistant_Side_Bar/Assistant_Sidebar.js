@@ -45,6 +45,13 @@ const structure = [
     icon: <DashboardIcon className="icons" />,
   },
 
+   {
+    id: 21,
+    label: "Make Invoice",
+    link: "/assistant/ui/MakeInvoiceTable",
+    icon: <LibraryIcon className="icons" />,
+  },
+
   {
     id: 1,
     label: "Items",

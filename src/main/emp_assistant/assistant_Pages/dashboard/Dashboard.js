@@ -27,7 +27,7 @@ function isDateBeforeToday(date) {
 // }
 
 function daysCountOfMonth(month, year) {
-  return new Date(year, month, 0).getDate();
+  return parseInt(new Date(year, month, 0).getDate());
 }
 
 export default function Dashboard() {
@@ -119,7 +119,7 @@ export default function Dashboard() {
       (1000 * 3600 * 24);
     let daysCountInitial =
       daysCountNode1 -
-      daysCountOfMonth(new Date().getMonth, new Date().getFullYear());
+      daysCountOfMonth(new Date().getMonth(), new Date().getFullYear());
     if (eachRe.data().selectedType === "shop") {
       if (7 - daysCountInitial >= 0) {
       } else {

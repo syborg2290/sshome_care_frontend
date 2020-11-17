@@ -39,7 +39,7 @@ import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import CloseOutlinedIcon from "@material-ui/icons/CloseOutlined";
 
 function daysCountOfMonth(month, year) {
-  return new Date(year, month, 0).getDate();
+  return parseInt(new Date(year, month, 0).getDate());
 }
 
 function Make_invoice() {
@@ -418,7 +418,7 @@ function Make_invoice() {
     var times = new Date(
       new Date(intialTimestamp?.seconds * 1000).setDate(
         new Date(intialTimestamp?.seconds * 1000).getDate() +
-          daysCountOfMonth(new Date().getMonth, new Date().getFullYear())
+          daysCountOfMonth(new Date().getMonth(), new Date().getFullYear())
       )
     );
     if (tablerows.some((ob) => ob.customer !== null)) {

@@ -35,7 +35,7 @@ function isDateBeforeNextDate(date1, date2, nextD) {
 // }
 
 function daysCountOfMonth(month, year) {
-  return new Date(year, month, 0).getDate();
+  return parseInt(new Date(year, month, 0).getDate());
 }
 
 export default function Update_Model({
@@ -113,7 +113,10 @@ export default function Update_Model({
                 (1000 * 3600 * 24);
               let daysCountInitial =
                 daysCountNode1 -
-                daysCountOfMonth(new Date().getMonth, new Date().getFullYear());
+                daysCountOfMonth(
+                  new Date().getMonth(),
+                  new Date().getFullYear()
+                );
 
               if (inReDoc.docs[0].data().selectedType === "shop") {
                 if (7 - daysCountInitial >= 0) {
@@ -282,7 +285,7 @@ export default function Update_Model({
                         reInvoice.docs[0].data()?.nextDate.seconds * 1000
                       ).getDate() +
                         daysCountOfMonth(
-                          new Date().getMonth,
+                          new Date().getMonth(),
                           new Date().getFullYear()
                         )
                     )
@@ -339,7 +342,7 @@ export default function Update_Model({
                             reInvoice.docs[0].data()?.nextDate.seconds * 1000
                           ).getDate() +
                             daysCountOfMonth(
-                              new Date().getMonth,
+                              new Date().getMonth(),
                               new Date().getFullYear()
                             )
                         )

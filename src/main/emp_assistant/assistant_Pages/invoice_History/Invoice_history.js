@@ -7,7 +7,6 @@ import moment from "moment";
 import CurrencyFormat from "react-currency-format";
 import { Button, Box, Tab, Tabs, AppBar, Grid } from "@material-ui/core";
 
-
 import { useHistory } from "react-router-dom";
 import db from "../../../../config/firebase.js";
 
@@ -69,7 +68,6 @@ function isDateBeforeToday(date) {
 }
 
 export default function Invoice_history() {
-  
   const [isLoading, setIsLoading] = useState(true);
   const [currentIndx, setCurrentIndx] = useState(0);
   const [currentIndx2, setCurrentIndx2] = useState(0);
@@ -346,10 +344,9 @@ export default function Invoice_history() {
   //START pay And Go Rows
 
   useEffect(() => {
-
-      window.addEventListener("offline", function (e) {
+    window.addEventListener("offline", function (e) {
       history2.push("/connection_lost");
-     });
+    });
 
     db.collection("invoice")
       .where("status_of_payandgo", "==", "onGoing")
@@ -441,34 +438,34 @@ export default function Invoice_history() {
                   Expired
                 </span>
               ) : (
-                      <span
-                        style={{
-                          color: "white",
-                          backgroundColor: "red",
-                          padding: "6px",
-                          borderRadius: "20px",
-                          width: "100%",
-                        }}
-                      >
-                        Blacklist
-                      </span>
-                    ),
+                <span
+                  style={{
+                    color: "white",
+                    backgroundColor: "red",
+                    padding: "6px",
+                    borderRadius: "20px",
+                    width: "100%",
+                  }}
+                >
+                  Blacklist
+                </span>
+              ),
             Action: (
               <div>
                 {siDoc.data().status_of_payandgo === "onGoing" ||
-                  siDoc.data().status_of_payandgo === "expired" ? (
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      size="small"
-                      className="btn_pay"
-                      onClick={showModalUpdate}
-                    >
-                      Update
-                    </Button>
-                  ) : (
-                    ""
-                  )}
+                siDoc.data().status_of_payandgo === "expired" ? (
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                    className="btn_pay"
+                    onClick={showModalUpdate}
+                  >
+                    Update
+                  </Button>
+                ) : (
+                  ""
+                )}
                 <span className="icon_visibl">
                   <HistoryIcon onClick={showModalHistory} />
                 </span>
@@ -585,19 +582,15 @@ export default function Invoice_history() {
                 instAmountProp={
                   payangoAllData[currentIndx2]?.data?.amountPerInstallment
                 }
-                instCount={
-                  payangoAllData[currentIndx2]?.data?.noOfInstallment
-                }
+                instCount={payangoAllData[currentIndx2]?.data?.noOfInstallment}
                 customer_id={payangoAllData[currentIndx]?.data?.customer_id}
                 closeModal={closeModalUpdate}
-                balanceProp={payangoAllData[currentIndx]?.data?.balance}
                 isEx={
                   payangoAllData[currentIndx]?.data?.status_of_payandgo ===
-                    "expired"
+                  "expired"
                     ? true
                     : false
                 }
-                nextDate={payangoAllData[currentIndx]?.data?.nextDate}
               />
             </div>
           </div>
@@ -692,7 +685,7 @@ export default function Invoice_history() {
                 columns={payAndGoColumns}
                 options={{
                   selectableRows: false,
-                  customToolbarSelect: () => { },
+                  customToolbarSelect: () => {},
                   filterType: "textField",
                   download: false,
                   print: false,
@@ -711,8 +704,8 @@ export default function Invoice_history() {
                           spinning="true"
                         />
                       ) : (
-                          ""
-                        ),
+                        ""
+                      ),
                     },
                   },
                 }}
@@ -730,7 +723,7 @@ export default function Invoice_history() {
                 columns={fullPaymentColumns}
                 options={{
                   selectableRows: false,
-                  customToolbarSelect: () => { },
+                  customToolbarSelect: () => {},
                   filterType: "textField",
                   download: false,
                   print: false,
@@ -749,8 +742,8 @@ export default function Invoice_history() {
                           spinning="true"
                         />
                       ) : (
-                          ""
-                        ),
+                        ""
+                      ),
                     },
                   },
                 }}

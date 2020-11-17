@@ -29,15 +29,12 @@ export default function Update_Model({
   instCount,
   customer_id,
   closeModal,
-  balanceProp,
   isEx,
-  nextDate
 }) {
   const [installments, setInstallments] = useState(0);
-  // eslint-disable-next-line
-  const [intialBalance, setInitialBalance] = useState(balanceProp);
-  // eslint-disable-next-line
-  const [balance, setBalance] = useState(balanceProp);
+  const [intialBalance, setInitialBalance] = useState(0);
+  const [balance, setBalance] = useState(0);
+  const [nextDate, setNextDate] = useState(null);
   const [delayedDays, setDelayedDays] = useState(0);
   const [installmentAmount, setInstallmentAmount] = useState(instAmountProp);
   // eslint-disable-next-line
@@ -81,6 +78,9 @@ export default function Update_Model({
       .where("invoice_number", "==", invoice_no)
       .get()
       .then((inReDoc) => {
+        setBalance(inReDoc.docs[0].data().balance);
+        setInitialBalance(inReDoc.docs[0].data().balance);
+        setNextDate(inReDoc.docs[0].data().nextDate);
         db.collection("installment")
           .where("invoice_number", "==", invoice_no)
           .get()
@@ -242,8 +242,7 @@ export default function Update_Model({
           });
         setIsLoading(false);
       });
-    // eslint-disable-next-line
-  }, [invoice_no]);
+  }, [invoice_no, isEx, instAmountProp, instCount, customer_id]);
 
   const updateInstallment = async () => {
     db.collection("invoice")
@@ -766,23 +765,24 @@ export default function Update_Model({
                 )}
               </Grid>
 
-                <Grid className="lbl_topi" item xs={12} sm={12}>
-                  <hr />
-                </Grid>
-                 {/* <Grid className="lbl_topi" item xs={12} sm={6}></Grid> */}
-                
+              <Grid className="lbl_topi" item xs={12} sm={12}>
+                <hr />
+              </Grid>
+              {/* <Grid className="lbl_topi" item xs={12} sm={6}></Grid> */}
 
             <Grid className="lbl_topi" item xs={12} sm={4}>
                  Next Installment Date
               </Grid>
-                <Grid item xs={12} sm={2}>
-                  :
+               <Grid item xs={12} sm={2}>
+                :
               </Grid>
-                <Grid item xs={12} sm={6}>
-                  <p className="next_date">{moment(nextDate?.toDate()).format(
-                    "dddd, MMMM Do YYYY"
-                  )}</p>
-                </Grid> 
+              <Grid item xs={12} sm={6}>
+                <p className="next_date">
+                  {nextDate === null
+                    ? ""
+                    : moment(nextDate?.toDate()).format("dddd, MMMM Do YYYY")}
+                </p>
+              </Grid>
 
               <Grid item xs={12} sm={12}>
                 <hr />

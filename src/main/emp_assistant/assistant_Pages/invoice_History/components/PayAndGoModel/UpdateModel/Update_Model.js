@@ -14,6 +14,7 @@ import db from "../../../../../../../config/firebase.js";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { useHistory } from "react-router-dom";
 import { Modal } from "antd";
+import moment from "moment";
 
 // styles
 import "./Update_Model.css";
@@ -30,6 +31,7 @@ export default function Update_Model({
   closeModal,
   balanceProp,
   isEx,
+  nextDate
 }) {
   const [installments, setInstallments] = useState(0);
   // eslint-disable-next-line
@@ -777,7 +779,9 @@ export default function Update_Model({
                   :
               </Grid>
                 <Grid item xs={12} sm={4}>
-                 <p>2020/02/15</p>
+                  <p>{moment(nextDate?.toDate()).format(
+                    "dddd, MMMM Do YYYY"
+                  )}</p>
                 </Grid> 
 
               <Grid item xs={12} sm={12}>

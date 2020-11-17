@@ -597,6 +597,7 @@ export default function Invoice_history() {
                     ? true
                     : false
                 }
+                nextDate={payangoAllData[currentIndx]?.data?.nextDate}
               />
             </div>
           </div>

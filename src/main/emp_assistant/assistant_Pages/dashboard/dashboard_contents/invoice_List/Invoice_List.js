@@ -603,6 +603,7 @@ export default function Invoice_List() {
                     ? true
                     : false
                 }
+                nextDate={payangoAllData[currentIndx]?.data?.nextDate}
               />
             </div>
           </div>

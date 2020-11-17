@@ -225,16 +225,14 @@ export default function Expire_invoice({ expire_list }) {
                 key={payangoAllData[currentIndx]?.id}
                 invoice_no={payangoAllData[currentIndx]?.data?.invoice_number}
                 instAmountProp={
-                  payangoAllData[currentIndx]?.data?.items[0]
-                    .amountPerInstallment
+                  payangoAllData[currentIndx]?.data?.amountPerInstallment
                 }
-                instCount={
-                  payangoAllData[currentIndx]?.data?.items[0].noOfInstallment
-                }
+                instCount={payangoAllData[currentIndx]?.data?.noOfInstallment}
                 customer_id={payangoAllData[currentIndx]?.data?.customer_id}
                 closeModal={closeModalUpdate}
                 balanceProp={payangoAllData[currentIndx]?.data?.balance}
                 isEx={true}
+                nextDate={payangoAllData[currentIndx]?.data?.nextDate}
               />
             </div>
           </div>

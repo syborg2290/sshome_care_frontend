@@ -26,17 +26,17 @@ function isDateBeforeNextDate(date1, date2, nextD) {
   return seeBool;
 }
 
-// function monthDiff(d1, d2) {
-//   var months;
-//   months = (d2.getFullYear() - d1.getFullYear()) * 12;
-//   months -= d1.getMonth();
-//   months += d2.getMonth();
-//   return months <= 0 ? 0 : months;
-// }
+function monthDiff(d1, d2) {
+  var months;
+  months = (d2.getFullYear() - d1.getFullYear()) * 12;
+  months -= d1.getMonth();
+  months += d2.getMonth();
+  return months <= 0 ? 0 : months;
+}
 
-// function daysCountOfMonth(month, year) {
-//   return parseInt(new Date(year, month, 0).getDate());
-// }
+function daysCountOfMonth(month, year) {
+  return parseInt(new Date(year, month, 0).getDate());
+}
 
 export default function Update_Model({
   invoice_no,
@@ -54,6 +54,7 @@ export default function Update_Model({
   const [installmentAmount, setInstallmentAmount] = useState(instAmountProp);
   // eslint-disable-next-line
   const [allInstallment, setAllInstallment] = useState(0);
+  const [delayedMonths, setDelayedMonths] = useState(0);
   const [delayedCharges, setDelayedCharges] = useState(0);
   const [customer, setCustomer] = useState({});
   const [isLoading, setIsLoading] = useState(true);
@@ -112,6 +113,17 @@ export default function Update_Model({
                   ).getTime()) /
                 (1000 * 3600 * 24);
               let daysCountInitial = daysCountNode1;
+              let monthsCount = monthDiff(
+                new Date(inReDoc.docs[0].data().date.seconds * 1000),
+                new Date()
+              );
+              setDelayedMonths(
+                parseInt(monthsCount) <= 0 ? 1 : parseInt(monthsCount)
+              );
+              let monthsRE =
+                parseInt(monthsCount) <= 0 ? 1 : parseInt(monthsCount);
+              let newInstamount = instAmountProp * monthsRE;
+              setInstallmentAmount(newInstamount);
 
               if (inReDoc.docs[0].data().selectedType === "shop") {
                 if (7 - daysCountInitial >= 0) {
@@ -190,7 +202,23 @@ export default function Update_Model({
                     inReDoc.docs[0].data()?.nextDate?.seconds * 1000
                   ).getTime()) /
                 (1000 * 3600 * 24);
-              let daysCount = daysCountNode2;
+              let daysCount =
+                daysCountNode2 +
+                daysCountOfMonth(
+                  new Date().getMonth(),
+                  new Date().getFullYear()
+                );
+              let monthsCount = monthDiff(
+                new Date(inReDoc.docs[0].data()?.nextDate?.seconds * 1000),
+                new Date()
+              );
+              setDelayedMonths(
+                parseInt(monthsCount) <= 0 ? 1 : parseInt(monthsCount)
+              );
+              let monthsRE =
+                parseInt(monthsCount) <= 0 ? 1 : parseInt(monthsCount);
+              let newInstamount = instAmountProp * monthsRE;
+              setInstallmentAmount(newInstamount);
 
               if (inReDoc.docs[0].data().selectedType === "shop") {
                 if (7 - daysCount >= 0) {

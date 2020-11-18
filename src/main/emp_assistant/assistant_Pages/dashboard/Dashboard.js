@@ -46,25 +46,6 @@ export default function Dashboard() {
       .get()
       .then((onSnap) => {
         onSnap.docs.forEach(async (eachRe) => {
-          // var isBeforeNe = isDateBeforeNextDate(
-          //   new Date(eachRe.data()?.nextDate.seconds * 1000)
-          // );
-          // if (isBeforeNe) {
-          //   await db
-          //     .collection("invoice")
-          //     .doc(eachRe.id)
-          //     .update({
-          //       nextDate: firebase.firestore.Timestamp.fromDate(
-          //         new Date(
-          //           new Date(eachRe.data()?.nextDate.seconds * 1000).setDate(
-          //             new Date(
-          //               eachRe.data()?.nextDate.seconds * 1000
-          //             ).getDate() + 31
-          //           )
-          //         )
-          //       ),
-          //     });
-          // }
           let isBeforeDate = isDateBeforeToday(
             new Date(eachRe.data()?.deadlineTimestamp?.seconds * 1000)
           );

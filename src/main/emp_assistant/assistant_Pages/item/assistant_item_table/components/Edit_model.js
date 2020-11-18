@@ -202,17 +202,17 @@ export default function Edit_model({
           } else {
             if (
               Object.keys(inputsModelNo).length !==
-              Object.keys(inputsSerialNo).length ||
+                Object.keys(inputsSerialNo).length ||
               modelNosList.includes("")
             ) {
-              setValidation("Item model number is required!");
+              setValidation("Item model number & serial number is required!");
             } else {
               if (
                 Object.keys(inputsModelNo).length !==
-                Object.keys(inputsSerialNo).length ||
+                  Object.keys(inputsSerialNo).length ||
                 serialNosList.includes("")
               ) {
-                setValidation("Item Serial number is required!");
+                setValidation("Item model number & serial number is required!");
               } else {
                 if (color === "") {
                   setValidation("Item color is required!");
@@ -319,7 +319,7 @@ export default function Edit_model({
                                                           : noOfInstallments,
                                                       amountPerInstallment:
                                                         amountPerInstallment ===
-                                                          ""
+                                                        ""
                                                           ? 0
                                                           : amountPerInstallment,
                                                       downPayment:
@@ -363,7 +363,7 @@ export default function Edit_model({
                                                           : noOfInstallments,
                                                       amountPerInstallment:
                                                         amountPerInstallment ===
-                                                          ""
+                                                        ""
                                                           ? 0
                                                           : amountPerInstallment,
                                                       downPayment:
@@ -426,8 +426,7 @@ export default function Edit_model({
 
                                                         setLoadingSubmit(false);
                                                         NotificationManager.success(
-                                                          "Item updated!",
-                                                          "Done"
+                                                          "Item updated!"
                                                         );
                                                         editModalClose();
                                                       })
@@ -743,8 +742,8 @@ export default function Edit_model({
               {loadingSubmit ? (
                 <Spin spinning={loadingSubmit} size="large" />
               ) : (
-                  "Update"
-                )}
+                "Update"
+              )}
             </Button>
           </Form>
 

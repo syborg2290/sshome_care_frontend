@@ -1,4 +1,4 @@
-import React, { useState ,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 
 import {
   TextField,
@@ -35,9 +35,7 @@ export default function Repair_model({ closeModel }) {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-
-    useEffect(() => {
-
+  useEffect(() => {
     window.addEventListener("offline", function (e) {
       history2.push("/assistant/connection/error/lost_connection");
     });
@@ -102,7 +100,8 @@ export default function Repair_model({ closeModel }) {
   const getInvoiceAndItem = async () => {
     await db
       .collection("invoice")
-      .get().then((re) => {
+      .get()
+      .then((re) => {
         re.docs.forEach((eachReturn) => {
           eachReturn.data().items.forEach((reItem) => {
             if (reItem.serialNo === serialNo.trim()) {
@@ -113,7 +112,7 @@ export default function Repair_model({ closeModel }) {
           });
         });
       });
-  }
+  };
 
   const addRepair = async () => {
     setLoading(true);
@@ -128,11 +127,11 @@ export default function Repair_model({ closeModel }) {
         .get();
       if (statusOfBlacklist.docs.length > 0) {
         setLoading(false);
-        setError("Invoice number you entered is in the blacklist!");
+        setError("Serial number you entered is in the blacklist!");
       } else {
         if (statusOfSeized.docs.length > 0) {
           setLoading(false);
-          setError("Invoice number you entered is in the seized list!");
+          setError("Serial number you entered is in the seized list!");
         } else {
           db.collection("invoice")
             .where("invoice_number", "==", invoice.trim())
@@ -182,7 +181,7 @@ export default function Repair_model({ closeModel }) {
                 });
               } else {
                 setLoading(false);
-                setError("Invoice number you entered is not found!");
+                setError("Serial number you entered is not found!");
               }
             });
         }
@@ -340,7 +339,6 @@ export default function Repair_model({ closeModel }) {
                 value={mobil_no1}
                 onChange={(e) => {
                   setMobil_no1(e.target.value);
-                  
                 }}
               />
             </Grid>
@@ -351,7 +349,7 @@ export default function Repair_model({ closeModel }) {
                 variant="outlined"
                 fullWidth
                 label="Mobil 2"
-                 type="number"
+                type="number"
                 size="small"
                 value={mobil_no2}
                 onChange={(e) => {
@@ -408,11 +406,11 @@ export default function Repair_model({ closeModel }) {
                 onClick={addRepair}
                 disabled={
                   loading ||
-                    serialNo.length === 0 ||
-                    model_no.length === 0 ||
-                    cust_name.length === 0 ||
-                    nic.length === 0 ||
-                    mobil_no1.length === 0
+                  serialNo.length === 0 ||
+                  model_no.length === 0 ||
+                  cust_name.length === 0 ||
+                  nic.length === 0 ||
+                  mobil_no1.length === 0
                     ? true
                     : false
                 }

@@ -12,7 +12,6 @@ import "./Repair_recipt.css";
 
 class RepairRecipt extends React.Component {
   state = {
-    invoice_number: "",
     serial_number: "",
     model_number: "",
     customer_nic: "",
@@ -21,7 +20,6 @@ class RepairRecipt extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state.invoice_number = this.props.prop?.invoice_no;
     this.state.serial_number = this.props.prop?.serail_no;
     this.state.model_number = this.props.prop?.model_no;
     this.state.customer_nic = this.props.prop?.nic;
@@ -50,11 +48,11 @@ class RepairRecipt extends React.Component {
           <div className="paper_repair">
             <form className="form_repair" noValidate>
               <Row>
-                <Col className="tiles_repair" span={6}>
-                  Invoice No.
+                 <Col className="tiles_repair" span={6}>
+                  Serial No.
                 </Col>
                 <Col className="tiles_details_repair" span={6}>
-                  {this.state.invoice_number}
+                  {this.state.serial_number}
                 </Col>
                 <Col className="tiles_repair" span={6}>
                   Accepted Date
@@ -64,12 +62,7 @@ class RepairRecipt extends React.Component {
                     firebase.firestore.FieldValue.serverTimestamp()
                   ).format("dddd, MMMM Do YYYY, h:mm:ss a")}
                 </Col>
-                <Col className="tiles_repair" span={6}>
-                  Serial No.
-                </Col>
-                <Col className="tiles_details_repair" span={18}>
-                  {this.state.serial_number}
-                </Col>
+              
                 <Col className="tiles_repair" span={6}>
                   Model No.
                 </Col>

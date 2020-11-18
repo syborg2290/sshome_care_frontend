@@ -23,7 +23,7 @@ export default function Repair_model({ closeModel }) {
   let history = useHistory();
   let history2 = useHistory();
   // eslint-disable-next-line
-  const [invoice, setInvoice] = useState("");
+  // const [invoice, setInvoice] = useState("");
   const [serialNo, setSerialNo] = useState("");
   const [model_no, setModel_no] = useState("");
   const [cust_name, setCust_name] = useState("");
@@ -41,14 +41,14 @@ export default function Repair_model({ closeModel }) {
     });
   });
 
-  const showConfirm = (item_name) => {
+  const showConfirm = (item_name, inv) => {
     confirm({
       title: "Do you want to print a receipt?",
       icon: <ExclamationCircleOutlined />,
       onOk() {
         db.collection("repair")
           .add({
-            invoice_no: invoice.trim(),
+            invoice_no: inv,
             serail_no: serialNo.trim(),
             model_no: model_no.trim(),
             nic: nic,
@@ -78,7 +78,7 @@ export default function Repair_model({ closeModel }) {
       onCancel() {
         db.collection("repair")
           .add({
-            invoice_no: invoice.trim(),
+            invoice_no: inv,
             serail_no: serialNo.trim(),
             model_no: model_no.trim(),
             nic: nic,
@@ -91,105 +91,110 @@ export default function Repair_model({ closeModel }) {
             date: firebase.firestore.FieldValue.serverTimestamp(),
           })
           .then(() => {
-            closeModel();
+            window.location.reload();
           });
       },
     });
   };
 
-  const getInvoiceAndItem = async () => {
-    let invoice = "";
-    await db
-      .collection("invoice")
+  const addRepair = async () => {
+    setLoading(true);
+    db.collection("invoice")
       .get()
       .then((re) => {
+        var count = 0;
         re.docs.forEach((eachReturn) => {
-          eachReturn.data().items.forEach((reItem) => {
-            if (reItem.serialNo === serialNo.trim()) {
-              if (reItem.modelNo === model_no.trim()) {
-                setInvoice(eachReturn.data().invoice_number);
-                invoice = eachReturn.data().invoice_number;
+          eachReturn.data().items.forEach(async (reItem) => {
+            if (reItem.serialNo[0] === serialNo.trim()) {
+              if (reItem.modelNo[0] === model_no.trim()) {
+                let result = eachReturn.data().invoice_number;
+                console.log(result);
+
+                let statusOfBlacklist = await db
+                  .collection("blacklist")
+                  .where("InvoiceNo", "==", result)
+                  .get();
+                let statusOfSeized = await db
+                  .collection("seized")
+                  .where("invoice_number", "==", result)
+                  .get();
+                if (statusOfBlacklist.docs.length > 0) {
+                  setLoading(false);
+                  setError("Serial number you entered is in the blacklist!");
+                } else {
+                  if (statusOfSeized.docs.length > 0) {
+                    setLoading(false);
+                    setError(
+                      "Serial number you entered is in the seized list!"
+                    );
+                  } else {
+                    db.collection("invoice")
+                      .where("invoice_number", "==", result)
+                      .get()
+                      .then((reThen) => {
+                        if (reThen.docs.length > 0) {
+                          reThen.docs.forEach((reInvo) => {
+                            reInvo.data().items.forEach((reI) => {
+                              db.collection("item")
+                                .doc(reI.item_id)
+                                .get()
+                                .then((itRe) => {
+                                  let daysCountInitial =
+                                    (new Date().getTime() -
+                                      new Date(
+                                        reInvo.data()?.date?.seconds * 1000
+                                      ).getTime()) /
+                                    (1000 * 3600 * 24);
+
+                                  if (
+                                    itRe.data().guarantee.value === "Months"
+                                  ) {
+                                    if (
+                                      Math.round(daysCountInitial / 30) <=
+                                      itRe.data().guaranteePeriod
+                                    ) {
+                                      showConfirm(itRe.data().itemName, result);
+                                      setLoading(false);
+                                    } else {
+                                      setLoading(false);
+                                      setError(
+                                        "Item's garuntee period is expired!"
+                                      );
+                                    }
+                                  } else {
+                                    if (
+                                      Math.round(daysCountInitial / 365) <=
+                                      itRe.data().guaranteePeriod
+                                    ) {
+                                      showConfirm(itRe.data().itemName, result);
+                                      setLoading(false);
+                                    } else {
+                                      setLoading(false);
+                                      setError(
+                                        "Item's garuntee period is expired!"
+                                      );
+                                    }
+                                  }
+                                });
+                            });
+                          });
+                        } else {
+                          setLoading(false);
+                          setError("Serial number you entered is not found!");
+                        }
+                      });
+                  }
+                }
               }
             }
           });
+          count = count + 1;
         });
-      });
-    return invoice;
-  };
-
-  const addRepair = async () => {
-    setLoading(true);
-    await getInvoiceAndItem().then(async (inv) => {
-      let statusOfBlacklist = await db
-        .collection("blacklist")
-        .where("InvoiceNo", "==", inv)
-        .get();
-      let statusOfSeized = await db
-        .collection("seized")
-        .where("invoice_number", "==", inv)
-        .get();
-      if (statusOfBlacklist.docs.length > 0) {
-        setLoading(false);
-        setError("Serial number you entered is in the blacklist!");
-      } else {
-        if (statusOfSeized.docs.length > 0) {
+        if (re.docs.length >= count) {
           setLoading(false);
-          setError("Serial number you entered is in the seized list!");
-        } else {
-          db.collection("invoice")
-            .where("invoice_number", "==", inv)
-            .get()
-            .then((reThen) => {
-              if (reThen.docs.length > 0) {
-                reThen.docs.forEach((reInvo) => {
-                  reInvo.data().items.forEach((reI) => {
-                    db.collection("item")
-                      .doc(reI.item_id)
-                      .get()
-                      .then((itRe) => {
-                        if (itRe.data().modelNo === model_no.trim()) {
-                          let daysCountInitial =
-                            (new Date().getTime() -
-                              new Date(
-                                reInvo.data()?.date?.seconds * 1000
-                              ).getTime()) /
-                            (1000 * 3600 * 24);
-
-                          if (itRe.data().guarantee.value === "Months") {
-                            if (
-                              Math.round(daysCountInitial / 30) <=
-                              itRe.data().guaranteePeriod
-                            ) {
-                              setLoading(false);
-                              showConfirm(itRe.data().itemName);
-                            } else {
-                              setLoading(false);
-                              setError("Item's garuntee period is expired!");
-                            }
-                          } else {
-                            if (
-                              Math.round(daysCountInitial / 365) <=
-                              itRe.data().guaranteePeriod
-                            ) {
-                              setLoading(false);
-                              showConfirm(itRe.data().itemName);
-                            } else {
-                              setLoading(false);
-                              setError("Item's garuntee period is expired!");
-                            }
-                          }
-                        }
-                      });
-                  });
-                });
-              } else {
-                setLoading(false);
-                setError("Serial number you entered is not found!");
-              }
-            });
+          setError("Serial number you entered is not found!");
         }
-      }
-    });
+      });
   };
 
   return (

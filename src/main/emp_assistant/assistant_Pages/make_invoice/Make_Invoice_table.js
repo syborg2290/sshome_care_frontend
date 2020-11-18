@@ -81,6 +81,12 @@ export default function Make_Invoice_table() {
             element.data().itemName,
             element.data().brand,
             element.data().qty,
+            element.data().color === "" ? " - " : element.data().color,
+            element.data().guaranteePeriod === ""
+              ? " - "
+              : element.data().guaranteePeriod +
+                " " +
+                element.data().guarantee.value,
             <CurrencyFormat
               value={element.data().salePrice}
               displayType={"text"}
@@ -158,6 +164,24 @@ export default function Make_Invoice_table() {
     },
     {
       name: "Qty",
+      options: {
+        filter: false,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "Color",
+      options: {
+        filter: false,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "Gurantee period",
       options: {
         filter: false,
         setCellHeaderProps: (value) => ({

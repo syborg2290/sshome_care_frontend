@@ -68,11 +68,9 @@ export default function Edit_model({
   const [inputsModelNo, setInputsModelNo] = useState({});
   const [inputsChassisNo, setInputsChassisNo] = useState({});
 
-
   let history = useHistory();
-  
+
   useEffect(() => {
-    
     window.addEventListener("offline", function (e) {
       history.push("/connection_lost");
     });
@@ -86,7 +84,7 @@ export default function Edit_model({
     });
   };
   const handleChangeAddSerialNoInputs = (e, i) => {
-     const { value } = e.target;
+    const { value } = e.target;
     db.collection("serail_no")
       .get()
       .then((re) => {
@@ -102,7 +100,7 @@ export default function Edit_model({
             setInputsSerialNo({ ...inputsSerialNo, [i]: value });
           }
         } else {
-          setInputsSerialNo({ ...inputsSerialNo, [i]:value });
+          setInputsSerialNo({ ...inputsSerialNo, [i]: value });
         }
       });
   };
@@ -157,14 +155,14 @@ export default function Edit_model({
         } else {
           if (
             Object.keys(inputsModelNo).length !==
-              Object.keys(inputsSerialNo).length ||
+            Object.keys(inputsSerialNo).length ||
             modelNosList.includes("")
           ) {
             setValidation("Item model number is required!");
           } else {
             if (
               Object.keys(inputsModelNo).length !==
-                Object.keys(inputsSerialNo).length ||
+              Object.keys(inputsSerialNo).length ||
               serialNosList.includes("")
             ) {
               setValidation("Item Serial number is required!");
@@ -257,13 +255,35 @@ export default function Edit_model({
                                                       Math.round(
                                                         docRe.data().qty
                                                       ) + serialNosList.length,
-                                                    cashPrice: cashPrice,
-                                                    salePrice: salePrice,
-                                                    noOfInstallments: noOfInstallments,
-                                                    amountPerInstallment: amountPerInstallment,
-                                                    downPayment: downPayment,
-                                                    guaranteePeriod: guaranteePeriod,
-                                                    discount: discount,
+                                                    cashPrice:
+                                                      cashPrice === ""
+                                                        ? 0
+                                                        : cashPrice,
+                                                    salePrice:
+                                                      salePrice === ""
+                                                        ? 0
+                                                        : salePrice,
+                                                    noOfInstallments:
+                                                      noOfInstallments === ""
+                                                        ? 0
+                                                        : noOfInstallments,
+                                                    amountPerInstallment:
+                                                      amountPerInstallment ===
+                                                        ""
+                                                        ? 0
+                                                        : amountPerInstallment,
+                                                    downPayment:
+                                                      downPayment === ""
+                                                        ? 0
+                                                        : downPayment,
+                                                    guaranteePeriod:
+                                                      guaranteePeriod === ""
+                                                        ? 0
+                                                        : guaranteePeriod,
+                                                    discount:
+                                                      discount === ""
+                                                        ? 0
+                                                        : discount,
                                                     description: description,
                                                     cInvoiceNo: cInvoiceNo,
                                                     GCardNo: GCardNo,
@@ -279,13 +299,35 @@ export default function Edit_model({
                                                     chassisNo: chassisNosList,
                                                     color: color,
                                                     qty: serialNosList.length,
-                                                    cashPrice: cashPrice,
-                                                    salePrice: salePrice,
-                                                    noOfInstallments: noOfInstallments,
-                                                    amountPerInstallment: amountPerInstallment,
-                                                    downPayment: downPayment,
-                                                    guaranteePeriod: guaranteePeriod,
-                                                    discount: discount,
+                                                    cashPrice:
+                                                      cashPrice === ""
+                                                        ? 0
+                                                        : cashPrice,
+                                                    salePrice:
+                                                      salePrice === ""
+                                                        ? 0
+                                                        : salePrice,
+                                                    noOfInstallments:
+                                                      noOfInstallments === ""
+                                                        ? 0
+                                                        : noOfInstallments,
+                                                    amountPerInstallment:
+                                                      amountPerInstallment ===
+                                                        ""
+                                                        ? 0
+                                                        : amountPerInstallment,
+                                                    downPayment:
+                                                      downPayment === ""
+                                                        ? 0
+                                                        : downPayment,
+                                                    guaranteePeriod:
+                                                      guaranteePeriod === ""
+                                                        ? 0
+                                                        : guaranteePeriod,
+                                                    discount:
+                                                      discount === ""
+                                                        ? 0
+                                                        : discount,
                                                     description: description,
                                                     cInvoiceNo: cInvoiceNo,
                                                     GCardNo: GCardNo,
@@ -647,8 +689,8 @@ export default function Edit_model({
               {loadingSubmit ? (
                 <Spin spinning={loadingSubmit} size="large" />
               ) : (
-                "Update"
-              )}
+                  "Update"
+                )}
             </Button>
           </Form>
 

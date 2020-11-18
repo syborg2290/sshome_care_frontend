@@ -196,7 +196,7 @@ export default function View_Model({ pendingBlackList }) {
         filter: true,
         setCellHeaderProps: (value) => ({
           style: {
-            width: "190px",
+           minWidth: "215px",
             margin: "auto",
             fontSize: "15px",
             color: "black",
@@ -237,15 +237,15 @@ export default function View_Model({ pendingBlackList }) {
                         <HistoryIcon onClick={showModalHistory} />
                       </span>
                       <Button
-                        variant="contained"
-                        color="primary"
-                        size="small"
-                        className="btn_pay"
-                        onClick={showModalUpdate}
-                        style={{
-                          color: "black",
-                          backgroundColor: "yellow",
-                        }}
+                       variant="contained"
+                       color="primary"
+                       size="small"
+                       className="btn_paydash"
+                       onClick={showModalUpdate}
+                        // style={{
+                        //   color: "black",
+                        //   backgroundColor: "yellow",
+                        // }}
                       >
                         Update
                       </Button>

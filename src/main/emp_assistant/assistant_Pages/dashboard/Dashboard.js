@@ -58,29 +58,26 @@ export default function Dashboard() {
         });
       });
 
-    db.collection("invoice")
-      .where("status_of_payandgo", "==", "expired")
-      .get()
-      .then((onSnap) => {
-        onSnap.docs.forEach(async (each) => {
-          let isBeforeDate = isDateBeforeToday(
-            new Date(each.data()?.deadlineTimestamp?.seconds * 1000)
-          );
-          if (isBeforeDate) {
-            setExpiredList([
-              ...expiredList,
-              {
-                invoice_number: each.data().invoice_number,
-                nic: each.data()?.nic,
-              },
-            ]);
-          }
-        });
-      });
     // eslint-disable-next-line
   }, []);
 
   const checkInstallmentsStatus = async (eachRe) => {
+    db.collection("invoice")
+      .where("status_of_payandgo", "==", "expired")
+      .get()
+      .then((onSnap) => {
+        var expiredRawData = [];
+        onSnap.docs.forEach((each) => {
+          expiredRawData.push({
+            invoice_number: each.data().invoice_number,
+            nic: each.data()?.nic,
+            data: each.data(),
+            id: each.id,
+          });
+        });
+        setExpiredList(expiredRawData);
+      });
+
     const installmentStatus = await db
       .collection("installment")
       .where("invoice_number", "==", eachRe.data().invoice_number)

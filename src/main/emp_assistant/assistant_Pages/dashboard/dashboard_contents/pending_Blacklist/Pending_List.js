@@ -11,6 +11,7 @@ import "./Pending_List.css";
 // components
 import PendingViewModel from "./blackList_Models/View_Model/View_Model";
 import PendingHistoryModel from "./blackList_Models/History_Model/History_Model";
+import UpdateInstallment from "../../../invoice_History/components/PayAndGoModel/UpdateModel/Update_Model";
 
 //icone
 import { ExclamationCircleOutlined } from "@ant-design/icons";
@@ -18,14 +19,22 @@ import VisibilityIcon from "@material-ui/icons/Visibility";
 import HistoryIcon from "@material-ui/icons/History";
 
 export default function View_Model({ pendingBlackList }) {
-  // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
   const [pendingList, setPendingList] = useState([]);
-
   const [pendingViewModel, setPendingViewModel] = useState(false); //  table models
   const [pendingHistoryModel, setPendingHistoryModel] = useState(false); //  table models
   const [allViewData, setAllViewData] = useState([]);
+  const [allPendingBlacklistData, setAllPendingBlacklistData] = useState([]);
   const [visibleConfirmPrint, setVisibleConfirmPrint] = useState(false);
+  const [installmentUpdate, setInstallmentUpdate] = useState(false); //  table models
+
+  const showModalUpdate = () => {
+    setInstallmentUpdate(true);
+  };
+
+  const closeModalUpdate = () => {
+    setInstallmentUpdate(false);
+  };
 
   const showVisibleConfirmModal = () => {
     setVisibleConfirmPrint(true);
@@ -227,6 +236,19 @@ export default function View_Model({ pendingBlackList }) {
                       <span className="icon_histry">
                         <HistoryIcon onClick={showModalHistory} />
                       </span>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        size="small"
+                        className="btn_pay"
+                        onClick={showModalUpdate}
+                        style={{
+                          color: "black",
+                          backgroundColor: "yellow",
+                        }}
+                      >
+                        Update
+                      </Button>
                       <span className="blk_btn">
                         <Button
                           variant="contained"
@@ -247,6 +269,13 @@ export default function View_Model({ pendingBlackList }) {
             .where("invoice_number", "==", each.invoice_number)
             .get()
             .then((reTruste) => {
+              setAllPendingBlacklistData((old) => [
+                ...old,
+                {
+                  id: reTruste.docs[0].id,
+                  data: reTruste.docs[0].data,
+                },
+              ]);
               setAllViewData((oldAll) => [
                 ...oldAll,
                 {
@@ -306,6 +335,44 @@ export default function View_Model({ pendingBlackList }) {
 
   return (
     <>
+      <Modal
+        visible={installmentUpdate}
+        className="update_Installment_Model"
+        footer={null}
+        onCancel={() => {
+          setInstallmentUpdate(false);
+        }}
+      >
+        <div className="update_Installment_Model">
+          <div className="update_Installment_Model_Main">
+            <div className="update_Installment_Model_Detail">
+              <UpdateInstallment
+                key={allPendingBlacklistData[currentIndx]?.id}
+                invoice_no={
+                  allPendingBlacklistData[currentIndx]?.data.invoice_number
+                }
+                instAmountProp={
+                  allPendingBlacklistData[currentIndx]?.data
+                    ?.amountPerInstallment
+                }
+                instCount={
+                  allPendingBlacklistData[currentIndx]?.data?.noOfInstallment
+                }
+                customer_id={
+                  allPendingBlacklistData[currentIndx]?.data?.customer_id
+                }
+                closeModal={closeModalUpdate}
+                isEx={
+                  allPendingBlacklistData[currentIndx]?.data
+                    .status_of_payandgo === "expired"
+                    ? true
+                    : false
+                }
+              />
+            </div>
+          </div>
+        </div>
+      </Modal>
       <Modal
         className="confo_model"
         closable={null}

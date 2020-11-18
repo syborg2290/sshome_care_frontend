@@ -5,7 +5,7 @@ import moment from "moment";
 import CurrencyFormat from "react-currency-format";
 import { Button, Grid } from "@material-ui/core";
 
-import db from "../../../../../../config/firebase.js";
+// import db from "../../../../../../config/firebase.js";
 
 // components
 import UpdateInstallment from "../../../invoice_History/components/PayAndGoModel/UpdateModel/Update_Model";
@@ -119,72 +119,57 @@ export default function Expire_invoice({ expire_list }) {
   //START pay And Go Rows
 
   useEffect(() => {
+    var rawData = [];
+    var rawAllData = [];
     expire_list.forEach((each) => {
-      db.collection("invoice")
-        .where("invoice_number", "!=", each.invoice_number)
-        .onSnapshot((cust) => {
-          var rawData = [];
-          var rawAllData = [];
+      rawAllData.push({
+        id: each.id,
+        data: each.data,
+      });
 
-          cust.docs.forEach((siDoc) => {
-            let daysCountInitial =
-              (new Date().getTime() -
-                new Date(siDoc.data()?.date?.seconds * 1000).getTime()) /
-              (1000 * 3600 * 24);
-            if (Math.round(daysCountInitial) === 0) {
-              rawAllData.push({
-                id: siDoc.id,
-                data: siDoc.data(),
-              });
-
-              rawData.push({
-                InvoiceNo: siDoc.data().invoice_number,
-                Type: siDoc.data().selectedType,
-                Date: moment(siDoc.data()?.date?.toDate()).format(
-                  "dddd, MMMM Do YYYY"
-                ),
-                Balance: (
-                  <CurrencyFormat
-                    value={siDoc.data().balance}
-                    displayType={"text"}
-                    thousandSeparator={true}
-                    prefix={" "}
-                  />
-                ),
-                NIC: siDoc.data().nic,
-                MID: siDoc.data().mid,
-                Action: (
-                  <div>
-                    {
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        size="small"
-                        className="btn_pay"
-                        onClick={showModalUpdate}
-                        style={{
-                          color: "white",
-                          backgroundColor: "#ff8c00",
-                        }}
-                      >
-                        Update
-                      </Button>
-                    }
-                    <span className="icon_visibl">
-                      <HistoryIcon onClick={showModalHistory} />
-                    </span>
-                    <span className="icon_Edit">
-                      <VisibilityIcon onClick={showInstallmentView} />
-                    </span>
-                  </div>
-                ),
-              });
+      rawData.push({
+        InvoiceNo: each.data.invoice_number,
+        Type: each.data.selectedType,
+        Date: moment(each.data.date?.toDate()).format("dddd, MMMM Do YYYY"),
+        Balance: (
+          <CurrencyFormat
+            value={each.data.balance}
+            displayType={"text"}
+            thousandSeparator={true}
+            prefix={" "}
+          />
+        ),
+        NIC: each.data.nic,
+        MID: each.data.mid,
+        Action: (
+          <div>
+            {
+              <Button
+                variant="contained"
+                color="primary"
+                size="small"
+                className="btn_pay"
+                onClick={showModalUpdate}
+                style={{
+                  color: "white",
+                  backgroundColor: "#ff8c00",
+                }}
+              >
+                Update
+              </Button>
             }
-          });
-          setpayangoAllData(rawAllData);
-          setpayangoTableData(rawData);
-        });
+            <span className="icon_visibl">
+              <HistoryIcon onClick={showModalHistory} />
+            </span>
+            <span className="icon_Edit">
+              <VisibilityIcon onClick={showInstallmentView} />
+            </span>
+          </div>
+        ),
+      });
     });
+    setpayangoAllData(rawAllData);
+    setpayangoTableData(rawData);
   }, [expire_list]);
   //End pay And Go Rows
 

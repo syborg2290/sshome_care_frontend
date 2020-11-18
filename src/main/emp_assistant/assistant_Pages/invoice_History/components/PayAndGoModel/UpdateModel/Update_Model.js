@@ -123,7 +123,9 @@ export default function Update_Model({
               let monthsRE =
                 parseInt(monthsCount) <= 0 ? 1 : parseInt(monthsCount);
               let newInstamount = instAmountProp * monthsRE;
-              setInstallmentAmount(newInstamount + instAmountProp);
+              setInstallmentAmount(
+                newInstamount + monthsRE > 1 ? instAmountProp : 0
+              );
 
               if (inReDoc.docs[0].data().selectedType === "shop") {
                 if (7 - daysCountInitial >= 0) {
@@ -218,7 +220,9 @@ export default function Update_Model({
               let monthsRE =
                 parseInt(monthsCount) <= 0 ? 1 : parseInt(monthsCount);
               let newInstamount = instAmountProp * monthsRE;
-              setInstallmentAmount(newInstamount + instAmountProp);
+              setInstallmentAmount(
+                newInstamount + monthsRE > 1 ? instAmountProp : 0
+              );
 
               if (inReDoc.docs[0].data().selectedType === "shop") {
                 if (7 - daysCount >= 0) {

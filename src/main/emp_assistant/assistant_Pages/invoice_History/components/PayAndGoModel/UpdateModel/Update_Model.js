@@ -272,7 +272,7 @@ export default function Update_Model({
           reTotCal / parseInt(reInvoice.docs[0].data()?.amountPerInstallment);
 
         if (reCalMult >= 1) {
-          for (var t = 0; t < Math.round(reCalMult); t++) {
+          for (var t = 0; t <= Math.round(reCalMult); t++) {
             db.collection("invoice")
               .doc(reInvoice.docs[0].id)
               .update({

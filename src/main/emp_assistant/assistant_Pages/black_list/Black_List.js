@@ -180,7 +180,7 @@ export default function Black_List() {
           MID: each.data().MID,
           NIC: each.data().NIC,
           Telephone: each.data().Telephone,
-          balance: each.data().balance,
+          Balance: each.data().balance,
           Action: (
             <div>
               <VisibilityIcon onClick={showModalCustomer} />

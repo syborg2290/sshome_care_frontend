@@ -90,6 +90,7 @@ export default function View_Model({ pendingBlackList }) {
                 .doc(reArreas.docs[0].data().customer_id)
                 .get()
             ).data().mobile1,
+            balance: allPendingBlacklistData[currentIndx].data?.balance,
           })
           .then((_) => {
             setVisibleConfirmPrint(false);
@@ -196,7 +197,7 @@ export default function View_Model({ pendingBlackList }) {
         filter: true,
         setCellHeaderProps: (value) => ({
           style: {
-           minWidth: "215px",
+            minWidth: "215px",
             margin: "auto",
             fontSize: "15px",
             color: "black",
@@ -244,11 +245,11 @@ export default function View_Model({ pendingBlackList }) {
                         <HistoryIcon onClick={showModalHistory} />
                       </span>
                       <Button
-                       variant="contained"
-                       color="primary"
-                       size="small"
-                       className="btn_paydash"
-                       onClick={showModalUpdate}
+                        variant="contained"
+                        color="primary"
+                        size="small"
+                        className="btn_paydash"
+                        onClick={showModalUpdate}
                         // style={{
                         //   color: "black",
                         //   backgroundColor: "yellow",

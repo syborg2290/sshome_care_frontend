@@ -418,7 +418,10 @@ function Make_invoice() {
     var times = new Date(
       new Date(intialTimestamp?.seconds * 1000).setDate(
         new Date(intialTimestamp?.seconds * 1000).getDate() +
-          daysCountOfMonth(new Date().getMonth(), new Date().getFullYear())
+          daysCountOfMonth(
+            new Date(intialTimestamp?.seconds * 1000).getMonth(),
+            new Date(intialTimestamp?.seconds * 1000).getFullYear()
+          )
       )
     );
     if (tablerows.some((ob) => ob.customer !== null)) {

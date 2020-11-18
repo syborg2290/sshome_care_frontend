@@ -154,7 +154,7 @@ export default function Repair_model({ closeModel }) {
                                       Math.round(daysCountInitial / 30) <=
                                       itRe.data().guaranteePeriod
                                     ) {
-                                      setError("");
+                                      setError("c");
                                       showConfirm(
                                         itRe.data().itemName,
                                         result,
@@ -172,7 +172,7 @@ export default function Repair_model({ closeModel }) {
                                       Math.round(daysCountInitial / 365) <=
                                       itRe.data().guaranteePeriod
                                     ) {
-                                      setError("");
+                                      setError("c");
                                       showConfirm(
                                         itRe.data().itemName,
                                         result,
@@ -191,6 +191,7 @@ export default function Repair_model({ closeModel }) {
                           });
                         } else {
                           setLoading(false);
+
                           setError("Serial number you entered is not found!");
                         }
                       });
@@ -201,9 +202,11 @@ export default function Repair_model({ closeModel }) {
           });
           count = count + 1;
         });
-        if (re.docs.length >= count) {
+        if (re.docs.length < count) {
           setLoading(false);
-          setError("Serial number you entered is not found!");
+          if (error !== "c") {
+            setError("Serial number you entered is not found!");
+          }
         }
       });
   };

@@ -22,7 +22,7 @@ class RepairRecipt extends React.Component {
   constructor(props) {
     super(props);
     this.state.invoice_number = this.props.prop?.invoice_no;
-    this.state.serial_number = this.props.prop?.serial_no;
+    this.state.serial_number = this.props.prop?.serail_no;
     this.state.model_number = this.props.prop?.model_no;
     this.state.customer_nic = this.props.prop?.nic;
     this.state.item_name = this.props.prop?.item_name;
@@ -64,8 +64,8 @@ class RepairRecipt extends React.Component {
                     firebase.firestore.FieldValue.serverTimestamp()
                   ).format("dddd, MMMM Do YYYY, h:mm:ss a")}
                 </Col>
-                 <Col className="tiles_repair" span={6}>
-                 Serial No.
+                <Col className="tiles_repair" span={6}>
+                  Serial No.
                 </Col>
                 <Col className="tiles_details_repair" span={18}>
                   {this.state.serial_number}

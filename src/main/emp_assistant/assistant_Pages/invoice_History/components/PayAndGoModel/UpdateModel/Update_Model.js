@@ -360,13 +360,13 @@ export default function Update_Model({
       .where("invoice_number", "==", invoice_no)
       .get()
       .then(async (reInst) => {
-        let tot = parseInt(installmentAmount) + parseInt(gamisaraniamount);
+        // let tot = parseInt(installmentAmount) + parseInt(gamisaraniamount);
         await db.collection("installment").add({
           invoice_number: invoice_no,
           amount: parseInt(installmentAmount) + parseInt(gamisaraniamount),
           delayed: delayedCharges === "" ? 0 : parseInt(delayedCharges),
           isExpired: isEx,
-          balance: balance - tot <= 0 ? 0 : balance - tot,
+          balance: balance <= 0 ? 0 : balance,
           gamisarani_amount: parseInt(gamisaraniamount),
           date: updateTimestamp,
         });
@@ -377,15 +377,12 @@ export default function Update_Model({
       .where("invoice_number", "==", invoice_no)
       .get()
       .then(async (reBalance) => {
-        let totot = parseInt(installmentAmount) + parseInt(gamisaraniamount);
+        // let totot = parseInt(installmentAmount) + parseInt(gamisaraniamount);
         await db
           .collection("invoice")
           .doc(reBalance.docs[0].id)
           .update({
-            balance:
-              reBalance.docs[0].data().balance - totot <= 0
-                ? 0
-                : reBalance.docs[0].data().balance - totot,
+            balance: balance <= 0 ? 0 : balance,
           });
       });
 

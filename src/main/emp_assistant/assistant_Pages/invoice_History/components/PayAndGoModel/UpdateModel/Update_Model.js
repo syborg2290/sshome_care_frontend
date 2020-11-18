@@ -466,7 +466,7 @@ export default function Update_Model({
         },
         async onCancel() {
           await updateInstallment();
-          // window.location.reload();
+          window.location.reload();
         },
       });
     }

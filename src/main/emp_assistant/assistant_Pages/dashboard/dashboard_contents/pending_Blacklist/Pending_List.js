@@ -152,19 +152,7 @@ export default function View_Model({ pendingBlackList }) {
         }),
       },
     },
-    {
-      name: "Serial_No",
-      options: {
-        filter: false,
-        setCellHeaderProps: (value) => ({
-          style: {
-            fontSize: "15px",
-            color: "black",
-            fontWeight: "600",
-          },
-        }),
-      },
-    },
+
     {
       name: "Type",
       options: {
@@ -216,40 +204,44 @@ export default function View_Model({ pendingBlackList }) {
         .where("nic", "==", each.nic)
         .get()
         .then((reThen) => {
-          setPendingList((old) => [
-            ...old,
-            {
-              InvoiceNo: each.invoice_number,
-              FirstName: reThen.docs[0].data().fname,
-              LastName: reThen.docs[0].data().lname,
-              NIC: each.nic,
-              MID: each.mid,
-              SerialNo: each.serialNo,
-              Type: each.type,
-              Telephone: reThen.docs[0].data().mobile1,
-              Action: (
-                <div>
-                  <VisibilityIcon
-                    className="icon_view"
-                    onClick={showModalView}
-                  />
-                  <span className="icon_histry">
-                    <HistoryIcon onClick={showModalHistory} />
-                  </span>
-                  <span className="blk_btn">
-                    <Button
-                      variant="contained"
-                      size="small"
-                      className="btnublock"
-                      onClick={showVisibleConfirmModal}
-                    >
-                      Blacklist
-                    </Button>
-                  </span>
-                </div>
-              ),
-            },
-          ]);
+          db.collection("invoice")
+            .where("invoice_number", "==", each.invoice_number)
+            .get()
+            .then((reInv) => {
+              setPendingList((old) => [
+                ...old,
+                {
+                  InvoiceNo: each.invoice_number,
+                  FirstName: reThen.docs[0].data().fname,
+                  LastName: reThen.docs[0].data().lname,
+                  NIC: each.nic,
+                  MID: reInv.docs[0].data().mid,
+                  Type: reInv.docs[0].data().selectedType,
+                  Telephone: reThen.docs[0].data().mobile1,
+                  Action: (
+                    <div>
+                      <VisibilityIcon
+                        className="icon_view"
+                        onClick={showModalView}
+                      />
+                      <span className="icon_histry">
+                        <HistoryIcon onClick={showModalHistory} />
+                      </span>
+                      <span className="blk_btn">
+                        <Button
+                          variant="contained"
+                          size="small"
+                          className="btnublock"
+                          onClick={showVisibleConfirmModal}
+                        >
+                          Blacklist
+                        </Button>
+                      </span>
+                    </div>
+                  ),
+                },
+              ]);
+            });
 
           db.collection("trustee")
             .where("invoice_number", "==", each.invoice_number)

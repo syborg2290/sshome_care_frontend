@@ -26,9 +26,9 @@ function isDateBeforeToday(date) {
 //   return new Date(date.toDateString()) > new Date(new Date().toDateString());
 // }
 
-function daysCountOfMonth(month, year) {
-  return parseInt(new Date(year, month, 0).getDate());
-}
+// function daysCountOfMonth(month, year) {
+//   return parseInt(new Date(year, month, 0).getDate());
+// }
 
 export default function Dashboard() {
   // eslint-disable-next-line
@@ -95,9 +95,7 @@ export default function Dashboard() {
       (new Date().getTime() -
         new Date(eachRe.data()?.date?.seconds * 1000).getTime()) /
       (1000 * 3600 * 24);
-    let daysCountInitial =
-      daysCountNode1 -
-      daysCountOfMonth(new Date().getMonth(), new Date().getFullYear());
+    let daysCountInitial = daysCountNode1;
     if (eachRe.data().selectedType === "shop") {
       if (7 - daysCountInitial >= 0) {
       } else {
@@ -284,24 +282,7 @@ export default function Dashboard() {
     }
   };
 
-  // const getDateCheck = (value, arr, prop) => {
-  //   for (var i = 0; i < arr.length; i++) {
-  //     if (new Date(arr[i].data()[prop].seconds * 1000) === value) {
-  //       return true;
-  //     }
-  //   }
-  //   return false; //to handle the case where the value doesn't exist
-  // };
-
   const afterStateOfArreasCheck = async (instReDoc, eachRe) => {
-    // let daysCountNode2 =
-    //   (new Date().getTime() -
-    //     new Date(
-    //       instReDoc.docs[instReDoc.docs.length - 1].data()?.date?.seconds * 1000
-    //     ).getTime()) /
-    //   (1000 * 3600 * 24);
-    // let daysCount = daysCountNode2 - 31;
-
     let daysCountNode2 =
       (new Date().getTime() -
         new Date(

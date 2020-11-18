@@ -34,9 +34,9 @@ function isDateBeforeNextDate(date1, date2, nextD) {
 //   return months <= 0 ? 0 : months;
 // }
 
-function daysCountOfMonth(month, year) {
-  return parseInt(new Date(year, month, 0).getDate());
-}
+// function daysCountOfMonth(month, year) {
+//   return parseInt(new Date(year, month, 0).getDate());
+// }
 
 export default function Update_Model({
   invoice_no,
@@ -111,12 +111,7 @@ export default function Update_Model({
                     inReDoc.docs[0].data().date.seconds * 1000
                   ).getTime()) /
                 (1000 * 3600 * 24);
-              let daysCountInitial =
-                daysCountNode1 -
-                daysCountOfMonth(
-                  new Date().getMonth(),
-                  new Date().getFullYear()
-                );
+              let daysCountInitial = daysCountNode1;
 
               if (inReDoc.docs[0].data().selectedType === "shop") {
                 if (7 - daysCountInitial >= 0) {
@@ -444,29 +439,31 @@ export default function Update_Model({
         icon: <ExclamationCircleOutlined />,
 
         async onOk() {
-          await updateInstallment();
-          let toto = parseInt(installmentAmount) + parseInt(gamisaraniamount);
-          let passingWithCustomerObj = {
-            invoice_number: invoice_no,
-            customerDetails: customer,
-            total: totalPlusRed(),
-            balance: balance - toto <= 0 ? 0 : balance - toto,
-            gamisarani_amount: parseInt(gamisaraniamount),
-            date: updateTimestamp,
-            delayedCharges: Math.round(delayedCharges),
-          };
+          await updateInstallment().then((_) => {
+            let toto = parseInt(installmentAmount) + parseInt(gamisaraniamount);
+            let passingWithCustomerObj = {
+              invoice_number: invoice_no,
+              customerDetails: customer,
+              total: totalPlusRed(),
+              balance: balance - toto <= 0 ? 0 : balance - toto,
+              gamisarani_amount: parseInt(gamisaraniamount),
+              date: updateTimestamp,
+              delayedCharges: Math.round(delayedCharges),
+            };
 
-          let moveWith = {
-            pathname:
-              "/assistant/invoice_history/payAndGo/updateModel/PrintReceipt",
-            search: "?query=abc",
-            state: { detail: passingWithCustomerObj },
-          };
-          history.push(moveWith);
+            let moveWith = {
+              pathname:
+                "/assistant/invoice_history/payAndGo/updateModel/PrintReceipt",
+              search: "?query=abc",
+              state: { detail: passingWithCustomerObj },
+            };
+            history.push(moveWith);
+          });
         },
         async onCancel() {
-          await updateInstallment();
-          window.location.reload();
+          await updateInstallment().then((_) => {
+            window.location.reload();
+          });
         },
       });
     }

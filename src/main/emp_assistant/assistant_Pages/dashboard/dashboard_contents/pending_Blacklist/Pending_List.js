@@ -78,6 +78,13 @@ export default function View_Model({ pendingBlackList }) {
                 .doc(reArreas.docs[0].data().customer_id)
                 .get()
             ).data().lname,
+            Type: allPendingBlacklistData[currentIndx].data?.selectedType,
+            MID: await (
+              await db
+                .collection("customer")
+                .doc(reArreas.docs[0].data().customer_id)
+                .get()
+            ).data().mid,
             NIC: await (
               await db
                 .collection("customer")

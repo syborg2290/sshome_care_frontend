@@ -78,30 +78,51 @@ export default function Edit_model({
 
   //add InputSerial No
   const addInputSerialNo = () => {
-    setInputsSerialNo({
-      ...inputsSerialNo,
-      [Object.keys(inputsSerialNo).length]: "",
-    });
-  };
-  const handleChangeAddSerialNoInputs = (e, i) => {
-    const { value } = e.target;
-    setInputsSerialNo({ ...inputsSerialNo, [i]: value });
-  };
-
-  const handleOnkeyupAddSerialNoInputs = (e, i) => {
-    const { value } = e.target;
-
-    db.collection("serail_no")
-      .get()
-      .then((re) => {
-        if (re.docs.length > 0) {
-          if (re.docs[0].data().serail_no.some((ob) => ob === value)) {
-            delete inputsSerialNo[i];
-            setInputsSerialNo({ ...inputsSerialNo });
-            NotificationManager.info("Item serial number must be unique !");
+    if (Object.keys(inputsSerialNo).length > 0) {
+      // let previous = Object.keys(inputsSerialNo).length - 1;
+      db.collection("serail_no")
+        .get()
+        .then((re) => {
+          if (re.docs.length > 0) {
+            if (
+              re.docs[0]
+                .data()
+                .serail_no.some(
+                  (ob) =>
+                    ob ===
+                    inputsSerialNo[Object.keys(inputsSerialNo).length - 1]
+                )
+            ) {
+              delete inputsSerialNo[Object.keys(inputsSerialNo).length - 1];
+              setInputsSerialNo({
+                ...inputsSerialNo,
+              });
+              NotificationManager.info("Item serial number must be unique !");
+            } else {
+              setInputsSerialNo({
+                ...inputsSerialNo,
+                [Object.keys(inputsSerialNo).length]: "",
+              });
+            }
+          } else {
+            setInputsSerialNo({
+              ...inputsSerialNo,
+              [Object.keys(inputsSerialNo).length]: "",
+            });
           }
-        }
+        });
+    } else {
+      setInputsSerialNo({
+        ...inputsSerialNo,
+        [Object.keys(inputsSerialNo).length]: "",
       });
+    }
+  };
+
+  const handleOnChangeAddSerialNoInputs = (e, i) => {
+    const { value } = e.target;
+
+    setInputsSerialNo({ ...inputsSerialNo, [i]: value });
   };
 
   //add InputModel No
@@ -627,8 +648,7 @@ export default function Edit_model({
                         key={i + 2}
                         id={i.toString()}
                         placeholder="xxx-serial"
-                        onKeyUp={(e) => handleOnkeyupAddSerialNoInputs(e, i)}
-                        onChange={(e) => handleChangeAddSerialNoInputs(e, i)}
+                        onChange={(e) => handleOnChangeAddSerialNoInputs(e, i)}
                       />
 
                       <MinusCircleOutlined

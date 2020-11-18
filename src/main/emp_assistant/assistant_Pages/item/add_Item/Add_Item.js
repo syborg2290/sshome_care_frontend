@@ -54,31 +54,51 @@ export default function Add_Item() {
 
   //add InputSerial No
   const addInputSerialNo = () => {
-    setInputsSerialNo({
-      ...inputsSerialNo,
-      [Object.keys(inputsSerialNo).length]: "",
-    });
+    if (Object.keys(inputsSerialNo).length > 0) {
+      // let previous = Object.keys(inputsSerialNo).length - 1;
+      db.collection("serail_no")
+        .get()
+        .then((re) => {
+          if (re.docs.length > 0) {
+            if (
+              re.docs[0]
+                .data()
+                .serail_no.some(
+                  (ob) =>
+                    ob ===
+                    inputsSerialNo[Object.keys(inputsSerialNo).length - 1]
+                )
+            ) {
+              delete inputsSerialNo[Object.keys(inputsSerialNo).length - 1];
+              setInputsSerialNo({
+                ...inputsSerialNo,
+              });
+              NotificationManager.info("Item serial number must be unique !");
+            } else {
+              setInputsSerialNo({
+                ...inputsSerialNo,
+                [Object.keys(inputsSerialNo).length]: "",
+              });
+            }
+          } else {
+            setInputsSerialNo({
+              ...inputsSerialNo,
+              [Object.keys(inputsSerialNo).length]: "",
+            });
+          }
+        });
+    } else {
+      setInputsSerialNo({
+        ...inputsSerialNo,
+        [Object.keys(inputsSerialNo).length]: "",
+      });
+    }
   };
+
   const handleChangeAddSerialNoInputs = (e, i) => {
     const { value } = e.target;
 
     setInputsSerialNo({ ...inputsSerialNo, [i]: value });
-  };
-
-  const handleOnkeyupAddSerialNoInputs = (e, i) => {
-    const { value } = e.target;
-
-    db.collection("serail_no")
-      .get()
-      .then((re) => {
-        if (re.docs.length > 0) {
-          if (re.docs[0].data().serail_no.some((ob) => ob === value)) {
-            delete inputsSerialNo[i];
-            setInputsSerialNo({ ...inputsSerialNo });
-            NotificationManager.info("Item serial number must be unique !");
-          }
-        }
-      });
   };
 
   //add InputModel No
@@ -1188,7 +1208,6 @@ export default function Add_Item() {
                       required={true}
                       label="xx-20097"
                       size="small"
-                      onKeyUp={(e) => handleOnkeyupAddSerialNoInputs(e, i)}
                       onChange={(e) => handleChangeAddSerialNoInputs(e, i)}
                     />
 

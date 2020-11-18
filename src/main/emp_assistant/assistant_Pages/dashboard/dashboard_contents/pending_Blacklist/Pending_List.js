@@ -217,6 +217,13 @@ export default function View_Model({ pendingBlackList }) {
             .where("invoice_number", "==", each.invoice_number)
             .get()
             .then((reInv) => {
+              setAllPendingBlacklistData((old) => [
+                ...old,
+                {
+                  id: reInv.docs[0].id,
+                  data: reInv.docs[0].data(),
+                },
+              ]);
               setPendingList((old) => [
                 ...old,
                 {
@@ -269,13 +276,6 @@ export default function View_Model({ pendingBlackList }) {
             .where("invoice_number", "==", each.invoice_number)
             .get()
             .then((reTruste) => {
-              setAllPendingBlacklistData((old) => [
-                ...old,
-                {
-                  id: reTruste.docs[0].id,
-                  data: reTruste.docs[0].data,
-                },
-              ]);
               setAllViewData((oldAll) => [
                 ...oldAll,
                 {

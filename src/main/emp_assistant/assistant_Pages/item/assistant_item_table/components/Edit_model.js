@@ -119,6 +119,27 @@ export default function Edit_model({
     }
   };
 
+  const checkSerialNumber = () => {
+    for (var l = 0; l < Object.keys(inputsSerialNo).length; l++) {
+      db.collection("serail_no")
+        .get()
+        // eslint-disable-next-line
+        .then((re) => {
+          if (re.docs.length > 0) {
+            if (
+              re.docs[0].data().serail_no.some((ob) => ob === inputsSerialNo[l])
+            ) {
+              delete inputsSerialNo[l];
+              setInputsSerialNo({
+                ...inputsSerialNo,
+              });
+              NotificationManager.info("Item serial number must be unique !");
+            }
+          }
+        });
+    }
+  };
+
   const handleOnChangeAddSerialNoInputs = (e, i) => {
     const { value } = e.target;
 
@@ -156,6 +177,7 @@ export default function Edit_model({
 
   const updateItem = async (e) => {
     e.preventDefault();
+    checkSerialNumber();
     let modelNosList = [];
     let serialNosList = [];
     let chassisNosList = [];

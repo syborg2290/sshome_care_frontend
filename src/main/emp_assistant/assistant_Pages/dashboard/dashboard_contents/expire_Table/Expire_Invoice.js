@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Modal } from "antd";
 import MUIDataTable from "mui-datatables";
 import moment from "moment";
-// import CurrencyFormat from "react-currency-format";
+import CurrencyFormat from "react-currency-format";
 import { Button, Grid } from "@material-ui/core";
 
 import db from "../../../../../../config/firebase.js";
@@ -73,17 +73,7 @@ export default function Expire_invoice({ expire_list }) {
       },
     },
     {
-      name: "FirstName",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
-
-    {
-      name: "LastName",
+      name: "Balance",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -102,16 +92,6 @@ export default function Expire_invoice({ expire_list }) {
     },
     {
       name: "MID",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
-
-    {
-      name: "Telephone",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -163,11 +143,16 @@ export default function Expire_invoice({ expire_list }) {
                 Date: moment(siDoc.data()?.date?.toDate()).format(
                   "dddd, MMMM Do YYYY"
                 ),
-                FirstName: siDoc.data().fname,
-                LastName: siDoc.data().lname,
+                Balance: (
+                  <CurrencyFormat
+                    value={siDoc.data().balance}
+                    displayType={"text"}
+                    thousandSeparator={true}
+                    prefix={" "}
+                  />
+                ),
                 NIC: siDoc.data().nic,
                 MID: siDoc.data().mid,
-                Telephone: siDoc.data().mobile1,
                 Action: (
                   <div>
                     {siDoc.data().status_of_payandgo === "onGoing" ||

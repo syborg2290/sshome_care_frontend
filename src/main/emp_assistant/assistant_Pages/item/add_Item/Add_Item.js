@@ -95,6 +95,27 @@ export default function Add_Item() {
     }
   };
 
+  const checkSerialNumber = () => {
+    for (var l = 0; l < Object.keys(inputsSerialNo).length; l++) {
+      db.collection("serail_no")
+        .get()
+        // eslint-disable-next-line
+        .then((re) => {
+          if (re.docs.length > 0) {
+            if (
+              re.docs[0].data().serail_no.some((ob) => ob === inputsSerialNo[l])
+            ) {
+              delete inputsSerialNo[l];
+              setInputsSerialNo({
+                ...inputsSerialNo,
+              });
+              NotificationManager.info("Item serial number must be unique !");
+            }
+          }
+        });
+    }
+  };
+
   const handleChangeAddSerialNoInputs = (e, i) => {
     const { value } = e.target;
 
@@ -158,6 +179,7 @@ export default function Add_Item() {
 
   const addItem = async (e) => {
     e.preventDefault();
+    checkSerialNumber();
     let modelNosList = [];
     let serialNosList = [];
     let chassisNosList = [];

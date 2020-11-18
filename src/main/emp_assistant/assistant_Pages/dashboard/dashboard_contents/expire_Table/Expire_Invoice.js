@@ -155,8 +155,7 @@ export default function Expire_invoice({ expire_list }) {
                 MID: siDoc.data().mid,
                 Action: (
                   <div>
-                    {siDoc.data().status_of_payandgo === "onGoing" ||
-                    siDoc.data().status_of_payandgo === "expired" ? (
+                    {
                       <Button
                         variant="contained"
                         color="primary"
@@ -170,9 +169,7 @@ export default function Expire_invoice({ expire_list }) {
                       >
                         Update
                       </Button>
-                    ) : (
-                      ""
-                    )}
+                    }
                     <span className="icon_visibl">
                       <HistoryIcon onClick={showModalHistory} />
                     </span>

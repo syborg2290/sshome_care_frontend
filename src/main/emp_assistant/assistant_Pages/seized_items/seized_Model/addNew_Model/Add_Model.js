@@ -70,9 +70,14 @@ export default function Add_Model({ closeModel }) {
                                       .doc(reI.item_id)
                                       .get()
                                       .then((itRe) => {
+                                        setError("");
                                         db.collection("seized")
                                           .add({
                                             invoice_number: invoice.trim(),
+                                            serialNo: serial.trim(),
+                                            type: reThen.docs[0].data()
+                                              .selectedType,
+                                            mid: itRe.data().mid,
                                             model_no: itRe.data().modelNo,
                                             item_name: itRe.data().itemName,
                                             nic: reThen.docs[0].data().nic,

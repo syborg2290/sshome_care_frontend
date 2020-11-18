@@ -248,7 +248,7 @@ export default function Repairs() {
   return (
     <>
       <Modal
-        className="confo_model"
+        className="confo_modelRpr"
         closable={null}
         visible={visibleConfirmPrint}
         cancelText="No"
@@ -260,8 +260,8 @@ export default function Repairs() {
         }}
       >
         <div className="confoModel_body">
-          <PrintRoundedIcon className="confo_Icon" />
-          <h3 className="txtConfoModel_body">
+          <PrintRoundedIcon className="confo_IconRpr" />
+          <h3 className="txtConfoModel_bodyRpr">
             Do you want to print an reciept?{" "}
           </h3>
         </div>

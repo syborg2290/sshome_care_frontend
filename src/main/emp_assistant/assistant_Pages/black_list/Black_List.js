@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import MUIDataTable from "mui-datatables";
-import { Grid } from "@material-ui/core";
 import { Modal } from "antd";
-import { Button } from "@material-ui/core";
+import { Button , Grid } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 // components
 import BlackListCustomers from "../black_list/customer_model/BlackList_Customers";
@@ -10,8 +9,9 @@ import BlackListHistory from "./histry_model/History_Model";
 
 // icons
 import VisibilityIcon from "@material-ui/icons/Visibility";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
 import HistoryIcon from "@material-ui/icons/History";
-import HelpIcon from "@material-ui/icons/Help";
+
 
 // styles
 import "./Black_List.css";
@@ -272,7 +272,7 @@ export default function Black_List() {
   return (
     <>
       <Modal
-        className="confo_model"
+        className="confo_models"
         closable={null}
         visible={confirmVisible}
         cancelText="No"
@@ -283,9 +283,16 @@ export default function Black_List() {
         }}
         onOk={onOkConfirm}
       >
-        <div className="confoModel_body">
-          <HelpIcon className="confo_Icon" />
-          <h3 className="txtConfoModel_body">Are You Sure? </h3>
+        <div className="confoModel_bodyys">
+          <Grid container spacing={2}>
+          <Grid item xs={12} sm={1}></Grid>
+           <Grid className="confo_Icons-gri" item xs={12} sm={1}>
+          <ExclamationCircleOutlined className="confo_Icons" />
+            </Grid>
+             <Grid item xs={12} sm={10}>
+            <h3 className="txtConfoModel_bodys">Are you sure to continue? </h3>
+            </Grid>
+            </Grid>
         </div>
       </Modal>
 

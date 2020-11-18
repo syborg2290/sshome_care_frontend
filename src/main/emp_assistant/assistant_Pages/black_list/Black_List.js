@@ -174,7 +174,7 @@ export default function Black_List() {
         allTableRaw.push({
           InvoiceNo: each.data().InvoiceNo,
           // SerialNo: each.data().serialNo,
-          Type: each.data().type,
+          Type: each.data().Type,
           FirstName: each.data().FirstName,
           LastName: each.data().LastName,
           MID: each.data().MID,

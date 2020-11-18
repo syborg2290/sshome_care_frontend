@@ -24,12 +24,10 @@ import { useHistory } from "react-router-dom";
 // components
 import EditModel from "./components/Edit_model";
 
-
 // icons
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
-import DescriptionIcon from "@material-ui/icons/Description";
 
 // styles
 import "./Item_table_assistant.css";
@@ -38,29 +36,22 @@ import db from "../../../../../config/firebase.js";
 
 export default function Item_table_assistant() {
   // const [selectedItemtVisible, setSelectedItemtVisible] = useState(false);
-  // eslint-disable-next-line
   const [itemTableData, setItemTableData] = useState([]);
-  // eslint-disable-next-line
   const [allTtemData, setAllItemData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [visible, setVisible] = useState(false);
+  // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
   const [editVisible, setEditVisible] = useState(false);
   const [confirmVisible, setConfirmVisible] = useState(false);
   // let socket = socketIOClient(RealtimeServerApi);
-  const [isLoaingToInvoice, setLoaingToInvoice] = useState(false);
-  // eslint-disable-next-line
-  var [selectedItems, setSelectedItems] = useState([]);
-
-  // eslint-disable-next-line
-  const [itemList, setItemList] = useState([]);
 
   const [itemListSeMo, setItemListSeMo] = useState([]);
 
   const [itemListSeMoCon, setItemListSeMoCon] = useState([]);
 
   let history = useHistory();
-  
+
   const showModal = () => {
     setVisible(true);
   };
@@ -74,10 +65,9 @@ export default function Item_table_assistant() {
   };
 
   useEffect(() => {
-
-       window.addEventListener("offline", function (e) {
+    window.addEventListener("offline", function (e) {
       history.push("/connection_lost");
-     });
+    });
 
     db.collection("item")
       .orderBy("timestamp", "desc")
@@ -158,8 +148,6 @@ export default function Item_table_assistant() {
     // eslint-disable-next-line
   }, []);
 
-
-
   const showDeleteItemsConfirm = async () => {
     await db
       .collection("item")
@@ -182,7 +170,6 @@ export default function Item_table_assistant() {
   };
 
   const editModalClose = () => {
-    window.location.reload();
     setEditVisible(false);
   };
 
@@ -245,8 +232,6 @@ export default function Item_table_assistant() {
 
   return (
     <>
-
-
       <Modal
         className="confo_model"
         closable={null}
@@ -256,7 +241,6 @@ export default function Item_table_assistant() {
         bodyStyle={{ borderRadius: "30px" }}
         onOk={showDeleteItemsConfirm}
         onCancel={() => {
-          window.location.reload();
           setConfirmVisible(false);
         }}
       >
@@ -279,7 +263,6 @@ export default function Item_table_assistant() {
         footer={null}
         className="model_Item"
         onCancel={() => {
-          window.location.reload();
           setVisible(false);
         }}
       >
@@ -547,7 +530,6 @@ export default function Item_table_assistant() {
         footer={null}
         className="model_edit_Item"
         onCancel={() => {
-          window.location.reload();
           setEditVisible(false);
         }}
       >
@@ -662,7 +644,6 @@ export default function Item_table_assistant() {
         </div>
       </Modal>
 
-
       <Grid className="tbl_Container" container spacing={4}>
         <Grid item xs={12}>
           <MUIDataTable
@@ -681,9 +662,9 @@ export default function Item_table_assistant() {
               elevation: 4,
               sort: true,
               selectableRowsHeader: false,
-              // onRowClick: (rowData, rowMeta) => {
-              //   setCurrentIndx(rowMeta.dataIndex);
-              // },
+              onRowClick: (rowData, rowMeta) => {
+                setCurrentIndx(rowMeta.dataIndex);
+              },
               textLabels: {
                 body: {
                   noMatch: isLoading ? (

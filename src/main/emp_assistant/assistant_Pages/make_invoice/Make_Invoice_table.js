@@ -30,35 +30,25 @@ export default function Make_Invoice_table() {
   // eslint-disable-next-line
   const [allTtemData, setAllItemData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [visible, setVisible] = useState(false);
+
+  // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
   const [isLoaingToInvoice, setLoaingToInvoice] = useState(false);
   // eslint-disable-next-line
   var [selectedItems, setSelectedItems] = useState([]);
-
   // eslint-disable-next-line
   const [itemList, setItemList] = useState([]);
 
-  const [itemListSeMo, setItemListSeMo] = useState([]);
-
-  const [itemListSeMoCon, setItemListSeMoCon] = useState([]);
-
   let history = useHistory();
-  
-  const showModal = () => {
-    setVisible(true);
-  };
 
   const selectedModalClose = () => {
-    window.location.reload();
     setSelectedItemtVisible(false);
   };
 
   useEffect(() => {
-
-       window.addEventListener("offline", function (e) {
+    window.addEventListener("offline", function (e) {
       history.push("/connection_lost");
-     });
+    });
 
     db.collection("item")
       .orderBy("timestamp", "desc")
@@ -119,13 +109,10 @@ export default function Make_Invoice_table() {
                 <p className="status">Out Of Stock</p>
               )}
             </div>,
-
           ]);
         });
         setItemTableData(newData);
         setAllItemData(itemData);
-        setItemListSeMo(itemDataSeMo);
-        setItemListSeMoCon(itemDataSeMoCon);
         setIsLoading(false);
       });
     // eslint-disable-next-line
@@ -149,7 +136,6 @@ export default function Make_Invoice_table() {
       NotificationManager.info("Please select items");
     }
   };
-
 
   const columns = [
     {
@@ -197,7 +183,6 @@ export default function Make_Invoice_table() {
         }),
       },
     },
-  
   ];
 
   return (
@@ -222,8 +207,6 @@ export default function Make_Invoice_table() {
           </div>
         </div>
       </Modal>
-
-          
 
       <Button
         variant="contained"

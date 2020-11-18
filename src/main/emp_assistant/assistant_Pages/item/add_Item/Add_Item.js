@@ -95,25 +95,28 @@ export default function Add_Item() {
     }
   };
 
-  const checkSerialNumber = () => {
-    for (var l = 0; l < Object.keys(inputsSerialNo).length; l++) {
-      db.collection("serail_no")
-        .get()
-        // eslint-disable-next-line
-        .then((re) => {
-          if (re.docs.length > 0) {
-            if (
-              re.docs[0].data().serail_no.some((ob) => ob === inputsSerialNo[l])
-            ) {
-              delete inputsSerialNo[l];
-              setInputsSerialNo({
-                ...inputsSerialNo,
-              });
-              NotificationManager.info("Item serial number must be unique !");
-            }
+  const checkSerialNumber = async () => {
+    await db
+      .collection("serail_no")
+      .get()
+      .then((re) => {
+        if (re.docs.length > 0) {
+          if (
+            re.docs[0]
+              .data()
+              .serail_no.some(
+                (ob) =>
+                  ob === inputsSerialNo[Object.keys(inputsSerialNo).length - 1]
+              )
+          ) {
+            delete inputsSerialNo[Object.keys(inputsSerialNo).length - 1];
+            setInputsSerialNo({
+              ...inputsSerialNo,
+            });
+            NotificationManager.info("Item serial number must be unique !");
           }
-        });
-    }
+        }
+      });
   };
 
   const handleChangeAddSerialNoInputs = (e, i) => {
@@ -179,333 +182,482 @@ export default function Add_Item() {
 
   const addItem = async (e) => {
     e.preventDefault();
-    checkSerialNumber();
-    let modelNosList = [];
-    let serialNosList = [];
-    let chassisNosList = [];
+    checkSerialNumber().then(async (checks) => {
+      let modelNosList = [];
+      let serialNosList = [];
+      let chassisNosList = [];
 
-    for (var k = 0; k < Object.keys(inputsSerialNo).length; k++) {
-      chassisNosList.push(inputsChassisNo[k] === "" ? "" : inputsChassisNo[k]);
-      db.collection("item")
-        .where("modelNo", "==", inputsModelNo[k])
-        .get()
-        .then((reModel) => {
-          if (reModel.docs.length > 0) {
-            setIsInAlreadyModel(true);
-          }
-        });
-      db.collection("item")
-        .where("serialNo", "==", inputsSerialNo[k])
-        .get()
-        .then((reSeril) => {
-          if (reSeril.docs.length > 0) {
-            setIsInAlreadySerial(true);
-          }
-        });
-      modelNosList.push(inputsModelNo[k]);
-      serialNosList.push(inputsSerialNo[k]);
-    }
+      for (var k = 0; k < Object.keys(inputsSerialNo).length; k++) {
+        chassisNosList.push(
+          inputsChassisNo[k] === "" ? "" : inputsChassisNo[k]
+        );
+        db.collection("item")
+          .where("modelNo", "==", inputsModelNo[k])
+          .get()
+          .then((reModel) => {
+            if (reModel.docs.length > 0) {
+              setIsInAlreadyModel(true);
+            }
+          });
+        db.collection("item")
+          .where("serialNo", "==", inputsSerialNo[k])
+          .get()
+          .then((reSeril) => {
+            if (reSeril.docs.length > 0) {
+              setIsInAlreadySerial(true);
+            }
+          });
+        modelNosList.push(inputsModelNo[k]);
+        serialNosList.push(inputsSerialNo[k]);
+      }
 
-    if (serialNosList.length >= Object.keys(inputsSerialNo).length) {
-      if (isInAlreadySerial && isInAlreadyModel) {
-        NotificationManager.info("Item serial no & model no must be unique !");
-      } else {
-        if (itemName === "") {
-          NotificationManager.info("Item name is required!");
+      if (serialNosList.length >= Object.keys(inputsSerialNo).length) {
+        if (isInAlreadySerial && isInAlreadyModel) {
+          NotificationManager.info(
+            "Item serial no & model no must be unique !"
+          );
         } else {
-          if (brand === "") {
-            NotificationManager.info("Item brand is required!");
+          if (itemName === "") {
+            NotificationManager.info("Item name is required!");
           } else {
-            if (
-              Object.keys(inputsModelNo).length === 0 ||
-              Object.keys(inputsModelNo).length !==
-                Object.keys(inputsSerialNo).length ||
-              modelNosList.includes("")
-            ) {
-              NotificationManager.info("Item model number is required!");
+            if (brand === "") {
+              NotificationManager.info("Item brand is required!");
             } else {
               if (
-                Object.keys(inputsSerialNo).length === 0 ||
+                Object.keys(inputsModelNo).length === 0 ||
                 Object.keys(inputsModelNo).length !==
                   Object.keys(inputsSerialNo).length ||
-                serialNosList.includes("")
+                modelNosList.includes("")
               ) {
-                NotificationManager.info("Item Serial number is required!");
+                NotificationManager.info("Item model number is required!");
               } else {
-                if (color === "") {
-                  NotificationManager.info("Item color is required!");
+                if (
+                  Object.keys(inputsSerialNo).length === 0 ||
+                  Object.keys(inputsModelNo).length !==
+                    Object.keys(inputsSerialNo).length ||
+                  serialNosList.includes("")
+                ) {
+                  NotificationManager.info("Item Serial number is required!");
                 } else {
-                  if (cashPrice === "") {
-                    NotificationManager.info("Item cash price is required!");
+                  if (color === "") {
+                    NotificationManager.info("Item color is required!");
                   } else {
-                    if (salePrice === "") {
-                      NotificationManager.info("Item sale price is required!");
+                    if (cashPrice === "") {
+                      NotificationManager.info("Item cash price is required!");
                     } else {
-                      if (noOfInstallments === "") {
+                      if (salePrice === "") {
                         NotificationManager.info(
-                          "Number of installment is required!"
+                          "Item sale price is required!"
                         );
                       } else {
-                        if (amountPerInstallment === "") {
+                        if (noOfInstallments === "") {
                           NotificationManager.info(
-                            "Amount per installment is required!"
+                            "Number of installment is required!"
                           );
                         } else {
-                          if (guaranteePeriod === "") {
+                          if (amountPerInstallment === "") {
                             NotificationManager.info(
-                              "Item guarantee period is required!"
+                              "Amount per installment is required!"
                             );
                           } else {
-                            if (downPayment === "") {
+                            if (guaranteePeriod === "") {
                               NotificationManager.info(
-                                "Item down payment is required!"
+                                "Item guarantee period is required!"
                               );
                             } else {
-                              if (discount === "") {
+                              if (downPayment === "") {
                                 NotificationManager.info(
-                                  "Item discount is required!"
+                                  "Item down payment is required!"
                                 );
                               } else {
-                                if (cashPrice < 0) {
+                                if (discount === "") {
                                   NotificationManager.info(
-                                    "Check again the amount of cash price"
+                                    "Item discount is required!"
                                   );
                                 } else {
-                                  if (salePrice < 0) {
+                                  if (cashPrice < 0) {
                                     NotificationManager.info(
-                                      "Check again the amount of sale price"
+                                      "Check again the amount of cash price"
                                     );
                                   } else {
-                                    if (noOfInstallments < 0) {
+                                    if (salePrice < 0) {
                                       NotificationManager.info(
-                                        "Check again the value of installments value"
+                                        "Check again the amount of sale price"
                                       );
                                     } else {
-                                      if (amountPerInstallment < 0) {
+                                      if (noOfInstallments < 0) {
                                         NotificationManager.info(
-                                          "Check again the amount per installment"
+                                          "Check again the value of installments value"
                                         );
                                       } else {
-                                        if (downPayment < 0) {
+                                        if (amountPerInstallment < 0) {
                                           NotificationManager.info(
-                                            "Check again the amount of down payment"
+                                            "Check again the amount per installment"
                                           );
                                         } else {
-                                          if (guaranteePeriod < 0) {
+                                          if (downPayment < 0) {
                                             NotificationManager.info(
-                                              "Check again the value of gurantee period"
+                                              "Check again the amount of down payment"
                                             );
                                           } else {
-                                            if (discount < 0) {
+                                            if (guaranteePeriod < 0) {
                                               NotificationManager.info(
-                                                "Check again the amount of discount"
+                                                "Check again the value of gurantee period"
                                               );
                                             } else {
-                                              //Rest of code here
-                                              setLoadingSubmit(true);
+                                              if (discount < 0) {
+                                                NotificationManager.info(
+                                                  "Check again the amount of discount"
+                                                );
+                                              } else {
+                                                //Rest of code here
+                                                setLoadingSubmit(true);
 
-                                              var value =
-                                                Math.round(salePrice) -
-                                                Math.round(downPayment);
-                                              var inst = returnInstallmentCount(
-                                                value
-                                              );
+                                                var value =
+                                                  Math.round(salePrice) -
+                                                  Math.round(downPayment);
+                                                var inst = returnInstallmentCount(
+                                                  value
+                                                );
 
-                                              var allItems = await db
-                                                .collection("item")
-                                                .get();
-                                              if (allItems) {
-                                                if (
-                                                  allItems.docs.some(
-                                                    (ob) =>
-                                                      ob.data().itemName ===
-                                                        itemName.trim() &&
-                                                      ob.data().brand ===
-                                                        brand.trim() &&
-                                                      ob.data().color ===
-                                                        color.trim() &&
-                                                      ob.data().cashPrice ===
-                                                        Math.round(cashPrice) &&
-                                                      ob.data().salePrice ===
-                                                        Math.round(salePrice) &&
-                                                      ob.data()
-                                                        .noOfInstallments ===
-                                                        Math.round(inst) &&
-                                                      ob.data()
-                                                        .amountPerInstallment ===
-                                                        Math.round(
-                                                          amountPerInstallment
-                                                        ) &&
-                                                      ob.data().downPayment ===
-                                                        Math.round(
-                                                          downPayment
-                                                        ) &&
-                                                      ob.data().discount ===
-                                                        Math.round(discount)
-                                                  )
-                                                ) {
-                                                  var newArray = allItems.docs.filter(
-                                                    (ob) =>
-                                                      ob.data().itemName ===
-                                                        itemName.trim() &&
-                                                      ob.data().brand ===
-                                                        brand.trim() &&
-                                                      ob.data().color ===
-                                                        color.trim() &&
-                                                      ob.data().cashPrice ===
-                                                        Math.round(cashPrice) &&
-                                                      ob.data().salePrice ===
-                                                        Math.round(salePrice) &&
-                                                      ob.data()
-                                                        .noOfInstallments ===
-                                                        Math.round(inst) &&
-                                                      ob.data()
-                                                        .amountPerInstallment ===
-                                                        Math.round(
-                                                          amountPerInstallment
-                                                        ) &&
-                                                      ob.data().downPayment ===
-                                                        Math.round(
-                                                          downPayment
-                                                        ) &&
-                                                      ob.data().discount ===
-                                                        Math.round(discount)
-                                                  );
-                                                  if (newArray) {
-                                                    let modelNoNewList = modelNosList.concat(
-                                                      newArray[0].data().modelNo
-                                                    );
-                                                    let serialNoNewList = serialNosList.concat(
-                                                      newArray[0].data()
-                                                        .serialNo
-                                                    );
-                                                    let chassisNoNewList = chassisNosList.concat(
-                                                      newArray[0].data()
-                                                        .chassisNo
-                                                    );
-
-                                                    let variable2 = {
-                                                      itemName: itemName.trim(),
-                                                      brand: brand.trim(),
-                                                      modelNo: modelNosList,
-                                                      serialNo: serialNosList,
-                                                      chassisNo: chassisNosList,
-                                                      color: color.trim(),
-                                                      qty:
-                                                        serialNoNewList.length,
-                                                      cashPrice:
-                                                        cashPrice === ""
-                                                          ? 0
-                                                          : Math.round(
-                                                              cashPrice
-                                                            ),
-                                                      salePrice:
-                                                        salePrice === ""
-                                                          ? 0
-                                                          : Math.round(
-                                                              salePrice
-                                                            ),
-                                                      noOfInstallments:
-                                                        inst === ""
-                                                          ? 0
-                                                          : Math.round(inst),
-                                                      amountPerInstallment:
-                                                        amountPerInstallment ===
-                                                        ""
-                                                          ? 0
-                                                          : Math.round(
-                                                              amountPerInstallment
-                                                            ),
-                                                      downPayment:
-                                                        downPayment === ""
-                                                          ? 0
-                                                          : Math.round(
-                                                              downPayment
-                                                            ),
-                                                      guaranteePeriod:
-                                                        guaranteePeriod === ""
-                                                          ? 0
-                                                          : Math.round(
-                                                              guaranteePeriod
-                                                            ),
-                                                      discount:
-                                                        discount === ""
-                                                          ? 0
-                                                          : Math.round(
-                                                              discount
-                                                            ),
-                                                      description: description,
-                                                      cInvoiceNo: cInvoiceNo.trim(),
-                                                      GCardNo: GCardNo.trim(),
-                                                      guarantee: guarantee,
-                                                      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                                                    };
-
-                                                    await db
-                                                      .collection(
-                                                        "item_history"
-                                                      )
-                                                      .add(variable2);
-                                                    db.collection("serail_no")
-                                                      .get()
-                                                      .then((reSerial) => {
-                                                        if (
-                                                          reSerial.docs.length >
-                                                          0
-                                                        ) {
-                                                          let reSerialChange = reSerial.docs[0]
-                                                            .data()
-                                                            .serail_no.concat(
-                                                              serialNosList
-                                                            );
-                                                          db.collection(
-                                                            "serail_no"
-                                                          )
-                                                            .doc(
-                                                              reSerial.docs[0]
-                                                                .id
-                                                            )
-                                                            .update({
-                                                              serail_no: reSerialChange,
-                                                            });
-                                                        } else {
-                                                          db.collection(
-                                                            "serail_no"
-                                                          ).add({
-                                                            serail_no: serialNosList,
-                                                          });
-                                                        }
-                                                      });
-
-                                                    await db
-                                                      .collection("item")
-                                                      .doc(newArray[0].id)
-                                                      .update({
-                                                        qty:
+                                                var allItems = await db
+                                                  .collection("item")
+                                                  .get();
+                                                if (allItems) {
+                                                  if (
+                                                    allItems.docs.some(
+                                                      (ob) =>
+                                                        ob.data().itemName ===
+                                                          itemName.trim() &&
+                                                        ob.data().brand ===
+                                                          brand.trim() &&
+                                                        ob.data().color ===
+                                                          color.trim() &&
+                                                        ob.data().cashPrice ===
                                                           Math.round(
-                                                            newArray[0].data()
-                                                              .qty
-                                                          ) +
+                                                            cashPrice
+                                                          ) &&
+                                                        ob.data().salePrice ===
+                                                          Math.round(
+                                                            salePrice
+                                                          ) &&
+                                                        ob.data()
+                                                          .noOfInstallments ===
+                                                          Math.round(inst) &&
+                                                        ob.data()
+                                                          .amountPerInstallment ===
+                                                          Math.round(
+                                                            amountPerInstallment
+                                                          ) &&
+                                                        ob.data()
+                                                          .downPayment ===
+                                                          Math.round(
+                                                            downPayment
+                                                          ) &&
+                                                        ob.data().discount ===
+                                                          Math.round(discount)
+                                                    )
+                                                  ) {
+                                                    var newArray = allItems.docs.filter(
+                                                      (ob) =>
+                                                        ob.data().itemName ===
+                                                          itemName.trim() &&
+                                                        ob.data().brand ===
+                                                          brand.trim() &&
+                                                        ob.data().color ===
+                                                          color.trim() &&
+                                                        ob.data().cashPrice ===
+                                                          Math.round(
+                                                            cashPrice
+                                                          ) &&
+                                                        ob.data().salePrice ===
+                                                          Math.round(
+                                                            salePrice
+                                                          ) &&
+                                                        ob.data()
+                                                          .noOfInstallments ===
+                                                          Math.round(inst) &&
+                                                        ob.data()
+                                                          .amountPerInstallment ===
+                                                          Math.round(
+                                                            amountPerInstallment
+                                                          ) &&
+                                                        ob.data()
+                                                          .downPayment ===
+                                                          Math.round(
+                                                            downPayment
+                                                          ) &&
+                                                        ob.data().discount ===
+                                                          Math.round(discount)
+                                                    );
+                                                    if (newArray) {
+                                                      let modelNoNewList = modelNosList.concat(
+                                                        newArray[0].data()
+                                                          .modelNo
+                                                      );
+                                                      let serialNoNewList = serialNosList.concat(
+                                                        newArray[0].data()
+                                                          .serialNo
+                                                      );
+                                                      let chassisNoNewList = chassisNosList.concat(
+                                                        newArray[0].data()
+                                                          .chassisNo
+                                                      );
+
+                                                      let variable2 = {
+                                                        itemName: itemName.trim(),
+                                                        brand: brand.trim(),
+                                                        modelNo: modelNosList,
+                                                        serialNo: serialNosList,
+                                                        chassisNo: chassisNosList,
+                                                        color: color.trim(),
+                                                        qty:
+                                                          serialNoNewList.length,
+                                                        cashPrice:
+                                                          cashPrice === ""
+                                                            ? 0
+                                                            : Math.round(
+                                                                cashPrice
+                                                              ),
+                                                        salePrice:
+                                                          salePrice === ""
+                                                            ? 0
+                                                            : Math.round(
+                                                                salePrice
+                                                              ),
+                                                        noOfInstallments:
+                                                          inst === ""
+                                                            ? 0
+                                                            : Math.round(inst),
+                                                        amountPerInstallment:
+                                                          amountPerInstallment ===
+                                                          ""
+                                                            ? 0
+                                                            : Math.round(
+                                                                amountPerInstallment
+                                                              ),
+                                                        downPayment:
+                                                          downPayment === ""
+                                                            ? 0
+                                                            : Math.round(
+                                                                downPayment
+                                                              ),
+                                                        guaranteePeriod:
+                                                          guaranteePeriod === ""
+                                                            ? 0
+                                                            : Math.round(
+                                                                guaranteePeriod
+                                                              ),
+                                                        discount:
+                                                          discount === ""
+                                                            ? 0
+                                                            : Math.round(
+                                                                discount
+                                                              ),
+                                                        description: description,
+                                                        cInvoiceNo: cInvoiceNo.trim(),
+                                                        GCardNo: GCardNo.trim(),
+                                                        guarantee: guarantee,
+                                                        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                                                      };
+
+                                                      await db
+                                                        .collection(
+                                                          "item_history"
+                                                        )
+                                                        .add(variable2);
+                                                      db.collection("serail_no")
+                                                        .get()
+                                                        .then((reSerial) => {
+                                                          if (
+                                                            reSerial.docs
+                                                              .length > 0
+                                                          ) {
+                                                            let reSerialChange = reSerial.docs[0]
+                                                              .data()
+                                                              .serail_no.concat(
+                                                                serialNosList
+                                                              );
+                                                            db.collection(
+                                                              "serail_no"
+                                                            )
+                                                              .doc(
+                                                                reSerial.docs[0]
+                                                                  .id
+                                                              )
+                                                              .update({
+                                                                serail_no: reSerialChange,
+                                                              });
+                                                          } else {
+                                                            db.collection(
+                                                              "serail_no"
+                                                            ).add({
+                                                              serail_no: serialNosList,
+                                                            });
+                                                          }
+                                                        });
+
+                                                      await db
+                                                        .collection("item")
+                                                        .doc(newArray[0].id)
+                                                        .update({
+                                                          qty:
+                                                            Math.round(
+                                                              newArray[0].data()
+                                                                .qty
+                                                            ) +
+                                                            serialNosList.length,
+                                                          modelNo: modelNoNewList,
+                                                          serialNo: serialNoNewList,
+                                                          chassisNo: chassisNoNewList,
+                                                        })
+                                                        .then(function (
+                                                          docRef
+                                                        ) {
+                                                          setLoadingSubmit(
+                                                            false
+                                                          );
+                                                          valuesInitialState();
+                                                          NotificationManager.success(
+                                                            "Item creation successfully!",
+                                                            "Done"
+                                                          );
+                                                        })
+                                                        .catch(function (
+                                                          error
+                                                        ) {
+                                                          setLoadingSubmit(
+                                                            false
+                                                          );
+                                                          NotificationManager.warning(
+                                                            "Failed to make the item!",
+                                                            "Please try again"
+                                                          );
+                                                        });
+                                                    }
+                                                  } else {
+                                                    if (inst) {
+                                                      let variable = {
+                                                        itemName: itemName.trim(),
+                                                        brand: brand.trim(),
+                                                        modelNo: modelNosList,
+                                                        serialNo: serialNosList,
+                                                        chassisNo: chassisNosList,
+                                                        color: color.trim(),
+                                                        qty:
                                                           serialNosList.length,
-                                                        modelNo: modelNoNewList,
-                                                        serialNo: serialNoNewList,
-                                                        chassisNo: chassisNoNewList,
-                                                      })
-                                                      .then(function (docRef) {
-                                                        setLoadingSubmit(false);
-                                                        valuesInitialState();
-                                                        NotificationManager.success(
-                                                          "Item creation successfully!",
-                                                          "Done"
-                                                        );
-                                                      })
-                                                      .catch(function (error) {
-                                                        setLoadingSubmit(false);
-                                                        NotificationManager.warning(
-                                                          "Failed to make the item!",
-                                                          "Please try again"
-                                                        );
-                                                      });
+                                                        cashPrice:
+                                                          cashPrice === ""
+                                                            ? 0
+                                                            : Math.round(
+                                                                cashPrice
+                                                              ),
+                                                        salePrice:
+                                                          salePrice === ""
+                                                            ? 0
+                                                            : Math.round(
+                                                                salePrice
+                                                              ),
+                                                        noOfInstallments:
+                                                          inst === ""
+                                                            ? 0
+                                                            : Math.round(inst),
+                                                        amountPerInstallment:
+                                                          amountPerInstallment ===
+                                                          ""
+                                                            ? 0
+                                                            : Math.round(
+                                                                amountPerInstallment
+                                                              ),
+                                                        downPayment:
+                                                          downPayment === ""
+                                                            ? 0
+                                                            : Math.round(
+                                                                downPayment
+                                                              ),
+                                                        guaranteePeriod:
+                                                          guaranteePeriod === ""
+                                                            ? 0
+                                                            : Math.round(
+                                                                guaranteePeriod
+                                                              ),
+                                                        discount:
+                                                          discount === ""
+                                                            ? 0
+                                                            : Math.round(
+                                                                discount
+                                                              ),
+                                                        description: description,
+                                                        cInvoiceNo: cInvoiceNo.trim(),
+                                                        GCardNo: GCardNo.trim(),
+                                                        guarantee: guarantee,
+                                                        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                                                      };
+
+                                                      await db
+                                                        .collection(
+                                                          "item_history"
+                                                        )
+                                                        .add(variable);
+
+                                                      db.collection("serail_no")
+                                                        .get()
+                                                        .then((reSerial) => {
+                                                          if (
+                                                            reSerial.docs
+                                                              .length > 0
+                                                          ) {
+                                                            let reSerialChange = reSerial.docs[0]
+                                                              .data()
+                                                              .serail_no.concat(
+                                                                serialNosList
+                                                              );
+                                                            db.collection(
+                                                              "serail_no"
+                                                            )
+                                                              .doc(
+                                                                reSerial.docs[0]
+                                                                  .id
+                                                              )
+                                                              .update({
+                                                                serail_no: reSerialChange,
+                                                              });
+                                                          } else {
+                                                            db.collection(
+                                                              "serail_no"
+                                                            ).add({
+                                                              serail_no: serialNosList,
+                                                            });
+                                                          }
+                                                        });
+
+                                                      await db
+                                                        .collection("item")
+                                                        .add(variable)
+                                                        .then(function (
+                                                          docRef
+                                                        ) {
+                                                          setLoadingSubmit(
+                                                            false
+                                                          );
+                                                          valuesInitialState();
+                                                          NotificationManager.success(
+                                                            "Item creation successfully!",
+                                                            "Done"
+                                                          );
+                                                        })
+                                                        .catch(function (
+                                                          error
+                                                        ) {
+                                                          setLoadingSubmit(
+                                                            false
+                                                          );
+                                                          NotificationManager.warning(
+                                                            "Failed to make the item!",
+                                                            "Please try again"
+                                                          );
+                                                        });
+                                                    }
                                                   }
                                                 } else {
                                                   if (inst) {
@@ -622,110 +774,6 @@ export default function Add_Item() {
                                                       });
                                                   }
                                                 }
-                                              } else {
-                                                if (inst) {
-                                                  let variable = {
-                                                    itemName: itemName.trim(),
-                                                    brand: brand.trim(),
-                                                    modelNo: modelNosList,
-                                                    serialNo: serialNosList,
-                                                    chassisNo: chassisNosList,
-                                                    color: color.trim(),
-                                                    qty: serialNosList.length,
-                                                    cashPrice:
-                                                      cashPrice === ""
-                                                        ? 0
-                                                        : Math.round(cashPrice),
-                                                    salePrice:
-                                                      salePrice === ""
-                                                        ? 0
-                                                        : Math.round(salePrice),
-                                                    noOfInstallments:
-                                                      inst === ""
-                                                        ? 0
-                                                        : Math.round(inst),
-                                                    amountPerInstallment:
-                                                      amountPerInstallment ===
-                                                      ""
-                                                        ? 0
-                                                        : Math.round(
-                                                            amountPerInstallment
-                                                          ),
-                                                    downPayment:
-                                                      downPayment === ""
-                                                        ? 0
-                                                        : Math.round(
-                                                            downPayment
-                                                          ),
-                                                    guaranteePeriod:
-                                                      guaranteePeriod === ""
-                                                        ? 0
-                                                        : Math.round(
-                                                            guaranteePeriod
-                                                          ),
-                                                    discount:
-                                                      discount === ""
-                                                        ? 0
-                                                        : Math.round(discount),
-                                                    description: description,
-                                                    cInvoiceNo: cInvoiceNo.trim(),
-                                                    GCardNo: GCardNo.trim(),
-                                                    guarantee: guarantee,
-                                                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                                                  };
-
-                                                  await db
-                                                    .collection("item_history")
-                                                    .add(variable);
-
-                                                  db.collection("serail_no")
-                                                    .get()
-                                                    .then((reSerial) => {
-                                                      if (
-                                                        reSerial.docs.length > 0
-                                                      ) {
-                                                        let reSerialChange = reSerial.docs[0]
-                                                          .data()
-                                                          .serail_no.concat(
-                                                            serialNosList
-                                                          );
-                                                        db.collection(
-                                                          "serail_no"
-                                                        )
-                                                          .doc(
-                                                            reSerial.docs[0].id
-                                                          )
-                                                          .update({
-                                                            serail_no: reSerialChange,
-                                                          });
-                                                      } else {
-                                                        db.collection(
-                                                          "serail_no"
-                                                        ).add({
-                                                          serail_no: serialNosList,
-                                                        });
-                                                      }
-                                                    });
-
-                                                  await db
-                                                    .collection("item")
-                                                    .add(variable)
-                                                    .then(function (docRef) {
-                                                      setLoadingSubmit(false);
-                                                      valuesInitialState();
-                                                      NotificationManager.success(
-                                                        "Item creation successfully!",
-                                                        "Done"
-                                                      );
-                                                    })
-                                                    .catch(function (error) {
-                                                      setLoadingSubmit(false);
-                                                      NotificationManager.warning(
-                                                        "Failed to make the item!",
-                                                        "Please try again"
-                                                      );
-                                                    });
-                                                }
                                               }
                                             }
                                           }
@@ -747,7 +795,7 @@ export default function Add_Item() {
           }
         }
       }
-    }
+    });
   };
 
   const returnInstallmentCount = (value) => {

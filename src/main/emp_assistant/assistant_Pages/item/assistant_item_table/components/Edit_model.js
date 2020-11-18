@@ -85,6 +85,7 @@ export default function Edit_model({
   };
   const handleChangeAddSerialNoInputs = (e, i) => {
     const { value } = e.target;
+
     db.collection("serail_no")
       .get()
       .then((re) => {
@@ -92,10 +93,7 @@ export default function Edit_model({
           if (re.docs[0].data().serail_no.some((ob) => ob === value)) {
             delete inputsSerialNo[i];
             setInputsSerialNo({ ...inputsSerialNo });
-            NotificationManager.info(
-              "Item serial number must be unique !",
-              "Remember validations"
-            );
+            NotificationManager.info("Item serial number must be unique !");
           } else {
             setInputsSerialNo({ ...inputsSerialNo, [i]: value });
           }
@@ -155,14 +153,14 @@ export default function Edit_model({
         } else {
           if (
             Object.keys(inputsModelNo).length !==
-            Object.keys(inputsSerialNo).length ||
+              Object.keys(inputsSerialNo).length ||
             modelNosList.includes("")
           ) {
             setValidation("Item model number is required!");
           } else {
             if (
               Object.keys(inputsModelNo).length !==
-              Object.keys(inputsSerialNo).length ||
+                Object.keys(inputsSerialNo).length ||
               serialNosList.includes("")
             ) {
               setValidation("Item Serial number is required!");
@@ -269,7 +267,7 @@ export default function Edit_model({
                                                         : noOfInstallments,
                                                     amountPerInstallment:
                                                       amountPerInstallment ===
-                                                        ""
+                                                      ""
                                                         ? 0
                                                         : amountPerInstallment,
                                                     downPayment:
@@ -313,7 +311,7 @@ export default function Edit_model({
                                                         : noOfInstallments,
                                                     amountPerInstallment:
                                                       amountPerInstallment ===
-                                                        ""
+                                                      ""
                                                         ? 0
                                                         : amountPerInstallment,
                                                     downPayment:
@@ -689,8 +687,8 @@ export default function Edit_model({
               {loadingSubmit ? (
                 <Spin spinning={loadingSubmit} size="large" />
               ) : (
-                  "Update"
-                )}
+                "Update"
+              )}
             </Button>
           </Form>
 

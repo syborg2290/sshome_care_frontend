@@ -285,8 +285,12 @@ export default function Update_Model({
                         reInvoice.docs[0].data()?.nextDate.seconds * 1000
                       ).getDate() +
                         daysCountOfMonth(
-                          new Date(updateTimestamp.seconds * 1000).getMonth(),
-                          new Date(updateTimestamp.seconds * 1000).getFullYear()
+                          new Date(
+                            reInvoice.docs[0].data()?.nextDate.seconds * 1000
+                          ).getMonth(),
+                          new Date(
+                            reInvoice.docs[0].data()?.nextDate.seconds * 1000
+                          ).getFullYear()
                         )
                     )
                   )
@@ -343,10 +347,12 @@ export default function Update_Model({
                           ).getDate() +
                             daysCountOfMonth(
                               new Date(
-                                updateTimestamp.seconds * 1000
+                                reInvoice.docs[0].data()?.nextDate.seconds *
+                                  1000
                               ).getMonth(),
                               new Date(
-                                updateTimestamp.seconds * 1000
+                                reInvoice.docs[0].data()?.nextDate.seconds *
+                                  1000
                               ).getFullYear()
                             )
                         )

@@ -41,7 +41,7 @@ export default function Repair_model({ closeModel }) {
     });
   });
 
-  const showConfirm = (item_name, inv) => {
+  const showConfirm = (item_name, inv, type) => {
     confirm({
       title: "Do you want to print a receipt?",
       icon: <ExclamationCircleOutlined />,
@@ -50,6 +50,7 @@ export default function Repair_model({ closeModel }) {
           .add({
             invoice_no: inv,
             serail_no: serialNo.trim(),
+            type: type,
             model_no: model_no.trim(),
             nic: nic,
             cust_name: cust_name.trim(),
@@ -80,6 +81,7 @@ export default function Repair_model({ closeModel }) {
           .add({
             invoice_no: inv,
             serail_no: serialNo.trim(),
+            type: type,
             model_no: model_no.trim(),
             nic: nic,
             cust_name: cust_name.trim(),
@@ -108,7 +110,6 @@ export default function Repair_model({ closeModel }) {
             if (reItem.serialNo[0] === serialNo.trim()) {
               if (reItem.modelNo[0] === model_no.trim()) {
                 let result = eachReturn.data().invoice_number;
-                console.log(result);
 
                 let statusOfBlacklist = await db
                   .collection("blacklist")
@@ -153,7 +154,12 @@ export default function Repair_model({ closeModel }) {
                                       Math.round(daysCountInitial / 30) <=
                                       itRe.data().guaranteePeriod
                                     ) {
-                                      showConfirm(itRe.data().itemName, result);
+                                      setError("");
+                                      showConfirm(
+                                        itRe.data().itemName,
+                                        result,
+                                        eachReturn.data().selectedType
+                                      );
                                       setLoading(false);
                                     } else {
                                       setLoading(false);
@@ -166,7 +172,12 @@ export default function Repair_model({ closeModel }) {
                                       Math.round(daysCountInitial / 365) <=
                                       itRe.data().guaranteePeriod
                                     ) {
-                                      showConfirm(itRe.data().itemName, result);
+                                      setError("");
+                                      showConfirm(
+                                        itRe.data().itemName,
+                                        result,
+                                        eachReturn.data().selectedType
+                                      );
                                       setLoading(false);
                                     } else {
                                       setLoading(false);

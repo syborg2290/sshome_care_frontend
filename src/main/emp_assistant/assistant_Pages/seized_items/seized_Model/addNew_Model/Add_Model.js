@@ -43,60 +43,60 @@ export default function Add_Model({ closeModel }) {
       .then((re) => {
         var count = 0;
         re.docs.forEach((eachReturn) => {
-          eachReturn.data().items.forEach((reItem) => {
-            if (reItem.serialNo === serial.trim()) {
+          eachReturn.data().items.forEach(async (reItem) => {
+            if (reItem.serialNo[0] === serial.trim()) {
               let invoice = eachReturn.data().invoice_number;
 
-              db.collection("seized")
-                .where("invoice_number", "==", invoice.trim())
-                .get()
-                .then((reSeizedCheck) => {
-                  if (reSeizedCheck.docs.length <= 0) {
-                    db.collection("invoice")
-                      .where("invoice_number", "==", invoice.trim())
-                      .get()
-                      .then((reThen) => {
-                        if (reThen.docs.length > 0) {
-                          reThen.docs[0].data().items.forEach((reI) => {
-                            db.collection("item")
-                              .doc(reI.item_id)
-                              .get()
-                              .then((itRe) => {
-                                setError(" ");
-                                db.collection("seized")
-                                  .add({
-                                    invoice_number: invoice.trim(),
-                                    serialNo: serial.trim(),
-                                    type: reThen.docs[0].data().selectedType,
-                                    mid: itRe.data().mid,
-                                    model_no: itRe.data().modelNo,
-                                    item_name: itRe.data().itemName,
-                                    nic: reThen.docs[0].data().nic,
-                                    date: date,
-                                    addedDate: firebase.firestore.FieldValue.serverTimestamp(),
-                                  })
-                                  .then((_) => {
-                                    setLoading(false);
-                                    closeModel();
-                                    window.location.reload();
-                                  });
+              let reSeizedCheck = await db
+                .collection("seized")
+                .where("invoice_number", "==", invoice)
+                .get();
+
+              if (reSeizedCheck.docs.length === 0) {
+                db.collection("invoice")
+                  .where("invoice_number", "==", invoice)
+                  .get()
+                  .then((reThen) => {
+                    if (reThen.docs.length > 0) {
+                      setError(" ");
+                      reThen.docs[0].data().items.forEach((reI) => {
+                        db.collection("item")
+                          .doc(reI.item_id)
+                          .get()
+                          .then((itRe) => {
+                            db.collection("seized")
+                              .add({
+                                invoice_number: invoice,
+                                serialNo: serial.trim(),
+                                type: eachReturn.data().selectedType,
+                                mid: eachReturn.data().mid,
+                                model_no: reItem.modelNo[0],
+                                item_name: itRe.data().itemName,
+                                nic: reThen.docs[0].data().nic,
+                                date: date,
+                                addedDate: firebase.firestore.FieldValue.serverTimestamp(),
+                              })
+                              .then((_) => {
+                                setLoading(false);
+                                closeModel();
+                                window.location.reload();
                               });
                           });
-                        } else {
-                          setLoading(false);
-                          setError("Serial number you entered is not found!");
-                        }
                       });
-                  } else {
-                    setLoading(false);
-                    setError(
-                      "Serial number you entered already in the seized list!"
-                    );
-                  }
-                });
+                    }
+                  });
+              } else {
+                setLoading(false);
+                setError(
+                  "Serial number you entered already in the seized list!"
+                );
+              }
+            } else {
+              setLoading(false);
+              setError("Serial number you entered is not found!");
             }
+            count = count + 1;
           });
-          count = count + 1;
         });
         if (re.docs.length < count) {
           setLoading(false);

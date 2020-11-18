@@ -21,9 +21,9 @@ import HistoryIcon from "@material-ui/icons/History";
 
 import { useHistory } from "react-router-dom";
 
-// function daysCountOfMonth(month, year) {
-//   return parseInt(new Date(year, month, 0).getDate());
-// }
+function daysCountOfMonth(month, year) {
+  return parseInt(new Date(year, month, 0).getDate());
+}
 
 export default function Areas() {
   const [isLoading, setIsLoading] = useState(true);
@@ -377,7 +377,9 @@ export default function Areas() {
           instReDoc.docs[0].data()?.nextDate?.seconds * 1000
         ).getTime()) /
       (1000 * 3600 * 24);
-    let daysCount = daysCountNode2;
+    let daysCount =
+      daysCountNode2 +
+      daysCountOfMonth(new Date().getMonth(), new Date().getFullYear());
 
     let instRECheckCount = 0;
 

@@ -100,6 +100,12 @@ export default function Item_table_assistant() {
             element.data().itemName,
             element.data().brand,
             element.data().qty,
+            element.data().color === "" ? " - " : element.data().color,
+            element.data().guaranteePeriod === ""
+              ? " - "
+              : element.data().guaranteePeriod +
+                " " +
+                element.data().guarantee.value,
             <CurrencyFormat
               value={element.data().salePrice}
               displayType={"text"}
@@ -194,6 +200,24 @@ export default function Item_table_assistant() {
     },
     {
       name: "Qty",
+      options: {
+        filter: false,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "Color",
+      options: {
+        filter: false,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "Gurantee period",
       options: {
         filter: false,
         setCellHeaderProps: (value) => ({

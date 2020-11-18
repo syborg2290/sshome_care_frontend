@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Radio, Button, Spin } from "antd";
 import { TextField } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
@@ -45,9 +45,8 @@ export default function Add_Item() {
   const [isInAlreadyModel, setIsInAlreadyModel] = useState(false);
 
   let history = useHistory();
-  
+
   useEffect(() => {
-    
     window.addEventListener("offline", function (e) {
       history.push("/connection_lost");
     });
@@ -70,10 +69,7 @@ export default function Add_Item() {
           if (re.docs[0].data().serail_no.some((ob) => ob === value)) {
             delete inputsSerialNo[i];
             setInputsSerialNo({ ...inputsSerialNo });
-            NotificationManager.info(
-              "Item serial number must be unique !",
-             
-            );
+            NotificationManager.info("Item serial number must be unique !");
           } else {
             setInputsSerialNo({ ...inputsSerialNo, [i]: value });
           }
@@ -168,22 +164,13 @@ export default function Add_Item() {
 
     if (serialNosList.length >= Object.keys(inputsSerialNo).length) {
       if (isInAlreadySerial && isInAlreadyModel) {
-        NotificationManager.info(
-          "Item serial no & model no must be unique !",
-         
-        );
+        NotificationManager.info("Item serial no & model no must be unique !");
       } else {
         if (itemName === "") {
-          NotificationManager.info(
-            "Item name is required!",
-           
-          );
+          NotificationManager.info("Item name is required!");
         } else {
           if (brand === "") {
-            NotificationManager.info(
-              "Item brand is required!",
-             
-            );
+            NotificationManager.info("Item brand is required!");
           } else {
             if (
               Object.keys(inputsModelNo).length === 0 ||
@@ -191,10 +178,7 @@ export default function Add_Item() {
                 Object.keys(inputsSerialNo).length ||
               modelNosList.includes("")
             ) {
-              NotificationManager.info(
-                "Item model number is required!",
-               
-              );
+              NotificationManager.info("Item model number is required!");
             } else {
               if (
                 Object.keys(inputsSerialNo).length === 0 ||
@@ -202,99 +186,75 @@ export default function Add_Item() {
                   Object.keys(inputsSerialNo).length ||
                 serialNosList.includes("")
               ) {
-                NotificationManager.info(
-                  "Item Serial number is required!",
-                 
-                );
+                NotificationManager.info("Item Serial number is required!");
               } else {
                 if (color === "") {
-                  NotificationManager.info(
-                    "Item color is required!",
-                   
-                  );
+                  NotificationManager.info("Item color is required!");
                 } else {
                   if (cashPrice === "") {
-                    NotificationManager.info(
-                      "Item cash price is required!",
-                     
-                    );
+                    NotificationManager.info("Item cash price is required!");
                   } else {
                     if (salePrice === "") {
-                      NotificationManager.info(
-                        "Item sale price is required!",
-                       
-                      );
+                      NotificationManager.info("Item sale price is required!");
                     } else {
                       if (noOfInstallments === "") {
                         NotificationManager.info(
-                          "Number of installment is required!",
-                         
+                          "Number of installment is required!"
                         );
                       } else {
                         if (amountPerInstallment === "") {
                           NotificationManager.info(
-                            "Amount per installment is required!",
-                           
+                            "Amount per installment is required!"
                           );
                         } else {
                           if (guaranteePeriod === "") {
                             NotificationManager.info(
-                              "Item guarantee period is required!",
-                             
+                              "Item guarantee period is required!"
                             );
                           } else {
                             if (downPayment === "") {
                               NotificationManager.info(
-                                "Item down payment is required!",
-                               
+                                "Item down payment is required!"
                               );
                             } else {
                               if (discount === "") {
                                 NotificationManager.info(
-                                  "Item discount is required!",
-                                 
+                                  "Item discount is required!"
                                 );
                               } else {
                                 if (cashPrice < 0) {
                                   NotificationManager.info(
-                                    "Check again the amount of cash price",
-                                   
+                                    "Check again the amount of cash price"
                                   );
                                 } else {
                                   if (salePrice < 0) {
                                     NotificationManager.info(
-                                      "Check again the amount of sale price",
-                                     
+                                      "Check again the amount of sale price"
                                     );
                                   } else {
                                     if (noOfInstallments < 0) {
                                       NotificationManager.info(
-                                        "Check again the value of installments value",
-                                       
+                                        "Check again the value of installments value"
                                       );
                                     } else {
                                       if (amountPerInstallment < 0) {
                                         NotificationManager.info(
-                                          "Check again the amount per installment",
-                                         
+                                          "Check again the amount per installment"
                                         );
                                       } else {
                                         if (downPayment < 0) {
                                           NotificationManager.info(
-                                            "Check again the amount of down payment",
-                                           
+                                            "Check again the amount of down payment"
                                           );
                                         } else {
                                           if (guaranteePeriod < 0) {
                                             NotificationManager.info(
-                                              "Check again the value of gurantee period",
-                                             
+                                              "Check again the value of gurantee period"
                                             );
                                           } else {
                                             if (discount < 0) {
                                               NotificationManager.info(
-                                                "Check again the amount of discount",
-                                               
+                                                "Check again the amount of discount"
                                               );
                                             } else {
                                               //Rest of code here
@@ -389,27 +349,47 @@ export default function Add_Item() {
                                                       color: color.trim(),
                                                       qty:
                                                         serialNoNewList.length,
-                                                      cashPrice: Math.round(
-                                                        cashPrice
-                                                      ),
-                                                      salePrice: Math.round(
-                                                        salePrice
-                                                      ),
-                                                      noOfInstallments: Math.round(
-                                                        inst
-                                                      ),
-                                                      amountPerInstallment: Math.round(
-                                                        amountPerInstallment
-                                                      ),
-                                                      downPayment: Math.round(
-                                                        downPayment
-                                                      ),
-                                                      guaranteePeriod: Math.round(
-                                                        guaranteePeriod
-                                                      ),
-                                                      discount: Math.round(
-                                                        discount
-                                                      ),
+                                                      cashPrice:
+                                                        cashPrice === ""
+                                                          ? 0
+                                                          : Math.round(
+                                                              cashPrice
+                                                            ),
+                                                      salePrice:
+                                                        salePrice === ""
+                                                          ? 0
+                                                          : Math.round(
+                                                              salePrice
+                                                            ),
+                                                      noOfInstallments:
+                                                        inst === ""
+                                                          ? 0
+                                                          : Math.round(inst),
+                                                      amountPerInstallment:
+                                                        amountPerInstallment ===
+                                                        ""
+                                                          ? 0
+                                                          : Math.round(
+                                                              amountPerInstallment
+                                                            ),
+                                                      downPayment:
+                                                        downPayment === ""
+                                                          ? 0
+                                                          : Math.round(
+                                                              downPayment
+                                                            ),
+                                                      guaranteePeriod:
+                                                        guaranteePeriod === ""
+                                                          ? 0
+                                                          : Math.round(
+                                                              guaranteePeriod
+                                                            ),
+                                                      discount:
+                                                        discount === ""
+                                                          ? 0
+                                                          : Math.round(
+                                                              discount
+                                                            ),
                                                       description: description,
                                                       cInvoiceNo: cInvoiceNo.trim(),
                                                       GCardNo: GCardNo.trim(),
@@ -493,27 +473,47 @@ export default function Add_Item() {
                                                       chassisNo: chassisNosList,
                                                       color: color.trim(),
                                                       qty: serialNosList.length,
-                                                      cashPrice: Math.round(
-                                                        cashPrice
-                                                      ),
-                                                      salePrice: Math.round(
-                                                        salePrice
-                                                      ),
-                                                      noOfInstallments: Math.round(
-                                                        inst
-                                                      ),
-                                                      amountPerInstallment: Math.round(
-                                                        amountPerInstallment
-                                                      ),
-                                                      downPayment: Math.round(
-                                                        downPayment
-                                                      ),
-                                                      guaranteePeriod: Math.round(
-                                                        guaranteePeriod
-                                                      ),
-                                                      discount: Math.round(
-                                                        discount
-                                                      ),
+                                                      cashPrice:
+                                                        cashPrice === ""
+                                                          ? 0
+                                                          : Math.round(
+                                                              cashPrice
+                                                            ),
+                                                      salePrice:
+                                                        salePrice === ""
+                                                          ? 0
+                                                          : Math.round(
+                                                              salePrice
+                                                            ),
+                                                      noOfInstallments:
+                                                        inst === ""
+                                                          ? 0
+                                                          : Math.round(inst),
+                                                      amountPerInstallment:
+                                                        amountPerInstallment ===
+                                                        ""
+                                                          ? 0
+                                                          : Math.round(
+                                                              amountPerInstallment
+                                                            ),
+                                                      downPayment:
+                                                        downPayment === ""
+                                                          ? 0
+                                                          : Math.round(
+                                                              downPayment
+                                                            ),
+                                                      guaranteePeriod:
+                                                        guaranteePeriod === ""
+                                                          ? 0
+                                                          : Math.round(
+                                                              guaranteePeriod
+                                                            ),
+                                                      discount:
+                                                        discount === ""
+                                                          ? 0
+                                                          : Math.round(
+                                                              discount
+                                                            ),
                                                       description: description,
                                                       cInvoiceNo: cInvoiceNo.trim(),
                                                       GCardNo: GCardNo.trim(),
@@ -588,27 +588,41 @@ export default function Add_Item() {
                                                     chassisNo: chassisNosList,
                                                     color: color.trim(),
                                                     qty: serialNosList.length,
-                                                    cashPrice: Math.round(
-                                                      cashPrice
-                                                    ),
-                                                    salePrice: Math.round(
-                                                      salePrice
-                                                    ),
-                                                    noOfInstallments: Math.round(
-                                                      inst
-                                                    ),
-                                                    amountPerInstallment: Math.round(
-                                                      amountPerInstallment
-                                                    ),
-                                                    downPayment: Math.round(
-                                                      downPayment
-                                                    ),
-                                                    guaranteePeriod: Math.round(
-                                                      guaranteePeriod
-                                                    ),
-                                                    discount: Math.round(
-                                                      discount
-                                                    ),
+                                                    cashPrice:
+                                                      cashPrice === ""
+                                                        ? 0
+                                                        : Math.round(cashPrice),
+                                                    salePrice:
+                                                      salePrice === ""
+                                                        ? 0
+                                                        : Math.round(salePrice),
+                                                    noOfInstallments:
+                                                      inst === ""
+                                                        ? 0
+                                                        : Math.round(inst),
+                                                    amountPerInstallment:
+                                                      amountPerInstallment ===
+                                                      ""
+                                                        ? 0
+                                                        : Math.round(
+                                                            amountPerInstallment
+                                                          ),
+                                                    downPayment:
+                                                      downPayment === ""
+                                                        ? 0
+                                                        : Math.round(
+                                                            downPayment
+                                                          ),
+                                                    guaranteePeriod:
+                                                      guaranteePeriod === ""
+                                                        ? 0
+                                                        : Math.round(
+                                                            guaranteePeriod
+                                                          ),
+                                                    discount:
+                                                      discount === ""
+                                                        ? 0
+                                                        : Math.round(discount),
                                                     description: description,
                                                     cInvoiceNo: cInvoiceNo.trim(),
                                                     GCardNo: GCardNo.trim(),

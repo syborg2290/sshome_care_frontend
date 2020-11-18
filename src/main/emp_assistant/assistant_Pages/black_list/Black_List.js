@@ -27,7 +27,7 @@ export default function Black_List() {
   const [confirmVisible, setConfirmVisible] = useState(false);
   const [blacklistTableRow, setBlackListTableRow] = useState([]);
   const [allDataBlacklist, setAllData] = useState([]);
- let history = useHistory();
+  let history = useHistory();
   const showModalConfirmModal = () => {
     setConfirmVisible(true);
   };
@@ -59,7 +59,7 @@ export default function Black_List() {
     //     }),
     //   },
     // },
-        {
+    {
       name: "Type",
       options: {
         filter: true,
@@ -126,6 +126,19 @@ export default function Black_List() {
         }),
       },
     },
+    {
+      name: "Balance",
+      options: {
+        filter: false,
+        setCellHeaderProps: (value) => ({
+          style: {
+            fontSize: "15px",
+            color: "black",
+            fontWeight: "600",
+          },
+        }),
+      },
+    },
 
     {
       name: "Action",
@@ -146,8 +159,7 @@ export default function Black_List() {
   ];
 
   useEffect(() => {
-
-     window.addEventListener("offline", function (e) {
+    window.addEventListener("offline", function (e) {
       history.push("/connection_lost");
     });
 
@@ -168,6 +180,7 @@ export default function Black_List() {
           MID: each.data().MID,
           NIC: each.data().NIC,
           Telephone: each.data().Telephone,
+          balance: each.data().balance,
           Action: (
             <div>
               <VisibilityIcon onClick={showModalCustomer} />
@@ -191,7 +204,7 @@ export default function Black_List() {
       setBlackListTableRow(allTableRaw);
       setAllData(allData);
     });
-      // eslint-disable-next-line
+    // eslint-disable-next-line
   }, []);
 
   const onOkConfirm = () => {

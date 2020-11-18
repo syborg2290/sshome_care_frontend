@@ -272,32 +272,22 @@ export default function Update_Model({
           reTotCal / parseInt(reInvoice.docs[0].data()?.amountPerInstallment);
 
         if (reCalMult >= 1) {
-          for (var t = 0; t <= Math.round(reCalMult); t++) {
-            db.collection("invoice")
-              .doc(reInvoice.docs[0].id)
-              .update({
-                nextDate: firebase.firestore.Timestamp.fromDate(
+          db.collection("invoice")
+            .doc(reInvoice.docs[0].id)
+            .update({
+              nextDate: firebase.firestore.Timestamp.fromDate(
+                new Date(
                   new Date(
+                    reInvoice.docs[0].data()?.nextDate.seconds * 1000
+                  ).setMonth(
                     new Date(
                       reInvoice.docs[0].data()?.nextDate.seconds * 1000
-                    ).setDate(
-                      new Date(
-                        reInvoice.docs[0].data()?.nextDate.seconds * 1000
-                      ).getDate() +
-                        daysCountOfMonth(
-                          new Date(
-                            reInvoice.docs[0].data()?.nextDate.seconds * 1000
-                          ).getMonth(),
-                          new Date(
-                            reInvoice.docs[0].data()?.nextDate.seconds * 1000
-                          ).getFullYear()
-                        )
-                    )
+                    ).getMonth() + reCalMult
                   )
-                ),
-              })
-              .then((_) => {});
-          }
+                )
+              ),
+            })
+            .then((_) => {});
         } else {
           db.collection("installment")
             .where("invoice_number", "==", invoice_no)
@@ -341,20 +331,10 @@ export default function Update_Model({
                       new Date(
                         new Date(
                           reInvoice.docs[0].data()?.nextDate.seconds * 1000
-                        ).setDate(
+                        ).setMonth(
                           new Date(
                             reInvoice.docs[0].data()?.nextDate.seconds * 1000
-                          ).getDate() +
-                            daysCountOfMonth(
-                              new Date(
-                                reInvoice.docs[0].data()?.nextDate.seconds *
-                                  1000
-                              ).getMonth(),
-                              new Date(
-                                reInvoice.docs[0].data()?.nextDate.seconds *
-                                  1000
-                              ).getFullYear()
-                            )
+                          ).getMonth() + Math.round(seeToot)
                         )
                       )
                     ),
@@ -442,11 +422,7 @@ export default function Update_Model({
         });
     }
 
-    if (
-      parseInt(balance) -
-        (parseInt(installmentAmount) + parseInt(gamisaraniamount)) <=
-      0
-    ) {
+    if (parseInt(balance) <= 0) {
       await db
         .collection("invoice")
         .where("invoice_number", "==", invoice_no)
@@ -490,7 +466,7 @@ export default function Update_Model({
         },
         async onCancel() {
           await updateInstallment();
-          window.location.reload();
+          // window.location.reload();
         },
       });
     }

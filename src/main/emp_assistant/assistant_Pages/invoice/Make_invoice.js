@@ -38,10 +38,6 @@ import "./Make_invoice.css";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import CloseOutlinedIcon from "@material-ui/icons/CloseOutlined";
 
-function daysCountOfMonth(month, year) {
-  return parseInt(new Date(year, month, 0).getDate());
-}
-
 function Make_invoice() {
   const location = useLocation();
   const [allRoot, setAllRoot] = useState([]);
@@ -416,12 +412,8 @@ function Make_invoice() {
   const invoiceIntoDb = async () => {
     setLoadingSubmit(true);
     var times = new Date(
-      new Date(intialTimestamp?.seconds * 1000).setDate(
-        new Date(intialTimestamp?.seconds * 1000).getDate() +
-          daysCountOfMonth(
-            new Date(intialTimestamp?.seconds * 1000).getMonth(),
-            new Date(intialTimestamp?.seconds * 1000).getFullYear()
-          )
+      new Date(intialTimestamp?.seconds * 1000).setMonth(
+        new Date(intialTimestamp?.seconds * 1000).getMonth() + 1
       )
     );
     if (tablerows.some((ob) => ob.customer !== null)) {

@@ -57,38 +57,31 @@ export default function Add_Model({ closeModel }) {
                       .get()
                       .then((reThen) => {
                         if (reThen.docs.length > 0) {
-                          if (reThen.docs[0].data()?.customer_id !== null) {
-                            reThen.docs[0].data().items.forEach((reI) => {
-                              db.collection("item")
-                                .doc(reI.item_id)
-                                .get()
-                                .then((itRe) => {
-                                  setError("c");
-                                  db.collection("seized")
-                                    .add({
-                                      invoice_number: invoice.trim(),
-                                      serialNo: serial.trim(),
-                                      type: reThen.docs[0].data().selectedType,
-                                      mid: itRe.data().mid,
-                                      model_no: itRe.data().modelNo,
-                                      item_name: itRe.data().itemName,
-                                      nic: reThen.docs[0].data().nic,
-                                      date: date,
-                                      addedDate: firebase.firestore.FieldValue.serverTimestamp(),
-                                    })
-                                    .then((_) => {
-                                      setLoading(false);
-                                      closeModel();
-                                      window.location.reload();
-                                    });
-                                });
-                            });
-                          } else {
-                            setLoading(false);
-                            setError(
-                              "Serial number you entered is not found in 'On Going Status'!"
-                            );
-                          }
+                          reThen.docs[0].data().items.forEach((reI) => {
+                            db.collection("item")
+                              .doc(reI.item_id)
+                              .get()
+                              .then((itRe) => {
+                                setError(" ");
+                                db.collection("seized")
+                                  .add({
+                                    invoice_number: invoice.trim(),
+                                    serialNo: serial.trim(),
+                                    type: reThen.docs[0].data().selectedType,
+                                    mid: itRe.data().mid,
+                                    model_no: itRe.data().modelNo,
+                                    item_name: itRe.data().itemName,
+                                    nic: reThen.docs[0].data().nic,
+                                    date: date,
+                                    addedDate: firebase.firestore.FieldValue.serverTimestamp(),
+                                  })
+                                  .then((_) => {
+                                    setLoading(false);
+                                    closeModel();
+                                    window.location.reload();
+                                  });
+                              });
+                          });
                         } else {
                           setLoading(false);
                           setError("Serial number you entered is not found!");
@@ -107,7 +100,9 @@ export default function Add_Model({ closeModel }) {
         });
         if (re.docs.length < count) {
           setLoading(false);
-          if (error !== "c") {
+          if (error === " ") {
+            setError("");
+          } else {
             setError("Serial number you entered is not found!");
           }
         }

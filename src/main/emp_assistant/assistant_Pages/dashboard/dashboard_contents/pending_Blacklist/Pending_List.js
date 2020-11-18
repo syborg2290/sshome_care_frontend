@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import MUIDataTable from "mui-datatables";
 import { Modal } from "antd";
-import { Button } from "@material-ui/core";
-
+import { Button, Grid } from "@material-ui/core";
 import db from "../../../../../../config/firebase.js";
 
 // styles
@@ -381,8 +380,12 @@ export default function View_Model({ pendingBlackList }) {
           </div>
         </div>
       </Modal>
+
+
+      {/*Start Blacklist Confo   model */}
+      
       <Modal
-        className="confo_model"
+        className="confo_models"
         closable={null}
         visible={visibleConfirmPrint}
         cancelText="No"
@@ -393,11 +396,23 @@ export default function View_Model({ pendingBlackList }) {
           setVisibleConfirmPrint(false);
         }}
       >
-        <div className="confoModel_body">
-          <ExclamationCircleOutlined className="confo_Icon" />
-          <h3 className="txtConfoModel_body">Are you sure to continue? </h3>
+        <div className="confoModel_bodyys">
+          <Grid container spacing={2}>
+          <Grid item xs={12} sm={1}></Grid>
+           <Grid className="confo_Icons-gri" item xs={12} sm={1}>
+          <ExclamationCircleOutlined className="confo_Icons" />
+            </Grid>
+             <Grid item xs={12} sm={10}>
+            <h3 className="txtConfoModel_bodys">Are you sure to continue? </h3>
+            </Grid>
+            </Grid>
         </div>
       </Modal>
+  
+    {/*END Blacklist Confo   model */}
+
+
+
       {/*Start Blacklist PENDING VIEW  model */}
 
       <Modal

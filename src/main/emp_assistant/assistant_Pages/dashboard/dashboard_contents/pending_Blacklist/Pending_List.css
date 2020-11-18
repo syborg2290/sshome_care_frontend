@@ -28,3 +28,29 @@
 
   margin-top: -15px !important;
 }
+
+.confo_Icons {
+  color: rgba(255, 145, 0, 0.945);
+  font-size: 18px !important;
+  font-weight: 900 !important;
+  margin: auto !important;
+  margin-top: 3px !important;
+}
+
+.confo_Icons-gri {
+}
+
+.txtConfoModel_bodys {
+  margin-left: 10px !important;
+}
+
+.confo_models {
+  width: 25% !important;
+  border-top: 8px #ffffff !important;
+  margin-top: 50px !important;
+  border-radius: 8px 8px 8px 8px !important;
+}
+
+.confoModel_bodyys {
+  /* background-color: #222020 !important; */
+}

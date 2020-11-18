@@ -51,6 +51,7 @@ export default function Repairs() {
       .then((reRepair) => {
         var passingWithCustomerObj = {
           invoice_no: reRepair.data().invoice_no,
+          serail_no: reRepair.data().serail_no,
           model_no: reRepair.data().model_no,
           nic: reRepair.data().nic,
           item_name: reRepair.data().item_name,

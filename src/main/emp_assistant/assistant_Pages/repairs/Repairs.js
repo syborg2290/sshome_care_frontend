@@ -180,10 +180,9 @@ export default function Repairs() {
   ];
 
   useEffect(() => {
-
-       window.addEventListener("offline", function (e) {
+    window.addEventListener("offline", function (e) {
       history2.push("/connection_lost");
-     });
+    });
 
     db.collection("repair").onSnapshot((snap) => {
       var rawData = [];
@@ -194,7 +193,7 @@ export default function Repairs() {
           data: re.data(),
         });
         rawData.push({
-          SerialNo: re.data().serail_no,
+          Serial_No: re.data().serail_no,
           Type: re.data().type,
           ModalNo: re.data().model_no,
           Item_Name: re.data().item_name,
@@ -204,10 +203,10 @@ export default function Repairs() {
               {re.data().status === "accepted"
                 ? "Accepted"
                 : re.data().status === "return_to_company"
-                  ? "Returned"
-                  : re.data().status === "return_from_company"
-                    ? "Issued from company"
-                    : "Delivered"}
+                ? "Returned"
+                : re.data().status === "return_from_company"
+                ? "Issued from company"
+                : "Delivered"}
             </span>
           ),
           Date: moment(re.data()?.date?.toDate()).format("dddd, MMMM Do YYYY"),
@@ -357,7 +356,7 @@ export default function Repairs() {
             columns={repairTableColomns}
             options={{
               selectableRows: false,
-              customToolbarSelect: () => { },
+              customToolbarSelect: () => {},
               filterType: "textfield",
               download: false,
               print: false,
@@ -372,8 +371,8 @@ export default function Repairs() {
                   noMatch: isLoading ? (
                     <Spin className="tblSpinner" size="large" spinning="true" />
                   ) : (
-                      ""
-                    ),
+                    ""
+                  ),
                 },
               },
             }}

@@ -47,82 +47,69 @@ export default function Add_Model({ closeModel }) {
             if (reItem.serialNo === serial.trim()) {
               let invoice = eachReturn.data().invoice_number;
 
-              db.collection("blacklist")
-                .where("InvoiceNo", "==", invoice.trim())
+              db.collection("seized")
+                .where("invoice_number", "==", invoice.trim())
                 .get()
-                .then((checkBlackList) => {
-                  if (checkBlackList.docs.length > 0) {
-                    db.collection("seized")
+                .then((reSeizedCheck) => {
+                  if (reSeizedCheck.docs.length <= 0) {
+                    db.collection("invoice")
                       .where("invoice_number", "==", invoice.trim())
                       .get()
-                      .then((reSeizedCheck) => {
-                        if (reSeizedCheck.docs.length <= 0) {
-                          db.collection("invoice")
-                            .where("invoice_number", "==", invoice.trim())
-                            .get()
-                            .then((reThen) => {
-                              if (reThen.docs.length > 0) {
-                                if (
-                                  reThen.docs[0].data()?.customer_id !== null
-                                ) {
-                                  reThen.docs[0].data().items.forEach((reI) => {
-                                    db.collection("item")
-                                      .doc(reI.item_id)
-                                      .get()
-                                      .then((itRe) => {
-                                        setError("");
-                                        db.collection("seized")
-                                          .add({
-                                            invoice_number: invoice.trim(),
-                                            serialNo: serial.trim(),
-                                            type: reThen.docs[0].data()
-                                              .selectedType,
-                                            mid: itRe.data().mid,
-                                            model_no: itRe.data().modelNo,
-                                            item_name: itRe.data().itemName,
-                                            nic: reThen.docs[0].data().nic,
-                                            date: date,
-                                            addedDate: firebase.firestore.FieldValue.serverTimestamp(),
-                                          })
-                                          .then((_) => {
-                                            setLoading(false);
-                                            closeModel();
-                                            window.location.reload();
-                                          });
-                                      });
-                                  });
-                                } else {
-                                  setLoading(false);
-                                  setError(
-                                    "Serial number you entered is not found in 'On Going Status'!"
-                                  );
-                                }
-                              } else {
-                                setLoading(false);
-                                setError(
-                                  "Serial number you entered is not found!"
-                                );
-                              }
+                      .then((reThen) => {
+                        if (reThen.docs.length > 0) {
+                          if (reThen.docs[0].data()?.customer_id !== null) {
+                            reThen.docs[0].data().items.forEach((reI) => {
+                              db.collection("item")
+                                .doc(reI.item_id)
+                                .get()
+                                .then((itRe) => {
+                                  setError("c");
+                                  db.collection("seized")
+                                    .add({
+                                      invoice_number: invoice.trim(),
+                                      serialNo: serial.trim(),
+                                      type: reThen.docs[0].data().selectedType,
+                                      mid: itRe.data().mid,
+                                      model_no: itRe.data().modelNo,
+                                      item_name: itRe.data().itemName,
+                                      nic: reThen.docs[0].data().nic,
+                                      date: date,
+                                      addedDate: firebase.firestore.FieldValue.serverTimestamp(),
+                                    })
+                                    .then((_) => {
+                                      setLoading(false);
+                                      closeModel();
+                                      window.location.reload();
+                                    });
+                                });
                             });
+                          } else {
+                            setLoading(false);
+                            setError(
+                              "Serial number you entered is not found in 'On Going Status'!"
+                            );
+                          }
                         } else {
                           setLoading(false);
-                          setError(
-                            "Serial number you entered already in the seized list!"
-                          );
+                          setError("Serial number you entered is not found!");
                         }
                       });
                   } else {
                     setLoading(false);
-                    setError("Serial number you entered not in the blacklist!");
+                    setError(
+                      "Serial number you entered already in the seized list!"
+                    );
                   }
                 });
             }
           });
           count = count + 1;
         });
-        if (re.docs.length >= count) {
+        if (re.docs.length < count) {
           setLoading(false);
-          setError("Serial number you entered is not found!");
+          if (error !== "c") {
+            setError("Serial number you entered is not found!");
+          }
         }
       });
   };

@@ -7,7 +7,6 @@ import moment from "moment";
 
 import db from "../../../../../../config/firebase.js";
 
-
 import ArreasHistory from "../../../arreas/arreas_history_Model/Arreas_History";
 
 // styles
@@ -28,10 +27,6 @@ export default function Arreas_Table() {
   const [arreasAllData, setArreasAllData] = useState([]);
 
   let history = useHistory();
-
-
-
-  
 
   const showModalArresHistory = () => {
     setArresHistory(true);
@@ -156,13 +151,7 @@ export default function Arreas_Table() {
           Date: moment(eachRe.data()?.date?.toDate()).format(
             "dddd, MMMM Do YYYY"
           ),
-          Action: (
-
-            
-                <HistoryIcon onClick={showModalArresHistory} />
-          
-            
-          ),
+          Action: <HistoryIcon onClick={showModalArresHistory} />,
         });
       });
       setArreasTableData(rawData);
@@ -175,8 +164,6 @@ export default function Arreas_Table() {
 
   return (
     <div>
-    
-
       {/*Start Arreas Model History */}
 
       <Modal
@@ -215,7 +202,7 @@ export default function Arreas_Table() {
                 };
               },
               selectableRows: false,
-              customToolbarSelect: () => { },
+              customToolbarSelect: () => {},
               filterType: "textfield",
               download: false,
               print: false,
@@ -230,8 +217,8 @@ export default function Arreas_Table() {
                   noMatch: isLoading ? (
                     <Spin className="tblSpinner" size="large" spinning="true" />
                   ) : (
-                      ""
-                    ),
+                    ""
+                  ),
                 },
               },
             }}

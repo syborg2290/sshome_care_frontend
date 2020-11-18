@@ -148,7 +148,7 @@ export default function Expire_invoice({ expire_list }) {
                 variant="contained"
                 color="primary"
                 size="small"
-                className="btn_pay"
+                className="btn_paydex"
                 onClick={showModalUpdate}
                 style={{
                   color: "white",

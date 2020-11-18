@@ -17,6 +17,7 @@ import {
   Commute as CommuteIcon,
   PlaylistAddCheck as PlaylistAddCheckIcon,
   MonetizationOnOutlined as MonetizationOnOutlinedIcon,
+  ReceiptOutlined as ReceiptOutlinedIcon,
 } from "@material-ui/icons";
 
 import { useTheme } from "@material-ui/styles";
@@ -49,7 +50,7 @@ const structure = [
     id: 21,
     label: "Make Invoice",
     link: "/assistant/ui/MakeInvoiceTable",
-    icon: <LibraryIcon className="icons" />,
+    icon: <ReceiptOutlinedIcon className="icons" />,
   },
 
   {

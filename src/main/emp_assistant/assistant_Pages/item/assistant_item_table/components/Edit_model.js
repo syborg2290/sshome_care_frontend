@@ -85,6 +85,11 @@ export default function Edit_model({
   };
   const handleChangeAddSerialNoInputs = (e, i) => {
     const { value } = e.target;
+    setInputsSerialNo({ ...inputsSerialNo, [i]: value });
+  };
+
+  const handleOnkeyupAddSerialNoInputs = (e, i) => {
+    const { value } = e.target;
 
     db.collection("serail_no")
       .get()
@@ -94,11 +99,7 @@ export default function Edit_model({
             delete inputsSerialNo[i];
             setInputsSerialNo({ ...inputsSerialNo });
             NotificationManager.info("Item serial number must be unique !");
-          } else {
-            setInputsSerialNo({ ...inputsSerialNo, [i]: value });
           }
-        } else {
-          setInputsSerialNo({ ...inputsSerialNo, [i]: value });
         }
       });
   };
@@ -626,6 +627,7 @@ export default function Edit_model({
                         key={i + 2}
                         id={i.toString()}
                         placeholder="xxx-serial"
+                        onKeyUp={(e) => handleOnkeyupAddSerialNoInputs(e, i)}
                         onChange={(e) => handleChangeAddSerialNoInputs(e, i)}
                       />
 

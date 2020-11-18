@@ -62,6 +62,12 @@ export default function Add_Item() {
   const handleChangeAddSerialNoInputs = (e, i) => {
     const { value } = e.target;
 
+    setInputsSerialNo({ ...inputsSerialNo, [i]: value });
+  };
+
+  const handleOnkeyupAddSerialNoInputs = (e, i) => {
+    const { value } = e.target;
+
     db.collection("serail_no")
       .get()
       .then((re) => {
@@ -70,11 +76,7 @@ export default function Add_Item() {
             delete inputsSerialNo[i];
             setInputsSerialNo({ ...inputsSerialNo });
             NotificationManager.info("Item serial number must be unique !");
-          } else {
-            setInputsSerialNo({ ...inputsSerialNo, [i]: value });
           }
-        } else {
-          setInputsSerialNo({ ...inputsSerialNo, [i]: value });
         }
       });
   };
@@ -1186,6 +1188,7 @@ export default function Add_Item() {
                       required={true}
                       label="xx-20097"
                       size="small"
+                      onKeyUp={(e) => handleOnkeyupAddSerialNoInputs(e, i)}
                       onChange={(e) => handleChangeAddSerialNoInputs(e, i)}
                     />
 

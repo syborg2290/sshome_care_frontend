@@ -373,7 +373,7 @@ export default function Edit_model({
                                                       setLoadingSubmit(false);
                                                       NotificationManager.success(
                                                         "Item updated!",
-                                                        "Done"
+                                                        
                                                       );
                                                       editModalClose();
                                                     })

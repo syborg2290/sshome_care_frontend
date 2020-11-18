@@ -98,6 +98,7 @@ export default function Repair_model({ closeModel }) {
   };
 
   const getInvoiceAndItem = async () => {
+    let invoice = "";
     await db
       .collection("invoice")
       .get()
@@ -107,23 +108,25 @@ export default function Repair_model({ closeModel }) {
             if (reItem.serialNo === serialNo.trim()) {
               if (reItem.modelNo === model_no.trim()) {
                 setInvoice(eachReturn.data().invoice_number);
+                invoice = eachReturn.data().invoice_number;
               }
             }
           });
         });
       });
+    return invoice;
   };
 
   const addRepair = async () => {
     setLoading(true);
-    await getInvoiceAndItem().then(async (_) => {
+    await getInvoiceAndItem().then(async (inv) => {
       let statusOfBlacklist = await db
         .collection("blacklist")
-        .where("InvoiceNo", "==", invoice.trim())
+        .where("InvoiceNo", "==", inv)
         .get();
       let statusOfSeized = await db
         .collection("seized")
-        .where("invoice_number", "==", invoice.trim())
+        .where("invoice_number", "==", inv)
         .get();
       if (statusOfBlacklist.docs.length > 0) {
         setLoading(false);
@@ -134,7 +137,7 @@ export default function Repair_model({ closeModel }) {
           setError("Serial number you entered is in the seized list!");
         } else {
           db.collection("invoice")
-            .where("invoice_number", "==", invoice.trim())
+            .where("invoice_number", "==", inv)
             .get()
             .then((reThen) => {
               if (reThen.docs.length > 0) {

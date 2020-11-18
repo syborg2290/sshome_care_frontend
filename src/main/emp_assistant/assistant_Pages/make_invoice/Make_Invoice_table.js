@@ -42,6 +42,7 @@ export default function Make_Invoice_table() {
   let history = useHistory();
 
   const selectedModalClose = () => {
+    window.location.reload();
     setSelectedItemtVisible(false);
   };
 

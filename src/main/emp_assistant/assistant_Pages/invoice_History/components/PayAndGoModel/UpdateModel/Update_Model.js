@@ -693,7 +693,16 @@ export default function Update_Model({
                   }}
                 />
               </Grid>
-
+              </Grid>
+              <Grid container spacing={2} className="arriGrid">
+              <Grid className="lbl_topi-txt" item xs={12} sm={8}>
+                Amount of Installment Arrears(LKR):
+              </Grid>
+              <Grid item xs={12} sm={4}>
+                  <p className="lbl_arr">1000.00<span className="lbl_arrex">(20 * 40)</span></p>
+              </Grid>
+                </Grid>
+                <Grid container spacing={2}>
               <Grid className="lbl_topi" item xs={12} sm={4}>
                 Due Installment Count
               </Grid>
@@ -806,7 +815,9 @@ export default function Update_Model({
               <Grid className="lbl_topi" item xs={12} sm={4}>
                 Next Installment Date
               </Grid>
-
+              <Grid item xs={12} sm={2}>
+                :
+              </Grid>
               <Grid item xs={12} sm={6}>
                 <p className="next_date">
                   {" "}

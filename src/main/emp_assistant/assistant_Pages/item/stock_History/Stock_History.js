@@ -442,7 +442,8 @@ export default function Stock_History() {
             columns={columns}
             options={{
               rowHover: true,
-              selectableRows: false,
+              // selectableRows: false,
+              selectableRows: "none",
               customToolbarSelect: () => {},
               filterType: "textField",
               download: false,

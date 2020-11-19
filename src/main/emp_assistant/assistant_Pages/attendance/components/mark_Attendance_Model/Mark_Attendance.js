@@ -106,7 +106,8 @@ export default function Mark_Attendance() {
             data={attendanceMarkTable}
             columns={attendanceMarkTableColomns}
             options={{
-              selectableRows: false,
+              // selectableRows: false,
+              selectableRows: "none",
               customToolbarSelect: () => {},
               filterType: "textfield",
               download: false,

@@ -238,7 +238,8 @@ let history = useHistory();
             data={tableData}
             columns={columns}
             options={{
-              selectableRows: false,
+              // selectableRows: false,
+              selectableRows: "none",
               customToolbarSelect: () => {},
               onRowClick: (rowData, rowMeta) => {
                 setCurrentIndx(rowMeta.dataIndex);

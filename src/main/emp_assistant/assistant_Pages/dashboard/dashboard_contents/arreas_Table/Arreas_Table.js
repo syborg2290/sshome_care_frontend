@@ -201,7 +201,8 @@ export default function Arreas_Table() {
                   style: { backgroundColor: "#F5F6CE" },
                 };
               },
-              selectableRows: false,
+              // selectableRows: false,
+              selectableRows: "none",
               customToolbarSelect: () => {},
               filterType: "textfield",
               download: false,

@@ -571,7 +571,8 @@ export default function Areas() {
                   style: { backgroundColor: "#F5F6CE" },
                 };
               },
-              selectableRows: false,
+              // selectableRows: false,
+              selectableRows: "none",
               customToolbarSelect: () => {},
               filterType: "textfield",
               download: false,

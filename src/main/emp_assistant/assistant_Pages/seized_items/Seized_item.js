@@ -194,7 +194,8 @@ export default function Seized_item() {
             data={seizedTableData}
             columns={seizedTableColomns}
             options={{
-              selectableRows: false,
+              // selectableRows: false,
+              selectableRows: "none",
               customToolbarSelect: () => {},
               filterType: "textfield",
               download: false,

@@ -257,7 +257,8 @@ export default function Expire_invoice({ expire_list }) {
             data={payangoTableData}
             columns={payAndGoColumns}
             options={{
-              selectableRows: false,
+              // selectableRows: false,
+              selectableRows: "none",
               customToolbarSelect: () => {},
               filterType: "textField",
               download: false,

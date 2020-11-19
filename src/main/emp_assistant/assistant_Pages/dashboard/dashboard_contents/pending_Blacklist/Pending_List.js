@@ -203,7 +203,7 @@ export default function View_Model({ pendingBlackList }) {
         filter: true,
         setCellHeaderProps: (value) => ({
           style: {
-            minWidth: "215px",
+            minWidth: "227px",
             margin: "auto",
             fontSize: "15px",
             color: "black",
@@ -250,24 +250,22 @@ export default function View_Model({ pendingBlackList }) {
                       <span className="icon_histry">
                         <HistoryIcon onClick={showModalHistory} />
                       </span>
+                      <span>
                       <Button
                         variant="contained"
                         color="primary"
                         size="small"
                         className="btn_paydash"
                         onClick={showModalUpdate}
-                        // style={{
-                        //   color: "black",
-                        //   backgroundColor: "yellow",
-                        // }}
                       >
                         Update
                       </Button>
-                      <span className="blk_btn">
+                      </span>
+                      <span>
                         <Button
                           variant="contained"
                           size="small"
-                          className="btnublock"
+                          className="btnblockss"
                           onClick={showVisibleConfirmModal}
                         >
                           Blacklist
@@ -490,7 +488,8 @@ export default function View_Model({ pendingBlackList }) {
               style: { backgroundColor: "#F6CECE" },
             };
           },
-          selectableRows: false,
+          // selectableRows: false,
+          selectableRows: "none",
           customToolbarSelect: () => {},
           filterType: "textfield",
           download: false,

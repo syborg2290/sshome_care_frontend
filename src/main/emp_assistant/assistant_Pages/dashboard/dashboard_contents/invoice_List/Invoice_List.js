@@ -695,7 +695,8 @@ export default function Invoice_List() {
                 data={payangoTableData}
                 columns={payAndGoColumns}
                 options={{
-                  selectableRows: false,
+                  // selectableRows: false,
+                  selectableRows: "none",
                   customToolbarSelect: () => {},
                   filterType: "textField",
                   download: false,
@@ -733,7 +734,8 @@ export default function Invoice_List() {
                 data={fullPaymentTableData}
                 columns={fullPaymentColumns}
                 options={{
-                  selectableRows: false,
+                  // selectableRows: false,
+                  selectableRows: "none",
                   customToolbarSelect: () => {},
                   filterType: "textField",
                   download: false,

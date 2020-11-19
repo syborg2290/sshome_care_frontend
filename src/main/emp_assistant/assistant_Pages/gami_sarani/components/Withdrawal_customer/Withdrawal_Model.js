@@ -121,7 +121,8 @@ export default function Withdrawal_Model({ docId, nicProp, midProp }) {
           data={allTableData}
           columns={columns}
           options={{
-            selectableRows: false,
+            // selectableRows: false,
+             selectableRows: "none",
             customToolbarSelect: () => {},
             filterType: "textField",
             download: false,

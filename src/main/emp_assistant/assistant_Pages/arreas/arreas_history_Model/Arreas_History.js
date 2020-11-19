@@ -140,7 +140,8 @@ export default function Arreas_History({ invoice_no }) {
             data={installments}
             columns={columns}
             options={{
-              selectableRows: false,
+              // selectableRows: false,
+              selectableRows: "none",
               customToolbarSelect: () => {},
               filterType: "textField",
               download: false,

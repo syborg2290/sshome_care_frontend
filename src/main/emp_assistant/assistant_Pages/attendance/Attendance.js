@@ -33,6 +33,7 @@ export default function Attendance() {
   // eslint-disable-next-line
   const [historyAttendanceModel, setHistoryAttendanceModel] = useState(false);
   const [attendanceTableRow, setAttendanceTableRow] = useState([]);
+  const [allTableData, setAllTableData] = useState([]);
   let history = useHistory();
 
   const showModalView = () => {
@@ -121,16 +122,22 @@ export default function Attendance() {
 
     db.collection("attendance_history").onSnapshot((snap) => {
       var rawData = [];
+      var allRawData = [];
       snap.docs.forEach((reSnap) => {
+        allRawData.push({
+          id: reSnap.id,
+          data: reSnap.data(),
+        });
         rawData.push({
           FirstName: reSnap.data().fname,
           LastName: reSnap.data().lname,
           NIC: reSnap.data().nic,
-          Status: (
-            <div className="workingStts">
-              {reSnap.data().status === "full" ? "Fullday" : "Halfday"}
-            </div>
-          ),
+          Status:
+            reSnap.data().status === "full" ? (
+              <div className="workingStts">Fullday</div>
+            ) : (
+              <div className="workingSttsHald">Halfday</div>
+            ),
           Action: (
             <div>
               <VisibilityIcon onClick={showModalView} />
@@ -141,7 +148,7 @@ export default function Attendance() {
           ),
         });
       });
-
+      setAllTableData(allRawData);
       setAttendanceTableRow(rawData);
     });
     // eslint-disable-next-line
@@ -175,7 +182,10 @@ export default function Attendance() {
         }}
       >
         <div className="view_body">
-          <ViewEmployee />
+          <ViewEmployee
+            key={allTableData[currentIndx]?.id}
+            nic={allTableData[currentIndx]?.data.nic}
+          />
         </div>
       </Modal>
 
@@ -191,7 +201,11 @@ export default function Attendance() {
         }}
       >
         <div className="view_body">
-          <UpdateStatus />
+          <UpdateStatus
+            key={allTableData[currentIndx]?.id}
+            docId={allTableData[currentIndx]?.id}
+            nic={allTableData[currentIndx]?.data.nic}
+          />
         </div>
       </Modal>
 

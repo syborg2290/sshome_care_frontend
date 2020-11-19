@@ -205,7 +205,7 @@ export default function Mark_Attendance() {
       <Grid container spacing={4}>
        
         <Grid className="sub_btnGrid" item xs={6}>
-          <Button 
+          <Button
             className="sub_btnAtt"
             endIcon={<AssignmentTurnedInOutlinedIcon />}
             disabled={
@@ -219,7 +219,6 @@ export default function Mark_Attendance() {
               "Submit"
             )}
           </Button>
-
         </Grid>
          <Grid className="sub_btnGrid" item xs={6}></Grid>
         <Grid item xs={12}>

@@ -124,29 +124,44 @@ export default function Attendance() {
       var rawData = [];
       var allRawData = [];
       snap.docs.forEach((reSnap) => {
-        allRawData.push({
-          id: reSnap.id,
-          data: reSnap.data(),
-        });
-        rawData.push({
-          FirstName: reSnap.data().fname,
-          LastName: reSnap.data().lname,
-          NIC: reSnap.data().nic,
-          Status:
-            reSnap.data().status === "full" ? (
-              <div className="workingStts">Fullday</div>
-            ) : (
-              <div className="workingSttsHald">Halfday</div>
-            ),
-          Action: (
-            <div>
-              <VisibilityIcon onClick={showModalView} />
-              <span className="icon_Edit">
-                <AutorenewIcon onClick={showModalStatusUpdate} />
-              </span>
-            </div>
-          ),
-        });
+        if (
+          new Date(reSnap.data().date?.seconds * 1000).getFullYear() ===
+          new Date().getFullYear()
+        ) {
+          if (
+            new Date(reSnap.data().date?.seconds * 1000).getMonth() ===
+            new Date().getMonth()
+          ) {
+            if (
+              new Date(reSnap.data().date?.seconds * 1000).getDate() ===
+              new Date().getDate()
+            ) {
+              allRawData.push({
+                id: reSnap.id,
+                data: reSnap.data(),
+              });
+              rawData.push({
+                FirstName: reSnap.data().fname,
+                LastName: reSnap.data().lname,
+                NIC: reSnap.data().nic,
+                Status:
+                  reSnap.data().status === "full" ? (
+                    <div className="workingStts">Fullday</div>
+                  ) : (
+                    <div className="workingSttsHald">Halfday</div>
+                  ),
+                Action: (
+                  <div>
+                    <VisibilityIcon onClick={showModalView} />
+                    <span className="icon_Edit">
+                      <AutorenewIcon onClick={showModalStatusUpdate} />
+                    </span>
+                  </div>
+                ),
+              });
+            }
+          }
+        }
       });
       setAllTableData(allRawData);
       setAttendanceTableRow(rawData);

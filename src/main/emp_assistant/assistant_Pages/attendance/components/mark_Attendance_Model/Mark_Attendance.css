@@ -1,3 +1,22 @@
 .attemdanceMark_Table {
+  margin-top: -20px !important;
+}
+
+.sub_btnGrid {
   margin-top: 40px !important;
+}
+
+.sub_btnAtt {
+  background-color: rgba(6, 6, 156, 0.705) !important;
+  border-radius: 6px !important;
+  color: aliceblue !important;
+  margin: auto !important;
+  text-align: center !important;
+  float: right !important;
+  font-size: small !important;
+  text-transform: none !important;
+}
+
+.checkboxAtt {
+  color: aquamarine !important;
 }

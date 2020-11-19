@@ -177,15 +177,12 @@ export default function Add_Root() {
             </Grid>
             <Grid item xs={12} sm={8}>
               <TextField
-                className="txt_discp_root"
-                autoComplete="description"
-                name="description"
+                // className="txt_discp_root"
+                autoComplete="discription"
                 variant="outlined"
-                required
                 multiline
-                rows={6}
+                rowsMax={5}
                 fullWidth
-                id="description"
                 label="Description"
                 size="small"
                 value={description}

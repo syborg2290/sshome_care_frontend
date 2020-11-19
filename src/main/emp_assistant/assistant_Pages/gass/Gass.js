@@ -173,6 +173,7 @@ export default function Gass() {
         <Grid container spacing={2}>
           <Grid item xs={12} sm={1}>
             <hr className="titles_hr" />
+           
           </Grid>
        
           <Grid item xs={12} sm={2}>

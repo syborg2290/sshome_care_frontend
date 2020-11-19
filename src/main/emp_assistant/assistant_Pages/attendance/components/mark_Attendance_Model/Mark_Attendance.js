@@ -10,11 +10,13 @@ import "./Mark_Attendance.css";
 import db from "../../../../../../config/firebase.js";
 import firebase from "firebase";
 
-async function doStuff(nics) {
+async function doStuff(nics, allNames) {
   for (var i = 0; i < nics.length; i++) {
     await db.collection("attendance_history").add({
       date: firebase.firestore.FieldValue.serverTimestamp(),
       nic: nics[i],
+      fname: allNames[i].fname,
+      lname: allNames[i].lname,
       status: "full",
     });
   }
@@ -29,6 +31,8 @@ export default function Mark_Attendance() {
   const [marks, setMarks] = useState({});
   // eslint-disable-next-line
   const [nics, setNics] = useState([]);
+  // eslint-disable-next-line
+  const [allNames, setAllNames] = useState([]);
 
   let history = useHistory();
 
@@ -148,12 +152,20 @@ export default function Mark_Attendance() {
                                 nics.indexOf(reEmployeeAd.docs[0].data().nic),
                                 1
                               );
+                              allNames.splice(
+                                nics.indexOf(reEmployeeAd.docs[0].data().nic),
+                                1
+                              );
                               setMarks({
                                 ...marks,
                                 [reEmployeeAd.docs[0].data().nic]: false,
                               });
                             } else {
                               nics.push(reEmployeeAd.docs[0].data().nic);
+                              allNames.push({
+                                fname: reEmployeeAd.docs[0].data().fname,
+                                lname: reEmployeeAd.docs[0].data().lname,
+                              });
                               setMarks({
                                 ...marks,
                                 [reEmployeeAd.docs[0].data().nic]: true,
@@ -176,7 +188,7 @@ export default function Mark_Attendance() {
 
   const markFunc = () => {
     setSubmitLoading(true);
-    doStuff(nics).then((_) => {
+    doStuff(nics, allNames).then((_) => {
       setSubmitLoading(false);
       window.location.reload();
     });

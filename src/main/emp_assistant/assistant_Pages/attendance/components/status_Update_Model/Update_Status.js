@@ -90,8 +90,8 @@ export default function Update_Status({ nic, docId }) {
 
         {/* <p className="validate_updateRoot">{validation}</p> */}
         <Grid container spacing={2}>
-          <Grid item xs={12} sm={6}></Grid>
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12} sm={8}></Grid>
+          <Grid item xs={12} sm={4}>
             <Button
               variant="contained"
               color="primary"

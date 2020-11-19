@@ -4,6 +4,16 @@
   border-radius: 8px;
   width: 45%;
   text-align: center;
+  padding: 10px;
+}
+
+.workingSttsHald {
+  background-color: orange;
+  color: aliceblue;
+  border-radius: 8px;
+  width: 45%;
+  text-align: center;
+  padding: 10px;
 }
 
 .offStts {

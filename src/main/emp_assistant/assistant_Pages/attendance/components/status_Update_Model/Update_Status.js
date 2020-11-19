@@ -1,133 +1,143 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
-import { Row, Col ,Spin} from "antd";
+import { Row, Col, Spin } from "antd";
 import {
   TextField,
   Button,
   Grid,
   Container,
   Typography,
-
 } from "@material-ui/core";
 
 // styles
 import "./Update_Status.css";
+import db from "../../../../../../config/firebase.js";
+import firebase from "firebase";
 
-export default function Update_Status({
-  fname,
-  lname,
-  nic,
-  date,
-//   reason,
-}) {
-
- // eslint-disable-next-line
+export default function Update_Status({ nic, docId }) {
+  let history = useHistory();
+  // eslint-disable-next-line
   const [isLoadingSubmit, setLoadingSubmit] = useState(false);
   const [reason, setReason] = useState("");
-  let history = useHistory();
-  
-  useEffect(() => {
+  const [fname, setFname] = useState("");
+  const [lname, setLname] = useState("");
 
+  useEffect(() => {
     window.addEventListener("offline", function (e) {
       history.push("/connection_lost");
     });
-  });
+    db.collection("employee")
+      .where("nic", "==", nic)
+      .get()
+      .then((reEmp) => {
+        setFname(reEmp.docs[0].data().fname);
+        setLname(reEmp.docs[0].data().lname);
+      });
+    // eslint-disable-next-line
+  }, [nic]);
 
-    return (
+  const makeLeave = async () => {
+    setLoadingSubmit(true);
+    await db
+      .collection("attendance_history")
+      .doc(docId)
+      .update({
+        status: "half",
+      })
+      .then(() => {
+        if (reason.length > 0) {
+          db.collection("short_leaves_history").add({
+            nic: nic,
+            date: firebase.firestore.FieldValue.serverTimestamp(),
+            reason: reason.trim(),
+          });
+        }
+        setLoadingSubmit(false);
+      });
+  };
 
-        <>
-            <Container component="main" className="main_container_upStts">
-                 <Typography className="title_root" variant="h5" gutterBottom>
-                 Employee leaves
-                </Typography>
-                <Grid item xs={12} sm={2}>
-                     <hr className="titles_hr_root" />
-                 </Grid>
-                 <Row>              
-                <Col className="customer_details_sarani" span={8}>
-                    First Name
-                 </Col>
-                <Col className="customer_sarani" span={2}>
-                    :
-                 </Col>
-                <Col className="customer_sarani" span={14}>
-                    {fname}
-                </Col>
-                <Col className="customer_details_sarani" span={8}>
-                    Last Name
-                 </Col>
-                <Col className="customer_sarani" span={2}>
-                    :
-                 </Col>
-                <Col className="customer_sarani" span={14}>
-                    {lname}
-                </Col>
-
-                <Col className="customer_details_sarani" span={8}>
-                    NIC
-                 </Col>
-                <Col className="customer_sarani" span={2}>
-                    :
-                 </Col>
-                <Col className="customer_sarani" span={14}>
-                    {nic}
-                    </Col>
-                       <Col className="customer_details_sarani" span={8}>
-                    Date
-                </Col>
-                <Col className="customer_sarani" span={2}>
-                    :
-                </Col>
-                <Col className="customer_sarani" span={14}>
-                    {date}
-                </Col>
-
-
-                <Col className="customer_details_sarani" span={8}>
-                    Reason
-                </Col>
-                <Col className="customer_sarani" span={2}>
-                    :
-                </Col>
-                <Col className="customer_sarani" span={14}>
-                    <TextField
-                        className="txt_reason"
-                        autoComplete="reason"
-                        name="reason"
-                        variant="outlined"
-                        required
-                        multiline
-                        rows={6}
-                        fullWidth
-                        id="reason"
-                        label="Reason"
-                        size="small"
-                    value={reason}
-                    onChange={(e) => {
-                      setReason(e.target.value.trim());
-                    }}
-                    />
-                </Col>
-             
-
-                </Row>
-                
-       {/* <p className="validate_updateRoot">{validation}</p> */}
-      <Grid container spacing={2}>
-        <Grid item xs={12} sm={8}></Grid>
-        <Grid item xs={12} sm={4}>
-          <Button
-            variant="contained"
-            color="primary"
-            className="btn_addRoot"
-            // onClick={submit}
-            // disabled={rootName.length === 0}
-          >
-            {isLoadingSubmit ? <Spin size="large" /> : "Make Leave"}
-          </Button>
+  return (
+    <>
+      <Container component="main" className="main_container_upStts">
+        <Typography className="title_root" variant="h5" gutterBottom>
+          Employee leaves
+        </Typography>
+        <Grid item xs={12} sm={2}>
+          <hr className="titles_hr_root" />
         </Grid>
-      </Grid>
-        </Container>
-        </>
-    );
+        <Row>
+          <Col className="customer_details_sarani" span={8}>
+            First Name
+          </Col>
+          <Col className="customer_sarani" span={2}>
+            :
+          </Col>
+          <Col className="customer_sarani" span={14}>
+            {fname}
+          </Col>
+          <Col className="customer_details_sarani" span={8}>
+            Last Name
+          </Col>
+          <Col className="customer_sarani" span={2}>
+            :
+          </Col>
+          <Col className="customer_sarani" span={14}>
+            {lname}
+          </Col>
+
+          <Col className="customer_details_sarani" span={8}>
+            NIC
+          </Col>
+          <Col className="customer_sarani" span={2}>
+            :
+          </Col>
+          <Col className="customer_sarani" span={14}>
+            {nic}
+          </Col>
+
+          <Col className="customer_details_sarani" span={8}>
+            Reason
+          </Col>
+          <Col className="customer_sarani" span={2}>
+            :
+          </Col>
+          <Col className="customer_sarani" span={14}>
+            <TextField
+              className="txt_reason"
+              autoComplete="reason"
+              name="reason"
+              variant="outlined"
+              required
+              multiline
+              rows={6}
+              fullWidth
+              id="reason"
+              label="Reason"
+              size="small"
+              value={reason}
+              onChange={(e) => {
+                setReason(e.target.value.trim());
+              }}
+            />
+          </Col>
+        </Row>
+
+        {/* <p className="validate_updateRoot">{validation}</p> */}
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={8}></Grid>
+          <Grid item xs={12} sm={4}>
+            <Button
+              variant="contained"
+              color="primary"
+              className="btn_addRoot"
+              onClick={makeLeave}
+              disabled={isLoadingSubmit}
+            >
+              {isLoadingSubmit ? <Spin size="small" /> : "Make Short Leave"}
+            </Button>
+          </Grid>
+        </Grid>
+      </Container>
+    </>
+  );
 }

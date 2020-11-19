@@ -23,7 +23,7 @@ export default function Attedance_History() {
   const [allData, setallData] = useState([]);
   const [viewEmployeesHistory, setViewEmployeesHistory] = useState(false); // Table models
 
-   const showModalHistory = () => {
+  const showModalHistory = () => {
     setViewEmployeesHistory(true);
   };
 
@@ -85,38 +85,38 @@ export default function Attedance_History() {
       history.push("/connection_lost");
     });
 
-    db.collection("employee").onSnapshot((snap) => {
-      var raw = [];
-      var rawAlldata = [];
-      snap.docs.forEach((each) => {
-        rawAlldata.push({
-          id: each.id,
-          data: each.data(),
-        });
-        raw.push({
-          FirstName: each.data().fname,
-          LastName: each.data().lname,
-          NIC: each.data().nic,
-          Mobile: each.data().mobile1,
+    db.collection("employee")
+      .get()
+      .then((snap) => {
+        var raw = [];
+        var rawAlldata = [];
+        snap.docs.forEach((each) => {
+          rawAlldata.push({
+            id: each.id,
+            data: each.data(),
+          });
+          raw.push({
+            FirstName: each.data().fname,
+            LastName: each.data().lname,
+            NIC: each.data().nic,
+            Mobile: each.data().mobile1,
 
-          Action: (
-            <div>
-              <HistoryIcon className="btnView" onClick={showModalHistory} />
-              
-            </div>
-          ),
+            Action: (
+              <div>
+                <HistoryIcon className="btnView" onClick={showModalHistory} />
+              </div>
+            ),
+          });
         });
+        setTableData(raw);
+        setallData(rawAlldata);
       });
-      setTableData(raw);
-      setallData(rawAlldata);
-    });
     // eslint-disable-next-line
   }, []);
 
   return (
     <>
-
-        {/* START History model */}
+      {/* START History model */}
       <Modal
         className="employee_hisstoryTbl"
         visible={viewEmployeesHistory}
@@ -126,12 +126,15 @@ export default function Attedance_History() {
         }}
       >
         <div className="mark_body">
-          <HistroryModel />
+          <HistroryModel
+            key={allData[currentIndx]?.id}
+            nic={allData[currentIndx]?.data.nic}
+          />
         </div>
       </Modal>
 
       {/* END History model */}
-      
+
       <Grid container spacing={4}>
         <Grid item xs={12}>
           <MUIDataTable

@@ -6,3 +6,12 @@
   overflow: hidden !important;
   margin-top: 30px !important;
 }
+
+.btn_leave {
+  text-transform: none !important;
+  margin-top: 30px !important;
+}
+
+.lnameSpan {
+  margin-left: 10px !important;
+}

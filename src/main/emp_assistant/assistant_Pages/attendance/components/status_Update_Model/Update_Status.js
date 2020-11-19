@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { Row, Col, Spin } from "antd";
 import {
-  TextField,
   Button,
   Grid,
   Container,
@@ -17,7 +16,6 @@ export default function Update_Status({ nic, docId }) {
   let history = useHistory();
   // eslint-disable-next-line
   const [isLoadingSubmit, setLoadingSubmit] = useState(false);
-  const [reason, setReason] = useState("");
   const [fname, setFname] = useState("");
   const [lname, setLname] = useState("");
   const [isFull, setIsFull] = useState(true);
@@ -71,24 +69,14 @@ export default function Update_Status({ nic, docId }) {
         </Grid>
         <Row>
           <Col className="customer_details_sarani" span={8}>
-            First Name
+            Full Name
           </Col>
           <Col className="customer_sarani" span={2}>
             :
           </Col>
           <Col className="customer_sarani" span={14}>
-            {fname}
+            {fname} <span  className="lnameSpan">{lname}</span> 
           </Col>
-          <Col className="customer_details_sarani" span={8}>
-            Last Name
-          </Col>
-          <Col className="customer_sarani" span={2}>
-            :
-          </Col>
-          <Col className="customer_sarani" span={14}>
-            {lname}
-          </Col>
-
           <Col className="customer_details_sarani" span={8}>
             NIC
           </Col>
@@ -98,44 +86,19 @@ export default function Update_Status({ nic, docId }) {
           <Col className="customer_sarani" span={14}>
             {nic}
           </Col>
-
-          <Col className="customer_details_sarani" span={8}>
-            Reason
-          </Col>
-          <Col className="customer_sarani" span={2}>
-            :
-          </Col>
-          <Col className="customer_sarani" span={14}>
-            <TextField
-              className="txt_reason"
-              autoComplete="reason"
-              name="reason"
-              variant="outlined"
-              required
-              multiline
-              rows={6}
-              fullWidth
-              id="reason"
-              label="Reason"
-              size="small"
-              value={reason}
-              onChange={(e) => {
-                setReason(e.target.value.trim());
-              }}
-            />
-          </Col>
         </Row>
 
         {/* <p className="validate_updateRoot">{validation}</p> */}
         <Grid container spacing={2}>
-          <Grid item xs={12} sm={8}></Grid>
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={12} sm={6}></Grid>
+          <Grid item xs={12} sm={6}>
             <Button
               variant="contained"
               color="primary"
-              className="btn_addRoot"
+              className="btn_leave"
               onClick={makeLeave}
               disabled={isLoadingSubmit}
+              size="small"
             >
               {isLoadingSubmit ? (
                 <Spin size="small" />

@@ -137,6 +137,10 @@ export default function Mark_Attendance() {
                       NIC: reEmployeeAd.docs[0].data().nic,
                       Mark: (
                         <Checkbox
+                          className="checkboxAtt"
+                          // style={{
+
+                          // }}
                           id={reEmployeeAd.docs[0].data().nic}
                           key={reEmployeeAd.docs[0].data().nic}
                           value={
@@ -197,8 +201,11 @@ export default function Mark_Attendance() {
   return (
     <>
       <Grid container spacing={4}>
-        <Grid item xs={12}>
-          <Button
+        <Grid className="sub_btnGrid" item xs={6}></Grid>
+        <Grid className="sub_btnGrid" item xs={6}>
+          <Button 
+            className="sub_btnAtt"
+            
             disabled={
               submitLoading || Object.keys(marks).length === 0 ? true : false
             }
@@ -210,6 +217,9 @@ export default function Mark_Attendance() {
               "Submit"
             )}
           </Button>
+
+        </Grid>
+        <Grid item xs={12}>
           <MUIDataTable
             title={
               <span className="title_Span_blackList">

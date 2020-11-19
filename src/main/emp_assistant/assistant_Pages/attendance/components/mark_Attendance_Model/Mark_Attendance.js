@@ -7,6 +7,9 @@ import { Spin, Checkbox } from "antd";
 // styles
 import "./Mark_Attendance.css";
 
+//icons
+import AssignmentTurnedInOutlinedIcon from "@material-ui/icons/AssignmentTurnedInOutlined";
+
 import db from "../../../../../../config/firebase.js";
 import firebase from "firebase";
 
@@ -198,10 +201,10 @@ export default function Mark_Attendance() {
   return (
     <>
       <Grid container spacing={4}>
-        <Grid className="sub_btnGrid" item xs={6}></Grid>
         <Grid className="sub_btnGrid" item xs={6}>
           <Button
             className="sub_btnAtt"
+            endIcon={<AssignmentTurnedInOutlinedIcon />}
             disabled={
               submitLoading || Object.keys(marks).length === 0 ? true : false
             }
@@ -214,6 +217,7 @@ export default function Mark_Attendance() {
             )}
           </Button>
         </Grid>
+        <Grid className="sub_btnGrid" item xs={6}></Grid>
         <Grid item xs={12}>
           <MUIDataTable
             title={
@@ -228,6 +232,9 @@ export default function Mark_Attendance() {
               // selectableRows: false,
               selectableRows: "none",
               customToolbarSelect: () => {},
+              setRowProps: (row) => ({
+                style: { backgroundColor: "#f2faff" },
+              }),
               filterType: "textfield",
               download: false,
               print: false,

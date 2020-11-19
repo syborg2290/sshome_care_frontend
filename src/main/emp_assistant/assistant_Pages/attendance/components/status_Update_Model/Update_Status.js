@@ -12,7 +12,6 @@ import {
 // styles
 import "./Update_Status.css";
 import db from "../../../../../../config/firebase.js";
-import firebase from "firebase";
 
 export default function Update_Status({ nic, docId }) {
   let history = useHistory();
@@ -21,11 +20,22 @@ export default function Update_Status({ nic, docId }) {
   const [reason, setReason] = useState("");
   const [fname, setFname] = useState("");
   const [lname, setLname] = useState("");
+  const [isFull, setIsFull] = useState(true);
 
   useEffect(() => {
     window.addEventListener("offline", function (e) {
       history.push("/connection_lost");
     });
+    db.collection("attendance_history")
+      .doc(docId)
+      .onSnapshot((snap) => {
+        if (snap.data().status === "full") {
+          setIsFull(true);
+        } else {
+          setIsFull(false);
+        }
+      });
+
     db.collection("employee")
       .where("nic", "==", nic)
       .get()
@@ -42,17 +52,11 @@ export default function Update_Status({ nic, docId }) {
       .collection("attendance_history")
       .doc(docId)
       .update({
-        status: "half",
+        status: isFull ? "half" : "full",
       })
       .then(() => {
-        if (reason.length > 0) {
-          db.collection("short_leaves_history").add({
-            nic: nic,
-            date: firebase.firestore.FieldValue.serverTimestamp(),
-            reason: reason.trim(),
-          });
-        }
         setLoadingSubmit(false);
+        window.location.reload();
       });
   };
 
@@ -133,7 +137,13 @@ export default function Update_Status({ nic, docId }) {
               onClick={makeLeave}
               disabled={isLoadingSubmit}
             >
-              {isLoadingSubmit ? <Spin size="small" /> : "Make Short Leave"}
+              {isLoadingSubmit ? (
+                <Spin size="small" />
+              ) : isFull ? (
+                "Make Short Leave"
+              ) : (
+                "Back to Full"
+              )}
             </Button>
           </Grid>
         </Grid>

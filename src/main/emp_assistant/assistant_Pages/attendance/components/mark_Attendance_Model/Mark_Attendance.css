@@ -3,7 +3,7 @@
 }
 
 .sub_btnGrid {
-  margin-top: 40px !important;
+  /* margin-top: 40px !important; */
 }
 
 .sub_btnAtt {
@@ -12,11 +12,16 @@
   color: aliceblue !important;
   margin: auto !important;
   text-align: center !important;
-  float: right !important;
+  float: left !important;
   font-size: small !important;
   text-transform: none !important;
 }
 
 .checkboxAtt {
-  color: aquamarine !important;
+  padding-top: 2px;
+  padding-right: 2px;
+  padding-left: 2px;
+  padding-bottom: 0 !important;
+  background-color: rgba(232, 232, 255, 0.979);
+  border-radius: 5px !important;
 }

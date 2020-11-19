@@ -1,8 +1,8 @@
 .workingStts {
   background-color: green;
   color: aliceblue;
-  border-radius: 8px;
-  width: 45%;
+  border-radius: 6px;
+  width: 50%;
   text-align: center;
   padding: 10px;
 }
@@ -14,9 +14,11 @@
   width: 45%;
   text-align: center;
   padding: 10px;
+  padding-left: 15px !important;
+  padding-right: 35px !important;
 }
 
-.offStts {
+/* .offStts {
   background-color: rgba(240, 15, 15, 0.849);
   color: aliceblue;
   border-radius: 8px;
@@ -30,7 +32,7 @@
   border-radius: 8px;
   width: 45%;
   text-align: center;
-}
+} */
 
 .btn_attendance {
   float: right !important;

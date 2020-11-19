@@ -127,7 +127,7 @@ class GassRecipt extends React.Component {
                         ))}
                         <TableRow>
                           <TableCell rowSpan={1} />
-                          <TableCell align="right" colSpan={1}>
+                          <TableCell align="right" colSpan={2}>
                             Total(LKR)
                           </TableCell>
                           <TableCell align="right" colSpan={2}>

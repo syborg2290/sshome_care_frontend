@@ -356,7 +356,8 @@ export default function Repairs() {
             data={repairTableData}
             columns={repairTableColomns}
             options={{
-              selectableRows: false,
+              // selectableRows: false,
+              selectableRows: "none",
               customToolbarSelect: () => {},
               filterType: "textfield",
               download: false,

@@ -256,7 +256,10 @@ export default function Make_Invoice_table() {
             columns={columns}
             options={{
               rowHover: true,
-              selectableRows: true,
+              // selectableRows: true,
+              //  selectableRows: "multiple",
+                // selectableRows: "single",
+               
               customToolbarSelect: () => {},
               filterType: "textField",
               download: false,
@@ -264,7 +267,7 @@ export default function Make_Invoice_table() {
               searchPlaceholder: "Search using any field",
               elevation: 4,
               sort: true,
-              onRowsSelect: (curRowSelected, allRowsSelected) => {
+              onRowSelectionChange: (curRowSelected, allRowsSelected) => {
                 selectedItems = [];
                 allRowsSelected.forEach((single) => {
                   if (allTtemData[single.dataIndex].data.qty > 0) {

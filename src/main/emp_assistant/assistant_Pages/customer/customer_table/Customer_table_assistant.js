@@ -243,7 +243,12 @@ export default function ItemTable() {
                   };
                 }
               },
-              selectableRows: false,
+              // selectableRows: false,
+              selectableRows: "none",
+              draggableColumns: {
+               enabled: true
+             },
+              responsive: "standard",
               customToolbarSelect: () => { },
               filterType: "textField",
               download: false,

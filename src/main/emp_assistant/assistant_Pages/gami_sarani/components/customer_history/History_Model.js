@@ -114,7 +114,8 @@ export default function History_Model({ mid }) {
           data={allTableData}
           columns={columns}
           options={{
-            selectableRows: false,
+            // selectableRows: false,
+             selectableRows: "none",
             customToolbarSelect: () => {},
             filterType: "textField",
             download: false,

@@ -230,7 +230,8 @@ export default function Attendance() {
             data={attendanceTableRow}
             columns={attendanceTableColomns}
             options={{
-              selectableRows: false,
+              // selectableRows: false,
+              selectableRows: "none",
               customToolbarSelect: () => {},
               filterType: "textfield",
               download: false,

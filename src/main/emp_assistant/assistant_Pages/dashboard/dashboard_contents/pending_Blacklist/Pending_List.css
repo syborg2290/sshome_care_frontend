@@ -2,11 +2,11 @@
   width: 60% !important;
 }
 
-.btnublock {
+.btnblockss {
   border-radius: 10px !important;
   font-size: 10px !important;
-  margin-left: 15px !important;
-  margin-top: -15px !important;
+  /* margin-left: 15px !important;
+  margin-top: -15px !important; */
   background-color: rgba(207, 9, 9, 0.829) !important;
   color: aliceblue !important;
 }
@@ -36,10 +36,6 @@
   margin: auto !important;
   margin-top: 3px !important;
 }
-
-.confo_Icons-gri {
-}
-
 .txtConfoModel_bodys {
   margin-left: 10px !important;
 }
@@ -49,8 +45,4 @@
   border-top: 8px #ffffff !important;
   margin-top: 50px !important;
   border-radius: 8px 8px 8px 8px !important;
-}
-
-.confoModel_bodyys {
-  /* background-color: #222020 !important; */
 }

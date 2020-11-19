@@ -677,7 +677,12 @@ export default function Item_table_assistant() {
             columns={columns}
             options={{
               rowHover: true,
-              selectableRows: false,
+              // selectableRows: false,
+              selectableRows: "none",
+              draggableColumns: {
+               enabled: true
+             },
+            responsive: "standard",
               customToolbarSelect: () => {},
               filterType: "textField",
               download: false,

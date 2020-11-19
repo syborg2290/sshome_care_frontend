@@ -350,7 +350,8 @@ export default function Black_List() {
             data={blacklistTableRow}
             columns={repairTableColomns}
             options={{
-              selectableRows: false,
+              // selectableRows: false,
+              selectableRows: "none",
               customToolbarSelect: () => {},
               filterType: "textfield",
               download: false,

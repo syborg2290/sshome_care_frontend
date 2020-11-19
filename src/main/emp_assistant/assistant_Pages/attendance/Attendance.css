@@ -4,8 +4,6 @@
   border-radius: 6px;
   width: 50%;
   text-align: center;
-  /* padding-right: 30px;
-  padding-left: 10px; */
 }
 
 .workingSttsHald {
@@ -14,25 +12,7 @@
   border-radius: 6px;
   width: 50%;
   text-align: center;
-  /* padding-right: 30px;
-  padding-left: 10px; */
 }
-
-/* .offStts {
-  background-color: rgba(240, 15, 15, 0.849);
-  color: aliceblue;
-  border-radius: 8px;
-  width: 45%;
-  text-align: center;
-}
-
-.leaveStts {
-  background-color: rgba(189, 80, 17, 0.884);
-  color: aliceblue;
-  border-radius: 8px;
-  width: 45%;
-  text-align: center;
-} */
 
 .btn_attendance {
   float: right !important;

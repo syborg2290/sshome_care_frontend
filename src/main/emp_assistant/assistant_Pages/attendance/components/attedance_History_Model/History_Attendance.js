@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-
+import { Modal } from "antd";
 import Grid from "@material-ui/core/Grid";
 import MUIDataTable from "mui-datatables";
 import { useHistory } from "react-router-dom";
@@ -7,8 +7,10 @@ import { useHistory } from "react-router-dom";
 import "./History_Attendance.css";
 
 // icons
-import VisibilityIcon from "@material-ui/icons/Visibility";
-import EditIcon from "@material-ui/icons/Edit";
+import HistoryIcon from "@material-ui/icons/History";
+
+//components
+import HistroryModel from "./components/Histrory_Model";
 
 import db from "../../../../../../config/firebase.js";
 
@@ -19,6 +21,11 @@ export default function Attedance_History() {
   const [tableData, setTableData] = useState([]);
   // eslint-disable-next-line
   const [allData, setallData] = useState([]);
+  const [viewEmployeesHistory, setViewEmployeesHistory] = useState(false); // Table models
+
+   const showModalHistory = () => {
+    setViewEmployeesHistory(true);
+  };
 
   const columns = [
     {
@@ -94,10 +101,8 @@ export default function Attedance_History() {
 
           Action: (
             <div>
-              <VisibilityIcon className="btnView" />
-              <span>
-                <EditIcon className="btnEdit" />
-              </span>
+              <HistoryIcon className="btnView" onClick={showModalHistory} />
+              
             </div>
           ),
         });
@@ -110,11 +115,28 @@ export default function Attedance_History() {
 
   return (
     <>
+
+        {/* START History model */}
+      <Modal
+        className="employee_hisstoryTbl"
+        visible={viewEmployeesHistory}
+        footer={null}
+        onCancel={() => {
+          setViewEmployeesHistory(false);
+        }}
+      >
+        <div className="mark_body">
+          <HistroryModel />
+        </div>
+      </Modal>
+
+      {/* END History model */}
+      
       <Grid container spacing={4}>
         <Grid item xs={12}>
           <MUIDataTable
             title={<span className="title_Span">Attendance History</span>}
-            className="Employee_table"
+            className="Attendance_hisstoryTbl"
             sty
             data={tableData}
             columns={columns}

@@ -32,7 +32,7 @@ export default function Update_Loan_Model() {
           <form className="form" noValidate>
            <Grid container spacing={2}>
            <Grid className="lbl_topi" item xs={12} sm={3}>
-                 Amount
+                 Amount(LKR)
         </Grid>
         <Grid item xs={12} sm={1}>
          :
@@ -45,7 +45,8 @@ export default function Update_Loan_Model() {
                 fullWidth
                 label="Amount"
                 size="small"
-                value={amount}
+                  value={amount}
+                  type="number"
                 onChange={(e) => {
                   setAmount(e.target.value);
                 }}

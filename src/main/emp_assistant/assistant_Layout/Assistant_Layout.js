@@ -27,6 +27,7 @@ import BlackList from "../assistant_Pages/black_list/Black_List";
 import Customer from "../assistant_Pages/customer/customer_table/Customer_table_assistant";
 import InvoiceHistory from "../assistant_Pages/invoice_History/Invoice_history";
 import Gass from "../assistant_Pages/gass/Gass";
+import Loans from "../assistant_Pages/loans/Loan";
 import Repair from "../assistant_Pages/repairs/Repairs";
 import GamiSarani from "../assistant_Pages/gami_sarani/Gami_Sarani";
 import SeizedItems from "../assistant_Pages/seized_items/Seized_item";
@@ -55,6 +56,7 @@ function LayoutAssistant(props) {
             <Route path="/assistant/ui/arries" component={Arries} />
             <Route path="/assistant/ui/Gamisarani" component={GamiSarani} />
             <Route path="/assistant/ui/Gass" component={Gass} />
+            <Route path="/assistant/ui/loan" component={Loans} />
             <Route path="/assistant/ui/Repair" component={Repair} />
             <Route path="/assistant/ui/BlackList" component={BlackList} />
             <Route path="/assistant/ui/SeizedItems" component={SeizedItems} />

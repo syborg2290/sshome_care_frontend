@@ -14,17 +14,18 @@ import "./Loan.css";
 
 // icons
 import PostAddIcon from "@material-ui/icons/PostAdd";
-import HistoryIcon from "@material-ui/icons/History";
+
+import db from "../../../../config/firebase.js";
 
 export default function Loan() {
   const [addNewLoanModel, setAddNewLoanModel] = useState(false); // table model
   const [loanHistoryModel, setLoanHistoryModel] = useState(false); // table model
   const [updateLoanModel, setUpdateLoanModel] = useState(false); // table model
-
   // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
   // eslint-disable-next-line
   const [allData, setallData] = useState([]);
+  const [tableData, setTableData] = useState([]);
 
   const AddNewLoanModel = () => {
     setAddNewLoanModel(true);
@@ -104,29 +105,35 @@ export default function Loan() {
     },
   ];
 
-  const tableData = [
-    [
-      "Joe ",
-      "James",
-      "Test",
-      "Corp",
-      <div className="sttLon">onGoing</div>,
-      <div>
-        <HistoryIcon className="btnView" onClick={HistoryLoanModel} />
-        <span>
-          <Button
-            variant="contained"
-            color="primary"
-            size="small"
-            className="btnupdateLon"
-            onClick={UpdateLoanModel}
-          >
-            Update
-          </Button>
-        </span>
-      </div>,
-    ],
-  ];
+  useEffect(() => {
+    db.collection("loans")
+      .get()
+      .then((reSnap) => {});
+  }, []);
+
+  // const tableData = [
+  //   [
+  //     "Joe ",
+  //     "James",
+  //     "Test",
+  //     "Corp",
+  //     <div className="sttLon">onGoing</div>,
+  //     <div>
+  //       <HistoryIcon className="btnView" onClick={HistoryLoanModel} />
+  //       <span>
+  //         <Button
+  //           variant="contained"
+  //           color="primary"
+  //           size="small"
+  //           className="btnupdateLon"
+  //           onClick={UpdateLoanModel}
+  //         >
+  //           Update
+  //         </Button>
+  //       </span>
+  //     </div>,
+  //   ],
+  // ];
 
   return (
     <>

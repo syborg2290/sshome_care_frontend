@@ -14,6 +14,16 @@ import "./New_Loan_Model.css";
 import db from "../../../../../../config/firebase.js";
 import firebase from "firebase";
 
+async function loanStatus(docs) {
+  let status = false;
+  for (var i = 0; i < docs.length; i++) {
+    if (docs[i].data().status === "ongoing") {
+      status = true;
+    }
+  }
+  return status;
+}
+
 export default function New_Loan_Model() {
   const [fname, setFname] = useState("");
   const [lname, setLname] = useState("");
@@ -21,11 +31,54 @@ export default function New_Loan_Model() {
   const [amount, setAmount] = useState(0);
   const [salaryCut, setSalaryCut] = useState(0);
   const [date, setDate] = useState(null);
+  const [validation, setValidation] = useState("");
+  const [isLoading, setLoading] = useState(false);
 
   const makeLoan = () => {
-    db.collection("loan")
-      .add({})
-      .then((_) => {});
+    setLoading(true);
+    db.collection("loans")
+      .where("nic", "==", nic.trim())
+      .get()
+      .then((reD) => {
+        if (reD.docs.length > 0) {
+          let status = loanStatus(reD.docs);
+
+          if (!status) {
+            db.collection("loans")
+              .add({
+                fname: fname.trim(),
+                lname: lname.trim(),
+                nic: nic.trim(),
+                amount: amount === "" ? 0 : amount,
+                salary_cut: salaryCut === "" ? 0 : salaryCut,
+                date: date,
+                status: "ongoing",
+              })
+              .then((_) => {
+                setLoading(false);
+                window.location.reload();
+              });
+          } else {
+            setLoading(false);
+            setValidation("Already using loan service that not completed ! ");
+          }
+        } else {
+          db.collection("loans")
+            .add({
+              fname: fname.trim(),
+              lname: lname.trim(),
+              nic: nic.trim(),
+              amount: amount === "" ? 0 : amount,
+              salary_cut: salaryCut === "" ? 0 : salaryCut,
+              date: date,
+              status: "ongoing",
+            })
+            .then((_) => {
+              setLoading(false);
+              window.location.reload();
+            });
+        }
+      });
   };
 
   return (
@@ -168,7 +221,7 @@ export default function New_Loan_Model() {
             </Grid>
             <Grid item xs={12} sm={3}></Grid>
           </Grid>
-
+          <p className="validate_updateEmployee">{validation}</p>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={9}></Grid>
             <Grid item xs={12} sm={3}>
@@ -177,8 +230,19 @@ export default function New_Loan_Model() {
                 color="primary"
                 className="btn_update"
                 onClick={makeLoan}
+                disabled={
+                  date === null ||
+                  fname.length === 0 ||
+                  lname.length === 0 ||
+                  nic.length === 0 ||
+                  amount.length === 0 ||
+                  salaryCut.length === 0 ||
+                  isLoading
+                    ? true
+                    : false
+                }
               >
-                Done
+                {isLoading ? <Spin size="small" /> : "Done"}
               </Button>
             </Grid>
           </Grid>

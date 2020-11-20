@@ -25,6 +25,10 @@ export default function Add_Paysheet_Model() {
     const [advance, setAdvance] = useState("");
     const [loan, setLoan] = useState("");
     const [shortage, setShortage] = useState("");
+  const [saleTarget, setSaleTarget] = useState("");
+  const [cashTarget, setCashTarget] = useState("");
+  const [exCard, setExCard] = useState("");
+  const [cashSale, setCashSale] = useState("");
 
 
     return (
@@ -39,7 +43,7 @@ export default function Add_Paysheet_Model() {
                 <form className="form" noValidate>
          <Grid container spacing={2}>
           <Grid className="lbl_topi" item xs={12} sm={4}>
-             Basic Salary
+             Basic Salary(LKR)
           </Grid>
             <Grid item xs={12} sm={1}>
               :
@@ -53,6 +57,7 @@ export default function Add_Paysheet_Model() {
                 type="number"
                 label="Basic Salary"
                 size="small"
+                 InputProps={{ inputProps: { min: 0 } }}
                 value={basicSalary}
                 onChange={(e) => {
                   setBasicSalary(e.target.value);
@@ -60,7 +65,7 @@ export default function Add_Paysheet_Model() {
               />
              </Grid>
          <Grid className="lbl_topi" item xs={12} sm={4}>
-             Insentive
+             Insentive(LKR)
           </Grid>
             <Grid item xs={12} sm={1}>
               :
@@ -73,7 +78,8 @@ export default function Add_Paysheet_Model() {
                 fullWidth
                 type="number"
                 label="Insentive"
-                size="small"
+                  size="small"
+                   InputProps={{ inputProps: { min: 0 } }}
                 value={insentive}
                 onChange={(e) => {
                   setInsentive(e.target.value);
@@ -81,7 +87,7 @@ export default function Add_Paysheet_Model() {
               />
            </Grid>
            <Grid className="lbl_topi" item xs={12} sm={4}>
-            Phone Bill
+            Phone Bill(LKR)
           </Grid>
             <Grid item xs={12} sm={1}>
               :
@@ -94,7 +100,8 @@ export default function Add_Paysheet_Model() {
                 fullWidth
                 type="number"
                 label=" Phone Bill"
-                size="small"
+                  size="small"
+                   InputProps={{ inputProps: { min: 0 } }}
                 value={phoneBill}
                 onChange={(e) => {
                   setPhoneBill(e.target.value);
@@ -107,8 +114,9 @@ export default function Add_Paysheet_Model() {
             <Grid item xs={12} sm={1}>
               :
             </Grid>
-            <Grid item xs={12} sm={7}>
-              <TextField
+              <Grid item xs={12} sm={7}>
+                <p>27 days</p>
+              {/* <TextField
                 autoComplete="attn"
                 variant="outlined"
                 required
@@ -120,11 +128,11 @@ export default function Add_Paysheet_Model() {
                 onChange={(e) => {
                   setAttendance(e.target.value);
                 }}
-              />
+              /> */}
          </Grid>
                         
           <Grid className="lbl_topi" item xs={12} sm={4}>
-           EPF
+           EPF(LKR)
           </Grid>
             <Grid item xs={12} sm={1}>
               :
@@ -138,6 +146,7 @@ export default function Add_Paysheet_Model() {
                 type="number"
                 label="EPF"
                 size="small"
+                 InputProps={{ inputProps: { min: 0 } }}
                 value={epf}
                 onChange={(e) => {
                   setEPF(e.target.value);
@@ -145,7 +154,7 @@ export default function Add_Paysheet_Model() {
               />
            </Grid>
          <Grid className="lbl_topi" item xs={12} sm={4}>
-           Security Deposit
+           Security Deposit(LKR)
           </Grid>
             <Grid item xs={12} sm={1}>
               :
@@ -158,7 +167,8 @@ export default function Add_Paysheet_Model() {
                 fullWidth
                 type="number"
                 label="Security Deposit"
-                size="small"
+                  size="small"
+                   InputProps={{ inputProps: { min: 0 } }}
                 value={securityDeposit}
                 onChange={(e) => {
                   setSecurityDeposit(e.target.value);
@@ -166,7 +176,7 @@ export default function Add_Paysheet_Model() {
               />
               </Grid>
           <Grid className="lbl_topi" item xs={12} sm={4}>
-          Attendance duductions
+          Attendance deductions(LKR)
           </Grid>
             <Grid item xs={12} sm={1}>
               :
@@ -180,6 +190,7 @@ export default function Add_Paysheet_Model() {
                 type="number"
                 label="Security Deposit"
                 size="small"
+                 InputProps={{ inputProps: { min: 0 } }}
                 value={deduction}
                 onChange={(e) => {
                   setDeduction(e.target.value);
@@ -187,7 +198,7 @@ export default function Add_Paysheet_Model() {
               />
               </Grid>
         <Grid className="lbl_topi" item xs={12} sm={4}>
-           Advance
+           Salary Advance(LKR)
           </Grid>
             <Grid item xs={12} sm={1}>
               :
@@ -201,6 +212,7 @@ export default function Add_Paysheet_Model() {
                 type="number"
                 label="Advance"
                 size="small"
+                 InputProps={{ inputProps: { min: 0 } }}
                 value={advance}
                 onChange={(e) => {
                   setAdvance(e.target.value);
@@ -208,7 +220,7 @@ export default function Add_Paysheet_Model() {
               />
              </Grid>
             <Grid className="lbl_topi" item xs={12} sm={4}>
-           Loan
+           Loan(LKR)
           </Grid>
             <Grid item xs={12} sm={1}>
               :
@@ -222,6 +234,7 @@ export default function Add_Paysheet_Model() {
                 type="number"
                 label="Loan"
                 size="small"
+                 InputProps={{ inputProps: { min: 0 } }}
                 value={loan}
                 onChange={(e) => {
                   setLoan(e.target.value);
@@ -229,7 +242,7 @@ export default function Add_Paysheet_Model() {
               />
             </Grid>
              <Grid className="lbl_topi" item xs={12} sm={4}>
-           Shortage
+           Shortage(LKR)
           </Grid>
             <Grid item xs={12} sm={1}>
               :
@@ -243,13 +256,102 @@ export default function Add_Paysheet_Model() {
                 type="number"
                 label="Shortage"
                 size="small"
+                 InputProps={{ inputProps: { min: 0 } }}
                 value={shortage}
                 onChange={(e) => {
                   setShortage(e.target.value);
                 }}
               />
                 </Grid>
-                        
+          <Grid item xs={12} sm={12}><hr /></Grid>
+          <Grid className="lbl_topi" item xs={12} sm={4}>
+           Sale Target(LKR)
+          </Grid>
+            <Grid item xs={12} sm={1}>
+              :
+            </Grid>
+            <Grid item xs={12} sm={7}>
+              <TextField
+                autoComplete="sho"
+                variant="outlined"
+                required
+                fullWidth
+                type="number"
+                label="Sale Target"
+                size="small"
+                 InputProps={{ inputProps: { min: 0 } }}
+                value={saleTarget}
+                onChange={(e) => {
+                  setSaleTarget(e.target.value);
+                }}
+              />
+              </Grid>
+               <Grid className="lbl_topi" item xs={12} sm={4}>
+          Cash Target(LKR)
+          </Grid>
+            <Grid item xs={12} sm={1}>
+              :
+            </Grid>
+            <Grid item xs={12} sm={7}>
+              <TextField
+                autoComplete="trgtCASH"
+                variant="outlined"
+                required
+                fullWidth
+                type="number"
+                label=" Cash Target"
+                size="small"
+                 InputProps={{ inputProps: { min: 0 } }}
+                value={cashTarget}
+                onChange={(e) => {
+                  setCashTarget(e.target.value);
+                }}
+              />
+              </Grid>
+          <Grid className="lbl_topi" item xs={12} sm={4}>
+           Cash Sale(LKR)
+          </Grid>
+            <Grid item xs={12} sm={1}>
+              :
+            </Grid>
+            <Grid item xs={12} sm={7}>
+              <TextField
+                autoComplete="cashsle"
+                variant="outlined"
+                required
+                fullWidth
+                type="number"
+                label="Cash Sale"
+                  size="small"
+                   InputProps={{ inputProps: { min: 0 } }}
+                value={cashSale}
+                onChange={(e) => {
+                  setCashSale(e.target.value);
+                }}
+              />
+              </Grid>
+              <Grid className="lbl_topi" item xs={12} sm={4}>
+           EX Card(LKR)
+          </Grid>
+            <Grid item xs={12} sm={1}>
+              :
+            </Grid>
+            <Grid item xs={12} sm={7}>
+              <TextField
+                autoComplete="ex"
+                variant="outlined"
+                required
+                fullWidth
+                type="number"
+                label=" EX Card"
+                size="small"
+                InputProps={{ inputProps: { min: 0 } }}
+                value={exCard}
+                onChange={(e) => {
+                  setExCard(e.target.value);
+                }}
+              />
+                </Grid>
                     </Grid>
 
              <Grid container spacing={2}>

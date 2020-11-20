@@ -255,11 +255,7 @@ export default function Make_Invoice_table() {
             data={itemTableData}
             columns={columns}
             options={{
-              rowHover: true,
-              // selectableRows: true,
-              //  selectableRows: "multiple",
-                // selectableRows: "single",
-               
+              rowHover: true, 
               customToolbarSelect: () => {},
               filterType: "textField",
               download: false,

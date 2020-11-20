@@ -17,8 +17,6 @@ export default function New_Loan_Model() {
     const [lname, setLname] = useState("");
     const [nic, setNic] = useState("");
     const [amount, setAmount] = useState("");
-    const [duration, setDuration] = useState("");
-    const [deadline, setDeadline] = useState("");
     const [salaryCut, setSalaryCut] = useState("");
     const [date, setDate] = useState("");
 
@@ -91,7 +89,8 @@ export default function New_Loan_Model() {
                 variant="outlined"
                 required
                 fullWidth
-                label="NIC"
+                  label="NIC"
+                  type="number"
                 size="small"
                 value={nic}
                 onChange={(e) => {
@@ -113,7 +112,8 @@ export default function New_Loan_Model() {
                 variant="outlined"
                 required
                 fullWidth
-                label="Amount"
+                  label="Amount"
+                  type="number"
                 size="small"
                 value={amount}
                 onChange={(e) => {
@@ -122,61 +122,6 @@ export default function New_Loan_Model() {
               />
                 </Grid>
             <Grid item xs={12} sm={3}></Grid>
-             <Grid className="lbl_topi" item xs={12} sm={3}>
-            Date
-            </Grid>
-            <Grid item xs={12} sm={1}>
-              :
-            </Grid>
-            <Grid item xs={12} sm={5}>
-               <Space direction="vertical">
-                <DatePicker onChange={onChange} />
-              </Space>
-                </Grid>
-              <Grid item xs={12} sm={3}></Grid>
-            <Grid className="lbl_topi" item xs={12} sm={3}>
-            Duration
-            </Grid>
-            <Grid item xs={12} sm={1}>
-              :
-            </Grid>
-            <Grid item xs={12} sm={5}>
-              <TextField
-                autoComplete="duration"
-                variant="outlined"
-                required
-                fullWidth
-                label="Duration"
-                size="small"
-                value={duration}
-                onChange={(e) => {
-                  setDuration(e.target.value);
-                }}
-              />
-                </Grid>
-                 <Grid item xs={12} sm={3}></Grid>
-
-            <Grid className="lbl_topi" item xs={12} sm={3}>
-            Deadline 
-            </Grid>
-            <Grid item xs={12} sm={1}>
-              :
-            </Grid>
-            <Grid item xs={12} sm={5}>
-              <TextField
-                autoComplete="deadline"
-                variant="outlined"
-                required
-                fullWidth
-                label="Deadline"
-                size="small"
-                value={deadline}
-                onChange={(e) => {
-                  setDeadline(e.target.value);
-                }}
-              />
-          </Grid>
-          <Grid item xs={12} sm={3}></Grid>
           <Grid className="lbl_topi" item xs={12} sm={3}>
             Salary Cut 
             </Grid>
@@ -190,6 +135,7 @@ export default function New_Loan_Model() {
                 required
                 fullWidth
                 label="Salary Cut "
+                type="number"
                 size="small"
                 value={salaryCut}
                 onChange={(e) => {
@@ -197,6 +143,18 @@ export default function New_Loan_Model() {
                 }}
               />
             </Grid>
+              <Grid item xs={12} sm={3}></Grid>
+              <Grid className="lbl_topi" item xs={12} sm={3}>
+            Date
+            </Grid>
+            <Grid item xs={12} sm={1}>
+              :
+            </Grid>
+            <Grid item xs={12} sm={5}>
+               <Space direction="vertical">
+                <DatePicker onChange={onChange} />
+              </Space>
+                </Grid>
               <Grid item xs={12} sm={3}></Grid>
                     </Grid>
                     

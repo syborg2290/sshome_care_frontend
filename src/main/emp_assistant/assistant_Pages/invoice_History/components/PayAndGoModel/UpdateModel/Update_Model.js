@@ -71,6 +71,8 @@ export default function Update_Model({
   const [validation, setValidation] = useState("");
   const [validationDate, setValidationDate] = useState("");
 
+  const [shortage, setShortage] = useState("");
+  
   const { confirm } = Modal;
 
   let history = useHistory();
@@ -824,6 +826,28 @@ export default function Update_Model({
                 ) : (
                   <p>{Math.round(delayedDays)} days delayed !</p>
                 )}
+                </Grid>
+                
+              <Grid className="lbl_topi" item xs={12} sm={4}>
+               Shortage(LKR)
+              </Grid>
+              <Grid item xs={12} sm={2}>
+                :
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  type="number"
+                  autoComplete="delayed"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  label="Shortage"
+                  size="small"
+                  value={shortage}
+                   onChange={(e) => {
+                  setShortage(e.target.value);
+                }}
+                />
               </Grid>
 
               <Grid className="lbl_topi" item xs={12} sm={12}>

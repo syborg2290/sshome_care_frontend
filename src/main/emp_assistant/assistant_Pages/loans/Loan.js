@@ -156,7 +156,8 @@ export default function Loan() {
                 Update
               </Button>
               </span>
-            </div>],
+        </div>
+      ],
 
 ];
     

@@ -107,6 +107,7 @@ export default function Loan() {
 
   useEffect(() => {
     db.collection("loans")
+      .orderBy("date", "desc")
       .get()
       .then((reSnap) => {});
   }, []);

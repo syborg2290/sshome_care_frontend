@@ -8,19 +8,23 @@ import { useHistory } from "react-router-dom";
 import "./Salary.css";
 
 // icons
-import VisibilityIcon from "@material-ui/icons/Visibility";
-import EditIcon from "@material-ui/icons/Edit";
+import HistoryIcon from "@material-ui/icons/History";
 import AddIcon from "@material-ui/icons/Add";
 
 // components
 import AddPaysheet from "./components/paysheet_Model/Add_Paysheet_Model";
 import PayHistoryModel from "./components/pay_history_Model/Pay_History_Model";
+import SalaryAdvanceMdl from "./components/salary_Advance_Model/Salary_Advance";
+import CreateTargetModel from "./components/target_Model/Create_Target_Model";
 
 import db from "../../../../config/firebase.js";
 
 export default function Salary() {
   const [addPaysheetModel, setAddPaysheetModel] = useState(false); // table model
   const [payHistoryModel, setpayHistoryModel] = useState(false); // table model
+
+  const [salaryAdvanceModel, setSalaryAdvanceModel] = useState(false);
+  const [targetModel, setTargetModel] = useState(false);
 
   // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
@@ -33,8 +37,16 @@ export default function Salary() {
     setAddPaysheetModel(true);
   };
 
-  const PayHistoryModel = () => {
-    setAddPaysheetModel(true);
+  const PayHistoryModels = () => {
+    setpayHistoryModel(true);
+  };
+
+  const SalaryAdvanceModels = () => {
+    setSalaryAdvanceModel(true);
+  };
+
+  const TrgetModelCreate = () => {
+    setTargetModel(true);
   };
 
   const columns = [
@@ -67,6 +79,15 @@ export default function Salary() {
     },
     {
       name: "Mobile",
+      options: {
+        filter: false,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "Status",
       options: {
         filter: false,
         setCellHeaderProps: (value) => ({
@@ -108,12 +129,31 @@ export default function Salary() {
           LastName: each.data().lname,
           NIC: each.data().nic,
           Mobile: each.data().mobile1,
-
+          Status: <div className="sttsal">Paied</div>,
           Action: (
             <div>
-              <VisibilityIcon className="btnView" onClick={PayHistoryModel} />
+              <HistoryIcon className="btnView" onClick={PayHistoryModels} />
               <span>
-                <EditIcon className="btnEdit" onClick={AddPaysheetModel} />
+                <Button
+                  variant="contained"
+                  color="primary"
+                  size="small"
+                  className="btnupdateLon"
+                  onClick={SalaryAdvanceModels}
+                >
+                  Advance
+                </Button>
+              </span>
+              <span>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  size="small"
+                  className="btnupdateLon"
+                  onClick={AddPaysheetModel}
+                >
+                  Update
+                </Button>
               </span>
             </div>
           ),
@@ -153,7 +193,7 @@ export default function Salary() {
       <Modal
         visible={payHistoryModel}
         footer={null}
-        className="model_paysheet_add"
+        className="model_histrySal"
         onCancel={() => {
           setpayHistoryModel(false);
         }}
@@ -168,27 +208,60 @@ export default function Salary() {
       </Modal>
 
       {/* End History sheet Model  */}
+
+      {/*Start Salry Advance Model */}
+
+      <Modal
+        visible={salaryAdvanceModel}
+        footer={null}
+        className="model_salry_advance"
+        onCancel={() => {
+          setSalaryAdvanceModel(false);
+        }}
+      >
+        <div>
+          <div>
+            <div>
+              <SalaryAdvanceMdl />
+            </div>
+          </div>
+        </div>
+      </Modal>
+
+      {/* End  Salry Advance Model  */}
+
+      {/*Start TARGET Model */}
+
+      <Modal
+        visible={targetModel}
+        footer={null}
+        className="model_salry_target"
+        onCancel={() => {
+          setTargetModel(false);
+        }}
+      >
+        <div>
+          <div>
+            <div>
+              <CreateTargetModel />
+            </div>
+          </div>
+        </div>
+      </Modal>
+
+      {/* End TARGET Model  */}
+
       <Grid container spacing={4}>
-        <Grid item xs={7}></Grid>
+        <Grid item xs={10}></Grid>
         <Grid item xs={2}>
           <Button
             variant="contained"
             color="primary"
-            className="btn_loans"
+            className="btn_target"
             endIcon={<AddIcon />}
-            // onClick={showModalRepair}
+            onClick={TrgetModelCreate}
           >
-            Loans
-          </Button>
-        </Grid>
-        <Grid item xs={3}>
-          <Button
-            variant="contained"
-            className="btn_advance"
-            endIcon={<AddIcon />}
-            // onClick={showModalRepair}
-          >
-            Salary Advance
+            Target
           </Button>
         </Grid>
       </Grid>

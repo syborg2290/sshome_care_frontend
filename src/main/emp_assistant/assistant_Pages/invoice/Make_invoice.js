@@ -50,6 +50,7 @@ function Make_invoice() {
   const [itemNOI, setItemNOI] = useState(0);
   const [itemAPI, setItemAPI] = useState(0);
   const [balance, setBalance] = useState(0);
+  const [shortage, setShortage] = useState(0);
   const [dpayment, setDpayment] = useState(0);
   const [itemDiscount, setItemDiscount] = useState({});
   const [totalDiscount, setTotalDiscount] = useState(0);
@@ -497,6 +498,7 @@ function Make_invoice() {
                         deadlineTimestamp: deadlineTimestamp,
                         selectedType: selectedType,
                         discount: totalDiscount === "" ? 0 : totalDiscount,
+                        shortage: shortage === "" ? 0 : shortage,
                         total:
                           subTotalFunc() -
                           (totalDiscount === "" ? 0 : totalDiscount),
@@ -673,6 +675,7 @@ function Make_invoice() {
                         deadlineTimestamp: deadlineTimestamp,
                         selectedType: selectedType,
                         discount: totalDiscount === "" ? 0 : totalDiscount,
+                        shortage: shortage === "" ? 0 : shortage,
                         total:
                           subTotalFunc() -
                           (totalDiscount === "" ? 0 : totalDiscount),
@@ -847,6 +850,7 @@ function Make_invoice() {
                     deadlineTimestamp: deadlineTimestamp,
                     selectedType: selectedType,
                     discount: totalDiscount === "" ? 0 : totalDiscount,
+                    shortage: shortage === "" ? 0 : shortage,
                     total:
                       subTotalFunc() -
                       (totalDiscount === "" ? 0 : totalDiscount),
@@ -1017,6 +1021,7 @@ function Make_invoice() {
                     deadlineTimestamp: deadlineTimestamp,
                     selectedType: selectedType,
                     discount: totalDiscount === "" ? 0 : totalDiscount,
+                    shortage: shortage === "" ? 0 : shortage,
                     total:
                       subTotalFunc() -
                       (totalDiscount === "" ? 0 : totalDiscount),
@@ -1170,6 +1175,7 @@ function Make_invoice() {
         deadlineTimestamp: null,
         selectedType: selectedType,
         discount: totalDiscount === "" ? 0 : totalDiscount,
+        shortage: shortage === "" ? 0 : shortage,
         total: subTotalFunc() - (totalDiscount === "" ? 0 : totalDiscount),
         status_of_payandgo: "Done",
         // description: discription,
@@ -1573,6 +1579,25 @@ function Make_invoice() {
                             if (e.target.value !== "") {
                               setBalance(parseInt(e.target.value.trim()));
                             }
+                          }}
+                        />
+                      </Grid>
+                      <Grid className="noi" item xs={12} sm={2}></Grid>
+                      <Grid className="lbl_MI" item xs={12} sm={6}>
+                        Shortage(LKR):
+                      </Grid>
+                      <Grid className="lbl_MI" item xs={12} sm={4}>
+                        <TextField
+                          className="txt_dpayment"
+                          variant="outlined"
+                          size="small"
+                          label="Shortage"
+                          InputProps={{ inputProps: { min: 0 } }}
+                          type="number"
+                          fullWidth
+                          value={shortage}
+                          onChange={(e) => {
+                            setShortage(parseInt(e.target.value.trim()));
                           }}
                         />
                       </Grid>

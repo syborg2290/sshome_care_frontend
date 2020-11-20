@@ -13,6 +13,7 @@ export default function View_Employee({
   address1,
   address2,
   basic,
+  deposit,
 }) {
   return (
     <Row>
@@ -104,6 +105,15 @@ export default function View_Employee({
       </Col>
       <Col className="customer_sarani" span={14}>
         {basic}
+      </Col>
+      <Col className="customer_details_sarani" span={8}>
+       Security Deposit(LKR)
+      </Col>
+      <Col className="customer_sarani" span={2}>
+        :
+      </Col>
+      <Col className="customer_sarani" span={14}>
+        {deposit}
       </Col>
     </Row>
   );

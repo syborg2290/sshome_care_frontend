@@ -2,7 +2,7 @@
   margin-top: 30px !important;
 }
 
-.btn_loans {
+.btn_target {
   margin-top: 70px !important;
   text-transform: none !important;
 }
@@ -12,4 +12,19 @@
   background-color: rgba(3, 3, 99, 0.897) !important;
   text-transform: none !important;
   color: aliceblue !important;
+}
+
+.sttsal {
+  background-color: orrgb(11, 161, 6);
+  color: aliceblue;
+  border-radius: 6px;
+  width: 60% !important;
+  text-align: center;
+  padding-right: 6px !important;
+  padding-right: 8px !important;
+}
+
+.model_histrySal {
+  width: 92% !important;
+  margin-right: 25px !important;
 }

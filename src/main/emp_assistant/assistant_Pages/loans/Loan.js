@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 
-
 import { Modal } from "antd";
 import { Grid, Button } from "@material-ui/core";
 import MUIDataTable from "mui-datatables";
@@ -10,25 +9,22 @@ import NewLoan from "./components/new_loan_Model/New_Loan_Model";
 import LoanHistory from "./components/history_loan_Model/Loan_History_Model";
 import UpdateLoan from "./components/update_loan_Model/Update_Loan_Model";
 
-
 // styles
 import "./Loan.css";
 
 // icons
-import PostAddIcon from '@material-ui/icons/PostAdd';
+import PostAddIcon from "@material-ui/icons/PostAdd";
 import HistoryIcon from "@material-ui/icons/History";
 
 export default function Loan() {
-
   const [addNewLoanModel, setAddNewLoanModel] = useState(false); // table model
   const [loanHistoryModel, setLoanHistoryModel] = useState(false); // table model
   const [updateLoanModel, setUpdateLoanModel] = useState(false); // table model
 
-     // eslint-disable-next-line
+  // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
   // eslint-disable-next-line
   const [allData, setallData] = useState([]);
-
 
   const AddNewLoanModel = () => {
     setAddNewLoanModel(true);
@@ -42,8 +38,7 @@ export default function Loan() {
     setUpdateLoanModel(true);
   };
 
-
-     const columns = [
+  const columns = [
     {
       name: "FirstName",
       options: {
@@ -82,32 +77,6 @@ export default function Loan() {
     },
 
     {
-      name: "Duraion",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: {
-            fontSize: "15px",
-            color: "black",
-            fontWeight: "600",
-          },
-        }),
-      },
-         },
-      {
-      name: "Deadline",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: {
-            fontSize: "15px",
-            color: "black",
-            fontWeight: "600",
-          },
-        }),
-      },
-         },
-         {
       name: "Status",
       options: {
         filter: true,
@@ -119,8 +88,8 @@ export default function Loan() {
           },
         }),
       },
-         },
-              {
+    },
+    {
       name: "Action",
       options: {
         filter: true,
@@ -133,38 +102,35 @@ export default function Loan() {
         }),
       },
     },
-    
   ];
 
-    const tableData = [
-        ["Joe ", "James", "Test", "Corp", "Yon", "kers",
-            <div  className="sttLon">
-               onGoing
-           </div>,
-            <div>
-     <HistoryIcon className="btnView"
-         onClick={HistoryLoanModel}
-     />
-              <span>
-         <Button
-                variant="contained"
-                color="primary"
-                size="small"
-                className="btnupdateLon"
-                onClick={UpdateLoanModel}
-              >
-                Update
-              </Button>
-              </span>
-            </div>],
+  const tableData = [
+    [
+      "Joe ",
+      "James",
+      "Test",
+      "Corp",
+      <div className="sttLon">onGoing</div>,
+      <div>
+        <HistoryIcon className="btnView" onClick={HistoryLoanModel} />
+        <span>
+          <Button
+            variant="contained"
+            color="primary"
+            size="small"
+            className="btnupdateLon"
+            onClick={UpdateLoanModel}
+          >
+            Update
+          </Button>
+        </span>
+      </div>,
+    ],
+  ];
 
-];
-    
-    return (
-        <>
-
-
-     {/*Start Add New Loan Model */}
+  return (
+    <>
+      {/*Start Add New Loan Model */}
 
       <Modal
         visible={addNewLoanModel}
@@ -183,9 +149,9 @@ export default function Loan() {
         </div>
       </Modal>
 
-          {/* End Add New Loan Model  */}
+      {/* End Add New Loan Model  */}
 
-    {/*Start  Loan hitory Model */}
+      {/*Start  Loan hitory Model */}
 
       <Modal
         visible={loanHistoryModel}
@@ -204,9 +170,9 @@ export default function Loan() {
         </div>
       </Modal>
 
-        {/* End Loan hitory Model  */}
-        
-        {/*Start  Loan Update Model */}
+      {/* End Loan hitory Model  */}
+
+      {/*Start  Loan Update Model */}
 
       <Modal
         visible={updateLoanModel}
@@ -225,49 +191,46 @@ export default function Loan() {
         </div>
       </Modal>
 
-          {/* End Loan Update Model  */}
-        
+      {/* End Loan Update Model  */}
 
-
-        <Grid container spacing={4}>
-       <Grid item xs={10}></Grid>
+      <Grid container spacing={4}>
+        <Grid item xs={10}></Grid>
         <Grid item xs={2}>
-        <Button
-        variant="contained"
-        className="btn_loans"
-        endIcon={<PostAddIcon />}
-        onClick={AddNewLoanModel}
-      >
-        New Loans
-      </Button>
+          <Button
+            variant="contained"
+            className="btn_loans"
+            endIcon={<PostAddIcon />}
+            onClick={AddNewLoanModel}
+          >
+            New Loans
+          </Button>
         </Grid>
-
       </Grid>
-        <Grid container spacing={4}>
-            <Grid item xs={12}>
-                <MUIDataTable
-                    title={<span className="title_Span">Employees loan</span>}
-                    className="loans_table"
-                    sty
-                    data={tableData}
-                    columns={columns}
-                    options={{
-                        // selectableRows: false,
-                        selectableRows: "none",
-                        customToolbarSelect: () => { },
-                        onRowClick: (rowData, rowMeta) => {
-                            setCurrentIndx(rowMeta.dataIndex);
-                        },
-                        filterType: "textField",
-                        download: false,
-                        print: false,
-                        searchPlaceholder: "Search using any column names",
-                        elevation: 4,
-                        sort: true,
-                    }}
-                />
-            </Grid>
-            </Grid>
-            </>
-    );
+      <Grid container spacing={4}>
+        <Grid item xs={12}>
+          <MUIDataTable
+            title={<span className="title_Span">Employees loan</span>}
+            className="loans_table"
+            sty
+            data={tableData}
+            columns={columns}
+            options={{
+              // selectableRows: false,
+              selectableRows: "none",
+              customToolbarSelect: () => {},
+              onRowClick: (rowData, rowMeta) => {
+                setCurrentIndx(rowMeta.dataIndex);
+              },
+              filterType: "textField",
+              download: false,
+              print: false,
+              searchPlaceholder: "Search using any column names",
+              elevation: 4,
+              sort: true,
+            }}
+          />
+        </Grid>
+      </Grid>
+    </>
+  );
 }

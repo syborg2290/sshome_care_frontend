@@ -142,38 +142,40 @@ export default function Areas() {
         });
       });
 
-    db.collection("arrears").onSnapshot((onSnap) => {
-      var rawData = [];
-      var rawAllData = [];
-      onSnap.docs.forEach((eachRe) => {
-        rawAllData.push({
-          id: eachRe.id,
-          data: eachRe.data(),
-        });
+    db.collection("arrears")
+      .orderBy("Date", "desc")
+      .onSnapshot((onSnap) => {
+        var rawData = [];
+        var rawAllData = [];
+        onSnap.docs.forEach((eachRe) => {
+          rawAllData.push({
+            id: eachRe.id,
+            data: eachRe.data(),
+          });
 
-        rawData.push({
-          InvoiceNo: eachRe.data().invoice_number,
-          Type: eachRe.data().type,
-          MID: eachRe.data().mid,
-          NIC: eachRe.data().nic,
-          Delayed_Days: Math.round(eachRe.data().delayed_days),
-          Delayed_Charges: (
-            <CurrencyFormat
-              value={Math.round(eachRe.data().delayed_charges)}
-              displayType={"text"}
-              thousandSeparator={true}
-              prefix={" "}
-            />
-          ),
-          Date: moment(eachRe.data()?.date?.toDate()).format(
-            "dddd, MMMM Do YYYY"
-          ),
-          Action: <HistoryIcon onClick={showModalArresHistory} />,
+          rawData.push({
+            InvoiceNo: eachRe.data().invoice_number,
+            Type: eachRe.data().type,
+            MID: eachRe.data().mid,
+            NIC: eachRe.data().nic,
+            Delayed_Days: Math.round(eachRe.data().delayed_days),
+            Delayed_Charges: (
+              <CurrencyFormat
+                value={Math.round(eachRe.data().delayed_charges)}
+                displayType={"text"}
+                thousandSeparator={true}
+                prefix={" "}
+              />
+            ),
+            Date: moment(eachRe.data()?.date?.toDate()).format(
+              "dddd, MMMM Do YYYY"
+            ),
+            Action: <HistoryIcon onClick={showModalArresHistory} />,
+          });
         });
+        setArreasTableData(rawData);
+        setArreasAllData(rawAllData);
       });
-      setArreasTableData(rawData);
-      setArreasAllData(rawAllData);
-    });
 
     setIsLoading(false);
     // eslint-disable-next-line

@@ -1,0 +1,15 @@
+.salary_table {
+  margin-top: 30px !important;
+}
+
+.btn_loans {
+  margin-top: 70px !important;
+  text-transform: none !important;
+}
+
+.btn_advance {
+  margin-top: 70px !important;
+  background-color: rgba(3, 3, 99, 0.897) !important;
+  text-transform: none !important;
+  color: aliceblue !important;
+}

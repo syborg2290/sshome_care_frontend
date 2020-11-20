@@ -18,6 +18,7 @@ import {
   PlaylistAddCheck as PlaylistAddCheckIcon,
   MonetizationOnOutlined as MonetizationOnOutlinedIcon,
   ReceiptOutlined as ReceiptOutlinedIcon,
+  LocalAtm as LocalAtmIcon,
 } from "@material-ui/icons";
 
 import { useTheme } from "@material-ui/styles";
@@ -101,10 +102,16 @@ const structure = [
   },
 
   {
-    id: 16,
+    id: 27,
     label: "Gas",
     link: "/assistant/ui/gass",
     icon: <BatteryStdIcon className="icons" />,
+  },
+  {
+    id: 16,
+    label: "Loan",
+    link: "/assistant/ui/loan",
+    icon: <LocalAtmIcon className="icons" />,
   },
   {
     id: 17,

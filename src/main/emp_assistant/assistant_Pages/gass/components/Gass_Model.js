@@ -34,7 +34,8 @@ export default function Gass_Model() {
   const [total, setTotal] = useState(0);
   const [unit, setUnit] = useState(0);
   const [saveTimestamp, setTimestamp] = useState(null);
-  const [validation, setValidation] = useState("");
+  const [validation, setValidation] = useState(""); 
+  const [shortage, setShortage] = useState("");
 
   useEffect(() => {
     db.collection("gas")
@@ -293,9 +294,29 @@ export default function Gass_Model() {
                 </FormControl>
               </Space>
             </Grid>
-            <Grid className="txt_Labels" item xs={12} sm={4}></Grid>
+             <Grid item xs={12} sm={4}></Grid>
             <Grid className="txt_Labels" item xs={12} sm={3}>
-              Total(LKR)
+              Shortage:
+            </Grid>
+            <Grid  item xs={12} sm={5}>
+              <TextField
+                variant="outlined"
+                type="number"
+                InputProps={{ inputProps: { min: 0 } }}
+                fullWidth
+                label="Shortage"
+                autoComplete="shortage"
+                size="small"
+                // className="txt_qtyGas"
+                value={shortage}
+                onChange={(e) => {
+                  setShortage(e.target.value.trim());
+                }}
+              />
+            </Grid>
+             <Grid item xs={12} sm={4}></Grid>
+            <Grid className="txt_Labels" item xs={12} sm={3}>
+              Total(LKR):
             </Grid>
             <Grid item xs={12} sm={5}>
               <p className="lbl_tots">

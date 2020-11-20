@@ -23,6 +23,7 @@ export default function Add_Employee({ close_model }) {
   const [mobile1, setMobile1] = useState("");
   const [mobile2, setMobile2] = useState("");
   const [basic, setBasic] = useState("");
+  const [deposits, setDeposits] = useState("");
   // eslint-disable-next-line
   const [validation, setValidation] = useState("");
   // eslint-disable-next-line
@@ -257,7 +258,29 @@ export default function Add_Employee({ close_model }) {
                 }}
               />
             </Grid>
-            <Grid item xs={12} sm={5}></Grid>
+           
+             <Grid className="txt_Labels" item xs={12} sm={2}>
+              Security Deposits :
+            </Grid>
+            <Grid item xs={12} sm={3}>
+              <TextField
+                className="txtt_basic"
+                autoComplete="basic"
+                variant="outlined"
+                required
+                fullWidth
+                label="Security Deposits"
+                autoFocus
+                size="small"
+                InputProps={{ inputProps: { min: 0 } }}
+                type="number"
+                value={deposits}
+                onChange={(e) => {
+                  setDeposits(e.target.value.trim());
+                }}
+              />
+            </Grid>
+           
           </Grid>
           <p className="validate_Edit">{validation}</p>
           <Grid container spacing={2}>

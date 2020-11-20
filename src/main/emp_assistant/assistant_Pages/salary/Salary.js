@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 
-
 import { Modal } from "antd";
 import { Grid, Button } from "@material-ui/core";
 import MUIDataTable from "mui-datatables";
@@ -17,14 +16,12 @@ import AddIcon from "@material-ui/icons/Add";
 import AddPaysheet from "./components/paysheet_Model/Add_Paysheet_Model";
 import PayHistoryModel from "./components/pay_history_Model/Pay_History_Model";
 
-
 import db from "../../../../config/firebase.js";
 
 export default function Salary() {
-
   const [addPaysheetModel, setAddPaysheetModel] = useState(false); // table model
   const [payHistoryModel, setpayHistoryModel] = useState(false); // table model
-    
+
   // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
   const [tableData, setTableData] = useState([]);
@@ -32,12 +29,11 @@ export default function Salary() {
   const [allData, setallData] = useState([]);
   let history = useHistory();
 
-
   const AddPaysheetModel = () => {
     setAddPaysheetModel(true);
   };
 
-   const PayHistoryModel = () => {
+  const PayHistoryModel = () => {
     setAddPaysheetModel(true);
   };
 
@@ -95,10 +91,9 @@ export default function Salary() {
   ];
 
   useEffect(() => {
-
-    //  window.addEventListener("offline", function (e) {
-    //   history.push("/connection_lost");
-    // });
+    window.addEventListener("offline", function (e) {
+      history.push("/connection_lost");
+    });
 
     db.collection("employee").onSnapshot((snap) => {
       var raw = [];
@@ -116,7 +111,7 @@ export default function Salary() {
 
           Action: (
             <div>
-              <VisibilityIcon className="btnView"  onClick={PayHistoryModel}  />
+              <VisibilityIcon className="btnView" onClick={PayHistoryModel} />
               <span>
                 <EditIcon className="btnEdit" onClick={AddPaysheetModel} />
               </span>
@@ -127,13 +122,12 @@ export default function Salary() {
       setTableData(raw);
       setallData(rawAlldata);
     });
-      // eslint-disable-next-line
+    // eslint-disable-next-line
   }, []);
 
   return (
     <>
-  
-     {/*Start Add sheet Model */}
+      {/*Start Add sheet Model */}
 
       <Modal
         visible={addPaysheetModel}
@@ -152,9 +146,9 @@ export default function Salary() {
         </div>
       </Modal>
 
-          {/* End Add sheet Model  */}
+      {/* End Add sheet Model  */}
 
-        {/*Start History sheet Model */}
+      {/*Start History sheet Model */}
 
       <Modal
         visible={payHistoryModel}
@@ -173,35 +167,32 @@ export default function Salary() {
         </div>
       </Modal>
 
-          {/* End History sheet Model  */}
+      {/* End History sheet Model  */}
       <Grid container spacing={4}>
-         <Grid item xs={7}></Grid>
-      <Grid item xs={2}>
-      <Button
-        variant="contained"
-        color="primary"
-        className="btn_loans"
-        endIcon={<AddIcon />}
-        // onClick={showModalRepair}
-      >
+        <Grid item xs={7}></Grid>
+        <Grid item xs={2}>
+          <Button
+            variant="contained"
+            color="primary"
+            className="btn_loans"
+            endIcon={<AddIcon />}
+            // onClick={showModalRepair}
+          >
             Loans
-      </Button>
-          
+          </Button>
         </Grid>
         <Grid item xs={3}>
-        <Button
-        variant="contained"
-        
-        className="btn_advance"
-        endIcon={<AddIcon />}
-        // onClick={showModalRepair}
-      >
-          Salary Advance
-      </Button>
+          <Button
+            variant="contained"
+            className="btn_advance"
+            endIcon={<AddIcon />}
+            // onClick={showModalRepair}
+          >
+            Salary Advance
+          </Button>
         </Grid>
-
       </Grid>
-          
+
       <Grid container spacing={4}>
         <Grid item xs={12}>
           <MUIDataTable

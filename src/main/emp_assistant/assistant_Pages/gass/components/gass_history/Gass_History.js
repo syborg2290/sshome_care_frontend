@@ -97,7 +97,6 @@ export default function Gass_History() {
           data={tableData}
           columns={columns}
           options={{
-            // selectableRows: false,
              selectableRows: "none",
             customToolbarSelect: () => {},
             filterType: "textField",

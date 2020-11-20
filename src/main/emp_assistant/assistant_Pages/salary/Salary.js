@@ -275,7 +275,6 @@ export default function Salary() {
             data={tableData}
             columns={columns}
             options={{
-              // selectableRows: false,
               selectableRows: "none",
               customToolbarSelect: () => {},
               onRowClick: (rowData, rowMeta) => {

@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { TextField, Button } from "@material-ui/core";
 import { Spin } from "antd";
 
@@ -22,15 +22,15 @@ export default function Add_Employee({ close_model }) {
   const [addres2, setAddres2] = useState("");
   const [mobile1, setMobile1] = useState("");
   const [mobile2, setMobile2] = useState("");
-  const [basic, setBasic] = useState("");
-  const [deposits, setDeposits] = useState("");
+  const [basic, setBasic] = useState(0);
+  const [deposits, setDeposits] = useState(0);
   // eslint-disable-next-line
   const [validation, setValidation] = useState("");
   // eslint-disable-next-line
   const [isLoadingSubmit, setLoadingSubmit] = useState(false);
 
   let history = useHistory();
-  
+
   const submit = () => {
     setLoadingSubmit(true);
     var result = nicValidation(nic);
@@ -52,7 +52,9 @@ export default function Add_Employee({ close_model }) {
                 addres2: addres2.trim(),
                 mobile1: mobile1.trim(),
                 mobile2: mobile2.trim(),
-                basic: parseInt(basic.trim()),
+                basic: basic === "" ? 0 : parseInt(basic.trim()),
+                security_deposit:
+                  deposits === "" ? 0 : parseInt(deposits.trim()),
                 date: firebase.firestore.FieldValue.serverTimestamp(),
               })
               .then((_) => {
@@ -68,8 +70,7 @@ export default function Add_Employee({ close_model }) {
     }
   };
 
-    useEffect(() => {
-
+  useEffect(() => {
     window.addEventListener("offline", function (e) {
       history.push("/connection_lost");
     });
@@ -234,7 +235,6 @@ export default function Add_Employee({ close_model }) {
               />
             </Grid>
 
-           
             <Grid className="txt_Labels" item xs={12} sm={2}>
               Basic :
             </Grid>
@@ -258,8 +258,8 @@ export default function Add_Employee({ close_model }) {
                 }}
               />
             </Grid>
-           
-             <Grid className="txt_Labels" item xs={12} sm={2}>
+
+            <Grid className="txt_Labels" item xs={12} sm={2}>
               Security Deposits :
             </Grid>
             <Grid item xs={12} sm={3}>
@@ -280,7 +280,6 @@ export default function Add_Employee({ close_model }) {
                 }}
               />
             </Grid>
-           
           </Grid>
           <p className="validate_Edit">{validation}</p>
           <Grid container spacing={2}>

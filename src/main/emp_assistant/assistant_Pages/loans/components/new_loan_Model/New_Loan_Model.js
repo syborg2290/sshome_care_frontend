@@ -16,7 +16,7 @@ export default function New_Loan_Model() {
     const [fname, setFname] = useState("");
     const [lname, setLname] = useState("");
     const [nic, setNic] = useState("");
-    const [amount, setAmount] = useState("");
+    const [amount, setAmount] = useState(0);
     const [duration, setDuration] = useState("");
     const [deadline, setDeadline] = useState("");
     const [salaryCut, setSalaryCut] = useState("");

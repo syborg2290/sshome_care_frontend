@@ -34,8 +34,8 @@ export default function Gass_Model() {
   const [total, setTotal] = useState(0);
   const [unit, setUnit] = useState(0);
   const [saveTimestamp, setTimestamp] = useState(null);
-  const [validation, setValidation] = useState(""); 
-  const [shortage, setShortage] = useState("");
+  const [validation, setValidation] = useState("");
+  const [shortage, setShortage] = useState(0);
 
   useEffect(() => {
     db.collection("gas")
@@ -128,6 +128,7 @@ export default function Gass_Model() {
                     type: selectedType,
                     price: total,
                     qty: qty,
+                    shortage: shortage === "" ? 0 : shortage,
                   });
                   db.collection("gas")
                     .doc(reSe.docs[0].id)
@@ -165,8 +166,6 @@ export default function Gass_Model() {
       }
     }
   };
-
-
 
   return (
     <Container component="main" className="conctainefr_main">
@@ -255,11 +254,8 @@ export default function Gass_Model() {
                         firebase.firestore.Timestamp.fromDate(e.toDate())
                       );
                     } else {
-                      setTimestamp(
-                        null
-                      );
+                      setTimestamp(null);
                     }
-
                   }}
                 />
               </Space>
@@ -294,11 +290,11 @@ export default function Gass_Model() {
                 </FormControl>
               </Space>
             </Grid>
-             <Grid item xs={12} sm={4}></Grid>
+            <Grid item xs={12} sm={4}></Grid>
             <Grid className="txt_Labels" item xs={12} sm={3}>
               Shortage:
             </Grid>
-            <Grid  item xs={12} sm={5}>
+            <Grid item xs={12} sm={5}>
               <TextField
                 variant="outlined"
                 type="number"
@@ -310,11 +306,11 @@ export default function Gass_Model() {
                 // className="txt_qtyGas"
                 value={shortage}
                 onChange={(e) => {
-                  setShortage(e.target.value.trim());
+                  setShortage(parseInt(e.target.value.trim()));
                 }}
               />
             </Grid>
-             <Grid item xs={12} sm={4}></Grid>
+            <Grid item xs={12} sm={4}></Grid>
             <Grid className="txt_Labels" item xs={12} sm={3}>
               Total(LKR):
             </Grid>

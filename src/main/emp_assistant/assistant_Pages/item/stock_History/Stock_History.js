@@ -36,11 +36,10 @@ export default function Stock_History() {
   };
 
   useEffect(() => {
-    
-       window.addEventListener("offline", function (e) {
+    window.addEventListener("offline", function (e) {
       history.push("/connection_lost");
-       });
-    
+    });
+
     db.collection("item_history")
       .orderBy("timestamp", "desc")
       .onSnapshot((snapshot) => {

@@ -498,6 +498,7 @@ function Make_invoice() {
                         deadlineTimestamp: deadlineTimestamp,
                         selectedType: selectedType,
                         discount: totalDiscount === "" ? 0 : totalDiscount,
+                        shortage: shortage === "" ? 0 : shortage,
                         total:
                           subTotalFunc() -
                           (totalDiscount === "" ? 0 : totalDiscount),
@@ -674,6 +675,7 @@ function Make_invoice() {
                         deadlineTimestamp: deadlineTimestamp,
                         selectedType: selectedType,
                         discount: totalDiscount === "" ? 0 : totalDiscount,
+                        shortage: shortage === "" ? 0 : shortage,
                         total:
                           subTotalFunc() -
                           (totalDiscount === "" ? 0 : totalDiscount),
@@ -848,6 +850,7 @@ function Make_invoice() {
                     deadlineTimestamp: deadlineTimestamp,
                     selectedType: selectedType,
                     discount: totalDiscount === "" ? 0 : totalDiscount,
+                    shortage: shortage === "" ? 0 : shortage,
                     total:
                       subTotalFunc() -
                       (totalDiscount === "" ? 0 : totalDiscount),
@@ -1018,6 +1021,7 @@ function Make_invoice() {
                     deadlineTimestamp: deadlineTimestamp,
                     selectedType: selectedType,
                     discount: totalDiscount === "" ? 0 : totalDiscount,
+                    shortage: shortage === "" ? 0 : shortage,
                     total:
                       subTotalFunc() -
                       (totalDiscount === "" ? 0 : totalDiscount),
@@ -1171,6 +1175,7 @@ function Make_invoice() {
         deadlineTimestamp: null,
         selectedType: selectedType,
         discount: totalDiscount === "" ? 0 : totalDiscount,
+        shortage: shortage === "" ? 0 : shortage,
         total: subTotalFunc() - (totalDiscount === "" ? 0 : totalDiscount),
         status_of_payandgo: "Done",
         // description: discription,
@@ -1578,7 +1583,7 @@ function Make_invoice() {
                         />
                       </Grid>
                       <Grid className="noi" item xs={12} sm={2}></Grid>
-                       <Grid className="lbl_MI" item xs={12} sm={6}>
+                      <Grid className="lbl_MI" item xs={12} sm={6}>
                         Shortage(LKR):
                       </Grid>
                       <Grid className="lbl_MI" item xs={12} sm={4}>
@@ -1592,7 +1597,7 @@ function Make_invoice() {
                           fullWidth
                           value={shortage}
                           onChange={(e) => {
-                           setShortage(e.target.value.trim());
+                            setShortage(parseInt(e.target.value.trim()));
                           }}
                         />
                       </Grid>

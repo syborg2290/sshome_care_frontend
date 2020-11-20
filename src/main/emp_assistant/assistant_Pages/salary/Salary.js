@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 
-
 import { Modal } from "antd";
 import { Grid, Button } from "@material-ui/core";
 import MUIDataTable from "mui-datatables";
@@ -18,17 +17,15 @@ import PayHistoryModel from "./components/pay_history_Model/Pay_History_Model";
 import SalaryAdvanceMdl from "./components/salary_Advance_Model/Salary_Advance";
 import CreateTargetModel from "./components/target_Model/Create_Target_Model";
 
-
 import db from "../../../../config/firebase.js";
 
 export default function Salary() {
-
   const [addPaysheetModel, setAddPaysheetModel] = useState(false); // table model
   const [payHistoryModel, setpayHistoryModel] = useState(false); // table model
 
-    const [salaryAdvanceModel, setSalaryAdvanceModel] = useState(false); 
-    const [targetModel, setTargetModel] = useState(false); 
-    
+  const [salaryAdvanceModel, setSalaryAdvanceModel] = useState(false);
+  const [targetModel, setTargetModel] = useState(false);
+
   // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
   const [tableData, setTableData] = useState([]);
@@ -36,12 +33,11 @@ export default function Salary() {
   const [allData, setallData] = useState([]);
   let history = useHistory();
 
-
   const AddPaysheetModel = () => {
     setAddPaysheetModel(true);
   };
 
-   const PayHistoryModels = () => {
+  const PayHistoryModels = () => {
     setpayHistoryModel(true);
   };
 
@@ -90,7 +86,7 @@ export default function Salary() {
         }),
       },
     },
-       {
+    {
       name: "Status",
       options: {
         filter: false,
@@ -116,8 +112,7 @@ export default function Salary() {
   ];
 
   useEffect(() => {
-
-     window.addEventListener("offline", function (e) {
+    window.addEventListener("offline", function (e) {
       history.push("/connection_lost");
     });
 
@@ -134,50 +129,45 @@ export default function Salary() {
           LastName: each.data().lname,
           NIC: each.data().nic,
           Mobile: each.data().mobile1,
-          Status: (
-             <div  className="sttsal">
-               Paied
-           </div>
-          ),
+          Status: <div className="sttsal">Paied</div>,
           Action: (
             <div>
               <HistoryIcon className="btnView" onClick={PayHistoryModels} />
-               <span>
+              <span>
                 <Button
-                variant="contained"
-                color="primary"
-                size="small"
-                className="btnupdateLon"
-                onClick={SalaryAdvanceModels}
-              >
-                Advance
-              </Button>
+                  variant="contained"
+                  color="primary"
+                  size="small"
+                  className="btnupdateLon"
+                  onClick={SalaryAdvanceModels}
+                >
+                  Advance
+                </Button>
               </span>
-                <span>
+              <span>
                 <Button
-                variant="contained"
-                color="primary"
-                size="small"
-                className="btnupdateLon"
-                onClick={AddPaysheetModel}
-              >
-                Update
-              </Button>
+                  variant="contained"
+                  color="primary"
+                  size="small"
+                  className="btnupdateLon"
+                  onClick={AddPaysheetModel}
+                >
+                  Update
+                </Button>
               </span>
-              </div>
+            </div>
           ),
         });
       });
       setTableData(raw);
       setallData(rawAlldata);
     });
-      // eslint-disable-next-line
+    // eslint-disable-next-line
   }, []);
 
   return (
     <>
-  
-     {/*Start Add sheet Model */}
+      {/*Start Add sheet Model */}
 
       <Modal
         visible={addPaysheetModel}
@@ -196,9 +186,9 @@ export default function Salary() {
         </div>
       </Modal>
 
-          {/* End Add sheet Model  */}
+      {/* End Add sheet Model  */}
 
-        {/*Start History sheet Model */}
+      {/*Start History sheet Model */}
 
       <Modal
         visible={payHistoryModel}
@@ -217,10 +207,9 @@ export default function Salary() {
         </div>
       </Modal>
 
-          {/* End History sheet Model  */}
+      {/* End History sheet Model  */}
 
-
- {/*Start Salry Advance Model */}
+      {/*Start Salry Advance Model */}
 
       <Modal
         visible={salaryAdvanceModel}
@@ -239,9 +228,9 @@ export default function Salary() {
         </div>
       </Modal>
 
-          {/* End  Salry Advance Model  */}
+      {/* End  Salry Advance Model  */}
 
-       {/*Start TARGET Model */}
+      {/*Start TARGET Model */}
 
       <Modal
         visible={targetModel}
@@ -260,25 +249,23 @@ export default function Salary() {
         </div>
       </Modal>
 
-          {/* End TARGET Model  */}
+      {/* End TARGET Model  */}
 
-      
       <Grid container spacing={4}>
-      <Grid item xs={10}></Grid>
-      <Grid item xs={2}>
-      <Button
-        variant="contained"
-        color="primary"
-        className="btn_target"
-        endIcon={<AddIcon />}
-        onClick={TrgetModelCreate}
-      >
-         Target
-      </Button>
+        <Grid item xs={10}></Grid>
+        <Grid item xs={2}>
+          <Button
+            variant="contained"
+            color="primary"
+            className="btn_target"
+            endIcon={<AddIcon />}
+            onClick={TrgetModelCreate}
+          >
+            Target
+          </Button>
         </Grid>
-       
       </Grid>
-          
+
       <Grid container spacing={4}>
         <Grid item xs={12}>
           <MUIDataTable

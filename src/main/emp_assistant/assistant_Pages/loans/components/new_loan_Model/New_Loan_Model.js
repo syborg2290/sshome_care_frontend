@@ -8,41 +8,98 @@ import {
   Button,
 } from "@material-ui/core";
 
-
 // styles
 import "./New_Loan_Model.css";
 
-export default function New_Loan_Model() {
-    const [fname, setFname] = useState("");
-    const [lname, setLname] = useState("");
-    const [nic, setNic] = useState("");
-    const [amount, setAmount] = useState("");
-    const [salaryCut, setSalaryCut] = useState("");
-    const [date, setDate] = useState("");
+import db from "../../../../../../config/firebase.js";
+import firebase from "firebase";
 
-    const onChange = (date, dateString) => {
-    setDate(dateString);
+async function loanStatus(docs) {
+  let status = false;
+  for (var i = 0; i < docs.length; i++) {
+    if (docs[i].data().status === "ongoing") {
+      status = true;
+    }
+  }
+  return status;
+}
+
+export default function New_Loan_Model() {
+  const [fname, setFname] = useState("");
+  const [lname, setLname] = useState("");
+  const [nic, setNic] = useState("");
+  const [amount, setAmount] = useState(0);
+  const [salaryCut, setSalaryCut] = useState(0);
+  const [date, setDate] = useState(null);
+  const [validation, setValidation] = useState("");
+  const [isLoading, setLoading] = useState(false);
+
+  const makeLoan = () => {
+    setLoading(true);
+    db.collection("loans")
+      .where("nic", "==", nic.trim())
+      .get()
+      .then((reD) => {
+        if (reD.docs.length > 0) {
+          let status = loanStatus(reD.docs);
+
+          if (!status) {
+            db.collection("loans")
+              .add({
+                fname: fname.trim(),
+                lname: lname.trim(),
+                nic: nic.trim(),
+                amount: amount === "" ? 0 : amount,
+                salary_cut: salaryCut === "" ? 0 : salaryCut,
+                date: date,
+                status: "ongoing",
+              })
+              .then((_) => {
+                setLoading(false);
+                window.location.reload();
+              });
+          } else {
+            setLoading(false);
+            setValidation("Already using loan service that not completed ! ");
+          }
+        } else {
+          db.collection("loans")
+            .add({
+              fname: fname.trim(),
+              lname: lname.trim(),
+              nic: nic.trim(),
+              amount: amount === "" ? 0 : amount,
+              salary_cut: salaryCut === "" ? 0 : salaryCut,
+              date: date,
+              status: "ongoing",
+            })
+            .then((_) => {
+              setLoading(false);
+              window.location.reload();
+            });
+        }
+      });
   };
 
-    return (
-        <Container component="main" className="conctainefr_main">
-         <Typography className="titleffs" variant="h5" gutterBottom>
-            Make a New Loan
-        </Typography>
-         <Grid item xs={12} sm={12}>
+  return (
+    <Container component="main" className="conctainefr_main">
+      <Typography className="titleffs" variant="h5" gutterBottom>
+        Make a New Loan
+      </Typography>
+      <Grid item xs={12} sm={12}>
         <hr className="titl_hr" />
-        </Grid>
-        <div className="paper">
+      </Grid>
+      <div className="paper">
         <form className="form" noValidate>
-        <Grid container spacing={2}>
-        <Grid className="lbl_topi" item xs={12} sm={3}>
-         First Name
-        </Grid>
-        <Grid item xs={12} sm={1}>
-         :
-        </Grid>
-        <Grid item xs={12} sm={5}>
-          <TextField
+          <Grid container spacing={2}>
+            <Grid className="lbl_topi" item xs={12} sm={3}>
+              First Name
+            </Grid>
+            <Grid item xs={12} sm={1}>
+              :
+            </Grid>
+            <Grid item xs={12} sm={5}>
+              <TextField
                 autoComplete="fname"
                 variant="outlined"
                 required
@@ -54,15 +111,15 @@ export default function New_Loan_Model() {
                   setFname(e.target.value);
                 }}
               />
-              </Grid>
-          <Grid item xs={12} sm={3}></Grid>
-        <Grid className="lbl_topi" item xs={12} sm={3}>
-         Last Name
-        </Grid>
-        <Grid item xs={12} sm={1}>
-         :
-        </Grid>
-               <Grid item xs={12} sm={5}>
+            </Grid>
+            <Grid item xs={12} sm={3}></Grid>
+            <Grid className="lbl_topi" item xs={12} sm={3}>
+              Last Name
+            </Grid>
+            <Grid item xs={12} sm={1}>
+              :
+            </Grid>
+            <Grid item xs={12} sm={5}>
               <TextField
                 autoComplete="lname"
                 variant="outlined"
@@ -75,10 +132,10 @@ export default function New_Loan_Model() {
                   setLname(e.target.value);
                 }}
               />
-                </Grid>
+            </Grid>
             <Grid item xs={12} sm={3}></Grid>
             <Grid className="lbl_topi" item xs={12} sm={3}>
-            NIC
+              NIC
             </Grid>
             <Grid item xs={12} sm={1}>
               :
@@ -89,19 +146,20 @@ export default function New_Loan_Model() {
                 variant="outlined"
                 required
                 fullWidth
-                  label="NIC"
-                  type="number"
+                label="NIC"
                 size="small"
                 value={nic}
                 onChange={(e) => {
                   setNic(e.target.value);
                 }}
               />
-                </Grid>
+            </Grid>
             <Grid item xs={12} sm={3}></Grid>
-          <Grid item xs={12} sm={12}><hr /></Grid>
-        <Grid className="lbl_topi" item xs={12} sm={3}>
-            Amount
+            <Grid item xs={12} sm={12}>
+              <hr />
+            </Grid>
+            <Grid className="lbl_topi" item xs={12} sm={3}>
+              Amount
             </Grid>
             <Grid item xs={12} sm={1}>
               :
@@ -112,18 +170,19 @@ export default function New_Loan_Model() {
                 variant="outlined"
                 required
                 fullWidth
-                  label="Amount"
-                  type="number"
+                label="Amount"
+                type="number"
                 size="small"
                 value={amount}
+                InputProps={{ inputProps: { min: 0 } }}
                 onChange={(e) => {
-                  setAmount(e.target.value);
+                  setAmount(parseInt(e.target.value.trim()));
                 }}
               />
-                </Grid>
+            </Grid>
             <Grid item xs={12} sm={3}></Grid>
-          <Grid className="lbl_topi" item xs={12} sm={3}>
-            Salary Cut 
+            <Grid className="lbl_topi" item xs={12} sm={3}>
+              Salary Cut
             </Grid>
             <Grid item xs={12} sm={1}>
               :
@@ -138,46 +197,57 @@ export default function New_Loan_Model() {
                 type="number"
                 size="small"
                 value={salaryCut}
+                InputProps={{ inputProps: { min: 0 } }}
                 onChange={(e) => {
-                  setSalaryCut (e.target.value);
+                  setSalaryCut(parseInt(e.target.value.trim()));
                 }}
               />
             </Grid>
-              <Grid item xs={12} sm={3}></Grid>
-              <Grid className="lbl_topi" item xs={12} sm={3}>
-            Date
+            <Grid item xs={12} sm={3}></Grid>
+            <Grid className="lbl_topi" item xs={12} sm={3}>
+              Date
             </Grid>
             <Grid item xs={12} sm={1}>
               :
             </Grid>
             <Grid item xs={12} sm={5}>
-               <Space direction="vertical">
-                <DatePicker onChange={onChange} />
+              <Space direction="vertical">
+                <DatePicker
+                  onChange={(e) => {
+                    setDate(firebase.firestore.Timestamp.fromDate(e.toDate()));
+                  }}
+                />
               </Space>
-                </Grid>
-              <Grid item xs={12} sm={3}></Grid>
-                    </Grid>
-                    
-                      <Grid container spacing={2}>
+            </Grid>
+            <Grid item xs={12} sm={3}></Grid>
+          </Grid>
+          <p className="validate_updateEmployee">{validation}</p>
+          <Grid container spacing={2}>
             <Grid item xs={12} sm={9}></Grid>
             <Grid item xs={12} sm={3}>
               <Button
                 variant="contained"
                 color="primary"
                 className="btn_update"
-                // onClick={addLoan}
-               
+                onClick={makeLoan}
+                disabled={
+                  date === null ||
+                  fname.length === 0 ||
+                  lname.length === 0 ||
+                  nic.length === 0 ||
+                  amount.length === 0 ||
+                  salaryCut.length === 0 ||
+                  isLoading
+                    ? true
+                    : false
+                }
               >
-              Done
+                {isLoading ? <Spin size="small" /> : "Done"}
               </Button>
             </Grid>
           </Grid>
-
-            </form>
-            </div>
-
-           
-
-        </Container>
-    )
+        </form>
+      </div>
+    </Container>
+  );
 }

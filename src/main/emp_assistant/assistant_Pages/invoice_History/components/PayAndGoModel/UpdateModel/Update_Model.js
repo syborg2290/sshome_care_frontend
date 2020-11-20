@@ -71,8 +71,8 @@ export default function Update_Model({
   const [validation, setValidation] = useState("");
   const [validationDate, setValidationDate] = useState("");
 
-  const [shortage, setShortage] = useState("");
-  
+  const [shortage, setShortage] = useState(0);
+
   const { confirm } = Modal;
 
   let history = useHistory();
@@ -387,6 +387,7 @@ export default function Update_Model({
           isExpired: isEx,
           balance: balance <= 0 ? 0 : balance,
           gamisarani_amount: parseInt(gamisaraniamount),
+          shortage: shortage === "" ? 0 : shortage,
           date: updateTimestamp,
         });
       });
@@ -826,10 +827,10 @@ export default function Update_Model({
                 ) : (
                   <p>{Math.round(delayedDays)} days delayed !</p>
                 )}
-                </Grid>
-                
+              </Grid>
+
               <Grid className="lbl_topi" item xs={12} sm={4}>
-               Shortage(LKR)
+                Shortage(LKR)
               </Grid>
               <Grid item xs={12} sm={2}>
                 :
@@ -844,9 +845,10 @@ export default function Update_Model({
                   label="Shortage"
                   size="small"
                   value={shortage}
-                   onChange={(e) => {
-                  setShortage(e.target.value);
-                }}
+                  InputProps={{ inputProps: { min: 0 } }}
+                  onChange={(e) => {
+                    setShortage(parseInt(e.target.value.trim()));
+                  }}
                 />
               </Grid>
 

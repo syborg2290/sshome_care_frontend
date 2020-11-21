@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 
 import { Grid } from "@material-ui/core";
 import MUIDataTable from "mui-datatables";
-import { useHistory } from "react-router-dom";
 
 // styles
 import "./Target_History_Model.css";

@@ -65,6 +65,7 @@ function Make_invoice() {
   const [intialTimestamp, setInititialTimestamp] = useState(null);
   const [deadlineTimestamp, setDeadlineTimestamp] = useState(null);
   const [isFullPayment, setIsFullPayment] = useState(false);
+  const [documentCharges, setDocumentCharges] = useState(0);
   let history = useHistory();
   let history2 = useHistory();
   const { confirm } = Modal;
@@ -1607,6 +1608,28 @@ function Make_invoice() {
                                setShortage(parseInt(e.target.value.trim()));
                                }
                           }}
+                        />
+                      </Grid>
+                      <Grid className="noi" item xs={12} sm={2}></Grid>
+                       <Grid className="lbl_MI" item xs={12} sm={6}>
+                       Document Charges(LKR):
+                      </Grid>
+                      <Grid className="lbl_MI" item xs={12} sm={4}>
+                        <TextField
+                          type="number"
+                          autoComplete="delayed"
+                            variant="outlined"
+                            required
+                            fullWidth
+                            label=" Document Charges"
+                          size="small"
+                            value={documentCharges}
+                          InputProps={{ inputProps: { min: 0 } }}
+                       onChange={(e) => {
+                      if (e.target.value !== "") {
+                        setDocumentCharges(parseInt(e.target.value.trim()));
+                      }
+                  }}
                         />
                       </Grid>
                       <Grid className="noi" item xs={12} sm={2}></Grid>

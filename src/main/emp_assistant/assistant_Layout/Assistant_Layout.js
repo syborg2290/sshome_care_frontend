@@ -21,6 +21,7 @@ import GassRecipt from "../assistant_Pages/gass/components/Make_Recipt/Gass_Reci
 
 import AttendatHistory from "../assistant_Pages/attendance/components/attedance_History_Model/History_Attendance";
 import Advance from "../assistant_Pages/salary/components/salary_Advance_Model/Salary_Advance";
+import TemporarySalary from "../assistant_Pages/salary/components/temporary_Model/Temporary";
 
 
 // pages
@@ -103,6 +104,11 @@ function LayoutAssistant(props) {
              <Route
               path="/assistant/salary/advance"
               component={Advance}
+            />
+
+             <Route
+              path="/assistant/salary/Temporary"
+              component={TemporarySalary}
             />
 
           </Switch>

@@ -24,10 +24,14 @@ import db from "../../../../config/firebase.js";
 export default function Salary() {
   const [addPaysheetModel, setAddPaysheetModel] = useState(false); // table model
   const [payHistoryModel, setpayHistoryModel] = useState(false); // table model
-
+// eslint-disable-next-line
   const [salaryAdvanceModel, setSalaryAdvanceModel] = useState(false);
+  // eslint-disable-next-line
+  const [temporaryModel, setTemporaryModel] = useState(false);
+  
   const [targetModel, setTargetModel] = useState(false);
   const [targetHistoryModel, setTargetHistoryModel] = useState(false);
+ 
 
 
   // eslint-disable-next-line
@@ -48,6 +52,11 @@ export default function Salary() {
   const SalaryAdvanceModels = () => {
     setSalaryAdvanceModel(true);
      history.push("/assistant/salary/advance");
+  };
+
+    const SalaryTemporaryModel = () => {
+    setTemporaryModel(true);
+     history.push("/assistant/salary/Temporary");
   };
 
   const TrgetModelCreate = () => {
@@ -259,7 +268,7 @@ export default function Salary() {
             variant="contained"
             className="btn_tempary"
             endIcon={<AvTimerIcon />}
-            // onClick={AdvanceModelHistory}
+            onClick={SalaryTemporaryModel}
           >
            Temporary
           </Button>

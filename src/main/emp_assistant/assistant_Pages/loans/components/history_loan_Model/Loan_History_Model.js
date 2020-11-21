@@ -57,7 +57,7 @@ export default function Loan_History_Model({ docId }) {
               "dddd, MMMM Do YYYY"
             ),
             Amount: reE.data().amount,
-            Balance: reE.data().Balance,
+            Balance: reE.data().balance,
           });
         });
         setallData(rawData);

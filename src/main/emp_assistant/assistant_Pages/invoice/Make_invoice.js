@@ -505,6 +505,7 @@ function Make_invoice() {
                           (totalDiscount === "" ? 0 : totalDiscount),
                         status_of_payandgo: "onGoing",
                         date: intialTimestamp,
+                        document_charges: documentCharges,
                         nextDate: firebase.firestore.Timestamp.fromDate(times),
                       })
                       .then((invDoc) => {
@@ -682,6 +683,7 @@ function Make_invoice() {
                           (totalDiscount === "" ? 0 : totalDiscount),
                         status_of_payandgo: "onGoing",
                         date: intialTimestamp,
+                        document_charges: documentCharges,
                         nextDate: firebase.firestore.Timestamp.fromDate(times),
                       })
                       .then((invDoc) => {
@@ -857,6 +859,7 @@ function Make_invoice() {
                       (totalDiscount === "" ? 0 : totalDiscount),
                     status_of_payandgo: "onGoing",
                     date: intialTimestamp,
+                    document_charges: documentCharges,
                     nextDate: firebase.firestore.Timestamp.fromDate(times),
                   })
                   .then((invDoc) => {
@@ -1028,6 +1031,7 @@ function Make_invoice() {
                       (totalDiscount === "" ? 0 : totalDiscount),
                     status_of_payandgo: "onGoing",
                     date: intialTimestamp,
+                    document_charges: documentCharges,
                     nextDate: firebase.firestore.Timestamp.fromDate(times),
                   })
                   .then((invDoc) => {
@@ -1181,6 +1185,7 @@ function Make_invoice() {
         status_of_payandgo: "Done",
         // description: discription,
         date: intialTimestamp,
+        document_charges: documentCharges,
         nextDate: null,
       });
 
@@ -1604,32 +1609,34 @@ function Make_invoice() {
                           fullWidth
                           value={shortage}
                           onChange={(e) => {
-                             if (e.target.value !== ""){
-                               setShortage(parseInt(e.target.value.trim()));
-                               }
+                            if (e.target.value !== "") {
+                              setShortage(parseInt(e.target.value.trim()));
+                            }
                           }}
                         />
                       </Grid>
                       <Grid className="noi" item xs={12} sm={2}></Grid>
-                       <Grid className="lbl_MI" item xs={12} sm={6}>
-                       Document Charges(LKR):
+                      <Grid className="lbl_MI" item xs={12} sm={6}>
+                        Document Charges(LKR):
                       </Grid>
                       <Grid className="lbl_MI" item xs={12} sm={4}>
                         <TextField
                           type="number"
                           autoComplete="delayed"
-                            variant="outlined"
-                            required
-                            fullWidth
-                            label=" Document Charges"
+                          variant="outlined"
+                          required
+                          fullWidth
+                          label=" Document Charges"
                           size="small"
-                            value={documentCharges}
+                          value={documentCharges}
                           InputProps={{ inputProps: { min: 0 } }}
-                       onChange={(e) => {
-                      if (e.target.value !== "") {
-                        setDocumentCharges(parseInt(e.target.value.trim()));
-                      }
-                  }}
+                          onChange={(e) => {
+                            if (e.target.value !== "") {
+                              setDocumentCharges(
+                                parseInt(e.target.value.trim())
+                              );
+                            }
+                          }}
                         />
                       </Grid>
                       <Grid className="noi" item xs={12} sm={2}></Grid>

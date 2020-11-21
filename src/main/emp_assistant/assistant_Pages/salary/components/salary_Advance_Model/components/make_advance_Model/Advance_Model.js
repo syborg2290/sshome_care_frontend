@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import {  DatePicker, Space } from "antd";
+import React, { useState, useEffect } from "react";
+import { DatePicker, Space } from "antd";
 
 import {
   TextField,
@@ -11,26 +11,34 @@ import {
 
 // styles
 import "./Advance_Model.css";
+
+import db from "../../../../../../../../config/firebase.js";
 import firebase from "firebase";
 
 export default function Advance_Model() {
-    const [amount, setAmount] = useState("");
-    const [date, setDate] = useState(null);
-  
-    return (
-        <Container component="main" className="conctainefr_main">
-          <Typography className="titleffs" variant="h5" gutterBottom>
-               Salary Advance
-          </Typography>
-             <Grid item xs={12} sm={12}>
-            <hr className="titl_hr" />
+  const [amount, setAmount] = useState(0);
+  const [date, setDate] = useState(null);
+
+  useEffect(() => {
+    db.collection("employee").get();
+  }, []);
+
+  const makeAdvance = () => {};
+
+  return (
+    <Container component="main" className="conctainefr_main">
+      <Typography className="titleffs" variant="h5" gutterBottom>
+        Salary Advance
+      </Typography>
+      <Grid item xs={12} sm={12}>
+        <hr className="titl_hr" />
+      </Grid>
+      <div className="paper">
+        <form className="form" noValidate>
+          <Grid container spacing={2}>
+            <Grid className="lbl_topi" item xs={12} sm={4}>
+              Amount(LKR)
             </Grid>
-            <div className="paper">
-            <form className="form" noValidate>
-            <Grid container spacing={2}>
-               <Grid className="lbl_topi" item xs={12} sm={4}>
-           Amount(LKR)
-          </Grid>
             <Grid item xs={12} sm={1}>
               :
             </Grid>
@@ -43,33 +51,34 @@ export default function Advance_Model() {
                 type="number"
                 label="Target Amount"
                 size="small"
-                 InputProps={{ inputProps: { min: 0 } }}
+                InputProps={{ inputProps: { min: 0 } }}
                 value={amount}
-                  onChange={(e) => {
-                    if (e.target.value !== "") {
-                      setAmount(e.target.value);
-                    }
+                onChange={(e) => {
+                  if (e.target.value !== "") {
+                    setAmount(e.target.value);
+                  }
                 }}
               />
-              </Grid>
-          <Grid className="lbl_topi" item xs={12} sm={4}>
-          Balance(LKR)
-          </Grid>
-            <Grid item xs={12} sm={1}>
-              :
             </Grid>
-            <Grid item xs={12} sm={7}>
-             <p>1234.00</p>
-              </Grid>
             <Grid className="lbl_topi" item xs={12} sm={4}>
-             Date
-           </Grid>
+              Balance(LKR)
+            </Grid>
             <Grid item xs={12} sm={1}>
               :
             </Grid>
             <Grid item xs={12} sm={7}>
-             <Space direction="vertical">
-              <DatePicker   onChange={(e) => {
+              <p>1234.00</p>
+            </Grid>
+            <Grid className="lbl_topi" item xs={12} sm={4}>
+              Date
+            </Grid>
+            <Grid item xs={12} sm={1}>
+              :
+            </Grid>
+            <Grid item xs={12} sm={7}>
+              <Space direction="vertical">
+                <DatePicker
+                  onChange={(e) => {
                     if (e !== null) {
                       setDate(
                         firebase.firestore.Timestamp.fromDate(e.toDate())
@@ -77,28 +86,26 @@ export default function Advance_Model() {
                     } else {
                       setDate(null);
                     }
-                                }}
-                                />
-            </Space>
+                  }}
+                />
+              </Space>
             </Grid>
-        
-            </Grid>
-             <Grid container spacing={2}>
+          </Grid>
+          <Grid container spacing={2}>
             <Grid item xs={12} sm={9}></Grid>
             <Grid item xs={12} sm={3}>
               <Button
                 variant="contained"
                 color="primary"
                 className="btn_update"
-                // onClick={btnUpdate}
-               
+                onClick={makeAdvance}
               >
-              Done
+                Done
               </Button>
             </Grid>
           </Grid>
-                  </form>
-             </div>
-        </Container>
-    )
+        </form>
+      </div>
+    </Container>
+  );
 }

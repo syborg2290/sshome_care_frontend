@@ -14,12 +14,9 @@ import AdvanceHistory from "./components/advance_history_Model/Advance_History";
 // icons
 import HistoryIcon from "@material-ui/icons/History";
 
-
-
 import db from "../../../../../../config/firebase.js";
 
 export default function Salary_Advance() {
-  
   const [salaryAdvanceModel, setSalaryAdvanceModel] = useState(false);
   const [advanceHistoryModel, setAdvanceHistoryModel] = useState(false);
 
@@ -38,7 +35,7 @@ export default function Salary_Advance() {
     setAdvanceHistoryModel(true);
   };
 
-    const columns = [
+  const columns = [
     {
       name: "FirstName",
       options: {
@@ -110,9 +107,7 @@ export default function Salary_Advance() {
           Mobile: each.data().mobile1,
           Action: (
             <div>
-              <HistoryIcon className="btnView"
-                onClick={AdvanceHistoryModel}
-              />
+              <HistoryIcon className="btnView" onClick={AdvanceHistoryModel} />
               <span>
                 <Button
                   variant="contained"
@@ -134,9 +129,8 @@ export default function Salary_Advance() {
     // eslint-disable-next-line
   }, []);
   return (
-      <>
-
-       {/*Start Salary Advance Model */}
+    <>
+      {/*Start Salary Advance Model */}
 
       <Modal
         visible={salaryAdvanceModel}
@@ -149,14 +143,19 @@ export default function Salary_Advance() {
         <div>
           <div>
             <div>
-              <AdvanceModel />
+              <AdvanceModel
+                key={allData[currentIndx]?.id}
+                docId={allData[currentIndx]?.id}
+                nic={allData[currentIndx]?.data.nic}
+                fname={allData[currentIndx]?.data.fname}
+                lname={allData[currentIndx]?.data.lname}
+              />
             </div>
           </div>
         </div>
       </Modal>
 
       {/* End Salary Advance Model  */}
-
 
       {/*Start Salary Advance HISTORY Model */}
 
@@ -179,8 +178,7 @@ export default function Salary_Advance() {
 
       {/* End Salary Advance HISTORY Model  */}
 
-      
-       <Grid container spacing={4}>
+      <Grid container spacing={4}>
         <Grid item xs={12}>
           <MUIDataTable
             title={<span className="title_Span">Employees Salary Advance</span>}
@@ -204,7 +202,6 @@ export default function Salary_Advance() {
           />
         </Grid>
       </Grid>
-      </>
-    );
+    </>
+  );
 }
-

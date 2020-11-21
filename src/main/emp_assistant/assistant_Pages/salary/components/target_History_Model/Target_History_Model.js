@@ -2,9 +2,12 @@ import React, { useState, useEffect } from "react";
 
 import { Grid } from "@material-ui/core";
 import MUIDataTable from "mui-datatables";
+import moment from "moment";
 
 // styles
 import "./Target_History_Model.css";
+
+import db from "../../../../../../config/firebase.js";
 
 export default function Target_History_Model() {
   // eslint-disable-next-line
@@ -60,9 +63,27 @@ export default function Target_History_Model() {
     },
   ];
 
-  const tableData = [["Test", "Corp", "Yon", "kers", "kers"]];
-
-  useEffect(() => {}, []);
+  useEffect(() => {
+    db.collection("targets")
+      .get()
+      .then((reThen) => {
+        var rawData = [];
+        reThen.docs.forEach((each) => {
+          rawData.push({
+            Target_Amount: each.data().amount,
+            Target_Type: each.data().target_type,
+            Start_Date: moment(each.data()?.start_date?.toDate()).format(
+              "dddd, MMMM Do YYYY"
+            ),
+            End_Date: moment(each.data()?.endDate?.toDate()).format(
+              "dddd, MMMM Do YYYY"
+            ),
+            Type: each.data().selectedType,
+          });
+        });
+        setallData(rawData);
+      });
+  }, []);
 
   return (
     <Grid container spacing={4}>
@@ -71,7 +92,7 @@ export default function Target_History_Model() {
           title={<span className="title_Span">Target History</span>}
           className="Target_History"
           sty
-          data={tableData}
+          data={allData}
           columns={columns}
           options={{
             // selectableRows: false,

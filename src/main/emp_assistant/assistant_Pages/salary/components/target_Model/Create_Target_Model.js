@@ -38,7 +38,7 @@ export default function Create_Target_Model() {
     }
   };
 
-  const getAllCashTargetAmount = () => {
+  const getAllSaleTargetAmount = () => {
     let daysCount = daysCountOfMonth(
       new Date().getMonth(),
       new Date().getFullYear()
@@ -63,8 +63,8 @@ export default function Create_Target_Model() {
                   .doc(eachItem.item_id)
                   .get()
                   .then((reItem) => {
-                    setCashAmount(
-                      parseInt(cash_taregt_amount) +
+                    setSaleAmount(
+                      parseInt(sale_taregt_amount) +
                         parseInt(reItem.data()?.cashPrice)
                     );
                   });
@@ -75,7 +75,7 @@ export default function Create_Target_Model() {
       });
   };
 
-  const getAllSaleTargetAmount = () => {
+  const getAllCashTargetAmount = () => {
     let daysCount = daysCountOfMonth(
       new Date().getMonth(),
       new Date().getFullYear()
@@ -98,7 +98,7 @@ export default function Create_Target_Model() {
                   new Date(reEa.data()?.date.seconds * 1000).toDateString()
                 ) <= new Date(new Date().toDateString())
               ) {
-                setSaleAmount(sale_taregt_amount + reEa.data()?.downpayment);
+                setCashAmount(cash_taregt_amount + reEa.data()?.downpayment);
               }
             }
           }
@@ -119,7 +119,7 @@ export default function Create_Target_Model() {
                 new Date(reEa.data()?.date.seconds * 1000).toDateString()
               ) <= new Date(new Date().toDateString())
             ) {
-              setSaleAmount(sale_taregt_amount + reEa.data()?.amount);
+              setCashAmount(cash_taregt_amount + reEa.data()?.amount);
             }
           }
         });
@@ -161,7 +161,7 @@ export default function Create_Target_Model() {
                   new Date(reEa.data()?.date.seconds * 1000).toDateString()
                 ) <= new Date(new Date().toDateString())
               ) {
-                setSaleAmount(sale_taregt_amount + reEa.data()?.downpayment);
+                setCashAmount(cash_taregt_amount + reEa.data()?.downpayment);
               }
             }
           }
@@ -208,8 +208,8 @@ export default function Create_Target_Model() {
                   .doc(eachItem.item_id)
                   .get()
                   .then((reItem) => {
-                    setCashAmount(
-                      parseInt(cash_taregt_amount) +
+                    setSaleAmount(
+                      parseInt(sale_taregt_amount) +
                         parseInt(reItem.data()?.cashPrice)
                     );
                   });

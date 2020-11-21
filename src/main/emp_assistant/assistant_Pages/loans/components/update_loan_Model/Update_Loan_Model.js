@@ -91,7 +91,9 @@ export default function Update_Loan_Model({ docId, balance, amountSe }) {
                 type="number"
                 InputProps={{ inputProps: { min: 0 } }}
                 onChange={(e) => {
-                  setAmount(parseInt(e.target.value.trim()));
+                  if (e.target.value !== "") {
+                    setAmount(parseInt(e.target.value.trim()));
+                  }
                 }}
               />
             </Grid>

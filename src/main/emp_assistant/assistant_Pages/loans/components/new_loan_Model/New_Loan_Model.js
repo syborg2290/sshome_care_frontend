@@ -178,7 +178,9 @@ export default function New_Loan_Model() {
                 value={amount}
                 InputProps={{ inputProps: { min: 0 } }}
                 onChange={(e) => {
-                  setAmount(parseInt(e.target.value.trim()));
+                  if (e.target.value !== "") {
+                    setAmount(parseInt(e.target.value.trim()));
+                  }
                 }}
               />
             </Grid>
@@ -201,7 +203,9 @@ export default function New_Loan_Model() {
                 value={salaryCut}
                 InputProps={{ inputProps: { min: 0 } }}
                 onChange={(e) => {
-                  setSalaryCut(parseInt(e.target.value.trim()));
+                  if (e.target.value !== "") {
+                    setSalaryCut(parseInt(e.target.value.trim()));
+                  }
                 }}
               />
             </Grid>

@@ -254,7 +254,9 @@ export default function Add_Employee({ close_model }) {
                 type="number"
                 value={basic}
                 onChange={(e) => {
-                  setBasic(e.target.value.trim());
+                  if (e.target.value !== "") {
+                    setBasic(e.target.value.trim());
+                  }
                 }}
               />
             </Grid>
@@ -276,7 +278,9 @@ export default function Add_Employee({ close_model }) {
                 type="number"
                 value={deposits}
                 onChange={(e) => {
-                  setDeposits(e.target.value.trim());
+                  if (e.target.value !== "") {
+                    setDeposits(e.target.value.trim());
+                  }
                 }}
               />
             </Grid>

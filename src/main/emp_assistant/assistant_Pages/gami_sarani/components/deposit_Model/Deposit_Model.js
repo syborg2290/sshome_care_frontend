@@ -188,7 +188,9 @@ export default function Deposit_Model({ midProp, nicProp, close_model }) {
                 InputProps={{ inputProps: { min: 1 } }}
                 value={deposit}
                 onChange={(e) => {
-                  setDeposit(e.target.value.trim());
+                  if (e.target.value !== "") {
+                    setDeposit(e.target.value.trim());
+                  }
                 }}
               />
             </Grid>

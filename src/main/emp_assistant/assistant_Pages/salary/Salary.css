@@ -12,6 +12,7 @@
   text-transform: none !important;
   background-color: rgba(3, 3, 99, 0.897) !important;
   color: aliceblue !important;
+  float: right !important;
 }
 
 .btn_advance {
@@ -19,6 +20,21 @@
   background-color: rgba(3, 3, 99, 0.897) !important;
   text-transform: none !important;
   color: aliceblue !important;
+}
+
+.btn_tempary {
+  margin-top: 70px !important;
+  background-color: rgba(54, 54, 161, 0.911) !important;
+  text-transform: none !important;
+  color: aliceblue !important;
+}
+
+.btn_advancetHis {
+  margin-top: 70px !important;
+  text-transform: none !important;
+  background-color: rgba(3, 170, 182, 0.979) !important;
+  color: aliceblue !important;
+  float: right !important;
 }
 
 .sttsal {
@@ -36,4 +52,8 @@
 
 .model_salry_targetHistry {
   width: 70% !important;
+}
+
+.model_salry_advanceHis {
+  width: 63% !important;
 }

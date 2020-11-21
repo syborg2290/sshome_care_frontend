@@ -10,13 +10,14 @@ import "./Salary.css";
 // icons
 import HistoryIcon from "@material-ui/icons/History";
 import AddIcon from "@material-ui/icons/Add";
+import AvTimerIcon from '@material-ui/icons/AvTimer';
 
 // components
 import AddPaysheet from "./components/paysheet_Model/Add_Paysheet_Model";
 import PayHistoryModel from "./components/pay_history_Model/Pay_History_Model";
-import SalaryAdvanceMdl from "./components/salary_Advance_Model/Salary_Advance";
 import CreateTargetModel from "./components/target_Model/Create_Target_Model";
 import TargetHistoryModel from "./components/target_History_Model/Target_History_Model";
+
 
 import db from "../../../../config/firebase.js";
 
@@ -27,6 +28,7 @@ export default function Salary() {
   const [salaryAdvanceModel, setSalaryAdvanceModel] = useState(false);
   const [targetModel, setTargetModel] = useState(false);
   const [targetHistoryModel, setTargetHistoryModel] = useState(false);
+
 
   // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
@@ -45,6 +47,7 @@ export default function Salary() {
 
   const SalaryAdvanceModels = () => {
     setSalaryAdvanceModel(true);
+     history.push("/assistant/salary/advance");
   };
 
   const TrgetModelCreate = () => {
@@ -54,6 +57,7 @@ export default function Salary() {
   const TrgetModelHistory = () => {
     setTargetHistoryModel(true);
   };
+
 
   const columns = [
     {
@@ -145,17 +149,6 @@ export default function Salary() {
                   color="primary"
                   size="small"
                   className="btnupdateLon"
-                  onClick={SalaryAdvanceModels}
-                >
-                  Advance
-                </Button>
-              </span>
-              <span>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  size="small"
-                  className="btnupdateLon"
                   onClick={AddPaysheetModel}
                 >
                   Pay Sheet
@@ -183,9 +176,9 @@ export default function Salary() {
           setAddPaysheetModel(false);
         }}
       >
-        <div className="table__paysheet_add">
-          <div className="model__paysheet_Main_add">
-            <div className="model_paysheet_Detail_add">
+        <div>
+          <div>
+            <div>
               <AddPaysheet />
             </div>
           </div>
@@ -215,28 +208,7 @@ export default function Salary() {
 
       {/* End History sheet Model  */}
 
-      {/*Start Salry Advance Model */}
-
-      <Modal
-        visible={salaryAdvanceModel}
-        footer={null}
-        className="model_salry_advance"
-        onCancel={() => {
-          setSalaryAdvanceModel(false);
-        }}
-      >
-        <div>
-          <div>
-            <div>
-              <SalaryAdvanceMdl />
-            </div>
-          </div>
-        </div>
-      </Modal>
-
-      {/* End  Salry Advance Model  */}
-
-
+    
      {/*Start TARGET HISTORY Model */}
 
       <Modal
@@ -281,8 +253,28 @@ export default function Salary() {
       {/* End TARGET Model  */}
 
       <Grid container spacing={4}>
-        <Grid item xs={7}></Grid>
-        <Grid item xs={3}>
+        <Grid item xs={3}></Grid>
+        <Grid item xs={2}>
+          <Button
+            variant="contained"
+            className="btn_tempary"
+            endIcon={<AvTimerIcon />}
+            // onClick={AdvanceModelHistory}
+          >
+           Tempary
+          </Button>
+        </Grid>
+          <Grid item xs={3}>
+          <Button
+            variant="contained"
+            className="btn_tempary"
+            // endIcon={<AvTimerIcon />}
+            onClick={SalaryAdvanceModels}
+          >
+            Salary Advance
+          </Button>
+        </Grid>
+        <Grid item xs={2}>
           <Button
             variant="contained"
             className="btn_targetHis"

@@ -73,6 +73,7 @@ export default function Update_Model({
   const [validationDate, setValidationDate] = useState("");
 
   const [shortage, setShortage] = useState(0);
+  const [documentCharges, setDocumentCharges] = useState(0);
 
   const { confirm } = Modal;
 
@@ -851,6 +852,30 @@ export default function Update_Model({
                     onChange={(e) => {
                       if (e.target.value !== "") {
                         setShortage(parseInt(e.target.value.trim()));
+                      }
+                  }}
+                />
+              </Grid>
+                <Grid className="lbl_topi" item xs={12} sm={4}>
+              Document Charges(LKR)
+              </Grid>
+              <Grid item xs={12} sm={2}>
+                :
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  type="number"
+                  autoComplete="delayed"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  label=" Document Charges"
+                  size="small"
+                  value={documentCharges}
+                  InputProps={{ inputProps: { min: 0 } }}
+                    onChange={(e) => {
+                      if (e.target.value !== "") {
+                        setDocumentCharges(parseInt(e.target.value.trim()));
                       }
                   }}
                 />

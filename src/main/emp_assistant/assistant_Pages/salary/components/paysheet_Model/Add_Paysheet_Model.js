@@ -60,7 +60,9 @@ export default function Add_Paysheet_Model() {
                  InputProps={{ inputProps: { min: 0 } }}
                 value={basicSalary}
                 onChange={(e) => {
-                  setBasicSalary(e.target.value);
+                  if (e.target.value !== "") {
+                    setBasicSalary(e.target.value);
+                  }
                 }}
               />
              </Grid>
@@ -81,8 +83,10 @@ export default function Add_Paysheet_Model() {
                   size="small"
                    InputProps={{ inputProps: { min: 0 } }}
                 value={insentive}
-                onChange={(e) => {
-                  setInsentive(e.target.value);
+                  onChange={(e) => {
+                    if (e.target.value !== "") {
+                      setInsentive(e.target.value);
+                    }
                 }}
               />
            </Grid>
@@ -103,8 +107,10 @@ export default function Add_Paysheet_Model() {
                   size="small"
                    InputProps={{ inputProps: { min: 0 } }}
                 value={phoneBill}
-                onChange={(e) => {
-                  setPhoneBill(e.target.value);
+                  onChange={(e) => {
+                    if (e.target.value !== "") {
+                      setPhoneBill(e.target.value);
+                    }
                 }}
               />
          </Grid>
@@ -148,8 +154,10 @@ export default function Add_Paysheet_Model() {
                 size="small"
                  InputProps={{ inputProps: { min: 0 } }}
                 value={epf}
-                onChange={(e) => {
-                  setEPF(e.target.value);
+                  onChange={(e) => {
+                    if (e.target.value !== "") {
+                      setEPF(e.target.value);
+                    }
                 }}
               />
            </Grid>
@@ -170,8 +178,10 @@ export default function Add_Paysheet_Model() {
                   size="small"
                    InputProps={{ inputProps: { min: 0 } }}
                 value={securityDeposit}
-                onChange={(e) => {
-                  setSecurityDeposit(e.target.value);
+                  onChange={(e) => {
+                    if (e.target.value !== "") {
+                      setSecurityDeposit(e.target.value);
+                    }
                 }}
               />
               </Grid>
@@ -192,8 +202,10 @@ export default function Add_Paysheet_Model() {
                 size="small"
                  InputProps={{ inputProps: { min: 0 } }}
                 value={deduction}
-                onChange={(e) => {
-                  setDeduction(e.target.value);
+                  onChange={(e) => {
+                    if (e.target.value !== "") {
+                      setDeduction(e.target.value);
+                    }
                 }}
               />
               </Grid>
@@ -214,8 +226,10 @@ export default function Add_Paysheet_Model() {
                 size="small"
                  InputProps={{ inputProps: { min: 0 } }}
                 value={advance}
-                onChange={(e) => {
-                  setAdvance(e.target.value);
+                  onChange={(e) => {
+                    if (e.target.value !== "") {
+                      setAdvance(e.target.value);
+                    }
                 }}
               />
              </Grid>
@@ -236,8 +250,10 @@ export default function Add_Paysheet_Model() {
                 size="small"
                  InputProps={{ inputProps: { min: 0 } }}
                 value={loan}
-                onChange={(e) => {
-                  setLoan(e.target.value);
+                  onChange={(e) => {
+                    if (e.target.value !== "") {
+                      setLoan(e.target.value);
+                    }
                 }}
               />
             </Grid>
@@ -258,8 +274,10 @@ export default function Add_Paysheet_Model() {
                 size="small"
                  InputProps={{ inputProps: { min: 0 } }}
                 value={shortage}
-                onChange={(e) => {
-                  setShortage(e.target.value);
+                  onChange={(e) => {
+                    if (e.target.value !== "") {
+                      setShortage(e.target.value);
+                    }
                 }}
               />
                 </Grid>
@@ -281,8 +299,10 @@ export default function Add_Paysheet_Model() {
                 size="small"
                  InputProps={{ inputProps: { min: 0 } }}
                 value={saleTarget}
-                onChange={(e) => {
-                  setSaleTarget(e.target.value);
+                  onChange={(e) => {
+                    if (e.target.value !== "") {
+                      setSaleTarget(e.target.value);
+                    }
                 }}
               />
               </Grid>
@@ -303,8 +323,10 @@ export default function Add_Paysheet_Model() {
                 size="small"
                  InputProps={{ inputProps: { min: 0 } }}
                 value={cashTarget}
-                onChange={(e) => {
-                  setCashTarget(e.target.value);
+                  onChange={(e) => {
+                    if (e.target.value !== "") {
+                      setCashTarget(e.target.value);
+                    }
                 }}
               />
               </Grid>
@@ -325,8 +347,10 @@ export default function Add_Paysheet_Model() {
                   size="small"
                    InputProps={{ inputProps: { min: 0 } }}
                 value={cashSale}
-                onChange={(e) => {
-                  setCashSale(e.target.value);
+                  onChange={(e) => {
+                    if (e.target.value !== "") {
+                      setCashSale(e.target.value);
+                    }
                 }}
               />
               </Grid>
@@ -347,8 +371,10 @@ export default function Add_Paysheet_Model() {
                 size="small"
                 InputProps={{ inputProps: { min: 0 } }}
                 value={exCard}
-                onChange={(e) => {
-                  setExCard(e.target.value);
+                  onChange={(e) => {
+                    if (e.target.value !== "") {
+                      setExCard(e.target.value);
+                    }
                 }}
               />
                 </Grid>

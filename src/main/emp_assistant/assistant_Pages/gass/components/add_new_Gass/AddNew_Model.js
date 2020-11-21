@@ -106,9 +106,11 @@ export default function AddNew_Model({ close_model }) {
                 size="small"
                 type="number"
                 value={weight}
-                InputProps={{ inputProps: { min: 0 } }}
+                InputProps={{ inputProps: { min: 1 } }}
                 onChange={(e) => {
-                  setWeight(e.target.value.trim());
+                  if (e.target.value !== "") {
+                    setWeight(e.target.value.trim());
+                  }
                 }}
               />
             </Grid>
@@ -131,7 +133,9 @@ export default function AddNew_Model({ close_model }) {
                 value={qty}
                 InputProps={{ inputProps: { min: 0 } }}
                 onChange={(e) => {
-                  setQty(e.target.value.trim());
+                  if (e.target.value !== "") {
+                    setQty(e.target.value.trim());
+                  }
                 }}
               />
             </Grid>
@@ -154,7 +158,9 @@ export default function AddNew_Model({ close_model }) {
                 value={price}
                 InputProps={{ inputProps: { min: 0 } }}
                 onChange={(e) => {
-                  setPrice(e.target.value.trim());
+                  if (e.target.value !== "") {
+                    setPrice(e.target.value.trim());
+                  }
                 }}
               />
             </Grid>
@@ -177,7 +183,9 @@ export default function AddNew_Model({ close_model }) {
                 value={purchesPrice}
                 InputProps={{ inputProps: { min: 0 } }}
                 onChange={(e) => {
-                  setPurchesPrice(e.target.value.trim());
+                  if (e.target.value !== "") {
+                    setPurchesPrice(e.target.value.trim());
+                  }
                 }}
               />
             </Grid>

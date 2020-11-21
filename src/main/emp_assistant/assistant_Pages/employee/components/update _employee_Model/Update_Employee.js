@@ -290,7 +290,9 @@ export default function Update_Employe({
                 type="number"
                 value={basic}
                 onChange={(e) => {
-                  setBasic(e.target.value.trim());
+                  if (e.target.value !== "") {
+                    setBasic(e.target.value.trim());
+                  }
                 }}
               />
             </Grid>

@@ -139,7 +139,7 @@ export default function Salary() {
           LastName: each.data().lname,
           NIC: each.data().nic,
           Mobile: each.data().mobile1,
-          Status: <div className="sttsal">Paied</div>,
+          Status: <div className="sttsal">Paid</div>,
           Action: (
             <div>
               <HistoryIcon className="btnView" onClick={PayHistoryModels} />
@@ -261,7 +261,7 @@ export default function Salary() {
             endIcon={<AvTimerIcon />}
             // onClick={AdvanceModelHistory}
           >
-           Tempary
+           Temporary
           </Button>
         </Grid>
           <Grid item xs={3}>

@@ -103,7 +103,7 @@ export default function Selling_History() {
           data={allTableData}
           columns={columns}
           options={{
-            selectableRows: false,
+            selectableRows: "none",
             customToolbarSelect: () => {},
             filterType: "textField",
             download: false,

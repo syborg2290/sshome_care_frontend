@@ -21,7 +21,9 @@ export default function Advance_Model({ docId, nic }) {
   const [date, setDate] = useState(null);
 
   useEffect(() => {
-    db.collection("employee").get();
+    db.collection("employee").doc(docId).get().then((reEmp) => {
+      
+    });
   }, []);
 
   const makeAdvance = () => {};

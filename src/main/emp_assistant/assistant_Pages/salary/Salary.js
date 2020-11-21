@@ -16,6 +16,7 @@ import AddPaysheet from "./components/paysheet_Model/Add_Paysheet_Model";
 import PayHistoryModel from "./components/pay_history_Model/Pay_History_Model";
 import SalaryAdvanceMdl from "./components/salary_Advance_Model/Salary_Advance";
 import CreateTargetModel from "./components/target_Model/Create_Target_Model";
+import TargetHistoryModel from "./components/target_History_Model/Target_History_Model";
 
 import db from "../../../../config/firebase.js";
 
@@ -25,6 +26,7 @@ export default function Salary() {
 
   const [salaryAdvanceModel, setSalaryAdvanceModel] = useState(false);
   const [targetModel, setTargetModel] = useState(false);
+  const [targetHistoryModel, setTargetHistoryModel] = useState(false);
 
   // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
@@ -47,6 +49,10 @@ export default function Salary() {
 
   const TrgetModelCreate = () => {
     setTargetModel(true);
+  };
+
+  const TrgetModelHistory = () => {
+    setTargetHistoryModel(true);
   };
 
   const columns = [
@@ -152,7 +158,7 @@ export default function Salary() {
                   className="btnupdateLon"
                   onClick={AddPaysheetModel}
                 >
-                  Update
+                  Pay Sheet
                 </Button>
               </span>
             </div>
@@ -230,6 +236,29 @@ export default function Salary() {
 
       {/* End  Salry Advance Model  */}
 
+
+     {/*Start TARGET HISTORY Model */}
+
+      <Modal
+        visible={targetHistoryModel}
+        footer={null}
+        className="model_salry_targetHistry"
+        onCancel={() => {
+          setTargetHistoryModel(false);
+        }}
+      >
+        <div>
+          <div>
+            <div>
+              <TargetHistoryModel />
+            </div>
+          </div>
+        </div>
+      </Modal>
+
+      {/* End TARGET HISTORY Model  */}
+
+
       {/*Start TARGET Model */}
 
       <Modal
@@ -252,7 +281,17 @@ export default function Salary() {
       {/* End TARGET Model  */}
 
       <Grid container spacing={4}>
-        <Grid item xs={10}></Grid>
+        <Grid item xs={7}></Grid>
+        <Grid item xs={3}>
+          <Button
+            variant="contained"
+            className="btn_targetHis"
+            endIcon={<HistoryIcon />}
+            onClick={TrgetModelHistory}
+          >
+            Target History
+          </Button>
+        </Grid>
         <Grid item xs={2}>
           <Button
             variant="contained"

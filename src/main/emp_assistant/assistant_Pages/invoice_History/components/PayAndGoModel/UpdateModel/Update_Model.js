@@ -848,8 +848,10 @@ export default function Update_Model({
                   size="small"
                   value={shortage}
                   InputProps={{ inputProps: { min: 0 } }}
-                  onChange={(e) => {
-                    setShortage(parseInt(e.target.value.trim()));
+                    onChange={(e) => {
+                      if (e.target.value !== "") {
+                        setShortage(parseInt(e.target.value.trim()));
+                      }
                   }}
                 />
               </Grid>

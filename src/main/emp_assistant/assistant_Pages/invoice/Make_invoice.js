@@ -1597,7 +1597,9 @@ function Make_invoice() {
                           fullWidth
                           value={shortage}
                           onChange={(e) => {
-                            setShortage(parseInt(e.target.value.trim()));
+                             if (e.target.value !== ""){
+                               setShortage(parseInt(e.target.value.trim()));
+                               }
                           }}
                         />
                       </Grid>
@@ -1908,6 +1910,7 @@ function Make_invoice() {
                     className="btn_addCustomer"
                     disabled={
                       loadingsubmit ||
+                      itemDP.length === 0 ||
                       tablerows.length === 0 ||
                       intialTimestamp === null
                         ? true

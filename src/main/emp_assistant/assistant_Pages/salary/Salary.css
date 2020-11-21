@@ -7,6 +7,13 @@
   text-transform: none !important;
 }
 
+.btn_targetHis {
+  margin-top: 70px !important;
+  text-transform: none !important;
+  background-color: rgba(3, 3, 99, 0.897) !important;
+  color: aliceblue !important;
+}
+
 .btn_advance {
   margin-top: 70px !important;
   background-color: rgba(3, 3, 99, 0.897) !important;
@@ -15,16 +22,18 @@
 }
 
 .sttsal {
-  background-color: orrgb(11, 161, 6);
+  background-color: rgba(30, 173, 1, 0.856);
   color: aliceblue;
   border-radius: 6px;
-  width: 60% !important;
+  width: 70% !important;
   text-align: center;
-  padding-right: 6px !important;
-  padding-right: 8px !important;
 }
 
 .model_histrySal {
   width: 92% !important;
   margin-right: 25px !important;
+}
+
+.model_salry_targetHistry {
+  width: 70% !important;
 }

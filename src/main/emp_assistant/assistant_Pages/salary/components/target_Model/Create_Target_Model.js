@@ -13,6 +13,7 @@ import {
 import { Spin } from "antd";
 
 import db from "../../../../../../config/firebase.js";
+import firebase from "firebase";
 
 function daysCountOfMonth(month, year) {
   return parseInt(new Date(year, month, 0).getDate());
@@ -22,26 +23,31 @@ export default function Create_Target_Model() {
   const [allRoot, setAllRoot] = useState([]);
   const [sale_taregt_amount, setSaleAmount] = useState(0);
   const [cash_taregt_amount, setCashAmount] = useState(0);
+  const [startDate, setStartdate] = useState(null);
+  const [endDate, setEnddate] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [selectedType, setSelectedType] = useState("shop");
   const [targetType, setTargetType] = useState("sale_target");
 
   const handleChange = (event) => {
     setSelectedType(event.target.value);
+    if (targetType === "sale_target") {
+      getAllSaleTargetAmount();
+    } else {
+      getAllCashTargetAmount();
+    }
   };
 
-  const getAllCashTargetAmount = () => {};
-
-  const getAllSaleTargetAmount = () => {
+  const getAllCashTargetAmount = () => {
     let daysCount = daysCountOfMonth(
       new Date().getMonth(),
       new Date().getFullYear()
     );
-    let fromT = new Date(new Date().setDate(new Date() - daysCount));
+    let fromT = new Date(new Date().setDate(new Date().getDate() - daysCount));
     db.collection("invoice")
       .where("selectedType", "==", selectedType)
       .get()
       .then((reInvoice) => {
-        console.log(reInvoice);
         reInvoice.docs.forEach((reEa) => {
           if (
             new Date(fromT.toDateString()) <
@@ -52,7 +58,68 @@ export default function Create_Target_Model() {
                 new Date(reEa.data()?.date.seconds * 1000).toDateString()
               ) <= new Date(new Date().toDateString())
             ) {
-              setSaleAmount(sale_taregt_amount + reEa.data()?.downpayment);
+              reEa.data().items.forEach((eachItem) => {
+                db.collection("item")
+                  .doc(eachItem.item_id)
+                  .get()
+                  .then((reItem) => {
+                    setCashAmount(
+                      parseInt(cash_taregt_amount) +
+                        parseInt(reItem.data()?.cashPrice)
+                    );
+                  });
+              });
+            }
+          }
+        });
+      });
+  };
+
+  const getAllSaleTargetAmount = () => {
+    let daysCount = daysCountOfMonth(
+      new Date().getMonth(),
+      new Date().getFullYear()
+    );
+    let fromT = new Date(new Date().setDate(new Date().getDate() - daysCount));
+    db.collection("invoice")
+      .where("selectedType", "==", selectedType)
+      .get()
+      .then((reInvoice) => {
+        reInvoice.docs.forEach((reEa) => {
+          if (reEa.data().paymentWay === "PayandGo") {
+            if (
+              new Date(fromT.toDateString()) <
+              new Date(
+                new Date(reEa.data()?.date.seconds * 1000).toDateString()
+              )
+            ) {
+              if (
+                new Date(
+                  new Date(reEa.data()?.date.seconds * 1000).toDateString()
+                ) <= new Date(new Date().toDateString())
+              ) {
+                setSaleAmount(sale_taregt_amount + reEa.data()?.downpayment);
+              }
+            }
+          }
+        });
+      });
+
+    db.collection("installment")
+      .where("type", "==", selectedType)
+      .get()
+      .then((reInstall) => {
+        reInstall.docs.forEach((reEa) => {
+          if (
+            new Date(fromT.toDateString()) <
+            new Date(new Date(reEa.data()?.date.seconds * 1000).toDateString())
+          ) {
+            if (
+              new Date(
+                new Date(reEa.data()?.date.seconds * 1000).toDateString()
+              ) <= new Date(new Date().toDateString())
+            ) {
+              setSaleAmount(sale_taregt_amount + reEa.data()?.amount);
             }
           }
         });
@@ -100,8 +167,83 @@ export default function Create_Target_Model() {
           }
         });
       });
+
+    db.collection("installment")
+      .where("type", "==", selectedType)
+      .get()
+      .then((reInstall) => {
+        reInstall.docs.forEach((reEa) => {
+          if (
+            new Date(fromT.toDateString()) <
+            new Date(new Date(reEa.data()?.date.seconds * 1000).toDateString())
+          ) {
+            if (
+              new Date(
+                new Date(reEa.data()?.date.seconds * 1000).toDateString()
+              ) <= new Date(new Date().toDateString())
+            ) {
+              setSaleAmount(sale_taregt_amount + reEa.data()?.amount);
+            }
+          }
+        });
+      });
+    // ======================================
+
+    db.collection("invoice")
+      .where("selectedType", "==", selectedType)
+      .get()
+      .then((reInvoice) => {
+        reInvoice.docs.forEach((reEa) => {
+          if (
+            new Date(fromT.toDateString()) <
+            new Date(new Date(reEa.data()?.date.seconds * 1000).toDateString())
+          ) {
+            if (
+              new Date(
+                new Date(reEa.data()?.date.seconds * 1000).toDateString()
+              ) <= new Date(new Date().toDateString())
+            ) {
+              reEa.data().items.forEach((eachItem) => {
+                db.collection("item")
+                  .doc(eachItem.item_id)
+                  .get()
+                  .then((reItem) => {
+                    setCashAmount(
+                      parseInt(cash_taregt_amount) +
+                        parseInt(reItem.data()?.cashPrice)
+                    );
+                  });
+              });
+            }
+          }
+        });
+      });
     // ======================================
   }, []);
+
+  const createTarget = () => {
+    setLoading(true);
+    db.collection("targets")
+      .add({
+        target_type: targetType,
+        selectedType: selectedType,
+        start_date: startDate,
+        endDate: endDate,
+        amount:
+          targetType === "sale_target"
+            ? sale_taregt_amount === ""
+              ? 0
+              : parseInt(sale_taregt_amount)
+            : cash_taregt_amount === ""
+            ? 0
+            : parseInt(cash_taregt_amount),
+        status: "Ongoing",
+      })
+      .then((_) => {
+        setLoading(false);
+        window.location.reload();
+      });
+  };
 
   return (
     <Container component="main" className="conctainefr_main">
@@ -136,10 +278,12 @@ export default function Create_Target_Model() {
                     : cash_taregt_amount
                 }
                 onChange={(e) => {
-                  if (targetType === "sale_target") {
-                    setSaleAmount(parseInt(e.target.value.trim()));
-                  } else {
-                    setCashAmount(parseInt(e.target.value.trim()));
+                  if (parseInt(e.target.value) >= 0) {
+                    if (targetType === "sale_target") {
+                      setSaleAmount(parseInt(e.target.value.trim()));
+                    } else {
+                      setCashAmount(parseInt(e.target.value.trim()));
+                    }
                   }
                 }}
               />
@@ -180,7 +324,17 @@ export default function Create_Target_Model() {
             </Grid>
             <Grid item xs={12} sm={7}>
               <Space direction="vertical">
-                <DatePicker />
+                <DatePicker
+                  onChange={(e) => {
+                    if (e !== null) {
+                      setStartdate(
+                        firebase.firestore.Timestamp.fromDate(e.toDate())
+                      );
+                    } else {
+                      setStartdate(null);
+                    }
+                  }}
+                />
               </Space>
             </Grid>
 
@@ -192,7 +346,17 @@ export default function Create_Target_Model() {
             </Grid>
             <Grid item xs={12} sm={7}>
               <Space direction="vertical">
-                <DatePicker />
+                <DatePicker
+                  onChange={(e) => {
+                    if (e !== null) {
+                      setEnddate(
+                        firebase.firestore.Timestamp.fromDate(e.toDate())
+                      );
+                    } else {
+                      setEnddate(null);
+                    }
+                  }}
+                />
               </Space>
             </Grid>
             <Grid className="lbl_topi" item xs={12} sm={4}>
@@ -221,9 +385,10 @@ export default function Create_Target_Model() {
                 variant="contained"
                 color="primary"
                 className="btn_update"
-                // onClick={btnUpdate}
+                onClick={createTarget}
+                disabled={endDate === null || startDate === null || loading}
               >
-                Done
+                {loading ? <Spin size="small" /> : "Done"}
               </Button>
             </Grid>
           </Grid>

@@ -216,7 +216,13 @@ export default function New_Loan_Model() {
               <Space direction="vertical">
                 <DatePicker
                   onChange={(e) => {
-                    setDate(firebase.firestore.Timestamp.fromDate(e.toDate()));
+                    if (e !== null) {
+                      setDate(
+                        firebase.firestore.Timestamp.fromDate(e.toDate())
+                      );
+                    } else {
+                      setDate(null);
+                    }
                   }}
                 />
               </Space>

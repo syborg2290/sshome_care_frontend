@@ -585,6 +585,7 @@ export default function Invoice_history() {
                 instCount={payangoAllData[currentIndx2]?.data?.noOfInstallment}
                 customer_id={payangoAllData[currentIndx]?.data?.customer_id}
                 closeModal={closeModalUpdate}
+                type={payangoAllData[currentIndx]?.data?.selectedType}
                 isEx={
                   payangoAllData[currentIndx]?.data?.status_of_payandgo ===
                   "expired"

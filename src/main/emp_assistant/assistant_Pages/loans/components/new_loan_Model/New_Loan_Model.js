@@ -53,7 +53,7 @@ export default function New_Loan_Model() {
                 balance: amount === "" ? 0 : amount,
                 salary_cut: salaryCut === "" ? 0 : salaryCut,
                 date: date,
-                status: "ongoing",
+                status: "Ongoing",
               })
               .then((_) => {
                 setLoading(false);
@@ -73,7 +73,7 @@ export default function New_Loan_Model() {
               balance: amount === "" ? 0 : amount,
               salary_cut: salaryCut === "" ? 0 : salaryCut,
               date: date,
-              status: "ongoing",
+              status: "Ongoing",
             })
             .then((_) => {
               setLoading(false);

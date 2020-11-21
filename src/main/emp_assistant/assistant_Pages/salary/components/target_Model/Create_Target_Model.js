@@ -14,6 +14,10 @@ import { Spin } from "antd";
 
 import db from "../../../../../../config/firebase.js";
 
+function daysCountOfMonth(month, year) {
+  return parseInt(new Date(year, month, 0).getDate());
+}
+
 export default function Create_Target_Model() {
   const [allRoot, setAllRoot] = useState([]);
   const [sale_taregt_amount, setSaleAmount] = useState(0);
@@ -23,6 +27,36 @@ export default function Create_Target_Model() {
 
   const handleChange = (event) => {
     setSelectedType(event.target.value);
+  };
+
+  const getAllCashTargetAmount = () => {};
+
+  const getAllSaleTargetAmount = () => {
+    let daysCount = daysCountOfMonth(
+      new Date().getMonth(),
+      new Date().getFullYear()
+    );
+    let fromT = new Date(new Date().setDate(new Date() - daysCount));
+    db.collection("invoice")
+      .where("selectedType", "==", selectedType)
+      .get()
+      .then((reInvoice) => {
+        console.log(reInvoice);
+        reInvoice.docs.forEach((reEa) => {
+          if (
+            new Date(fromT.toDateString()) <
+            new Date(new Date(reEa.data()?.date.seconds * 1000).toDateString())
+          ) {
+            if (
+              new Date(
+                new Date(reEa.data()?.date.seconds * 1000).toDateString()
+              ) <= new Date(new Date().toDateString())
+            ) {
+              setSaleAmount(sale_taregt_amount + reEa.data()?.downpayment);
+            }
+          }
+        });
+      });
   };
 
   useEffect(() => {
@@ -35,6 +69,38 @@ export default function Create_Target_Model() {
         });
         setAllRoot(rawRoot);
       });
+
+    // ======================================
+
+    let daysCount = daysCountOfMonth(
+      new Date().getMonth(),
+      new Date().getFullYear()
+    );
+    let fromT = new Date(new Date().setDate(new Date().getDate() - daysCount));
+    db.collection("invoice")
+      .where("selectedType", "==", selectedType)
+      .get()
+      .then((reInvoice) => {
+        reInvoice.docs.forEach((reEa) => {
+          if (reEa.data().paymentWay === "PayandGo") {
+            if (
+              new Date(fromT.toDateString()) <
+              new Date(
+                new Date(reEa.data()?.date.seconds * 1000).toDateString()
+              )
+            ) {
+              if (
+                new Date(
+                  new Date(reEa.data()?.date.seconds * 1000).toDateString()
+                ) <= new Date(new Date().toDateString())
+              ) {
+                setSaleAmount(sale_taregt_amount + reEa.data()?.downpayment);
+              }
+            }
+          }
+        });
+      });
+    // ======================================
   }, []);
 
   return (

@@ -139,7 +139,7 @@ export default function Loan() {
               reE.data().balance === 0 ? (
                 <div className="sttLondone">Done</div>
               ) : (
-                <div className="sttLon">onGoing</div>
+                <div className="sttLon">OnGoing</div>
               ),
             Action: (
               <div>

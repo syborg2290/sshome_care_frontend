@@ -6,11 +6,7 @@
 /* .MuiList-root {
   overflow: hidden !important;
   white-space: nowrap;
-  scroll-behavior: unset !important;
-   -ms-overflow-style: none;  /* IE and Edge */
-/* scrollbar-width: none;  */
-/* Firefox */
-/* }  */
+} */
 
 .sidebarList {
   margin-top: 12px !important;

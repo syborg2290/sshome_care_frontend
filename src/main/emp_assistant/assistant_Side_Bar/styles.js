@@ -15,11 +15,9 @@ export default makeStyles((theme) => ({
     flexShrink: 0,
     whiteSpace: "nowrap",
     // backgroundColor: "#222A44",
-  
   },
 
   drawerOpen: {
-    // overflowX: "hidden",
     color: "white",
     backgroundColor: "#222A44",
     width: drawerWidth,
@@ -34,14 +32,13 @@ export default makeStyles((theme) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    // overflowX: "hidden",
+    overflowX: "hidden",
     width: theme.spacing(7) + 10,
     [theme.breakpoints.down("sm")]: {
       width: drawerWidth,
     },
   },
   sidebarList: {
-    // overflowX: "hidden",
     marginTop: theme.spacing(6),
   },
   // toolbar: {

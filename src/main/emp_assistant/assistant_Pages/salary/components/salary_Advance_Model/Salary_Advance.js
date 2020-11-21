@@ -20,7 +20,6 @@ import db from "../../../../../../config/firebase.js";
 
 export default function Salary_Advance() {
   
-  
   const [salaryAdvanceModel, setSalaryAdvanceModel] = useState(false);
   const [advanceHistoryModel, setAdvanceHistoryModel] = useState(false);
 

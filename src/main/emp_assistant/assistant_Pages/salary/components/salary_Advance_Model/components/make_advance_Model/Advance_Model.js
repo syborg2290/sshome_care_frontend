@@ -15,8 +15,9 @@ import "./Advance_Model.css";
 import db from "../../../../../../../../config/firebase.js";
 import firebase from "firebase";
 
-export default function Advance_Model() {
+export default function Advance_Model({ docId, nic }) {
   const [amount, setAmount] = useState(0);
+  const [balance, setBalance] = useState(0);
   const [date, setDate] = useState(null);
 
   useEffect(() => {

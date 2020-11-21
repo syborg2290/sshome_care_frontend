@@ -8,8 +8,7 @@ import { useHistory } from "react-router-dom";
 import "./Pay_History_Model.css";
 
 export default function Pay_History_Model() {
-
-   // eslint-disable-next-line
+  // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
   // eslint-disable-next-line
   const [allData, setallData] = useState([]);
@@ -52,7 +51,7 @@ export default function Pay_History_Model() {
         }),
       },
     },
-       {
+    {
       name: "Attendant",
       options: {
         filter: false,
@@ -75,7 +74,7 @@ export default function Pay_History_Model() {
         }),
       },
     },
-     {
+    {
       name: "Security_Deposit",
       options: {
         filter: true,
@@ -88,7 +87,7 @@ export default function Pay_History_Model() {
         }),
       },
     },
-      {
+    {
       name: " Attendance_Deductions",
       options: {
         filter: true,
@@ -101,7 +100,7 @@ export default function Pay_History_Model() {
         }),
       },
     },
-         {
+    {
       name: "Salary_Advance",
       options: {
         filter: true,
@@ -114,7 +113,7 @@ export default function Pay_History_Model() {
         }),
       },
     },
-{
+    {
       name: "Loan",
       options: {
         filter: true,
@@ -140,7 +139,7 @@ export default function Pay_History_Model() {
         }),
       },
     },
-     {
+    {
       name: "Sale_Target",
       options: {
         filter: true,
@@ -153,7 +152,7 @@ export default function Pay_History_Model() {
         }),
       },
     },
-      {
+    {
       name: "Cash_Target",
       options: {
         filter: true,
@@ -166,7 +165,7 @@ export default function Pay_History_Model() {
         }),
       },
     },
-     {
+    {
       name: "Cash_Sale",
       options: {
         filter: true,
@@ -179,7 +178,7 @@ export default function Pay_History_Model() {
         }),
       },
     },
-     {
+    {
       name: "Ex_Card",
       options: {
         filter: true,
@@ -194,38 +193,51 @@ export default function Pay_History_Model() {
     },
   ];
 
-   const tableData = [
-        ["Joe ", "James", "Test", "Corp", "Yon", "kers","Test", "Corp", "Yon", "kers", "Test", "Corp", "Yon", "kers", "kers"],
-
-];
-    
+  const tableData = [
+    [
+      "Joe ",
+      "James",
+      "Test",
+      "Corp",
+      "Yon",
+      "kers",
+      "Test",
+      "Corp",
+      "Yon",
+      "kers",
+      "Test",
+      "Corp",
+      "Yon",
+      "kers",
+      "kers",
+    ],
+  ];
 
   return (
-          
-      <Grid container spacing={4}>
-        <Grid item xs={12}>
-          <MUIDataTable
-            title={<span className="title_Span">Salary History</span>}
-            className="salary_histable"
-            sty
-            data={tableData}
-            columns={columns}
-            options={{
-              // selectableRows: false,
-              selectableRows: "none",
-              customToolbarSelect: () => {},
-              onRowClick: (rowData, rowMeta) => {
-                setCurrentIndx(rowMeta.dataIndex);
-              },
-              filterType: "textField",
-              download: false,
-              print: false,
-              searchPlaceholder: "Search using any column names",
-              elevation: 4,
-              sort: true,
-            }}
-          />
-        </Grid>
+    <Grid container spacing={4}>
+      <Grid item xs={12}>
+        <MUIDataTable
+          title={<span className="title_Span">Salary History</span>}
+          className="salary_histable"
+          sty
+          data={tableData}
+          columns={columns}
+          options={{
+            // selectableRows: false,
+            selectableRows: "none",
+            customToolbarSelect: () => {},
+            onRowClick: (rowData, rowMeta) => {
+              setCurrentIndx(rowMeta.dataIndex);
+            },
+            filterType: "textField",
+            download: false,
+            print: false,
+            searchPlaceholder: "Search using any column names",
+            elevation: 4,
+            sort: true,
+          }}
+        />
       </Grid>
-  )
+    </Grid>
+  );
 }

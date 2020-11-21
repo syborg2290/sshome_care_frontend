@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { DatePicker, Space } from "antd";
+import { DatePicker, Space, Spin } from "antd";
 
 import {
   TextField,
@@ -15,16 +15,53 @@ import "./Advance_Model.css";
 import db from "../../../../../../../../config/firebase.js";
 import firebase from "firebase";
 
-export default function Advance_Model({ docId, nic }) {
+export default function Advance_Model({ docId, nic, fname, lname }) {
   const [amount, setAmount] = useState(0);
   const [balance, setBalance] = useState(0);
+  const [intialBalance, setInitialBalance] = useState(0);
   const [date, setDate] = useState(null);
+  const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
-    db.collection("employee").get();
-  }, []);
+    db.collection("employee")
+      .doc(docId)
+      .get()
+      .then((reEmp) => {
+        let unpaidamount = 0;
+        db.collection("salary_advance")
+          .where("nic", "==", nic)
+          .get()
+          .then((reAd) => {
+            reAd.docs.forEach((reEach) => {
+              if (reEach.data().status === "unpaid") {
+                unpaidamount = unpaidamount + parseInt(reEach.data().amount);
+              }
+            });
+          });
+        setBalance(parseInt(reEmp.data().basic) - parseInt(unpaidamount));
+        setInitialBalance(
+          parseInt(reEmp.data().basic) - parseInt(unpaidamount)
+        );
+      });
+  }, [docId, nic]);
 
-  const makeAdvance = () => {};
+  const makeAdvance = () => {
+    setLoading(true);
+    db.collection("salary_advance")
+      .add({
+        name: fname + " " + lname,
+        nic: nic,
+        emp_docId: docId,
+        amount: amount,
+        balance: balance,
+        date: date,
+        status: "unpaid",
+      })
+      .then((_) => {
+        setLoading(false);
+        window.location.reload();
+      });
+  };
 
   return (
     <Container component="main" className="conctainefr_main">
@@ -56,7 +93,17 @@ export default function Advance_Model({ docId, nic }) {
                 value={amount}
                 onChange={(e) => {
                   if (e.target.value !== "") {
-                    setAmount(e.target.value);
+                    if (balance >= parseInt(e.target.value.trim())) {
+                      if (parseInt(e.target.value.trim()) === 0) {
+                        setBalance(intialBalance);
+                      } else {
+                        setBalance(
+                          intialBalance - parseInt(e.target.value.trim())
+                        );
+                      }
+
+                      setAmount(parseInt(e.target.value.trim()));
+                    }
                   }
                 }}
               />
@@ -68,7 +115,7 @@ export default function Advance_Model({ docId, nic }) {
               :
             </Grid>
             <Grid item xs={12} sm={7}>
-              <p>1234.00</p>
+              <p>{balance}</p>
             </Grid>
             <Grid className="lbl_topi" item xs={12} sm={4}>
               Date
@@ -100,8 +147,9 @@ export default function Advance_Model({ docId, nic }) {
                 color="primary"
                 className="btn_update"
                 onClick={makeAdvance}
+                disabled={date === null || isLoading}
               >
-                Done
+                {isLoading ? <Spin size="small" /> : "Done"}
               </Button>
             </Grid>
           </Grid>

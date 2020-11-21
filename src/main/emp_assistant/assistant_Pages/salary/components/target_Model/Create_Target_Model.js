@@ -65,7 +65,7 @@ export default function Create_Target_Model() {
                   .then((reItem) => {
                     setSaleAmount(
                       parseInt(sale_taregt_amount) +
-                        parseInt(reItem.data()?.cashPrice)
+                        parseInt(reItem.data()?.salePrice)
                     );
                   });
               });
@@ -210,7 +210,7 @@ export default function Create_Target_Model() {
                   .then((reItem) => {
                     setSaleAmount(
                       parseInt(sale_taregt_amount) +
-                        parseInt(reItem.data()?.cashPrice)
+                        parseInt(reItem.data()?.salePrice)
                     );
                   });
               });

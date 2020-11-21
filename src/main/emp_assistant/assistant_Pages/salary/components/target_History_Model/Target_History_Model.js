@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Grid } from "@material-ui/core";
 import MUIDataTable from "mui-datatables";
 import moment from "moment";
-
+import CurrencyFormat from "react-currency-format";
 // styles
 import "./Target_History_Model.css";
 
@@ -16,15 +16,7 @@ export default function Target_History_Model() {
   const [allData, setallData] = useState([]);
 
   const columns = [
-    {
-      name: "Target_Amount",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
+ 
     {
       name: "Target_Type",
       options: {
@@ -52,6 +44,15 @@ export default function Target_History_Model() {
         }),
       },
     },
+       {
+      name: "Target_Amount",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
     {
       name: "Type",
       options: {
@@ -70,7 +71,7 @@ export default function Target_History_Model() {
         var rawData = [];
         reThen.docs.forEach((each) => {
           rawData.push({
-            Target_Amount: each.data().amount,
+           
             Target_Type: each.data().target_type,
             Start_Date: moment(each.data()?.start_date?.toDate()).format(
               "dddd, MMMM Do YYYY"
@@ -78,6 +79,15 @@ export default function Target_History_Model() {
             End_Date: moment(each.data()?.endDate?.toDate()).format(
               "dddd, MMMM Do YYYY"
             ),
+            Target_Amount: (
+             <CurrencyFormat
+                  value={each.data().amount}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+              />
+              ),
+             
             Type: each.data().selectedType,
           });
         });

@@ -253,7 +253,7 @@ export default function Salary() {
       {/* End TARGET Model  */}
 
       <Grid container spacing={4}>
-        <Grid item xs={3}></Grid>
+        <Grid item xs={2}></Grid>
         <Grid item xs={2}>
           <Button
             variant="contained"
@@ -274,7 +274,7 @@ export default function Salary() {
             Salary Advance
           </Button>
         </Grid>
-        <Grid item xs={2}>
+        <Grid item xs={3}>
           <Button
             variant="contained"
             className="btn_targetHis"

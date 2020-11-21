@@ -119,10 +119,7 @@ export default function Update_Loan_Model({ docId, balance, amountSe }) {
                 className="btn_update"
                 onClick={updateLoan}
                 disabled={
-                  amount.length === 0 ||
-                  parseInt(amount) === 0 ||
-                  date === null ||
-                  isLoading
+                  parseInt(amount) === 0 || date === null || isLoading
                     ? true
                     : false
                 }

@@ -14,6 +14,10 @@ import { Spin } from "antd";
 
 import db from "../../../../../../config/firebase.js";
 
+function daysCountOfMonth(month, year) {
+  return parseInt(new Date(year, month, 0).getDate());
+}
+
 export default function Create_Target_Model() {
   const [allRoot, setAllRoot] = useState([]);
   const [sale_taregt_amount, setSaleAmount] = useState(0);
@@ -23,6 +27,21 @@ export default function Create_Target_Model() {
 
   const handleChange = (event) => {
     setSelectedType(event.target.value);
+  };
+
+  const getAllCashTargetAmount = () => {};
+
+  const getAllSaleTargetAmount = () => {
+    let daysCount = daysCountOfMonth(
+      new Date().getMonth(),
+      new Date().getFullYear()
+    );
+    let fromT = new Date(new Date().setDate(new Date() - daysCount));
+    db.collection("invoice")
+      .get()
+      .then((reInvoice) => {
+        // reInvoice.docs
+      });
   };
 
   useEffect(() => {

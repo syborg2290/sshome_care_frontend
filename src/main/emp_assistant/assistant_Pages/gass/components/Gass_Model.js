@@ -307,7 +307,9 @@ export default function Gass_Model() {
                 // className="txt_qtyGas"
                 value={shortage}
                 onChange={(e) => {
-                  setShortage(parseInt(e.target.value.trim()));
+                  if (e.target.value !== "") {
+                    setShortage(parseInt(e.target.value.trim()));
+                  }
                 }}
               />
             </Grid>

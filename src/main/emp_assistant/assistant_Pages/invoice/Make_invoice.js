@@ -1327,10 +1327,12 @@ function Make_invoice() {
                               id={row.i.toString()}
                               value={itemDP[row.i]}
                               onChange={(e) => {
-                                setItemDP({
-                                  ...itemDP,
-                                  [row.i]: e.target.value,
-                                });
+                                if (e.target.value !== "") {
+                                  setItemDP({
+                                    ...itemDP,
+                                    [row.i]: e.target.value,
+                                  });
+                                }
                               }}
                             />
                           </TableCell>
@@ -1348,11 +1350,13 @@ function Make_invoice() {
                               id={row.i.toString()}
                               value={itemDiscount[row.i]}
                               onChange={(e) => {
-                                if (e.target.value < itemDP[row.i]) {
-                                  setItemDiscount({
-                                    ...itemDiscount,
-                                    [row.i]: e.target.value,
-                                  });
+                                if (e.target.value !== "") {
+                                  if (e.target.value < itemDP[row.i]) {
+                                    setItemDiscount({
+                                      ...itemDiscount,
+                                      [row.i]: e.target.value,
+                                    });
+                                  }
                                 }
                               }}
                             />
@@ -1433,8 +1437,10 @@ function Make_invoice() {
                             fullWidth
                             value={totalDiscount}
                             onChange={(e) => {
-                              if (e.target.value < subTotalFunc()) {
-                                setTotalDiscount(e.target.value);
+                              if (e.target.value !== "") {
+                                if (e.target.value < subTotalFunc()) {
+                                  setTotalDiscount(e.target.value);
+                                }
                               }
                             }}
                           />

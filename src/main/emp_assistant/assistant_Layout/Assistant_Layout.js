@@ -19,6 +19,10 @@ import RepairRecipt from "../assistant_Pages/repairs/repairs_Model/repair_update
 import PrintInvoice from "../assistant_Pages/invoice/printInvoice/Print_invoice";
 import GassRecipt from "../assistant_Pages/gass/components/Make_Recipt/Gass_Recipt";
 
+import AttendatHistory from "../assistant_Pages/attendance/components/attedance_History_Model/History_Attendance";
+import Advance from "../assistant_Pages/salary/components/salary_Advance_Model/Salary_Advance";
+
+
 // pages
 import Dashboard from "../assistant_Pages/dashboard/Dashboard";
 import MakeInvoiceTable from "../assistant_Pages/make_invoice/Make_Invoice_table";
@@ -35,7 +39,7 @@ import Employee from "../assistant_Pages/employee/Employee";
 import Salary from "../assistant_Pages/salary/Salary";
 import Attendance from "../assistant_Pages/attendance/Attendance";
 import Root from "../assistant_Pages/root/Root";
-import AttendatHistory from "../assistant_Pages/attendance/components/attedance_History_Model/History_Attendance";
+
 
 function LayoutAssistant(props) {
   return (
@@ -86,8 +90,6 @@ function LayoutAssistant(props) {
               component={PrintReceipt}
             />
 
-            
-
             <Route
               path="/assistant/gass/gass_Model/make_recipt/Gass_recipt"
               component={GassRecipt}
@@ -96,6 +98,11 @@ function LayoutAssistant(props) {
             <Route
               path="/assistant/attendant/attendat_history"
               component={AttendatHistory}
+            />
+
+             <Route
+              path="/assistant/salary/advance"
+              component={Advance}
             />
 
           </Switch>

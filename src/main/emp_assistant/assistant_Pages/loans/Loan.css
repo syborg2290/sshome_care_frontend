@@ -19,6 +19,16 @@
   padding-right: 8px !important;
 }
 
+.sttLondone {
+  background-color: green;
+  color: aliceblue;
+  border-radius: 6px;
+  width: 60% !important;
+  text-align: center;
+  padding-right: 6px !important;
+  padding-right: 8px !important;
+}
+
 .btnLloan {
   margin-top: 70px !important;
   text-transform: none !important;

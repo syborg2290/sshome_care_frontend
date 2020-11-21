@@ -14,6 +14,7 @@ import "./Loan.css";
 
 // icons
 import PostAddIcon from "@material-ui/icons/PostAdd";
+import HistoryIcon from "@material-ui/icons/History";
 
 import db from "../../../../config/firebase.js";
 
@@ -78,6 +79,16 @@ export default function Loan() {
     },
 
     {
+      name: "Balance",
+      options: {
+        filter: false,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+
+    {
       name: "Status",
       options: {
         filter: true,
@@ -109,32 +120,53 @@ export default function Loan() {
     db.collection("loans")
       .orderBy("date", "desc")
       .get()
-      .then((reSnap) => {});
-  }, []);
+      .then((reSnap) => {
+        var rawTableData = [];
+        var allRawData = [];
 
-  // const tableData = [
-  //   [
-  //     "Joe ",
-  //     "James",
-  //     "Test",
-  //     "Corp",
-  //     <div className="sttLon">onGoing</div>,
-  //     <div>
-  //       <HistoryIcon className="btnView" onClick={HistoryLoanModel} />
-  //       <span>
-  //         <Button
-  //           variant="contained"
-  //           color="primary"
-  //           size="small"
-  //           className="btnupdateLon"
-  //           onClick={UpdateLoanModel}
-  //         >
-  //           Update
-  //         </Button>
-  //       </span>
-  //     </div>,
-  //   ],
-  // ];
+        reSnap.docs.forEach((reE) => {
+          allRawData.push({
+            id: reE.id,
+            data: reE.data(),
+          });
+          rawTableData.push({
+            FirstName: reE.data().fname,
+            LastName: reE.data().lname,
+            NIC: reE.data().nic,
+            Amount: reE.data().amount,
+            Balance: reE.data().balance,
+            Status:
+              reE.data().balance === 0 ? (
+                <div className="sttLondone">Done</div>
+              ) : (
+                <div className="sttLon">onGoing</div>
+              ),
+            Action: (
+              <div>
+                <HistoryIcon className="btnView" onClick={HistoryLoanModel} />
+                {reE.data().balance === 0 ? (
+                  ""
+                ) : (
+                  <span>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      size="small"
+                      className="btnupdateLon"
+                      onClick={UpdateLoanModel}
+                    >
+                      Update
+                    </Button>
+                  </span>
+                )}
+              </div>
+            ),
+          });
+        });
+        setallData(allRawData);
+        setTableData(rawTableData);
+      });
+  }, []);
 
   return (
     <>
@@ -172,7 +204,10 @@ export default function Loan() {
         <div>
           <div>
             <div>
-              <LoanHistory />
+              <LoanHistory
+                key={allData[currentIndx]?.id}
+                docId={allData[currentIndx]?.id}
+              />
             </div>
           </div>
         </div>
@@ -193,7 +228,12 @@ export default function Loan() {
         <div>
           <div>
             <div>
-              <UpdateLoan />
+              <UpdateLoan
+                key={allData[currentIndx]?.id}
+                docId={allData[currentIndx]?.id}
+                balance={allData[currentIndx]?.data.balance}
+                amountSe={allData[currentIndx]?.data.amount}
+              />
             </div>
           </div>
         </div>

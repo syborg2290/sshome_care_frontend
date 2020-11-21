@@ -106,7 +106,13 @@ export default function Update_Loan_Model({ docId, balance, amountSe }) {
               <Space direction="vertical">
                 <DatePicker
                   onChange={(e) => {
-                    setDate(firebase.firestore.Timestamp.fromDate(e.toDate()));
+                    if (e !== null) {
+                      setDate(
+                        firebase.firestore.Timestamp.fromDate(e.toDate())
+                      );
+                    } else {
+                      setDate(null);
+                    }
                   }}
                 />
               </Space>

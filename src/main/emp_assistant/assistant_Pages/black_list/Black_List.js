@@ -243,37 +243,28 @@ export default function Black_List() {
                           )
                           .get()
                           .then((reInst) => {
-                            let amount = 0;
-                            let count = 0;
-                            reInst.docs.forEach((each) => {
-                              amount = amount + parseInt(each.data().amount);
-                              count++;
+                            let isExC =
+                              allDataBlacklist[currentIndx].data
+                                .status_of_payandgo === "expired"
+                                ? true
+                                : false;
+                            db.collection("installment").add({
+                              invoice_number:
+                                allDataBlacklist[currentIndx]?.data.InvoiceNo,
+                              isEx: isExC,
+                              amount: parseInt(
+                                allDataBlacklist[currentIndx]?.data.balance
+                              ),
+                              gamisarani_amount: 0,
+                              shortage: 0,
+                              type:
+                                allDataBlacklist[currentIndx]?.data
+                                  .selectedType,
+                              delayed: 0,
+                              balance: 0,
+                              date: firebase.firestore.FieldValue.serverTimestamp(),
                             });
-                            if (count === reInst.docs.length) {
-                              let isEx =
-                                allDataBlacklist[currentIndx].data
-                                  .status_of_payandgo === "expired"
-                                  ? true
-                                  : false;
-                              db.collection("installment").add({
-                                invoice_number:
-                                  allDataBlacklist[currentIndx]?.data.InvoiceNo,
-                                isEx: {
-                                  isEx,
-                                },
-
-                                amount: amount,
-                                gamisarani_amount: 0,
-                                shortage: 0,
-                                type:
-                                  allDataBlacklist[currentIndx]?.data
-                                    .selectedType,
-                                delayed: 0,
-                                balance: 0,
-                                date: firebase.firestore.FieldValue.serverTimestamp(),
-                              });
-                              setConfirmVisible(false);
-                            }
+                            setConfirmVisible(false);
                           });
                       });
                   });
@@ -367,7 +358,7 @@ export default function Black_List() {
             options={{
               // selectableRows: false,
               selectableRows: "none",
-              customToolbarSelect: () => { },
+              customToolbarSelect: () => {},
               filterType: "textfield",
               download: false,
               print: false,

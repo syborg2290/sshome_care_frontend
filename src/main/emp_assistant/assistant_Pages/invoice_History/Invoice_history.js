@@ -363,6 +363,8 @@ export default function Invoice_history() {
         });
       });
     db.collection("invoice")
+      .orderBy("customer_id", "desc")
+      .orderBy("date", "desc")
       .where("customer_id", "!=", null)
       .onSnapshot((cust) => {
         var rawData = [];
@@ -488,6 +490,8 @@ export default function Invoice_history() {
 
     //START Full Payment Rows
     db.collection("invoice")
+      // .orderBy("customer_id", "desc")
+      .orderBy("date", "desc")
       .where("customer_id", "==", null)
       .onSnapshot((cust) => {
         var rawDataFull = [];

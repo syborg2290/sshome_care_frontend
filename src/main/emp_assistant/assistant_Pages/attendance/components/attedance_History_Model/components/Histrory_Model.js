@@ -46,12 +46,7 @@ export default function History_Model({ nic }) {
       .get()
       .then((snap) => {
         var rawData = [];
-        var allRawData = [];
         snap.docs.forEach((reSnap) => {
-          allRawData.push({
-            id: reSnap.id,
-            data: reSnap.data(),
-          });
           rawData.push({
             Date: moment(reSnap.data().date?.toDate()).format(
               "dddd, MMMM Do YYYY"
@@ -64,6 +59,7 @@ export default function History_Model({ nic }) {
               ),
           });
         });
+
         setAttendanceTableRow(rawData);
       });
     // eslint-disable-next-line

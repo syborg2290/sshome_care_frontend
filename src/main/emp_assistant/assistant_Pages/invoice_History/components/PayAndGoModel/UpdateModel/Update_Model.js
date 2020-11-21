@@ -44,6 +44,7 @@ export default function Update_Model({
   instCount,
   customer_id,
   closeModal,
+  type,
   isEx,
 }) {
   const [installments, setInstallments] = useState(0);
@@ -388,6 +389,7 @@ export default function Update_Model({
           balance: balance <= 0 ? 0 : balance,
           gamisarani_amount: parseInt(gamisaraniamount),
           shortage: shortage === "" ? 0 : shortage,
+          type: type,
           date: updateTimestamp,
         });
       });

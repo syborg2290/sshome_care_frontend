@@ -197,6 +197,7 @@ export default function Expire_invoice({ expire_list }) {
                 instCount={payangoAllData[currentIndx]?.data?.noOfInstallment}
                 customer_id={payangoAllData[currentIndx]?.data?.customer_id}
                 closeModal={closeModalUpdate}
+                type={payangoAllData[currentIndx]?.data?.selectedType}
                 isEx={true}
               />
             </div>

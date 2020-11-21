@@ -251,15 +251,15 @@ export default function View_Model({ pendingBlackList }) {
                         <HistoryIcon onClick={showModalHistory} />
                       </span>
                       <span>
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        size="small"
-                        className="btn_paydash"
-                        onClick={showModalUpdate}
-                      >
-                        Update
-                      </Button>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          size="small"
+                          className="btn_paydash"
+                          onClick={showModalUpdate}
+                        >
+                          Update
+                        </Button>
                       </span>
                       <span>
                         <Button
@@ -366,6 +366,7 @@ export default function View_Model({ pendingBlackList }) {
                 customer_id={
                   allPendingBlacklistData[currentIndx]?.data?.customer_id
                 }
+                type={allPendingBlacklistData[currentIndx]?.data?.selectedType}
                 closeModal={closeModalUpdate}
                 isEx={
                   allPendingBlacklistData[currentIndx]?.data
@@ -379,9 +380,8 @@ export default function View_Model({ pendingBlackList }) {
         </div>
       </Modal>
 
-
       {/*Start Blacklist Confo   model */}
-      
+
       <Modal
         className="confo_models"
         closable={null}
@@ -396,20 +396,20 @@ export default function View_Model({ pendingBlackList }) {
       >
         <div className="confoModel_bodyys">
           <Grid container spacing={2}>
-          <Grid item xs={12} sm={1}></Grid>
-           <Grid className="confo_Icons-gri" item xs={12} sm={1}>
-          <ExclamationCircleOutlined className="confo_Icons" />
+            <Grid item xs={12} sm={1}></Grid>
+            <Grid className="confo_Icons-gri" item xs={12} sm={1}>
+              <ExclamationCircleOutlined className="confo_Icons" />
             </Grid>
-             <Grid item xs={12} sm={10}>
-            <h3 className="txtConfoModel_bodys">Are you sure to continue? </h3>
+            <Grid item xs={12} sm={10}>
+              <h3 className="txtConfoModel_bodys">
+                Are you sure to continue?{" "}
+              </h3>
             </Grid>
-            </Grid>
+          </Grid>
         </div>
       </Modal>
-  
-    {/*END Blacklist Confo   model */}
 
-
+      {/*END Blacklist Confo   model */}
 
       {/*Start Blacklist PENDING VIEW  model */}
 

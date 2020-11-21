@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import MUIDataTable from "mui-datatables";
 import { Modal } from "antd";
-import { Button , Grid } from "@material-ui/core";
+import { Button, Grid } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 // components
 import BlackListCustomers from "../black_list/customer_model/BlackList_Customers";
@@ -11,7 +11,6 @@ import BlackListHistory from "./histry_model/History_Model";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import HistoryIcon from "@material-ui/icons/History";
-
 
 // styles
 import "./Black_List.css";
@@ -251,10 +250,24 @@ export default function Black_List() {
                               count++;
                             });
                             if (count === reInst.docs.length) {
+                              let isEx =
+                                allDataBlacklist[currentIndx].data
+                                  .status_of_payandgo === "expired"
+                                  ? true
+                                  : false;
                               db.collection("installment").add({
                                 invoice_number:
                                   allDataBlacklist[currentIndx]?.data.InvoiceNo,
+                                isEx: {
+                                  isEx,
+                                },
+
                                 amount: amount,
+                                gamisarani_amount: 0,
+                                shortage: 0,
+                                type:
+                                  allDataBlacklist[currentIndx]?.data
+                                    .selectedType,
                                 delayed: 0,
                                 balance: 0,
                                 date: firebase.firestore.FieldValue.serverTimestamp(),
@@ -285,14 +298,16 @@ export default function Black_List() {
       >
         <div className="confoModel_bodyys">
           <Grid container spacing={2}>
-          <Grid item xs={12} sm={1}></Grid>
-           <Grid className="confo_Icons-gri" item xs={12} sm={1}>
-          <ExclamationCircleOutlined className="confo_Icons" />
+            <Grid item xs={12} sm={1}></Grid>
+            <Grid className="confo_Icons-gri" item xs={12} sm={1}>
+              <ExclamationCircleOutlined className="confo_Icons" />
             </Grid>
-             <Grid item xs={12} sm={10}>
-            <h3 className="txtConfoModel_bodys">Are you sure to continue? </h3>
+            <Grid item xs={12} sm={10}>
+              <h3 className="txtConfoModel_bodys">
+                Are you sure to continue?{" "}
+              </h3>
             </Grid>
-            </Grid>
+          </Grid>
         </div>
       </Modal>
 
@@ -352,7 +367,7 @@ export default function Black_List() {
             options={{
               // selectableRows: false,
               selectableRows: "none",
-              customToolbarSelect: () => {},
+              customToolbarSelect: () => { },
               filterType: "textfield",
               download: false,
               print: false,

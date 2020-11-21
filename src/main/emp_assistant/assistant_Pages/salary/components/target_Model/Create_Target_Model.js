@@ -38,9 +38,24 @@ export default function Create_Target_Model() {
     );
     let fromT = new Date(new Date().setDate(new Date() - daysCount));
     db.collection("invoice")
+      .where("selectedType", "==", selectedType)
       .get()
       .then((reInvoice) => {
-        // reInvoice.docs
+        console.log(reInvoice);
+        reInvoice.docs.forEach((reEa) => {
+          if (
+            new Date(fromT.toDateString()) <
+            new Date(new Date(reEa.data()?.date.seconds * 1000).toDateString())
+          ) {
+            if (
+              new Date(
+                new Date(reEa.data()?.date.seconds * 1000).toDateString()
+              ) <= new Date(new Date().toDateString())
+            ) {
+              setSaleAmount(sale_taregt_amount + reEa.data()?.downpayment);
+            }
+          }
+        });
       });
   };
 
@@ -54,6 +69,38 @@ export default function Create_Target_Model() {
         });
         setAllRoot(rawRoot);
       });
+
+    // ======================================
+
+    let daysCount = daysCountOfMonth(
+      new Date().getMonth(),
+      new Date().getFullYear()
+    );
+    let fromT = new Date(new Date().setDate(new Date().getDate() - daysCount));
+    db.collection("invoice")
+      .where("selectedType", "==", selectedType)
+      .get()
+      .then((reInvoice) => {
+        reInvoice.docs.forEach((reEa) => {
+          if (reEa.data().paymentWay === "PayandGo") {
+            if (
+              new Date(fromT.toDateString()) <
+              new Date(
+                new Date(reEa.data()?.date.seconds * 1000).toDateString()
+              )
+            ) {
+              if (
+                new Date(
+                  new Date(reEa.data()?.date.seconds * 1000).toDateString()
+                ) <= new Date(new Date().toDateString())
+              ) {
+                setSaleAmount(sale_taregt_amount + reEa.data()?.downpayment);
+              }
+            }
+          }
+        });
+      });
+    // ======================================
   }, []);
 
   return (

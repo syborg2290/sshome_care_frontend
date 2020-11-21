@@ -91,6 +91,7 @@ export default function Gass_Model() {
           type: selectedType,
           price: total,
           qty: qty,
+          shortage: shortage === "" ? 0 : shortage,
         });
         db.collection("gas")
           .doc(reSe.docs[0].id)

@@ -37,7 +37,7 @@ export default function Update_Loan_Model({ docId, balance, amountSe }) {
               status:
                 parseInt(reCu.data().balance) - parseInt(amount) <= 0
                   ? "Done"
-                  : "ongoing",
+                  : "Ongoing",
             })
             .then((_) => {
               db.collection("loan_history")

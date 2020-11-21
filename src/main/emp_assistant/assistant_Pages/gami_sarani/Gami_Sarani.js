@@ -38,7 +38,7 @@ export default function Gami_Sarani() {
 
   // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
-let history = useHistory();
+  let history = useHistory();
   const GamisaraniAddCustomer = () => {
     setGamisaraniModel(true);
   };
@@ -142,7 +142,7 @@ let history = useHistory();
   ];
 
   useEffect(() => {
-     window.addEventListener("offline", function (e) {
+    window.addEventListener("offline", function (e) {
       history.push("/connection_lost");
     });
     db.collection("gami_sarani").onSnapshot((re) => {
@@ -219,7 +219,7 @@ let history = useHistory();
       setAllTableData(rawAllData);
       setTableData(rawData);
     });
-      // eslint-disable-next-line
+    // eslint-disable-next-line
   }, []);
 
   return (
@@ -410,10 +410,10 @@ let history = useHistory();
               // selectableRows: false,
               selectableRows: "none",
               draggableColumns: {
-               enabled: true
-             },
-            responsive: "standard",
-              
+                enabled: true,
+              },
+              responsive: "standard",
+
               customToolbarSelect: () => {},
               onRowClick: (rowData, rowMeta) => {
                 setCurrentIndx(rowMeta.dataIndex);

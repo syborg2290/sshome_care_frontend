@@ -1,0 +1,6 @@
+.validate_updateEmployee {
+  color: red;
+  text-align: center !important;
+  font-weight: 600 !important;
+  margin-top: 20px;
+}

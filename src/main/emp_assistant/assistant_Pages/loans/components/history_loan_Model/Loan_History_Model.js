@@ -68,7 +68,7 @@ export default function Loan_History_Model({ docId }) {
     <Grid container spacing={4}>
       <Grid item xs={12}>
         <MUIDataTable
-          title={<span className="title_Span">Loan Paied History</span>}
+          title={<span className="title_Span">Loan History</span>}
           className="loans_table"
           sty
           data={tableData}

@@ -219,24 +219,21 @@ export default function Create_Target_Model() {
         });
       });
     // ======================================
+    // eslint-disable-next-line
   }, []);
 
   const createTarget = () => {
     setLoading(true);
+    // eslint-disable-next-line
+    let totAmount =
+      targetType === "sale_target" ? sale_taregt_amount : cash_taregt_amount;
     db.collection("targets")
       .add({
         target_type: targetType,
         selectedType: selectedType,
         start_date: startDate,
         endDate: endDate,
-        amount:
-          targetType === "sale_target"
-            ? sale_taregt_amount === ""
-              ? 0
-              : parseInt(sale_taregt_amount)
-            : cash_taregt_amount === ""
-            ? 0
-            : parseInt(cash_taregt_amount),
+        amount: totAmount,
         status: "Ongoing",
       })
       .then((_) => {

@@ -229,7 +229,8 @@ export default function Create_Target_Model() {
       targetType === "sale_target" ? sale_taregt_amount : cash_taregt_amount;
     db.collection("targets")
       .add({
-        target_type: targetType,
+        target_type:
+          targetType === "sale_target" ? "Sale target" : "Cash target",
         selectedType: selectedType,
         start_date: startDate,
         endDate: endDate,

@@ -1138,7 +1138,6 @@ function Make_invoice() {
       }
     } else {
       let arrayItems = [];
-      let itemsDiscount = 0;
 
       tablerows.forEach((one) => {
         let listOfSerilNo = [];
@@ -1150,9 +1149,6 @@ function Make_invoice() {
           listOfChassisNo.push(one.chassisNo[n]);
         }
         if (listOfSerilNo.length === parseInt(itemQty[one.i])) {
-          itemsDiscount =
-            parseInt(itemsDiscount) +
-            parseInt(itemDiscount[one.i] === "" ? 0 : itemDiscount[one.i]);
           let objItem = {
             item_id: one.id,
             serialNo: listOfSerilNo,
@@ -1177,7 +1173,7 @@ function Make_invoice() {
         gamisarani_amount:
           gamisaraniamount === "" ? 0 : parseInt(gamisaraniamount),
         paymentWay: isFullPayment ? "FullPayment" : "PayandGo",
-        downpayment: subTotalFunc() - itemsDiscount,
+        downpayment: dpayment,
         noOfInstallment: itemNOI,
         amountPerInstallment: itemAPI,
         balance: balance,

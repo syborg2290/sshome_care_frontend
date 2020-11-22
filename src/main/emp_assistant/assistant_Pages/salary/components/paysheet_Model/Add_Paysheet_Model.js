@@ -224,17 +224,19 @@ async function cashTargetFunc(root) {
 
           if (seeBool1) {
             for (let n = 0; n < saleRe.docs[i].data().items.length; n++) {
-              threePresentage =
-                parseInt(threePresentage) +
-                (parseInt(saleRe.docs[i].data().items[n].downpayment) * 3) /
-                  100;
-              fourPresentage =
-                parseInt(fourPresentage) +
-                (parseInt(saleRe.docs[i].data().items[n].downpayment) * 4) /
-                  100;
-              cashTargetValue =
-                parseInt(cashTargetValue) +
-                parseInt(saleRe.docs[i].data().items[n].downpayment);
+              if (!installmentsRe.docs[i].data().isExpired) {
+                threePresentage =
+                  parseInt(threePresentage) +
+                  (parseInt(saleRe.docs[i].data().items[n].downpayment) * 3) /
+                    100;
+                fourPresentage =
+                  parseInt(fourPresentage) +
+                  (parseInt(saleRe.docs[i].data().items[n].downpayment) * 4) /
+                    100;
+                cashTargetValue =
+                  parseInt(cashTargetValue) +
+                  parseInt(saleRe.docs[i].data().items[n].downpayment);
+              }
             }
           }
         }
@@ -249,17 +251,19 @@ async function cashTargetFunc(root) {
 
         if (seeBool1) {
           for (let n = 0; n < installmentsRe.docs[i].data().items.length; n++) {
-            threePresentage =
-              parseInt(threePresentage) +
-              (parseInt(installmentsRe.docs[i].data().items[n].amount) * 3) /
-                100;
-            fourPresentage =
-              parseInt(fourPresentage) +
-              (parseInt(installmentsRe.docs[i].data().items[n].amount) * 4) /
-                100;
-            cashTargetValue =
-              parseInt(cashTargetValue) +
-              parseInt(installmentsRe.docs[i].data().items[n].amount);
+            if (!installmentsRe.docs[i].data().isExpired) {
+              threePresentage =
+                parseInt(threePresentage) +
+                (parseInt(installmentsRe.docs[i].data().items[n].amount) * 3) /
+                  100;
+              fourPresentage =
+                parseInt(fourPresentage) +
+                (parseInt(installmentsRe.docs[i].data().items[n].amount) * 4) /
+                  100;
+              cashTargetValue =
+                parseInt(cashTargetValue) +
+                parseInt(installmentsRe.docs[i].data().items[n].amount);
+            }
           }
         }
       }

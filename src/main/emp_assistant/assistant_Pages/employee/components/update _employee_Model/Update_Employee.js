@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { TextField, Button } from "@material-ui/core";
 import { Spin } from "antd";
 
@@ -36,7 +36,7 @@ export default function Update_Employe({
   // eslint-disable-next-line
   const [isLoadingSubmit, setLoadingSubmit] = useState(false);
   let history = useHistory();
-  
+
   const updateEmployee = async (e) => {
     e.preventDefault();
     setLoadingSubmit(true);
@@ -94,8 +94,7 @@ export default function Update_Employe({
     }
   };
 
-    useEffect(() => {
-
+  useEffect(() => {
     window.addEventListener("offline", function (e) {
       history.push("/connection_lost");
     });
@@ -127,6 +126,7 @@ export default function Update_Employe({
                 label="NIC"
                 autoFocus
                 size="small"
+                disabled={true}
                 value={nic}
                 onChange={(e) => {
                   setNic(e.target.value.trim());
@@ -270,7 +270,6 @@ export default function Update_Employe({
             </Grid>
             <Grid item xs={12} sm={1}></Grid>
 
-         
             <Grid className="txt_Labels_employee_update" item xs={12} sm={4}>
               Basic :
             </Grid>

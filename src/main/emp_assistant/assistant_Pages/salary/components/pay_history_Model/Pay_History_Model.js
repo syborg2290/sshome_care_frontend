@@ -11,11 +11,20 @@ import "./Pay_History_Model.css";
 import HistoryIcon from "@material-ui/icons/History";
 
 export default function Pay_History_Model() {
+
+  const [payHistoryTabModel, setpayHistoryTabModel] = useState(false); // table model
+
   // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
   // eslint-disable-next-line
   const [allData, setallData] = useState([]);
   let history = useHistory();
+
+
+  const PayHistoryTabModels = () => {
+    setpayHistoryTabModel(true);
+     history.push("/assistant/salary/history_reports");
+  };
 
   const columns = [
     {
@@ -228,7 +237,7 @@ export default function Pay_History_Model() {
       "kers",
       <div>
         <HistoryIcon className="btnView"
-        // onClick={PayHistoryModels}
+        onClick={PayHistoryTabModels}
         />
       </div>,
     ],

@@ -1,7 +1,11 @@
-.temporary_table {
-  margin-top: 75px !important;
+.temporary_istable {
+  margin-top: 50px !important;
+  width: 90% !important;
 }
 
 .model_history_temporary {
   width: 65% !important;
+}
+
+.btn_tempary {
 }

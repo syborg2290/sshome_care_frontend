@@ -14,7 +14,10 @@ import "./Add_Paysheet_Model.css";
 import db from "../../../../../../config/firebase.js";
 
 async function getGasshort(root, isFirstSalary, lastSalaryDate) {
-  var reGas = await db.collection("gas_purchase_history").get();
+  var reGas = await db
+    .collection("gas_purchase_history")
+    .where("type", "==", root)
+    .get();
 
   var gasShort = 0;
 
@@ -36,11 +39,14 @@ async function getGasshort(root, isFirstSalary, lastSalaryDate) {
     }
   }
 
-  return gasShort === 0 ? 0 : gasShort / 2;
+  return gasShort;
 }
 
 async function getInstallmentshort(root, isFirstSalary, lastSalaryDate) {
-  var reInstallment = await db.collection("installment").get();
+  var reInstallment = await db
+    .collection("installment")
+    .where("type", "==", root)
+    .get();
 
   var installShortage = 0;
   for (var i = 0; i < reInstallment.docs.length; i++) {
@@ -65,11 +71,14 @@ async function getInstallmentshort(root, isFirstSalary, lastSalaryDate) {
     }
   }
 
-  return installShortage === 0 ? 0 : installShortage / 2;
+  return installShortage;
 }
 
 async function getShortage(root, isFirstSalary, lastSalaryDate) {
-  var reInvoice = await db.collection("invoice").get();
+  var reInvoice = await db
+    .collection("invoice")
+    .where("selectedType", "==", root)
+    .get();
 
   var shortage = 0;
   for (var i = 0; i < reInvoice.docs.length; i++) {
@@ -91,7 +100,7 @@ async function getShortage(root, isFirstSalary, lastSalaryDate) {
     }
   }
 
-  return shortage === 0 ? 0 : shortage / 2;
+  return shortage;
 }
 
 async function getAllAttendance(nic, isFirstSalary, lastSalaryDate) {
@@ -123,7 +132,43 @@ async function getAllAttendance(nic, isFirstSalary, lastSalaryDate) {
   }
 }
 
-async function getSaleTarget() {}
+async function getSaleTarget(root) {
+  var saleRe = await db
+    .collection("invoice")
+    .where("selectedType", "==", root)
+    .get();
+
+  var salesTaregt = await db
+    .collection("targets")
+    .where("selectedType", "==", root)
+    .get();
+  var saleTarget = 0;
+  var targetValue = 0;
+
+  for (var k = 0; k < salesTaregt.docs.length; k++) {
+    if (salesTaregt.docs[k].data().status === "ongoing") {
+      targetValue = parseInt(salesTaregt.docs[k].data().amount);
+      for (var i = 0; i < saleRe.docs.length; i++) {
+        if (saleRe.docs[i].data().selectedType === root) {
+          let seeBool1 =
+            new Date(saleRe.docs[i].data()?.date.seconds * 1000) >
+              new Date(salesTaregt.docs[k].data()?.start_date.seconds * 1000) &&
+            new Date(saleRe.docs[i].data()?.date.seconds * 1000) <= new Date();
+
+          if (seeBool1) {
+            for (let n = 0; n < saleRe.docs[i].data().items.length; n++) {
+              saleTarget =
+                parseInt(saleTarget) +
+                parseInt(saleRe.docs[i].data().items[n].downpayment);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  return saleTarget >= targetValue ? 0 : 5000;
+}
 
 export default function Add_Paysheet_Model({ nic }) {
   // eslint-disable-next-line
@@ -158,6 +203,9 @@ export default function Add_Paysheet_Model({ nic }) {
       .then((reRoot) => {
         reRoot.docs.forEach((eachRoot) => {
           let rootName = eachRoot.data().root;
+          getSaleTarget(rootName).then((reSaleTarget) => {
+            setSaleTarget(reSaleTarget);
+          });
           if (eachRoot.data().employee1 === nic) {
             db.collection("salary")
               .where("nic", "==", nic)

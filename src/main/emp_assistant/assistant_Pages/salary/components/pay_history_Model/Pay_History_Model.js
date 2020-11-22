@@ -7,6 +7,9 @@ import { useHistory } from "react-router-dom";
 // styles
 import "./Pay_History_Model.css";
 
+// icons
+import HistoryIcon from "@material-ui/icons/History";
+
 export default function Pay_History_Model() {
   // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
@@ -191,11 +194,24 @@ export default function Pay_History_Model() {
         }),
       },
     },
+        {
+      name: "Action",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: {
+            fontSize: "15px",
+            color: "black",
+            fontWeight: "600",
+          },
+        }),
+      },
+    },
   ];
 
   const tableData = [
     [
-      "Joe ",
+      "2020/03/01",
       "James",
       "Test",
       "Corp",
@@ -210,6 +226,11 @@ export default function Pay_History_Model() {
       "Yon",
       "kers",
       "kers",
+      <div>
+        <HistoryIcon className="btnView"
+        // onClick={PayHistoryModels}
+        />
+      </div>,
     ],
   ];
 
@@ -223,7 +244,6 @@ export default function Pay_History_Model() {
           data={tableData}
           columns={columns}
           options={{
-            // selectableRows: false,
             selectableRows: "none",
             customToolbarSelect: () => {},
             onRowClick: (rowData, rowMeta) => {

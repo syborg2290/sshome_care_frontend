@@ -995,7 +995,9 @@ export default function Add_Paysheet_Model({ nic }) {
                   value={loan}
                   onChange={(e) => {
                     if (e.target.value !== "") {
-                      setLoan(parseInt(e.target.value.trim()));
+                      if (loanBalance >= parseInt(e.target.value)) {
+                        setLoan(parseInt(e.target.value.trim()));
+                      }
                     }
                   }}
                 />

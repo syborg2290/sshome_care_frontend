@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { DatePicker, Space, Spin } from "antd";
+import CurrencyFormat from "react-currency-format";
 
 import {
   TextField,
@@ -115,7 +116,14 @@ export default function Advance_Model({ docId, nic, fname, lname }) {
               :
             </Grid>
             <Grid item xs={12} sm={7}>
-              <p>{balance}</p>
+              <p>
+                <CurrencyFormat
+                  value={balance}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              </p>
             </Grid>
             <Grid className="lbl_topi" item xs={12} sm={4}>
               Date

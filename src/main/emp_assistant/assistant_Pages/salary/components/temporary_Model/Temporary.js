@@ -1,64 +1,35 @@
 import React, { useState, useEffect } from "react";
-
-import { Modal } from "antd";
 import { Grid, Button } from "@material-ui/core";
 import MUIDataTable from "mui-datatables";
 import { useHistory } from "react-router-dom";
+import CurrencyFormat from "react-currency-format";
+import moment from "moment";
+import { Modal } from "antd";
+
+import MakeTemp from "./components/make_temporary_Model/Temporary_Make";
+
+import AvTimerIcon from "@material-ui/icons/AvTimer";
+
 // styles
 import "./Temporary.css";
 
-// components
-import TemporaryModels from "./components/make_temporary_Model/Temporary_Make";
-import TemporaryHistory from "./components/temporory_history_Model/Temporary_History";
-
-// icons
-import HistoryIcon from "@material-ui/icons/History";
-
-
-
 import db from "../../../../../../config/firebase.js";
 
-export default function Temporary() {
-  
-  const [temporaryModel, setTemporaryModel] = useState(false);
-  const [temporaryHistoryModel, setTemporaryHistoryModel] = useState(false);
-
+export default function Temporary_History() {
   // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
-  const [tableData, setTableData] = useState([]);
   // eslint-disable-next-line
   const [allData, setallData] = useState([]);
+  const [makeTemp, setMakeTemp] = useState(false);
   let history = useHistory();
 
-  const TemporaryModel = () => {
-    setTemporaryModel(true);
+  const openMakeTemp = () => {
+    setMakeTemp(true);
   };
 
-  const TemporaryHistoryModel = () => {
-    setTemporaryHistoryModel(true);
-  };
-
-    const columns = [
+  const columns = [
     {
-      name: "FirstName",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
-    {
-      name: "LastName",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
-    {
-      name: "NIC",
+      name: "Date",
       options: {
         filter: false,
         setCellHeaderProps: (value) => ({
@@ -67,7 +38,7 @@ export default function Temporary() {
       },
     },
     {
-      name: "Mobile",
+      name: "Amount",
       options: {
         filter: false,
         setCellHeaderProps: (value) => ({
@@ -76,15 +47,11 @@ export default function Temporary() {
       },
     },
     {
-      name: "Action",
+      name: "Reason",
       options: {
-        filter: true,
+        filter: false,
         setCellHeaderProps: (value) => ({
-          style: {
-            fontSize: "15px",
-            color: "black",
-            fontWeight: "600",
-          },
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
         }),
       },
     },
@@ -95,98 +62,66 @@ export default function Temporary() {
       history.push("/connection_lost");
     });
 
-    db.collection("employee").onSnapshot((snap) => {
-      var raw = [];
-      var rawAlldata = [];
-      snap.docs.forEach((each) => {
-        rawAlldata.push({
-          id: each.id,
-          data: each.data(),
-        });
-        raw.push({
-          FirstName: each.data().fname,
-          LastName: each.data().lname,
-          NIC: each.data().nic,
-          Mobile: each.data().mobile1,
-          Action: (
-            <div>
-              <HistoryIcon className="btnView"
-                onClick={TemporaryHistoryModel}
+    db.collection("temporary")
+      .get()
+      .then((reTemp) => {
+        var rawData = [];
+        reTemp.docs.forEach((reT) => {
+          rawData.push({
+            Date: moment(reT.data()?.date?.toDate()).format(
+              "dddd, MMMM Do YYYY"
+            ),
+            Amount: (
+              <CurrencyFormat
+                value={reT.data()?.amount}
+                displayType={"text"}
+                thousandSeparator={true}
+                prefix={" "}
               />
-              <span>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  size="small"
-                  className="btnupdateLon"
-                  onClick={TemporaryModel}
-                >
-                  Temporary
-                </Button>
-              </span>
-            </div>
-          ),
+            ),
+            reason: reT.data()?.reason,
+          });
         });
+        setallData(rawData);
       });
-      setTableData(raw);
-      setallData(rawAlldata);
-    });
     // eslint-disable-next-line
   }, []);
+
   return (
-      <>
-
-       {/*Start  Temporary Model */}
-
+    <>
       <Modal
-        visible={temporaryModel}
+        visible={makeTemp}
         footer={null}
-        className="model_temporary"
+        className="model_paysheet_add"
         onCancel={() => {
-          setTemporaryModel(false);
+          setMakeTemp(false);
         }}
       >
         <div>
           <div>
             <div>
-              <TemporaryModels />
+              <MakeTemp />
             </div>
           </div>
         </div>
       </Modal>
-
-      {/* End Temporary Model  */}
-
-
-      {/*Start Temporary HISTORY Model */}
-
-      <Modal
-        visible={temporaryHistoryModel}
-        footer={null}
-        className="model_history_temporary"
-        onCancel={() => {
-          setTemporaryHistoryModel(false);
-        }}
-      >
-        <div>
-          <div>
-            <div>
-              <TemporaryHistory />
-            </div>
-          </div>
-        </div>
-      </Modal>
-
-      {/* End Temporary HISTORY Model  */}
-
-      
-       <Grid container spacing={4}>
+      <Grid container spacing={4}>
         <Grid item xs={12}>
+          <Grid item xs={2}>
+            <Button
+              variant="contained"
+              className="btn_tempary"
+              endIcon={<AvTimerIcon />}
+              onClick={openMakeTemp}
+            >
+              Make Temporary
+            </Button>
+          </Grid>
           <MUIDataTable
-            title={<span className="title_Span">Temporary</span>}
-            className="temporary_table"
+            title={<span className="title_Span">Temporary History</span>}
+            className="temporary_histable"
             sty
-            data={tableData}
+            data={allData}
             columns={columns}
             options={{
               selectableRows: "none",
@@ -204,8 +139,6 @@ export default function Temporary() {
           />
         </Grid>
       </Grid>
-      </>
-    );
+    </>
+  );
 }
-
-

@@ -170,7 +170,10 @@ export default function Salary_Advance() {
         <div>
           <div>
             <div>
-              <AdvanceHistory />
+              <AdvanceHistory
+                key={allData[currentIndx]?.id}
+                nic={allData[currentIndx]?.data.nic}
+              />
             </div>
           </div>
         </div>

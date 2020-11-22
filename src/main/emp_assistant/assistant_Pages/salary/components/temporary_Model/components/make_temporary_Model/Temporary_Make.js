@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { DatePicker, Space } from "antd";
-import CurrencyFormat from "react-currency-format";
+import React, { useState } from "react";
+import { DatePicker, Space, Spin } from "antd";
 
 import {
   TextField,
@@ -18,14 +17,23 @@ import firebase from "firebase";
 
 export default function Temporary_Make() {
   const [amount, setAmount] = useState(0);
-  const [balance, setBalance] = useState(0);
+  const [reason, setReason] = useState("");
   const [date, setDate] = useState(null);
+  const [isLoading, setLoading] = useState(false);
 
-  // useEffect(() => {
-  //   db.collection("employee").get();
-  // }, []);
-
-  // const makeTemporary = () => {};
+  const makeTemporary = () => {
+    setLoading(true);
+    db.collection("temporary")
+      .add({
+        reason: reason,
+        amount: amount,
+        date: date,
+      })
+      .then((_) => {
+        setLoading(false);
+        window.location.reload();
+      });
+  };
 
   return (
     <Container component="main" className="conctainefr_main">
@@ -57,27 +65,33 @@ export default function Temporary_Make() {
                 value={amount}
                 onChange={(e) => {
                   if (e.target.value !== "") {
-                    setAmount(e.target.value);
+                    setAmount(parseInt(e.target.value.trim()));
                   }
                 }}
               />
             </Grid>
+
             <Grid className="lbl_topi" item xs={12} sm={4}>
-              Balance(LKR)
+              Reason
             </Grid>
             <Grid item xs={12} sm={1}>
               :
             </Grid>
             <Grid item xs={12} sm={7}>
-              <p>
-                <CurrencyFormat
-                  value={10000}
-                  displayType={"text"}
-                  thousandSeparator={true}
-                  prefix={" "}
-                />
-              </p>
+              <TextField
+                autoComplete="bsly"
+                variant="outlined"
+                required
+                fullWidth
+                label="Target Amount"
+                size="small"
+                value={reason}
+                onChange={(e) => {
+                  setReason(e.target.value.trim());
+                }}
+              />
             </Grid>
+
             <Grid className="lbl_topi" item xs={12} sm={4}>
               Date
             </Grid>
@@ -107,9 +121,10 @@ export default function Temporary_Make() {
                 variant="contained"
                 color="primary"
                 className="btn_update"
-                // onClick={makeTemporary}
+                onClick={makeTemporary}
+                disabled={date === null || isLoading}
               >
-                Done
+                {isLoading ? <Spin size="small" /> : "Done"}
               </Button>
             </Grid>
           </Grid>

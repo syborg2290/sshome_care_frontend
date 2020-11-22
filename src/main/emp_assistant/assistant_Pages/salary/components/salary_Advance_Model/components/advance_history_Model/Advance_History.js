@@ -2,18 +2,18 @@ import React, { useState, useEffect } from "react";
 
 import { Grid } from "@material-ui/core";
 import MUIDataTable from "mui-datatables";
-import { useHistory } from "react-router-dom";
+import moment from "moment";
+import CurrencyFormat from "react-currency-format";
 
 // styles
 import "./Advance_History.css";
 
-export default function Advance_History() {
+import db from "../../../../../../../../config/firebase.js";
 
-   // eslint-disable-next-line
-  const [currentIndx, setCurrentIndx] = useState(0);
+export default function Advance_History({ nic }) {
   // eslint-disable-next-line
+  const [currentIndx, setCurrentIndx] = useState(0);
   const [allData, setallData] = useState([]);
-  let history = useHistory();
 
   const columns = [
     {
@@ -52,7 +52,7 @@ export default function Advance_History() {
         }),
       },
     },
-       {
+    {
       name: "Balance",
       options: {
         filter: false,
@@ -61,42 +61,68 @@ export default function Advance_History() {
         }),
       },
     },
-
-  
   ];
 
-   const tableData = [
-        ["Joe ", "James", "Test", "Corp", "Yon"],
-
-];
-    
+  useEffect(() => {
+    db.collection("salary_advance")
+      .where("nic", "==", nic)
+      .get()
+      .then((reSlAd) => {
+        var rawData = [];
+        reSlAd.docs.forEach((each) => {
+          rawData.push({
+            Name: each.data().name,
+            NIC: each.data().nic,
+            Date: moment(each.data()?.date?.toDate()).format(
+              "dddd, MMMM Do YYYY"
+            ),
+            Amount: (
+              <CurrencyFormat
+                value={each.data().amount}
+                displayType={"text"}
+                thousandSeparator={true}
+                prefix={" "}
+              />
+            ),
+            Balance: (
+              <CurrencyFormat
+                value={each.data().balance}
+                displayType={"text"}
+                thousandSeparator={true}
+                prefix={" "}
+              />
+            ),
+          });
+        });
+        setallData(rawData);
+      });
+  }, [nic]);
 
   return (
-          
-      <Grid container spacing={4}>
-        <Grid item xs={12}>
-          <MUIDataTable
-            title={<span className="title_Span">Advance History</span>}
-            className="advance_histable"
-            sty
-            data={tableData}
-            columns={columns}
-            options={{
-              // selectableRows: false,
-              selectableRows: "none",
-              customToolbarSelect: () => {},
-              onRowClick: (rowData, rowMeta) => {
-                setCurrentIndx(rowMeta.dataIndex);
-              },
-              filterType: "textField",
-              download: false,
-              print: false,
-              searchPlaceholder: "Search using any column names",
-              elevation: 4,
-              sort: true,
-            }}
-          />
-        </Grid>
+    <Grid container spacing={4}>
+      <Grid item xs={12}>
+        <MUIDataTable
+          title={<span className="title_Span">Advance History</span>}
+          className="advance_histable"
+          sty
+          data={allData}
+          columns={columns}
+          options={{
+            // selectableRows: false,
+            selectableRows: "none",
+            customToolbarSelect: () => {},
+            onRowClick: (rowData, rowMeta) => {
+              setCurrentIndx(rowMeta.dataIndex);
+            },
+            filterType: "textField",
+            download: false,
+            print: false,
+            searchPlaceholder: "Search using any column names",
+            elevation: 4,
+            sort: true,
+          }}
+        />
       </Grid>
-  )
+    </Grid>
+  );
 }

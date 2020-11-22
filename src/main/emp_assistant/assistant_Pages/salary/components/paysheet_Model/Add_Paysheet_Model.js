@@ -87,19 +87,29 @@ async function getShortage(root, isFirstSalary, lastSalaryDate) {
     });
 }
 
-function getAllAttendance(nic, isFirstSalary, lastSalaryDate) {
-  //  if (isFirstSalary) {
-  //    shortage = parseInt(shortage) + parseInt(eachIn.data().shortage);
-  //  } else {
-  //    let seeBool1 =
-  //      new Date(eachIn.data()?.date.seconds * 1000) >
-  //        new Date(lastSalaryDate.seconds * 1000) &&
-  //      new Date(eachIn.data()?.date.seconds * 1000) <= new Date();
+async function getAllAttendance(nic, isFirstSalary, lastSalaryDate) {
+  await db
+    .collection("attendance_history")
+    .where("nic", "==", nic)
+    .get()
+    .then((reAt) => {
+      var attendance = 0;
+      if (isFirstSalary) {
+        attendance = reAt.docs.length;
+      } else {
+        reAt.docs.forEach((reAtee) => {
+          let seeBool1 =
+            new Date(reAtee.data()?.date.seconds * 1000) >
+              new Date(lastSalaryDate.seconds * 1000) &&
+            new Date(reAtee.data()?.date.seconds * 1000) <= new Date();
 
-  //    if (seeBool1) {
-  //      shortage = parseInt(shortage) + parseInt(eachIn.data().shortage);
-  //    }
-  //  }
+          if (seeBool1) {
+            attendance = parseInt(attendance) + 1;
+          }
+        });
+      }
+      return attendance;
+    });
 }
 
 export default function Add_Paysheet_Model({ nic }) {
@@ -136,6 +146,7 @@ export default function Add_Paysheet_Model({ nic }) {
         reRoot.docs.forEach((eachRoot) => {
           if (eachRoot.data().employee1 === nic) {
             db.collection("salary")
+              .where("nic", "==", nic)
               .get()
               .then((reSalary) => {
                 if (reSalary.docs.length > 0) {
@@ -146,6 +157,13 @@ export default function Add_Paysheet_Model({ nic }) {
                   ).then((reShort) => {
                     setShortage(parseInt(reShort));
                   });
+                  getAllAttendance(
+                    nic,
+                    false,
+                    reSalary.docs[0].data().date
+                  ).then((reAtte) => {
+                    setAttendance(reAtte);
+                  });
                 } else {
                   getShortage(
                     eachRoot.data().root,
@@ -153,6 +171,13 @@ export default function Add_Paysheet_Model({ nic }) {
                     reSalary.docs[0].data().date
                   ).then((reShort) => {
                     setShortage(parseInt(reShort));
+                  });
+                  getAllAttendance(
+                    nic,
+                    true,
+                    reSalary.docs[0].data().date
+                  ).then((reAtte) => {
+                    setAttendance(reAtte);
                   });
                 }
               });
@@ -162,6 +187,7 @@ export default function Add_Paysheet_Model({ nic }) {
 
           if (eachRoot.data().employee2 === nic) {
             db.collection("salary")
+              .where("nic", "==", nic)
               .get()
               .then((reSalary) => {
                 if (reSalary.docs.length > 0) {
@@ -172,6 +198,13 @@ export default function Add_Paysheet_Model({ nic }) {
                   ).then((reShort) => {
                     setShortage(parseInt(reShort));
                   });
+                  getAllAttendance(
+                    nic,
+                    false,
+                    reSalary.docs[0].data().date
+                  ).then((reAtte) => {
+                    setAttendance(reAtte);
+                  });
                 } else {
                   getShortage(
                     eachRoot.data().root,
@@ -179,6 +212,13 @@ export default function Add_Paysheet_Model({ nic }) {
                     reSalary.docs[0].data().date
                   ).then((reShort) => {
                     setShortage(parseInt(reShort));
+                  });
+                  getAllAttendance(
+                    nic,
+                    true,
+                    reSalary.docs[0].data().date
+                  ).then((reAtte) => {
+                    setAttendance(reAtte);
                   });
                 }
               });

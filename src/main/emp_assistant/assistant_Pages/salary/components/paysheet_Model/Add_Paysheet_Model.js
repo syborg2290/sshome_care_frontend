@@ -223,21 +223,15 @@ async function cashTargetFunc(root) {
             new Date(saleRe.docs[i].data()?.date.seconds * 1000) <= new Date();
 
           if (seeBool1) {
-            for (let n = 0; n < saleRe.docs[i].data().items.length; n++) {
-              if (!installmentsRe.docs[i].data().isExpired) {
-                threePresentage =
-                  parseInt(threePresentage) +
-                  (parseInt(saleRe.docs[i].data().items[n].downpayment) * 3) /
-                    100;
-                fourPresentage =
-                  parseInt(fourPresentage) +
-                  (parseInt(saleRe.docs[i].data().items[n].downpayment) * 4) /
-                    100;
-                cashTargetValue =
-                  parseInt(cashTargetValue) +
-                  parseInt(saleRe.docs[i].data().items[n].downpayment);
-              }
-            }
+            threePresentage =
+              parseInt(threePresentage) +
+              (parseInt(saleRe.docs[i].data().downpayment) * 3) / 100;
+            fourPresentage =
+              parseInt(fourPresentage) +
+              (parseInt(saleRe.docs[i].data().downpayment) * 4) / 100;
+            cashTargetValue =
+              parseInt(cashTargetValue) +
+              parseInt(saleRe.docs[i].data().downpayment);
           }
         }
       }
@@ -288,11 +282,9 @@ async function getCashSaleFunc(root, isFirstSalary, lastSalaryDate) {
   for (var i = 0; i < saleRe.docs.length; i++) {
     if (saleRe.docs[i].data().paymentWay === "FullPayment") {
       if (isFirstSalary) {
-        for (let n = 0; n < saleRe.docs[i].data().items.length; n++) {
-          cashSale =
-            parseInt(cashSale) +
-            (parseInt(saleRe.docs[i].data().items[n].downpayment) * 2.5) / 100;
-        }
+        cashSale =
+          parseInt(cashSale) +
+          (parseInt(saleRe.docs[i].data().downpayment) * 2.5) / 100;
       } else {
         let seeBool1 =
           new Date(saleRe.docs[i].data()?.date.seconds * 1000) >
@@ -300,12 +292,9 @@ async function getCashSaleFunc(root, isFirstSalary, lastSalaryDate) {
           new Date(saleRe.docs[i].data()?.date.seconds * 1000) <= new Date();
 
         if (seeBool1) {
-          for (let n = 0; n < saleRe.docs[i].data().items.length; n++) {
-            cashSale =
-              parseInt(cashSale) +
-              (parseInt(saleRe.docs[i].data().items[n].downpayment) * 2.5) /
-                100;
-          }
+          cashSale =
+            parseInt(cashSale) +
+            (parseInt(saleRe.docs[i].data().downpayment) * 2.5) / 100;
         }
       }
     }

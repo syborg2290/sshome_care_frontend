@@ -15,20 +15,20 @@ export default function Add_Paysheet_Model() {
     // eslint-disable-next-line
   const [loading, setLoading] = useState(false);
 
-    const [basicSalary, setBasicSalary] = useState("");
-    const [insentive, setInsentive] = useState("");
-    const [phoneBill, setPhoneBill] = useState("");
+    const [basicSalary, setBasicSalary] = useState(0);
+    const [insentive, setInsentive] = useState(0);
+    const [phoneBill, setPhoneBill] = useState(0);
     const [attendance, setAttendance] = useState("");
-    const [epf, setEPF] = useState("");
-    const [securityDeposit, setSecurityDeposit] = useState("");
-    const [deduction, setDeduction] = useState("");
-    const [advance, setAdvance] = useState("");
-    const [loan, setLoan] = useState("");
-    const [shortage, setShortage] = useState("");
-  const [saleTarget, setSaleTarget] = useState("");
-  const [cashTarget, setCashTarget] = useState("");
-  const [exCard, setExCard] = useState("");
-  const [cashSale, setCashSale] = useState("");
+    const [epf, setEPF] = useState(0);
+    const [securityDeposit, setSecurityDeposit] = useState(0);
+    const [deduction, setDeduction] = useState(0);
+    const [advance, setAdvance] = useState(0);
+    const [loan, setLoan] = useState(0);
+    const [shortage, setShortage] = useState(0);
+  const [saleTarget, setSaleTarget] = useState(0);
+  const [cashTarget, setCashTarget] = useState(0);
+  const [exCard, setExCard] = useState(0);
+  const [cashSale, setCashSale] = useState(0);
 
 
     return (

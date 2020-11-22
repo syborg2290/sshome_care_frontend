@@ -160,7 +160,7 @@ async function getSaleTarget(root) {
 
   for (var k = 0; k < salesTaregt.docs.length; k++) {
     if (
-      salesTaregt.docs[k].data().status === "ongoing" ||
+      salesTaregt.docs[k].data().status === "ongoing" &&
       salesTaregt.docs[k].data().target_type === "Sale target"
     ) {
       targetValue = parseInt(salesTaregt.docs[k].data().amount);
@@ -210,7 +210,7 @@ async function cashTargetFunc(root) {
 
   for (let k = 0; k < cashTaregt.docs.length; k++) {
     if (
-      cashTaregt.docs[k].data().status === "ongoing" ||
+      cashTaregt.docs[k].data().status === "ongoing" &&
       cashTaregt.docs[k].data().target_type === "Cash target"
     ) {
       var targetValue = parseInt(cashTaregt.docs[k].data().amount);
@@ -245,7 +245,7 @@ async function cashTargetFunc(root) {
 
         if (seeBool1) {
           for (let n = 0; n < installmentsRe.docs[i].data().items.length; n++) {
-            if (!installmentsRe.docs[i].data().isExpired) {
+            if (installmentsRe.docs[i].data().isExpired === false) {
               threePresentage =
                 parseInt(threePresentage) +
                 (parseInt(installmentsRe.docs[i].data().items[n].amount) * 3) /

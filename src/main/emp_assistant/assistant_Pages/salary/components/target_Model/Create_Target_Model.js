@@ -29,19 +29,19 @@ export default function Create_Target_Model() {
   const [selectedType, setSelectedType] = useState("shop");
   const [targetType, setTargetType] = useState("sale_target");
 
-  const handleChange = (event) => {
+  const handleChange = async (event) => {
     setSelectedType(event.target.value);
 
     if (targetType === "sale_target") {
       setSaleAmount(0);
-      getAllSaleTargetAmount();
+      await getAllSaleTargetAmount(event.target.value);
     } else {
       setCashAmount(0);
-      getAllCashTargetAmount();
+      await getAllCashTargetAmount(event.target.value);
     }
   };
 
-  const getAllSaleTargetAmount = () => {
+  const getAllSaleTargetAmount = async (type) => {
     setLoading(true);
 
     let daysCount = daysCountOfMonth(
@@ -50,7 +50,7 @@ export default function Create_Target_Model() {
     );
     let fromT = new Date(new Date().setDate(new Date().getDate() - daysCount));
     db.collection("invoice")
-      .where("selectedType", "==", selectedType)
+      .where("selectedType", "==", type)
       .get()
       .then((reInvoice) => {
         reInvoice.docs.forEach((reEa) => {
@@ -75,7 +75,7 @@ export default function Create_Target_Model() {
       });
   };
 
-  const getAllCashTargetAmount = () => {
+  const getAllCashTargetAmount = async (type) => {
     setLoading(true);
 
     let daysCount = daysCountOfMonth(
@@ -84,7 +84,7 @@ export default function Create_Target_Model() {
     );
     let fromT = new Date(new Date().setDate(new Date().getDate() - daysCount));
     db.collection("invoice")
-      .where("selectedType", "==", selectedType)
+      .where("selectedType", "==", type)
       .get()
       .then((reInvoice) => {
         reInvoice.docs.forEach((reEa) => {
@@ -108,7 +108,7 @@ export default function Create_Target_Model() {
       });
 
     db.collection("installment")
-      .where("type", "==", selectedType)
+      .where("type", "==", type)
       .get()
       .then((reInstall) => {
         reInstall.docs.forEach((reEa) => {

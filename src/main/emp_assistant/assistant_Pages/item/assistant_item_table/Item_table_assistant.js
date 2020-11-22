@@ -139,9 +139,9 @@ export default function Item_table_assistant() {
               <span className="icon_Edit">
                 <EditIcon onClick={editModal} />
               </span>
-              <span className="icon_delete">
+              {/* <span className="icon_delete">
                 <DeleteIcon onClick={showModalConfirmModal} />
-              </span>
+              </span> */}
             </div>,
           ]);
         });
@@ -154,26 +154,26 @@ export default function Item_table_assistant() {
     // eslint-disable-next-line
   }, []);
 
-  const showDeleteItemsConfirm = async () => {
-    await db
-      .collection("item")
-      .doc(
-        allTtemData[currentIndx] && allTtemData[currentIndx].id
-          ? allTtemData[currentIndx].id
-          : ""
-      )
-      .delete()
-      .then(function () {
-        NotificationManager.success("Item deletion successfully!", "Done");
-        setConfirmVisible(false);
-      })
-      .catch(function (error) {
-        NotificationManager.warning(
-          "Failed to continue the process!",
-          "Please try again"
-        );
-      });
-  };
+  // const showDeleteItemsConfirm = async () => {
+  //   await db
+  //     .collection("item")
+  //     .doc(
+  //       allTtemData[currentIndx] && allTtemData[currentIndx].id
+  //         ? allTtemData[currentIndx].id
+  //         : ""
+  //     )
+  //     .delete()
+  //     .then(function () {
+  //       NotificationManager.success("Item deletion successfully!", "Done");
+  //       setConfirmVisible(false);
+  //     })
+  //     .catch(function (error) {
+  //       NotificationManager.warning(
+  //         "Failed to continue the process!",
+  //         "Please try again"
+  //       );
+  //     });
+  // };
 
   const editModalClose = () => {
     setEditVisible(false);
@@ -256,7 +256,7 @@ export default function Item_table_assistant() {
 
   return (
     <>
-      <Modal
+      {/* <Modal
         className="confo_model"
         closable={null}
         visible={confirmVisible}
@@ -274,7 +274,7 @@ export default function Item_table_assistant() {
             Do you want to delete this item?{" "}
           </h3>
         </div>
-      </Modal>
+      </Modal> */}
       <Modal
         title={
           <span className="model_title">

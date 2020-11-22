@@ -83,7 +83,7 @@ export default function Temporary_Make() {
                 variant="outlined"
                 required
                 fullWidth
-                label="Target Amount"
+                label="Reason"
                 size="small"
                 value={reason}
                 onChange={(e) => {

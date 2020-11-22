@@ -79,7 +79,7 @@ export default function Temporary_History() {
                 prefix={" "}
               />
             ),
-            reason: reT.data()?.reason,
+            Reason: reT.data()?.reason,
           });
         });
         setallData(rawData);

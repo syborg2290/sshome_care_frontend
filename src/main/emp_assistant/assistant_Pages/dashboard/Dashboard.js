@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
+import Fab from '@material-ui/core/Fab';
 
 //components
 import ArreasTable from "../dashboard/dashboard_contents/arreas_Table/Arreas_Table";
@@ -12,6 +12,13 @@ import ExpireInvoice from "../dashboard/dashboard_contents/expire_Table/Expire_I
 
 import firebase from "firebase";
 import db from "../../../../config/firebase.js";
+
+//icons
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import NotificationsIcon from '@material-ui/icons/Notifications';
+import BlockIcon from '@material-ui/icons/Block';
+import ErrorIcon from '@material-ui/icons/Error';
+import MoneyOffIcon from '@material-ui/icons/MoneyOff';
 
 // styles
 import "./Dashboard.css";
@@ -475,13 +482,47 @@ export default function Dashboard() {
   };
 
   return (
+    <>
+      
+      {/* <Grid container spacing={4}>
+        <Grid item xs={3}>
+          <div className="card_Top">
+           <Fab className="icon1Fab" aria-label="like">
+            <NotificationsIcon />
+            </Fab>
+            <span className="installmnt">Today Installment Count</span>
+            <br />
+            15 Customers
+         </div>
+        </Grid>
+          <Grid item xs={3}>
+          <div className="card_Top">
+           <Fab  className="icon2Fab" aria-label="like">
+            <MoneyOffIcon />
+            </Fab>
+         </div>
+        </Grid><Grid item xs={3}>
+          <div className="card_Top">
+           <Fab  className="icon3Fab" aria-label="like">
+            <ErrorIcon />
+            </Fab>
+         </div>
+        </Grid><Grid item xs={3}>
+          <div className="card_Top">
+           <Fab  className="icon4Fab" aria-label="like">
+            <BlockIcon />
+            </Fab>
+         </div>
+        </Grid>
+      </Grid> */}
+      
     <Container component="main" className="main_container">
-      <Typography className="titles" variant="h5" gutterBottom>
+      {/* <Typography className="titles" variant="h5" gutterBottom>
         Dashboard
       </Typography>
       <Grid item xs={12} sm={2}>
         <hr className="titles_hr" />
-      </Grid>
+      </Grid> */}
 
       {/*START Arreas Table */}
 
@@ -523,6 +564,7 @@ export default function Dashboard() {
         </Grid>
       </Grid>
       {/*END Invoices  Table */}
-    </Container>
+      </Container>
+      </>
   );
 }

@@ -10,7 +10,7 @@ import "./Salary.css";
 // icons
 import HistoryIcon from "@material-ui/icons/History";
 import AddIcon from "@material-ui/icons/Add";
-import AvTimerIcon from '@material-ui/icons/AvTimer';
+import AvTimerIcon from "@material-ui/icons/AvTimer";
 
 // components
 import AddPaysheet from "./components/paysheet_Model/Add_Paysheet_Model";
@@ -18,21 +18,19 @@ import AddPaysheet from "./components/paysheet_Model/Add_Paysheet_Model";
 import CreateTargetModel from "./components/target_Model/Create_Target_Model";
 import TargetHistoryModel from "./components/target_History_Model/Target_History_Model";
 
-
 import db from "../../../../config/firebase.js";
 
 export default function Salary() {
   const [addPaysheetModel, setAddPaysheetModel] = useState(false); // table model
+  // eslint-disable-next-line
   const [payHistoryModel, setpayHistoryModel] = useState(false); // table model
-// eslint-disable-next-line
+  // eslint-disable-next-line
   const [salaryAdvanceModel, setSalaryAdvanceModel] = useState(false);
   // eslint-disable-next-line
   const [temporaryModel, setTemporaryModel] = useState(false);
-  
+
   const [targetModel, setTargetModel] = useState(false);
   const [targetHistoryModel, setTargetHistoryModel] = useState(false);
- 
-
 
   // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
@@ -47,17 +45,17 @@ export default function Salary() {
 
   const PayHistoryModels = () => {
     setpayHistoryModel(true);
-     history.push("/assistant/salary/pay_history");
+    history.push("/assistant/salary/pay_history");
   };
 
   const SalaryAdvanceModels = () => {
     setSalaryAdvanceModel(true);
-     history.push("/assistant/salary/advance");
+    history.push("/assistant/salary/advance");
   };
 
-    const SalaryTemporaryModel = () => {
+  const SalaryTemporaryModel = () => {
     setTemporaryModel(true);
-     history.push("/assistant/salary/Temporary");
+    history.push("/assistant/salary/Temporary");
   };
 
   const TrgetModelCreate = () => {
@@ -67,7 +65,6 @@ export default function Salary() {
   const TrgetModelHistory = () => {
     setTargetHistoryModel(true);
   };
-
 
   const columns = [
     {
@@ -189,7 +186,10 @@ export default function Salary() {
         <div>
           <div>
             <div>
-              <AddPaysheet />
+              <AddPaysheet
+                key={allData[currentIndx]?.id}
+                nic={allData[currentIndx]?.data.nic}
+              />
             </div>
           </div>
         </div>
@@ -197,10 +197,7 @@ export default function Salary() {
 
       {/* End Add sheet Model  */}
 
-   
-
-    
-     {/*Start TARGET HISTORY Model */}
+      {/*Start TARGET HISTORY Model */}
 
       <Modal
         visible={targetHistoryModel}
@@ -220,7 +217,6 @@ export default function Salary() {
       </Modal>
 
       {/* End TARGET HISTORY Model  */}
-
 
       {/*Start TARGET Model */}
 
@@ -252,10 +248,10 @@ export default function Salary() {
             endIcon={<AvTimerIcon />}
             onClick={SalaryTemporaryModel}
           >
-           Temporary
+            Temporary
           </Button>
         </Grid>
-          <Grid item xs={3}>
+        <Grid item xs={3}>
           <Button
             variant="contained"
             className="btn_tempary"

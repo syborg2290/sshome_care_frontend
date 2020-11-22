@@ -8,9 +8,8 @@ import {
   Grid,
   Container,
   Typography,
-
 } from "@material-ui/core";
-import { Checkbox , Spin } from "antd";
+import { Checkbox, Spin } from "antd";
 
 import { useHistory } from "react-router-dom";
 import db from "../../../../../../config/firebase.js";
@@ -44,8 +43,7 @@ export default function Add_Root() {
   let history = useHistory();
 
   useEffect(() => {
-
-     window.addEventListener("offline", function (e) {
+    window.addEventListener("offline", function (e) {
       history.push("/assistant/connection/error/lost_connection");
     });
 
@@ -56,11 +54,11 @@ export default function Add_Root() {
         re.docs.forEach((each) => {
           raw.push(each.data());
         });
-        setEmployee1(raw[0].nic);
-        setEmployee2(raw[0].nic);
+        // setEmployee1(raw[0].nic);
+        // setEmployee2(raw[0].nic);
         setAllEmployee(raw);
       });
-      // eslint-disable-next-line
+    // eslint-disable-next-line
   }, []);
 
   const handleChange1 = (event) => {
@@ -101,7 +99,7 @@ export default function Add_Root() {
             saturday ||
             sunday
           ) {
-            if (employee1 !== "" || employee2 !== "") {
+            if (employee1.length !== 0 || employee1 !== "") {
               var daysList = [];
               daysList.push({
                 monday: monday,
@@ -199,6 +197,9 @@ export default function Add_Root() {
               <FormControl size="small" variant="outlined">
                 <InputLabel htmlFor="outlined-age-native-simple"></InputLabel>
                 <Select native label="Name" onChange={handleChange1}>
+                  <option onChange={handleChange1} value="">
+                    Select Employee
+                  </option>
                   {allEmployee.map((reM) => (
                     <option
                       key={reM.nic + "r"}
@@ -217,6 +218,9 @@ export default function Add_Root() {
               <FormControl size="small" variant="outlined">
                 <InputLabel htmlFor="outlined-age-native-simple"></InputLabel>
                 <Select native label="Name" onChange={handleChange2}>
+                  <option onChange={handleChange2} value="">
+                    Select Employee
+                  </option>
                   {allEmployee.map((reM) => (
                     <option
                       key={reM.nic + "e"}
@@ -344,7 +348,11 @@ export default function Add_Root() {
             color="primary"
             className="btn_addRoot"
             onClick={submit}
-            disabled={rootName.length === 0}
+            disabled={
+              rootName.length === 0 ||
+              employee1 === "" ||
+              employee1.length === 0
+            }
           >
             {isLoadingSubmit ? <Spin size="large" /> : "Done"}
           </Button>

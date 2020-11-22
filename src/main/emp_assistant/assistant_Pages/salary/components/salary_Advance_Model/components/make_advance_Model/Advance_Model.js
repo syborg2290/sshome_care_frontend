@@ -24,6 +24,7 @@ export default function Advance_Model({ docId, nic, fname, lname }) {
   const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     db.collection("employee")
       .doc(docId)
       .get()
@@ -43,6 +44,7 @@ export default function Advance_Model({ docId, nic, fname, lname }) {
             setInitialBalance(
               parseInt(reEmp.data().basic) - parseInt(unpaidamount)
             );
+            setLoading(false);
           });
       });
   }, [docId, nic]);

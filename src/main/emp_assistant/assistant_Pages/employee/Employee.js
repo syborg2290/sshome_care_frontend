@@ -27,7 +27,7 @@ export default function Employee() {
   const [currentIndx, setCurrentIndx] = useState(0);
   const [tableData, setTableData] = useState([]);
   const [allData, setallData] = useState([]);
-let history = useHistory();
+  let history = useHistory();
   const EmployeeAdd = () => {
     setEmployeeAddModel(true);
   };
@@ -93,8 +93,7 @@ let history = useHistory();
   ];
 
   useEffect(() => {
-
-     window.addEventListener("offline", function (e) {
+    window.addEventListener("offline", function (e) {
       history.push("/connection_lost");
     });
 
@@ -125,7 +124,7 @@ let history = useHistory();
       setTableData(raw);
       setallData(rawAlldata);
     });
-      // eslint-disable-next-line
+    // eslint-disable-next-line
   }, []);
 
   return (
@@ -178,6 +177,7 @@ let history = useHistory();
                 mobile1={allData[currentIndx]?.data.mobile1}
                 mobile2={allData[currentIndx]?.data.mobile2}
                 nic={allData[currentIndx]?.data.nic}
+                deposit={allData[currentIndx]?.data.security_deposit}
               />
             </div>
           </div>

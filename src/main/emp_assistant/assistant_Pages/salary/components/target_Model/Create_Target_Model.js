@@ -59,15 +59,9 @@ export default function Create_Target_Model() {
               ) <= new Date(new Date().toDateString())
             ) {
               reEa.data().items.forEach((eachItem) => {
-                db.collection("item")
-                  .doc(eachItem.item_id)
-                  .get()
-                  .then((reItem) => {
-                    setSaleAmount(
-                      parseInt(sale_taregt_amount) +
-                        parseInt(reItem.data()?.salePrice)
-                    );
-                  });
+                setSaleAmount(
+                  parseInt(sale_taregt_amount) + parseInt(eachItem.downpayment)
+                );
               });
             }
           }
@@ -204,15 +198,9 @@ export default function Create_Target_Model() {
               ) <= new Date(new Date().toDateString())
             ) {
               reEa.data().items.forEach((eachItem) => {
-                db.collection("item")
-                  .doc(eachItem.item_id)
-                  .get()
-                  .then((reItem) => {
-                    setSaleAmount(
-                      parseInt(sale_taregt_amount) +
-                        parseInt(reItem.data()?.salePrice)
-                    );
-                  });
+                setSaleAmount(
+                  parseInt(sale_taregt_amount) + parseInt(eachItem.downpayment)
+                );
               });
             }
           }

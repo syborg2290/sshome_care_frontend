@@ -36,49 +36,61 @@ export default function New_Loan_Model() {
 
   const makeLoan = () => {
     setLoading(true);
-    db.collection("loans")
+    db.collection("employee")
       .where("nic", "==", nic.trim())
       .get()
-      .then((reD) => {
-        if (reD.docs.length > 0) {
-          let status = loanStatus(reD.docs);
-
-          if (!status) {
-            db.collection("loans")
-              .add({
-                fname: fname.trim(),
-                lname: lname.trim(),
-                nic: nic.trim(),
-                amount: amount === "" ? 0 : amount,
-                balance: amount === "" ? 0 : amount,
-                salary_cut: salaryCut === "" ? 0 : salaryCut,
-                date: date,
-                status: "Ongoing",
-              })
-              .then((_) => {
-                setLoading(false);
-                window.location.reload();
-              });
-          } else {
-            setLoading(false);
-            setValidation("Already using loan service that not completed ! ");
-          }
-        } else {
+      .then((reEmp) => {
+        if (reEmp.docs.length > 0) {
           db.collection("loans")
-            .add({
-              fname: fname.trim(),
-              lname: lname.trim(),
-              nic: nic.trim(),
-              amount: amount === "" ? 0 : amount,
-              balance: amount === "" ? 0 : amount,
-              salary_cut: salaryCut === "" ? 0 : salaryCut,
-              date: date,
-              status: "Ongoing",
-            })
-            .then((_) => {
-              setLoading(false);
-              window.location.reload();
+            .where("nic", "==", nic.trim())
+            .get()
+            .then((reD) => {
+              if (reD.docs.length > 0) {
+                let status = loanStatus(reD.docs);
+
+                if (!status) {
+                  db.collection("loans")
+                    .add({
+                      fname: fname.trim(),
+                      lname: lname.trim(),
+                      nic: nic.trim(),
+                      amount: amount === "" ? 0 : amount,
+                      balance: amount === "" ? 0 : amount,
+                      salary_cut: salaryCut === "" ? 0 : salaryCut,
+                      date: date,
+                      status: "Ongoing",
+                    })
+                    .then((_) => {
+                      setLoading(false);
+                      window.location.reload();
+                    });
+                } else {
+                  setLoading(false);
+                  setValidation(
+                    "Already using loan service that not completed ! "
+                  );
+                }
+              } else {
+                db.collection("loans")
+                  .add({
+                    fname: fname.trim(),
+                    lname: lname.trim(),
+                    nic: nic.trim(),
+                    amount: amount === "" ? 0 : amount,
+                    balance: amount === "" ? 0 : amount,
+                    salary_cut: salaryCut === "" ? 0 : salaryCut,
+                    date: date,
+                    status: "Ongoing",
+                  })
+                  .then((_) => {
+                    setLoading(false);
+                    window.location.reload();
+                  });
+              }
             });
+        } else {
+          setLoading(false);
+          setValidation("Could not found any employee as entered NIC ! ");
         }
       });
   };

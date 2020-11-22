@@ -22,6 +22,9 @@ import GassRecipt from "../assistant_Pages/gass/components/Make_Recipt/Gass_Reci
 import AttendatHistory from "../assistant_Pages/attendance/components/attedance_History_Model/History_Attendance";
 import Advance from "../assistant_Pages/salary/components/salary_Advance_Model/Salary_Advance";
 import TemporarySalary from "../assistant_Pages/salary/components/temporary_Model/Temporary";
+import SalaryHistory from "../assistant_Pages/salary/components/pay_history_Model/Pay_History_Model";
+import PayHistoryReports from "../assistant_Pages/salary/components/pay_history_Model/components/Pay_History_Tabs";
+
 
 
 // pages
@@ -109,6 +112,15 @@ function LayoutAssistant(props) {
              <Route
               path="/assistant/salary/Temporary"
               component={TemporarySalary}
+            />
+
+             <Route
+              path="/assistant/salary/pay_history"
+              component={SalaryHistory}
+            />
+               <Route
+              path="/assistant/salary/history_reports"
+              component={PayHistoryReports}
             />
 
           </Switch>

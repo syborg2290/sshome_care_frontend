@@ -14,7 +14,7 @@ import AvTimerIcon from '@material-ui/icons/AvTimer';
 
 // components
 import AddPaysheet from "./components/paysheet_Model/Add_Paysheet_Model";
-import PayHistoryModel from "./components/pay_history_Model/Pay_History_Model";
+// import PayHistoryModel from "./components/pay_history_Model/Pay_History_Model";
 import CreateTargetModel from "./components/target_Model/Create_Target_Model";
 import TargetHistoryModel from "./components/target_History_Model/Target_History_Model";
 
@@ -47,6 +47,7 @@ export default function Salary() {
 
   const PayHistoryModels = () => {
     setpayHistoryModel(true);
+     history.push("/assistant/salary/pay_history");
   };
 
   const SalaryAdvanceModels = () => {
@@ -196,26 +197,7 @@ export default function Salary() {
 
       {/* End Add sheet Model  */}
 
-      {/*Start History sheet Model */}
-
-      <Modal
-        visible={payHistoryModel}
-        footer={null}
-        className="model_histrySal"
-        onCancel={() => {
-          setpayHistoryModel(false);
-        }}
-      >
-        <div className="table__paysheet_add">
-          <div className="model__paysheet_Main_add">
-            <div className="model_paysheet_Detail_add">
-              <PayHistoryModel />
-            </div>
-          </div>
-        </div>
-      </Modal>
-
-      {/* End History sheet Model  */}
+   
 
     
      {/*Start TARGET HISTORY Model */}

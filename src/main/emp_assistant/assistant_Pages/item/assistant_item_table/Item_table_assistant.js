@@ -1,15 +1,9 @@
 import React, { useState, useEffect } from "react";
-// eslint-disable-next-line
-import { Grid, Button } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import { Spin, Modal } from "antd";
-import HelpIcon from "@material-ui/icons/Help";
 import MUIDataTable from "mui-datatables";
 import { Row, Col } from "antd";
-import {
-  NotificationContainer,
-  NotificationManager,
-} from "react-notifications";
-import "react-notifications/lib/notifications.css";
+
 import CurrencyFormat from "react-currency-format";
 import moment from "moment";
 
@@ -27,7 +21,6 @@ import EditModel from "./components/Edit_model";
 // icons
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import EditIcon from "@material-ui/icons/Edit";
-import DeleteIcon from "@material-ui/icons/Delete";
 
 // styles
 import "./Item_table_assistant.css";
@@ -43,7 +36,7 @@ export default function Item_table_assistant() {
   // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
   const [editVisible, setEditVisible] = useState(false);
-  const [confirmVisible, setConfirmVisible] = useState(false);
+
   // let socket = socketIOClient(RealtimeServerApi);
 
   const [itemListSeMo, setItemListSeMo] = useState([]);
@@ -54,10 +47,6 @@ export default function Item_table_assistant() {
 
   const showModal = () => {
     setVisible(true);
-  };
-
-  const showModalConfirmModal = () => {
-    setConfirmVisible(true);
   };
 
   const editModal = () => {
@@ -680,9 +669,9 @@ export default function Item_table_assistant() {
               // selectableRows: false,
               selectableRows: "none",
               draggableColumns: {
-               enabled: true
-             },
-            responsive: "standard",
+                enabled: true,
+              },
+              responsive: "standard",
               customToolbarSelect: () => {},
               filterType: "textField",
               download: false,
@@ -705,7 +694,6 @@ export default function Item_table_assistant() {
               },
             }}
           />
-          <NotificationContainer />
         </Grid>
       </Grid>
     </>

@@ -52,9 +52,8 @@ export default function Add_Employee({ close_model }) {
                 addres2: addres2.trim(),
                 mobile1: mobile1.trim(),
                 mobile2: mobile2.trim(),
-                basic: basic === "" ? 0 : parseInt(basic.trim()),
-                security_deposit:
-                  deposits === "" ? 0 : parseInt(deposits.trim()),
+                basic: basic === "" ? 0 : parseInt(basic),
+                security_deposit: deposits === "" ? 0 : parseInt(deposits),
                 date: firebase.firestore.FieldValue.serverTimestamp(),
               })
               .then((_) => {

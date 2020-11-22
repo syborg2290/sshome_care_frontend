@@ -58,9 +58,9 @@ export default function Temporary_History() {
   ];
 
   useEffect(() => {
-    // window.addEventListener("offline", function (e) {
-    //   history.push("/connection_lost");
-    // });
+    window.addEventListener("offline", function (e) {
+      history.push("/connection_lost");
+    });
 
     db.collection("temporary")
       .get()
@@ -106,20 +106,20 @@ export default function Temporary_History() {
         </div>
       </Modal>
       <Grid container spacing={4}>
-         <Grid item xs={9}></Grid>
+        <Grid item xs={9}></Grid>
         <Grid item xs={3}>
-            <Button
-              variant="contained"
-              className="btn_tempary"
-              endIcon={<AvTimerIcon />}
-              onClick={openMakeTemp}
-            >
-              Make Temporary
-            </Button>
+          <Button
+            variant="contained"
+            className="btn_tempary"
+            endIcon={<AvTimerIcon />}
+            onClick={openMakeTemp}
+          >
+            Make Temporary
+          </Button>
         </Grid>
-        </Grid>
-        <Grid container spacing={4}>
-           <Grid item xs={1}></Grid>
+      </Grid>
+      <Grid container spacing={4}>
+        <Grid item xs={1}></Grid>
         <Grid item xs={11}>
           <MUIDataTable
             title={<span className="title_Span">Temporary History</span>}

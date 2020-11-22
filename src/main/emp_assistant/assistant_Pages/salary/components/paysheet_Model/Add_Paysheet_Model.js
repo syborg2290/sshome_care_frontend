@@ -160,7 +160,7 @@ async function getSaleTarget(root) {
 
   for (var k = 0; k < salesTaregt.docs.length; k++) {
     if (
-      salesTaregt.docs[k].data().status === "ongoing" ||
+      salesTaregt.docs[k].data().status === "ongoing" &&
       salesTaregt.docs[k].data().target_type === "Sale target"
     ) {
       targetValue = parseInt(salesTaregt.docs[k].data().amount);
@@ -210,7 +210,7 @@ async function cashTargetFunc(root) {
 
   for (let k = 0; k < cashTaregt.docs.length; k++) {
     if (
-      cashTaregt.docs[k].data().status === "ongoing" ||
+      cashTaregt.docs[k].data().status === "ongoing" &&
       cashTaregt.docs[k].data().target_type === "Cash target"
     ) {
       var targetValue = parseInt(cashTaregt.docs[k].data().amount);
@@ -245,7 +245,7 @@ async function cashTargetFunc(root) {
 
         if (seeBool1) {
           for (let n = 0; n < installmentsRe.docs[i].data().items.length; n++) {
-            if (!installmentsRe.docs[i].data().isExpired) {
+            if (installmentsRe.docs[i].data().isExpired === false) {
               threePresentage =
                 parseInt(threePresentage) +
                 (parseInt(installmentsRe.docs[i].data().items[n].amount) * 3) /
@@ -268,7 +268,7 @@ async function cashTargetFunc(root) {
       }
     }
   }
-  return returnValue === 0 ? 0 : parseInt(returnValue / 2);
+  return returnValue === 0 ? 0 : returnValue / 2;
 }
 
 async function getCashSaleFunc(root, isFirstSalary, lastSalaryDate) {
@@ -305,7 +305,7 @@ async function getCashSaleFunc(root, isFirstSalary, lastSalaryDate) {
     }
   }
 
-  return cashSale === 0 ? 0 : parseInt(cashSale / 2);
+  return cashSale === 0 ? 0 : cashSale / 2;
 }
 
 async function getExcardFunc(root, isFirstSalary, lastSalaryDate) {
@@ -340,7 +340,7 @@ async function getExcardFunc(root, isFirstSalary, lastSalaryDate) {
     }
   }
 
-  return excardAmount === 0 ? 0 : parseInt(excardAmount / 2);
+  return excardAmount === 0 ? 0 : excardAmount / 2;
 }
 
 export default function Add_Paysheet_Model({ nic }) {

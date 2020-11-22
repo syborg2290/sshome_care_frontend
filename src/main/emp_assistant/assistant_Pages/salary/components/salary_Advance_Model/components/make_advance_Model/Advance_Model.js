@@ -28,21 +28,22 @@ export default function Advance_Model({ docId, nic, fname, lname }) {
       .doc(docId)
       .get()
       .then((reEmp) => {
-        let unpaidamount = 0;
         db.collection("salary_advance")
           .where("nic", "==", nic)
           .get()
           .then((reAd) => {
+            var unpaidamount = 0;
+
             reAd.docs.forEach((reEach) => {
               if (reEach.data().status === "unpaid") {
                 unpaidamount = unpaidamount + parseInt(reEach.data().amount);
               }
             });
+            setBalance(parseInt(reEmp.data().basic) - parseInt(unpaidamount));
+            setInitialBalance(
+              parseInt(reEmp.data().basic) - parseInt(unpaidamount)
+            );
           });
-        setBalance(parseInt(reEmp.data().basic) - parseInt(unpaidamount));
-        setInitialBalance(
-          parseInt(reEmp.data().basic) - parseInt(unpaidamount)
-        );
       });
   }, [docId, nic]);
 

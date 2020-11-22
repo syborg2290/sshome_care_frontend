@@ -11,7 +11,7 @@ import "./Pay_History_Model.css";
 import HistoryIcon from "@material-ui/icons/History";
 
 export default function Pay_History_Model() {
-
+  // eslint-disable-next-line
   const [payHistoryTabModel, setpayHistoryTabModel] = useState(false); // table model
 
   // eslint-disable-next-line
@@ -20,10 +20,9 @@ export default function Pay_History_Model() {
   const [allData, setallData] = useState([]);
   let history = useHistory();
 
-
   const PayHistoryTabModels = () => {
     setpayHistoryTabModel(true);
-     history.push("/assistant/salary/history_reports");
+    history.push("/assistant/salary/history_reports");
   };
 
   const columns = [
@@ -203,7 +202,7 @@ export default function Pay_History_Model() {
         }),
       },
     },
-        {
+    {
       name: "Action",
       options: {
         filter: true,
@@ -236,12 +235,17 @@ export default function Pay_History_Model() {
       "kers",
       "kers",
       <div>
-        <HistoryIcon className="btnView"
-        onClick={PayHistoryTabModels}
-        />
+        <HistoryIcon className="btnView" onClick={PayHistoryTabModels} />
       </div>,
     ],
   ];
+
+  useEffect(() => {
+    window.addEventListener("offline", function (e) {
+      history.push("/connection_lost");
+    });
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <Grid container spacing={4}>

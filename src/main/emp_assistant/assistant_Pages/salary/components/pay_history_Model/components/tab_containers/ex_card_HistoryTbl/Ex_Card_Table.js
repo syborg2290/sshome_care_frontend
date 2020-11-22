@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Grid } from "@material-ui/core";
 import MUIDataTable from "mui-datatables";
-import { useHistory } from "react-router-dom";
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
@@ -15,7 +14,6 @@ export default function Ex_Card_Table() {
   const [currentIndx, setCurrentIndx] = useState(0);
   // eslint-disable-next-line
   const [allData, setallData] = useState([]);
-  let history = useHistory();
 
 
   const columns = [

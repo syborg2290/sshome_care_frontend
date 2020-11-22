@@ -1,22 +1,18 @@
 import React, { useState } from "react";
 import { Grid } from "@material-ui/core";
 import MUIDataTable from "mui-datatables";
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
-import CurrencyFormat from "react-currency-format";
-
+// import Card from '@material-ui/core/Card';
+// import CardContent from '@material-ui/core/CardContent';
+// import Typography from '@material-ui/core/Typography';
 
 // styles
-import "./Ex_Card_Table.css";
+import "./Cash_Sale_History.css";
 
-export default function Ex_Card_Table() {
-
+export default function Cash_Sale_History() {
   // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
   // eslint-disable-next-line
   const [allData, setallData] = useState([]);
-
 
   const columns = [
     {
@@ -55,62 +51,47 @@ export default function Ex_Card_Table() {
         }),
       },
     },
-  
+   
 
   ];
 
   const tableData = [
     [
       "2020/03/01",
-      <CurrencyFormat
-              value={2000}
-              displayType={"text"}
-              thousandSeparator={true}
-              prefix={" "}
-            />,
-      "IN-6437",
-      <CurrencyFormat
-              value={2000}
-              displayType={"text"}
-              thousandSeparator={true}
-              prefix={" "}
-            />,
-      
+      "James",
+      "Test",
+      "Corp",
+      "Yon",
+      "kers",
      
     ],
   ];
 
   return (
-
     <>
-   <Grid container spacing={2}>
+  {/* <Grid container spacing={2}>
         <Grid item xs={9}>
         </Grid>
         <Grid item xs={3}>
           <Card className="root">
             <CardContent>
               <Typography className="sale_tagets"  gutterBottom>
-                Total(LKR) : <span className="sale_taget_tot"><CurrencyFormat
-              value={2000}
-              displayType={"text"}
-              thousandSeparator={true}
-              prefix={" "}
-            /></span>
+                Total(LKR) : <span className="sale_taget_tot">20000</span>
               </Typography>
               <hr />
                 <Typography  color="textSecondary">
-                   Total + 2%<span className="cash_tagetPer">per Installment</span>
+                   Total + 2.5%<span className="cash_tagetPer">per Sale</span>
                 </Typography>
               </CardContent>
             </Card> 
         </Grid>
-     </Grid>
+     </Grid> */}
       
     <Grid container spacing={4}>
       <Grid item xs={12}>
         <MUIDataTable
-          title={<span className="title_Span">Ex Card History</span>}
-          className="exx_histable"
+          title={<span className="title_Span">Cash Sales History</span>}
+          className="cash_histable"
           sty
           data={tableData}
           columns={columns}
@@ -133,3 +114,4 @@ export default function Ex_Card_Table() {
       </>
   );
 }
+

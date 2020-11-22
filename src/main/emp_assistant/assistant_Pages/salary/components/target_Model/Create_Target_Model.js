@@ -24,6 +24,7 @@ export default function Create_Target_Model() {
   const [sale_taregt_amount, setSaleAmount] = useState(0);
   const [cash_taregt_amount, setCashAmount] = useState(0);
   const [startDate, setStartdate] = useState(null);
+  // const [endDate, setEnddate] = useState(null);
   const [loading, setLoading] = useState(false);
   const [selectedType, setSelectedType] = useState("shop");
   const [targetType, setTargetType] = useState("sale_target");
@@ -229,6 +230,7 @@ export default function Create_Target_Model() {
           targetType === "sale_target" ? "Sale target" : "Cash target",
         selectedType: selectedType,
         start_date: startDate,
+        // endDate: endDate,
         amount: totAmount,
         status: "ongoing",
       })
@@ -331,6 +333,27 @@ export default function Create_Target_Model() {
               </Space>
             </Grid>
 
+            {/* <Grid className="lbl_topi" item xs={12} sm={4}>
+              End Date
+            </Grid>
+            <Grid item xs={12} sm={1}>
+              :
+            </Grid>
+            <Grid item xs={12} sm={7}>
+              <Space direction="vertical">
+                <DatePicker
+                  onChange={(e) => {
+                    if (e !== null) {
+                      setEnddate(
+                        firebase.firestore.Timestamp.fromDate(e.toDate())
+                      );
+                    } else {
+                      setEnddate(null);
+                    }
+                  }}
+                />
+              </Space>
+            </Grid> */}
             <Grid className="lbl_topi" item xs={12} sm={4}>
               Target Type
             </Grid>

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-
 import { Grid } from "@material-ui/core";
 import MUIDataTable from "mui-datatables";
 import { useHistory } from "react-router-dom";
+import CurrencyFormat from "react-currency-format";
 
 // styles
 import "./Pay_History_Model.css";
@@ -220,20 +220,85 @@ export default function Pay_History_Model() {
   const tableData = [
     [
       "2020/03/01",
-      "James",
-      "Test",
-      "Corp",
-      "Yon",
-      "kers",
-      "Test",
-      "Corp",
-      "Yon",
-      "kers",
-      "Test",
-      "Corp",
-      "Yon",
-      "kers",
-      "kers",
+      <CurrencyFormat
+              value={25000}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={" "}
+            />,
+      <CurrencyFormat
+              value={200}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={" "}
+            />,
+      <CurrencyFormat
+              value={2000}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={" "}
+            />,
+      "29",
+      <CurrencyFormat
+              value={280}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={" "}
+            />,
+      <CurrencyFormat
+              value={5000}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={" "}
+            />,
+      <CurrencyFormat
+              value={50}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={" "}
+            />,
+      <CurrencyFormat
+              value={3000}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={" "}
+            />,
+      <CurrencyFormat
+              value={2500}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={" "}
+            />,
+      <CurrencyFormat
+              value={120}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={" "}
+            />,
+      <CurrencyFormat
+              value={50000}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={" "}
+            />,
+      <CurrencyFormat
+              value={25000}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={" "}
+            />,
+      <CurrencyFormat
+              value={25000}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={" "}
+            />,
+      <CurrencyFormat
+              value={25000}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={" "}
+            />,
       <div>
         <HistoryIcon className="btnView" onClick={PayHistoryTabModels} />
       </div>,

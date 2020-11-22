@@ -6,12 +6,25 @@ import {
   Container,
   Typography,
   Button,
+  Fab,
 } from "@material-ui/core";
-import { Spin } from "antd";
+import { Modal,Spin } from "antd";
+
 // styles
 import "./Add_Paysheet_Model.css";
 
 import db from "../../../../../../config/firebase.js";
+
+//icons
+import HistoryIcon from "@material-ui/icons/History";
+
+// components
+import AttendanceHistorys from "./components/attendance_history_Model/Attendance_History";
+import CashSaleHistorys from "./components/cash_sale_history_Model/Cash_Sale_History";
+import CashTargetHistorys from "./components/cash_target_history_Model/Cash_Target_History";
+import ExcardHistorys from "./components/excard_history_Model/Excard_History";
+import SaleTargetHistorys from "./components/sale_target_history_Model/Sale_Target_History";
+import ShortageHistorys from "./components/shortage_history_Model/Shortage_History";
 
 async function getGasshort(root, isFirstSalary, lastSalaryDate) {
   var reGas = await db
@@ -330,6 +343,14 @@ async function getExcardFunc(root, isFirstSalary, lastSalaryDate) {
 }
 
 export default function Add_Paysheet_Model({ nic }) {
+
+  const [attendanceModel, setAttendanceModel] = useState(false);
+  const [cashSaleModel, setCashSaleModel] = useState(false);
+  const [cashTargetModel, setCashTargetModel] = useState(false);
+  const [exCardModel, setExCardModel] = useState(false);
+  const [saleTargetModel, setSaleTargetModel] = useState(false);
+  const [shortageModel, setShortageModel] = useState(false);
+
   // eslint-disable-next-line
   const [loading, setLoading] = useState(false);
   const [basicSalary, setBasicSalary] = useState(0);
@@ -353,6 +374,25 @@ export default function Add_Paysheet_Model({ nic }) {
   const [root, setRoot] = useState("");
   // eslint-disable-next-line
   const [rootDocId, setRootDocId] = useState("");
+
+   const AttendanceModel = () => {
+    setAttendanceModel(true);
+  };
+   const CashSaleModel = () => {
+    setCashSaleModel(true);
+  };
+   const CashTargetModel = () => {
+    setCashTargetModel(true);
+  };
+   const ExCardModel = () => {
+    setExCardModel(true);
+  };
+   const SaleTargetModel = () => {
+    setSaleTargetModel(true);
+  };
+   const ShortageModel = () => {
+    setShortageModel(true);
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -605,6 +645,143 @@ export default function Add_Paysheet_Model({ nic }) {
   }, [nic]);
 
   return (
+<>
+
+     {/*Start Attendance Model */}
+
+      <Modal
+        visible={attendanceModel}
+        footer={null}
+        className="model_attendce_add"
+        onCancel={() => {
+          setAttendanceModel(false);
+        }}
+      >
+        <div>
+          <div>
+            <div>
+              <AttendanceHistorys
+              
+              />
+            </div>
+          </div>
+        </div>
+      </Modal>
+
+      {/* End Attendance Model  */}
+        {/*Start CashSale Model */}
+
+      <Modal
+        visible={cashSaleModel}
+        footer={null}
+        className="model_CashSale"
+        onCancel={() => {
+          setCashSaleModel(false);
+        }}
+      >
+        <div>
+          <div>
+            <div>
+              <CashSaleHistorys
+            
+              />
+            </div>
+          </div>
+        </div>
+      </Modal>
+
+      {/* End CashSale Model  */}
+        {/*Start CashTarget Model */}
+
+      <Modal
+        visible={cashTargetModel}
+        footer={null}
+        className="model_cashTargetModel_add"
+        onCancel={() => {
+          setCashTargetModel(false);
+        }}
+      >
+        <div>
+          <div>
+            <div>
+              <CashTargetHistorys
+              
+              />
+            </div>
+          </div>
+        </div>
+      </Modal>
+
+      {/* End CashTarget Model  */}
+        {/*Start exCard Model */}
+
+      <Modal
+        visible={exCardModel}
+        footer={null}
+        className="model_exCardModel_add"
+        onCancel={() => {
+          setExCardModel(false);
+        }}
+      >
+        <div>
+          <div>
+            <div>
+              <ExcardHistorys
+               
+              />
+            </div>
+          </div>
+        </div>
+      </Modal>
+
+      {/* End exCard Model  */}
+        {/*Start saleTarget Model */}
+
+      <Modal
+        visible={saleTargetModel}
+        footer={null}
+        className="model_saleTarget_add"
+        onCancel={() => {
+          setSaleTargetModel(false);
+        }}
+      >
+        <div>
+          <div>
+            <div>
+              <SaleTargetHistorys
+             
+              />
+            </div>
+          </div>
+        </div>
+      </Modal>
+
+      {/* End saleTarget Model  */}
+        {/*Start shortage Model */}
+
+      <Modal
+        visible={shortageModel}
+        footer={null}
+        className="model_shortage_add"
+        onCancel={() => {
+          setShortageModel(false);
+        }}
+      >
+        <div>
+          <div>
+            <div>
+              <ShortageHistorys
+              
+              />
+            </div>
+          </div>
+        </div>
+      </Modal>
+
+      {/* End shortage Model  */}
+
+
+
     <Container component="main" className="conctainefr_main">
       <Typography className="titleffs" variant="h5" gutterBottom>
         Make Salary
@@ -693,9 +870,14 @@ export default function Add_Paysheet_Model({ nic }) {
             <Grid item xs={12} sm={1}>
               :
             </Grid>
-            <Grid item xs={12} sm={7}>
+            <Grid item xs={12} sm={5}>
               <p>{attendance}</p>
             </Grid>
+              <Grid item xs={12} sm={2}>
+                <Fab className="icon1Fab" size="small" aria-label="like">
+                <HistoryIcon  onClick={AttendanceModel} />
+            </Fab>
+              </Grid>
 
             <Grid className="lbl_topi" item xs={12} sm={4}>
               EPF(LKR)
@@ -851,7 +1033,7 @@ export default function Add_Paysheet_Model({ nic }) {
             <Grid item xs={12} sm={1}>
               :
             </Grid>
-            <Grid item xs={12} sm={7}>
+            <Grid item xs={12} sm={5}>
               <TextField
                 autoComplete="sho"
                 variant="outlined"
@@ -869,6 +1051,11 @@ export default function Add_Paysheet_Model({ nic }) {
                 }}
               />
             </Grid>
+             <Grid item xs={12} sm={2}>
+                <Fab className="icon1Fab" size="small" aria-label="like">
+                <HistoryIcon onClick={ShortageModel} />
+            </Fab>
+              </Grid>
             <Grid item xs={12} sm={12}>
               <hr />
             </Grid>
@@ -878,7 +1065,7 @@ export default function Add_Paysheet_Model({ nic }) {
             <Grid item xs={12} sm={1}>
               :
             </Grid>
-            <Grid item xs={12} sm={7}>
+            <Grid item xs={12} sm={5}>
               <TextField
                 autoComplete="sho"
                 variant="outlined"
@@ -896,13 +1083,18 @@ export default function Add_Paysheet_Model({ nic }) {
                 }}
               />
             </Grid>
+             <Grid item xs={12} sm={2}>
+                <Fab className="icon1Fab" size="small" aria-label="like">
+                <HistoryIcon  onClick={SaleTargetModel}/>
+            </Fab>
+              </Grid>
             <Grid className="lbl_topi" item xs={12} sm={4}>
               Cash Target(LKR)
             </Grid>
             <Grid item xs={12} sm={1}>
               :
             </Grid>
-            <Grid item xs={12} sm={7}>
+            <Grid item xs={12} sm={5}>
               <TextField
                 autoComplete="trgtCASH"
                 variant="outlined"
@@ -920,13 +1112,18 @@ export default function Add_Paysheet_Model({ nic }) {
                 }}
               />
             </Grid>
+             <Grid item xs={12} sm={2}>
+                <Fab className="icon1Fab" size="small" aria-label="like">
+                <HistoryIcon  onClick={CashTargetModel}/>
+            </Fab>
+              </Grid>
             <Grid className="lbl_topi" item xs={12} sm={4}>
               Cash Sale(LKR)
             </Grid>
             <Grid item xs={12} sm={1}>
               :
             </Grid>
-            <Grid item xs={12} sm={7}>
+            <Grid item xs={12} sm={5}>
               <TextField
                 autoComplete="cashsle"
                 variant="outlined"
@@ -944,13 +1141,18 @@ export default function Add_Paysheet_Model({ nic }) {
                 }}
               />
             </Grid>
+             <Grid item xs={12} sm={2}>
+                <Fab className="icon1Fab" size="small" aria-label="like">
+                <HistoryIcon  onClick={CashSaleModel}/>
+            </Fab>
+              </Grid>
             <Grid className="lbl_topi" item xs={12} sm={4}>
               EX Card(LKR)
             </Grid>
             <Grid item xs={12} sm={1}>
               :
             </Grid>
-            <Grid item xs={12} sm={7}>
+            <Grid item xs={12} sm={5}>
               <TextField
                 autoComplete="ex"
                 variant="outlined"
@@ -968,6 +1170,11 @@ export default function Add_Paysheet_Model({ nic }) {
                 }}
               />
             </Grid>
+             <Grid  className="icon1Fabgrid" item xs={12} sm={2}>
+                 <Fab  className="icon1Fab" size="small" aria-label="like">
+                <HistoryIcon  onClick={ExCardModel}/>
+            </Fab>
+              </Grid>
           </Grid>
 
           <Grid container spacing={2}>
@@ -993,6 +1200,7 @@ export default function Add_Paysheet_Model({ nic }) {
           </Grid>
         </form>
       </div>
-    </Container>
+      </Container>
+      </>
   );
 }

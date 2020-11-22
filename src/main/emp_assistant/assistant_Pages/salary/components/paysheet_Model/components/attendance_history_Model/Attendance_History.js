@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import { Grid } from "@material-ui/core";
 import MUIDataTable from "mui-datatables";
-import CurrencyFormat from "react-currency-format";
 
 // styles
-import "./Shortage_Table.css";
+import "./Attendance_History.css";
 
-export default function Shortage_Table() {
+export default function Attendance_History() {
   // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
   // eslint-disable-next-line
@@ -23,7 +22,7 @@ export default function Shortage_Table() {
       },
     },
     {
-      name: "Amount",
+      name: "Status",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -31,64 +30,23 @@ export default function Shortage_Table() {
         }),
       },
     },
-    {
-      name: "Type",
-      options: {
-        filter: false,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
-    {
-      name: "Shortage_of",
-      options: {
-        filter: false,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
-    {
-      name: "Total",
-      options: {
-        filter: false,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
+   
   ];
 
-  const tableData = [["2020/03/01", <CurrencyFormat
-              value={2000}
-              displayType={"text"}
-              thousandSeparator={true}
-              prefix={" "}
-            />, "Shop", "Gass",<CurrencyFormat
-              value={2000}
-              displayType={"text"}
-              thousandSeparator={true}
-              prefix={" "}
-            />]];
+  const tableData = [["2020/03/01",  <div className="workingStts">Fullday</div>]];
 
   return (
     <>
-      <Grid container spacing={4}>
+      {/* <Grid container spacing={4}>
         <Grid item xs={8}></Grid>
         <Grid className="shortage_tot" item xs={2}>
           Total(LKR) :
         </Grid>
         <Grid item xs={1}>
-          <p className="shortage_totNum"><CurrencyFormat
-              value={2000}
-              displayType={"text"}
-              thousandSeparator={true}
-              prefix={" "}
-            /></p>
+          <p className="shortage_totNum">3200</p>
         </Grid>
         <Grid item xs={1}></Grid>
-      </Grid>
+      </Grid> */}
 
       <Grid container spacing={4}>
         <Grid item xs={12}>

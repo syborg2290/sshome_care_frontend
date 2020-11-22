@@ -30,28 +30,18 @@ export default function Attendance_History() {
         }),
       },
     },
-   
   ];
 
-  const tableData = [["2020/03/01",  <div className="workingStts">Fullday</div>]];
+  const tableData = [
+    ["2020/03/01", <div className="workingStts">Fullday</div>],
+  ];
 
   return (
     <>
-      {/* <Grid container spacing={4}>
-        <Grid item xs={8}></Grid>
-        <Grid className="shortage_tot" item xs={2}>
-          Total(LKR) :
-        </Grid>
-        <Grid item xs={1}>
-          <p className="shortage_totNum">3200</p>
-        </Grid>
-        <Grid item xs={1}></Grid>
-      </Grid> */}
-
       <Grid container spacing={4}>
         <Grid item xs={12}>
           <MUIDataTable
-            title={<span className="title_Span">Shortage History</span>}
+            title={<span className="title_Span">Attendance History</span>}
             className="shortage_tbl"
             sty
             data={tableData}

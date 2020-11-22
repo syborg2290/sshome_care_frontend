@@ -24,24 +24,23 @@ export default function Create_Target_Model() {
   const [sale_taregt_amount, setSaleAmount] = useState(0);
   const [cash_taregt_amount, setCashAmount] = useState(0);
   const [startDate, setStartdate] = useState(null);
-  // const [endDate, setEnddate] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [selectedType, setSelectedType] = useState("shop");
+  const [selectedType, setSelectedType] = useState("");
   const [targetType, setTargetType] = useState("sale_target");
 
-  const handleChange = (event) => {
+  const handleChange = async (event) => {
     setSelectedType(event.target.value);
 
     if (targetType === "sale_target") {
       setSaleAmount(0);
-      getAllSaleTargetAmount();
+      await getAllSaleTargetAmount(event.target.value);
     } else {
       setCashAmount(0);
-      getAllCashTargetAmount();
+      await getAllCashTargetAmount(event.target.value);
     }
   };
 
-  const getAllSaleTargetAmount = () => {
+  const getAllSaleTargetAmount = async (type) => {
     setLoading(true);
 
     let daysCount = daysCountOfMonth(
@@ -50,7 +49,7 @@ export default function Create_Target_Model() {
     );
     let fromT = new Date(new Date().setDate(new Date().getDate() - daysCount));
     db.collection("invoice")
-      .where("selectedType", "==", selectedType)
+      .where("selectedType", "==", type)
       .get()
       .then((reInvoice) => {
         reInvoice.docs.forEach((reEa) => {
@@ -75,7 +74,7 @@ export default function Create_Target_Model() {
       });
   };
 
-  const getAllCashTargetAmount = () => {
+  const getAllCashTargetAmount = async (type) => {
     setLoading(true);
 
     let daysCount = daysCountOfMonth(
@@ -84,7 +83,7 @@ export default function Create_Target_Model() {
     );
     let fromT = new Date(new Date().setDate(new Date().getDate() - daysCount));
     db.collection("invoice")
-      .where("selectedType", "==", selectedType)
+      .where("selectedType", "==", type)
       .get()
       .then((reInvoice) => {
         reInvoice.docs.forEach((reEa) => {
@@ -108,7 +107,7 @@ export default function Create_Target_Model() {
       });
 
     db.collection("installment")
-      .where("type", "==", selectedType)
+      .where("type", "==", type)
       .get()
       .then((reInstall) => {
         reInstall.docs.forEach((reEa) => {
@@ -230,7 +229,6 @@ export default function Create_Target_Model() {
           targetType === "sale_target" ? "Sale target" : "Cash target",
         selectedType: selectedType,
         start_date: startDate,
-        // endDate: endDate,
         amount: totAmount,
         status: "ongoing",
       })
@@ -299,8 +297,8 @@ export default function Create_Target_Model() {
                     onChange={handleChange}
                     value={selectedType}
                   >
-                    <option onChange={handleChange} value={"shop"}>
-                      shop
+                    <option onChange={handleChange} value={""}>
+                      Select a type
                     </option>
                     {allRoot.map((each) => (
                       <option onChange={handleChange} key={each} value={each}>
@@ -332,28 +330,6 @@ export default function Create_Target_Model() {
                 />
               </Space>
             </Grid>
-
-            {/* <Grid className="lbl_topi" item xs={12} sm={4}>
-              End Date
-            </Grid>
-            <Grid item xs={12} sm={1}>
-              :
-            </Grid>
-            <Grid item xs={12} sm={7}>
-              <Space direction="vertical">
-                <DatePicker
-                  onChange={(e) => {
-                    if (e !== null) {
-                      setEnddate(
-                        firebase.firestore.Timestamp.fromDate(e.toDate())
-                      );
-                    } else {
-                      setEnddate(null);
-                    }
-                  }}
-                />
-              </Space>
-            </Grid> */}
             <Grid className="lbl_topi" item xs={12} sm={4}>
               Target Type
             </Grid>
@@ -381,7 +357,9 @@ export default function Create_Target_Model() {
                 color="primary"
                 className="btn_update"
                 onClick={createTarget}
-                disabled={startDate === null || loading}
+                disabled={
+                  startDate === null || selectedType.length === 0 || loading
+                }
               >
                 {loading ? <Spin size="small" /> : "Done"}
               </Button>

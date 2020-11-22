@@ -63,9 +63,6 @@ export default function Shortage_Table() {
       },
     },
 
-
-   
-
   ];
 
   const tableData = [

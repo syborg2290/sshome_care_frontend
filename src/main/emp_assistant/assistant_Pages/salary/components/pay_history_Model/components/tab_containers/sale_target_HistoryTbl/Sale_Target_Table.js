@@ -97,11 +97,10 @@ export default function Sale_Target_Table() {
             <CardContent>
               <Typography className="sale_tagets"  gutterBottom>
                 Total(LKR) : <span className="sale_taget_tot">20000</span>
-                <br />
-                <hr />
               </Typography>
+              <hr />
                 <Typography  color="textSecondary">
-                   <p>Total  &gt;= Sale Taget(20000) + 5000</p>
+                   Total  &gt;= Sale Taget(20000) + 5000
                 </Typography>
               </CardContent>
             </Card> 

@@ -89,13 +89,12 @@ export default function Cash_Target_Table() {
             <CardContent>
               <Typography className="cash_tagets"  gutterBottom>
                 Total(LKR) : <span className="cash_taget_tot">20000</span>
-                <br />
-                <hr />
               </Typography>
+              <hr />
                 <Typography  color="textSecondary">
-                <p>Total  &gt;= Cash Taget(20000) + 4%<span className="cash_tagetPer">per Installemt</span></p>
+                Total  &gt;= Cash Taget(20000) + 4%<span className="cash_tagetPer">per Installemt</span>
                 <br />
-                <p>Total &lt; Cash Taget(20000) + 3%<span className="cash_tagetPer">per Installemt</span></p>
+              Total &lt; Cash Taget(20000) + 3%<span className="cash_tagetPer">per Installemt</span>
                 </Typography>
               </CardContent>
             </Card> 

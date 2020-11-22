@@ -81,11 +81,10 @@ export default function Ex_Card_Table() {
             <CardContent>
               <Typography className="sale_tagets"  gutterBottom>
                 Total(LKR) : <span className="sale_taget_tot">20000</span>
-                <br />
-                <hr />
               </Typography>
+              <hr />
                 <Typography  color="textSecondary">
-                   <p>Total + 2%<span className="cash_tagetPer">per Installment</span></p>
+                   Total + 2%<span className="cash_tagetPer">per Installment</span>
                 </Typography>
               </CardContent>
             </Card> 

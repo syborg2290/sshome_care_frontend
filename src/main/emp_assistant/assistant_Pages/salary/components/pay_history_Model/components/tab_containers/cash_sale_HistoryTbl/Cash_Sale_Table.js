@@ -4,6 +4,8 @@ import MUIDataTable from "mui-datatables";
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
+import CurrencyFormat from "react-currency-format";
+
 
 // styles
 import "./Cash_Sale_Table.css";
@@ -58,12 +60,19 @@ export default function Cash_Sale_Table() {
   const tableData = [
     [
       "2020/03/01",
-      "James",
+      <CurrencyFormat
+              value={5000}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={" "}
+            />,
       "Test",
-      "Corp",
-      "Yon",
-      "kers",
-     
+      <CurrencyFormat
+              value={5000}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={" "}
+            />,
     ],
   ];
 
@@ -76,7 +85,12 @@ export default function Cash_Sale_Table() {
           <Card className="root">
             <CardContent>
               <Typography className="sale_tagets"  gutterBottom>
-                Total(LKR) : <span className="sale_taget_tot">20000</span>
+                Total(LKR) : <span className="sale_taget_tot"><CurrencyFormat
+              value={2000}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={" "}
+            /></span>
               </Typography>
               <hr />
                 <Typography  color="textSecondary">

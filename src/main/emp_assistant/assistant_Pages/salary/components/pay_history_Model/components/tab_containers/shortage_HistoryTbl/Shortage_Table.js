@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-
 import { Grid } from "@material-ui/core";
 import MUIDataTable from "mui-datatables";
+import CurrencyFormat from "react-currency-format";
 
 // styles
 import "./Shortage_Table.css";
@@ -60,7 +60,17 @@ export default function Shortage_Table() {
     },
   ];
 
-  const tableData = [["2020/03/01", "150", "Shop", "Gass", "150"]];
+  const tableData = [["2020/03/01", <CurrencyFormat
+              value={2000}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={" "}
+            />, "Shop", "Gass",<CurrencyFormat
+              value={2000}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={" "}
+            />]];
 
   return (
     <>
@@ -70,7 +80,12 @@ export default function Shortage_Table() {
           Total(LKR) :
         </Grid>
         <Grid item xs={1}>
-          <p className="shortage_totNum">3200</p>
+          <p className="shortage_totNum"><CurrencyFormat
+              value={2000}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={" "}
+            /></p>
         </Grid>
         <Grid item xs={1}></Grid>
       </Grid>

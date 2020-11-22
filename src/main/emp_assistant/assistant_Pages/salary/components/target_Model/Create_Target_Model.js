@@ -24,7 +24,7 @@ export default function Create_Target_Model() {
   const [sale_taregt_amount, setSaleAmount] = useState(0);
   const [cash_taregt_amount, setCashAmount] = useState(0);
   const [startDate, setStartdate] = useState(null);
-  const [endDate, setEnddate] = useState(null);
+  // const [endDate, setEnddate] = useState(null);
   const [loading, setLoading] = useState(false);
   const [selectedType, setSelectedType] = useState("shop");
   const [targetType, setTargetType] = useState("sale_target");
@@ -221,7 +221,7 @@ export default function Create_Target_Model() {
           targetType === "sale_target" ? "Sale target" : "Cash target",
         selectedType: selectedType,
         start_date: startDate,
-        endDate: endDate,
+        // endDate: endDate,
         amount: totAmount,
       })
       .then((_) => {
@@ -323,7 +323,7 @@ export default function Create_Target_Model() {
               </Space>
             </Grid>
 
-            <Grid className="lbl_topi" item xs={12} sm={4}>
+            {/* <Grid className="lbl_topi" item xs={12} sm={4}>
               End Date
             </Grid>
             <Grid item xs={12} sm={1}>
@@ -343,7 +343,7 @@ export default function Create_Target_Model() {
                   }}
                 />
               </Space>
-            </Grid>
+            </Grid> */}
             <Grid className="lbl_topi" item xs={12} sm={4}>
               Target Type
             </Grid>
@@ -371,7 +371,7 @@ export default function Create_Target_Model() {
                 color="primary"
                 className="btn_update"
                 onClick={createTarget}
-                disabled={endDate === null || startDate === null || loading}
+                disabled={startDate === null || loading}
               >
                 {loading ? <Spin size="small" /> : "Done"}
               </Button>

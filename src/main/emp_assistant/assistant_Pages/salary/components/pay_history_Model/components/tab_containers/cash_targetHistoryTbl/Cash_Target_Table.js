@@ -4,6 +4,8 @@ import MUIDataTable from "mui-datatables";
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
+import CurrencyFormat from "react-currency-format";
+
 
 // styles
 import "./Cash_Target_Table.css";
@@ -54,18 +56,26 @@ export default function Cash_Target_Table() {
       },
     },
 
-   
 
   ];
 
   const tableData = [
     [
       "2020/03/01",
-      "James",
+      <CurrencyFormat
+              value={2000}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={" "}
+            />,
       "Test",
-      "Corp",
-      "Yon",
-      "kers",
+      <CurrencyFormat
+              value={2000}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={" "}
+            />,
+      
      
     ],
   ];
@@ -77,7 +87,12 @@ export default function Cash_Target_Table() {
           <Card className="root">
             <CardContent>
               <Typography className="cash_tagets" gutterBottom>
-                Cash Taget(LKR) : <span className="cash_taget_tot">20000</span>
+                Cash Taget(LKR) : <span className="cash_taget_tot"><CurrencyFormat
+              value={2000}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={" "}
+            /></span>
               </Typography>
               </CardContent>
             </Card> 
@@ -88,7 +103,12 @@ export default function Cash_Target_Table() {
           <Card className="root">
             <CardContent>
               <Typography className="cash_tagets"  gutterBottom>
-                Total(LKR) : <span className="cash_taget_tot">20000</span>
+                Total(LKR) : <span className="cash_taget_tot"><CurrencyFormat
+              value={2000}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={" "}
+            /></span>
               </Typography>
               <hr />
                 <Typography  color="textSecondary">

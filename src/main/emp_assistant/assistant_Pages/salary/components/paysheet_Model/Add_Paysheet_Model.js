@@ -268,7 +268,7 @@ async function cashTargetFunc(root) {
       }
     }
   }
-  return returnValue === 0 ? 0 : parseInt(returnValue / 2);
+  return returnValue === 0 ? 0 : returnValue / 2;
 }
 
 async function getCashSaleFunc(root, isFirstSalary, lastSalaryDate) {
@@ -305,7 +305,7 @@ async function getCashSaleFunc(root, isFirstSalary, lastSalaryDate) {
     }
   }
 
-  return cashSale === 0 ? 0 : parseInt(cashSale / 2);
+  return cashSale === 0 ? 0 : cashSale / 2;
 }
 
 async function getExcardFunc(root, isFirstSalary, lastSalaryDate) {
@@ -340,7 +340,7 @@ async function getExcardFunc(root, isFirstSalary, lastSalaryDate) {
     }
   }
 
-  return excardAmount === 0 ? 0 : parseInt(excardAmount / 2);
+  return excardAmount === 0 ? 0 : excardAmount / 2;
 }
 
 export default function Add_Paysheet_Model({ nic }) {

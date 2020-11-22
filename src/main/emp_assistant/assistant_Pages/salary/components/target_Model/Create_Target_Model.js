@@ -30,14 +30,19 @@ export default function Create_Target_Model() {
 
   const handleChange = (event) => {
     setSelectedType(event.target.value);
+
     if (targetType === "sale_target") {
+      setSaleAmount(0);
       getAllSaleTargetAmount();
     } else {
+      setCashAmount(0);
       getAllCashTargetAmount();
     }
   };
 
   const getAllSaleTargetAmount = () => {
+    setLoading(true);
+
     let daysCount = daysCountOfMonth(
       new Date().getMonth(),
       new Date().getFullYear()
@@ -65,10 +70,13 @@ export default function Create_Target_Model() {
             }
           }
         });
+        setLoading(false);
       });
   };
 
   const getAllCashTargetAmount = () => {
+    setLoading(true);
+
     let daysCount = daysCountOfMonth(
       new Date().getMonth(),
       new Date().getFullYear()
@@ -116,6 +124,7 @@ export default function Create_Target_Model() {
             }
           }
         });
+        setLoading(false);
       });
   };
 

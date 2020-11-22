@@ -404,22 +404,27 @@ export default function Edit_model({
                                                             .get()
                                                             .then(
                                                               (reSerial) => {
-                                                                let reSerialChange = reSerial?.docs[0]
-                                                                  ?.data()
-                                                                  .serail_no.concat(
-                                                                    serialNosList
-                                                                  );
-                                                                db.collection(
-                                                                  "serail_no"
-                                                                )
-                                                                  .doc(
-                                                                    reSerial
-                                                                      .docs[0]
-                                                                      .id
+                                                                if (
+                                                                  reSerial.docs
+                                                                    .length > 0
+                                                                ) {
+                                                                  let reSerialChange = reSerial?.docs[0]
+                                                                    ?.data()
+                                                                    .serail_no.concat(
+                                                                      serialNosList
+                                                                    );
+                                                                  db.collection(
+                                                                    "serail_no"
                                                                   )
-                                                                  .update({
-                                                                    serail_no: reSerialChange,
-                                                                  });
+                                                                    .doc(
+                                                                      reSerial
+                                                                        .docs[0]
+                                                                        .id
+                                                                    )
+                                                                    .update({
+                                                                      serail_no: reSerialChange,
+                                                                    });
+                                                                }
                                                               }
                                                             );
                                                         }

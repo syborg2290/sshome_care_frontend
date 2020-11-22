@@ -87,6 +87,21 @@ async function getShortage(root, isFirstSalary, lastSalaryDate) {
     });
 }
 
+function getAllAttendance(nic, isFirstSalary, lastSalaryDate) {
+  //  if (isFirstSalary) {
+  //    shortage = parseInt(shortage) + parseInt(eachIn.data().shortage);
+  //  } else {
+  //    let seeBool1 =
+  //      new Date(eachIn.data()?.date.seconds * 1000) >
+  //        new Date(lastSalaryDate.seconds * 1000) &&
+  //      new Date(eachIn.data()?.date.seconds * 1000) <= new Date();
+
+  //    if (seeBool1) {
+  //      shortage = parseInt(shortage) + parseInt(eachIn.data().shortage);
+  //    }
+  //  }
+}
+
 export default function Add_Paysheet_Model({ nic }) {
   // eslint-disable-next-line
   const [loading, setLoading] = useState(false);

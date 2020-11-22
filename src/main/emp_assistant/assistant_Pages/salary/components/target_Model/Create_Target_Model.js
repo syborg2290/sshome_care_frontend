@@ -223,6 +223,7 @@ export default function Create_Target_Model() {
         start_date: startDate,
         // endDate: endDate,
         amount: totAmount,
+        status: "ongoing",
       })
       .then((_) => {
         setLoading(false);

@@ -16,7 +16,6 @@ export default function Target_History_Model() {
   const [allData, setallData] = useState([]);
 
   const columns = [
- 
     {
       name: "Target_Type",
       options: {
@@ -35,16 +34,8 @@ export default function Target_History_Model() {
         }),
       },
     },
+
     {
-      name: "End_Date",
-      options: {
-        filter: false,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
-       {
       name: "Target_Amount",
       options: {
         filter: true,
@@ -71,23 +62,19 @@ export default function Target_History_Model() {
         var rawData = [];
         reThen.docs.forEach((each) => {
           rawData.push({
-           
             Target_Type: each.data().target_type,
             Start_Date: moment(each.data()?.start_date?.toDate()).format(
               "dddd, MMMM Do YYYY"
             ),
-            End_Date: moment(each.data()?.endDate?.toDate()).format(
-              "dddd, MMMM Do YYYY"
-            ),
             Target_Amount: (
-             <CurrencyFormat
-                  value={each.data().amount}
-                  displayType={"text"}
-                  thousandSeparator={true}
-                  prefix={" "}
+              <CurrencyFormat
+                value={each.data().amount}
+                displayType={"text"}
+                thousandSeparator={true}
+                prefix={" "}
               />
-              ),
-             
+            ),
+
             Type: each.data().selectedType,
           });
         });

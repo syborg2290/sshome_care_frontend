@@ -483,7 +483,6 @@ export default function Dashboard() {
 
   return (
     <>
-      
       {/* <Grid container spacing={4}>
         <Grid item xs={3}>
           <div className="card_Top">
@@ -515,56 +514,56 @@ export default function Dashboard() {
          </div>
         </Grid>
       </Grid> */}
-      
-    <Container component="main" className="main_container">
-      {/* <Typography className="titles" variant="h5" gutterBottom>
+
+      <Container component="main" className="main_container">
+        {/* <Typography className="titles" variant="h5" gutterBottom>
         Dashboard
       </Typography>
       <Grid item xs={12} sm={2}>
         <hr className="titles_hr" />
       </Grid> */}
 
-      {/*START Arreas Table */}
+        {/*START Arreas Table */}
 
-      <Grid container spacing={4}>
-        <Grid item xs={12}>
-          <ArreasTable />
+        <Grid container spacing={4}>
+          <Grid item xs={12}>
+            <ArreasTable />
+          </Grid>
         </Grid>
-      </Grid>
-      {/* END Arreas Table */}
+        {/* END Arreas Table */}
 
-      {/*START Expire Invoice Table */}
+        {/*START Expire Invoice Table */}
 
-      <Grid container spacing={4}>
-        <Grid item xs={12}>
-          <ExpireInvoice expire_list={expiredList} />
+        <Grid container spacing={4}>
+          <Grid item xs={12}>
+            <ExpireInvoice expire_list={expiredList} />
+          </Grid>
         </Grid>
-      </Grid>
-      {/* END Expire Invoice Table */}
+        {/* END Expire Invoice Table */}
 
-      {/*START BlockListPrnding Table */}
+        {/*START BlockListPrnding Table */}
 
-      <Grid container spacing={4}>
-        <Grid item xs={12}>
-          <PendingList pendingBlackList={pendingBlackList} />
+        <Grid container spacing={4}>
+          <Grid item xs={12}>
+            <PendingList pendingBlackList={pendingBlackList} />
+          </Grid>
         </Grid>
-      </Grid>
-      {/*END BlockListPrnding Table */}
+        {/*END BlockListPrnding Table */}
 
-      <br />
+        <br />
 
-      {/*START Invoices  Table */}
+        {/*START Invoices  Table */}
 
-      <Typography className="today_invoices" variant="h4" component="h6">
-        All invoices of issued in recently
-      </Typography>
-      <Grid container spacing={4}>
-        <Grid item xs={12}>
-          <InvoiceList />
+        <Typography className="today_invoices" variant="h4" component="h6">
+          All invoices of issued in recently
+        </Typography>
+        <Grid container spacing={4}>
+          <Grid item xs={12}>
+            <InvoiceList />
+          </Grid>
         </Grid>
-      </Grid>
-      {/*END Invoices  Table */}
+        {/*END Invoices  Table */}
       </Container>
-      </>
+    </>
   );
 }

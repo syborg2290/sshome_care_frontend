@@ -14,7 +14,6 @@ import AvTimerIcon from "@material-ui/icons/AvTimer";
 
 // components
 import AddPaysheet from "./components/paysheet_Model/Add_Paysheet_Model";
-// import PayHistoryModel from "./components/pay_history_Model/Pay_History_Model";
 import CreateTargetModel from "./components/target_Model/Create_Target_Model";
 import TargetHistoryModel from "./components/target_History_Model/Target_History_Model";
 

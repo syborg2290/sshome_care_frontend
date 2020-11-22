@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
-import Fab from '@material-ui/core/Fab';
+// import Fab from '@material-ui/core/Fab';
 
 //components
 import ArreasTable from "../dashboard/dashboard_contents/arreas_Table/Arreas_Table";
@@ -14,11 +14,11 @@ import firebase from "firebase";
 import db from "../../../../config/firebase.js";
 
 //icons
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import NotificationsIcon from '@material-ui/icons/Notifications';
-import BlockIcon from '@material-ui/icons/Block';
-import ErrorIcon from '@material-ui/icons/Error';
-import MoneyOffIcon from '@material-ui/icons/MoneyOff';
+// import FavoriteIcon from '@material-ui/icons/Favorite';
+// import NotificationsIcon from '@material-ui/icons/Notifications';
+// // import BlockIcon from '@material-ui/icons/Block';
+// import ErrorIcon from '@material-ui/icons/Error';
+// import MoneyOffIcon from '@material-ui/icons/MoneyOff';
 
 // styles
 import "./Dashboard.css";

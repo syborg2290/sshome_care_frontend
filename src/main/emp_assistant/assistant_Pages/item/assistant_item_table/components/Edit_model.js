@@ -404,8 +404,8 @@ export default function Edit_model({
                                                             .get()
                                                             .then(
                                                               (reSerial) => {
-                                                                let reSerialChange = reSerial.docs[0]
-                                                                  .data()
+                                                                let reSerialChange = reSerial?.docs[0]
+                                                                  ?.data()
                                                                   .serail_no.concat(
                                                                     serialNosList
                                                                   );

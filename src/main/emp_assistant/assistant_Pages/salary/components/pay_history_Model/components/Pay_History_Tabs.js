@@ -9,7 +9,6 @@ import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
 import LocalAtmIcon from "@material-ui/icons/LocalAtm";
 import AssignmentTurnedInIcon from "@material-ui/icons/AssignmentTurnedIn";
 import MoneyOffIcon from "@material-ui/icons/MoneyOff";
-import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import { useHistory } from "react-router-dom";
 
@@ -33,7 +32,7 @@ function TabPanel(props) {
     >
       {value === index && (
         <Box p={3}>
-          <Typography>{children}</Typography>
+          <div>{children}</div>
         </Box>
       )}
     </div>

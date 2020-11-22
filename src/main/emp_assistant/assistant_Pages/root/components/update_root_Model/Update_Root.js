@@ -53,10 +53,9 @@ export default function Update_Root({
   const [validation, setValidation] = useState("");
 
   let history = useHistory();
-  
-  useEffect(() => {
 
-     window.addEventListener("offline", function (e) {
+  useEffect(() => {
+    window.addEventListener("offline", function (e) {
       history.push("/assistant/connection/error/lost_connection");
     });
 
@@ -101,7 +100,7 @@ export default function Update_Root({
       saturday ||
       sunday
     ) {
-      if (employee1 !== "" || employee2 !== "") {
+      if (employee1.length !== 0 || employee1 !== "") {
         var daysList = [];
         daysList.push({
           monday: monday,
@@ -206,6 +205,9 @@ export default function Update_Root({
                   onChange={handleChange1}
                   value={employee1}
                 >
+                  <option onChange={handleChange1} value="">
+                    Select Employee
+                  </option>
                   {allEmployee.map((reM) => (
                     <option
                       key={reM.nic + "r"}
@@ -229,6 +231,9 @@ export default function Update_Root({
                   onChange={handleChange2}
                   value={employee2}
                 >
+                  <option onChange={handleChange2} value="">
+                    Select Employee
+                  </option>
                   {allEmployee.map((reM) => (
                     <option
                       key={reM.nic + "e"}
@@ -356,7 +361,11 @@ export default function Update_Root({
             color="primary"
             className="btn_addRoot"
             onClick={submit}
-            disabled={rootName.length === 0}
+            disabled={
+              rootName.length === 0 ||
+              employee1 === "" ||
+              employee1.length === 0
+            }
           >
             {isLoadingSubmit ? <Spin size="large" /> : "Done"}
           </Button>

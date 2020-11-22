@@ -22,6 +22,7 @@ import db from "../../../../config/firebase.js";
 
 export default function Salary() {
   const [addPaysheetModel, setAddPaysheetModel] = useState(false); // table model
+  // eslint-disable-next-line
   const [payHistoryModel, setpayHistoryModel] = useState(false); // table model
   // eslint-disable-next-line
   const [salaryAdvanceModel, setSalaryAdvanceModel] = useState(false);

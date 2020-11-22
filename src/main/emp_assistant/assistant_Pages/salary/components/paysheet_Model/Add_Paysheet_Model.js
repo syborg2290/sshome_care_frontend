@@ -13,12 +13,87 @@ import "./Add_Paysheet_Model.css";
 
 import db from "../../../../../../config/firebase.js";
 
+async function getShortage(root, isFirstSalary, lastSalaryDate) {
+  var shortage = 0;
+  await db
+    .collection("invoice")
+    .get()
+    .then((reInvoice) => {
+      reInvoice.docs.forEach((eachIn) => {
+        if (eachIn.data().selectedType === root) {
+          if (isFirstSalary) {
+            shortage = parseInt(shortage) + parseInt(eachIn.data().shortage);
+          } else {
+            let seeBool1 =
+              new Date(eachIn.data()?.date.seconds * 1000) >
+                new Date(lastSalaryDate.seconds * 1000) &&
+              new Date(eachIn.data()?.date.seconds * 1000) <= new Date();
+
+            if (seeBool1) {
+              shortage = parseInt(shortage) + parseInt(eachIn.data().shortage);
+            }
+          }
+        }
+
+        db.collection("installment")
+          .get()
+          .then((reInstallment) => {
+            reInstallment.docs.forEach((eachIns) => {
+              if (eachIns.data().type === root) {
+                if (isFirstSalary) {
+                  shortage =
+                    parseInt(shortage) + parseInt(eachIns.data().shortage);
+                } else {
+                  let seeBool2 =
+                    new Date(eachIns.data()?.date.seconds * 1000) >
+                      new Date(lastSalaryDate.seconds * 1000) &&
+                    new Date(eachIns.data()?.date.seconds * 1000) <= new Date();
+
+                  if (seeBool2) {
+                    shortage =
+                      parseInt(shortage) + parseInt(eachIns.data().shortage);
+                  }
+                }
+              }
+            });
+
+            db.collection("gas_purchase_history")
+              .get()
+              .then((reGas) => {
+                reGas.docs.forEach((eachGas) => {
+                  if (eachGas.data().type === root) {
+                    if (isFirstSalary) {
+                      shortage =
+                        parseInt(shortage) + parseInt(eachGas.data().shortage);
+                    } else {
+                      let seeBool3 =
+                        new Date(eachGas.data()?.date.seconds * 1000) >
+                          new Date(lastSalaryDate.seconds * 1000) &&
+                        new Date(eachGas.data()?.date.seconds * 1000) <=
+                          new Date();
+
+                      if (seeBool3) {
+                        shortage =
+                          parseInt(shortage) +
+                          parseInt(eachGas.data().shortage);
+                      }
+                    }
+                  }
+                });
+                return shortage;
+              });
+          });
+      });
+    });
+}
+
 export default function Add_Paysheet_Model({ nic }) {
   // eslint-disable-next-line
   const [loading, setLoading] = useState(false);
   const [basicSalary, setBasicSalary] = useState(0);
   const [insentive, setInsentive] = useState(0);
   const [phoneBill, setPhoneBill] = useState(0);
+  // eslint-disable-next-line
   const [attendance, setAttendance] = useState(0);
   const [epf, setEPF] = useState(0);
   const [paidSecurityDepo, setPaidSecurityDepo] = useState(0);
@@ -32,17 +107,68 @@ export default function Add_Paysheet_Model({ nic }) {
   const [cashTarget, setCashTarget] = useState(0);
   const [exCard, setExCard] = useState(0);
   const [cashSale, setCashSale] = useState(0);
+  // eslint-disable-next-line
+  const [root, setRoot] = useState("");
+  // eslint-disable-next-line
+  const [rootDocId, setRootDocId] = useState("");
 
   useEffect(() => {
     setLoading(true);
+
     db.collection("root")
       .get()
       .then((reRoot) => {
         reRoot.docs.forEach((eachRoot) => {
           if (eachRoot.data().employee1 === nic) {
+            db.collection("salary")
+              .get()
+              .then((reSalary) => {
+                if (reSalary.docs.length > 0) {
+                  getShortage(
+                    eachRoot.data().root,
+                    false,
+                    reSalary.docs[0].data().date
+                  ).then((reShort) => {
+                    setShortage(parseInt(reShort));
+                  });
+                } else {
+                  getShortage(
+                    eachRoot.data().root,
+                    true,
+                    reSalary.docs[0].data().date
+                  ).then((reShort) => {
+                    setShortage(parseInt(reShort));
+                  });
+                }
+              });
+            setRoot(eachRoot.data().root);
+            setRootDocId(eachRoot.id);
           }
 
           if (eachRoot.data().employee2 === nic) {
+            db.collection("salary")
+              .get()
+              .then((reSalary) => {
+                if (reSalary.docs.length > 0) {
+                  getShortage(
+                    eachRoot.data().root,
+                    false,
+                    reSalary.docs[0].data().date
+                  ).then((reShort) => {
+                    setShortage(parseInt(reShort));
+                  });
+                } else {
+                  getShortage(
+                    eachRoot.data().root,
+                    true,
+                    reSalary.docs[0].data().date
+                  ).then((reShort) => {
+                    setShortage(parseInt(reShort));
+                  });
+                }
+              });
+            setRoot(eachRoot.data().root);
+            setRootDocId(eachRoot.id);
           }
         });
       });
@@ -80,7 +206,7 @@ export default function Add_Paysheet_Model({ nic }) {
               });
           });
       });
-  }, []);
+  }, [nic]);
 
   return (
     <Container component="main" className="conctainefr_main">

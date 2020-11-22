@@ -282,9 +282,11 @@ async function getCashSaleFunc(root, isFirstSalary, lastSalaryDate) {
   for (var i = 0; i < saleRe.docs.length; i++) {
     if (saleRe.docs[i].data().paymentWay === "FullPayment") {
       if (isFirstSalary) {
-        cashSale =
-          parseInt(cashSale) +
-          (parseInt(saleRe.docs[i].data().downpayment) * 2.5) / 100;
+        for (let n = 0; n < saleRe.docs[i].data().items.length; n++) {
+          cashSale =
+            parseInt(cashSale) +
+            (parseInt(saleRe.docs[i].data().items[n].downpayment) * 2.5) / 100;
+        }
       } else {
         let seeBool1 =
           new Date(saleRe.docs[i].data()?.date.seconds * 1000) >
@@ -292,9 +294,12 @@ async function getCashSaleFunc(root, isFirstSalary, lastSalaryDate) {
           new Date(saleRe.docs[i].data()?.date.seconds * 1000) <= new Date();
 
         if (seeBool1) {
-          cashSale =
-            parseInt(cashSale) +
-            (parseInt(saleRe.docs[i].data().downpayment) * 2.5) / 100;
+          for (let n = 0; n < saleRe.docs[i].data().items.length; n++) {
+            cashSale =
+              parseInt(cashSale) +
+              (parseInt(saleRe.docs[i].data().items[n].downpayment) * 2.5) /
+                100;
+          }
         }
       }
     }

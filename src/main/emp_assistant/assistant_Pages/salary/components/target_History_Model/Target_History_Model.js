@@ -89,7 +89,7 @@ export default function Target_History_Model() {
               each.data().status === "ongoing" ? (
                 <div className="sttLondone">Ongoing</div>
               ) : (
-                <div className="sttLondone">Expired</div>
+                <div className="sttLon">Expired</div>
               ),
           });
         });

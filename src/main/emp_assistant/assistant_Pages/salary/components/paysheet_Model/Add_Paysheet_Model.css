@@ -26,3 +26,23 @@
 .model_shortage_add {
   width: 60% !important;
 }
+
+.card_container {
+  margin-top: 15px !important;
+}
+
+.titlexy {
+  margin-top: 5px !important;
+  font-size: small !important;
+  font-weight: 500 !important;
+  color: rgb(0, 0, 0) !important;
+  font: bold !important;
+}
+
+.titleNety {
+  margin-top: 8px !important;
+  float: right !important;
+  font-weight: 700 !important;
+  color: rgb(5, 5, 124) !important;
+  font-size: large !important;
+}

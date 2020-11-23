@@ -7,7 +7,11 @@ import {
   Typography,
   Button,
   Fab,
+  Card,
+  CardContent,
+  
 } from "@material-ui/core";
+
 import { Modal, Spin, Space, DatePicker } from "antd";
 
 // styles
@@ -1982,6 +1986,24 @@ export default function Add_Paysheet_Model({ nic }) {
                 </Space>
               </Grid>
             </Grid>
+            <Grid item xs={12} sm={12}>
+              <hr />
+             </Grid>
+            <Grid  className="card_container" container spacing={2}>
+              <Grid item xs={12} sm={12}>
+                <Card className="root">
+                  <CardContent>
+                     <Typography className="titlexy" color="textSecondary" gutterBottom>
+                      (Basic Salary + Insentive + Phone Bill - EPF - Security Deposit - Attendance deductions - Salary Advance - 
+                      Loan - Shortage + Sale Target + Cash Target + Cash Sale + Ex Card)
+                     </Typography>
+                   <Typography className="titleNety" color="textSecondary" gutterBottom>
+                      NET Salary = 2000.00/-
+                     </Typography>
+                   </CardContent>
+                </Card>
+              </Grid>
+              </Grid>
 
             <Grid container spacing={2}>
               <Grid item xs={12} sm={9}></Grid>

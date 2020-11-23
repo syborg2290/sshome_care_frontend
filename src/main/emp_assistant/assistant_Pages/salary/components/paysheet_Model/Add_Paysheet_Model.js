@@ -248,18 +248,16 @@ async function cashTargetFunc(root) {
             new Date();
 
         if (seeBool1) {
-          for (let n = 0; n < installmentsRe.docs[i].data().items.length; n++) {
+          if (installmentsRe.docs[i].data().isExpired === false) {
             threePresentage =
               parseInt(threePresentage) +
-              (parseInt(installmentsRe.docs[i].data().items[n].amount) * 3) /
-                100;
+              (parseInt(installmentsRe.docs[i].data().amount) * 3) / 100;
             fourPresentage =
               parseInt(fourPresentage) +
-              (parseInt(installmentsRe.docs[i].data().items[n].amount) * 4) /
-                100;
+              (parseInt(installmentsRe.docs[i].data().amount) * 4) / 100;
             cashTargetValue =
               parseInt(cashTargetValue) +
-              parseInt(installmentsRe.docs[i].data().items[n].amount);
+              parseInt(installmentsRe.docs[i].data().amount);
           }
         }
       }

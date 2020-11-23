@@ -52,7 +52,7 @@ async function getGasshort(root, isFirstSalary, lastSalaryDate) {
     }
   }
 
-  return gasShort === 0 ? 0 : gasShort / 2;
+  return gasShort === 0 ? 0 : Math.round((gasShort / 2) * 10) / 10;
 }
 
 async function getInstallmentshort(root, isFirstSalary, lastSalaryDate) {
@@ -84,7 +84,9 @@ async function getInstallmentshort(root, isFirstSalary, lastSalaryDate) {
     }
   }
 
-  return installShortage === 0 ? 0 : installShortage / 2;
+  return installShortage === 0
+    ? 0
+    : Math.round((installShortage / 2) * 10) / 10;
 }
 
 async function getShortage(root, isFirstSalary, lastSalaryDate) {
@@ -113,7 +115,7 @@ async function getShortage(root, isFirstSalary, lastSalaryDate) {
     }
   }
 
-  return shortage === 0 ? 0 : shortage / 2;
+  return shortage === 0 ? 0 : Math.round((shortage / 2) * 10) / 10;
 }
 
 async function getAllAttendance(nic, isFirstSalary, lastSalaryDate) {
@@ -310,7 +312,7 @@ async function cashTargetFunc(root, isFirstSalary, lastSalaryDate) {
     returnValue = threePresentage;
   }
 
-  return returnValue === 0 ? 0 : returnValue / 2;
+  return returnValue === 0 ? 0 : Math.round((returnValue / 2) * 10) / 10;
 }
 
 async function getCashSaleFunc(root, isFirstSalary, lastSalaryDate) {
@@ -347,7 +349,7 @@ async function getCashSaleFunc(root, isFirstSalary, lastSalaryDate) {
     }
   }
 
-  return cashSale === 0 ? 0 : cashSale / 2;
+  return cashSale === 0 ? 0 : Math.round((cashSale / 2) * 10) / 10;
 }
 
 async function getExcardFunc(root, isFirstSalary, lastSalaryDate) {
@@ -382,7 +384,7 @@ async function getExcardFunc(root, isFirstSalary, lastSalaryDate) {
     }
   }
 
-  return excardAmount === 0 ? 0 : excardAmount / 2;
+  return excardAmount === 0 ? 0 : Math.round((excardAmount / 2) * 10) / 10;
 }
 
 export default function Add_Paysheet_Model({ nic }) {

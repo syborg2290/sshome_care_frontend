@@ -8,7 +8,7 @@ import {
   Button,
   Fab,
 } from "@material-ui/core";
-import { Modal, Spin } from "antd";
+import { Modal,Spin } from "antd";
 
 // styles
 import "./Add_Paysheet_Model.css";
@@ -52,7 +52,7 @@ async function getGasshort(root, isFirstSalary, lastSalaryDate) {
     }
   }
 
-  return gasShort === 0 ? 0 : gasShort / 2;
+  return gasShort;
 }
 
 async function getInstallmentshort(root, isFirstSalary, lastSalaryDate) {
@@ -84,7 +84,7 @@ async function getInstallmentshort(root, isFirstSalary, lastSalaryDate) {
     }
   }
 
-  return installShortage === 0 ? 0 : installShortage / 2;
+  return installShortage;
 }
 
 async function getShortage(root, isFirstSalary, lastSalaryDate) {
@@ -113,7 +113,7 @@ async function getShortage(root, isFirstSalary, lastSalaryDate) {
     }
   }
 
-  return shortage === 0 ? 0 : shortage / 2;
+  return shortage;
 }
 
 async function getAllAttendance(nic, isFirstSalary, lastSalaryDate) {
@@ -160,7 +160,7 @@ async function getSaleTarget(root) {
 
   for (var k = 0; k < salesTaregt.docs.length; k++) {
     if (
-      salesTaregt.docs[k].data().status === "ongoing" &&
+      salesTaregt.docs[k].data().status === "ongoing" ||
       salesTaregt.docs[k].data().target_type === "Sale target"
     ) {
       targetValue = parseInt(salesTaregt.docs[k].data().amount);
@@ -210,7 +210,7 @@ async function cashTargetFunc(root) {
 
   for (let k = 0; k < cashTaregt.docs.length; k++) {
     if (
-      cashTaregt.docs[k].data().status === "ongoing" &&
+      cashTaregt.docs[k].data().status === "ongoing" ||
       cashTaregt.docs[k].data().target_type === "Cash target"
     ) {
       var targetValue = parseInt(cashTaregt.docs[k].data().amount);
@@ -223,15 +223,19 @@ async function cashTargetFunc(root) {
             new Date(saleRe.docs[i].data()?.date.seconds * 1000) <= new Date();
 
           if (seeBool1) {
-            threePresentage =
-              parseInt(threePresentage) +
-              (parseInt(saleRe.docs[i].data().downpayment) * 3) / 100;
-            fourPresentage =
-              parseInt(fourPresentage) +
-              (parseInt(saleRe.docs[i].data().downpayment) * 4) / 100;
-            cashTargetValue =
-              parseInt(cashTargetValue) +
-              parseInt(saleRe.docs[i].data().downpayment);
+            for (let n = 0; n < saleRe.docs[i].data().items.length; n++) {
+              threePresentage =
+                parseInt(threePresentage) +
+                (parseInt(saleRe.docs[i].data().items[n].downpayment) * 3) /
+                  100;
+              fourPresentage =
+                parseInt(fourPresentage) +
+                (parseInt(saleRe.docs[i].data().items[n].downpayment) * 4) /
+                  100;
+              cashTargetValue =
+                parseInt(cashTargetValue) +
+                parseInt(saleRe.docs[i].data().items[n].downpayment);
+            }
           }
         }
       }
@@ -245,19 +249,17 @@ async function cashTargetFunc(root) {
 
         if (seeBool1) {
           for (let n = 0; n < installmentsRe.docs[i].data().items.length; n++) {
-            if (installmentsRe.docs[i].data().isExpired === false) {
-              threePresentage =
-                parseInt(threePresentage) +
-                (parseInt(installmentsRe.docs[i].data().items[n].amount) * 3) /
-                  100;
-              fourPresentage =
-                parseInt(fourPresentage) +
-                (parseInt(installmentsRe.docs[i].data().items[n].amount) * 4) /
-                  100;
-              cashTargetValue =
-                parseInt(cashTargetValue) +
-                parseInt(installmentsRe.docs[i].data().items[n].amount);
-            }
+            threePresentage =
+              parseInt(threePresentage) +
+              (parseInt(installmentsRe.docs[i].data().items[n].amount) * 3) /
+                100;
+            fourPresentage =
+              parseInt(fourPresentage) +
+              (parseInt(installmentsRe.docs[i].data().items[n].amount) * 4) /
+                100;
+            cashTargetValue =
+              parseInt(cashTargetValue) +
+              parseInt(installmentsRe.docs[i].data().items[n].amount);
           }
         }
       }
@@ -268,7 +270,7 @@ async function cashTargetFunc(root) {
       }
     }
   }
-  return returnValue === 0 ? 0 : returnValue / 2;
+  return parseInt(returnValue);
 }
 
 async function getCashSaleFunc(root, isFirstSalary, lastSalaryDate) {
@@ -280,32 +282,29 @@ async function getCashSaleFunc(root, isFirstSalary, lastSalaryDate) {
   var cashSale = 0;
 
   for (var i = 0; i < saleRe.docs.length; i++) {
-    if (saleRe.docs[i].data().paymentWay === "FullPayment") {
-      if (isFirstSalary) {
+    if (isFirstSalary) {
+      for (let n = 0; n < saleRe.docs[i].data().items.length; n++) {
+        cashSale =
+          parseInt(cashSale) +
+          (parseInt(saleRe.docs[i].data().items[n].downpayment) * 2.5) / 100;
+      }
+    } else {
+      let seeBool1 =
+        new Date(saleRe.docs[i].data()?.date.seconds * 1000) >
+          new Date(lastSalaryDate.seconds * 1000) &&
+        new Date(saleRe.docs[i].data()?.date.seconds * 1000) <= new Date();
+
+      if (seeBool1) {
         for (let n = 0; n < saleRe.docs[i].data().items.length; n++) {
           cashSale =
             parseInt(cashSale) +
             (parseInt(saleRe.docs[i].data().items[n].downpayment) * 2.5) / 100;
         }
-      } else {
-        let seeBool1 =
-          new Date(saleRe.docs[i].data()?.date.seconds * 1000) >
-            new Date(lastSalaryDate.seconds * 1000) &&
-          new Date(saleRe.docs[i].data()?.date.seconds * 1000) <= new Date();
-
-        if (seeBool1) {
-          for (let n = 0; n < saleRe.docs[i].data().items.length; n++) {
-            cashSale =
-              parseInt(cashSale) +
-              (parseInt(saleRe.docs[i].data().items[n].downpayment) * 2.5) /
-                100;
-          }
-        }
       }
     }
   }
 
-  return cashSale === 0 ? 0 : cashSale / 2;
+  return parseInt(cashSale);
 }
 
 async function getExcardFunc(root, isFirstSalary, lastSalaryDate) {
@@ -340,10 +339,11 @@ async function getExcardFunc(root, isFirstSalary, lastSalaryDate) {
     }
   }
 
-  return excardAmount === 0 ? 0 : excardAmount / 2;
+  return parseInt(excardAmount);
 }
 
 export default function Add_Paysheet_Model({ nic }) {
+
   const [attendanceModel, setAttendanceModel] = useState(false);
   const [cashSaleModel, setCashSaleModel] = useState(false);
   const [cashTargetModel, setCashTargetModel] = useState(false);
@@ -375,22 +375,22 @@ export default function Add_Paysheet_Model({ nic }) {
   // eslint-disable-next-line
   const [rootDocId, setRootDocId] = useState("");
 
-  const AttendanceModel = () => {
+   const AttendanceModel = () => {
     setAttendanceModel(true);
   };
-  const CashSaleModel = () => {
+   const CashSaleModel = () => {
     setCashSaleModel(true);
   };
-  const CashTargetModel = () => {
+   const CashTargetModel = () => {
     setCashTargetModel(true);
   };
-  const ExCardModel = () => {
+   const ExCardModel = () => {
     setExCardModel(true);
   };
-  const SaleTargetModel = () => {
+   const SaleTargetModel = () => {
     setSaleTargetModel(true);
   };
-  const ShortageModel = () => {
+   const ShortageModel = () => {
     setShortageModel(true);
   };
 
@@ -645,8 +645,9 @@ export default function Add_Paysheet_Model({ nic }) {
   }, [nic]);
 
   return (
-    <>
-      {/*Start Attendance Model */}
+<>
+
+     {/*Start Attendance Model */}
 
       <Modal
         visible={attendanceModel}
@@ -659,14 +660,16 @@ export default function Add_Paysheet_Model({ nic }) {
         <div>
           <div>
             <div>
-              <AttendanceHistorys />
+              <AttendanceHistorys
+              
+              />
             </div>
           </div>
         </div>
       </Modal>
 
       {/* End Attendance Model  */}
-      {/*Start CashSale Model */}
+        {/*Start CashSale Model */}
 
       <Modal
         visible={cashSaleModel}
@@ -679,14 +682,16 @@ export default function Add_Paysheet_Model({ nic }) {
         <div>
           <div>
             <div>
-              <CashSaleHistorys />
+              <CashSaleHistorys
+            
+              />
             </div>
           </div>
         </div>
       </Modal>
 
       {/* End CashSale Model  */}
-      {/*Start CashTarget Model */}
+        {/*Start CashTarget Model */}
 
       <Modal
         visible={cashTargetModel}
@@ -699,14 +704,16 @@ export default function Add_Paysheet_Model({ nic }) {
         <div>
           <div>
             <div>
-              <CashTargetHistorys />
+              <CashTargetHistorys
+              
+              />
             </div>
           </div>
         </div>
       </Modal>
 
       {/* End CashTarget Model  */}
-      {/*Start exCard Model */}
+        {/*Start exCard Model */}
 
       <Modal
         visible={exCardModel}
@@ -719,14 +726,16 @@ export default function Add_Paysheet_Model({ nic }) {
         <div>
           <div>
             <div>
-              <ExcardHistorys />
+              <ExcardHistorys
+               
+              />
             </div>
           </div>
         </div>
       </Modal>
 
       {/* End exCard Model  */}
-      {/*Start saleTarget Model */}
+        {/*Start saleTarget Model */}
 
       <Modal
         visible={saleTargetModel}
@@ -739,14 +748,16 @@ export default function Add_Paysheet_Model({ nic }) {
         <div>
           <div>
             <div>
-              <SaleTargetHistorys />
+              <SaleTargetHistorys
+             
+              />
             </div>
           </div>
         </div>
       </Modal>
 
       {/* End saleTarget Model  */}
-      {/*Start shortage Model */}
+        {/*Start shortage Model */}
 
       <Modal
         visible={shortageModel}
@@ -759,7 +770,9 @@ export default function Add_Paysheet_Model({ nic }) {
         <div>
           <div>
             <div>
-              <ShortageHistorys />
+              <ShortageHistorys
+              
+              />
             </div>
           </div>
         </div>
@@ -767,425 +780,427 @@ export default function Add_Paysheet_Model({ nic }) {
 
       {/* End shortage Model  */}
 
-      <Container component="main" className="conctainefr_main">
-        <Typography className="titleffs" variant="h5" gutterBottom>
-          Make Salary
-        </Typography>
-        <Grid item xs={12} sm={12}>
-          <hr className="titl_hr" />
-        </Grid>
-        <div className="paper">
-          <form className="form" noValidate>
-            <Grid container spacing={2}>
-              <Grid className="lbl_topi" item xs={12} sm={4}>
-                Basic Salary(LKR)
-              </Grid>
-              <Grid item xs={12} sm={1}>
-                :
-              </Grid>
-              <Grid item xs={12} sm={7}>
-                <TextField
-                  autoComplete="bsly"
-                  variant="outlined"
-                  required
-                  fullWidth
-                  type="number"
-                  label="Basic Salary"
-                  size="small"
-                  InputProps={{ inputProps: { min: 0 } }}
-                  value={basicSalary}
-                  onChange={(e) => {
-                    if (e.target.value !== "") {
-                      setBasicSalary(parseInt(e.target.value.trim()));
-                    }
-                  }}
-                />
-              </Grid>
-              <Grid className="lbl_topi" item xs={12} sm={4}>
-                Insentive(LKR)
-              </Grid>
-              <Grid item xs={12} sm={1}>
-                :
-              </Grid>
-              <Grid item xs={12} sm={7}>
-                <TextField
-                  autoComplete="insn"
-                  variant="outlined"
-                  required
-                  fullWidth
-                  type="number"
-                  label="Insentive"
-                  size="small"
-                  InputProps={{ inputProps: { min: 0 } }}
-                  value={insentive}
-                  onChange={(e) => {
-                    if (e.target.value !== "") {
-                      setInsentive(parseInt(e.target.value.trim()));
-                    }
-                  }}
-                />
-              </Grid>
-              <Grid className="lbl_topi" item xs={12} sm={4}>
-                Phone Bill(LKR)
-              </Grid>
-              <Grid item xs={12} sm={1}>
-                :
-              </Grid>
-              <Grid item xs={12} sm={7}>
-                <TextField
-                  autoComplete="pbill"
-                  variant="outlined"
-                  required
-                  fullWidth
-                  type="number"
-                  label=" Phone Bill"
-                  size="small"
-                  InputProps={{ inputProps: { min: 0 } }}
-                  value={phoneBill}
-                  onChange={(e) => {
-                    if (e.target.value !== "") {
-                      setPhoneBill(parseInt(e.target.value.trim()));
-                    }
-                  }}
-                />
-              </Grid>
-              <Grid className="lbl_topi" item xs={12} sm={4}>
-                Attendant
-              </Grid>
-              <Grid item xs={12} sm={1}>
-                :
-              </Grid>
-              <Grid item xs={12} sm={5}>
-                <p>{attendance}</p>
-              </Grid>
-              <Grid item xs={12} sm={2}>
-                <Fab className="icon1Fab" size="small" aria-label="like">
-                  <HistoryIcon onClick={AttendanceModel} />
-                </Fab>
-              </Grid>
 
-              <Grid className="lbl_topi" item xs={12} sm={4}>
-                EPF(LKR)
-              </Grid>
-              <Grid item xs={12} sm={1}>
-                :
-              </Grid>
-              <Grid item xs={12} sm={7}>
-                <TextField
-                  autoComplete="epf"
-                  variant="outlined"
-                  required
-                  fullWidth
-                  type="number"
-                  label="EPF"
-                  size="small"
-                  InputProps={{ inputProps: { min: 0 } }}
-                  value={epf}
-                  onChange={(e) => {
-                    if (e.target.value !== "") {
-                      setEPF(parseInt(e.target.value.trim()));
-                    }
-                  }}
-                />
-              </Grid>
-              <Grid className="lbl_topi" item xs={12} sm={4}>
-                Security Deposit(LKR)
-              </Grid>
-              <Grid item xs={12} sm={1}>
-                :
-              </Grid>
-              <Grid item xs={12} sm={7}>
-                <TextField
-                  autoComplete="sdp"
-                  variant="outlined"
-                  required
-                  fullWidth
-                  type="number"
-                  label="Security Deposit"
-                  size="small"
-                  InputProps={{ inputProps: { min: 0 } }}
-                  value={securityDeposit}
-                  onChange={(e) => {
-                    if (e.target.value !== "") {
-                      setSecurityDeposit(parseInt(e.target.value.trim()));
-                    }
-                  }}
-                />
-              </Grid>
 
-              <Grid item xs={12} sm={12}>
-                <p
-                  style={{
-                    color: "red",
-                    fontWeight: "bold",
-                    fontSize: "12px",
-                    textAlign: "center",
-                  }}
-                >
-                  Paid security deposit amount(LKR) : {paidSecurityDepo}
-                </p>
-              </Grid>
-
-              <Grid className="lbl_topi" item xs={12} sm={4}>
-                Attendance deductions(LKR)
-              </Grid>
-              <Grid item xs={12} sm={1}>
-                :
-              </Grid>
-              <Grid item xs={12} sm={7}>
-                <TextField
-                  autoComplete="sdp"
-                  variant="outlined"
-                  required
-                  fullWidth
-                  type="number"
-                  label="Security Deposit"
-                  size="small"
-                  InputProps={{ inputProps: { min: 0 } }}
-                  value={deduction}
-                  onChange={(e) => {
-                    if (e.target.value !== "") {
-                      setDeduction(parseInt(e.target.value.trim()));
-                    }
-                  }}
-                />
-              </Grid>
-              <Grid className="lbl_topi" item xs={12} sm={4}>
-                Salary Advance(LKR)
-              </Grid>
-              <Grid item xs={12} sm={1}>
-                :
-              </Grid>
-              <Grid item xs={12} sm={7}>
-                <TextField
-                  autoComplete="adv"
-                  variant="outlined"
-                  required
-                  fullWidth
-                  type="number"
-                  label="Advance"
-                  size="small"
-                  disabled={advance === 0}
-                  InputProps={{ inputProps: { min: 0 } }}
-                  value={advance}
-                  onChange={(e) => {
-                    if (e.target.value !== "") {
-                      setAdvance(parseInt(e.target.value.trim()));
-                    }
-                  }}
-                />
-              </Grid>
-              <Grid className="lbl_topi" item xs={12} sm={4}>
-                Loan(LKR)
-              </Grid>
-              <Grid item xs={12} sm={1}>
-                :
-              </Grid>
-              <Grid item xs={12} sm={7}>
-                <TextField
-                  autoComplete="lon"
-                  variant="outlined"
-                  required
-                  fullWidth
-                  type="number"
-                  label="Loan"
-                  size="small"
-                  disabled={loanBalance === 0 ? true : false}
-                  InputProps={{ inputProps: { min: 0 } }}
-                  value={loan}
-                  onChange={(e) => {
-                    if (e.target.value !== "") {
-                      setLoan(parseInt(e.target.value.trim()));
-                    }
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12} sm={12}>
-                <p
-                  style={{
-                    color: "red",
-                    fontWeight: "bold",
-                    fontSize: "12px",
-                    textAlign: "center",
-                  }}
-                >
-                  Current loan balance(LKR) : {loanBalance}
-                </p>
-              </Grid>
-              <Grid className="lbl_topi" item xs={12} sm={4}>
-                Shortage(LKR)
-              </Grid>
-              <Grid item xs={12} sm={1}>
-                :
-              </Grid>
-              <Grid item xs={12} sm={5}>
-                <TextField
-                  autoComplete="sho"
-                  variant="outlined"
-                  required
-                  fullWidth
-                  type="number"
-                  label="Shortage"
-                  size="small"
-                  InputProps={{ inputProps: { min: 0 } }}
-                  value={shortage}
-                  onChange={(e) => {
-                    if (e.target.value !== "") {
-                      setShortage(parseInt(e.target.value.trim()));
-                    }
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12} sm={2}>
-                <Fab className="icon1Fab" size="small" aria-label="like">
-                  <HistoryIcon onClick={ShortageModel} />
-                </Fab>
-              </Grid>
-              <Grid item xs={12} sm={12}>
-                <hr />
-              </Grid>
-              <Grid className="lbl_topi" item xs={12} sm={4}>
-                Sale Target(LKR)
-              </Grid>
-              <Grid item xs={12} sm={1}>
-                :
-              </Grid>
-              <Grid item xs={12} sm={5}>
-                <TextField
-                  autoComplete="sho"
-                  variant="outlined"
-                  required
-                  fullWidth
-                  type="number"
-                  label="Sale Target"
-                  size="small"
-                  InputProps={{ inputProps: { min: 0 } }}
-                  value={saleTarget}
-                  onChange={(e) => {
-                    if (e.target.value !== "") {
-                      setSaleTarget(parseInt(e.target.value.trim()));
-                    }
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12} sm={2}>
-                <Fab className="icon1Fab" size="small" aria-label="like">
-                  <HistoryIcon onClick={SaleTargetModel} />
-                </Fab>
-              </Grid>
-              <Grid className="lbl_topi" item xs={12} sm={4}>
-                Cash Target(LKR)
-              </Grid>
-              <Grid item xs={12} sm={1}>
-                :
-              </Grid>
-              <Grid item xs={12} sm={5}>
-                <TextField
-                  autoComplete="trgtCASH"
-                  variant="outlined"
-                  required
-                  fullWidth
-                  type="number"
-                  label=" Cash Target"
-                  size="small"
-                  InputProps={{ inputProps: { min: 0 } }}
-                  value={cashTarget}
-                  onChange={(e) => {
-                    if (e.target.value !== "") {
-                      setCashTarget(parseInt(e.target.value.trim()));
-                    }
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12} sm={2}>
-                <Fab className="icon1Fab" size="small" aria-label="like">
-                  <HistoryIcon onClick={CashTargetModel} />
-                </Fab>
-              </Grid>
-              <Grid className="lbl_topi" item xs={12} sm={4}>
-                Cash Sale(LKR)
-              </Grid>
-              <Grid item xs={12} sm={1}>
-                :
-              </Grid>
-              <Grid item xs={12} sm={5}>
-                <TextField
-                  autoComplete="cashsle"
-                  variant="outlined"
-                  required
-                  fullWidth
-                  type="number"
-                  label="Cash Sale"
-                  size="small"
-                  InputProps={{ inputProps: { min: 0 } }}
-                  value={cashSale}
-                  onChange={(e) => {
-                    if (e.target.value !== "") {
-                      setCashSale(parseInt(e.target.value.trim()));
-                    }
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12} sm={2}>
-                <Fab className="icon1Fab" size="small" aria-label="like">
-                  <HistoryIcon onClick={CashSaleModel} />
-                </Fab>
-              </Grid>
-              <Grid className="lbl_topi" item xs={12} sm={4}>
-                EX Card(LKR)
-              </Grid>
-              <Grid item xs={12} sm={1}>
-                :
-              </Grid>
-              <Grid item xs={12} sm={5}>
-                <TextField
-                  autoComplete="ex"
-                  variant="outlined"
-                  required
-                  fullWidth
-                  type="number"
-                  label=" EX Card"
-                  size="small"
-                  InputProps={{ inputProps: { min: 0 } }}
-                  value={exCard}
-                  onChange={(e) => {
-                    if (e.target.value !== "") {
-                      setExCard(parseInt(e.target.value.trim()));
-                    }
-                  }}
-                />
-              </Grid>
-              <Grid className="icon1Fabgrid" item xs={12} sm={2}>
-                <Fab className="icon1Fab" size="small" aria-label="like">
-                  <HistoryIcon onClick={ExCardModel} />
-                </Fab>
-              </Grid>
+    <Container component="main" className="conctainefr_main">
+      <Typography className="titleffs" variant="h5" gutterBottom>
+        Make Salary
+      </Typography>
+      <Grid item xs={12} sm={12}>
+        <hr className="titl_hr" />
+      </Grid>
+      <div className="paper">
+        <form className="form" noValidate>
+          <Grid container spacing={2}>
+            <Grid className="lbl_topi" item xs={12} sm={4}>
+              Basic Salary(LKR)
             </Grid>
-
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={9}></Grid>
-              <Grid item xs={12} sm={3}>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  className="btn_update"
-                  // onClick={addRepair}
-                  disabled={
-                    loading ||
-                    basicSalary.length === 0 ||
-                    insentive.length === 0 ||
-                    phoneBill.length === 0
-                      ? true
-                      : false
+            <Grid item xs={12} sm={1}>
+              :
+            </Grid>
+            <Grid item xs={12} sm={7}>
+              <TextField
+                autoComplete="bsly"
+                variant="outlined"
+                required
+                fullWidth
+                type="number"
+                label="Basic Salary"
+                size="small"
+                InputProps={{ inputProps: { min: 0 } }}
+                value={basicSalary}
+                onChange={(e) => {
+                  if (e.target.value !== "") {
+                    setBasicSalary(parseInt(e.target.value.trim()));
                   }
-                >
-                  {loading ? <Spin /> : "Done"}
-                </Button>
-              </Grid>
+                }}
+              />
             </Grid>
-          </form>
-        </div>
+            <Grid className="lbl_topi" item xs={12} sm={4}>
+              Insentive(LKR)
+            </Grid>
+            <Grid item xs={12} sm={1}>
+              :
+            </Grid>
+            <Grid item xs={12} sm={7}>
+              <TextField
+                autoComplete="insn"
+                variant="outlined"
+                required
+                fullWidth
+                type="number"
+                label="Insentive"
+                size="small"
+                InputProps={{ inputProps: { min: 0 } }}
+                value={insentive}
+                onChange={(e) => {
+                  if (e.target.value !== "") {
+                    setInsentive(parseInt(e.target.value.trim()));
+                  }
+                }}
+              />
+            </Grid>
+            <Grid className="lbl_topi" item xs={12} sm={4}>
+              Phone Bill(LKR)
+            </Grid>
+            <Grid item xs={12} sm={1}>
+              :
+            </Grid>
+            <Grid item xs={12} sm={7}>
+              <TextField
+                autoComplete="pbill"
+                variant="outlined"
+                required
+                fullWidth
+                type="number"
+                label=" Phone Bill"
+                size="small"
+                InputProps={{ inputProps: { min: 0 } }}
+                value={phoneBill}
+                onChange={(e) => {
+                  if (e.target.value !== "") {
+                    setPhoneBill(parseInt(e.target.value.trim()));
+                  }
+                }}
+              />
+            </Grid>
+            <Grid className="lbl_topi" item xs={12} sm={4}>
+              Attendant
+            </Grid>
+            <Grid item xs={12} sm={1}>
+              :
+            </Grid>
+            <Grid item xs={12} sm={5}>
+              <p>{attendance}</p>
+            </Grid>
+              <Grid item xs={12} sm={2}>
+                <Fab className="icon1Fab" size="small" aria-label="like">
+                <HistoryIcon  onClick={AttendanceModel} />
+            </Fab>
+              </Grid>
+
+            <Grid className="lbl_topi" item xs={12} sm={4}>
+              EPF(LKR)
+            </Grid>
+            <Grid item xs={12} sm={1}>
+              :
+            </Grid>
+            <Grid item xs={12} sm={7}>
+              <TextField
+                autoComplete="epf"
+                variant="outlined"
+                required
+                fullWidth
+                type="number"
+                label="EPF"
+                size="small"
+                InputProps={{ inputProps: { min: 0 } }}
+                value={epf}
+                onChange={(e) => {
+                  if (e.target.value !== "") {
+                    setEPF(parseInt(e.target.value.trim()));
+                  }
+                }}
+              />
+            </Grid>
+            <Grid className="lbl_topi" item xs={12} sm={4}>
+              Security Deposit(LKR)
+            </Grid>
+            <Grid item xs={12} sm={1}>
+              :
+            </Grid>
+            <Grid item xs={12} sm={7}>
+              <TextField
+                autoComplete="sdp"
+                variant="outlined"
+                required
+                fullWidth
+                type="number"
+                label="Security Deposit"
+                size="small"
+                InputProps={{ inputProps: { min: 0 } }}
+                value={securityDeposit}
+                onChange={(e) => {
+                  if (e.target.value !== "") {
+                    setSecurityDeposit(parseInt(e.target.value.trim()));
+                  }
+                }}
+              />
+            </Grid>
+
+            <Grid item xs={12} sm={12}>
+              <p
+                style={{
+                  color: "red",
+                  fontWeight: "bold",
+                  fontSize: "12px",
+                  textAlign: "center",
+                }}
+              >
+                Paid security deposit amount(LKR) : {paidSecurityDepo}
+              </p>
+            </Grid>
+
+            <Grid className="lbl_topi" item xs={12} sm={4}>
+              Attendance deductions(LKR)
+            </Grid>
+            <Grid item xs={12} sm={1}>
+              :
+            </Grid>
+            <Grid item xs={12} sm={7}>
+              <TextField
+                autoComplete="sdp"
+                variant="outlined"
+                required
+                fullWidth
+                type="number"
+                label="Attendance deductions"
+                size="small"
+                InputProps={{ inputProps: { min: 0 } }}
+                value={deduction}
+                onChange={(e) => {
+                  if (e.target.value !== "") {
+                    setDeduction(parseInt(e.target.value.trim()));
+                  }
+                }}
+              />
+            </Grid>
+            <Grid className="lbl_topi" item xs={12} sm={4}>
+              Salary Advance(LKR)
+            </Grid>
+            <Grid item xs={12} sm={1}>
+              :
+            </Grid>
+            <Grid item xs={12} sm={7}>
+              <TextField
+                autoComplete="adv"
+                variant="outlined"
+                required
+                fullWidth
+                type="number"
+                label="Advance"
+                size="small"
+                disabled={advance === 0}
+                InputProps={{ inputProps: { min: 0 } }}
+                value={advance}
+                onChange={(e) => {
+                  if (e.target.value !== "") {
+                    setAdvance(parseInt(e.target.value.trim()));
+                  }
+                }}
+              />
+            </Grid>
+            <Grid className="lbl_topi" item xs={12} sm={4}>
+              Loan(LKR)
+            </Grid>
+            <Grid item xs={12} sm={1}>
+              :
+            </Grid>
+            <Grid item xs={12} sm={7}>
+              <TextField
+                autoComplete="lon"
+                variant="outlined"
+                required
+                fullWidth
+                type="number"
+                label="Loan"
+                size="small"
+                disabled={loanBalance === 0 ? true : false}
+                InputProps={{ inputProps: { min: 0 } }}
+                value={loan}
+                onChange={(e) => {
+                  if (e.target.value !== "") {
+                    setLoan(parseInt(e.target.value.trim()));
+                  }
+                }}
+              />
+            </Grid>
+            <Grid item xs={12} sm={12}>
+              <p
+                style={{
+                  color: "red",
+                  fontWeight: "bold",
+                  fontSize: "12px",
+                  textAlign: "center",
+                }}
+              >
+                Current loan balance(LKR) : {loanBalance}
+              </p>
+            </Grid>
+            <Grid className="lbl_topi" item xs={12} sm={4}>
+              Shortage(LKR)
+            </Grid>
+            <Grid item xs={12} sm={1}>
+              :
+            </Grid>
+            <Grid item xs={12} sm={5}>
+              <TextField
+                autoComplete="sho"
+                variant="outlined"
+                required
+                fullWidth
+                type="number"
+                label="Shortage"
+                size="small"
+                InputProps={{ inputProps: { min: 0 } }}
+                value={shortage}
+                onChange={(e) => {
+                  if (e.target.value !== "") {
+                    setShortage(parseInt(e.target.value.trim()));
+                  }
+                }}
+              />
+            </Grid>
+             <Grid item xs={12} sm={2}>
+                <Fab className="icon1Fab" size="small" aria-label="like">
+                <HistoryIcon onClick={ShortageModel} />
+            </Fab>
+              </Grid>
+            <Grid item xs={12} sm={12}>
+              <hr />
+            </Grid>
+            <Grid className="lbl_topi" item xs={12} sm={4}>
+              Sale Target(LKR)
+            </Grid>
+            <Grid item xs={12} sm={1}>
+              :
+            </Grid>
+            <Grid item xs={12} sm={5}>
+              <TextField
+                autoComplete="sho"
+                variant="outlined"
+                required
+                fullWidth
+                type="number"
+                label="Sale Target"
+                size="small"
+                InputProps={{ inputProps: { min: 0 } }}
+                value={saleTarget}
+                onChange={(e) => {
+                  if (e.target.value !== "") {
+                    setSaleTarget(parseInt(e.target.value.trim()));
+                  }
+                }}
+              />
+            </Grid>
+             <Grid item xs={12} sm={2}>
+                <Fab className="icon1Fab" size="small" aria-label="like">
+                <HistoryIcon  onClick={SaleTargetModel}/>
+            </Fab>
+              </Grid>
+            <Grid className="lbl_topi" item xs={12} sm={4}>
+              Cash Target(LKR)
+            </Grid>
+            <Grid item xs={12} sm={1}>
+              :
+            </Grid>
+            <Grid item xs={12} sm={5}>
+              <TextField
+                autoComplete="trgtCASH"
+                variant="outlined"
+                required
+                fullWidth
+                type="number"
+                label=" Cash Target"
+                size="small"
+                InputProps={{ inputProps: { min: 0 } }}
+                value={cashTarget}
+                onChange={(e) => {
+                  if (e.target.value !== "") {
+                    setCashTarget(parseInt(e.target.value.trim()));
+                  }
+                }}
+              />
+            </Grid>
+             <Grid item xs={12} sm={2}>
+                <Fab className="icon1Fab" size="small" aria-label="like">
+                <HistoryIcon  onClick={CashTargetModel}/>
+            </Fab>
+              </Grid>
+            <Grid className="lbl_topi" item xs={12} sm={4}>
+              Cash Sale(LKR)
+            </Grid>
+            <Grid item xs={12} sm={1}>
+              :
+            </Grid>
+            <Grid item xs={12} sm={5}>
+              <TextField
+                autoComplete="cashsle"
+                variant="outlined"
+                required
+                fullWidth
+                type="number"
+                label="Cash Sale"
+                size="small"
+                InputProps={{ inputProps: { min: 0 } }}
+                value={cashSale}
+                onChange={(e) => {
+                  if (e.target.value !== "") {
+                    setCashSale(parseInt(e.target.value.trim()));
+                  }
+                }}
+              />
+            </Grid>
+             <Grid item xs={12} sm={2}>
+                <Fab className="icon1Fab" size="small" aria-label="like">
+                <HistoryIcon  onClick={CashSaleModel}/>
+            </Fab>
+              </Grid>
+            <Grid className="lbl_topi" item xs={12} sm={4}>
+              EX Card(LKR)
+            </Grid>
+            <Grid item xs={12} sm={1}>
+              :
+            </Grid>
+            <Grid item xs={12} sm={5}>
+              <TextField
+                autoComplete="ex"
+                variant="outlined"
+                required
+                fullWidth
+                type="number"
+                label=" EX Card"
+                size="small"
+                InputProps={{ inputProps: { min: 0 } }}
+                value={exCard}
+                onChange={(e) => {
+                  if (e.target.value !== "") {
+                    setExCard(parseInt(e.target.value.trim()));
+                  }
+                }}
+              />
+            </Grid>
+             <Grid  className="icon1Fabgrid" item xs={12} sm={2}>
+                 <Fab  className="icon1Fab" size="small" aria-label="like">
+                <HistoryIcon  onClick={ExCardModel}/>
+            </Fab>
+              </Grid>
+          </Grid>
+
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={9}></Grid>
+            <Grid item xs={12} sm={3}>
+              <Button
+                variant="contained"
+                color="primary"
+                className="btn_update"
+                // onClick={addRepair}
+                disabled={
+                  loading ||
+                  basicSalary.length === 0 ||
+                  insentive.length === 0 ||
+                  phoneBill.length === 0
+                    ? true
+                    : false
+                }
+              >
+                {loading ? <Spin /> : "Done"}
+              </Button>
+            </Grid>
+          </Grid>
+        </form>
+      </div>
       </Container>
-    </>
+      </>
   );
 }

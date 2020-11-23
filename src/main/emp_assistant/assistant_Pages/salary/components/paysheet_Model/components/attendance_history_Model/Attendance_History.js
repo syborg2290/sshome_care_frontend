@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Grid } from "@material-ui/core";
 import MUIDataTable from "mui-datatables";
+import moment from "moment";
 
 // styles
 import "./Attendance_History.css";
 
-export default function Attendance_History() {
+export default function Attendance_History({ list }) {
   // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
   // eslint-disable-next-line
@@ -32,9 +33,21 @@ export default function Attendance_History() {
     },
   ];
 
-  const tableData = [
-    ["2020/03/01", <div className="workingStts">Fullday</div>],
-  ];
+  useEffect(() => {
+    var rawData = [];
+    list.forEach((reEa) => {
+      rawData.push({
+        Date: moment(reEa?.date?.toDate()).format("dddd, MMMM Do YYYY"),
+        Status:
+          reEa.status === "full" ? (
+            <div className="workingStts">Fullday</div>
+          ) : (
+            <div className="workingSttsHald">Halfday</div>
+          ),
+      });
+    });
+    setallData(rawData);
+  }, [list]);
 
   return (
     <>
@@ -44,7 +57,7 @@ export default function Attendance_History() {
             title={<span className="title_Span">Attendance History</span>}
             className="shortage_tbl"
             sty
-            data={tableData}
+            data={allData}
             columns={columns}
             options={{
               selectableRows: "none",

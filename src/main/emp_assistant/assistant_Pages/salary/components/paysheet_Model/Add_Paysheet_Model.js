@@ -128,22 +128,48 @@ async function getAllAttendance(nic, isFirstSalary, lastSalaryDate) {
     return reAt.docs.length;
   } else {
     var attendance = 0;
-    var retu = new Promise((resolve, reject) => {
-      reAt.docs.forEach((reAtee, index, array) => {
-        if (index === array.length - 1) resolve();
-        let seeBool1 =
-          new Date(reAtee.data()?.date.seconds * 1000) >
-            new Date(lastSalaryDate.seconds * 1000) &&
-          new Date(reAtee.data()?.date.seconds * 1000) <= new Date();
+    for (var i = 0; i < reAt.docs.length; i++) {
+      let seeBool1 =
+        new Date(reAt.docs[i].data()?.date.seconds * 1000) >
+          new Date(lastSalaryDate.seconds * 1000) &&
+        new Date(reAt.docs[i].data()?.date.seconds * 1000) <= new Date();
 
-        if (seeBool1) {
-          attendance = parseInt(attendance) + 1;
-        }
-      });
-    });
-    retu.then(() => {
-      return parseInt(attendance);
-    });
+      if (seeBool1) {
+        attendance = parseInt(attendance) + 1;
+      }
+    }
+
+    return parseInt(attendance);
+  }
+}
+
+async function getAllAttendanceForTable(nic, isFirstSalary, lastSalaryDate) {
+  var reAt = await db
+    .collection("attendance_history")
+    .where("nic", "==", nic)
+    .get();
+
+  if (isFirstSalary) {
+    let allAttendance1 = [];
+    for (let i = 0; i < reAt.docs.length; i++) {
+      allAttendance1.push(reAt.docs[i].data());
+    }
+
+    return allAttendance1;
+  } else {
+    let allAttendance2 = [];
+    for (let i = 0; i < reAt.docs.length; i++) {
+      let seeBool1 =
+        new Date(reAt.docs[i].data()?.date.seconds * 1000) >
+          new Date(lastSalaryDate.seconds * 1000) &&
+        new Date(reAt.docs[i].data()?.date.seconds * 1000) <= new Date();
+
+      if (seeBool1) {
+        allAttendance2.push(reAt.docs[i].data());
+      }
+    }
+
+    return allAttendance2;
   }
 }
 
@@ -289,9 +315,11 @@ async function cashTargetFunc(root, isFirstSalary, lastSalaryDate) {
 
     for (let i = 0; i < installmentsRe.docs.length; i++) {
       if (isFirstSalary) {
-        threePresentage =
-          parseInt(threePresentage) +
-          (parseInt(installmentsRe.docs[i].data().amount) * 3) / 100;
+        if (installmentsRe.docs[i].data().isExpired === false) {
+          threePresentage =
+            parseInt(threePresentage) +
+            (parseInt(installmentsRe.docs[i].data().amount) * 3) / 100;
+        }
       } else {
         let seeBool1 =
           new Date(installmentsRe.docs[i].data()?.date.seconds * 1000) >
@@ -419,6 +447,8 @@ export default function Add_Paysheet_Model({ nic }) {
   // eslint-disable-next-line
   const [rootDocId, setRootDocId] = useState("");
 
+  const [attendanceList, setAttendanceList] = useState([]);
+
   const AttendanceModel = () => {
     setAttendanceModel(true);
   };
@@ -507,6 +537,13 @@ export default function Add_Paysheet_Model({ nic }) {
                   ).then((reAtte) => {
                     setAttendance(reAtte);
                   });
+                  getAllAttendanceForTable(
+                    nic,
+                    false,
+                    reSalary.docs[0]?.data().date
+                  ).then((reAtte) => {
+                    setAttendanceList(reAtte);
+                  });
                 } else {
                   cashTargetFunc(
                     rootName,
@@ -557,6 +594,13 @@ export default function Add_Paysheet_Model({ nic }) {
                     reSalary.docs[0]?.data().date
                   ).then((reAtte) => {
                     setAttendance(reAtte);
+                  });
+                  getAllAttendanceForTable(
+                    nic,
+                    true,
+                    reSalary.docs[0]?.data().date
+                  ).then((reAtte) => {
+                    setAttendanceList(reAtte);
                   });
                 }
               });
@@ -624,6 +668,14 @@ export default function Add_Paysheet_Model({ nic }) {
                   ).then((reAtte) => {
                     setAttendance(reAtte);
                   });
+
+                  getAllAttendanceForTable(
+                    nic,
+                    false,
+                    reSalary.docs[0]?.data().date
+                  ).then((reAtte) => {
+                    setAttendanceList(reAtte);
+                  });
                 } else {
                   cashTargetFunc(
                     rootName,
@@ -674,6 +726,13 @@ export default function Add_Paysheet_Model({ nic }) {
                     reSalary.docs[0]?.data().date
                   ).then((reAtte) => {
                     setAttendance(reAtte);
+                  });
+                  getAllAttendanceForTable(
+                    nic,
+                    true,
+                    reSalary.docs[0]?.data().date
+                  ).then((reAtte) => {
+                    setAttendanceList(reAtte);
                   });
                 }
               });
@@ -734,7 +793,7 @@ export default function Add_Paysheet_Model({ nic }) {
         <div>
           <div>
             <div>
-              <AttendanceHistorys />
+              <AttendanceHistorys list={attendanceList} />
             </div>
           </div>
         </div>
@@ -935,7 +994,9 @@ export default function Add_Paysheet_Model({ nic }) {
               </Grid>
               <Grid item xs={12} sm={2}>
                 <Fab className="icon1Fab" size="small" aria-label="like">
-                  <HistoryIcon onClick={AttendanceModel} />
+                  <HistoryIcon
+                    onClick={(e) => (attendance > 0 ? AttendanceModel() : null)}
+                  />
                 </Fab>
               </Grid>
 

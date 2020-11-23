@@ -400,13 +400,14 @@ export default function Add_Paysheet_Model({ nic }) {
       .then((reRoot) => {
         reRoot.docs.forEach((eachRoot) => {
           let rootName = eachRoot.data().root;
-          getSaleTarget(rootName).then((reSaleTarget) => {
-            setSaleTarget(reSaleTarget);
-          });
-          cashTargetFunc(rootName).then((reCashTaregt) => {
-            setCashTarget(reCashTaregt);
-          });
+
           if (eachRoot.data().employee1 === nic) {
+            getSaleTarget(rootName).then((reSaleTarget) => {
+              setSaleTarget(reSaleTarget);
+            });
+            cashTargetFunc(rootName).then((reCashTaregt) => {
+              setCashTarget(reCashTaregt);
+            });
             db.collection("salary")
               .where("nic", "==", nic)
               .get()
@@ -506,6 +507,12 @@ export default function Add_Paysheet_Model({ nic }) {
           }
 
           if (eachRoot.data().employee2 === nic) {
+            getSaleTarget(rootName).then((reSaleTarget) => {
+              setSaleTarget(reSaleTarget);
+            });
+            cashTargetFunc(rootName).then((reCashTaregt) => {
+              setCashTarget(reCashTaregt);
+            });
             db.collection("salary")
               .where("nic", "==", nic)
               .get()

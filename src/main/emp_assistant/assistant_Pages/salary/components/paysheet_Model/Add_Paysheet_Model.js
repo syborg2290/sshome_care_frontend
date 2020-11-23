@@ -190,7 +190,7 @@ async function getSaleTarget(root) {
     : 0;
 }
 
-async function cashTargetFunc(root) {
+async function cashTargetFunc(root, isFirstSalary, lastSalaryDate) {
   var saleRe = await db
     .collection("invoice")
     .where("selectedType", "==", root)
@@ -200,7 +200,7 @@ async function cashTargetFunc(root) {
     .where("type", "==", root)
     .get();
 
-  var cashTaregt = await db
+  var cashTaregtRpp = await db
     .collection("targets")
     .where("selectedType", "==", root)
     .get();
@@ -208,38 +208,92 @@ async function cashTargetFunc(root) {
   var threePresentage = 0;
   var fourPresentage = 0;
 
-  for (let k = 0; k < cashTaregt.docs.length; k++) {
-    if (
-      cashTaregt.docs[k].data().status === "ongoing" &&
-      cashTaregt.docs[k].data().target_type === "Cash target"
-    ) {
-      var targetValue = parseInt(cashTaregt.docs[k].data().amount);
-      var cashTargetValue = 0;
-      for (let i = 0; i < saleRe.docs.length; i++) {
-        if (saleRe.docs[i].data().paymentWay === "PayandGo") {
+  var dueCashTaregt = cashTaregtRpp.docs.filter(
+    (ob) =>
+      ob.data().status === "ongoing" && ob.data().target_type === "Cash target"
+  );
+
+  if (dueCashTaregt.length > 0) {
+    var targetValue = parseInt(dueCashTaregt[0].data().amount);
+    var cashTargetValue = 0;
+    for (let i = 0; i < saleRe.docs.length; i++) {
+      if (saleRe.docs[i].data().paymentWay === "PayandGo") {
+        let seeBool1 =
+          new Date(saleRe.docs[i].data()?.date.seconds * 1000) >
+            new Date(dueCashTaregt[0].data()?.start_date.seconds * 1000) &&
+          new Date(saleRe.docs[i].data()?.date.seconds * 1000) <= new Date();
+
+        if (seeBool1) {
+          threePresentage =
+            parseInt(threePresentage) +
+            (parseInt(saleRe.docs[i].data().downpayment) * 3) / 100;
+          fourPresentage =
+            parseInt(fourPresentage) +
+            (parseInt(saleRe.docs[i].data().downpayment) * 4) / 100;
+          cashTargetValue =
+            parseInt(cashTargetValue) +
+            parseInt(saleRe.docs[i].data().downpayment);
+        }
+      }
+    }
+
+    for (let i = 0; i < installmentsRe.docs.length; i++) {
+      let seeBool1 =
+        new Date(installmentsRe.docs[i].data()?.date.seconds * 1000) >
+          new Date(dueCashTaregt[0].data()?.start_date.seconds * 1000) &&
+        new Date(installmentsRe.docs[i].data()?.date.seconds * 1000) <=
+          new Date();
+
+      if (seeBool1) {
+        if (installmentsRe.docs[i].data().isExpired === false) {
+          threePresentage =
+            parseInt(threePresentage) +
+            (parseInt(installmentsRe.docs[i].data().amount) * 3) / 100;
+          fourPresentage =
+            parseInt(fourPresentage) +
+            (parseInt(installmentsRe.docs[i].data().amount) * 4) / 100;
+          cashTargetValue =
+            parseInt(cashTargetValue) +
+            parseInt(installmentsRe.docs[i].data().amount);
+        }
+      }
+    }
+    if (cashTargetValue >= targetValue) {
+      returnValue = fourPresentage;
+    } else {
+      returnValue = threePresentage;
+    }
+  } else {
+    for (let i = 0; i < saleRe.docs.length; i++) {
+      if (saleRe.docs[i].data().paymentWay === "PayandGo") {
+        if (isFirstSalary) {
+          threePresentage =
+            parseInt(threePresentage) +
+            (parseInt(saleRe.docs[i].data().downpayment) * 3) / 100;
+        } else {
           let seeBool1 =
             new Date(saleRe.docs[i].data()?.date.seconds * 1000) >
-              new Date(cashTaregt.docs[k].data()?.start_date.seconds * 1000) &&
+              new Date(lastSalaryDate.seconds * 1000) &&
             new Date(saleRe.docs[i].data()?.date.seconds * 1000) <= new Date();
 
           if (seeBool1) {
             threePresentage =
               parseInt(threePresentage) +
               (parseInt(saleRe.docs[i].data().downpayment) * 3) / 100;
-            fourPresentage =
-              parseInt(fourPresentage) +
-              (parseInt(saleRe.docs[i].data().downpayment) * 4) / 100;
-            cashTargetValue =
-              parseInt(cashTargetValue) +
-              parseInt(saleRe.docs[i].data().downpayment);
           }
         }
       }
+    }
 
-      for (let i = 0; i < installmentsRe.docs.length; i++) {
+    for (let i = 0; i < installmentsRe.docs.length; i++) {
+      if (isFirstSalary) {
+        threePresentage =
+          parseInt(threePresentage) +
+          (parseInt(installmentsRe.docs[i].data().amount) * 3) / 100;
+      } else {
         let seeBool1 =
           new Date(installmentsRe.docs[i].data()?.date.seconds * 1000) >
-            new Date(cashTaregt.docs[k].data()?.start_date.seconds * 1000) &&
+            new Date(lastSalaryDate.seconds * 1000) &&
           new Date(installmentsRe.docs[i].data()?.date.seconds * 1000) <=
             new Date();
 
@@ -248,22 +302,14 @@ async function cashTargetFunc(root) {
             threePresentage =
               parseInt(threePresentage) +
               (parseInt(installmentsRe.docs[i].data().amount) * 3) / 100;
-            fourPresentage =
-              parseInt(fourPresentage) +
-              (parseInt(installmentsRe.docs[i].data().amount) * 4) / 100;
-            cashTargetValue =
-              parseInt(cashTargetValue) +
-              parseInt(installmentsRe.docs[i].data().amount);
           }
         }
       }
-      if (cashTargetValue >= targetValue) {
-        returnValue = fourPresentage;
-      } else {
-        returnValue = threePresentage;
-      }
     }
+
+    returnValue = threePresentage;
   }
+
   return returnValue === 0 ? 0 : returnValue / 2;
 }
 
@@ -403,14 +449,19 @@ export default function Add_Paysheet_Model({ nic }) {
             getSaleTarget(rootName).then((reSaleTarget) => {
               setSaleTarget(reSaleTarget);
             });
-            cashTargetFunc(rootName).then((reCashTaregt) => {
-              setCashTarget(reCashTaregt);
-            });
+
             db.collection("salary")
               .where("nic", "==", nic)
               .get()
               .then((reSalary) => {
                 if (reSalary.docs.length > 0) {
+                  cashTargetFunc(
+                    rootName,
+                    false,
+                    reSalary.docs[0]?.data().date
+                  ).then((reCashTaregt) => {
+                    setCashTarget(reCashTaregt);
+                  });
                   getCashSaleFunc(
                     rootName,
                     false,
@@ -455,6 +506,13 @@ export default function Add_Paysheet_Model({ nic }) {
                     setAttendance(reAtte);
                   });
                 } else {
+                  cashTargetFunc(
+                    rootName,
+                    true,
+                    reSalary.docs[0]?.data().date
+                  ).then((reCashTaregt) => {
+                    setCashTarget(reCashTaregt);
+                  });
                   getCashSaleFunc(
                     rootName,
                     true,
@@ -508,14 +566,19 @@ export default function Add_Paysheet_Model({ nic }) {
             getSaleTarget(rootName).then((reSaleTarget) => {
               setSaleTarget(reSaleTarget);
             });
-            cashTargetFunc(rootName).then((reCashTaregt) => {
-              setCashTarget(reCashTaregt);
-            });
+
             db.collection("salary")
               .where("nic", "==", nic)
               .get()
               .then((reSalary) => {
                 if (reSalary.docs.length > 0) {
+                  cashTargetFunc(
+                    rootName,
+                    false,
+                    reSalary.docs[0]?.data().date
+                  ).then((reCashTaregt) => {
+                    setCashTarget(reCashTaregt);
+                  });
                   getCashSaleFunc(
                     rootName,
                     false,
@@ -560,6 +623,13 @@ export default function Add_Paysheet_Model({ nic }) {
                     setAttendance(reAtte);
                   });
                 } else {
+                  cashTargetFunc(
+                    rootName,
+                    true,
+                    reSalary.docs[0]?.data().date
+                  ).then((reCashTaregt) => {
+                    setCashTarget(reCashTaregt);
+                  });
                   getCashSaleFunc(
                     rootName,
                     true,

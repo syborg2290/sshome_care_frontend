@@ -26,6 +26,7 @@ export default function Create_Target_Model() {
   const [startDate, setStartdate] = useState(null);
   const [loading, setLoading] = useState(false);
   const [selectedType, setSelectedType] = useState("");
+  const [validation, setValidation] = useState("");
   const [targetType, setTargetType] = useState("sale_target");
 
   const handleChange = async (event) => {
@@ -218,24 +219,48 @@ export default function Create_Target_Model() {
     // eslint-disable-next-line
   }, []);
 
-  const createTarget = () => {
+  const createTarget = async () => {
     setLoading(true);
-    // eslint-disable-next-line
+    var dueCashTaregt = [];
+
+    var cashTaregtRpp = await db
+      .collection("targets")
+      .where("selectedType", "==", selectedType)
+      .get();
+
+    if (targetType === "sale_target") {
+      dueCashTaregt = cashTaregtRpp.docs.filter(
+        (ob) =>
+          ob.data().status === "ongoing" &&
+          ob.data().target_type === "Sale target"
+      );
+    } else {
+      dueCashTaregt = cashTaregtRpp.docs.filter(
+        (ob) =>
+          ob.data().status === "ongoing" &&
+          ob.data().target_type === "Cash target"
+      );
+    }
+
     let totAmount =
       targetType === "sale_target" ? sale_taregt_amount : cash_taregt_amount;
-    db.collection("targets")
-      .add({
-        target_type:
-          targetType === "sale_target" ? "Sale target" : "Cash target",
-        selectedType: selectedType,
-        start_date: startDate,
-        amount: totAmount,
-        status: "ongoing",
-      })
-      .then((_) => {
-        setLoading(false);
-        window.location.reload();
-      });
+    if (dueCashTaregt.length > 0) {
+      db.collection("targets")
+        .add({
+          target_type:
+            targetType === "sale_target" ? "Sale target" : "Cash target",
+          selectedType: selectedType,
+          start_date: startDate,
+          amount: totAmount,
+          status: "ongoing",
+        })
+        .then((_) => {
+          setLoading(false);
+          window.location.reload();
+        });
+    } else {
+      setValidation("Previous target is still on 'ONGOING' ");
+    }
   };
 
   return (
@@ -348,6 +373,18 @@ export default function Create_Target_Model() {
                 <Radio.Button value="cash_target">Cash Target</Radio.Button>
               </Radio.Group>
             </Grid>
+          </Grid>
+          <Grid item xs={12} sm={12}>
+            <p
+              style={{
+                color: "red",
+                fontWeight: "bold",
+                fontSize: "12px",
+                textAlign: "center",
+              }}
+            >
+              {validation}
+            </p>
           </Grid>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={9}></Grid>

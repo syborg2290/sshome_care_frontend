@@ -51,6 +51,7 @@ async function getGasshort(root, isFirstSalary, lastSalaryDate) {
       }
     }
   }
+  return gasShort === 0 ? 0 : Math.round((gasShort / 2) * 10) / 10;
 }
 
 async function getGasshortForTable(root, isFirstSalary, lastSalaryDate) {
@@ -59,12 +60,19 @@ async function getGasshortForTable(root, isFirstSalary, lastSalaryDate) {
     .where("type", "==", root)
     .get();
 
-  var gasShort = 0;
+  var gasShort1 = [];
 
   for (var i = 0; i < reGas.docs.length; i++) {
     if (reGas.docs[i].data().type === root) {
       if (isFirstSalary) {
-        gasShort = parseInt(gasShort) + parseInt(reGas.docs[i].data().shortage);
+        if (reGas.docs[i].data().shortage > 0) {
+          gasShort1.push({
+            date: reGas.docs[i].data().date,
+            amount: reGas.docs[i].data().shortage,
+            short_type: "Gas",
+            type: reGas.docs[i].data().type,
+          });
+        }
       } else {
         let seeBool3 =
           new Date(reGas.docs[i].data()?.date.seconds * 1000) >
@@ -72,14 +80,20 @@ async function getGasshortForTable(root, isFirstSalary, lastSalaryDate) {
           new Date(reGas.docs[i].data()?.date.seconds * 1000) <= new Date();
 
         if (seeBool3) {
-          gasShort =
-            parseInt(gasShort) + parseInt(reGas.docs[i].data().shortage);
+          if (reGas.docs[i].data().shortage > 0) {
+            gasShort1.push({
+              date: reGas.docs[i].data().date,
+              amount: reGas.docs[i].data().shortage,
+              short_type: "Gas",
+              type: reGas.docs[i].data().type,
+            });
+          }
         }
       }
     }
   }
 
-  return gasShort === 0 ? 0 : Math.round((gasShort / 2) * 10) / 10;
+  return gasShort1;
 }
 
 async function getInstallmentshort(root, isFirstSalary, lastSalaryDate) {
@@ -116,6 +130,49 @@ async function getInstallmentshort(root, isFirstSalary, lastSalaryDate) {
     : Math.round((installShortage / 2) * 10) / 10;
 }
 
+async function getInstallmentshortForTable(
+  root,
+  isFirstSalary,
+  lastSalaryDate
+) {
+  var reInstallment = await db
+    .collection("installment")
+    .where("type", "==", root)
+    .get();
+
+  var installShortage = [];
+  for (var i = 0; i < reInstallment.docs.length; i++) {
+    if (isFirstSalary) {
+      if (reInstallment.docs[i].data().shortage > 0) {
+        installShortage.push({
+          date: reInstallment.docs[i].data().date,
+          amount: reInstallment.docs[i].data().shortage,
+          short_type: "Installment",
+          type: reInstallment.docs[i].data().type,
+        });
+      }
+    } else {
+      let seeBool2 =
+        new Date(reInstallment.docs[i].data()?.date.seconds * 1000) >
+          new Date(lastSalaryDate.seconds * 1000) &&
+        new Date(reInstallment.docs[i].data()?.date.seconds * 1000) <=
+          new Date();
+
+      if (seeBool2) {
+        if (reInstallment.docs[i].data().shortage > 0) {
+          installShortage.push({
+            date: reInstallment.docs[i].data().date,
+            amount: reInstallment.docs[i].data().shortage,
+            short_type: "Installment",
+            type: reInstallment.docs[i].data().type,
+          });
+        }
+      }
+    }
+  }
+  return installShortage;
+}
+
 async function getShortage(root, isFirstSalary, lastSalaryDate) {
   var reInvoice = await db
     .collection("invoice")
@@ -143,6 +200,45 @@ async function getShortage(root, isFirstSalary, lastSalaryDate) {
   }
 
   return shortage === 0 ? 0 : Math.round((shortage / 2) * 10) / 10;
+}
+
+async function getShortageForTable(root, isFirstSalary, lastSalaryDate) {
+  var reInvoice = await db
+    .collection("invoice")
+    .where("selectedType", "==", root)
+    .get();
+
+  var shortage = [];
+  for (var i = 0; i < reInvoice.docs.length; i++) {
+    if (isFirstSalary) {
+      if (reInvoice.docs[i].data().shortage > 0) {
+        shortage.push({
+          date: reInvoice.docs[i].data().date,
+          amount: reInvoice.docs[i].data().shortage,
+          short_type: "Invoice",
+          type: reInvoice.docs[i].data().selectedType,
+        });
+      }
+    } else {
+      let seeBool1 =
+        new Date(reInvoice.docs[i].data()?.date.seconds * 1000) >
+          new Date(lastSalaryDate.seconds * 1000) &&
+        new Date(reInvoice.docs[i].data()?.date.seconds * 1000) <= new Date();
+
+      if (seeBool1) {
+        if (reInvoice.docs[i].data().shortage > 0) {
+          shortage.push({
+            date: reInvoice.docs[i].data().date,
+            amount: reInvoice.docs[i].data().shortage,
+            short_type: "Invoice",
+            type: reInvoice.docs[i].data().selectedType,
+          });
+        }
+      }
+    }
+  }
+
+  return shortage;
 }
 
 async function getAllAttendance(nic, isFirstSalary, lastSalaryDate) {
@@ -475,6 +571,8 @@ export default function Add_Paysheet_Model({ nic }) {
   const [rootDocId, setRootDocId] = useState("");
 
   const [attendanceList, setAttendanceList] = useState([]);
+  // eslint-disable-next-line
+  const [shortageList, setshortageList] = useState([]);
 
   const AttendanceModel = () => {
     setAttendanceModel(true);
@@ -556,6 +654,31 @@ export default function Add_Paysheet_Model({ nic }) {
                   ).then((reShort) => {
                     setShortage((sho) => sho + parseInt(reShort));
                   });
+
+                  //================
+
+                  getShortageForTable(
+                    rootName,
+                    false,
+                    reSalary.docs[0]?.data().date
+                  ).then((reShort) => {
+                    shortageList.push(reShort);
+                  });
+                  getInstallmentshortForTable(
+                    rootName,
+                    false,
+                    reSalary.docs[0]?.data().date
+                  ).then((reShort) => {
+                    shortageList.push(reShort);
+                  });
+                  getGasshortForTable(
+                    rootName,
+                    false,
+                    reSalary.docs[0]?.data().date
+                  ).then((reShort) => {
+                    shortageList.push(reShort);
+                  });
+
                   //================
                   getAllAttendance(
                     nic,
@@ -614,6 +737,31 @@ export default function Add_Paysheet_Model({ nic }) {
                   ).then((reShort) => {
                     setShortage((sho) => sho + parseInt(reShort));
                   });
+
+                  //=====================
+
+                  getShortageForTable(
+                    rootName,
+                    true,
+                    reSalary.docs[0]?.data().date
+                  ).then((reShort) => {
+                    shortageList.push(reShort);
+                  });
+                  getInstallmentshortForTable(
+                    rootName,
+                    true,
+                    reSalary.docs[0]?.data().date
+                  ).then((reShort) => {
+                    shortageList.push(reShort);
+                  });
+                  getGasshortForTable(
+                    rootName,
+                    true,
+                    reSalary.docs[0]?.data().date
+                  ).then((reShort) => {
+                    shortageList.push(reShort);
+                  });
+
                   //===========
                   getAllAttendance(
                     nic,
@@ -687,6 +835,30 @@ export default function Add_Paysheet_Model({ nic }) {
                   ).then((reShort) => {
                     setShortage((sho) => sho + parseInt(reShort));
                   });
+
+                  //===============
+                  getShortageForTable(
+                    rootName,
+                    false,
+                    reSalary.docs[0]?.data().date
+                  ).then((reShort) => {
+                    shortageList.push(reShort);
+                  });
+                  getInstallmentshortForTable(
+                    rootName,
+                    false,
+                    reSalary.docs[0]?.data().date
+                  ).then((reShort) => {
+                    shortageList.push(reShort);
+                  });
+                  getGasshortForTable(
+                    rootName,
+                    false,
+                    reSalary.docs[0]?.data().date
+                  ).then((reShort) => {
+                    shortageList.push(reShort);
+                  });
+
                   //==============
                   getAllAttendance(
                     nic,
@@ -746,6 +918,31 @@ export default function Add_Paysheet_Model({ nic }) {
                   ).then((reShort) => {
                     setShortage((sho) => sho + parseInt(reShort));
                   });
+
+                  //================
+
+                  getShortageForTable(
+                    rootName,
+                    true,
+                    reSalary.docs[0]?.data().date
+                  ).then((reShort) => {
+                    shortageList.push(reShort);
+                  });
+                  getInstallmentshortForTable(
+                    rootName,
+                    true,
+                    reSalary.docs[0]?.data().date
+                  ).then((reShort) => {
+                    shortageList.push(reShort);
+                  });
+                  getGasshortForTable(
+                    rootName,
+                    true,
+                    reSalary.docs[0]?.data().date
+                  ).then((reShort) => {
+                    shortageList.push(reShort);
+                  });
+
                   //=============
                   getAllAttendance(
                     nic,
@@ -920,7 +1117,7 @@ export default function Add_Paysheet_Model({ nic }) {
         <div>
           <div>
             <div>
-              <ShortageHistorys />
+              <ShortageHistorys list={shortageList} />
             </div>
           </div>
         </div>

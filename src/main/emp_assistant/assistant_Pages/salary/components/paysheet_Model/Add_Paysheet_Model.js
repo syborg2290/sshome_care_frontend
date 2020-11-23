@@ -51,6 +51,33 @@ async function getGasshort(root, isFirstSalary, lastSalaryDate) {
       }
     }
   }
+}
+
+async function getGasshortForTable(root, isFirstSalary, lastSalaryDate) {
+  var reGas = await db
+    .collection("gas_purchase_history")
+    .where("type", "==", root)
+    .get();
+
+  var gasShort = 0;
+
+  for (var i = 0; i < reGas.docs.length; i++) {
+    if (reGas.docs[i].data().type === root) {
+      if (isFirstSalary) {
+        gasShort = parseInt(gasShort) + parseInt(reGas.docs[i].data().shortage);
+      } else {
+        let seeBool3 =
+          new Date(reGas.docs[i].data()?.date.seconds * 1000) >
+            new Date(lastSalaryDate.seconds * 1000) &&
+          new Date(reGas.docs[i].data()?.date.seconds * 1000) <= new Date();
+
+        if (seeBool3) {
+          gasShort =
+            parseInt(gasShort) + parseInt(reGas.docs[i].data().shortage);
+        }
+      }
+    }
+  }
 
   return gasShort === 0 ? 0 : Math.round((gasShort / 2) * 10) / 10;
 }

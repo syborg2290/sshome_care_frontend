@@ -244,7 +244,7 @@ export default function Create_Target_Model() {
 
     let totAmount =
       targetType === "sale_target" ? sale_taregt_amount : cash_taregt_amount;
-    if (dueCashTaregt.length > 0) {
+    if (dueCashTaregt.length === 0) {
       db.collection("targets")
         .add({
           target_type:

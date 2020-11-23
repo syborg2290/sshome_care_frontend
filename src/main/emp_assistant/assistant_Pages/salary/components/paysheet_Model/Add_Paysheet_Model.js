@@ -8,12 +8,13 @@ import {
   Button,
   Fab,
 } from "@material-ui/core";
-import { Modal, Spin } from "antd";
+import { Modal, Spin, Space, DatePicker } from "antd";
 
 // styles
 import "./Add_Paysheet_Model.css";
 
 import db from "../../../../../../config/firebase.js";
+import firebase from "firebase";
 
 //icons
 import HistoryIcon from "@material-ui/icons/History";
@@ -764,12 +765,24 @@ export default function Add_Paysheet_Model({ nic }) {
   const [saleTargetModel, setSaleTargetModel] = useState(false);
   const [shortageModel, setShortageModel] = useState(false);
 
-  // eslint-disable-next-line
   const [loading, setLoading] = useState(false);
+
+  // eslint-disable-next-line
+  const [root, setRoot] = useState("");
+  // eslint-disable-next-line
+  const [rootDocId, setRootDocId] = useState("");
+
+  const [attendanceList, setAttendanceList] = useState([]);
+  // eslint-disable-next-line
+  const [shortageList, setShortageList] = useState([]);
+  const [saleTargetList, setSaleTargetList] = useState([]);
+  const [cashTargetList, setCashTargetList] = useState([]);
+  const [cashSaleList, setCashSaleList] = useState([]);
+  const [excardsList, setExcardslist] = useState([]);
+
   const [basicSalary, setBasicSalary] = useState(0);
   const [insentive, setInsentive] = useState(0);
   const [phoneBill, setPhoneBill] = useState(0);
-  // eslint-disable-next-line
   const [attendance, setAttendance] = useState(0);
   const [epf, setEPF] = useState(0);
   const [paidSecurityDepo, setPaidSecurityDepo] = useState(0);
@@ -783,18 +796,8 @@ export default function Add_Paysheet_Model({ nic }) {
   const [cashTarget, setCashTarget] = useState(0);
   const [exCard, setExCard] = useState(0);
   const [cashSale, setCashSale] = useState(0);
-  // eslint-disable-next-line
-  const [root, setRoot] = useState("");
-  // eslint-disable-next-line
-  const [rootDocId, setRootDocId] = useState("");
 
-  const [attendanceList, setAttendanceList] = useState([]);
-  // eslint-disable-next-line
-  const [shortageList, setShortageList] = useState([]);
-  const [saleTargetList, setSaleTargetList] = useState([]);
-  const [cashTargetList, setCashTargetList] = useState([]);
-  const [cashSaleList, setCashSaleList] = useState([]);
-  const [excardsList, setExcardslist] = useState([]);
+  const [date, setDate] = useState(null);
 
   const AttendanceModel = () => {
     setAttendanceModel(true);
@@ -1345,6 +1348,97 @@ export default function Add_Paysheet_Model({ nic }) {
     // eslint-disable-next-line
   }, [nic]);
 
+  const makeSalary = () => {
+    var dbList = {
+      nic: nic,
+      basicSalary: basicSalary,
+      insentive: insentive,
+      phoneBill: phoneBill,
+      attendance: attendance,
+      epf: epf,
+      paidSecurityDepo: paidSecurityDepo,
+      securityDeposit: securityDeposit,
+      deduction: deduction,
+      advance: advance,
+      loan: loan,
+      loanBalance: loanBalance,
+      shortage: shortage,
+      saleTarget: saleTarget,
+      cashTarget: cashTarget,
+      exCard: exCard,
+      cashSale: cashSale,
+      root: root,
+      attendanceList: attendanceList,
+      shortageList: shortageList,
+      saleTargetList: saleTargetList,
+      cashTargetList: cashTargetList,
+      cashSaleList: cashSaleList,
+      excardsList: excardsList,
+      Date: date,
+    };
+
+    db.collection("salary")
+      .add(dbList)
+      .then((_) => {
+        db.collection("targets")
+          .where("selectedType", "==", root)
+          .get()
+          .then((reTarget) => {
+            if (reTarget.docs.length > 0) {
+              reTarget.docs.forEach((reEach) => {
+                db.collection("targets").doc(reEach.id).update({
+                  status: "Expired",
+                });
+              });
+            }
+          });
+        db.collection("salary_advance")
+          .where("nic", "==", nic)
+          .get()
+          .then((reAdd) => {
+            reAdd.docs.forEach((reEa) => {
+              if (reEa.data().status === "unpaid") {
+                db.collection("salary_advance").doc(reEa.id).update({
+                  status: "paid",
+                });
+              }
+            });
+          });
+        db.collection("loans")
+          .where("nic", "==", nic)
+          .get()
+          .then((reLoan) => {
+            reLoan.docs.forEach((reEachL) => {
+              if (reEachL.data().status === "Ongoing") {
+                if (parseInt(reEachL.data().balance) - parseInt(loan) > 0) {
+                  db.collection("loans")
+                    .doc(reEachL.id)
+                    .update({
+                      balance:
+                        parseInt(reEachL.data().balance) - parseInt(loan),
+                    });
+                  db.collection("loan_history").add({
+                    Date: date,
+                    Amount: reEachL.data().amount,
+                    Balance: parseInt(reEachL.data().balance) - parseInt(loan),
+                  });
+                } else {
+                  db.collection("loans").doc(reEachL.id).update({
+                    balance: 0,
+                    status: "Done",
+                  });
+                  db.collection("loan_history").add({
+                    Date: date,
+                    Amount: reEachL.data().amount,
+                    Balance: 0,
+                  });
+                }
+              }
+            });
+          });
+      });
+  };
+
   return (
     <>
       {/*Start Attendance Model */}
@@ -1865,6 +1959,28 @@ export default function Add_Paysheet_Model({ nic }) {
                   <HistoryIcon onClick={ExCardModel} />
                 </Fab>
               </Grid>
+
+              <Grid className="lbl_topi" item xs={12} sm={4}>
+                Date
+              </Grid>
+              <Grid item xs={12} sm={1}>
+                :
+              </Grid>
+              <Grid item xs={12} sm={5}>
+                <Space direction="vertical">
+                  <DatePicker
+                    onChange={(e) => {
+                      if (e !== null) {
+                        setDate(
+                          firebase.firestore.Timestamp.fromDate(e.toDate())
+                        );
+                      } else {
+                        setDate(null);
+                      }
+                    }}
+                  />
+                </Space>
+              </Grid>
             </Grid>
 
             <Grid container spacing={2}>
@@ -1874,12 +1990,23 @@ export default function Add_Paysheet_Model({ nic }) {
                   variant="contained"
                   color="primary"
                   className="btn_update"
-                  // onClick={addRepair}
+                  onClick={makeSalary}
                   disabled={
                     loading ||
                     basicSalary.length === 0 ||
                     insentive.length === 0 ||
-                    phoneBill.length === 0
+                    phoneBill.length === 0 ||
+                    epf.length === 0 ||
+                    securityDeposit.length === 0 ||
+                    deduction.length === 0 ||
+                    advance.length === 0 ||
+                    loan.length === 0 ||
+                    shortage.length === 0 ||
+                    saleTarget.length === 0 ||
+                    cashTarget.length === 0 ||
+                    exCard.length === 0 ||
+                    cashSale.length === 0 ||
+                    date === null
                       ? true
                       : false
                   }

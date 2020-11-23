@@ -135,17 +135,41 @@ export default function Salary() {
     db.collection("employee").onSnapshot((snap) => {
       var raw = [];
       var rawAlldata = [];
+
       snap.docs.forEach((each) => {
         rawAlldata.push({
           id: each.id,
           data: each.data(),
         });
+        var IsPaid = false;
+        db.collection("salary")
+          .where("nic", "==", each.data().nic)
+          .get()
+          .then((reSal) => {
+            if (reSal.docs.length === 0) {
+              IsPaid = false;
+            } else {
+              if (
+                new Date(
+                  reSal.docs[0].data()?.date?.seconds * 1000
+                ).getFullYear() === new Date().getFullYear()
+              ) {
+                if (
+                  new Date(
+                    reSal.docs[0].data()?.date?.seconds * 1000
+                  ).getMonth() === new Date().getMonth()
+                ) {
+                  IsPaid = true;
+                }
+              }
+            }
+          });
         raw.push({
           FirstName: each.data().fname,
           LastName: each.data().lname,
           NIC: each.data().nic,
           Mobile: each.data().mobile1,
-          Status: <div className="sttsal">Paid</div>,
+          Status: <div className="sttsal">{IsPaid ? "Paid" : "Not Paid"}</div>,
           Action: (
             <div>
               <HistoryIcon className="btnView" onClick={PayHistoryModels} />

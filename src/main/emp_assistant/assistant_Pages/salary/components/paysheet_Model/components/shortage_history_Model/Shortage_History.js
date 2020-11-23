@@ -54,7 +54,6 @@ export default function Shortage_History({ list }) {
 
   useEffect(() => {
     var rawData = [];
-    console.log(list);
     list.forEach((reEach) => {
       reEach.forEach((reAgaEx) => {
         rawData.push({

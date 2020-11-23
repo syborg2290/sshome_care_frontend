@@ -325,7 +325,8 @@ async function getSaleTarget(root) {
           for (let n = 0; n < saleRe.docs[i].data().items.length; n++) {
             saleTargetValue =
               parseInt(saleTargetValue) +
-              parseInt(saleRe.docs[i].data().items[n].downpayment);
+              parseInt(saleRe.docs[i].data().items[n].downpayment) *
+                parseInt(saleRe.docs[i].data().items[n].qty);
           }
         }
       }
@@ -339,6 +340,51 @@ async function getSaleTarget(root) {
     : saleTargetValue >= targetValue
     ? 5000
     : 0;
+}
+
+async function getSaleTargetForTable(root, isFirstSalary, lastSalaryDate) {
+  var saleRe = await db
+    .collection("invoice")
+    .where("selectedType", "==", root)
+    .get();
+
+  var saleTargetValue = [];
+
+  for (var i = 0; i < saleRe.docs.length; i++) {
+    if (isFirstSalary) {
+      for (let n = 0; n < saleRe.docs[i].data().items.length; n++) {
+        saleTargetValue.push({
+          date: saleRe.docs[i].data().date,
+          qty: saleRe.docs[i].data().items[n].qty,
+          item_name: saleRe.docs[i].data().items[n].item_name,
+          serail_number: saleRe.docs[i].data().items[n].serialNo,
+          total:
+            parseInt(saleRe.docs[i].data().items[n].downpayment) *
+            parseInt(saleRe.docs[i].data().items[n].qty),
+        });
+      }
+    } else {
+      let seeBool1 =
+        new Date(saleRe.docs[i].data()?.date.seconds * 1000) >
+          new Date(lastSalaryDate.seconds * 1000) &&
+        new Date(saleRe.docs[i].data()?.date.seconds * 1000) <= new Date();
+
+      if (seeBool1) {
+        for (let n = 0; n < saleRe.docs[i].data().items.length; n++) {
+          saleTargetValue.push({
+            date: saleRe.docs[i].data().date,
+            qty: saleRe.docs[i].data().items[n].qty,
+            item_name: saleRe.docs[i].data().items[n].item_name,
+            serail_number: saleRe.docs[i].data().items[n].serialNo,
+            total:
+              parseInt(saleRe.docs[i].data().items[n].downpayment) *
+              parseInt(saleRe.docs[i].data().items[n].qty),
+          });
+        }
+      }
+    }
+  }
+  return saleTargetValue;
 }
 
 async function cashTargetFunc(root, isFirstSalary, lastSalaryDate) {
@@ -466,6 +512,78 @@ async function cashTargetFunc(root, isFirstSalary, lastSalaryDate) {
   return returnValue === 0 ? 0 : Math.round((returnValue / 2) * 10) / 10;
 }
 
+async function cashTargetFuncForTable(root, isFirstSalary, lastSalaryDate) {
+  var saleRe = await db
+    .collection("invoice")
+    .where("selectedType", "==", root)
+    .get();
+  var installmentsRe = await db
+    .collection("installment")
+    .where("type", "==", root)
+    .get();
+
+  var returnValue = [];
+
+  for (let i = 0; i < saleRe.docs.length; i++) {
+    if (saleRe.docs[i].data().paymentWay === "PayandGo") {
+      if (isFirstSalary) {
+        returnValue.push({
+          date: saleRe.docs[i].data().date,
+          type: "Invoice",
+          invoice_no: saleRe.docs[i].data().invoice_number,
+          amount: saleRe.docs[i].data().downpayment,
+        });
+      } else {
+        let seeBool1 =
+          new Date(saleRe.docs[i].data()?.date.seconds * 1000) >
+            new Date(lastSalaryDate.seconds * 1000) &&
+          new Date(saleRe.docs[i].data()?.date.seconds * 1000) <= new Date();
+
+        if (seeBool1) {
+          returnValue.push({
+            date: saleRe.docs[i].data().date,
+            type: "Invoice",
+            invoice_no: saleRe.docs[i].data().invoice_number,
+            amount: saleRe.docs[i].data().downpayment,
+          });
+        }
+      }
+    }
+  }
+
+  for (let i = 0; i < installmentsRe.docs.length; i++) {
+    if (isFirstSalary) {
+      if (installmentsRe.docs[i].data().isExpired === false) {
+        returnValue.push({
+          date: installmentsRe.docs[i].data().date,
+          type: "Installment",
+          invoice_no: installmentsRe.docs[i].data().invoice_number,
+          amount: installmentsRe.docs[i].data().amount,
+        });
+      }
+    } else {
+      let seeBool1 =
+        new Date(installmentsRe.docs[i].data()?.date.seconds * 1000) >
+          new Date(lastSalaryDate.seconds * 1000) &&
+        new Date(installmentsRe.docs[i].data()?.date.seconds * 1000) <=
+          new Date();
+
+      if (seeBool1) {
+        if (installmentsRe.docs[i].data().isExpired === false) {
+          returnValue.push({
+            date: installmentsRe.docs[i].data().date,
+            type: "Installment",
+            invoice_no: installmentsRe.docs[i].data().invoice_number,
+            amount: installmentsRe.docs[i].data().amount,
+          });
+        }
+      }
+    }
+  }
+
+  return returnValue;
+}
+
 async function getCashSaleFunc(root, isFirstSalary, lastSalaryDate) {
   var saleRe = await db
     .collection("invoice")
@@ -480,7 +598,12 @@ async function getCashSaleFunc(root, isFirstSalary, lastSalaryDate) {
         for (let n = 0; n < saleRe.docs[i].data().items.length; n++) {
           cashSale =
             parseInt(cashSale) +
-            (parseInt(saleRe.docs[i].data().items[n].downpayment) * 2.5) / 100;
+            (parseInt(
+              saleRe.docs[i].data().items[n].downpayment *
+                saleRe.docs[i].data().items[n].qty
+            ) *
+              2.5) /
+              100;
         }
       } else {
         let seeBool1 =
@@ -492,7 +615,11 @@ async function getCashSaleFunc(root, isFirstSalary, lastSalaryDate) {
           for (let n = 0; n < saleRe.docs[i].data().items.length; n++) {
             cashSale =
               parseInt(cashSale) +
-              (parseInt(saleRe.docs[i].data().items[n].downpayment) * 2.5) /
+              (parseInt(
+                saleRe.docs[i].data().items[n].downpayment *
+                  saleRe.docs[i].data().items[n].qty
+              ) *
+                2.5) /
                 100;
           }
         }
@@ -501,6 +628,58 @@ async function getCashSaleFunc(root, isFirstSalary, lastSalaryDate) {
   }
 
   return cashSale === 0 ? 0 : Math.round((cashSale / 2) * 10) / 10;
+}
+
+async function getCashSaleFuncForTable(root, isFirstSalary, lastSalaryDate) {
+  var saleRe = await db
+    .collection("invoice")
+    .where("selectedType", "==", root)
+    .get();
+
+  var cashSale = [];
+
+  for (var i = 0; i < saleRe.docs.length; i++) {
+    if (saleRe.docs[i].data().paymentWay === "FullPayment") {
+      if (isFirstSalary) {
+        for (let n = 0; n < saleRe.docs[i].data().items.length; n++) {
+          cashSale.push({
+            date: saleRe.docs[i].data().date,
+            invoice_no: saleRe.docs[i].data().invoice_number,
+            total: parseInt(
+              saleRe.docs[i].data().items[n].downpayment *
+                saleRe.docs[i].data().items[n].qty
+            ),
+            qty: saleRe.docs[i].data().items[n].qty,
+            item_name: saleRe.docs[i].data().items[n].item_name,
+            serail_number: saleRe.docs[i].data().items[n].serialNo,
+          });
+        }
+      } else {
+        let seeBool1 =
+          new Date(saleRe.docs[i].data()?.date.seconds * 1000) >
+            new Date(lastSalaryDate.seconds * 1000) &&
+          new Date(saleRe.docs[i].data()?.date.seconds * 1000) <= new Date();
+
+        if (seeBool1) {
+          for (let n = 0; n < saleRe.docs[i].data().items.length; n++) {
+            cashSale.push({
+              date: saleRe.docs[i].data().date,
+              invoice_no: saleRe.docs[i].data().invoice_number,
+              total: parseInt(
+                saleRe.docs[i].data().items[n].downpayment *
+                  saleRe.docs[i].data().items[n].qty
+              ),
+              qty: saleRe.docs[i].data().items[n].qty,
+              item_name: saleRe.docs[i].data().items[n].item_name,
+              serail_number: saleRe.docs[i].data().items[n].serialNo,
+            });
+          }
+        }
+      }
+    }
+  }
+
+  return cashSale;
 }
 
 async function getExcardFunc(root, isFirstSalary, lastSalaryDate) {
@@ -538,6 +717,45 @@ async function getExcardFunc(root, isFirstSalary, lastSalaryDate) {
   return excardAmount === 0 ? 0 : Math.round((excardAmount / 2) * 10) / 10;
 }
 
+async function getExcardFuncForTable(root, isFirstSalary, lastSalaryDate) {
+  var installmentsRe = await db
+    .collection("installment")
+    .where("type", "==", root)
+    .get();
+
+  var excardList = [];
+
+  for (var i = 0; i < installmentsRe.docs.length; i++) {
+    if (isFirstSalary) {
+      if (installmentsRe.docs[i].data().isExpired) {
+        excardList.push({
+          date: installmentsRe.docs[i].data().date,
+          amount: installmentsRe.docs[i].data().amount,
+          invoice_number: installmentsRe.docs[i].data().invoice_number,
+        });
+      }
+    } else {
+      let seeBool1 =
+        new Date(installmentsRe.docs[i].data()?.date.seconds * 1000) >
+          new Date(lastSalaryDate.seconds * 1000) &&
+        new Date(installmentsRe.docs[i].data()?.date.seconds * 1000) <=
+          new Date();
+
+      if (seeBool1) {
+        if (installmentsRe.docs[i].data().isExpired) {
+          excardList.push({
+            date: installmentsRe.docs[i].data().date,
+            amount: installmentsRe.docs[i].data().amount,
+            invoice_number: installmentsRe.docs[i].data().invoice_number,
+          });
+        }
+      }
+    }
+  }
+
+  return excardList;
+}
+
 export default function Add_Paysheet_Model({ nic }) {
   const [attendanceModel, setAttendanceModel] = useState(false);
   const [cashSaleModel, setCashSaleModel] = useState(false);
@@ -572,7 +790,11 @@ export default function Add_Paysheet_Model({ nic }) {
 
   const [attendanceList, setAttendanceList] = useState([]);
   // eslint-disable-next-line
-  const [shortageList, setshortageList] = useState([]);
+  const [shortageList, setShortageList] = useState([]);
+  const [saleTargetList, setSaleTargetList] = useState([]);
+  const [cashTargetList, setCashTargetList] = useState([]);
+  const [cashSaleList, setCashSaleList] = useState([]);
+  const [excardsList, setExcardslist] = useState([]);
 
   const AttendanceModel = () => {
     setAttendanceModel(true);
@@ -612,6 +834,14 @@ export default function Add_Paysheet_Model({ nic }) {
               .get()
               .then((reSalary) => {
                 if (reSalary.docs.length > 0) {
+                  getSaleTargetForTable(
+                    rootName,
+                    false,
+                    reSalary.docs[0]?.data().date
+                  ).then((reSaleTarget) => {
+                    setSaleTargetList(reSaleTarget);
+                  });
+
                   cashTargetFunc(
                     rootName,
                     false,
@@ -619,6 +849,15 @@ export default function Add_Paysheet_Model({ nic }) {
                   ).then((reCashTaregt) => {
                     setCashTarget(reCashTaregt);
                   });
+
+                  cashTargetFuncForTable(
+                    rootName,
+                    false,
+                    reSalary.docs[0]?.data().date
+                  ).then((reCashTaregt) => {
+                    setCashTargetList(reCashTaregt);
+                  });
+
                   getCashSaleFunc(
                     rootName,
                     false,
@@ -626,6 +865,15 @@ export default function Add_Paysheet_Model({ nic }) {
                   ).then((reCashSale) => {
                     setCashSale(reCashSale);
                   });
+
+                  getCashSaleFuncForTable(
+                    rootName,
+                    false,
+                    reSalary.docs[0]?.data().date
+                  ).then((reCashSale) => {
+                    setCashSaleList(reCashSale);
+                  });
+
                   getExcardFunc(
                     rootName,
                     false,
@@ -633,6 +881,15 @@ export default function Add_Paysheet_Model({ nic }) {
                   ).then((reEx) => {
                     setExCard(reEx);
                   });
+
+                  getExcardFuncForTable(
+                    rootName,
+                    false,
+                    reSalary.docs[0]?.data().date
+                  ).then((reEx) => {
+                    setExcardslist(reEx);
+                  });
+
                   getShortage(
                     rootName,
                     false,
@@ -695,12 +952,26 @@ export default function Add_Paysheet_Model({ nic }) {
                     setAttendanceList(reAtte);
                   });
                 } else {
+                  getSaleTargetForTable(
+                    rootName,
+                    true,
+                    reSalary.docs[0]?.data().date
+                  ).then((reSaleTarget) => {
+                    setSaleTargetList(reSaleTarget);
+                  });
                   cashTargetFunc(
                     rootName,
                     true,
                     reSalary.docs[0]?.data().date
                   ).then((reCashTaregt) => {
                     setCashTarget(reCashTaregt);
+                  });
+                  cashTargetFuncForTable(
+                    rootName,
+                    true,
+                    reSalary.docs[0]?.data().date
+                  ).then((reCashTaregt) => {
+                    setCashTargetList(reCashTaregt);
                   });
                   getCashSaleFunc(
                     rootName,
@@ -709,12 +980,28 @@ export default function Add_Paysheet_Model({ nic }) {
                   ).then((reCashSale) => {
                     setCashSale(reCashSale);
                   });
+
+                  getCashSaleFuncForTable(
+                    rootName,
+                    true,
+                    reSalary.docs[0]?.data().date
+                  ).then((reCashSale) => {
+                    setCashSaleList(reCashSale);
+                  });
+
                   getExcardFunc(
                     rootName,
                     true,
                     reSalary.docs[0]?.data().date
                   ).then((reEx) => {
                     setExCard(reEx);
+                  });
+                  getExcardFuncForTable(
+                    rootName,
+                    true,
+                    reSalary.docs[0]?.data().date
+                  ).then((reEx) => {
+                    setExcardslist(reEx);
                   });
                   getShortage(
                     rootName,
@@ -793,12 +1080,26 @@ export default function Add_Paysheet_Model({ nic }) {
               .get()
               .then((reSalary) => {
                 if (reSalary.docs.length > 0) {
+                  getSaleTargetForTable(
+                    rootName,
+                    false,
+                    reSalary.docs[0]?.data().date
+                  ).then((reSaleTarget) => {
+                    setSaleTargetList(reSaleTarget);
+                  });
                   cashTargetFunc(
                     rootName,
                     false,
                     reSalary.docs[0]?.data().date
                   ).then((reCashTaregt) => {
                     setCashTarget(reCashTaregt);
+                  });
+                  cashTargetFuncForTable(
+                    rootName,
+                    false,
+                    reSalary.docs[0]?.data().date
+                  ).then((reCashTaregt) => {
+                    setCashTargetList(reCashTaregt);
                   });
                   getCashSaleFunc(
                     rootName,
@@ -807,12 +1108,26 @@ export default function Add_Paysheet_Model({ nic }) {
                   ).then((reCashSale) => {
                     setCashSale(reCashSale);
                   });
+                  getCashSaleFuncForTable(
+                    rootName,
+                    false,
+                    reSalary.docs[0]?.data().date
+                  ).then((reCashSale) => {
+                    setCashSaleList(reCashSale);
+                  });
                   getExcardFunc(
                     rootName,
                     false,
                     reSalary.docs[0]?.data().date
                   ).then((reEx) => {
                     setExCard(reEx);
+                  });
+                  getExcardFuncForTable(
+                    rootName,
+                    false,
+                    reSalary.docs[0]?.data().date
+                  ).then((reEx) => {
+                    setExcardslist(reEx);
                   });
                   getShortage(
                     rootName,
@@ -876,12 +1191,26 @@ export default function Add_Paysheet_Model({ nic }) {
                     setAttendanceList(reAtte);
                   });
                 } else {
+                  getSaleTargetForTable(
+                    rootName,
+                    true,
+                    reSalary.docs[0]?.data().date
+                  ).then((reSaleTarget) => {
+                    setSaleTargetList(reSaleTarget);
+                  });
                   cashTargetFunc(
                     rootName,
                     true,
                     reSalary.docs[0]?.data().date
                   ).then((reCashTaregt) => {
                     setCashTarget(reCashTaregt);
+                  });
+                  cashTargetFuncForTable(
+                    rootName,
+                    true,
+                    reSalary.docs[0]?.data().date
+                  ).then((reCashTaregt) => {
+                    setCashTargetList(reCashTaregt);
                   });
                   getCashSaleFunc(
                     rootName,
@@ -890,12 +1219,26 @@ export default function Add_Paysheet_Model({ nic }) {
                   ).then((reCashSale) => {
                     setCashSale(reCashSale);
                   });
+                  getCashSaleFuncForTable(
+                    rootName,
+                    true,
+                    reSalary.docs[0]?.data().date
+                  ).then((reCashSale) => {
+                    setCashSaleList(reCashSale);
+                  });
                   getExcardFunc(
                     rootName,
                     true,
                     reSalary.docs[0]?.data().date
                   ).then((reEx) => {
                     setExCard(reEx);
+                  });
+                  getExcardFuncForTable(
+                    rootName,
+                    true,
+                    reSalary.docs[0]?.data().date
+                  ).then((reEx) => {
+                    setExcardslist(reEx);
                   });
                   getShortage(
                     rootName,
@@ -1037,7 +1380,7 @@ export default function Add_Paysheet_Model({ nic }) {
         <div>
           <div>
             <div>
-              <CashSaleHistorys />
+              <CashSaleHistorys list={cashSaleList} />
             </div>
           </div>
         </div>
@@ -1057,7 +1400,7 @@ export default function Add_Paysheet_Model({ nic }) {
         <div>
           <div>
             <div>
-              <CashTargetHistorys />
+              <CashTargetHistorys list={cashTargetList} />
             </div>
           </div>
         </div>
@@ -1077,7 +1420,7 @@ export default function Add_Paysheet_Model({ nic }) {
         <div>
           <div>
             <div>
-              <ExcardHistorys />
+              <ExcardHistorys list={excardsList} />
             </div>
           </div>
         </div>
@@ -1097,7 +1440,7 @@ export default function Add_Paysheet_Model({ nic }) {
         <div>
           <div>
             <div>
-              <SaleTargetHistorys />
+              <SaleTargetHistorys list={saleTargetList} />
             </div>
           </div>
         </div>

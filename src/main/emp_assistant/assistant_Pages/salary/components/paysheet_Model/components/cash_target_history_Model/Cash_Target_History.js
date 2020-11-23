@@ -1,16 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Grid } from "@material-ui/core";
 import MUIDataTable from "mui-datatables";
-// import Card from '@material-ui/core/Card';
-// import CardContent from '@material-ui/core/CardContent';
-// import Typography from '@material-ui/core/Typography';
 
-// styles
+import moment from "moment";
+
 import "./Cash_Target_History.css";
 
-
-export default function Cash_Target_History() {
-
+export default function Cash_Target_History({ list }) {
   // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
   // eslint-disable-next-line
@@ -26,15 +22,7 @@ export default function Cash_Target_History() {
         }),
       },
     },
-    {
-      name: "Amount",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
+
     {
       name: "Invoice_No",
       options: {
@@ -45,7 +33,7 @@ export default function Cash_Target_History() {
       },
     },
     {
-      name: "Total",
+      name: "Type",
       options: {
         filter: false,
         setCellHeaderProps: (value) => ({
@@ -53,78 +41,56 @@ export default function Cash_Target_History() {
         }),
       },
     },
-
-   
-
+    {
+      name: "Amount",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
   ];
 
-  const tableData = [
-    [
-      "2020/03/01",
-      "James",
-      "Test",
-      "Corp",
-      "Yon",
-      "kers",
-     
-    ],
-  ];
+  useEffect(() => {
+    var rawData = [];
+    list.forEach((reEa) => {
+      rawData.push({
+        Date: moment(reEa?.date?.toDate()).format("dddd, MMMM Do YYYY"),
+        Invoice_No: reEa.invoice_no,
+        Type: reEa.type,
+        Amount: reEa.amount,
+      });
+    });
+    setallData(rawData);
+  }, [list]);
 
   return (
     <>
- {/* <Grid container spacing={2}>
-        <Grid item xs={4}>
-          <Card className="root">
-            <CardContent>
-              <Typography className="cash_tagets" gutterBottom>
-                Cash Taget(LKR) : <span className="cash_taget_tot">20000</span>
-              </Typography>
-              </CardContent>
-            </Card> 
+      <Grid container spacing={4}>
+        <Grid item xs={12}>
+          <MUIDataTable
+            title={<span className="title_Span">Cash Target History</span>}
+            className="cash_taRhistable"
+            sty
+            data={allData}
+            columns={columns}
+            options={{
+              selectableRows: "none",
+              customToolbarSelect: () => {},
+              onRowClick: (rowData, rowMeta) => {
+                setCurrentIndx(rowMeta.dataIndex);
+              },
+              filterType: "textField",
+              download: false,
+              print: false,
+              searchPlaceholder: "Search using any column names",
+              elevation: 4,
+              sort: true,
+            }}
+          />
         </Grid>
-        <Grid item xs={3}></Grid>
-        <Grid item xs={5}>
-
-          <Card className="root">
-            <CardContent>
-              <Typography className="cash_tagets"  gutterBottom>
-                Total(LKR) : <span className="cash_taget_tot">20000</span>
-              </Typography>
-              <hr />
-                <Typography  color="textSecondary">
-                Total  &gt;= Cash Taget(20000) + 4%<span className="cash_tagetPer">per Installemt</span>
-                <br />
-              Total &lt; Cash Taget(20000) + 3%<span className="cash_tagetPer">per Installemt</span>
-                </Typography>
-              </CardContent>
-            </Card> 
-        </Grid>
-      </Grid> */}
-      
-    <Grid container spacing={4}>
-      <Grid item xs={12}>
-        <MUIDataTable
-          title={<span className="title_Span">Cash Target History</span>}
-          className="cash_taRhistable"
-          sty
-          data={tableData}
-          columns={columns}
-          options={{
-            selectableRows: "none",
-            customToolbarSelect: () => {},
-            onRowClick: (rowData, rowMeta) => {
-              setCurrentIndx(rowMeta.dataIndex);
-            },
-            filterType: "textField",
-            download: false,
-            print: false,
-            searchPlaceholder: "Search using any column names",
-            elevation: 4,
-            sort: true,
-          }}
-        />
       </Grid>
-      </Grid>
-      </>
+    </>
   );
 }

@@ -1,32 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Grid } from "@material-ui/core";
 import MUIDataTable from "mui-datatables";
-// import Card from '@material-ui/core/Card';
-// import CardContent from '@material-ui/core/CardContent';
-// import Typography from '@material-ui/core/Typography';
-// styles
+import moment from "moment";
+
 import "./Sale_Target_History.css";
 
-export default function Sale_Target_History() {
-
+export default function Sale_Target_History({ list }) {
   // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
   // eslint-disable-next-line
   const [allData, setallData] = useState([]);
 
-
   const columns = [
     {
       name: "Date",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
-    {
-      name: "Amount",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -53,6 +40,16 @@ export default function Sale_Target_History() {
       },
     },
     {
+      name: "Qty",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+
+    {
       name: "Total",
       options: {
         filter: false,
@@ -60,74 +57,49 @@ export default function Sale_Target_History() {
           style: { fontSize: "15px", color: "black", fontWeight: "600" },
         }),
       },
-    }, 
-
+    },
   ];
 
-  const tableData = [
-    [
-      "2020/03/01",
-      "3000",
-      "Gass Cooker",
-      "S012-89",
-      "30000",
-     
-     
-    ],
-  ];
+  useEffect(() => {
+    var rawData = [];
+    list.forEach((reEa) => {
+      rawData.push({
+        Date: moment(reEa?.date?.toDate()).format("dddd, MMMM Do YYYY"),
+        Item_Name: reEa.item_name,
+        Serial_Number: reEa.serail_number,
+        Qty: reEa.qty,
+        Total: reEa.total,
+      });
+    });
+    setallData(rawData);
+  }, [list]);
 
   return (
-<>
- {/* <Grid container spacing={2}>
-        <Grid item xs={4}>
-          <Card className="root">
-            <CardContent>
-              <Typography className="sale_tagets" gutterBottom>
-                Sale Taget(LKR) : <span className="sale_taget_tot">20000</span>
-              </Typography>
-              </CardContent>
-            </Card> 
+    <>
+      <Grid container spacing={4}>
+        <Grid item xs={12}>
+          <MUIDataTable
+            title={<span className="title_Span">Sale Target History</span>}
+            className="sale_Tarhistable"
+            sty
+            data={allData}
+            columns={columns}
+            options={{
+              selectableRows: "none",
+              customToolbarSelect: () => {},
+              onRowClick: (rowData, rowMeta) => {
+                setCurrentIndx(rowMeta.dataIndex);
+              },
+              filterType: "textField",
+              download: false,
+              print: false,
+              searchPlaceholder: "Search using any column names",
+              elevation: 4,
+              sort: true,
+            }}
+          />
         </Grid>
-        <Grid item xs={4}></Grid>
-        <Grid item xs={4}>
-          <Card className="root">
-            <CardContent>
-              <Typography className="sale_tagets"  gutterBottom>
-                Total(LKR) : <span className="sale_taget_tot">20000</span>
-              </Typography>
-              <hr />
-                <Typography  color="textSecondary">
-                   Total  &gt;= Sale Taget(20000) + 5000
-                </Typography>
-              </CardContent>
-            </Card> 
-        </Grid>
-     </Grid> */}
-
-    <Grid container spacing={4}>
-      <Grid item xs={12}>
-        <MUIDataTable
-          title={<span className="title_Span">Sale Target History</span>}
-          className="sale_Tarhistable"
-          sty
-          data={tableData}
-          columns={columns}
-          options={{
-            selectableRows: "none",
-            customToolbarSelect: () => {},
-            onRowClick: (rowData, rowMeta) => {
-              setCurrentIndx(rowMeta.dataIndex);
-            },
-            filterType: "textField",
-            download: false,
-            print: false,
-            searchPlaceholder: "Search using any column names",
-            elevation: 4,
-            sort: true,
-          }}
-        />
       </Grid>
-      </Grid>
-      </>
+    </>
   );
 }

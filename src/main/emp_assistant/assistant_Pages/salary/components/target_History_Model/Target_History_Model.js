@@ -53,7 +53,7 @@ export default function Target_History_Model() {
         }),
       },
     },
-        {
+    {
       name: "Status",
       options: {
         filter: false,
@@ -85,7 +85,12 @@ export default function Target_History_Model() {
             ),
 
             Type: each.data().selectedType,
-            Status: <div className="sttLondone">Done</div>,
+            Status:
+              each.data().status === "ongoing" ? (
+                <div className="sttLondone">Ongoing</div>
+              ) : (
+                <div className="sttLondone">Expired</div>
+              ),
           });
         });
         setallData(rawData);

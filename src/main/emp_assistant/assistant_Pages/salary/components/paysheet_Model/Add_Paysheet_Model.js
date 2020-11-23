@@ -941,117 +941,151 @@ export default function Add_Paysheet_Model({ nic }) {
               </p>
             </Grid>
 
-            <Grid className="lbl_topi" item xs={12} sm={4}>
-              Attendance deductions(LKR)
-            </Grid>
-            <Grid item xs={12} sm={1}>
-              :
-            </Grid>
-            <Grid item xs={12} sm={7}>
-              <TextField
-                autoComplete="sdp"
-                variant="outlined"
-                required
-                fullWidth
-                type="number"
-                label="Attendance deductions"
-                size="small"
-                InputProps={{ inputProps: { min: 0 } }}
-                value={deduction}
-                onChange={(e) => {
-                  if (e.target.value !== "") {
-                    setDeduction(parseInt(e.target.value.trim()));
-                  }
-                }}
-              />
-            </Grid>
-            <Grid className="lbl_topi" item xs={12} sm={4}>
-              Salary Advance(LKR)
-            </Grid>
-            <Grid item xs={12} sm={1}>
-              :
-            </Grid>
-            <Grid item xs={12} sm={7}>
-              <TextField
-                autoComplete="adv"
-                variant="outlined"
-                required
-                fullWidth
-                type="number"
-                label="Advance"
-                size="small"
-                disabled={advance === 0}
-                InputProps={{ inputProps: { min: 0 } }}
-                value={advance}
-                onChange={(e) => {
-                  if (e.target.value !== "") {
-                    setAdvance(parseInt(e.target.value.trim()));
-                  }
-                }}
-              />
-            </Grid>
-            <Grid className="lbl_topi" item xs={12} sm={4}>
-              Loan(LKR)
-            </Grid>
-            <Grid item xs={12} sm={1}>
-              :
-            </Grid>
-            <Grid item xs={12} sm={7}>
-              <TextField
-                autoComplete="lon"
-                variant="outlined"
-                required
-                fullWidth
-                type="number"
-                label="Loan"
-                size="small"
-                disabled={loanBalance === 0 ? true : false}
-                InputProps={{ inputProps: { min: 0 } }}
-                value={loan}
-                onChange={(e) => {
-                  if (e.target.value !== "") {
-                    setLoan(parseInt(e.target.value.trim()));
-                  }
-                }}
-              />
-            </Grid>
-            <Grid item xs={12} sm={12}>
-              <p
-                style={{
-                  color: "red",
-                  fontWeight: "bold",
-                  fontSize: "12px",
-                  textAlign: "center",
-                }}
-              >
-                Current loan balance(LKR) : {loanBalance}
-              </p>
-            </Grid>
-            <Grid className="lbl_topi" item xs={12} sm={4}>
-              Shortage(LKR)
-            </Grid>
-            <Grid item xs={12} sm={1}>
-              :
-            </Grid>
-            <Grid item xs={12} sm={5}>
-              <TextField
-                autoComplete="sho"
-                variant="outlined"
-                required
-                fullWidth
-                type="number"
-                label="Shortage"
-                size="small"
-                InputProps={{ inputProps: { min: 0 } }}
-                value={shortage}
-                onChange={(e) => {
-                  if (e.target.value !== "") {
-                    setShortage(parseInt(e.target.value.trim()));
-                  }
-                }}
-              />
-            </Grid>
-             <Grid item xs={12} sm={2}>
+              <Grid className="lbl_topi" item xs={12} sm={4}>
+                Attendance deductions(LKR)
+              </Grid>
+              <Grid item xs={12} sm={1}>
+                :
+              </Grid>
+              <Grid item xs={12} sm={7}>
+                <TextField
+                  autoComplete="sdp"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  type="number"
+                  label="Security Deposit"
+                  size="small"
+                  InputProps={{ inputProps: { min: 0 } }}
+                  value={deduction}
+                  onChange={(e) => {
+                    if (e.target.value !== "") {
+                      setDeduction(parseInt(e.target.value.trim()));
+                    }
+                  }}
+                />
+              </Grid>
+              <Grid className="lbl_topi" item xs={12} sm={4}>
+                Salary Advance(LKR)
+              </Grid>
+              <Grid item xs={12} sm={1}>
+                :
+              </Grid>
+              <Grid item xs={12} sm={7}>
+                <TextField
+                  autoComplete="adv"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  type="number"
+                  label="Advance"
+                  size="small"
+                  disabled={advance === 0}
+                  InputProps={{ inputProps: { min: 0 } }}
+                  value={advance}
+                  onChange={(e) => {
+                    if (e.target.value !== "") {
+                      setAdvance(parseInt(e.target.value.trim()));
+                    }
+                  }}
+                />
+              </Grid>
+              <Grid className="lbl_topi" item xs={12} sm={4}>
+                Loan(LKR)
+              </Grid>
+              <Grid item xs={12} sm={1}>
+                :
+              </Grid>
+              <Grid item xs={12} sm={7}>
+                <TextField
+                  autoComplete="lon"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  type="number"
+                  label="Loan"
+                  size="small"
+                  disabled={loanBalance === 0 ? true : false}
+                  InputProps={{ inputProps: { min: 0 } }}
+                  value={loan}
+                  onChange={(e) => {
+                    if (e.target.value !== "") {
+                      if (loanBalance >= parseInt(e.target.value)) {
+                        setLoan(parseInt(e.target.value.trim()));
+                      }
+                    }
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12} sm={12}>
+                <p
+                  style={{
+                    color: "red",
+                    fontWeight: "bold",
+                    fontSize: "12px",
+                    textAlign: "center",
+                  }}
+                >
+                  Current loan balance(LKR) : {loanBalance}
+                </p>
+              </Grid>
+              <Grid className="lbl_topi" item xs={12} sm={4}>
+                Shortage(LKR)
+              </Grid>
+              <Grid item xs={12} sm={1}>
+                :
+              </Grid>
+              <Grid item xs={12} sm={5}>
+                <TextField
+                  autoComplete="sho"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  type="number"
+                  label="Shortage"
+                  size="small"
+                  InputProps={{ inputProps: { min: 0 } }}
+                  value={shortage}
+                  onChange={(e) => {
+                    if (e.target.value !== "") {
+                      setShortage(parseInt(e.target.value.trim()));
+                    }
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12} sm={2}>
+                <Fab className="icon1Fab" size="small" aria-label="like">
+                  <HistoryIcon onClick={ShortageModel} />
+                </Fab>
+              </Grid>
+              <Grid item xs={12} sm={12}>
+                <hr />
+              </Grid>
+              <Grid className="lbl_topi" item xs={12} sm={4}>
+                Sale Target(LKR)
+              </Grid>
+              <Grid item xs={12} sm={1}>
+                :
+              </Grid>
+              <Grid item xs={12} sm={5}>
+                <TextField
+                  autoComplete="sho"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  type="number"
+                  label="Sale Target"
+                  size="small"
+                  InputProps={{ inputProps: { min: 0 } }}
+                  value={saleTarget}
+                  onChange={(e) => {
+                    if (e.target.value !== "") {
+                      setSaleTarget(parseInt(e.target.value.trim()));
+                    }
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12} sm={2}>
                 <Fab className="icon1Fab" size="small" aria-label="like">
                 <HistoryIcon onClick={ShortageModel} />
             </Fab>

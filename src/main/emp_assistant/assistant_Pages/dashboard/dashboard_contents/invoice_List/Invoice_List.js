@@ -594,11 +594,11 @@ export default function Invoice_List() {
                   payangoAllData[currentIndx2]?.data?.amountPerInstallment
                 }
                 instCount={payangoAllData[currentIndx2]?.data?.noOfInstallment}
-                customer_id={payangoAllData[currentIndx]?.data?.customer_id}
+                customer_id={payangoAllData[currentIndx2]?.data?.customer_id}
                 closeModal={closeModalUpdate}
-                type={payangoAllData[currentIndx]?.data?.selectedType}
+                type={payangoAllData[currentIndx2]?.data?.selectedType}
                 isEx={
-                  payangoAllData[currentIndx]?.data?.status_of_payandgo ===
+                  payangoAllData[currentIndx2]?.data?.status_of_payandgo ===
                   "expired"
                     ? true
                     : false

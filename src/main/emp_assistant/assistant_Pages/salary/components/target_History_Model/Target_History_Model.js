@@ -53,6 +53,15 @@ export default function Target_History_Model() {
         }),
       },
     },
+        {
+      name: "Status",
+      options: {
+        filter: false,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
   ];
 
   useEffect(() => {
@@ -76,6 +85,7 @@ export default function Target_History_Model() {
             ),
 
             Type: each.data().selectedType,
+            Status: <div className="sttLondone">Done</div>,
           });
         });
         setallData(rawData);

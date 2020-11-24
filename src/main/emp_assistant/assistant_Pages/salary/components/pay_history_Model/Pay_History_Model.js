@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Grid } from "@material-ui/core";
 import MUIDataTable from "mui-datatables";
-import { useHistory } from "react-router-dom";
+import moment from "moment";
+import { useLocation, useHistory } from "react-router-dom";
 import CurrencyFormat from "react-currency-format";
 
 // styles
@@ -9,6 +10,8 @@ import "./Pay_History_Model.css";
 
 // icons
 import HistoryIcon from "@material-ui/icons/History";
+
+import db from "../../../../../../config/firebase.js";
 
 export default function Pay_History_Model() {
   // eslint-disable-next-line
@@ -18,7 +21,9 @@ export default function Pay_History_Model() {
   const [currentIndx, setCurrentIndx] = useState(0);
   // eslint-disable-next-line
   const [allData, setallData] = useState([]);
+  const [allTableData, setallTableData] = useState([]);
   let history = useHistory();
+  const location = useLocation();
 
   const PayHistoryTabModels = () => {
     setpayHistoryTabModel(true);
@@ -36,7 +41,7 @@ export default function Pay_History_Model() {
       },
     },
     {
-      name: "Basic Salary",
+      name: "Basic_Salary",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -54,7 +59,7 @@ export default function Pay_History_Model() {
       },
     },
     {
-      name: "Phone Bill",
+      name: "Phone_Bills",
       options: {
         filter: false,
         setCellHeaderProps: (value) => ({
@@ -99,7 +104,7 @@ export default function Pay_History_Model() {
       },
     },
     {
-      name: " Attendance_Deductions",
+      name: "Attendance_Deductions",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -203,6 +208,19 @@ export default function Pay_History_Model() {
       },
     },
     {
+      name: "Net_salary",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: {
+            fontSize: "15px",
+            color: "black",
+            fontWeight: "600",
+          },
+        }),
+      },
+    },
+    {
       name: "Action",
       options: {
         filter: true,
@@ -217,98 +235,155 @@ export default function Pay_History_Model() {
     },
   ];
 
-  const tableData = [
-    [
-      "2020/03/01",
-      <CurrencyFormat
-              value={25000}
-              displayType={"text"}
-              thousandSeparator={true}
-              prefix={" "}
-            />,
-      <CurrencyFormat
-              value={200}
-              displayType={"text"}
-              thousandSeparator={true}
-              prefix={" "}
-            />,
-      <CurrencyFormat
-              value={2000}
-              displayType={"text"}
-              thousandSeparator={true}
-              prefix={" "}
-            />,
-      "29",
-      <CurrencyFormat
-              value={280}
-              displayType={"text"}
-              thousandSeparator={true}
-              prefix={" "}
-            />,
-      <CurrencyFormat
-              value={5000}
-              displayType={"text"}
-              thousandSeparator={true}
-              prefix={" "}
-            />,
-      <CurrencyFormat
-              value={50}
-              displayType={"text"}
-              thousandSeparator={true}
-              prefix={" "}
-            />,
-      <CurrencyFormat
-              value={3000}
-              displayType={"text"}
-              thousandSeparator={true}
-              prefix={" "}
-            />,
-      <CurrencyFormat
-              value={2500}
-              displayType={"text"}
-              thousandSeparator={true}
-              prefix={" "}
-            />,
-      <CurrencyFormat
-              value={120}
-              displayType={"text"}
-              thousandSeparator={true}
-              prefix={" "}
-            />,
-      <CurrencyFormat
-              value={50000}
-              displayType={"text"}
-              thousandSeparator={true}
-              prefix={" "}
-            />,
-      <CurrencyFormat
-              value={25000}
-              displayType={"text"}
-              thousandSeparator={true}
-              prefix={" "}
-            />,
-      <CurrencyFormat
-              value={25000}
-              displayType={"text"}
-              thousandSeparator={true}
-              prefix={" "}
-            />,
-      <CurrencyFormat
-              value={25000}
-              displayType={"text"}
-              thousandSeparator={true}
-              prefix={" "}
-            />,
-      <div>
-        <HistoryIcon className="btnView" onClick={PayHistoryTabModels} />
-      </div>,
-    ],
-  ];
-
   useEffect(() => {
     window.addEventListener("offline", function (e) {
       history.push("/connection_lost");
     });
+    if (location?.state?.detail !== undefined) {
+      db.collection("salary")
+        .where("nic", "==", location?.state?.detail)
+        .get()
+        .then((reSal) => {
+          let rawAllData = [];
+          let rawNormdata = [];
+          reSal.docs.forEach((saDoc) => {
+            rawNormdata.push({
+              id: saDoc.id,
+              data: saDoc.data(),
+            });
+
+            rawAllData.push({
+              Date: moment(saDoc.data()?.date?.toDate()).format(
+                "dddd, MMMM Do YYYY"
+              ),
+              Basic_Salary: (
+                <CurrencyFormat
+                  value={saDoc.data()?.basicSalary}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+              Insentive: (
+                <CurrencyFormat
+                  value={saDoc.data()?.insentive}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+              Phone_Bills: (
+                <CurrencyFormat
+                  value={saDoc.data()?.phoneBill}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+              Attendant: saDoc.data()?.phoneBill,
+              EPF: (
+                <CurrencyFormat
+                  value={saDoc.data()?.epf}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+              Security_Deposit: (
+                <CurrencyFormat
+                  value={saDoc.data()?.securityDeposit}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+              Attendance_Deductions: (
+                <CurrencyFormat
+                  value={saDoc.data()?.deduction}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+              Salary_Advance: (
+                <CurrencyFormat
+                  value={saDoc.data()?.advance}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+              Loan: (
+                <CurrencyFormat
+                  value={saDoc.data()?.loan}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+              Shortage: (
+                <CurrencyFormat
+                  value={saDoc.data()?.shortage}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+              Sale_Target: (
+                <CurrencyFormat
+                  value={saDoc.data()?.saleTarget}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+              Cash_Target: (
+                <CurrencyFormat
+                  value={saDoc.data()?.cashTarget}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+              Cash_Sale: (
+                <CurrencyFormat
+                  value={saDoc.data()?.cashSale}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+              Ex_Card: (
+                <CurrencyFormat
+                  value={saDoc.data()?.exCard}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+              Net_salary: (
+                <CurrencyFormat
+                  value={saDoc.data()?.net_Salery}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+              Action: (
+                <div>
+                  <HistoryIcon
+                    className="btnView"
+                    onClick={PayHistoryTabModels}
+                  />
+                </div>
+              ),
+            });
+          });
+          setallData(rawNormdata);
+          setallTableData(rawAllData);
+        });
+    }
+
     // eslint-disable-next-line
   }, []);
 
@@ -319,7 +394,7 @@ export default function Pay_History_Model() {
           title={<span className="title_Span">Salary History</span>}
           className="salary_histable"
           sty
-          data={tableData}
+          data={allTableData}
           columns={columns}
           options={{
             selectableRows: "none",

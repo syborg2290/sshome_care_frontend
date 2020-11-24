@@ -1390,7 +1390,7 @@ export default function Add_Paysheet_Model({ nic }) {
       cashTargetList: cashTargetList,
       cashSaleList: cashSaleList,
       excardsList: excardsList,
-      Date: date,
+      date: date,
       net_Salery: netSalary,
     };
 

@@ -42,11 +42,6 @@ export default function Salary() {
     setAddPaysheetModel(true);
   };
 
-  const PayHistoryModels = () => {
-    setpayHistoryModel(true);
-    history.push("/assistant/salary/pay_history");
-  };
-
   const SalaryAdvanceModels = () => {
     setSalaryAdvanceModel(true);
     history.push("/assistant/salary/advance");
@@ -172,7 +167,10 @@ export default function Salary() {
           Status: <div className="sttsal">{IsPaid ? "Paid" : "Not Paid"}</div>,
           Action: (
             <div>
-              <HistoryIcon className="btnView" onClick={PayHistoryModels} />
+              <HistoryIcon
+                className="btnView"
+                onClick={(e) => PayHistoryModels(each.data().nic)}
+              />
               <span>
                 <Button
                   variant="contained"
@@ -193,6 +191,16 @@ export default function Salary() {
     });
     // eslint-disable-next-line
   }, []);
+
+  const PayHistoryModels = (nic) => {
+    setpayHistoryModel(true);
+    let moveWith = {
+      pathname: "/assistant/salary/pay_history",
+      search: "?query=abc",
+      state: { detail: nic },
+    };
+    history.push(moveWith);
+  };
 
   return (
     <>

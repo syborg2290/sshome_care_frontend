@@ -134,7 +134,7 @@ export default function Pay_History_Tabs() {
         <CashTargetTable list={objRe?.cashTargetList} />
       </TabPanel>
       <TabPanel value={value} index={3}>
-        <CashSaleTable list={objRe?.cashSaleList} />
+        <CashSaleTable list={objRe?.cashSaleList} cash_sale={objRe?.cashSale} />
       </TabPanel>
       <TabPanel value={value} index={4}>
         <ExCardTable list={objRe?.excardsList} />

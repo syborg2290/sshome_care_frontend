@@ -1,11 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Grid } from "@material-ui/core";
 import MUIDataTable from "mui-datatables";
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
-import CurrencyFormat from "react-currency-format";
-
+import moment from "moment";
 
 // styles
 import "./Ex_Card_Table.css";
@@ -26,15 +22,7 @@ export default function Ex_Card_Table({ list }) {
         }),
       },
     },
-    {
-      name: "Amount",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
+
     {
       name: "Invoice_No",
       options: {
@@ -45,9 +33,9 @@ export default function Ex_Card_Table({ list }) {
       },
     },
     {
-      name: "Total",
+      name: "Amount",
       options: {
-        filter: false,
+        filter: true,
         setCellHeaderProps: (value) => ({
           style: { fontSize: "15px", color: "black", fontWeight: "600" },
         }),
@@ -55,59 +43,27 @@ export default function Ex_Card_Table({ list }) {
     },
   ];
 
-  const tableData = [
-    [
-      "2020/03/01",
-      <CurrencyFormat
-        value={2000}
-        displayType={"text"}
-        thousandSeparator={true}
-        prefix={" "}
-      />,
-      "IN-6437",
-      <CurrencyFormat
-        value={2000}
-        displayType={"text"}
-        thousandSeparator={true}
-        prefix={" "}
-      />,
-    ],
-  ];
+  useEffect(() => {
+    var rawData = [];
+    list.forEach((reEa) => {
+      rawData.push({
+        Date: moment(reEa?.date?.toDate()).format("dddd, MMMM Do YYYY"),
+        Invoice_No: reEa?.invoice_number,
+        Amount: reEa?.amount,
+      });
+    });
+    setallData(rawData);
+  }, [list]);
 
   return (
     <>
-      <Grid container spacing={2}>
-        <Grid item xs={9}></Grid>
-        <Grid item xs={3}>
-          <Card className="root">
-            <CardContent>
-              <Typography className="sale_tagets" gutterBottom>
-                Total(LKR) :{" "}
-                <span className="sale_taget_tot">
-                  <CurrencyFormat
-                    value={2000}
-                    displayType={"text"}
-                    thousandSeparator={true}
-                    prefix={" "}
-                  />
-                </span>
-              </Typography>
-              <hr />
-              <Typography color="textSecondary">
-                Total + 2%<span className="cash_tagetPer">per Installment</span>
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
-
       <Grid container spacing={4}>
         <Grid item xs={12}>
           <MUIDataTable
             title={<span className="title_Span">Ex Card History</span>}
             className="exx_histable"
             sty
-            data={tableData}
+            data={allData}
             columns={columns}
             options={{
               selectableRows: "none",

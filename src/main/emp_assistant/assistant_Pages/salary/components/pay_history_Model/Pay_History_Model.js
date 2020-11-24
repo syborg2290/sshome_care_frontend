@@ -235,12 +235,12 @@ export default function Pay_History_Model() {
       setpayHistoryTabModel(true);
 
       var passingObj = {
-        attendanceList: allData[currentIndx].data.attendanceList,
-        shortageList: allData[currentIndx].data.shortageList,
-        saleTargetList: allData[currentIndx].data.saleTargetList,
-        cashTargetList: allData[currentIndx].data.cashTargetList,
-        cashSaleList: allData[currentIndx].data.cashSaleList,
-        excardsList: allData[currentIndx].data.excardsList,
+        attendanceList: JSON.parse(allData[currentIndx].data.attendanceList),
+        shortageList: JSON.parse(allData[currentIndx].data.shortageList),
+        saleTargetList: JSON.parse(allData[currentIndx].data.saleTargetList),
+        cashTargetList: JSON.parse(allData[currentIndx].data.cashTargetList),
+        cashSaleList: JSON.parse(allData[currentIndx].data.cashSaleList),
+        excardsList: JSON.parse(allData[currentIndx].data.excardsList),
         shortage: allData[currentIndx].data.shortage,
         saleTarget: allData[currentIndx].data.saleTarget,
         cashTarget: allData[currentIndx].data.cashTarget,

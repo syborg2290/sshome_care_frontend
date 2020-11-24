@@ -1,10 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Grid } from "@material-ui/core";
 import MUIDataTable from "mui-datatables";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import Typography from "@material-ui/core/Typography";
-import CurrencyFormat from "react-currency-format";
+import moment from "moment";
 
 // styles
 import "./Sale_Target_Table.css";
@@ -18,15 +15,6 @@ export default function Sale_Target_Table({ list }) {
   const columns = [
     {
       name: "Date",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
-    {
-      name: "Amount",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -53,6 +41,16 @@ export default function Sale_Target_Table({ list }) {
       },
     },
     {
+      name: "Qty",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+
+    {
       name: "Total",
       options: {
         filter: false,
@@ -63,77 +61,29 @@ export default function Sale_Target_Table({ list }) {
     },
   ];
 
-  const tableData = [
-    [
-      "2020/03/01",
-      <CurrencyFormat
-        value={2000}
-        displayType={"text"}
-        thousandSeparator={true}
-        prefix={" "}
-      />,
-      "Gass Cooker",
-      "S012-89",
-      <CurrencyFormat
-        value={2000}
-        displayType={"text"}
-        thousandSeparator={true}
-        prefix={" "}
-      />,
-    ],
-  ];
+  useEffect(() => {
+    var rawData = [];
+    list.forEach((reEa) => {
+      rawData.push({
+        Date: moment(reEa?.date?.toDate()).format("dddd, MMMM Do YYYY"),
+        Item_Name: reEa.item_name,
+        Serial_Number: reEa.serail_number,
+        Qty: reEa.qty,
+        Total: reEa.total,
+      });
+    });
+    setallData(rawData);
+  }, [list]);
 
   return (
     <>
-      <Grid container spacing={2}>
-        <Grid item xs={4}>
-          <Card className="root">
-            <CardContent>
-              <Typography className="sale_tagets" gutterBottom>
-                Sale Taget(LKR) :{" "}
-                <span className="sale_taget_tot">
-                  <CurrencyFormat
-                    value={2000}
-                    displayType={"text"}
-                    thousandSeparator={true}
-                    prefix={" "}
-                  />
-                </span>
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={4}></Grid>
-        <Grid item xs={4}>
-          <Card className="root">
-            <CardContent>
-              <Typography className="sale_tagets" gutterBottom>
-                Total(LKR) :{" "}
-                <span className="sale_taget_tot">
-                  <CurrencyFormat
-                    value={2000}
-                    displayType={"text"}
-                    thousandSeparator={true}
-                    prefix={" "}
-                  />
-                </span>
-              </Typography>
-              <hr />
-              <Typography color="textSecondary">
-                Total &gt;= Sale Taget(20000) + 5000
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
-
       <Grid container spacing={4}>
         <Grid item xs={12}>
           <MUIDataTable
             title={<span className="title_Span">Sale Target History</span>}
             className="sale_Tarhistable"
             sty
-            data={tableData}
+            data={allData}
             columns={columns}
             options={{
               selectableRows: "none",

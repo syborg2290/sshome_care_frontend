@@ -1395,11 +1395,6 @@ export default function Add_Paysheet_Model({ nic }) {
       net_Salery: netSalary,
     };
 
-    let employeeRe = await db
-      .collection("employee")
-      .where("nic", "==", nic)
-      .get();
-
     db.collection("salary")
       .add(dbList)
       .then((_) => {
@@ -1444,7 +1439,7 @@ export default function Add_Paysheet_Model({ nic }) {
                     date: date,
                     amount: reEachL.data().amount,
                     balance: parseInt(reEachL.data().balance) - parseInt(loan),
-                    docId: employeeRe.docs[0].id,
+                    docId: reEachL.id,
                   });
                 } else {
                   db.collection("loans").doc(reEachL.id).update({
@@ -1455,7 +1450,7 @@ export default function Add_Paysheet_Model({ nic }) {
                     date: date,
                     amount: reEachL.data().amount,
                     balance: 0,
-                    docId: employeeRe.docs[0].id,
+                    docId: reEachL.id,
                   });
                 }
               }

@@ -76,6 +76,27 @@ export default function Pay_History_Tabs() {
       history.push("/connection_lost");
     });
 
+    window.addEventListener(
+      "popstate",
+      (event) => {
+        if (event.state) {
+          history.push("/assistant/ui/salary");
+        }
+      },
+      false
+    );
+
+    window.history.pushState(
+      { name: "browserBack" },
+      "on browser back click",
+      window.location.href
+    );
+    window.history.pushState(
+      { name: "browserBack" },
+      "on browser back click",
+      window.location.href
+    );
+
     // eslint-disable-next-line
   }, []);
 

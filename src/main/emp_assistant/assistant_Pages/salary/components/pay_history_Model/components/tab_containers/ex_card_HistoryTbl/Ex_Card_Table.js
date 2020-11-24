@@ -44,15 +44,19 @@ export default function Ex_Card_Table({ list }) {
   ];
 
   useEffect(() => {
-    var rawData = [];
-    list.forEach((reEa) => {
-      rawData.push({
-        Date: moment(reEa?.date?.toDate()).format("dddd, MMMM Do YYYY"),
-        Invoice_No: reEa?.invoice_number,
-        Amount: reEa?.amount,
+    if (list !== undefined) {
+      var rawData = [];
+      list.forEach((reEa) => {
+        rawData.push({
+          Date: moment(new Date(reEa.date.seconds * 1000)).format(
+            "dddd, MMMM Do YYYY"
+          ),
+          Invoice_No: reEa.invoice_number,
+          Amount: reEa.amount,
+        });
       });
-    });
-    setallData(rawData);
+      setallData(rawData);
+    }
   }, [list]);
 
   return (

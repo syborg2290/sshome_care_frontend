@@ -1351,7 +1351,7 @@ export default function Add_Paysheet_Model({ nic }) {
     // eslint-disable-next-line
   }, [nic]);
 
-  const makeSalary = () => {
+  const makeSalary = async () => {
     setLoading(true);
     let deductions =
       epf + securityDeposit + deduction + advance + loan + shortage;
@@ -1395,6 +1395,11 @@ export default function Add_Paysheet_Model({ nic }) {
       net_Salery: netSalary,
     };
 
+    let employeeRe = await db
+      .collection("employee")
+      .where("nic", "==", nic)
+      .get();
+
     db.collection("salary")
       .add(dbList)
       .then((_) => {
@@ -1436,9 +1441,10 @@ export default function Add_Paysheet_Model({ nic }) {
                         parseInt(reEachL.data().balance) - parseInt(loan),
                     });
                   db.collection("loan_history").add({
-                    Date: date,
-                    Amount: reEachL.data().amount,
-                    Balance: parseInt(reEachL.data().balance) - parseInt(loan),
+                    date: date,
+                    amount: reEachL.data().amount,
+                    balance: parseInt(reEachL.data().balance) - parseInt(loan),
+                    docId: employeeRe.docs[0].id,
                   });
                 } else {
                   db.collection("loans").doc(reEachL.id).update({
@@ -1446,16 +1452,17 @@ export default function Add_Paysheet_Model({ nic }) {
                     status: "Done",
                   });
                   db.collection("loan_history").add({
-                    Date: date,
-                    Amount: reEachL.data().amount,
-                    Balance: 0,
+                    date: date,
+                    amount: reEachL.data().amount,
+                    balance: 0,
+                    docId: employeeRe.docs[0].id,
                   });
                 }
               }
             });
+            setLoading(false);
+            window.location.reload();
           });
-        setLoading(false);
-        window.location.reload();
       });
   };
 

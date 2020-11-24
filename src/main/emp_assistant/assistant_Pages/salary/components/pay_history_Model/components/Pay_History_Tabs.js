@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
@@ -8,7 +8,7 @@ import TrendingUpIcon from "@material-ui/icons/TrendingUp";
 import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
 import LocalAtmIcon from "@material-ui/icons/LocalAtm";
 import AssignmentTurnedInIcon from "@material-ui/icons/AssignmentTurnedIn";
-import MoneyOffIcon from "@material-ui/icons/MoneyOff";
+
 import Box from "@material-ui/core/Box";
 import { useHistory, useLocation } from "react-router-dom";
 
@@ -17,7 +17,6 @@ import CashSaleTable from "./tab_containers/cash_sale_HistoryTbl/Cash_Sale_Table
 import CashTargetTable from "./tab_containers/cash_targetHistoryTbl/Cash_Target_Table";
 import ExCardTable from "./tab_containers/ex_card_HistoryTbl/Ex_Card_Table";
 import SaleTargetTable from "./tab_containers/sale_target_HistoryTbl/Sale_Target_Table";
-import ShortageTable from "./tab_containers/shortage_HistoryTbl/Shortage_Table";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -66,7 +65,7 @@ export default function Pay_History_Tabs() {
   const [value, setValue] = React.useState(0);
   let history = useHistory();
   const location = useLocation();
-  const [objRe, setObjRe] = useState({});
+  // const [objRe, setObjRe] = useState({});
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -76,9 +75,7 @@ export default function Pay_History_Tabs() {
     window.addEventListener("offline", function (e) {
       history.push("/connection_lost");
     });
-    if (location?.state?.detail !== undefined) {
-      setObjRe(location?.state?.detail);
-    }
+
     // eslint-disable-next-line
   }, []);
 
@@ -92,12 +89,6 @@ export default function Pay_History_Tabs() {
           scrollButtons="on"
           aria-label="scrollable prevent tabs example"
         >
-          <Tab
-            icon={<MoneyOffIcon />}
-            label="Shortage"
-            aria-label="phone"
-            {...a11yProps(0)}
-          />
           <Tab
             icon={<TrendingUpIcon />}
             label="Sale Target"
@@ -124,20 +115,21 @@ export default function Pay_History_Tabs() {
           />
         </Tabs>
       </AppBar>
+
       <TabPanel value={value} index={0}>
-        <ShortageTable list={objRe?.shortageList} />
+        <SaleTargetTable list={location?.state?.detail?.saleTargetList} />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <SaleTargetTable list={objRe?.saleTargetList} />
+        <CashTargetTable list={location?.state?.detail?.cashTargetList} />
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <CashTargetTable list={objRe?.cashTargetList} />
+        <CashSaleTable
+          list={location?.state?.detail?.cashSaleList}
+          cash_sale={location?.state?.detail?.cashSale}
+        />
       </TabPanel>
       <TabPanel value={value} index={3}>
-        <CashSaleTable list={objRe?.cashSaleList} cash_sale={objRe?.cashSale} />
-      </TabPanel>
-      <TabPanel value={value} index={4}>
-        <ExCardTable list={objRe?.excardsList} />
+        <ExCardTable list={location?.state?.detail?.excardsList} />
       </TabPanel>
     </div>
   );

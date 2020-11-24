@@ -74,18 +74,22 @@ export default function Cash_Sale_Table({ list, cash_sale }) {
   ];
 
   useEffect(() => {
-    var rawData = [];
-    list.forEach((reEa) => {
-      rawData.push({
-        Date: moment(reEa?.date?.toDate()).format("dddd, MMMM Do YYYY"),
-        Invoice_No: reEa.invoice_no,
-        Item_name: reEa.item_name,
-        Serial_numbers: reEa.serail_number,
-        Qty: reEa.qty,
-        Total: reEa.total,
+    if (list !== undefined) {
+      var rawData = [];
+      list.forEach((reEa) => {
+        rawData.push({
+          Date: moment(new Date(reEa.date.seconds * 1000)).format(
+            "dddd, MMMM Do YYYY"
+          ),
+          Invoice_No: reEa.invoice_no,
+          Item_name: reEa.item_name,
+          Serial_numbers: reEa.serail_number,
+          Qty: reEa.qty,
+          Total: reEa.total,
+        });
       });
-    });
-    setallData(rawData);
+      setallData(rawData);
+    }
   }, [list]);
 
   return (
@@ -99,7 +103,7 @@ export default function Cash_Sale_Table({ list, cash_sale }) {
                 Total(LKR) :{" "}
                 <span className="sale_taget_tot">
                   <CurrencyFormat
-                    value={cash_sale}
+                    value={cash_sale !== undefined ? cash_sale : 0}
                     displayType={"text"}
                     thousandSeparator={true}
                     prefix={" "}

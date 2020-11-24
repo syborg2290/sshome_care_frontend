@@ -11,7 +11,7 @@ import "./Salary.css";
 import HistoryIcon from "@material-ui/icons/History";
 import AddIcon from "@material-ui/icons/Add";
 import AvTimerIcon from "@material-ui/icons/AvTimer";
-import CardTravelIcon from '@material-ui/icons/CardTravel';
+import CardTravelIcon from "@material-ui/icons/CardTravel";
 
 // components
 import AddPaysheet from "./components/paysheet_Model/Add_Paysheet_Model";
@@ -98,15 +98,6 @@ export default function Salary() {
         }),
       },
     },
-    {
-      name: "Status",
-      options: {
-        filter: false,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
 
     {
       name: "Action",
@@ -137,35 +128,12 @@ export default function Salary() {
           id: each.id,
           data: each.data(),
         });
-        var IsPaid = false;
-        db.collection("salary")
-          .where("nic", "==", each.data().nic)
-          .get()
-          .then((reSal) => {
-            if (reSal.docs.length === 0) {
-              IsPaid = false;
-            } else {
-              if (
-                new Date(
-                  reSal.docs[0].data()?.date?.seconds * 1000
-                ).getFullYear() === new Date().getFullYear()
-              ) {
-                if (
-                  new Date(
-                    reSal.docs[0].data()?.date?.seconds * 1000
-                  ).getMonth() === new Date().getMonth()
-                ) {
-                  IsPaid = true;
-                }
-              }
-            }
-          });
+
         raw.push({
           FirstName: each.data().fname,
           LastName: each.data().lname,
           NIC: each.data().nic,
           Mobile: each.data().mobile1,
-          Status: <div className="sttsal">{IsPaid ? "Paid" : "Not Paid"}</div>,
           Action: (
             <div>
               <HistoryIcon
@@ -272,7 +240,6 @@ export default function Salary() {
       {/* End TARGET Model  */}
 
       <Grid container spacing={4}>
-       
         <Grid item xs={2}>
           <Button
             variant="contained"
@@ -293,7 +260,7 @@ export default function Salary() {
             Salary Advance
           </Button>
         </Grid>
-         <Grid item xs={2}></Grid>
+        <Grid item xs={2}></Grid>
         <Grid item xs={3}>
           <Button
             variant="contained"

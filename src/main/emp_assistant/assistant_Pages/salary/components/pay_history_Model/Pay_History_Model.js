@@ -20,7 +20,7 @@ export default function Pay_History_Model() {
   // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
   // eslint-disable-next-line
-  const [allData, setallData] = useState([]);
+  const [allData, setAllData] = useState([]);
   const [allTableData, setallTableData] = useState([]);
   let history = useHistory();
   const location = useLocation();
@@ -215,19 +215,7 @@ export default function Pay_History_Model() {
         }),
       },
     },
-    {
-      name: "Net_salary",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: {
-            fontSize: "15px",
-            color: "black",
-            fontWeight: "600",
-          },
-        }),
-      },
-    },
+
     {
       name: "Action",
       options: {
@@ -242,34 +230,6 @@ export default function Pay_History_Model() {
       },
     },
   ];
-
-  const PayHistoryTabModels = () => {
-    if (location?.state?.detail !== undefined) {
-      setpayHistoryTabModel(true);
-
-      var passingObj = {
-        attendanceList: JSON.parse(allData[currentIndx].data.attendanceList),
-        shortageList: JSON.parse(allData[currentIndx].data.shortageList),
-        saleTargetList: JSON.parse(allData[currentIndx].data.saleTargetList),
-        cashTargetList: JSON.parse(allData[currentIndx].data.cashTargetList),
-        cashSaleList: JSON.parse(allData[currentIndx].data.cashSaleList),
-        excardsList: JSON.parse(allData[currentIndx].data.excardsList),
-        shortage: allData[currentIndx].data.shortage,
-        saleTarget: allData[currentIndx].data.saleTarget,
-        cashTarget: allData[currentIndx].data.cashTarget,
-        exCard: allData[currentIndx].data.exCard,
-        cashSale: allData[currentIndx].data.cashSale,
-      };
-
-      let moveWith = {
-        pathname: "/assistant/salary/history_reports",
-        search: "?query=abc",
-        state: { detail: passingObj },
-      };
-
-      history.push(moveWith);
-    }
-  };
 
   useEffect(() => {
     window.addEventListener("offline", function (e) {
@@ -397,7 +357,7 @@ export default function Pay_History_Model() {
                   prefix={" "}
                 />
               ),
-              Net_salary: (
+              Net_Salary: (
                 <CurrencyFormat
                   value={saDoc.data()?.net_Salery}
                   displayType={"text"}
@@ -409,19 +369,47 @@ export default function Pay_History_Model() {
                 <div>
                   <HistoryIcon
                     className="btnView"
-                    onClick={PayHistoryTabModels}
+                    onClick={(e) => PayHistoryTabModels(saDoc.data())}
                   />
                 </div>
               ),
             });
           });
-          setallData(rawNormdata);
+          setAllData(rawNormdata);
           setallTableData(rawAllData);
         });
     }
 
     // eslint-disable-next-line
   }, []);
+
+  const PayHistoryTabModels = (allDataParam) => {
+    if (location?.state?.detail !== undefined) {
+      setpayHistoryTabModel(true);
+
+      var passingObj = {
+        attendanceList: JSON.parse(allDataParam.attendanceList),
+        shortageList: JSON.parse(allDataParam.shortageList),
+        saleTargetList: JSON.parse(allDataParam.saleTargetList),
+        cashTargetList: JSON.parse(allDataParam.cashTargetList),
+        cashSaleList: JSON.parse(allDataParam.cashSaleList),
+        excardsList: JSON.parse(allDataParam.excardsList),
+        shortage: allDataParam.shortage,
+        saleTarget: allDataParam.saleTarget,
+        cashTarget: allDataParam.cashTarget,
+        exCard: allDataParam.exCard,
+        cashSale: allDataParam.cashSale,
+      };
+
+      let moveWith = {
+        pathname: "/assistant/salary/history_reports",
+        search: "?query=abc",
+        state: { detail: passingObj },
+      };
+
+      history.push(moveWith);
+    }
+  };
 
   return (
     <Grid container spacing={4}>

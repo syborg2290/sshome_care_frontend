@@ -62,17 +62,21 @@ export default function Sale_Target_Table({ list }) {
   ];
 
   useEffect(() => {
-    var rawData = [];
-    list.forEach((reEa) => {
-      rawData.push({
-        Date: moment(reEa?.date?.toDate()).format("dddd, MMMM Do YYYY"),
-        Item_Name: reEa.item_name,
-        Serial_Number: reEa.serail_number,
-        Qty: reEa.qty,
-        Total: reEa.total,
+    if (list !== undefined) {
+      var rawData = [];
+      list.forEach((reEa) => {
+        rawData.push({
+          Date: moment(new Date(reEa.date.seconds * 1000)).format(
+            "dddd, MMMM Do YYYY"
+          ),
+          Item_Name: reEa.item_name,
+          Serial_Number: reEa.serail_number,
+          Qty: reEa.qty,
+          Total: reEa.total,
+        });
       });
-    });
-    setallData(rawData);
+      setallData(rawData);
+    }
   }, [list]);
 
   return (

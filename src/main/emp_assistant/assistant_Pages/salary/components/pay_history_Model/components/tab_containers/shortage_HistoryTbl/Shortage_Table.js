@@ -6,7 +6,7 @@ import CurrencyFormat from "react-currency-format";
 // styles
 import "./Shortage_Table.css";
 
-export default function Shortage_Table() {
+export default function Shortage_Table({ list }) {
   // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
   // eslint-disable-next-line
@@ -60,17 +60,25 @@ export default function Shortage_Table() {
     },
   ];
 
-  const tableData = [["2020/03/01", <CurrencyFormat
-              value={2000}
-              displayType={"text"}
-              thousandSeparator={true}
-              prefix={" "}
-            />, "Shop", "Gass",<CurrencyFormat
-              value={2000}
-              displayType={"text"}
-              thousandSeparator={true}
-              prefix={" "}
-            />]];
+  const tableData = [
+    [
+      "2020/03/01",
+      <CurrencyFormat
+        value={2000}
+        displayType={"text"}
+        thousandSeparator={true}
+        prefix={" "}
+      />,
+      "Shop",
+      "Gass",
+      <CurrencyFormat
+        value={2000}
+        displayType={"text"}
+        thousandSeparator={true}
+        prefix={" "}
+      />,
+    ],
+  ];
 
   return (
     <>
@@ -80,12 +88,14 @@ export default function Shortage_Table() {
           Total(LKR) :
         </Grid>
         <Grid item xs={1}>
-          <p className="shortage_totNum"><CurrencyFormat
+          <p className="shortage_totNum">
+            <CurrencyFormat
               value={2000}
               displayType={"text"}
               thousandSeparator={true}
               prefix={" "}
-            /></p>
+            />
+          </p>
         </Grid>
         <Grid item xs={1}></Grid>
       </Grid>

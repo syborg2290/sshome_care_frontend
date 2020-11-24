@@ -25,11 +25,6 @@ export default function Pay_History_Model() {
   let history = useHistory();
   const location = useLocation();
 
-  const PayHistoryTabModels = () => {
-    setpayHistoryTabModel(true);
-    history.push("/assistant/salary/history_reports");
-  };
-
   const columns = [
     {
       name: "Date",
@@ -234,6 +229,34 @@ export default function Pay_History_Model() {
       },
     },
   ];
+
+  const PayHistoryTabModels = () => {
+    if (location?.state?.detail !== undefined) {
+      setpayHistoryTabModel(true);
+
+      var passingObj = {
+        attendanceList: allData[currentIndx].data.attendanceList,
+        shortageList: allData[currentIndx].data.shortageList,
+        saleTargetList: allData[currentIndx].data.saleTargetList,
+        cashTargetList: allData[currentIndx].data.cashTargetList,
+        cashSaleList: allData[currentIndx].data.cashSaleList,
+        excardsList: allData[currentIndx].data.excardsList,
+        shortage: allData[currentIndx].data.shortage,
+        saleTarget: allData[currentIndx].data.saleTarget,
+        cashTarget: allData[currentIndx].data.cashTarget,
+        exCard: allData[currentIndx].data.exCard,
+        cashSale: allData[currentIndx].data.cashSale,
+      };
+
+      let moveWith = {
+        pathname: "/assistant/salary/history_reports",
+        search: "?query=abc",
+        state: { detail: passingObj },
+      };
+
+      history.push(moveWith);
+    }
+  };
 
   useEffect(() => {
     window.addEventListener("offline", function (e) {

@@ -10,7 +10,7 @@ import CurrencyFormat from "react-currency-format";
 // styles
 import "./Cash_Sale_Table.css";
 
-export default function Cash_Sale_Table() {
+export default function Cash_Sale_Table({list}) {
   // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
   // eslint-disable-next-line

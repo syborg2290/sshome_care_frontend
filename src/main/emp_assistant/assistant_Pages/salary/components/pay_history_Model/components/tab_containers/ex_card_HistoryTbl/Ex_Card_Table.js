@@ -10,13 +10,11 @@ import CurrencyFormat from "react-currency-format";
 // styles
 import "./Ex_Card_Table.css";
 
-export default function Ex_Card_Table() {
-
+export default function Ex_Card_Table({ list }) {
   // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
   // eslint-disable-next-line
   const [allData, setallData] = useState([]);
-
 
   const columns = [
     {
@@ -55,81 +53,78 @@ export default function Ex_Card_Table() {
         }),
       },
     },
-  
-
   ];
 
   const tableData = [
     [
       "2020/03/01",
       <CurrencyFormat
-              value={2000}
-              displayType={"text"}
-              thousandSeparator={true}
-              prefix={" "}
-            />,
+        value={2000}
+        displayType={"text"}
+        thousandSeparator={true}
+        prefix={" "}
+      />,
       "IN-6437",
       <CurrencyFormat
-              value={2000}
-              displayType={"text"}
-              thousandSeparator={true}
-              prefix={" "}
-            />,
-      
-     
+        value={2000}
+        displayType={"text"}
+        thousandSeparator={true}
+        prefix={" "}
+      />,
     ],
   ];
 
   return (
-
     <>
-   <Grid container spacing={2}>
-        <Grid item xs={9}>
-        </Grid>
+      <Grid container spacing={2}>
+        <Grid item xs={9}></Grid>
         <Grid item xs={3}>
           <Card className="root">
             <CardContent>
-              <Typography className="sale_tagets"  gutterBottom>
-                Total(LKR) : <span className="sale_taget_tot"><CurrencyFormat
-              value={2000}
-              displayType={"text"}
-              thousandSeparator={true}
-              prefix={" "}
-            /></span>
+              <Typography className="sale_tagets" gutterBottom>
+                Total(LKR) :{" "}
+                <span className="sale_taget_tot">
+                  <CurrencyFormat
+                    value={2000}
+                    displayType={"text"}
+                    thousandSeparator={true}
+                    prefix={" "}
+                  />
+                </span>
               </Typography>
               <hr />
-                <Typography  color="textSecondary">
-                   Total + 2%<span className="cash_tagetPer">per Installment</span>
-                </Typography>
-              </CardContent>
-            </Card> 
+              <Typography color="textSecondary">
+                Total + 2%<span className="cash_tagetPer">per Installment</span>
+              </Typography>
+            </CardContent>
+          </Card>
         </Grid>
-     </Grid>
-      
-    <Grid container spacing={4}>
-      <Grid item xs={12}>
-        <MUIDataTable
-          title={<span className="title_Span">Ex Card History</span>}
-          className="exx_histable"
-          sty
-          data={tableData}
-          columns={columns}
-          options={{
-            selectableRows: "none",
-            customToolbarSelect: () => {},
-            onRowClick: (rowData, rowMeta) => {
-              setCurrentIndx(rowMeta.dataIndex);
-            },
-            filterType: "textField",
-            download: false,
-            print: false,
-            searchPlaceholder: "Search using any column names",
-            elevation: 4,
-            sort: true,
-          }}
-        />
       </Grid>
+
+      <Grid container spacing={4}>
+        <Grid item xs={12}>
+          <MUIDataTable
+            title={<span className="title_Span">Ex Card History</span>}
+            className="exx_histable"
+            sty
+            data={tableData}
+            columns={columns}
+            options={{
+              selectableRows: "none",
+              customToolbarSelect: () => {},
+              onRowClick: (rowData, rowMeta) => {
+                setCurrentIndx(rowMeta.dataIndex);
+              },
+              filterType: "textField",
+              download: false,
+              print: false,
+              searchPlaceholder: "Search using any column names",
+              elevation: 4,
+              sort: true,
+            }}
+          />
+        </Grid>
       </Grid>
-      </>
+    </>
   );
 }

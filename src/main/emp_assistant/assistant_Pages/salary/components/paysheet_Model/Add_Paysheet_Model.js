@@ -1352,6 +1352,7 @@ export default function Add_Paysheet_Model({ nic }) {
   }, [nic]);
 
   const makeSalary = () => {
+    setLoading(true);
     let deductions =
       epf + securityDeposit + deduction + advance + loan + shortage;
     let earnings =
@@ -1453,6 +1454,8 @@ export default function Add_Paysheet_Model({ nic }) {
               }
             });
           });
+        setLoading(false);
+        window.location.reload();
       });
   };
 
@@ -2002,103 +2005,94 @@ export default function Add_Paysheet_Model({ nic }) {
             <Grid item xs={12} sm={12}>
               <hr />
             </Grid>
-                <Card className="root">
-                  <CardContent>
-                     <Grid className="card_container" container spacing={2}>
+            <Card className="root">
+              <CardContent>
+                <Grid className="card_container" container spacing={2}>
                   <Grid item xs={12} sm={5}>
-                     <Typography
+                    <Typography
                       className="titlexyww"
                       color="textSecondary"
                       gutterBottom
                     >
-                     Earnings
+                      Earnings
                     </Typography>
                     <Typography
                       className="titlexy"
                       color="textSecondary"
                       gutterBottom
                     >
-                      Basic Salary , 
-                      Insentive , Phone Bill ,
-                       Sale Target , Cash Target ,
-                      Cash Sale ,
-                      Ex Card
-                       
+                      Basic Salary , Insentive , Phone Bill , Sale Target , Cash
+                      Target , Cash Sale , Ex Card
                     </Typography>
                   </Grid>
-                   <Grid item xs={12} sm={2}>
+                  <Grid item xs={12} sm={2}>
                     <div className="vl"></div>
-                    </Grid>
-                    <Grid item xs={12} sm={5}>
+                  </Grid>
+                  <Grid item xs={12} sm={5}>
                     <Typography
                       className="titlexyww"
                       color="textSecondary"
                       gutterBottom
                     >
-                     Deductions
+                      Deductions
                     </Typography>
                     <Typography
                       className="titlexy"
                       color="textSecondary"
                       gutterBottom
                     >
-                      EPF, Security
-                      Deposit ,
-                      Attendance deductions,
-                      Salary Advance ,
-                      Loan ,
-                      Shortage
+                      EPF, Security Deposit , Attendance deductions, Salary
+                      Advance , Loan , Shortage
                     </Typography>
-                    
-                    </Grid>
-                    <Grid item xs={12} sm={12}>
+                  </Grid>
+                  <Grid item xs={12} sm={12}>
                     <Typography
                       className="titleNety"
                       color="textSecondary"
                       gutterBottom
                     >
-                       NET Salary ={" "}
-                     <CurrencyFormat
-                        value={insentive +
-                        phoneBill +
-                        saleTarget +
-                        cashTarget +
-                        exCard +
-                        cashSale +
-                        basicSalary -
-                        (epf +
-                          securityDeposit +
-                          deduction +
-                          advance +
-                          loan +
-                          shortage) <=
-                      0
-                        ? 0
-                        : insentive +
-                          phoneBill +
-                          saleTarget +
-                          cashTarget +
-                          exCard +
-                          cashSale +
-                          basicSalary -
-                          (epf +
-                            securityDeposit +
-                            deduction +
-                            advance +
-                            loan +
-                            shortage)}
+                      NET Salary ={" "}
+                      <CurrencyFormat
+                        value={
+                          insentive +
+                            phoneBill +
+                            saleTarget +
+                            cashTarget +
+                            exCard +
+                            cashSale +
+                            basicSalary -
+                            (epf +
+                              securityDeposit +
+                              deduction +
+                              advance +
+                              loan +
+                              shortage) <=
+                          0
+                            ? 0
+                            : insentive +
+                              phoneBill +
+                              saleTarget +
+                              cashTarget +
+                              exCard +
+                              cashSale +
+                              basicSalary -
+                              (epf +
+                                securityDeposit +
+                                deduction +
+                                advance +
+                                loan +
+                                shortage)
+                        }
                         displayType={"text"}
                         thousandSeparator={true}
                         prefix={" "}
-                      />
-                      {" "}
-                      
-                      </Typography>
-                      </Grid>
-                      </Grid>
-                  </CardContent>
-                </Card>
-              {/* </Grid>
+                      />{" "}
+                    </Typography>
+                  </Grid>
+                </Grid>
+              </CardContent>
+            </Card>
+            {/* </Grid>
             </Grid> */}
 
             <Grid container spacing={2}>

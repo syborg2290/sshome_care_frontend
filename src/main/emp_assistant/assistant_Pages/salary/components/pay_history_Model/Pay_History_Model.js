@@ -202,7 +202,7 @@ export default function Pay_History_Model() {
         }),
       },
     },
-        {
+    {
       name: "Net_Salary",
       options: {
         filter: true,

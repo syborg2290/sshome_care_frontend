@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Grid } from "@material-ui/core";
 import MUIDataTable from "mui-datatables";
-import CurrencyFormat from "react-currency-format";
+import moment from "moment";
 
 // styles
 import "./Shortage_Table.css";
 
-export default function Shortage_Table() {
+export default function Shortage_Table({ list }) {
   // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
   // eslint-disable-next-line
@@ -22,15 +22,7 @@ export default function Shortage_Table() {
         }),
       },
     },
-    {
-      name: "Amount",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
+
     {
       name: "Type",
       options: {
@@ -50,7 +42,7 @@ export default function Shortage_Table() {
       },
     },
     {
-      name: "Total",
+      name: "Amount",
       options: {
         filter: false,
         setCellHeaderProps: (value) => ({
@@ -60,43 +52,30 @@ export default function Shortage_Table() {
     },
   ];
 
-  const tableData = [["2020/03/01", <CurrencyFormat
-              value={2000}
-              displayType={"text"}
-              thousandSeparator={true}
-              prefix={" "}
-            />, "Shop", "Gass",<CurrencyFormat
-              value={2000}
-              displayType={"text"}
-              thousandSeparator={true}
-              prefix={" "}
-            />]];
+  useEffect(() => {
+    var rawData = [];
+    list.forEach((reEach) => {
+      reEach.forEach((reAgaEx) => {
+        rawData.push({
+          Date: moment(reAgaEx?.date?.toDate()).format("dddd, MMMM Do YYYY"),
+          Type: reAgaEx?.type,
+          Shortage_of: reAgaEx?.short_type,
+          Amount: reAgaEx?.amount,
+        });
+      });
+    });
+    setallData(rawData);
+  }, [list]);
 
   return (
     <>
-      <Grid container spacing={4}>
-        <Grid item xs={8}></Grid>
-        <Grid className="shortage_tot" item xs={2}>
-          Total(LKR) :
-        </Grid>
-        <Grid item xs={1}>
-          <p className="shortage_totNum"><CurrencyFormat
-              value={2000}
-              displayType={"text"}
-              thousandSeparator={true}
-              prefix={" "}
-            /></p>
-        </Grid>
-        <Grid item xs={1}></Grid>
-      </Grid>
-
       <Grid container spacing={4}>
         <Grid item xs={12}>
           <MUIDataTable
             title={<span className="title_Span">Shortage History</span>}
             className="shortage_tbl"
             sty
-            data={tableData}
+            data={allData}
             columns={columns}
             options={{
               selectableRows: "none",

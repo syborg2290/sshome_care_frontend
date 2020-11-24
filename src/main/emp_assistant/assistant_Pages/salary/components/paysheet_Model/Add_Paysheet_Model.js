@@ -9,7 +9,6 @@ import {
   Fab,
   Card,
   CardContent,
-  
 } from "@material-ui/core";
 
 import { Modal, Spin, Space, DatePicker } from "antd";
@@ -1353,6 +1352,19 @@ export default function Add_Paysheet_Model({ nic }) {
   }, [nic]);
 
   const makeSalary = () => {
+    let deductions =
+      epf + securityDeposit + deduction + advance + loan + shortage;
+    let earnings =
+      insentive +
+      phoneBill +
+      saleTarget +
+      cashTarget +
+      exCard +
+      cashSale +
+      basicSalary;
+
+    let netSalary = earnings - deductions <= 0 ? 0 : earnings - deductions;
+
     var dbList = {
       nic: nic,
       basicSalary: basicSalary,
@@ -1379,6 +1391,7 @@ export default function Add_Paysheet_Model({ nic }) {
       cashSaleList: cashSaleList,
       excardsList: excardsList,
       Date: date,
+      net_Salery: netSalary,
     };
 
     db.collection("salary")
@@ -1988,22 +2001,61 @@ export default function Add_Paysheet_Model({ nic }) {
             </Grid>
             <Grid item xs={12} sm={12}>
               <hr />
-             </Grid>
-            <Grid  className="card_container" container spacing={2}>
+            </Grid>
+            <Grid className="card_container" container spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Card className="root">
                   <CardContent>
-                     <Typography className="titlexy" color="textSecondary" gutterBottom>
-                      (Basic Salary + Insentive + Phone Bill - EPF - Security Deposit - Attendance deductions - Salary Advance - 
-                      Loan - Shortage + Sale Target + Cash Target + Cash Sale + Ex Card)
-                     </Typography>
-                   <Typography className="titleNety" color="textSecondary" gutterBottom>
-                      NET Salary = 2000.00/-
-                     </Typography>
-                   </CardContent>
+                    <Typography
+                      className="titlexy"
+                      color="textSecondary"
+                      gutterBottom
+                    >
+                      (Basic Salary + Insentive + Phone Bill - EPF - Security
+                      Deposit - Attendance deductions - Salary Advance - Loan -
+                      Shortage + Sale Target + Cash Target + Cash Sale + Ex
+                      Card)
+                    </Typography>
+                    <Typography
+                      className="titleNety"
+                      color="textSecondary"
+                      gutterBottom
+                    >
+                      NET Salary ={" "}
+                      {insentive +
+                        phoneBill +
+                        saleTarget +
+                        cashTarget +
+                        exCard +
+                        cashSale +
+                        basicSalary -
+                        (epf +
+                          securityDeposit +
+                          deduction +
+                          advance +
+                          loan +
+                          shortage) <=
+                      0
+                        ? 0
+                        : insentive +
+                          phoneBill +
+                          saleTarget +
+                          cashTarget +
+                          exCard +
+                          cashSale +
+                          basicSalary -
+                          (epf +
+                            securityDeposit +
+                            deduction +
+                            advance +
+                            loan +
+                            shortage)}{" "}
+                      /=
+                    </Typography>
+                  </CardContent>
                 </Card>
               </Grid>
-              </Grid>
+            </Grid>
 
             <Grid container spacing={2}>
               <Grid item xs={12} sm={9}></Grid>

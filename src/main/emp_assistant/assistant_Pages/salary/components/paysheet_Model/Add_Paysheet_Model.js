@@ -10,7 +10,7 @@ import {
   Card,
   CardContent,
 } from "@material-ui/core";
-
+import CurrencyFormat from "react-currency-format";
 import { Modal, Spin, Space, DatePicker } from "antd";
 
 // styles
@@ -1753,7 +1753,7 @@ export default function Add_Paysheet_Model({ nic }) {
                   required
                   fullWidth
                   type="number"
-                  label="Security Deposit"
+                  label=" Attendance deductions"
                   size="small"
                   InputProps={{ inputProps: { min: 0 } }}
                   value={deduction}
@@ -2002,27 +2002,64 @@ export default function Add_Paysheet_Model({ nic }) {
             <Grid item xs={12} sm={12}>
               <hr />
             </Grid>
-            <Grid className="card_container" container spacing={2}>
-              <Grid item xs={12} sm={12}>
                 <Card className="root">
                   <CardContent>
+                     <Grid className="card_container" container spacing={2}>
+                  <Grid item xs={12} sm={5}>
+                     <Typography
+                      className="titlexyww"
+                      color="textSecondary"
+                      gutterBottom
+                    >
+                     Earnings
+                    </Typography>
                     <Typography
                       className="titlexy"
                       color="textSecondary"
                       gutterBottom
                     >
-                      (Basic Salary + Insentive + Phone Bill - EPF - Security
-                      Deposit - Attendance deductions - Salary Advance - Loan -
-                      Shortage + Sale Target + Cash Target + Cash Sale + Ex
-                      Card)
+                      Basic Salary , 
+                      Insentive , Phone Bill ,
+                       Sale Target , Cash Target ,
+                      Cash Sale ,
+                      Ex Card
+                       
                     </Typography>
+                  </Grid>
+                   <Grid item xs={12} sm={2}>
+                    <div className="vl"></div>
+                    </Grid>
+                    <Grid item xs={12} sm={5}>
+                    <Typography
+                      className="titlexyww"
+                      color="textSecondary"
+                      gutterBottom
+                    >
+                     Deductions
+                    </Typography>
+                    <Typography
+                      className="titlexy"
+                      color="textSecondary"
+                      gutterBottom
+                    >
+                      EPF, Security
+                      Deposit ,
+                      Attendance deductions,
+                      Salary Advance ,
+                      Loan ,
+                      Shortage
+                    </Typography>
+                    
+                    </Grid>
+                    <Grid item xs={12} sm={12}>
                     <Typography
                       className="titleNety"
                       color="textSecondary"
                       gutterBottom
                     >
-                      NET Salary ={" "}
-                      {insentive +
+                       NET Salary ={" "}
+                     <CurrencyFormat
+                        value={insentive +
                         phoneBill +
                         saleTarget +
                         cashTarget +
@@ -2049,13 +2086,20 @@ export default function Add_Paysheet_Model({ nic }) {
                             deduction +
                             advance +
                             loan +
-                            shortage)}{" "}
-                      /=
-                    </Typography>
+                            shortage)}
+                        displayType={"text"}
+                        thousandSeparator={true}
+                        prefix={" "}
+                      />
+                      {" "}
+                      
+                      </Typography>
+                      </Grid>
+                      </Grid>
                   </CardContent>
                 </Card>
-              </Grid>
-            </Grid>
+              {/* </Grid>
+            </Grid> */}
 
             <Grid container spacing={2}>
               <Grid item xs={12} sm={9}></Grid>

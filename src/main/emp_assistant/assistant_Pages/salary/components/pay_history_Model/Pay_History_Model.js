@@ -202,6 +202,19 @@ export default function Pay_History_Model() {
         }),
       },
     },
+        {
+      name: "Net_Salary",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: {
+            fontSize: "15px",
+            color: "black",
+            fontWeight: "600",
+          },
+        }),
+      },
+    },
     {
       name: "Action",
       options: {
@@ -289,6 +302,12 @@ export default function Pay_History_Model() {
             />,
       <CurrencyFormat
               value={25000}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={" "}
+      />,
+       <CurrencyFormat
+              value={50000}
               displayType={"text"}
               thousandSeparator={true}
               prefix={" "}

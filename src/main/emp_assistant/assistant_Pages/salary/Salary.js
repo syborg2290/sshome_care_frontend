@@ -11,6 +11,7 @@ import "./Salary.css";
 import HistoryIcon from "@material-ui/icons/History";
 import AddIcon from "@material-ui/icons/Add";
 import AvTimerIcon from "@material-ui/icons/AvTimer";
+import CardTravelIcon from '@material-ui/icons/CardTravel';
 
 // components
 import AddPaysheet from "./components/paysheet_Model/Add_Paysheet_Model";
@@ -263,7 +264,7 @@ export default function Salary() {
       {/* End TARGET Model  */}
 
       <Grid container spacing={4}>
-        <Grid item xs={2}></Grid>
+       
         <Grid item xs={2}>
           <Button
             variant="contained"
@@ -277,13 +278,14 @@ export default function Salary() {
         <Grid item xs={3}>
           <Button
             variant="contained"
-            className="btn_tempary"
-            // endIcon={<AvTimerIcon />}
+            className="btn_advance"
+            endIcon={<CardTravelIcon />}
             onClick={SalaryAdvanceModels}
           >
             Salary Advance
           </Button>
         </Grid>
+         <Grid item xs={2}></Grid>
         <Grid item xs={3}>
           <Button
             variant="contained"

@@ -48,29 +48,27 @@
   margin-top: 30px !important;
 }
 
-/* .card_Top {
-  width: 100% !important;
+.btn_Dash {
+  background-color: blueviolet !important;
+  color: whitesmoke !important;
   margin-top: 70px !important;
-  height: 55px !important;
-  border-radius: 40px !important;
-  background-color: rgb(255, 255, 255) !important;
-  box-shadow: -4px -1px 7px rgba(0, 0, 0, 0.16), 3px 3px 2px rgba(0, 0, 0, 0.23) !important;
+  display: flex !important;
+  flex-direction: column !important;
 }
 
-.icon1Fab {
-  background-color: rgba(32, 145, 3, 0.89) !important;
-  color: #ffffff !important;
+.main_containerDash {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.16), 0 1px 2px rgba(0, 0, 0, 0.23);
+  background-color: white;
+  padding-bottom: 50px;
+  border-radius: 6px;
+  overflow: hidden !important;
+  margin-top: 20px !important;
 }
 
-.icon2Fab {
-  background-color: rgb(106, 4, 116) !important;
-  color: #ffffff !important;
+.titl_Dash {
+  margin-top: 70px !important;
+  font-size: 26px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  color: #65646998 !important;
 }
-.icon3Fab {
-  background-color: rgba(247, 162, 6, 0.89) !important;
-  color: #ffffff !important;
-}
-.icon4Fab {
-  background-color: rgba(117, 6, 6, 0.918) !important;
-  color: #ffffff !important;
-} */

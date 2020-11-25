@@ -22,7 +22,6 @@ function createData(item, qty, unit, price) {
   return { item, qty, unit, price };
 }
 
-
 class GassRecipt extends React.Component {
   state = {
     rows: [],
@@ -32,11 +31,13 @@ class GassRecipt extends React.Component {
   constructor(props) {
     super(props);
     this.state.total = this.props.prop?.total;
-    this.props.prop.list.forEach((ele) => {
-      this.state.rows.push(
-        createData(ele?.weight+" Kg", ele?.qty, ele?.unit, ele?.price)
-      );
-    });
+    if (this.props.prop?.list !== undefined) {
+      this.props.prop.list.forEach((ele) => {
+        this.state.rows.push(
+          createData(ele?.weight + " Kg", ele?.qty, ele?.unit, ele?.price)
+        );
+      });
+    }
   }
 
   render() {

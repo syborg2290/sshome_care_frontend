@@ -276,7 +276,7 @@ export default function Pay_History_Model() {
                   prefix={" "}
                 />
               ),
-              Attendant: saDoc.data()?.phoneBill,
+              Attendant: saDoc.data()?.attendance,
               EPF: (
                 <CurrencyFormat
                   value={saDoc.data()?.epf}
@@ -359,7 +359,7 @@ export default function Pay_History_Model() {
               ),
               Net_Salary: (
                 <CurrencyFormat
-                  value={saDoc.data()?.net_Salery}
+                  value={Math.round(saDoc.data()?.net_Salery)}
                   displayType={"text"}
                   thousandSeparator={true}
                   prefix={" "}

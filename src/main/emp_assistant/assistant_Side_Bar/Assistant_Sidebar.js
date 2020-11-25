@@ -19,7 +19,6 @@ import {
   MonetizationOnOutlined as MonetizationOnOutlinedIcon,
   ReceiptOutlined as ReceiptOutlinedIcon,
   LocalAtm as LocalAtmIcon,
-  Assessment as AssessmentIcon,
 } from "@material-ui/icons";
 
 import { useTheme } from "@material-ui/styles";
@@ -48,7 +47,7 @@ const structure = [
     icon: <DashboardIcon className="icons" />,
   },
 
-   {
+  {
     id: 21,
     label: "Make Invoice",
     link: "/assistant/ui/MakeInvoiceTable",
@@ -79,13 +78,6 @@ const structure = [
     label: "Invoice",
     link: "/assistant/ui/InvoiceHistory",
     icon: <LibraryIcon className="icons" />,
-  },
-
-   {
-    id: 28,
-    label: "Reports",
-    link: "/assistant/ui/reports",
-    icon: <AssessmentIcon className="icons" />,
   },
 
   { id: 5, type: "divider" },
@@ -127,7 +119,7 @@ const structure = [
     link: "/assistant/ui/employee",
     icon: <GroupAddIcon className="icons" />,
   },
-   {
+  {
     id: 20,
     label: "Salary",
     link: "/assistant/ui/salary",

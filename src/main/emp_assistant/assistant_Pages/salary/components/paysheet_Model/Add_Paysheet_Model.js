@@ -929,6 +929,7 @@ export default function Add_Paysheet_Model({ nic }) {
 
     db.collection("salary")
       .where("nic", "==", nic)
+      .orderBy("date", "asc")
       .get()
       .then((reSalaryInt) => {
         if (reSalaryInt.docs.length > 0) {
@@ -984,6 +985,7 @@ export default function Add_Paysheet_Model({ nic }) {
 
             db.collection("salary")
               .where("nic", "==", nic)
+              .orderBy("date", "asc")
               .get()
               .then((reSalary) => {
                 if (reSalary.docs.length > 0) {
@@ -1228,6 +1230,7 @@ export default function Add_Paysheet_Model({ nic }) {
 
             db.collection("salary")
               .where("nic", "==", nic)
+              .orderBy("date", "asc")
               .get()
               .then((reSalary) => {
                 if (reSalary.docs.length > 0) {

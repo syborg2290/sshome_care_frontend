@@ -1765,6 +1765,7 @@ export default function Add_Paysheet_Model({ nic }) {
 
   const getChangedValuesFromdate = (currentdateRe) => {
     setLoading(true);
+    setShortage(0);
 
     db.collection("salary")
       .where("nic", "==", nic)

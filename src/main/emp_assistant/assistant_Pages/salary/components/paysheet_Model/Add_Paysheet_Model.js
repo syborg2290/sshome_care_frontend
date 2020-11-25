@@ -2872,8 +2872,8 @@ export default function Add_Paysheet_Model({ nic }) {
                       color="textSecondary"
                       gutterBottom
                     >
-                      Basic Salary , Insentive , Phone Bill , Sale Target , Cash
-                      Target , Cash Sale , Ex Card
+                      Insentive , Phone Bill , Sale Target , Cash Target , Cash
+                      Sale , Ex Card
                     </Typography>
                   </Grid>
                   <Grid item xs={12} sm={2}>

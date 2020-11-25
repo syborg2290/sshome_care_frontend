@@ -2049,7 +2049,7 @@ export default function Add_Paysheet_Model({ nic }) {
                   label="Sale Target"
                   size="small"
                   InputProps={{ inputProps: { min: 0 } }}
-                  disabled={saleTarget <= 0 ? true : false}
+                  // disabled={saleTarget <= 0 ? true : false}
                   value={saleTarget}
                   onChange={(e) => {
                     if (e.target.value !== "") {
@@ -2079,7 +2079,7 @@ export default function Add_Paysheet_Model({ nic }) {
                   label=" Cash Target"
                   size="small"
                   InputProps={{ inputProps: { min: 0 } }}
-                  disabled={cashTarget <= 0 ? true : false}
+                  // disabled={cashTarget <= 0 ? true : false}
                   value={cashTarget}
                   onChange={(e) => {
                     if (e.target.value !== "") {
@@ -2109,7 +2109,7 @@ export default function Add_Paysheet_Model({ nic }) {
                   label="Cash Sale"
                   size="small"
                   InputProps={{ inputProps: { min: 0 } }}
-                  disabled={cashSale <= 0 ? true : false}
+                  // disabled={cashSale <= 0 ? true : false}
                   value={cashSale}
                   onChange={(e) => {
                     if (e.target.value !== "") {
@@ -2139,7 +2139,7 @@ export default function Add_Paysheet_Model({ nic }) {
                   label=" EX Card"
                   size="small"
                   InputProps={{ inputProps: { min: 0 } }}
-                  disabled={exCard <= 0 ? true : false}
+                  // disabled={exCard <= 0 ? true : false}
                   value={exCard}
                   onChange={(e) => {
                     if (e.target.value !== "") {

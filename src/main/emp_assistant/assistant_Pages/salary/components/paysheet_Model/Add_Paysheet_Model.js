@@ -36,6 +36,8 @@ async function getGasshort(root, isFirstSalary, lastSalaryDate) {
     .where("type", "==", root)
     .get();
 
+  var rootStatus = await db.collection("root").where("root", "==", root).get();
+
   var gasShort = 0;
 
   for (var i = 0; i < reGas.docs.length; i++) {
@@ -55,7 +57,11 @@ async function getGasshort(root, isFirstSalary, lastSalaryDate) {
       }
     }
   }
-  return gasShort === 0 ? 0 : Math.round((gasShort / 2) * 10) / 10;
+  return gasShort === 0
+    ? 0
+    : rootStatus.docs[0].data().employee2 === ""
+    ? Math.round(gasShort * 10) / 10
+    : Math.round((gasShort / 2) * 10) / 10;
 }
 
 async function getGasshortForTable(root, isFirstSalary, lastSalaryDate) {
@@ -106,6 +112,8 @@ async function getInstallmentshort(root, isFirstSalary, lastSalaryDate) {
     .where("type", "==", root)
     .get();
 
+  var rootStatus = await db.collection("root").where("root", "==", root).get();
+
   var installShortage = 0;
   for (var i = 0; i < reInstallment.docs.length; i++) {
     if (reInstallment.docs[i].data().type === root) {
@@ -131,6 +139,8 @@ async function getInstallmentshort(root, isFirstSalary, lastSalaryDate) {
 
   return installShortage === 0
     ? 0
+    : rootStatus.docs[0].data().employee2 === ""
+    ? Math.round(installShortage * 10) / 10
     : Math.round((installShortage / 2) * 10) / 10;
 }
 
@@ -183,6 +193,8 @@ async function getShortage(root, isFirstSalary, lastSalaryDate) {
     .where("selectedType", "==", root)
     .get();
 
+  var rootStatus = await db.collection("root").where("root", "==", root).get();
+
   var shortage = 0;
   for (var i = 0; i < reInvoice.docs.length; i++) {
     if (reInvoice.docs[i].data().selectedType === root) {
@@ -203,7 +215,11 @@ async function getShortage(root, isFirstSalary, lastSalaryDate) {
     }
   }
 
-  return shortage === 0 ? 0 : Math.round((shortage / 2) * 10) / 10;
+  return shortage === 0
+    ? 0
+    : rootStatus.docs[0].data().employee2 === ""
+    ? Math.round(shortage * 10) / 10
+    : Math.round((shortage / 2) * 10) / 10;
 }
 
 async function getShortageForTable(root, isFirstSalary, lastSalaryDate) {
@@ -513,7 +529,13 @@ async function cashTargetFunc(root, isFirstSalary, lastSalaryDate) {
     returnValue = threePresentage;
   }
 
-  return returnValue === 0 ? 0 : Math.round((returnValue / 2) * 10) / 10;
+  var rootStatus = await db.collection("root").where("root", "==", root).get();
+
+  return returnValue === 0
+    ? 0
+    : rootStatus.docs[0].data().employee2 === ""
+    ? Math.round(returnValue * 10) / 10
+    : Math.round((returnValue / 2) * 10) / 10;
 }
 
 async function cashTargetFuncForTable(root, isFirstSalary, lastSalaryDate) {
@@ -631,7 +653,13 @@ async function getCashSaleFunc(root, isFirstSalary, lastSalaryDate) {
     }
   }
 
-  return cashSale === 0 ? 0 : Math.round((cashSale / 2) * 10) / 10;
+  var rootStatus = await db.collection("root").where("root", "==", root).get();
+
+  return cashSale === 0
+    ? 0
+    : rootStatus.docs[0].data().employee2 === ""
+    ? Math.round(cashSale * 10) / 10
+    : Math.round((cashSale / 2) * 10) / 10;
 }
 
 async function getCashSaleFuncForTable(root, isFirstSalary, lastSalaryDate) {
@@ -718,7 +746,13 @@ async function getExcardFunc(root, isFirstSalary, lastSalaryDate) {
     }
   }
 
-  return excardAmount === 0 ? 0 : Math.round((excardAmount / 2) * 10) / 10;
+  var rootStatus = await db.collection("root").where("root", "==", root).get();
+
+  return excardAmount === 0
+    ? 0
+    : rootStatus.docs[0].data().employee2 === ""
+    ? Math.round(excardAmount * 10) / 10
+    : Math.round((excardAmount / 2) * 10) / 10;
 }
 
 async function getExcardFuncForTable(root, isFirstSalary, lastSalaryDate) {
@@ -1375,6 +1409,19 @@ export default function Add_Paysheet_Model({ nic }) {
       net_Salery: netSalary,
     };
 
+    db.collection("employee")
+      .where("nic", "==", nic)
+      .get()
+      .then((reEmployeeSe) => {
+        db.collection("employee")
+          .doc(reEmployeeSe.docs[0].id)
+          .update({
+            security_deposit:
+              parseInt(reEmployeeSe.docs[0].data().security_deposit) +
+              parseInt(securityDeposit),
+          });
+      });
+
     db.collection("salary")
       .add(dbList)
       .then(async (_) => {
@@ -2002,6 +2049,7 @@ export default function Add_Paysheet_Model({ nic }) {
                   label="Sale Target"
                   size="small"
                   InputProps={{ inputProps: { min: 0 } }}
+                  disabled={saleTarget <= 0 ? true : false}
                   value={saleTarget}
                   onChange={(e) => {
                     if (e.target.value !== "") {
@@ -2031,6 +2079,7 @@ export default function Add_Paysheet_Model({ nic }) {
                   label=" Cash Target"
                   size="small"
                   InputProps={{ inputProps: { min: 0 } }}
+                  disabled={cashTarget <= 0 ? true : false}
                   value={cashTarget}
                   onChange={(e) => {
                     if (e.target.value !== "") {
@@ -2060,6 +2109,7 @@ export default function Add_Paysheet_Model({ nic }) {
                   label="Cash Sale"
                   size="small"
                   InputProps={{ inputProps: { min: 0 } }}
+                  disabled={cashSale <= 0 ? true : false}
                   value={cashSale}
                   onChange={(e) => {
                     if (e.target.value !== "") {
@@ -2089,6 +2139,7 @@ export default function Add_Paysheet_Model({ nic }) {
                   label=" EX Card"
                   size="small"
                   InputProps={{ inputProps: { min: 0 } }}
+                  disabled={exCard <= 0 ? true : false}
                   value={exCard}
                   onChange={(e) => {
                     if (e.target.value !== "") {

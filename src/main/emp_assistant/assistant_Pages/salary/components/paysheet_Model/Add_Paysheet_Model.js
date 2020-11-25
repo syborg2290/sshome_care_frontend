@@ -1567,14 +1567,18 @@ export default function Add_Paysheet_Model({ nic }) {
           let isSalary = await db
             .collection("salary")
             .where("nic", "==", nic)
+            .orderBy("date", "asc")
             .get();
           let emp1 = await db
             .collection("salary")
             .where("nic", "==", rootCur.docs[0].data().employee1)
+            .orderBy("date", "asc")
             .get();
           let emp2 = await db
             .collection("salary")
+
             .where("nic", "==", rootCur.docs[0].data().employee2)
+            .orderBy("date", "asc")
             .get();
           if (isSalary.docs.length > 0) {
             if (nic === rootCur.docs[0].data().employee1) {
@@ -1772,6 +1776,7 @@ export default function Add_Paysheet_Model({ nic }) {
 
     db.collection("salary")
       .where("nic", "==", nic)
+      .orderBy("date", "asc")
       .get()
       .then((reSalaryInt) => {
         if (reSalaryInt.docs.length > 0) {
@@ -1824,6 +1829,7 @@ export default function Add_Paysheet_Model({ nic }) {
 
             db.collection("salary")
               .where("nic", "==", nic)
+              .orderBy("date", "asc")
               .get()
               .then((reSalary) => {
                 if (reSalary.docs.length > 0) {
@@ -2066,6 +2072,7 @@ export default function Add_Paysheet_Model({ nic }) {
 
             db.collection("salary")
               .where("nic", "==", nic)
+              .orderBy("date", "asc")
               .get()
               .then((reSalary) => {
                 if (reSalary.docs.length > 0) {

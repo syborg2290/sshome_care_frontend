@@ -259,6 +259,7 @@ export default function Create_Target_Model() {
           window.location.reload();
         });
     } else {
+      setLoading(false);
       setValidation("Previous target is still on 'ONGOING' ");
     }
   };

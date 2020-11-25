@@ -45,7 +45,7 @@ async function getGasshort(root, isFirstSalary, lastSalaryDate) {
       } else {
         let seeBool3 =
           new Date(reGas.docs[i].data()?.date.seconds * 1000) >
-          new Date(lastSalaryDate.seconds * 1000) &&
+            new Date(lastSalaryDate.seconds * 1000) &&
           new Date(reGas.docs[i].data()?.date.seconds * 1000) <= new Date();
 
         if (seeBool3) {
@@ -80,7 +80,7 @@ async function getGasshortForTable(root, isFirstSalary, lastSalaryDate) {
       } else {
         let seeBool3 =
           new Date(reGas.docs[i].data()?.date.seconds * 1000) >
-          new Date(lastSalaryDate.seconds * 1000) &&
+            new Date(lastSalaryDate.seconds * 1000) &&
           new Date(reGas.docs[i].data()?.date.seconds * 1000) <= new Date();
 
         if (seeBool3) {
@@ -116,9 +116,9 @@ async function getInstallmentshort(root, isFirstSalary, lastSalaryDate) {
       } else {
         let seeBool2 =
           new Date(reInstallment.docs[i].data()?.date.seconds * 1000) >
-          new Date(lastSalaryDate.seconds * 1000) &&
+            new Date(lastSalaryDate.seconds * 1000) &&
           new Date(reInstallment.docs[i].data()?.date.seconds * 1000) <=
-          new Date();
+            new Date();
 
         if (seeBool2) {
           installShortage =
@@ -158,9 +158,9 @@ async function getInstallmentshortForTable(
     } else {
       let seeBool2 =
         new Date(reInstallment.docs[i].data()?.date.seconds * 1000) >
-        new Date(lastSalaryDate.seconds * 1000) &&
+          new Date(lastSalaryDate.seconds * 1000) &&
         new Date(reInstallment.docs[i].data()?.date.seconds * 1000) <=
-        new Date();
+          new Date();
 
       if (seeBool2) {
         if (reInstallment.docs[i].data().shortage > 0) {
@@ -192,7 +192,7 @@ async function getShortage(root, isFirstSalary, lastSalaryDate) {
       } else {
         let seeBool1 =
           new Date(reInvoice.docs[i].data()?.date.seconds * 1000) >
-          new Date(lastSalaryDate.seconds * 1000) &&
+            new Date(lastSalaryDate.seconds * 1000) &&
           new Date(reInvoice.docs[i].data()?.date.seconds * 1000) <= new Date();
 
         if (seeBool1) {
@@ -226,7 +226,7 @@ async function getShortageForTable(root, isFirstSalary, lastSalaryDate) {
     } else {
       let seeBool1 =
         new Date(reInvoice.docs[i].data()?.date.seconds * 1000) >
-        new Date(lastSalaryDate.seconds * 1000) &&
+          new Date(lastSalaryDate.seconds * 1000) &&
         new Date(reInvoice.docs[i].data()?.date.seconds * 1000) <= new Date();
 
       if (seeBool1) {
@@ -258,7 +258,7 @@ async function getAllAttendance(nic, isFirstSalary, lastSalaryDate) {
     for (var i = 0; i < reAt.docs.length; i++) {
       let seeBool1 =
         new Date(reAt.docs[i].data()?.date.seconds * 1000) >
-        new Date(lastSalaryDate.seconds * 1000) &&
+          new Date(lastSalaryDate.seconds * 1000) &&
         new Date(reAt.docs[i].data()?.date.seconds * 1000) <= new Date();
 
       if (seeBool1) {
@@ -288,7 +288,7 @@ async function getAllAttendanceForTable(nic, isFirstSalary, lastSalaryDate) {
     for (let i = 0; i < reAt.docs.length; i++) {
       let seeBool1 =
         new Date(reAt.docs[i].data()?.date.seconds * 1000) >
-        new Date(lastSalaryDate.seconds * 1000) &&
+          new Date(lastSalaryDate.seconds * 1000) &&
         new Date(reAt.docs[i].data()?.date.seconds * 1000) <= new Date();
 
       if (seeBool1) {
@@ -322,7 +322,7 @@ async function getSaleTarget(root) {
       for (var i = 0; i < saleRe.docs.length; i++) {
         let seeBool1 =
           new Date(saleRe.docs[i].data()?.date.seconds * 1000) >
-          new Date(salesTaregt.docs[k].data()?.start_date.seconds * 1000) &&
+            new Date(salesTaregt.docs[k].data()?.start_date.seconds * 1000) &&
           new Date(saleRe.docs[i].data()?.date.seconds * 1000) <= new Date();
 
         if (seeBool1) {
@@ -330,7 +330,7 @@ async function getSaleTarget(root) {
             saleTargetValue =
               parseInt(saleTargetValue) +
               parseInt(saleRe.docs[i].data().items[n].downpayment) *
-              parseInt(saleRe.docs[i].data().items[n].qty);
+                parseInt(saleRe.docs[i].data().items[n].qty);
           }
         }
       }
@@ -340,10 +340,10 @@ async function getSaleTarget(root) {
   return targetValue === 0
     ? 0
     : saleTargetValue === 0
-      ? 0
-      : saleTargetValue >= targetValue
-        ? 5000
-        : 0;
+    ? 0
+    : saleTargetValue >= targetValue
+    ? 5000
+    : 0;
 }
 
 async function getSaleTargetForTable(root, isFirstSalary, lastSalaryDate) {
@@ -370,7 +370,7 @@ async function getSaleTargetForTable(root, isFirstSalary, lastSalaryDate) {
     } else {
       let seeBool1 =
         new Date(saleRe.docs[i].data()?.date.seconds * 1000) >
-        new Date(lastSalaryDate.seconds * 1000) &&
+          new Date(lastSalaryDate.seconds * 1000) &&
         new Date(saleRe.docs[i].data()?.date.seconds * 1000) <= new Date();
 
       if (seeBool1) {
@@ -421,7 +421,7 @@ async function cashTargetFunc(root, isFirstSalary, lastSalaryDate) {
       if (saleRe.docs[i].data().paymentWay === "PayandGo") {
         let seeBool1 =
           new Date(saleRe.docs[i].data()?.date.seconds * 1000) >
-          new Date(dueCashTaregt[0].data()?.start_date.seconds * 1000) &&
+            new Date(dueCashTaregt[0].data()?.start_date.seconds * 1000) &&
           new Date(saleRe.docs[i].data()?.date.seconds * 1000) <= new Date();
 
         if (seeBool1) {
@@ -441,9 +441,9 @@ async function cashTargetFunc(root, isFirstSalary, lastSalaryDate) {
     for (let i = 0; i < installmentsRe.docs.length; i++) {
       let seeBool1 =
         new Date(installmentsRe.docs[i].data()?.date.seconds * 1000) >
-        new Date(dueCashTaregt[0].data()?.start_date.seconds * 1000) &&
+          new Date(dueCashTaregt[0].data()?.start_date.seconds * 1000) &&
         new Date(installmentsRe.docs[i].data()?.date.seconds * 1000) <=
-        new Date();
+          new Date();
 
       if (seeBool1) {
         if (installmentsRe.docs[i].data().isExpired === false) {
@@ -474,7 +474,7 @@ async function cashTargetFunc(root, isFirstSalary, lastSalaryDate) {
         } else {
           let seeBool1 =
             new Date(saleRe.docs[i].data()?.date.seconds * 1000) >
-            new Date(lastSalaryDate.seconds * 1000) &&
+              new Date(lastSalaryDate.seconds * 1000) &&
             new Date(saleRe.docs[i].data()?.date.seconds * 1000) <= new Date();
 
           if (seeBool1) {
@@ -496,9 +496,9 @@ async function cashTargetFunc(root, isFirstSalary, lastSalaryDate) {
       } else {
         let seeBool1 =
           new Date(installmentsRe.docs[i].data()?.date.seconds * 1000) >
-          new Date(lastSalaryDate.seconds * 1000) &&
+            new Date(lastSalaryDate.seconds * 1000) &&
           new Date(installmentsRe.docs[i].data()?.date.seconds * 1000) <=
-          new Date();
+            new Date();
 
         if (seeBool1) {
           if (installmentsRe.docs[i].data().isExpired === false) {
@@ -540,7 +540,7 @@ async function cashTargetFuncForTable(root, isFirstSalary, lastSalaryDate) {
       } else {
         let seeBool1 =
           new Date(saleRe.docs[i].data()?.date.seconds * 1000) >
-          new Date(lastSalaryDate.seconds * 1000) &&
+            new Date(lastSalaryDate.seconds * 1000) &&
           new Date(saleRe.docs[i].data()?.date.seconds * 1000) <= new Date();
 
         if (seeBool1) {
@@ -568,9 +568,9 @@ async function cashTargetFuncForTable(root, isFirstSalary, lastSalaryDate) {
     } else {
       let seeBool1 =
         new Date(installmentsRe.docs[i].data()?.date.seconds * 1000) >
-        new Date(lastSalaryDate.seconds * 1000) &&
+          new Date(lastSalaryDate.seconds * 1000) &&
         new Date(installmentsRe.docs[i].data()?.date.seconds * 1000) <=
-        new Date();
+          new Date();
 
       if (seeBool1) {
         if (installmentsRe.docs[i].data().isExpired === false) {
@@ -604,15 +604,15 @@ async function getCashSaleFunc(root, isFirstSalary, lastSalaryDate) {
             parseInt(cashSale) +
             (parseInt(
               saleRe.docs[i].data().items[n].downpayment *
-              saleRe.docs[i].data().items[n].qty
+                saleRe.docs[i].data().items[n].qty
             ) *
               2.5) /
-            100;
+              100;
         }
       } else {
         let seeBool1 =
           new Date(saleRe.docs[i].data()?.date.seconds * 1000) >
-          new Date(lastSalaryDate.seconds * 1000) &&
+            new Date(lastSalaryDate.seconds * 1000) &&
           new Date(saleRe.docs[i].data()?.date.seconds * 1000) <= new Date();
 
         if (seeBool1) {
@@ -621,10 +621,10 @@ async function getCashSaleFunc(root, isFirstSalary, lastSalaryDate) {
               parseInt(cashSale) +
               (parseInt(
                 saleRe.docs[i].data().items[n].downpayment *
-                saleRe.docs[i].data().items[n].qty
+                  saleRe.docs[i].data().items[n].qty
               ) *
                 2.5) /
-              100;
+                100;
           }
         }
       }
@@ -651,7 +651,7 @@ async function getCashSaleFuncForTable(root, isFirstSalary, lastSalaryDate) {
             invoice_no: saleRe.docs[i].data().invoice_number,
             total: parseInt(
               saleRe.docs[i].data().items[n].downpayment *
-              saleRe.docs[i].data().items[n].qty
+                saleRe.docs[i].data().items[n].qty
             ),
             qty: saleRe.docs[i].data().items[n].qty,
             item_name: saleRe.docs[i].data().items[n].item_name,
@@ -661,7 +661,7 @@ async function getCashSaleFuncForTable(root, isFirstSalary, lastSalaryDate) {
       } else {
         let seeBool1 =
           new Date(saleRe.docs[i].data()?.date.seconds * 1000) >
-          new Date(lastSalaryDate.seconds * 1000) &&
+            new Date(lastSalaryDate.seconds * 1000) &&
           new Date(saleRe.docs[i].data()?.date.seconds * 1000) <= new Date();
 
         if (seeBool1) {
@@ -671,7 +671,7 @@ async function getCashSaleFuncForTable(root, isFirstSalary, lastSalaryDate) {
               invoice_no: saleRe.docs[i].data().invoice_number,
               total: parseInt(
                 saleRe.docs[i].data().items[n].downpayment *
-                saleRe.docs[i].data().items[n].qty
+                  saleRe.docs[i].data().items[n].qty
               ),
               qty: saleRe.docs[i].data().items[n].qty,
               item_name: saleRe.docs[i].data().items[n].item_name,
@@ -704,9 +704,9 @@ async function getExcardFunc(root, isFirstSalary, lastSalaryDate) {
     } else {
       let seeBool1 =
         new Date(installmentsRe.docs[i].data()?.date.seconds * 1000) >
-        new Date(lastSalaryDate.seconds * 1000) &&
+          new Date(lastSalaryDate.seconds * 1000) &&
         new Date(installmentsRe.docs[i].data()?.date.seconds * 1000) <=
-        new Date();
+          new Date();
 
       if (seeBool1) {
         if (installmentsRe.docs[i].data().isExpired) {
@@ -741,9 +741,9 @@ async function getExcardFuncForTable(root, isFirstSalary, lastSalaryDate) {
     } else {
       let seeBool1 =
         new Date(installmentsRe.docs[i].data()?.date.seconds * 1000) >
-        new Date(lastSalaryDate.seconds * 1000) &&
+          new Date(lastSalaryDate.seconds * 1000) &&
         new Date(installmentsRe.docs[i].data()?.date.seconds * 1000) <=
-        new Date();
+          new Date();
 
       if (seeBool1) {
         if (installmentsRe.docs[i].data().isExpired) {
@@ -1404,12 +1404,42 @@ export default function Add_Paysheet_Model({ nic }) {
                         }
                       });
                   } else {
+                    if (emp2.docs.length === 0) {
+                    } else {
+                      if (
+                        new Date(
+                          emp2.docs[0].data().date.seconds * 1000
+                        ).getFullYear() === new Date().getFullYear() &&
+                        new Date(
+                          emp2.docs[0].data().date.seconds * 1000
+                        ).getMonth() === new Date().getMonth()
+                      ) {
+                        db.collection("targets")
+                          .where("selectedType", "==", root)
+                          .get()
+                          .then((reTarget) => {
+                            if (reTarget.docs.length > 0) {
+                              reTarget.docs.forEach((reEach) => {
+                                db.collection("targets").doc(reEach.id).update({
+                                  status: "Expired",
+                                });
+                              });
+                            }
+                          });
+                      }
+                    }
+                  }
+                }
+
+                if (nic === reEmpRoot.docs[0].data().employee2) {
+                  if (emp1.docs.length === 0) {
+                  } else {
                     if (
                       new Date(
-                        emp2.docs[0].data().date.seconds * 1000
+                        emp1.docs[0].data().date.seconds * 1000
                       ).getFullYear() === new Date().getFullYear() &&
                       new Date(
-                        emp2.docs[0].data().date.seconds * 1000
+                        emp1.docs[0].data().date.seconds * 1000
                       ).getMonth() === new Date().getMonth()
                     ) {
                       db.collection("targets")
@@ -1425,30 +1455,6 @@ export default function Add_Paysheet_Model({ nic }) {
                           }
                         });
                     }
-                  }
-                }
-
-                if (nic === reEmpRoot.docs[0].data().employee2) {
-                  if (
-                    new Date(
-                      emp1.docs[0].data().date.seconds * 1000
-                    ).getFullYear() === new Date().getFullYear() &&
-                    new Date(
-                      emp1.docs[0].data().date.seconds * 1000
-                    ).getMonth() === new Date().getMonth()
-                  ) {
-                    db.collection("targets")
-                      .where("selectedType", "==", root)
-                      .get()
-                      .then((reTarget) => {
-                        if (reTarget.docs.length > 0) {
-                          reTarget.docs.forEach((reEach) => {
-                            db.collection("targets").doc(reEach.id).update({
-                              status: "Expired",
-                            });
-                          });
-                        }
-                      });
                   }
                 }
               } else {
@@ -2131,21 +2137,21 @@ export default function Add_Paysheet_Model({ nic }) {
                               advance +
                               loan +
                               shortage) <=
-                            0
+                          0
                             ? 0
                             : insentive +
-                            phoneBill +
-                            saleTarget +
-                            cashTarget +
-                            exCard +
-                            cashSale +
-                            basicSalary -
-                            (epf +
-                              securityDeposit +
-                              deduction +
-                              advance +
-                              loan +
-                              shortage)
+                              phoneBill +
+                              saleTarget +
+                              cashTarget +
+                              exCard +
+                              cashSale +
+                              basicSalary -
+                              (epf +
+                                securityDeposit +
+                                deduction +
+                                advance +
+                                loan +
+                                shortage)
                         }
                         displayType={"text"}
                         thousandSeparator={true}
@@ -2169,20 +2175,20 @@ export default function Add_Paysheet_Model({ nic }) {
                   onClick={makeSalary}
                   disabled={
                     loading ||
-                      basicSalary.length === 0 ||
-                      insentive.length === 0 ||
-                      phoneBill.length === 0 ||
-                      epf.length === 0 ||
-                      securityDeposit.length === 0 ||
-                      deduction.length === 0 ||
-                      advance.length === 0 ||
-                      loan.length === 0 ||
-                      shortage.length === 0 ||
-                      saleTarget.length === 0 ||
-                      cashTarget.length === 0 ||
-                      exCard.length === 0 ||
-                      cashSale.length === 0 ||
-                      date === null
+                    basicSalary.length === 0 ||
+                    insentive.length === 0 ||
+                    phoneBill.length === 0 ||
+                    epf.length === 0 ||
+                    securityDeposit.length === 0 ||
+                    deduction.length === 0 ||
+                    advance.length === 0 ||
+                    loan.length === 0 ||
+                    shortage.length === 0 ||
+                    saleTarget.length === 0 ||
+                    cashTarget.length === 0 ||
+                    exCard.length === 0 ||
+                    cashSale.length === 0 ||
+                    date === null
                       ? true
                       : false
                   }

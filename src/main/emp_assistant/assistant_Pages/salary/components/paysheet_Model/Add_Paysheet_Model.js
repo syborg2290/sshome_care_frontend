@@ -829,24 +829,28 @@ export default function Add_Paysheet_Model({ nic }) {
       .get()
       .then((reSalaryInt) => {
         if (reSalaryInt.docs.length > 0) {
-          getAllAttendance(nic, false, reSalaryInt.docs[0]?.data().date).then(
-            (reAtte) => {
-              setAttendance(reAtte);
-            }
-          );
+          getAllAttendance(
+            nic,
+            false,
+            reSalaryInt.docs[reSalaryInt.docs.length - 1]?.data().date
+          ).then((reAtte) => {
+            setAttendance(reAtte);
+          });
           getAllAttendanceForTable(
             nic,
             false,
-            reSalaryInt.docs[0]?.data().date
+            reSalaryInt.docs[reSalaryInt.docs.length - 1]?.data().date
           ).then((reAtte) => {
             setAttendanceList(reAtte);
           });
         } else {
-          getAllAttendance(nic, true, reSalaryInt.docs[0]?.data().date).then(
-            (reAtte) => {
-              setAttendance(reAtte);
-            }
-          );
+          getAllAttendance(
+            nic,
+            true,
+            reSalaryInt.docs[0]?.data().date
+          ).then((reAtte) => {
+            setAttendance(reAtte);
+          });
           getAllAttendanceForTable(
             nic,
             true,
@@ -876,7 +880,7 @@ export default function Add_Paysheet_Model({ nic }) {
                   getSaleTargetForTable(
                     rootName,
                     false,
-                    reSalary.docs[0]?.data().date
+                    reSalary.docs[reSalary.docs.length-1]?.data().date
                   ).then((reSaleTarget) => {
                     setSaleTargetList(reSaleTarget);
                   });
@@ -884,7 +888,7 @@ export default function Add_Paysheet_Model({ nic }) {
                   cashTargetFunc(
                     rootName,
                     false,
-                    reSalary.docs[0]?.data().date
+                    reSalary.docs[reSalary.docs.length - 1]?.data().date
                   ).then((reCashTaregt) => {
                     setCashTarget(reCashTaregt);
                   });
@@ -892,7 +896,7 @@ export default function Add_Paysheet_Model({ nic }) {
                   cashTargetFuncForTable(
                     rootName,
                     false,
-                    reSalary.docs[0]?.data().date
+                    reSalary.docs[reSalary.docs.length - 1]?.data().date
                   ).then((reCashTaregt) => {
                     setCashTargetList(reCashTaregt);
                   });
@@ -900,7 +904,7 @@ export default function Add_Paysheet_Model({ nic }) {
                   getCashSaleFunc(
                     rootName,
                     false,
-                    reSalary.docs[0]?.data().date
+                    reSalary.docs[reSalary.docs.length - 1]?.data().date
                   ).then((reCashSale) => {
                     setCashSale(reCashSale);
                   });
@@ -908,7 +912,7 @@ export default function Add_Paysheet_Model({ nic }) {
                   getCashSaleFuncForTable(
                     rootName,
                     false,
-                    reSalary.docs[0]?.data().date
+                    reSalary.docs[reSalary.docs.length - 1]?.data().date
                   ).then((reCashSale) => {
                     setCashSaleList(reCashSale);
                   });
@@ -916,7 +920,7 @@ export default function Add_Paysheet_Model({ nic }) {
                   getExcardFunc(
                     rootName,
                     false,
-                    reSalary.docs[0]?.data().date
+                    reSalary.docs[reSalary.docs.length - 1]?.data().date
                   ).then((reEx) => {
                     setExCard(reEx);
                   });
@@ -924,7 +928,7 @@ export default function Add_Paysheet_Model({ nic }) {
                   getExcardFuncForTable(
                     rootName,
                     false,
-                    reSalary.docs[0]?.data().date
+                    reSalary.docs[reSalary.docs.length - 1]?.data().date
                   ).then((reEx) => {
                     setExcardslist(reEx);
                   });
@@ -932,21 +936,21 @@ export default function Add_Paysheet_Model({ nic }) {
                   getShortage(
                     rootName,
                     false,
-                    reSalary.docs[0]?.data().date
+                    reSalary.docs[reSalary.docs.length - 1]?.data().date
                   ).then((reShort) => {
                     setShortage((sho) => sho + parseInt(reShort));
                   });
                   getInstallmentshort(
                     rootName,
                     false,
-                    reSalary.docs[0]?.data().date
+                    reSalary.docs[reSalary.docs.length - 1]?.data().date
                   ).then((reShort) => {
                     setShortage((sho) => sho + parseInt(reShort));
                   });
                   getGasshort(
                     rootName,
                     false,
-                    reSalary.docs[0]?.data().date
+                    reSalary.docs[reSalary.docs.length - 1]?.data().date
                   ).then((reShort) => {
                     setShortage((sho) => sho + parseInt(reShort));
                   });
@@ -956,21 +960,21 @@ export default function Add_Paysheet_Model({ nic }) {
                   getShortageForTable(
                     rootName,
                     false,
-                    reSalary.docs[0]?.data().date
+                    reSalary.docs[reSalary.docs.length - 1]?.data().date
                   ).then((reShort) => {
                     shortageList.push(reShort);
                   });
                   getInstallmentshortForTable(
                     rootName,
                     false,
-                    reSalary.docs[0]?.data().date
+                    reSalary.docs[reSalary.docs.length - 1]?.data().date
                   ).then((reShort) => {
                     shortageList.push(reShort);
                   });
                   getGasshortForTable(
                     rootName,
                     false,
-                    reSalary.docs[0]?.data().date
+                    reSalary.docs[reSalary.docs.length - 1]?.data().date
                   ).then((reShort) => {
                     shortageList.push(reShort);
                   });
@@ -1094,70 +1098,70 @@ export default function Add_Paysheet_Model({ nic }) {
                   getSaleTargetForTable(
                     rootName,
                     false,
-                    reSalary.docs[0]?.data().date
+                    reSalary.docs[reSalary.docs.length - 1]?.data().date
                   ).then((reSaleTarget) => {
                     setSaleTargetList(reSaleTarget);
                   });
                   cashTargetFunc(
                     rootName,
                     false,
-                    reSalary.docs[0]?.data().date
+                    reSalary.docs[reSalary.docs.length - 1]?.data().date
                   ).then((reCashTaregt) => {
                     setCashTarget(reCashTaregt);
                   });
                   cashTargetFuncForTable(
                     rootName,
                     false,
-                    reSalary.docs[0]?.data().date
+                    reSalary.docs[reSalary.docs.length - 1]?.data().date
                   ).then((reCashTaregt) => {
                     setCashTargetList(reCashTaregt);
                   });
                   getCashSaleFunc(
                     rootName,
                     false,
-                    reSalary.docs[0]?.data().date
+                    reSalary.docs[reSalary.docs.length - 1]?.data().date
                   ).then((reCashSale) => {
                     setCashSale(reCashSale);
                   });
                   getCashSaleFuncForTable(
                     rootName,
                     false,
-                    reSalary.docs[0]?.data().date
+                    reSalary.docs[reSalary.docs.length - 1]?.data().date
                   ).then((reCashSale) => {
                     setCashSaleList(reCashSale);
                   });
                   getExcardFunc(
                     rootName,
                     false,
-                    reSalary.docs[0]?.data().date
+                    reSalary.docs[reSalary.docs.length - 1]?.data().date
                   ).then((reEx) => {
                     setExCard(reEx);
                   });
                   getExcardFuncForTable(
                     rootName,
                     false,
-                    reSalary.docs[0]?.data().date
+                    reSalary.docs[reSalary.docs.length - 1]?.data().date
                   ).then((reEx) => {
                     setExcardslist(reEx);
                   });
                   getShortage(
                     rootName,
                     false,
-                    reSalary.docs[0]?.data().date
+                    reSalary.docs[reSalary.docs.length - 1]?.data().date
                   ).then((reShort) => {
                     setShortage((sho) => sho + parseInt(reShort));
                   });
                   getInstallmentshort(
                     rootName,
                     false,
-                    reSalary.docs[0]?.data().date
+                    reSalary.docs[reSalary.docs.length - 1]?.data().date
                   ).then((reShort) => {
                     setShortage((sho) => sho + parseInt(reShort));
                   });
                   getGasshort(
                     rootName,
                     false,
-                    reSalary.docs[0]?.data().date
+                    reSalary.docs[reSalary.docs.length - 1]?.data().date
                   ).then((reShort) => {
                     setShortage((sho) => sho + parseInt(reShort));
                   });
@@ -1166,21 +1170,21 @@ export default function Add_Paysheet_Model({ nic }) {
                   getShortageForTable(
                     rootName,
                     false,
-                    reSalary.docs[0]?.data().date
+                    reSalary.docs[reSalary.docs.length - 1]?.data().date
                   ).then((reShort) => {
                     shortageList.push(reShort);
                   });
                   getInstallmentshortForTable(
                     rootName,
                     false,
-                    reSalary.docs[0]?.data().date
+                    reSalary.docs[reSalary.docs.length - 1]?.data().date
                   ).then((reShort) => {
                     shortageList.push(reShort);
                   });
                   getGasshortForTable(
                     rootName,
                     false,
-                    reSalary.docs[0]?.data().date
+                    reSalary.docs[reSalary.docs.length - 1]?.data().date
                   ).then((reShort) => {
                     shortageList.push(reShort);
                   });
@@ -1301,9 +1305,11 @@ export default function Add_Paysheet_Model({ nic }) {
           .get()
           .then((reLoan) => {
             if (reLoan.docs.length > 0) {
-              if (reLoan.docs[0].data().balance > 0) {
-                setLoanBalance(reLoan.docs[0].data().balance);
-                setLoan(reLoan.docs[0].data().salary_cut);
+              if (reLoan.docs[reLoan.docs.length - 1].data().balance > 0) {
+                setLoanBalance(
+                  reLoan.docs[reLoan.docs.length - 1].data().balance
+                );
+                setLoan(reLoan.docs[reLoan.docs.length - 1].data().salary_cut);
               }
             }
 
@@ -1408,10 +1414,12 @@ export default function Add_Paysheet_Model({ nic }) {
                     } else {
                       if (
                         new Date(
-                          emp2.docs[0].data().date.seconds * 1000
+                          emp2.docs[emp2.docs.length - 1].data().date.seconds *
+                            1000
                         ).getFullYear() === new Date().getFullYear() &&
                         new Date(
-                          emp2.docs[0].data().date.seconds * 1000
+                          emp2.docs[emp2.docs.length - 1].data().date.seconds *
+                            1000
                         ).getMonth() === new Date().getMonth()
                       ) {
                         db.collection("targets")
@@ -1436,10 +1444,12 @@ export default function Add_Paysheet_Model({ nic }) {
                   } else {
                     if (
                       new Date(
-                        emp1.docs[0].data().date.seconds * 1000
+                        emp1.docs[emp1.docs.length - 1].data().date.seconds *
+                          1000
                       ).getFullYear() === new Date().getFullYear() &&
                       new Date(
-                        emp1.docs[0].data().date.seconds * 1000
+                        emp1.docs[emp1.docs.length - 1].data().date.seconds *
+                          1000
                       ).getMonth() === new Date().getMonth()
                     ) {
                       db.collection("targets")

@@ -63,7 +63,7 @@ export default function Purchased_Gass() {
       },
     },
   ];
-
+    // eslint-disable-next-line
     const data = [
  ["Joe James", "Test Corp", "Yonkers", "NY", "NY"],
 

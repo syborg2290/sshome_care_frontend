@@ -15,6 +15,7 @@ import db from "../../../../config/firebase.js";
 
 //icons
 import FolderOpenIcon from '@material-ui/icons/FolderOpen';
+import PostAddIcon from '@material-ui/icons/PostAdd';
 
 // styles
 import "./Dashboard.css";
@@ -39,12 +40,21 @@ export default function Dashboard() {
   const [expiredList, setExpiredList] = useState([]);
     // eslint-disable-next-line
   const [recordPnl, setRecordPnl] = useState(false);
+      // eslint-disable-next-line
+  const [expencesPnl, setExpencesPnl] = useState(false);
   let history = useHistory();
+  let history1 = useHistory();
   let history2 = useHistory();
+
 
     const RecordPnl = () => {
     setRecordPnl(true);
-    history2.push("/assistant/pages/records");
+    history1.push("/assistant/pages/records");
+  };
+
+    const ExpencesPnl = () => {
+    setExpencesPnl(true);
+    history2.push("/assistant/pages/expences");
   };
 
   useEffect(() => {
@@ -488,8 +498,18 @@ export default function Dashboard() {
   return (
     <>
     <Grid container spacing={4}>
-        <Grid item xs={10}>
+        <Grid item xs={7}>
           <p className="titl_Dash">DashBoard</p>
+        </Grid>
+         <Grid item xs={3}>
+          <Button
+            variant="contained"
+            className="btn_Expences"
+            endIcon={<PostAddIcon />}
+            onClick={ExpencesPnl}
+          >
+            Add Expences
+          </Button>
         </Grid>
         <Grid item xs={2}>
           <Button

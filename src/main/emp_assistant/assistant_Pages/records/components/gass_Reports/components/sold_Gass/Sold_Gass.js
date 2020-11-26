@@ -29,6 +29,24 @@ export default function Sold_Gass() {
           style: { fontSize: "15px", color: "black", fontWeight: "600" },
         }),
       },
+      },
+         {
+      name: "Type",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+        {
+      name: "Qty",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
     },
     {
       name: "Total",
@@ -39,33 +57,12 @@ export default function Sold_Gass() {
         }),
       },
     },
-    {
-      name: "Total Balance",
-      options: {
-        filter: false,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
+ 
 
-    {
-      name: "Action",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: {
-            fontSize: "15px",
-            color: "black",
-            fontWeight: "600",
-          },
-        }),
-      },
-    },
   ];
     // eslint-disable-next-line
     const data = [
- ["Joe James", "Test Corp", "Yonkers", "NY", "NY"],
+ ["Joe James", "Test Corp", "Test Corp", "Yonkers", "Yonkers"],
 
 ];
 

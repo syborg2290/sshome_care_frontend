@@ -72,3 +72,11 @@
   flex-direction: column !important;
   color: #65646998 !important;
 }
+
+.btn_Expences {
+  color: whitesmoke !important;
+  margin-top: 70px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  background-color: #160558e7 !important;
+}

@@ -3,7 +3,7 @@ import { Grid } from "@material-ui/core";
 import MUIDataTable from "mui-datatables";
 
 
-export default function Purchased_Gass() {
+export default function Rest_Of_Hand() {
     // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
   // eslint-disable-next-line
@@ -22,26 +22,16 @@ export default function Purchased_Gass() {
       },
     },
     {
-      name: "Weight",
+      name: "Sold_Gass",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
           style: { fontSize: "15px", color: "black", fontWeight: "600" },
         }),
       },
-      },
-      {
-      name: "Qty",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-      },
-        
+    },
     {
-      name: "Total",
+      name: "Purchased_Gass",
       options: {
         filter: false,
         setCellHeaderProps: (value) => ({
@@ -49,11 +39,21 @@ export default function Purchased_Gass() {
         }),
       },
     },
-    
+    {
+      name: "Rest_of_the_Hand",
+      options: {
+        filter: false,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+
+
   ];
     // eslint-disable-next-line
     const data = [
- ["Joe James", "Test Corp", "Test Corp", "Test Corp"],
+ ["Joe James", "Test Corp", "Yonkers", "NY"],
 
 ];
 
@@ -62,7 +62,7 @@ export default function Purchased_Gass() {
          <Grid container spacing={4}>
         <Grid item xs={12}>
           <MUIDataTable
-            title={<span className="title_Span">Daily Purchased Gass Report</span>}
+            title={<span className="title_Span">Daily Rest of the Hand Report</span>}
             className="purchsd_gass"
             sty
             data={tableData}

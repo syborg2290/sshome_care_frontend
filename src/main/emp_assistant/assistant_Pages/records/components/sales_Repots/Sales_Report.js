@@ -1,8 +1,10 @@
+    // eslint-disable-next-line
 import React, { useState, useEffect } from "react";
 
-import { Modal } from "antd";
-import { Grid, Button } from "@material-ui/core";
+
+import { Grid } from "@material-ui/core";
 import MUIDataTable from "mui-datatables";
+    // eslint-disable-next-line
 import { useHistory } from "react-router-dom";
 
 export default function Sales_Report() {
@@ -65,7 +67,7 @@ export default function Sales_Report() {
       },
     },
   ];
-
+    // eslint-disable-next-line
     const data = [
  ["Joe James", "Test Corp", "Yonkers", "NY", "NY"],
 

@@ -63,7 +63,7 @@ export default function Sold_Gass() {
       },
     },
   ];
-
+    // eslint-disable-next-line
     const data = [
  ["Joe James", "Test Corp", "Yonkers", "NY", "NY"],
 

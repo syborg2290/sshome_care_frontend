@@ -1,96 +1,128 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Grid } from "@material-ui/core";
 import MUIDataTable from "mui-datatables";
-
+import CurrencyFormat from "react-currency-format";
+import moment from "moment";
+import db from "../../../../../../../../config/firebase.js";
 
 export default function Sold_Gass() {
-    // eslint-disable-next-line
-  const [currentIndx, setCurrentIndx] = useState(0);
-  // eslint-disable-next-line
-  const [tableData, setTableData] = useState([]);
-  // eslint-disable-next-line
-    const [allData, setallData] = useState([]);
-    
-    const columns = [
-    {
-      name: "Date",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
-    {
-      name: "Weight",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-      },
-         {
-      name: "Type",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
-        {
-      name: "Qty",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
-    {
-      name: "Total",
-      options: {
-        filter: false,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
- 
+  const [allTableData, setTableData] = useState([]);
+ const columns = [
+   {
+     name: "Weight",
+     options: {
+       filter: true,
+       setCellHeaderProps: (value) => ({
+         style: { fontSize: "15px", color: "black", fontWeight: "600" },
+       }),
+     },
+   },
+   {
+     name: "Date",
+     options: {
+       filter: true,
+       setCellHeaderProps: (value) => ({
+         style: { fontSize: "15px", color: "black", fontWeight: "600" },
+       }),
+     },
+   },
+   {
+     name: "Qty",
+     options: {
+       filter: true,
+       setCellHeaderProps: (value) => ({
+         style: {
+           fontSize: "15px",
+           color: "black",
+           fontWeight: "600",
+         },
+       }),
+     },
+   },
+   {
+     name: "Unit_Price",
+     options: {
+       filter: true,
+       setCellHeaderProps: (value) => ({
+         style: {
+           fontSize: "15px",
+           color: "black",
+           fontWeight: "600",
+         },
+       }),
+     },
+   },
+   {
+     name: "Total",
+     options: {
+       filter: true,
+       setCellHeaderProps: (value) => ({
+         style: {
+           fontSize: "15px",
+           color: "black",
+           fontWeight: "600",
+         },
+       }),
+     },
+   },
+ ];
 
-  ];
-    // eslint-disable-next-line
-    const data = [
- ["Joe James", "Test Corp", "Test Corp", "Yonkers", "Yonkers"],
 
-];
+  useEffect(() => {
+    db.collection("gas_purchase_history").orderBy("date","desc").onSnapshot((snap) => {
+      var raw = [];
 
-    return (
+      snap.docs.forEach((each) => {
+        raw.push({
+          Weight: each.data().weight + " Kg",
+          Date: moment(each.data()?.date?.toDate()).format(
+            "dddd, MMMM Do YYYY"
+          ),
+          Qty: each.data().qty,
+          Unit_Price: (
+            <CurrencyFormat
+              value={each.data().price}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={" "}
+            />
+          ),
+          Total: (
+            <CurrencyFormat
+              value={parseInt(each.data().price) * parseInt(each.data().qty)}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={" "}
+            />
+          ),
+        });
+      });
 
-         <Grid container spacing={4}>
-        <Grid item xs={12}>
-          <MUIDataTable
-            title={<span className="title_Span">Daily Sold Gass Report</span>}
-            className="purchsd_gass"
-            sty
-            data={tableData}
-            columns={columns}
-            options={{
-              selectableRows: "none",
-              customToolbarSelect: () => {},
-              onRowClick: (rowData, rowMeta) => {
-                setCurrentIndx(rowMeta.dataIndex);
-              },
-              filterType: "textField",
-              download: false,
-              print: false,
-              searchPlaceholder: "Search using any column names",
-              elevation: 4,
-              sort: true,
-            }}
-          />
-        </Grid>
+      setTableData(raw);
+    });
+  }, []);
+
+  return (
+    <Grid container spacing={4}>
+      <Grid item xs={12}>
+        <MUIDataTable
+          title={<span className="title_Span">Sold History</span>}
+          className="gass_purches_history"
+          sty
+          data={allTableData}
+          columns={columns}
+          options={{
+            selectableRows: "none",
+            customToolbarSelect: () => {},
+            filterType: "textField",
+            download: false,
+            print: false,
+            searchPlaceholder: "Search using any column names",
+            elevation: 4,
+            sort: true,
+          }}
+        />
       </Grid>
-    )
+    </Grid>
+  );
 }

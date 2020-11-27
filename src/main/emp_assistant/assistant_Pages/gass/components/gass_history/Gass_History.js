@@ -91,7 +91,7 @@ export default function Gass_History() {
     <Grid container spacing={4}>
       <Grid item xs={12}>
         <MUIDataTable
-          title={<span className="title_Span">Gass History</span>}
+          title={<span className="title_Span">Purchased History</span>}
           className="gass_purches_history"
           sty
           data={tableData}

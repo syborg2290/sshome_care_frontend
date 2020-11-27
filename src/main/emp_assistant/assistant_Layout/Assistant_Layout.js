@@ -26,9 +26,9 @@ import SalaryHistory from "../assistant_Pages/salary/components/pay_history_Mode
 import PayHistoryReports from "../assistant_Pages/salary/components/pay_history_Model/components/Pay_History_Tabs";
 
 import Record from "../assistant_Pages/records/Record";
+import Expences from "../assistant_Pages/expences/Expences";
 
 // pages
-
 import Dashboard from "../assistant_Pages/dashboard/Dashboard";
 import MakeInvoiceTable from "../assistant_Pages/make_invoice/Make_Invoice_table";
 import Arries from "../assistant_Pages/arreas/Areas";
@@ -127,6 +127,11 @@ function LayoutAssistant(props) {
              <Route
               path="/assistant/pages/records"
               component={Record}
+            />
+
+             <Route
+              path="/assistant/pages/expences"
+              component={Expences}
             />
 
           </Switch>

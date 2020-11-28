@@ -18,15 +18,7 @@ export default function View_Repair() {
  
   
     const columns = [
-    {
-      name: "Date",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
+   
     {
       name: "Discription",
       options: {
@@ -59,7 +51,7 @@ export default function View_Repair() {
   ];
     // eslint-disable-next-line
     const tableData = [
-      ["Joe James","Joe James","Joe James",
+      ["Joe James","Joe James",
         <CurrencyFormat
                         value={35000}
                         displayType={"text"}

@@ -16,15 +16,7 @@ export default function Salary_Table() {
 
 
     const columns = [
-    {
-      name: "Date",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
+ 
     {
       name: "Discription",
       options: {
@@ -48,7 +40,7 @@ export default function Salary_Table() {
   ];
     // eslint-disable-next-line
     const tableData = [
-      ["20/20/20","JoeJames",
+      ["JoeJames",
         <CurrencyFormat
                         value={25000}
                         displayType={"text"}

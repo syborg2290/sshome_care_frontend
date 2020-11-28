@@ -1965,6 +1965,7 @@ export default function Expences() {
                 />
               </Grid>
                 <Grid item xs={12} sm={3}> </Grid> 
+                 <Grid item xs={12} sm={12}><hr /> </Grid>
                        <Grid item xs={12} sm={5}> 
                           <p className="txt_blnceEx">Balance(LKR) :</p>
                         </Grid>

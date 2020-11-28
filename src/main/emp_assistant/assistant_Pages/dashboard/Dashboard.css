@@ -80,3 +80,11 @@
   flex-direction: column !important;
   background-color: #160558e7 !important;
 }
+
+.btn_VehicalService {
+  color: whitesmoke !important;
+  margin-top: 70px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  background-color: #33a124 !important;
+}

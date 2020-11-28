@@ -2,29 +2,18 @@ import React, { useState } from "react";
 import { Grid } from "@material-ui/core";
 import MUIDataTable from "mui-datatables";
 import CurrencyFormat from "react-currency-format";
-import { Modal } from "antd";
-
-// components
-import ViewRepair from "./components/View_Repair";
-
-// styles
-import "./Vehical_Repair.css";
-
-// icons
-import VisibilityIcon from "@material-ui/icons/Visibility";
 
 
-export default function Vehical_Repair() {
-    const [repairViewModel, setRepairViewModel] = useState(false); // table model
+
+export default function Boc() {
+
     // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
   // eslint-disable-next-line
     const [allData, setallData] = useState([]);
-  
-  const RepairView = () => {
-    setRepairViewModel(true);
-  };
-  
+ 
+
+
     const columns = [
     {
       name: "Date",
@@ -35,7 +24,15 @@ export default function Vehical_Repair() {
         }),
       },
     },
-  
+    {
+      name: "Discription",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
     {
       name: "Cost",
       options: {
@@ -45,59 +42,28 @@ export default function Vehical_Repair() {
         }),
       },
       },
-      {
-      name: "Action",
-      options: {
-        filter: false,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-        },
+
 
   ];
     // eslint-disable-next-line
     const tableData = [
-      ["Joe James",
+      ["20/20/20","JoeJames",
         <CurrencyFormat
-                        value={35000}
+                        value={25000}
                         displayType={"text"}
                         thousandSeparator={true}
                         prefix={" "}
-        />
-        , <VisibilityIcon className="btnEdit" onClick={RepairView} />
-       
+        /> 
       ],
 
 ];
 
     return (
 <>
-       {/*Start view Model */}
-
-      <Modal
-        visible={repairViewModel}
-        footer={null}
-        className="fuel_viewmdl"
-        onCancel={() => {
-          setRepairViewModel(false);
-        }}
-      >
-        <div>
-          <div>
-            <div>
-              <ViewRepair  />
-            </div>
-          </div>
-        </div>
-      </Modal>
-
-      {/* End view Model  */}
-
          <Grid container spacing={4}>
         <Grid item xs={12}>
           <MUIDataTable
-            title={<span className="title_Span">Repair For Vehical</span>}
+            title={<span className="title_Span">BOC Bank</span>}
             className="salary_table"
             sty
             data={tableData}
@@ -117,7 +83,8 @@ export default function Vehical_Repair() {
             }}
           />
         </Grid>
-        </Grid>
+            </Grid>
+         
         </>
     )
 }

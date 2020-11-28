@@ -27,6 +27,7 @@ import PayHistoryReports from "../assistant_Pages/salary/components/pay_history_
 
 import Record from "../assistant_Pages/records/Record";
 import Expences from "../assistant_Pages/expences/Expences";
+import VehicalService from "../assistant_Pages/vehical_Service/Vehical_Service";
 
 // pages
 import Dashboard from "../assistant_Pages/dashboard/Dashboard";
@@ -132,6 +133,10 @@ function LayoutAssistant(props) {
              <Route
               path="/assistant/pages/expences"
               component={Expences}
+            />
+             <Route
+              path="/assistant/pages/vehicalSevice"
+              component={VehicalService}
             />
 
           </Switch>

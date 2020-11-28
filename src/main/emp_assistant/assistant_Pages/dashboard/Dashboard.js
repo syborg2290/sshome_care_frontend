@@ -16,6 +16,7 @@ import db from "../../../../config/firebase.js";
 //icons
 import FolderOpenIcon from '@material-ui/icons/FolderOpen';
 import PostAddIcon from '@material-ui/icons/PostAdd';
+import SettingsApplicationsIcon from '@material-ui/icons/SettingsApplications';
 
 // styles
 import "./Dashboard.css";
@@ -42,9 +43,12 @@ export default function Dashboard() {
   const [recordPnl, setRecordPnl] = useState(false);
       // eslint-disable-next-line
   const [expencesPnl, setExpencesPnl] = useState(false);
+     // eslint-disable-next-line
+  const [vehicalSevicePnl, setVehicalSevicePnl] = useState(false);
   let history = useHistory();
   let history1 = useHistory();
   let history2 = useHistory();
+  let history3 = useHistory();
 
 
     const RecordPnl = () => {
@@ -55,6 +59,11 @@ export default function Dashboard() {
     const ExpencesPnl = () => {
     setExpencesPnl(true);
     history2.push("/assistant/pages/expences");
+  };
+
+    const VehicalServicePnl = () => {
+    setVehicalSevicePnl(true);
+    history3.push("/assistant/pages/vehicalSevice");
   };
 
   useEffect(() => {
@@ -498,8 +507,18 @@ export default function Dashboard() {
   return (
     <>
     <Grid container spacing={4}>
-        <Grid item xs={7}>
+        <Grid item xs={4}>
           <p className="titl_Dash">DashBoard</p>
+        </Grid>
+         <Grid item xs={3}>
+          <Button
+            variant="contained"
+            className="btn_VehicalService"
+            endIcon={<SettingsApplicationsIcon />}
+            onClick={VehicalServicePnl}
+          >
+            Vehical Services
+          </Button>
         </Grid>
          <Grid item xs={3}>
           <Button
@@ -518,7 +537,7 @@ export default function Dashboard() {
             endIcon={<FolderOpenIcon />}
             onClick={RecordPnl}
           >
-            Records
+            Reports
           </Button>
         </Grid>
       </Grid>

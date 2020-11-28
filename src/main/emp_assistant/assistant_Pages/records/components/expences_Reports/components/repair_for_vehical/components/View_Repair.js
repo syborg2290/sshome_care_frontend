@@ -1,29 +1,21 @@
-import React, { useState } from "react";
+ // eslint-disable-next-line
+import React, { useState, useEffect } from "react";
 import { Grid } from "@material-ui/core";
 import MUIDataTable from "mui-datatables";
+    // eslint-disable-next-line
+import { useHistory } from "react-router-dom";
 import CurrencyFormat from "react-currency-format";
-import { Modal } from "antd";
-
-// components
-import ViewRepair from "./components/View_Repair";
 
 // styles
-import "./Vehical_Repair.css";
+import "./View_Repair.css";
 
-// icons
-import VisibilityIcon from "@material-ui/icons/Visibility";
+export default function View_Repair() {
 
-
-export default function Vehical_Repair() {
-    const [repairViewModel, setRepairViewModel] = useState(false); // table model
     // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
   // eslint-disable-next-line
     const [allData, setallData] = useState([]);
-  
-  const RepairView = () => {
-    setRepairViewModel(true);
-  };
+ 
   
     const columns = [
     {
@@ -35,7 +27,24 @@ export default function Vehical_Repair() {
         }),
       },
     },
-  
+    {
+      name: "Discription",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "Vehical",
+      options: {
+        filter: false,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+        },
     {
       name: "Cost",
       options: {
@@ -45,27 +54,19 @@ export default function Vehical_Repair() {
         }),
       },
       },
-      {
-      name: "Action",
-      options: {
-        filter: false,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-        },
+
 
   ];
     // eslint-disable-next-line
     const tableData = [
-      ["Joe James",
+      ["Joe James","Joe James","Joe James",
         <CurrencyFormat
                         value={35000}
                         displayType={"text"}
                         thousandSeparator={true}
                         prefix={" "}
         />
-        , <VisibilityIcon className="btnEdit" onClick={RepairView} />
+        
        
       ],
 
@@ -73,27 +74,7 @@ export default function Vehical_Repair() {
 
     return (
 <>
-       {/*Start view Model */}
-
-      <Modal
-        visible={repairViewModel}
-        footer={null}
-        className="fuel_viewmdl"
-        onCancel={() => {
-          setRepairViewModel(false);
-        }}
-      >
-        <div>
-          <div>
-            <div>
-              <ViewRepair  />
-            </div>
-          </div>
-        </div>
-      </Modal>
-
-      {/* End view Model  */}
-
+     
          <Grid container spacing={4}>
         <Grid item xs={12}>
           <MUIDataTable

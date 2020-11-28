@@ -11,6 +11,7 @@ import "./Record.css";
 import SalesReport from "./components/sales_Repots/Sales_Report";
 import GassReport from "./components/gass_Reports/Gass_Reports";
 import ExpencesReport from "./components/expences_Reports/Expences_Report";
+import VehicalServiceReport from "./components/vehical_service/Vehical_Service_Report";
 
 export default function Record() {
     return (
@@ -46,6 +47,16 @@ export default function Record() {
         </Grid>
                 
         {/* END Gass Table */}
+
+             {/*START Vehical Table */}
+
+        <Grid container spacing={4}>
+          <Grid item xs={12}>
+            <VehicalServiceReport />
+          </Grid>
+        </Grid>
+                
+        {/* END Vehical Table */}
                 
             </Container>
         

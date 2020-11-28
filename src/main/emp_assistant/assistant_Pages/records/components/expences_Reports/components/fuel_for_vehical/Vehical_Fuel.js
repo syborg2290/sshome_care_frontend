@@ -1,22 +1,33 @@
- // eslint-disable-next-line
+// eslint-disable-next-line
 import React, { useState, useEffect } from "react";
 import { Grid } from "@material-ui/core";
 import MUIDataTable from "mui-datatables";
-    // eslint-disable-next-line
-import { useHistory } from "react-router-dom";
+
+import { Modal } from "antd";
+
 import CurrencyFormat from "react-currency-format";
 // styles
 import "./Vehical_Fuel.css";
+// icons
+import VisibilityIcon from "@material-ui/icons/Visibility";
+// components
+import ViewFuel from "./components/View_Fuel";
+
+import db from "../../../../../../../../config/firebase.js";
 
 export default function Vehical_Fuel() {
-    // eslint-disable-next-line
+  const [fuelViewModel, setFuelViewModel] = useState(false); // table model
+  // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
   // eslint-disable-next-line
+  const [allData, setallData] = useState([]);
   const [tableData, setTableData] = useState([]);
-  // eslint-disable-next-line
-    const [allData, setallData] = useState([]);
-    
-    const columns = [
+
+  const FuelView = () => {
+    setFuelViewModel(true);
+  };
+
+  const columns = [
     {
       name: "Date",
       options: {
@@ -26,24 +37,7 @@ export default function Vehical_Fuel() {
         }),
       },
     },
-    {
-      name: "Discription",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
-    {
-      name: "Vehical",
-      options: {
-        filter: false,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-        },
+
     {
       name: "Cost",
       options: {
@@ -52,24 +46,74 @@ export default function Vehical_Fuel() {
           style: { fontSize: "15px", color: "black", fontWeight: "600" },
         }),
       },
-        },
-
+    },
+    {
+      name: "Action",
+      options: {
+        filter: false,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
   ];
-    // eslint-disable-next-line
-    const data = [
- ["Joe James", "Test Corp", "Yonkers", <CurrencyFormat
-                        value={35000}
-                        displayType={"text"}
-                        thousandSeparator={true}
-                        prefix={" "}
-                      />
-        ],
 
-];
+  useEffect(() => {
+    db.collection("expences")
+      .get()
+      .then((reEx) => {
+        var raw = [];
+        var rawAll = [];
+        reEx.docs.forEach((each) => {
+          rawAll.push({
+            id: each.id,
+            data: each.data(),
+          });
+          raw.push({
+            Date: new Date(each.data().date).toDateString(),
+            Cost: (
+              <CurrencyFormat
+                value={each.data().total_fuel}
+                displayType={"text"}
+                thousandSeparator={true}
+                prefix={" "}
+              />
+            ),
+            Action: <VisibilityIcon className="btnEdit" onClick={FuelView} />,
+          });
+        });
+        setallData(rawAll);
+        setTableData(raw);
+      });
+  }, []);
 
-    return (
+  return (
+    <>
+      {/*Start view Model */}
 
-         <Grid container spacing={4}>
+      <Modal
+        visible={fuelViewModel}
+        footer={null}
+        className="fuel_viewmdl"
+        onCancel={() => {
+          setFuelViewModel(false);
+        }}
+      >
+        <div>
+          <div>
+            <div>
+              <ViewFuel
+                key={allData[currentIndx]?.id}
+                obj={allData[currentIndx]?.data.vehicles_repairs}
+              />
+            </div>
+          </div>
+        </div>
+      </Modal>
+
+      {/* End view Model  */}
+
+      <Grid container spacing={4}>
         <Grid item xs={12}>
           <MUIDataTable
             title={<span className="title_Span">Fuel For Vehical</span>}
@@ -93,5 +137,6 @@ export default function Vehical_Fuel() {
           />
         </Grid>
       </Grid>
-    )
+    </>
+  );
 }

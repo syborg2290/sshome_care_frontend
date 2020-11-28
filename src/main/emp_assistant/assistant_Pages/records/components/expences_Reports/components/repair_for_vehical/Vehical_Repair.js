@@ -4,7 +4,7 @@ import { Grid } from "@material-ui/core";
 import MUIDataTable from "mui-datatables";
     // eslint-disable-next-line
 import { useHistory } from "react-router-dom";
-
+import CurrencyFormat from "react-currency-format";
 // styles
 import "./Vehical_Repair.css";
 
@@ -57,7 +57,13 @@ export default function Vehical_Repair() {
   ];
     // eslint-disable-next-line
     const data = [
- ["Joe James", "Test Corp", "Yonkers","Joe James"],
+      ["Joe James", "Test Corp", "Yonkers",
+        <CurrencyFormat
+                        value={35000}
+                        displayType={"text"}
+                        thousandSeparator={true}
+                        prefix={" "}
+                      />],
 
 ];
 

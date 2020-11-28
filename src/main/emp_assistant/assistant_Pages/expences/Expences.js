@@ -8,6 +8,9 @@ import Typography from "@material-ui/core/Typography";
 import DoneIcon from "@material-ui/icons/Done";
 import firebase from "firebase";
 import { useHistory } from "react-router-dom";
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CurrencyFormat from "react-currency-format";
 
 // styles
 import "./Expences.css";
@@ -30,7 +33,6 @@ export default function Expences() {
   const [stationary, setStationary] = useState(0);
   const [stationaryDiscription, setStationaryDiscription] = useState("");
   const [expences, setExpences] = useState(0);
-  const [expencesDiscription, setExpencesDiscription] = useState("");
   const [reload, setReload] = useState(0);
   const [reloadDiscription, setReloadDiscription] = useState("");
 
@@ -38,8 +40,8 @@ export default function Expences() {
   const [bocDiscription, setBocDiscription] = useState("");
   const [union, setUnion] = useState(0);
   const [unionDiscription, setUnionDiscription] = useState("");
-  const [sampathBnk, setSampathBnk] = useState(0);
-  const [sampathBnkDiscription, setSampathBnkDiscription] = useState("");
+  const [bankingInstallment, setBankingInstallment] = useState(0);
+  const [bankingInstallmentDiscription, setBankingInstallmentDiscription] = useState("");
   const [loans, setLoans] = useState(0);
   const [loanDiscription, setLoanDiscription] = useState("");
 
@@ -50,6 +52,9 @@ export default function Expences() {
   const [inputsSampath, setInputsSampath] = useState({});
   const [inputsMonika, setInputsMonika] = useState({});
   const [inputsSithu, setInputsSithu] = useState({});
+
+  const [salaryInstallment, setSalaryInstallment] = useState(0);
+  const [salaryInstallmentDiscription, setSalaryInstallmentDiscription] = useState("");
 
   //Start Repair Text 
 
@@ -612,53 +617,7 @@ export default function Expences() {
                   }}
                 />
                  </Grid> 
-             <Grid className="txt_Labels" item xs={12} sm={2}>
-              Expences :
-              </Grid>
-              <Grid item xs={12} sm={4}>
-                <TextField
-                  className="txtt_nic"
-                  autoComplete="expences"
-                  name="expences"
-                  variant="outlined"
-                  required
-                  fullWidth
-                  id="expences"
-                  label="Expences"
-                  autoFocus
-                  size="small"
-                  type="number"
-                  InputProps={{ inputProps: { min: 0 } }}
-                  value={expences}
-                  onChange={(e) => {
-                    if (e.target.value !== "") {
-                      setExpences(parseInt(e.target.value.trim()));
-                    }
-                  }}
-                />
-              </Grid>
-              <Grid className="txt_Labels" item xs={12} sm={2}>
-             Discription :
-              </Grid>
-              <Grid item xs={12} sm={4}>
-                <TextField
-                  className="txtt_nic"
-                  autoComplete="nic"
-                  name="nic"
-                  variant="outlined"
-                  required
-                  fullWidth
-                  id="nic"
-                  label="Discription"
-                  autoFocus
-                  size="small"
-                
-                  value={expencesDiscription}
-                  onChange={(e) => {
-                      setExpencesDiscription(e.target.value);
-                  }}
-                />
-                 </Grid> 
+            
          <Grid className="txt_Labels" item xs={12} sm={2}>
               Card & Reload :
               </Grid>
@@ -797,26 +756,23 @@ export default function Expences() {
                 />
                  </Grid>
                <Grid className="txt_Labels" item xs={12} sm={2}>
-              Sampath Bank :
+              Banking Installment :
               </Grid>
               <Grid item xs={12} sm={4}>
                 <TextField
                   className="txtt_nic"
-                  autoComplete="nic"
-                  name="nic"
                   variant="outlined"
                   required
                   fullWidth
-                  id="sampathBnk"
-                  label=" Sampath Bank"
+                  label="Installment"
                   autoFocus
                   size="small"
                   type="number"
                   InputProps={{ inputProps: { min: 0 } }}
-                  value={sampathBnk}
+                  value={bankingInstallment}
                   onChange={(e) => {
                     if (e.target.value !== "") {
-                      setSampathBnk(parseInt(e.target.value.trim()));
+                      setBankingInstallment(parseInt(e.target.value.trim()));
                     }
                   }}
                 />
@@ -833,9 +789,9 @@ export default function Expences() {
                   label="Discription"
                   autoFocus
                   size="small"
-                  value={sampathBnkDiscription}
+                  value={bankingInstallmentDiscription}
                   onChange={(e) => {
-                      setSampathBnkDiscription(e.target.value);
+                      setBankingInstallmentDiscription(e.target.value);
                   }}
                 />
                  </Grid>
@@ -1882,7 +1838,48 @@ export default function Expences() {
                         </Grid>
                            </Grid>   
                     </div>
-                  ))}
+            
+            ))}
+            <Grid className="grid_deductibles" container spacing={2}>
+            <Grid className="txt_Labels" item xs={12} sm={2}>
+              Salary Deductibles :
+              </Grid>
+              <Grid item xs={12} sm={4}>
+                <TextField
+                  className="txtt_nic"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  label="Installment"
+                  size="small"
+                  type="number"
+                 InputProps={{ inputProps: { min: 0 } }}
+                  value={salaryInstallment}
+                  onChange={(e) => {
+                    if (e.target.value !== "") {
+                      setSalaryInstallment(parseInt(e.target.value.trim()));
+                    }
+                  }}
+                />
+                 </Grid>
+                   <Grid className="txt_Labels" item xs={12} sm={2}>
+             Discription :
+              </Grid>
+              <Grid item xs={12} sm={4}>
+                <TextField
+                  className="txtt_nic"
+                  variant="outlined"
+                  required
+                   fullWidth
+                  label="Discription"
+                  size="small"
+                  value={salaryInstallmentDiscription}
+                  onChange={(e) => {
+                      setSalaryInstallmentDiscription(e.target.value);
+                  }}
+                />
+                 </Grid>
+            </Grid>
              <Grid className="brre" item xs={12} sm={12}>
               <hr />
               <br />
@@ -1901,7 +1898,6 @@ export default function Expences() {
                         key={i + 2}
                         id={i.toString()}
                         className="txt_othrtn"
-                        autoComplete="discription"
                         name="discription"
                         variant="outlined"
                         fullWidth
@@ -1914,7 +1910,6 @@ export default function Expences() {
                         key={i + 3}
                         id={i.toString()}
                         className="txt_othrtn"
-                        autoComplete="cost"
                         name="cost"
                         variant="outlined"
                         fullWidth
@@ -1937,8 +1932,60 @@ export default function Expences() {
                            </Grid>   
                     </div>
                   ))}
-            <Grid item xs={12} sm={12}><br /></Grid>     
+           <Grid className="brre" item xs={12} sm={12}>
+              <hr />
+              <br />
+            </Grid>
             
+               <Grid container spacing={2}>
+                <Grid item xs={12} sm={6}> 
+                    <Card className="expences_card">
+                    <CardContent>
+                    <Grid  container spacing={2}>
+                      <Grid className="txt_Labels" item xs={12} sm={4}>
+              Expences(LKR) :
+              </Grid>
+              <Grid item xs={12} sm={5}>
+                <TextField
+                  className="txtt_nic"
+                  name="expences"
+                  variant="outlined"
+                  required
+                  label="Total"
+                          size="small"
+                          fullWidth
+                  type="number"
+                  InputProps={{ inputProps: { min: 0 } }}
+                  value={expences}
+                  onChange={(e) => {
+                    if (e.target.value !== "") {
+                      setExpences(parseInt(e.target.value.trim()));
+                    }
+                  }}
+                />
+              </Grid>
+                <Grid item xs={12} sm={3}> </Grid> 
+                       <Grid item xs={12} sm={5}> 
+                          <p className="txt_blnceEx">Balance(LKR) :</p>
+                        </Grid>
+                        <Grid item xs={12} sm={4}>
+                        <p className="txt_blnceEx">
+                        <CurrencyFormat
+                        value={35000}
+                        displayType={"text"}
+                        thousandSeparator={true}
+                        prefix={" "}
+                          />
+                        </p>   
+                        </Grid>  
+                        <Grid item xs={12} sm={3}> </Grid>   
+                        </Grid>
+                    </CardContent>
+                 </Card>
+                </Grid>
+                <Grid item xs={12} sm={6}></Grid>
+              </Grid>
+              
              <Grid container spacing={2}>
               <Grid item xs={12} sm={2}></Grid>
               <Grid item xs={12} sm={10}>

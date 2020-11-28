@@ -4,11 +4,11 @@ import { Grid } from "@material-ui/core";
 import MUIDataTable from "mui-datatables";
     // eslint-disable-next-line
 import { useHistory } from "react-router-dom";
-
+import CurrencyFormat from "react-currency-format";
 // styles
-import "./Vehical_Repair.css";
+import "./Vehical_Fuel.css";
 
-export default function Vehical_Repair() {
+export default function Vehical_Fuel() {
     // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
   // eslint-disable-next-line
@@ -57,7 +57,13 @@ export default function Vehical_Repair() {
   ];
     // eslint-disable-next-line
     const data = [
- ["Joe James", "Test Corp", "Yonkers","Joe James"],
+ ["Joe James", "Test Corp", "Yonkers", <CurrencyFormat
+                        value={35000}
+                        displayType={"text"}
+                        thousandSeparator={true}
+                        prefix={" "}
+                      />
+        ],
 
 ];
 
@@ -66,7 +72,7 @@ export default function Vehical_Repair() {
          <Grid container spacing={4}>
         <Grid item xs={12}>
           <MUIDataTable
-            title={<span className="title_Span">Repair For Vehical</span>}
+            title={<span className="title_Span">Fuel For Vehical</span>}
             className="salary_table"
             sty
             data={tableData}

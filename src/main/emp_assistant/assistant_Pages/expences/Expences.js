@@ -8,6 +8,9 @@ import Typography from "@material-ui/core/Typography";
 import DoneIcon from "@material-ui/icons/Done";
 import firebase from "firebase";
 import { useHistory } from "react-router-dom";
+import Card from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
+import CurrencyFormat from "react-currency-format";
 
 import db from "../../../../config/firebase.js";
 
@@ -32,7 +35,6 @@ export default function Expences() {
   const [stationary, setStationary] = useState(0);
   const [stationaryDiscription, setStationaryDiscription] = useState("");
   const [expences, setExpences] = useState(0);
-  const [expencesDiscription, setExpencesDiscription] = useState("");
   const [reload, setReload] = useState(0);
   const [reloadDiscription, setReloadDiscription] = useState("");
 
@@ -40,8 +42,11 @@ export default function Expences() {
   const [bocDiscription, setBocDiscription] = useState("");
   const [union, setUnion] = useState(0);
   const [unionDiscription, setUnionDiscription] = useState("");
-  const [sampathBnk, setSampathBnk] = useState(0);
-  const [sampathBnkDiscription, setSampathBnkDiscription] = useState("");
+  const [bankingInstallment, setBankingInstallment] = useState(0);
+  const [
+    bankingInstallmentDiscription,
+    setBankingInstallmentDiscription,
+  ] = useState("");
   const [loans, setLoans] = useState(0);
   const [loanDiscription, setLoanDiscription] = useState("");
 
@@ -51,6 +56,12 @@ export default function Expences() {
   const [inputsSampath, setInputsSampath] = useState({});
   const [inputsMonika, setInputsMonika] = useState({});
   const [inputsSithu, setInputsSithu] = useState({});
+
+  const [salaryInstallment, setSalaryInstallment] = useState(0);
+  const [
+    salaryInstallmentDiscription,
+    setSalaryInstallmentDiscription,
+  ] = useState("");
 
   //Start Repair Text
 
@@ -113,6 +124,9 @@ export default function Expences() {
   //End Furl Text
 
   const [loading, setLoading] = useState(false);
+  const [previousBalance, setPreviousBalance] = useState(0);
+  const [totalFuel, setTotalFuel] = useState(0);
+  const [totalRepair, setTotalRepair] = useState(0);
 
   let history = useHistory();
 
@@ -120,6 +134,19 @@ export default function Expences() {
     window.addEventListener("offline", function (e) {
       history.push("/connection_lost");
     });
+
+    db.collection("expences")
+      .get()
+      .then((reExpe) => {
+        if (reExpe.docs.length <= 0) {
+          setPreviousBalance(0);
+        } else {
+          setPreviousBalance(
+            parseInt(reExpe.docs[reExpe.docs.length - 1].data().balance)
+          );
+        }
+      });
+
     // eslint-disable-next-line
   }, []);
 
@@ -147,10 +174,6 @@ export default function Expences() {
       description: stationaryDiscription,
       cost: stationary,
     };
-    var expencesObj = {
-      description: expencesDiscription,
-      cost: expences,
-    };
 
     var cards_reload_obj = {
       description: reloadDiscription,
@@ -163,11 +186,6 @@ export default function Expences() {
     var unionBank = {
       description: unionDiscription,
       cost: union,
-    };
-
-    var sampathBank = {
-      description: sampathBnkDiscription,
-      cost: sampathBnk,
     };
 
     var loansObj = {
@@ -238,6 +256,11 @@ export default function Expences() {
       cost: rentCost,
     };
 
+    var salaryDeductables = {
+      description: salaryInstallmentDiscription,
+      cost: salaryInstallment,
+    };
+
     await db
       .collection("expences")
       .add({
@@ -251,19 +274,22 @@ export default function Expences() {
         foods: foodsObj,
         pay_for_workers: workersObj,
         stationary: stationaryObj,
-        expences: expencesObj,
         cards_reload: cards_reload_obj,
         boc_bank: bocBankObj,
         unionBank: unionBank,
-        sampathBank: sampathBank,
         loans_for: loansObj,
         vehicles_repairs: repairObj,
+        total_repairs: totalRepair,
         vehicles_fuel: fuelObj,
+        total_fuel: totalFuel,
         rentVehi: rentObj,
         salary: inputsSalary,
         advance: inputsAdvance,
         temp: inputsTemporary,
+        salaryDeductables: salaryDeductables,
         other: inputsOther,
+        total: expences,
+        balance: expences + parseInt(previousBalance),
       })
       .then((_) => {
         setLoading(false);
@@ -457,13 +483,19 @@ export default function Expences() {
                     InputProps={{ inputProps: { min: 0 } }}
                     value={inputsSampath[i].cost}
                     onChange={(e) => {
-                      setInputsSampath({
-                        ...inputsSampath,
-                        [i]: {
-                          description: inputsSampath[i].description,
-                          cost: parseInt(e.target.value.trim()),
-                        },
-                      });
+                      if (e.target.value !== "") {
+                        setInputsSampath({
+                          ...inputsSampath,
+                          [i]: {
+                            description: inputsSampath[i].description,
+                            cost: parseInt(e.target.value.trim()),
+                          },
+                        });
+
+                        let val = parseInt(e.target.value.trim());
+
+                        setExpences((exp) => exp + val);
+                      }
                     }}
                   />
                 </Grid>
@@ -472,6 +504,7 @@ export default function Expences() {
                     key={i + 4}
                     className="sampath_icon"
                     onClick={() => {
+                      setExpences((exp) => exp - inputsSampath[i].cost);
                       delete inputsSampath[i];
                       setInputsSampath({ ...inputsSampath });
                     }}
@@ -529,13 +562,18 @@ export default function Expences() {
                     InputProps={{ inputProps: { min: 0 } }}
                     value={inputsMonika[i].cost}
                     onChange={(e) => {
-                      setInputsMonika({
-                        ...inputsMonika,
-                        [i]: {
-                          description: inputsMonika[i].description,
-                          cost: parseInt(e.target.value.trim()),
-                        },
-                      });
+                      if (e.target.value !== "") {
+                        setInputsMonika({
+                          ...inputsMonika,
+                          [i]: {
+                            description: inputsMonika[i].description,
+                            cost: parseInt(e.target.value.trim()),
+                          },
+                        });
+                        let val = parseInt(e.target.value.trim());
+
+                        setExpences((exp) => exp + val);
+                      }
                     }}
                   />
                 </Grid>
@@ -602,13 +640,18 @@ export default function Expences() {
                     InputProps={{ inputProps: { min: 0 } }}
                     value={inputsSithu[i].cost}
                     onChange={(e) => {
-                      setInputsSithu({
-                        ...inputsSithu,
-                        [i]: {
-                          description: inputsSithu[i].cost,
-                          cost: parseInt(e.target.value.trim()),
-                        },
-                      });
+                      if (e.target.value !== "") {
+                        setInputsSithu({
+                          ...inputsSithu,
+                          [i]: {
+                            description: inputsSithu[i].cost,
+                            cost: parseInt(e.target.value.trim()),
+                          },
+                        });
+                        let val = parseInt(e.target.value.trim());
+
+                        setExpences((exp) => exp + val);
+                      }
                     }}
                   />
                 </Grid>
@@ -655,6 +698,9 @@ export default function Expences() {
                 onChange={(e) => {
                   if (e.target.value !== "") {
                     setOil(parseInt(e.target.value.trim()));
+                    let val = parseInt(e.target.value.trim());
+
+                    setExpences((exp) => exp + val);
                   }
                 }}
               />
@@ -702,6 +748,9 @@ export default function Expences() {
                 onChange={(e) => {
                   if (e.target.value !== "") {
                     setShort(parseInt(e.target.value.trim()));
+                    let val = parseInt(e.target.value.trim());
+
+                    setExpences((exp) => exp + val);
                   }
                 }}
               />
@@ -748,6 +797,9 @@ export default function Expences() {
                 onChange={(e) => {
                   if (e.target.value !== "") {
                     setFood(parseInt(e.target.value.trim()));
+                    let val = parseInt(e.target.value.trim());
+
+                    setExpences((exp) => exp + val);
                   }
                 }}
               />
@@ -794,6 +846,9 @@ export default function Expences() {
                 onChange={(e) => {
                   if (e.target.value !== "") {
                     setWorker(parseInt(e.target.value.trim()));
+                    let val = parseInt(e.target.value.trim());
+
+                    setExpences((exp) => exp + val);
                   }
                 }}
               />
@@ -841,6 +896,9 @@ export default function Expences() {
                 onChange={(e) => {
                   if (e.target.value !== "") {
                     setStationary(parseInt(e.target.value.trim()));
+                    let val = parseInt(e.target.value.trim());
+
+                    setExpences((exp) => exp + val);
                   }
                 }}
               />
@@ -866,54 +924,9 @@ export default function Expences() {
                 }}
               />
             </Grid>
+
             <Grid className="txt_Labels" item xs={12} sm={2}>
-              Expences :
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <TextField
-                className="txtt_nic"
-                autoComplete="expences"
-                name="expences"
-                variant="outlined"
-                required
-                fullWidth
-                id="expences"
-                label="Expences"
-                autoFocus
-                size="small"
-                type="number"
-                InputProps={{ inputProps: { min: 0 } }}
-                value={expences}
-                onChange={(e) => {
-                  if (e.target.value !== "") {
-                    setExpences(parseInt(e.target.value.trim()));
-                  }
-                }}
-              />
-            </Grid>
-            <Grid className="txt_Labels" item xs={12} sm={2}>
-              Discription :
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <TextField
-                className="txtt_nic"
-                autoComplete="nic"
-                name="nic"
-                variant="outlined"
-                required
-                fullWidth
-                id="nic"
-                label="Discription"
-                autoFocus
-                size="small"
-                value={expencesDiscription}
-                onChange={(e) => {
-                  setExpencesDiscription(e.target.value);
-                }}
-              />
-            </Grid>
-            <Grid className="txt_Labels" item xs={12} sm={2}>
-              Cards & Reloads :
+              Card & Reload :
             </Grid>
             <Grid item xs={12} sm={4}>
               <TextField
@@ -933,6 +946,9 @@ export default function Expences() {
                 onChange={(e) => {
                   if (e.target.value !== "") {
                     setReload(parseInt(e.target.value.trim()));
+                    let val = parseInt(e.target.value.trim());
+
+                    setExpences((exp) => exp + val);
                   }
                 }}
               />
@@ -984,6 +1000,9 @@ export default function Expences() {
                 onChange={(e) => {
                   if (e.target.value !== "") {
                     setBoc(parseInt(e.target.value.trim()));
+                    let val = parseInt(e.target.value.trim());
+
+                    setExpences((exp) => exp + val);
                   }
                 }}
               />
@@ -1027,6 +1046,9 @@ export default function Expences() {
                 onChange={(e) => {
                   if (e.target.value !== "") {
                     setUnion(parseInt(e.target.value.trim()));
+                    let val = parseInt(e.target.value.trim());
+
+                    setExpences((exp) => exp + val);
                   }
                 }}
               />
@@ -1050,26 +1072,26 @@ export default function Expences() {
               />
             </Grid>
             <Grid className="txt_Labels" item xs={12} sm={2}>
-              Sampath Bank :
+              Banking Installment :
             </Grid>
             <Grid item xs={12} sm={4}>
               <TextField
                 className="txtt_nic"
-                autoComplete="nic"
-                name="nic"
                 variant="outlined"
                 required
                 fullWidth
-                id="sampathBnk"
-                label=" Sampath Bank"
+                label="Installment"
                 autoFocus
                 size="small"
                 type="number"
                 InputProps={{ inputProps: { min: 0 } }}
-                value={sampathBnk}
+                value={bankingInstallment}
                 onChange={(e) => {
                   if (e.target.value !== "") {
-                    setSampathBnk(parseInt(e.target.value.trim()));
+                    setBankingInstallment(parseInt(e.target.value.trim()));
+                    let val = parseInt(e.target.value.trim());
+
+                    setExpences((exp) => exp + val);
                   }
                 }}
               />
@@ -1086,9 +1108,9 @@ export default function Expences() {
                 label="Discription"
                 autoFocus
                 size="small"
-                value={sampathBnkDiscription}
+                value={bankingInstallmentDiscription}
                 onChange={(e) => {
-                  setSampathBnkDiscription(e.target.value);
+                  setBankingInstallmentDiscription(e.target.value);
                 }}
               />
             </Grid>
@@ -1113,6 +1135,9 @@ export default function Expences() {
                 onChange={(e) => {
                   if (e.target.value !== "") {
                     setLoans(parseInt(e.target.value.trim()));
+                    let val = parseInt(e.target.value.trim());
+
+                    setExpences((exp) => exp + val);
                   }
                 }}
               />
@@ -1194,6 +1219,10 @@ export default function Expences() {
                 onChange={(e) => {
                   if (e.target.value !== "") {
                     setFbCost(parseInt(e.target.value.trim()));
+                    let val = parseInt(e.target.value.trim());
+
+                    setExpences((exp) => exp + val);
+                    setTotalRepair((repir) => repir + val);
                   }
                 }}
               />
@@ -1246,6 +1275,10 @@ export default function Expences() {
                 onChange={(e) => {
                   if (e.target.value !== "") {
                     setFdCost(parseInt(e.target.value.trim()));
+                    let val = parseInt(e.target.value.trim());
+
+                    setExpences((exp) => exp + val);
+                    setTotalRepair((repir) => repir + val);
                   }
                 }}
               />
@@ -1298,6 +1331,10 @@ export default function Expences() {
                 onChange={(e) => {
                   if (e.target.value !== "") {
                     setBoxerCost(parseInt(e.target.value.trim()));
+                    let val = parseInt(e.target.value.trim());
+
+                    setExpences((exp) => exp + val);
+                    setTotalRepair((repir) => repir + val);
                   }
                 }}
               />
@@ -1350,6 +1387,10 @@ export default function Expences() {
                 onChange={(e) => {
                   if (e.target.value !== "") {
                     setCtBpnCost(parseInt(e.target.value.trim()));
+                    let val = parseInt(e.target.value.trim());
+
+                    setExpences((exp) => exp + val);
+                    setTotalRepair((repir) => repir + val);
                   }
                 }}
               />
@@ -1402,6 +1443,10 @@ export default function Expences() {
                 onChange={(e) => {
                   if (e.target.value !== "") {
                     setGkCost(parseInt(e.target.value.trim()));
+                    let val = parseInt(e.target.value.trim());
+
+                    setExpences((exp) => exp + val);
+                    setTotalRepair((repir) => repir + val);
                   }
                 }}
               />
@@ -1473,14 +1518,20 @@ export default function Expences() {
                     InputProps={{ inputProps: { min: 0 } }}
                     value={inputsRepair[i].cost}
                     onChange={(e) => {
-                      setInputsRepair({
-                        ...inputsRepair,
-                        [i]: {
-                          vehi_name: inputsRepair[i].vehi_name,
-                          description: inputsRepair[i].description,
-                          cost: parseInt(e.target.value.trim()),
-                        },
-                      });
+                      if (e.target.value !== "") {
+                        setInputsRepair({
+                          ...inputsRepair,
+                          [i]: {
+                            vehi_name: inputsRepair[i].vehi_name,
+                            description: inputsRepair[i].description,
+                            cost: parseInt(e.target.value.trim()),
+                          },
+                        });
+                        let val = parseInt(e.target.value.trim());
+
+                        setExpences((exp) => exp + val);
+                        setTotalRepair((repir) => repir + val);
+                      }
                     }}
                   />
                 </Grid>
@@ -1549,6 +1600,10 @@ export default function Expences() {
                 onChange={(e) => {
                   if (e.target.value !== "") {
                     setOtherRepairCost(parseInt(e.target.value.trim()));
+                    let val = parseInt(e.target.value.trim());
+
+                    setExpences((exp) => exp + val);
+                    setTotalRepair((repir) => repir + val);
                   }
                 }}
               />
@@ -1614,6 +1669,10 @@ export default function Expences() {
                 onChange={(e) => {
                   if (e.target.value !== "") {
                     setFbCostFuel(parseInt(e.target.value.trim()));
+                    let val = parseInt(e.target.value.trim());
+
+                    setExpences((exp) => exp + val);
+                    setTotalFuel((fuel) => fuel + val);
                   }
                 }}
               />
@@ -1666,6 +1725,10 @@ export default function Expences() {
                 onChange={(e) => {
                   if (e.target.value !== "") {
                     setFdCostFuel(parseInt(e.target.value.trim()));
+                    let val = parseInt(e.target.value.trim());
+
+                    setExpences((exp) => exp + val);
+                    setTotalFuel((fuel) => fuel + val);
                   }
                 }}
               />
@@ -1718,6 +1781,10 @@ export default function Expences() {
                 onChange={(e) => {
                   if (e.target.value !== "") {
                     setBoxerCostFuel(parseInt(e.target.value.trim()));
+                    let val = parseInt(e.target.value.trim());
+
+                    setExpences((exp) => exp + val);
+                    setTotalFuel((fuel) => fuel + val);
                   }
                 }}
               />
@@ -1770,6 +1837,10 @@ export default function Expences() {
                 onChange={(e) => {
                   if (e.target.value !== "") {
                     setCtBpnCostFuel(parseInt(e.target.value.trim()));
+                    let val = parseInt(e.target.value.trim());
+
+                    setExpences((exp) => exp + val);
+                    setTotalFuel((fuel) => fuel + val);
                   }
                 }}
               />
@@ -1822,6 +1893,10 @@ export default function Expences() {
                 onChange={(e) => {
                   if (e.target.value !== "") {
                     setGkCostFuel(parseInt(e.target.value.trim()));
+                    let val = parseInt(e.target.value.trim());
+
+                    setExpences((exp) => exp + val);
+                    setTotalFuel((fuel) => fuel + val);
                   }
                 }}
               />
@@ -1893,14 +1968,20 @@ export default function Expences() {
                     InputProps={{ inputProps: { min: 0 } }}
                     value={inputsFuel[i].cost}
                     onChange={(e) => {
-                      setInputsFuel({
-                        ...inputsFuel,
-                        [i]: {
-                          vehi_name: inputsFuel[i].vehi_name,
-                          description: inputsFuel[i].description,
-                          cost: parseInt(e.target.value.trim()),
-                        },
-                      });
+                      if (e.target.value !== "") {
+                        setInputsFuel({
+                          ...inputsFuel,
+                          [i]: {
+                            vehi_name: inputsFuel[i].vehi_name,
+                            description: inputsFuel[i].description,
+                            cost: parseInt(e.target.value.trim()),
+                          },
+                        });
+                        let val = parseInt(e.target.value.trim());
+
+                        setExpences((exp) => exp + val);
+                        setTotalFuel((fuel) => fuel + val);
+                      }
                     }}
                   />
                 </Grid>
@@ -1969,6 +2050,10 @@ export default function Expences() {
                 onChange={(e) => {
                   if (e.target.value !== "") {
                     setOtherFuelCost(parseInt(e.target.value.trim()));
+                    let val = parseInt(e.target.value.trim());
+
+                    setExpences((exp) => exp + val);
+                    setTotalFuel((fuel) => fuel + val);
                   }
                 }}
               />
@@ -2015,6 +2100,9 @@ export default function Expences() {
                 onChange={(e) => {
                   if (e.target.value !== "") {
                     setRentCost(parseInt(e.target.value.trim()));
+                    let val = parseInt(e.target.value.trim());
+
+                    setExpences((exp) => exp + val);
                   }
                 }}
               />
@@ -2077,13 +2165,18 @@ export default function Expences() {
                     InputProps={{ inputProps: { min: 0 } }}
                     value={inputsSalary[i].cost}
                     onChange={(e) => {
-                      setInputsSalary({
-                        ...inputsSalary,
-                        [i]: {
-                          description: inputsSalary[i].description,
-                          cost: parseInt(e.target.value.trim()),
-                        },
-                      });
+                      if (e.target.value !== "") {
+                        setInputsSalary({
+                          ...inputsSalary,
+                          [i]: {
+                            description: inputsSalary[i].description,
+                            cost: parseInt(e.target.value.trim()),
+                          },
+                        });
+                        let val = parseInt(e.target.value.trim());
+
+                        setExpences((exp) => exp + val);
+                      }
                     }}
                   />
                 </Grid>
@@ -2149,13 +2242,18 @@ export default function Expences() {
                     InputProps={{ inputProps: { min: 0 } }}
                     value={inputsAdvance[i].cost}
                     onChange={(e) => {
-                      setInputsAdvance({
-                        ...inputsAdvance,
-                        [i]: {
-                          description: inputsAdvance[i].description,
-                          cost: parseInt(e.target.value.trim()),
-                        },
-                      });
+                      if (e.target.value !== "") {
+                        setInputsAdvance({
+                          ...inputsAdvance,
+                          [i]: {
+                            description: inputsAdvance[i].description,
+                            cost: parseInt(e.target.value.trim()),
+                          },
+                        });
+                        let val = parseInt(e.target.value.trim());
+
+                        setExpences((exp) => exp + val);
+                      }
                     }}
                   />
                 </Grid>
@@ -2221,13 +2319,18 @@ export default function Expences() {
                     InputProps={{ inputProps: { min: 0 } }}
                     value={inputsTemporary[i].cost}
                     onChange={(e) => {
-                      setInputsTemporary({
-                        ...inputsTemporary,
-                        [i]: {
-                          description: inputsTemporary[i].description,
-                          cost: parseInt(e.target.value.trim()),
-                        },
-                      });
+                      if (e.target.value !== "") {
+                        setInputsTemporary({
+                          ...inputsTemporary,
+                          [i]: {
+                            description: inputsTemporary[i].description,
+                            cost: parseInt(e.target.value.trim()),
+                          },
+                        });
+                        let val = parseInt(e.target.value.trim());
+
+                        setExpences((exp) => exp + val);
+                      }
                     }}
                   />
                 </Grid>
@@ -2244,6 +2347,53 @@ export default function Expences() {
               </Grid>
             </div>
           ))}
+          <Grid className="brre" item xs={12} sm={12}>
+            <hr />
+            <br />
+          </Grid>
+          <Grid className="grid_deductibles" container spacing={2}>
+            <Grid className="txt_Labels" item xs={12} sm={2}>
+              Salary Deductibles :
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <TextField
+                className="txtt_nic"
+                variant="outlined"
+                required
+                fullWidth
+                label="Installment"
+                size="small"
+                type="number"
+                InputProps={{ inputProps: { min: 0 } }}
+                value={salaryInstallment}
+                onChange={(e) => {
+                  if (e.target.value !== "") {
+                    setSalaryInstallment(parseInt(e.target.value.trim()));
+                    let val = parseInt(e.target.value.trim());
+
+                    setExpences((exp) => exp + val);
+                  }
+                }}
+              />
+            </Grid>
+            <Grid className="txt_Labels" item xs={12} sm={2}>
+              Discription :
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <TextField
+                className="txtt_nic"
+                variant="outlined"
+                required
+                fullWidth
+                label="Discription"
+                size="small"
+                value={salaryInstallmentDiscription}
+                onChange={(e) => {
+                  setSalaryInstallmentDiscription(e.target.value);
+                }}
+              />
+            </Grid>
+          </Grid>
           <Grid className="brre" item xs={12} sm={12}>
             <hr />
             <br />
@@ -2295,13 +2445,18 @@ export default function Expences() {
                     InputProps={{ inputProps: { min: 0 } }}
                     value={inputsOther[i].cost}
                     onChange={(e) => {
-                      setInputsOther({
-                        ...inputsOther,
-                        [i]: {
-                          description: inputsOther[i].description,
-                          cost: parseInt(e.target.value.trim()),
-                        },
-                      });
+                      if (e.target.value !== "") {
+                        setInputsOther({
+                          ...inputsOther,
+                          [i]: {
+                            description: inputsOther[i].description,
+                            cost: parseInt(e.target.value.trim()),
+                          },
+                        });
+                        let val = parseInt(e.target.value.trim());
+
+                        setExpences((exp) => exp + val);
+                      }
                     }}
                   />
                 </Grid>
@@ -2320,6 +2475,61 @@ export default function Expences() {
           ))}
           <Grid item xs={12} sm={12}>
             <br />
+          </Grid>
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}>
+              <Card className="expences_card">
+                <CardContent>
+                  <Grid container spacing={2}>
+                    <Grid className="txt_Labels" item xs={12} sm={4}>
+                      Total Expences(LKR) :
+                    </Grid>
+                    <Grid item xs={12} sm={5}>
+                      <TextField
+                        className="txtt_nic"
+                        name="expences"
+                        variant="outlined"
+                        required
+                        label="Total"
+                        size="small"
+                        fullWidth
+                        type="number"
+                        InputProps={{ inputProps: { min: 0 } }}
+                        value={expences}
+                        onChange={(e) => {
+                          if (e.target.value !== "") {
+                            setExpences(parseInt(e.target.value.trim()));
+                          }
+                        }}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={3}>
+                      {" "}
+                    </Grid>
+                    <Grid item xs={12} sm={12}>
+                      <hr />{" "}
+                    </Grid>
+                    <Grid item xs={12} sm={5}>
+                      <p className="txt_blnceEx">Balance(LKR) :</p>
+                    </Grid>
+                    <Grid item xs={12} sm={4}>
+                      <p className="txt_blnceEx">
+                        <CurrencyFormat
+                          value={expences + previousBalance}
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          prefix={" "}
+                        />
+                      </p>
+                    </Grid>
+                    <Grid item xs={12} sm={3}>
+                      {" "}
+                    </Grid>
+                  </Grid>
+                </CardContent>
+              </Card>
+            </Grid>
+            <Grid item xs={12} sm={6}></Grid>
           </Grid>
 
           <Grid container spacing={2}>

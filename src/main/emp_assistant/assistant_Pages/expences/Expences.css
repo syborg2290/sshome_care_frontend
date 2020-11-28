@@ -32,6 +32,10 @@
   margin-top: -95px !important;
   padding: 35px !important;
 }
+.tt_dfltGrid {
+  margin-top: -75px !important;
+  padding: 35px !important;
+}
 
 .othr_icon {
   margin-top: 35px !important;
@@ -52,7 +56,22 @@
 .txtt_oth {
   margin-left: 23px !important;
 }
-
 .brre {
   margin-top: 10px !important;
+}
+.sampath_add {
+  background-color: rgba(11, 1, 70, 0.897) !important;
+  color: aliceblue !important;
+  margin-top: 40px !important;
+}
+.txt_sampathGrid {
+  margin-top: -98px !important;
+  padding: 35px !important;
+}
+.txt_sampath {
+  margin-top: 20px !important;
+  margin-left: -20px !important;
+}
+.sampath_icon {
+  margin-top: 35px !important;
 }

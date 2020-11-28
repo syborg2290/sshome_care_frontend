@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { TextField, Button } from "@material-ui/core";
-import { DatePicker } from "antd";
+import { DatePicker, Spin } from "antd";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
@@ -112,7 +112,6 @@ export default function Expences() {
 
   //End Furl Text
 
-  // eslint-disable-next-line
   const [loading, setLoading] = useState(false);
 
   let history = useHistory();
@@ -125,6 +124,8 @@ export default function Expences() {
   }, []);
 
   const makeExpences = async () => {
+    setLoading(true);
+
     var coco_oil = {
       description: oilDiscription,
       cost: oil,
@@ -265,7 +266,8 @@ export default function Expences() {
         other: inputsOther,
       })
       .then((_) => {
-        // window.location.reload();
+        setLoading(false);
+        window.location.reload();
       });
   };
 
@@ -2331,7 +2333,7 @@ export default function Expences() {
                 onClick={makeExpences}
                 disabled={loading || date === null ? true : false}
               >
-                Submit
+                {loading ? <Spin size="small" /> : "Submit"}
               </Button>
             </Grid>
           </Grid>

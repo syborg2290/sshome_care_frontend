@@ -53,8 +53,21 @@ export default function Vehical_Repair() {
           style: { fontSize: "15px", color: "black", fontWeight: "600" },
         }),
       },
-        },
-
+    },
+  ];
+  // eslint-disable-next-line
+  const data = [
+    [
+      "Joe James",
+      "Test Corp",
+      "Yonkers",
+      <CurrencyFormat
+        value={35000}
+        displayType={"text"}
+        thousandSeparator={true}
+        prefix={" "}
+      />,
+    ],
   ];
     // eslint-disable-next-line
     const tableData = [

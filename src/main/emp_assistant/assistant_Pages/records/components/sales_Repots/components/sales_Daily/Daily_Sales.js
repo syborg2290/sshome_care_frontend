@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import CurrencyFormat from "react-currency-format";
 import { Grid } from "@material-ui/core";
 import MUIDataTable from "mui-datatables";
+import { Spin } from "antd";
 
 // styles
 import "./Daily_Sales.css";
@@ -78,6 +79,7 @@ async function sumSameDaySales(allSales) {
 export default function Daily_Sales() {
   // eslint-disable-next-line
   const [tableData, setTableData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const columns = [
     {
@@ -162,6 +164,7 @@ export default function Daily_Sales() {
           });
         });
         setTableData(eachRE);
+        setIsLoading(false);
       });
     });
   }, []);
@@ -184,6 +187,15 @@ export default function Daily_Sales() {
             searchPlaceholder: "Search using any column names",
             elevation: 4,
             sort: true,
+            textLabels: {
+              body: {
+                noMatch: isLoading ? (
+                  <Spin className="tblSpinner" size="large" spinning="true" />
+                ) : (
+                  ""
+                ),
+              },
+            },
           }}
         />
       </Grid>

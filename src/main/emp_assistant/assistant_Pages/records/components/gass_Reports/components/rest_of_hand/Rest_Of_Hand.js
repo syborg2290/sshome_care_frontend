@@ -4,6 +4,7 @@ import MUIDataTable from "mui-datatables";
 import CurrencyFormat from "react-currency-format";
 // import moment from "moment";
 import db from "../../../../../../../../config/firebase.js";
+import { Spin } from "antd";
 
 async function getAllSold() {
   var rawSold = [];
@@ -292,6 +293,7 @@ async function getSameDateWithTotals(sold, purchased) {
 export default function Rest_Of_Hand() {
   // eslint-disable-next-line
   const [tableData, setTableData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const columns = [
     {
@@ -350,6 +352,7 @@ export default function Rest_Of_Hand() {
                     });
                   });
                   setTableData(rawTable);
+                  setIsLoading(false);
                 }
               );
             }
@@ -379,6 +382,15 @@ export default function Rest_Of_Hand() {
             searchPlaceholder: "Search using any column names",
             elevation: 4,
             sort: true,
+            textLabels: {
+              body: {
+                noMatch: isLoading ? (
+                  <Spin className="tblSpinner" size="large" spinning="true" />
+                ) : (
+                  ""
+                ),
+              },
+            },
           }}
         />
       </Grid>

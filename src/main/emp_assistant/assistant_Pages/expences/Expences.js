@@ -582,6 +582,7 @@ export default function Expences() {
                     key={i + 4}
                     className="sampath_icon"
                     onClick={() => {
+                      setExpences((exp) => exp - inputsMonika[i].cost);
                       delete inputsMonika[i];
                       setInputsMonika({ ...inputsMonika });
                     }}
@@ -660,6 +661,7 @@ export default function Expences() {
                     key={i + 4}
                     className="sampath_icon"
                     onClick={() => {
+                      setExpences((exp) => exp - inputsSithu[i].cost);
                       delete inputsSithu[i];
                       setInputsSithu({ ...inputsSithu });
                     }}
@@ -1540,6 +1542,8 @@ export default function Expences() {
                     key={i + 4}
                     className="rpr_icon"
                     onClick={() => {
+                      setExpences((exp) => exp - inputsRepair[i].cost);
+                      setTotalRepair((repir) => repir - inputsRepair[i].cost);
                       delete inputsRepair[i];
                       setInputsRepair({ ...inputsRepair });
                     }}
@@ -1990,6 +1994,8 @@ export default function Expences() {
                     key={i + 4}
                     className="rpr_icon"
                     onClick={() => {
+                      setExpences((exp) => exp - inputsFuel[i].cost);
+                      setTotalFuel((fuel) => fuel - inputsFuel[i].cost);
                       delete inputsFuel[i];
                       setInputsFuel({ ...inputsFuel });
                     }}
@@ -2185,6 +2191,7 @@ export default function Expences() {
                     key={i + 4}
                     className="othr_icon"
                     onClick={() => {
+                      setExpences((exp) => exp - inputsSalary[i].cost);
                       delete inputsSalary[i];
                       setInputsSalary({ ...inputsSalary });
                     }}
@@ -2262,6 +2269,7 @@ export default function Expences() {
                     key={i + 4}
                     className="othr_icon"
                     onClick={() => {
+                      setExpences((exp) => exp - inputsAdvance[i].cost);
                       delete inputsAdvance[i];
                       setInputsAdvance({ ...inputsAdvance });
                     }}
@@ -2339,6 +2347,7 @@ export default function Expences() {
                     key={i + 4}
                     className="othr_icon"
                     onClick={() => {
+                      setExpences((exp) => exp - inputsTemporary[i].cost);
                       delete inputsTemporary[i];
                       setInputsTemporary({ ...inputsTemporary });
                     }}
@@ -2465,6 +2474,7 @@ export default function Expences() {
                     key={i + 4}
                     className="othr_icon"
                     onClick={() => {
+                      setExpences((exp) => exp - inputsOther[i].cost);
                       delete inputsOther[i];
                       setInputsOther({ ...inputsOther });
                     }}

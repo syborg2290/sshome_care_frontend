@@ -4,6 +4,7 @@ import CurrencyFormat from "react-currency-format";
 
 import { Grid } from "@material-ui/core";
 import MUIDataTable from "mui-datatables";
+import { Spin } from "antd";
 
 // styles
 import "./All_Sales_Balance.css";
@@ -419,6 +420,7 @@ async function getAllSalesReports(sales, cash, cards, installment, docs) {
 export default function All_Sales_Balance() {
   // eslint-disable-next-line
   const [tableData, setTableData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const columns = [
     {
@@ -658,6 +660,7 @@ export default function All_Sales_Balance() {
                                 });
                               });
                               setTableData(eachRE);
+                              setIsLoading(false);
                             });
                           }
                         );
@@ -692,6 +695,15 @@ export default function All_Sales_Balance() {
             searchPlaceholder: "Search using any column names",
             elevation: 4,
             sort: true,
+            textLabels: {
+              body: {
+                noMatch: isLoading ? (
+                  <Spin className="tblSpinner" size="large" spinning="true" />
+                ) : (
+                  ""
+                ),
+              },
+            },
           }}
         />
       </Grid>

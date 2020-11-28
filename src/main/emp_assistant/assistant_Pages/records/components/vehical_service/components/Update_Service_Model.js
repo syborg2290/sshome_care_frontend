@@ -13,9 +13,9 @@ import { useHistory } from "react-router-dom";
 import Checkbox from '@material-ui/core/Checkbox';
 
 // styles
-import "./Vehical_Service_Model.css";
+import "./Update_Service_Model.css";
 
-export default function Vehical_Service_Model() {
+export default function Update_Service_Model() {
    // eslint-disable-next-lines
   const [date, setDate] = useState(null);
     // eslint-disable-next-line

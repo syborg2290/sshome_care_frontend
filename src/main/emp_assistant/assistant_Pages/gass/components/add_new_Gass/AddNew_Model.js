@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { TextField, Button } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
@@ -11,25 +11,25 @@ import "./AddNew_Model.css";
 
 import db from "../../../../../../config/firebase.js";
 import firebase from "firebase";
+import { Spin } from "antd";
 
 export default function AddNew_Model({ close_model }) {
   const [weight, setWeight] = useState(0);
   const [qty, setQty] = useState(0);
   const [price, setPrice] = useState(0);
   const [purchesPrice, setPurchesPrice] = useState(0);
-
+  const [isLoading, setIsLoading] = useState(false);
 
   let history = useHistory();
-  
 
-   useEffect(() => {
-
+  useEffect(() => {
     window.addEventListener("offline", function (e) {
       history.push("/connection_lost");
     });
   });
 
   const submit = () => {
+    setIsLoading(true);
     db.collection("gas")
       .where("weight", "==", weight.trim())
       .get()
@@ -55,7 +55,9 @@ export default function AddNew_Model({ close_model }) {
                     : parseInt(price.trim()),
                 date: firebase.firestore.FieldValue.serverTimestamp(),
               });
-              close_model();
+
+              window.location.reload();
+              setIsLoading(false);
             });
         } else {
           db.collection("gas")
@@ -72,7 +74,8 @@ export default function AddNew_Model({ close_model }) {
                 price: price,
                 date: firebase.firestore.FieldValue.serverTimestamp(),
               });
-              close_model();
+              window.location.reload();
+              setIsLoading(false);
             });
         }
       });
@@ -141,7 +144,7 @@ export default function AddNew_Model({ close_model }) {
             </Grid>
             <Grid className="txt_Labels" item xs={12} sm={3}></Grid>
             <Grid className="txt_Labels" item xs={12} sm={4}>
-             Selling Price :
+              Selling Price :
             </Grid>
             <Grid item xs={12} sm={5}>
               <TextField
@@ -166,7 +169,7 @@ export default function AddNew_Model({ close_model }) {
             </Grid>
             <Grid className="txt_Labels" item xs={12} sm={3}></Grid>
             <Grid className="txt_Labels" item xs={12} sm={4}>
-             Unit Purchased Price :
+              Unit Purchased Price :
             </Grid>
             <Grid item xs={12} sm={5}>
               <TextField
@@ -200,10 +203,17 @@ export default function AddNew_Model({ close_model }) {
                 className="btn_done"
                 onClick={submit}
                 disabled={
-                  weight.length === 0 || price.length === 0 || purchesPrice.length === 0 || qty.length === 0 || weight===0 || price===0 || qty ===0 
+                  isLoading ||
+                  weight.length === 0 ||
+                  price.length === 0 ||
+                  purchesPrice.length === 0 ||
+                  qty.length === 0 ||
+                  weight === 0 ||
+                  price === 0 ||
+                  qty === 0
                 }
               >
-                Done
+                {isLoading ? <Spin size="small" /> : "Done"}
               </Button>
             </Grid>
           </Grid>

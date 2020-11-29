@@ -24,6 +24,14 @@ export default function Vehical_Service_Report() {
   // eslint-disable-next-line
     const [allData, setallData] = useState([]);
     
+    let history = useHistory();
+
+   useEffect(() => {
+    window.addEventListener("offline", function (e) {
+      history.push("/connection_lost");
+    });
+    // eslint-disable-next-line
+  }, []);
   
   const UpdateModel = () => {
     setUpdateModel(true);

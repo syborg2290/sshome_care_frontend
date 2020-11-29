@@ -26,9 +26,7 @@ export default function Update_Service_Model() {
     const [nextService, setNextService] = useState("");
     const [other, setOther] = useState("");
     const [vehical, setVehical] = useState("");
-  
-    
-    
+
     let history = useHistory();
 
    useEffect(() => {

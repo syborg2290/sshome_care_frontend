@@ -12,6 +12,7 @@ import {
 } from "@material-ui/core";
 import CurrencyFormat from "react-currency-format";
 import { Modal, Spin, Space, DatePicker } from "antd";
+import { useHistory } from "react-router-dom";
 
 // styles
 import "./Add_Paysheet_Model.css";
@@ -905,6 +906,8 @@ export default function Add_Paysheet_Model({ nic }) {
 
   const [date, setDate] = useState(null);
 
+  let history = useHistory();
+
   const AttendanceModel = () => {
     setAttendanceModel(true);
   };
@@ -925,6 +928,9 @@ export default function Add_Paysheet_Model({ nic }) {
   };
 
   useEffect(() => {
+    //  window.addEventListener("offline", function (e) {
+    //   history.push("/connection_lost");
+    // });
     setLoading(true);
 
     db.collection("salary")

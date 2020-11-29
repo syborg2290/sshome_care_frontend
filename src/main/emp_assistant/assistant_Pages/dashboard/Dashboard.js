@@ -42,7 +42,9 @@ export default function Dashboard() {
 
   const [pendingBlackList, setPendingBlackList] = useState([]);
   const [expiredList, setExpiredList] = useState([]);
+  // eslint-disable-next-line
   const [recordPnl, setRecordPnl] = useState(false);
+  // eslint-disable-next-line
   const [expencesPnl, setExpencesPnl] = useState(false);
   let history = useHistory();
   let history1 = useHistory();

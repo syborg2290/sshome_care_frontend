@@ -150,6 +150,7 @@ export default function Update_Employe({
                 label="First Name"
                 autoFocus
                 size="small"
+                disabled={true}
                 value={fname}
                 onChange={(e) => {
                   setFirstName(e.target.value);
@@ -172,6 +173,7 @@ export default function Update_Employe({
                 label="Last Name"
                 autoFocus
                 size="small"
+                disabled={true}
                 value={lname}
                 onChange={(e) => {
                   setLastName(e.target.value);

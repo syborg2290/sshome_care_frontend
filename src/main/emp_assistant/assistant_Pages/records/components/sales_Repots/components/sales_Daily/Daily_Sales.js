@@ -17,28 +17,6 @@ import ViewDailySales from "./components/View_Daily_Sales";
 // icons
 import VisibilityIcon from "@material-ui/icons/Visibility";
 
-async function getAllSalesSaily() {
-  var sales = [];
-  await db
-    .collection("invoice")
-    .orderBy("date", "asc")
-    .get()
-    .then((custIn) => {
-      for (let i = 0; i < custIn.docs.length; i++) {
-        for (let j = 0; j < custIn.docs[i].data().items.length; j++) {
-          sales.push({
-            date: new Date(custIn.docs[i].data().date.seconds * 1000),
-            type: custIn.docs[i].data().selectedType,
-            total:
-              parseInt(custIn.docs[i].data().items[j].downpayment) *
-              parseInt(custIn.docs[i].data().items[j].qty),
-          });
-        }
-      }
-    });
-  return sales;
-}
-
 async function sumSameDaySales(allSales) {
   var reduceDup = [];
 
@@ -46,9 +24,9 @@ async function sumSameDaySales(allSales) {
     let result = reduceDup.some(
       (ob) =>
         new Date(ob.date).getFullYear() ===
-          new Date(allSales[i].date).getFullYear() &&
+        new Date(allSales[i].date).getFullYear() &&
         new Date(ob.date).getMonth() ===
-          new Date(allSales[i].date).getMonth() &&
+        new Date(allSales[i].date).getMonth() &&
         new Date(ob.date).getDate() === new Date(allSales[i].date).getDate()
     );
 
@@ -56,9 +34,9 @@ async function sumSameDaySales(allSales) {
       let indexFor = reduceDup.findIndex(
         (ob) =>
           new Date(ob.date).getFullYear() ===
-            new Date(allSales[i].date).getFullYear() &&
+          new Date(allSales[i].date).getFullYear() &&
           new Date(ob.date).getMonth() ===
-            new Date(allSales[i].date).getMonth() &&
+          new Date(allSales[i].date).getMonth() &&
           new Date(ob.date).getDate() === new Date(allSales[i].date).getDate()
       );
 
@@ -87,9 +65,9 @@ async function sumEachSameDaySales(allSales) {
     let result = reduceDup.some(
       (ob) =>
         new Date(ob.date).getFullYear() ===
-          new Date(allSales[i].date).getFullYear() &&
+        new Date(allSales[i].date).getFullYear() &&
         new Date(ob.date).getMonth() ===
-          new Date(allSales[i].date).getMonth() &&
+        new Date(allSales[i].date).getMonth() &&
         new Date(ob.date).getDate() === new Date(allSales[i].date).getDate() &&
         ob.type === allSales[i].type
     );
@@ -98,11 +76,11 @@ async function sumEachSameDaySales(allSales) {
       let indexFor = reduceDup.findIndex(
         (ob) =>
           new Date(ob.date).getFullYear() ===
-            new Date(allSales[i].date).getFullYear() &&
+          new Date(allSales[i].date).getFullYear() &&
           new Date(ob.date).getMonth() ===
-            new Date(allSales[i].date).getMonth() &&
+          new Date(allSales[i].date).getMonth() &&
           new Date(ob.date).getDate() ===
-            new Date(allSales[i].date).getDate() &&
+          new Date(allSales[i].date).getDate() &&
           ob.type === allSales[i].type
       );
 
@@ -130,7 +108,7 @@ async function dateEachSameDaySales(allSales, date) {
   for (let i = 0; i < allSales.length; i++) {
     if (
       new Date(date).getFullYear() ===
-        new Date(allSales[i].date).getFullYear() &&
+      new Date(allSales[i].date).getFullYear() &&
       new Date(date).getMonth() === new Date(allSales[i].date).getMonth() &&
       new Date(date).getDate() === new Date(allSales[i].date).getDate()
     ) {
@@ -146,15 +124,10 @@ async function dateEachSameDaySales(allSales, date) {
 }
 
 export default function Daily_Sales() {
-  const [viewModel, setViewModel] = useState(false); // View model
+  const [viewVarModel, setViewModel] = useState(false); // View model
   const [tableData, setTableData] = useState([]);
-  const [allSalesType, setAllSalesType] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [currentIndx, setCurrentIndx] = useState(0);
-
-  const ViewModel = () => {
-    setViewModel(true);
-  };
+  const [list, setList] = useState(null);
 
   const columns = [
     {
@@ -197,80 +170,83 @@ export default function Daily_Sales() {
   ];
 
   useEffect(() => {
-    getAllSalesSaily().then((reAllSales) => {
-      sumEachSameDaySales(reAllSales).then((reAllTypesSale) => {
-        let againArrayTypes = reAllTypesSale;
-        againArrayTypes.sort((a, b) => {
-          if (
-            new Date(a.date).getFullYear() === new Date(b.date).getFullYear() &&
-            new Date(a.date).getMonth() === new Date(b.date).getMonth() &&
-            new Date(a.date).getDate() === new Date(b.date).getDate()
-          ) {
-            return -1;
-          } else {
-            return 1;
+    db.collection("invoice")
+      .orderBy("date", "asc")
+      .get()
+      .then((custIn) => {
+        var sales = [];
+        var tableDataRE = [];
+
+        for (let i = 0; i < custIn.docs.length; i++) {
+          for (let j = 0; j < custIn.docs[i].data().items.length; j++) {
+            sales.push({
+              date: new Date(custIn.docs[i].data().date.seconds * 1000),
+              type: custIn.docs[i].data().selectedType,
+              total:
+                parseInt(custIn.docs[i].data().items[j].downpayment) *
+                parseInt(custIn.docs[i].data().items[j].qty),
+            });
           }
-        });
-        var raw22 = [];
-        againArrayTypes.forEach((each) => {
-          dateEachSameDaySales(againArrayTypes, new Date(each.date)).then(
-            (reE) => {
-              raw22.push(reE);
-            }
-          );
-        });
-        setAllSalesType(raw22);
-      });
-      sumSameDaySales(reAllSales).then((reSumWith) => {
-        let againArray = reSumWith;
-        let eachRE = [];
-        let totalBalance = 0;
-        againArray.sort((a, b) => {
-          if (
-            new Date(a.date).getFullYear() === new Date(b.date).getFullYear() &&
-            new Date(a.date).getMonth() === new Date(b.date).getMonth() &&
-            new Date(a.date).getDate() === new Date(b.date).getDate()
-          ) {
-            return -1;
-          } else {
-            return 1;
+        }
+
+        sumSameDaySales(sales).then((reSumWith) => {
+          let totalBalance = 0;
+
+          for (let n = 0; n < reSumWith.length; n++) {
+            totalBalance = totalBalance + parseInt(reSumWith[n].total);
+
+            tableDataRE.push({
+              Date: new Date(reSumWith[n].date).toDateString(),
+              Total: (
+                <CurrencyFormat
+                  value={reSumWith[n].total}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+              Total_Balance: (
+                <CurrencyFormat
+                  value={totalBalance}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+              Action: (
+                <div>
+                  <VisibilityIcon
+                    className="btnEdit"
+                    onClick={(e) =>
+                      viewModel(new Date(reSumWith[n].date), sales)
+                    }
+                  />
+                </div>
+              ),
+            });
           }
+
+          setTableData(tableDataRE);
         });
-        againArray.forEach((each) => {
-          totalBalance = totalBalance + parseInt(each.total);
-          eachRE.push({
-            Date: new Date(each.date).toDateString(),
-            Total: (
-              <CurrencyFormat
-                value={each.total}
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={" "}
-              />
-            ),
-            Total_Balance: (
-              <CurrencyFormat
-                value={totalBalance}
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={" "}
-              />
-            ),
-            Action: <VisibilityIcon className="btnEdit" onClick={ViewModel} />,
-          });
-        });
-        setTableData(eachRE);
         setIsLoading(false);
       });
-    });
   }, []);
+
+  const viewModel = async (date, sales) => {
+    sumEachSameDaySales(sales).then((reAllTypesSale) => {
+      dateEachSameDaySales(reAllTypesSale, date).then((reList) => {
+        setList(reList);
+        setViewModel(true);
+      });
+    });
+  };
 
   return (
     <>
       {/*Start View Model */}
 
       <Modal
-        visible={viewModel}
+        visible={viewVarModel}
         footer={null}
         className="model_viw"
         onCancel={() => {
@@ -280,7 +256,10 @@ export default function Daily_Sales() {
         <div>
           <div>
             <div>
-              <ViewDailySales list={allSalesType[currentIndx]} />
+              <ViewDailySales
+                // key={new Date(allSalesType[currentIndx]?.date).getTime()}
+                list={list}
+              />
             </div>
           </div>
         </div>
@@ -298,23 +277,20 @@ export default function Daily_Sales() {
             columns={columns}
             options={{
               selectableRows: "none",
-              customToolbarSelect: () => {},
+              customToolbarSelect: () => { },
               filterType: "textField",
               download: false,
               print: false,
               searchPlaceholder: "Search using any column names",
               elevation: 4,
-              onRowClick: (rowData, rowMeta) => {
-                setCurrentIndx(rowMeta.dataIndex);
-              },
-              sort: true,
+              sort: false,
               textLabels: {
                 body: {
                   noMatch: isLoading ? (
                     <Spin className="tblSpinner" size="large" spinning="true" />
                   ) : (
-                    ""
-                  ),
+                      ""
+                    ),
                 },
               },
             }}

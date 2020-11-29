@@ -19,7 +19,7 @@ import db from "../../../../../../../config/firebase.js";
 
 export default function Update_Service_Model({ data, id }) {
   // eslint-disable-next-lines
-  const [date, setDate] = useState(data.date);
+  const [date, setDate] = useState(null);
   // eslint-disable-next-line
   const [loading, setLoading] = useState(false);
 
@@ -48,7 +48,7 @@ export default function Update_Service_Model({ data, id }) {
     db.collection("vehi_service")
       .doc(id)
       .update({
-        date: date,
+        date: date === null ? data.date : date,
         serviceKm: serviceKm,
         serviceCenter: serviceCenter,
         nextService: nextService,
@@ -269,9 +269,7 @@ export default function Update_Service_Model({ data, id }) {
                 className="btn_vehicalService"
                 endIcon={<DoneIcon />}
                 onClick={updateService}
-                disabled={
-                  loading || date === null || vehical === "" ? true : false
-                }
+                disabled={loading || vehical === "" ? true : false}
               >
                 {loading ? <Spin size="small" /> : "Submit"}
               </Button>

@@ -504,6 +504,7 @@ export default function Expences() {
                     value={inputsSampath[i].cost}
                     onChange={(e) => {
                       if (e.target.value !== "") {
+                        let previousCost = inputsSampath[i].cost;
                         setInputsSampath({
                           ...inputsSampath,
                           [i]: {
@@ -513,7 +514,8 @@ export default function Expences() {
                         });
 
                         let val = parseInt(e.target.value.trim());
-
+                        setExpences((exp) => exp - previousCost);
+                        setTotalSampath((exp) => exp - previousCost);
                         setExpences((exp) => exp + val);
                         setTotalSampath((exp) => exp + val);
                       }
@@ -525,8 +527,9 @@ export default function Expences() {
                     key={i + 4}
                     className="sampath_icon"
                     onClick={() => {
-                      setExpences((exp) => exp - inputsSampath[i].cost);
-                      setTotalSampath((exp) => exp - inputsSampath[i].cost);
+                      let costExp = inputsSampath[i].cost;
+                      setExpences((exp) => exp - costExp);
+                      setTotalSampath((exp) => exp - costExp);
                       delete inputsSampath[i];
                       setInputsSampath({ ...inputsSampath });
                     }}
@@ -585,6 +588,7 @@ export default function Expences() {
                     value={inputsMonika[i].cost}
                     onChange={(e) => {
                       if (e.target.value !== "") {
+                        let previousCost = inputsMonika[i].cost;
                         setInputsMonika({
                           ...inputsMonika,
                           [i]: {
@@ -593,7 +597,8 @@ export default function Expences() {
                           },
                         });
                         let val = parseInt(e.target.value.trim());
-
+                        setExpences((exp) => exp - previousCost);
+                        setTotalMonika((exp) => exp - previousCost);
                         setExpences((exp) => exp + val);
                         setTotalMonika((exp) => exp + val);
                       }
@@ -605,8 +610,9 @@ export default function Expences() {
                     key={i + 4}
                     className="sampath_icon"
                     onClick={() => {
-                      setExpences((exp) => exp - inputsMonika[i].cost);
-                      setTotalMonika((exp) => exp - inputsMonika[i].cost);
+                      let cost = inputsMonika[i].cost;
+                      setExpences((exp) => exp - cost);
+                      setTotalMonika((exp) => exp - cost);
                       delete inputsMonika[i];
                       setInputsMonika({ ...inputsMonika });
                     }}
@@ -666,6 +672,7 @@ export default function Expences() {
                     value={inputsSithu[i].cost}
                     onChange={(e) => {
                       if (e.target.value !== "") {
+                        let costPrev = inputsSithu[i].cost;
                         setInputsSithu({
                           ...inputsSithu,
                           [i]: {
@@ -674,7 +681,8 @@ export default function Expences() {
                           },
                         });
                         let val = parseInt(e.target.value.trim());
-
+                        setExpences((exp) => exp - costPrev);
+                        setTotalSithu((exp) => exp - costPrev);
                         setExpences((exp) => exp + val);
                         setTotalSithu((exp) => exp + val);
                       }
@@ -686,8 +694,9 @@ export default function Expences() {
                     key={i + 4}
                     className="sampath_icon"
                     onClick={() => {
-                      setExpences((exp) => exp - inputsSithu[i].cost);
-                      setTotalSithu((exp) => exp - inputsSithu[i].cost);
+                      let cost = inputsSithu[i].cost;
+                      setExpences((exp) => exp - cost);
+                      setTotalSithu((exp) => exp - cost);
                       delete inputsSithu[i];
                       setInputsSithu({ ...inputsSithu });
                     }}
@@ -725,9 +734,10 @@ export default function Expences() {
                 value={oil}
                 onChange={(e) => {
                   if (e.target.value !== "") {
+                    let prev = oil;
                     setOil(parseInt(e.target.value.trim()));
                     let val = parseInt(e.target.value.trim());
-
+                    setExpences((exp) => exp - prev);
                     setExpences((exp) => exp + val);
                   }
                 }}
@@ -775,9 +785,10 @@ export default function Expences() {
                 value={short}
                 onChange={(e) => {
                   if (e.target.value !== "") {
+                    let prev = short;
                     setShort(parseInt(e.target.value.trim()));
                     let val = parseInt(e.target.value.trim());
-
+                    setExpences((exp) => exp - prev);
                     setExpences((exp) => exp + val);
                   }
                 }}
@@ -824,9 +835,10 @@ export default function Expences() {
                 value={food}
                 onChange={(e) => {
                   if (e.target.value !== "") {
+                    let prevFood = food;
                     setFood(parseInt(e.target.value.trim()));
                     let val = parseInt(e.target.value.trim());
-
+                    setExpences((exp) => exp - prevFood);
                     setExpences((exp) => exp + val);
                   }
                 }}
@@ -873,9 +885,10 @@ export default function Expences() {
                 value={worker}
                 onChange={(e) => {
                   if (e.target.value !== "") {
+                    let prev = worker;
                     setWorker(parseInt(e.target.value.trim()));
                     let val = parseInt(e.target.value.trim());
-
+                    setExpences((exp) => exp - prev);
                     setExpences((exp) => exp + val);
                   }
                 }}
@@ -923,9 +936,10 @@ export default function Expences() {
                 value={stationary}
                 onChange={(e) => {
                   if (e.target.value !== "") {
+                    let prev = stationary;
                     setStationary(parseInt(e.target.value.trim()));
                     let val = parseInt(e.target.value.trim());
-
+                    setExpences((exp) => exp - prev);
                     setExpences((exp) => exp + val);
                   }
                 }}
@@ -973,9 +987,10 @@ export default function Expences() {
                 value={reload}
                 onChange={(e) => {
                   if (e.target.value !== "") {
+                    let prev = reload;
                     setReload(parseInt(e.target.value.trim()));
                     let val = parseInt(e.target.value.trim());
-
+                    setExpences((exp) => exp - prev);
                     setExpences((exp) => exp + val);
                   }
                 }}
@@ -1027,9 +1042,10 @@ export default function Expences() {
                 value={boc}
                 onChange={(e) => {
                   if (e.target.value !== "") {
+                    let prev = boc;
                     setBoc(parseInt(e.target.value.trim()));
                     let val = parseInt(e.target.value.trim());
-
+                    setExpences((exp) => exp - prev);
                     setExpences((exp) => exp + val);
                   }
                 }}
@@ -1073,9 +1089,10 @@ export default function Expences() {
                 value={union}
                 onChange={(e) => {
                   if (e.target.value !== "") {
+                    let prev = union;
                     setUnion(parseInt(e.target.value.trim()));
                     let val = parseInt(e.target.value.trim());
-
+                    setExpences((exp) => exp - prev);
                     setExpences((exp) => exp + val);
                   }
                 }}
@@ -1116,9 +1133,10 @@ export default function Expences() {
                 value={bankingInstallment}
                 onChange={(e) => {
                   if (e.target.value !== "") {
+                    let prev = bankingInstallment;
                     setBankingInstallment(parseInt(e.target.value.trim()));
                     let val = parseInt(e.target.value.trim());
-
+                    setExpences((exp) => exp - prev);
                     setExpences((exp) => exp + val);
                   }
                 }}
@@ -1162,9 +1180,10 @@ export default function Expences() {
                 value={loans}
                 onChange={(e) => {
                   if (e.target.value !== "") {
+                    let prev = loans;
                     setLoans(parseInt(e.target.value.trim()));
                     let val = parseInt(e.target.value.trim());
-
+                    setExpences((exp) => exp - prev);
                     setExpences((exp) => exp + val);
                   }
                 }}
@@ -1246,9 +1265,11 @@ export default function Expences() {
                 value={fbCost}
                 onChange={(e) => {
                   if (e.target.value !== "") {
+                    let prev = fbCost;
                     setFbCost(parseInt(e.target.value.trim()));
                     let val = parseInt(e.target.value.trim());
-
+                    setExpences((exp) => exp - prev);
+                    setTotalRepair((repir) => repir - prev);
                     setExpences((exp) => exp + val);
                     setTotalRepair((repir) => repir + val);
                   }
@@ -1302,9 +1323,11 @@ export default function Expences() {
                 value={fdCost}
                 onChange={(e) => {
                   if (e.target.value !== "") {
+                    let prev = fdCost;
                     setFdCost(parseInt(e.target.value.trim()));
                     let val = parseInt(e.target.value.trim());
-
+                    setExpences((exp) => exp - prev);
+                    setTotalRepair((repir) => repir - prev);
                     setExpences((exp) => exp + val);
                     setTotalRepair((repir) => repir + val);
                   }
@@ -1358,9 +1381,11 @@ export default function Expences() {
                 value={boxerCost}
                 onChange={(e) => {
                   if (e.target.value !== "") {
+                    let prev = boxerCost;
                     setBoxerCost(parseInt(e.target.value.trim()));
                     let val = parseInt(e.target.value.trim());
-
+                    setExpences((exp) => exp - prev);
+                    setTotalRepair((repir) => repir - prev);
                     setExpences((exp) => exp + val);
                     setTotalRepair((repir) => repir + val);
                   }
@@ -1414,9 +1439,11 @@ export default function Expences() {
                 value={ctBpnCost}
                 onChange={(e) => {
                   if (e.target.value !== "") {
+                    let prev = ctBpnCost;
                     setCtBpnCost(parseInt(e.target.value.trim()));
                     let val = parseInt(e.target.value.trim());
-
+                    setExpences((exp) => exp - prev);
+                    setTotalRepair((repir) => repir - prev);
                     setExpences((exp) => exp + val);
                     setTotalRepair((repir) => repir + val);
                   }
@@ -1470,9 +1497,11 @@ export default function Expences() {
                 value={gkCost}
                 onChange={(e) => {
                   if (e.target.value !== "") {
+                    let prev = gkCost;
                     setGkCost(parseInt(e.target.value.trim()));
                     let val = parseInt(e.target.value.trim());
-
+                    setExpences((exp) => exp - prev);
+                    setTotalRepair((repir) => repir - prev);
                     setExpences((exp) => exp + val);
                     setTotalRepair((repir) => repir + val);
                   }
@@ -1547,6 +1576,7 @@ export default function Expences() {
                     value={inputsRepair[i].cost}
                     onChange={(e) => {
                       if (e.target.value !== "") {
+                        let prev = inputsRepair[i].cost;
                         setInputsRepair({
                           ...inputsRepair,
                           [i]: {
@@ -1556,7 +1586,8 @@ export default function Expences() {
                           },
                         });
                         let val = parseInt(e.target.value.trim());
-
+                        setExpences((exp) => exp - prev);
+                        setTotalRepair((repir) => repir - prev);
                         setExpences((exp) => exp + val);
                         setTotalRepair((repir) => repir + val);
                       }
@@ -1568,8 +1599,9 @@ export default function Expences() {
                     key={i + 4}
                     className="rpr_icon"
                     onClick={() => {
-                      setExpences((exp) => exp - inputsRepair[i].cost);
-                      setTotalRepair((repir) => repir - inputsRepair[i].cost);
+                      let cost = inputsRepair[i].cost;
+                      setExpences((exp) => exp - cost);
+                      setTotalRepair((repir) => repir - cost);
                       delete inputsRepair[i];
                       setInputsRepair({ ...inputsRepair });
                     }}
@@ -1629,9 +1661,11 @@ export default function Expences() {
                 value={otherRepairCost}
                 onChange={(e) => {
                   if (e.target.value !== "") {
+                    let prev = otherRepairCost;
                     setOtherRepairCost(parseInt(e.target.value.trim()));
                     let val = parseInt(e.target.value.trim());
-
+                    setExpences((exp) => exp - prev);
+                    setTotalRepair((repir) => repir - prev);
                     setExpences((exp) => exp + val);
                     setTotalRepair((repir) => repir + val);
                   }
@@ -1698,9 +1732,11 @@ export default function Expences() {
                 value={fbCostFuel}
                 onChange={(e) => {
                   if (e.target.value !== "") {
+                    let prev = fbCostFuel;
                     setFbCostFuel(parseInt(e.target.value.trim()));
                     let val = parseInt(e.target.value.trim());
-
+                    setExpences((exp) => exp - prev);
+                    setTotalFuel((fuel) => fuel - prev);
                     setExpences((exp) => exp + val);
                     setTotalFuel((fuel) => fuel + val);
                   }
@@ -1754,8 +1790,12 @@ export default function Expences() {
                 value={fdCostFuel}
                 onChange={(e) => {
                   if (e.target.value !== "") {
+                    let prev = fdCostFuel;
                     setFdCostFuel(parseInt(e.target.value.trim()));
                     let val = parseInt(e.target.value.trim());
+
+                    setExpences((exp) => exp - prev);
+                    setTotalFuel((fuel) => fuel - prev);
 
                     setExpences((exp) => exp + val);
                     setTotalFuel((fuel) => fuel + val);
@@ -1810,8 +1850,12 @@ export default function Expences() {
                 value={boxerCostFuel}
                 onChange={(e) => {
                   if (e.target.value !== "") {
+                    let prev = boxerCostFuel;
                     setBoxerCostFuel(parseInt(e.target.value.trim()));
                     let val = parseInt(e.target.value.trim());
+
+                    setExpences((exp) => exp - prev);
+                    setTotalFuel((fuel) => fuel - prev);
 
                     setExpences((exp) => exp + val);
                     setTotalFuel((fuel) => fuel + val);
@@ -1866,8 +1910,13 @@ export default function Expences() {
                 value={ctBpnCostFuel}
                 onChange={(e) => {
                   if (e.target.value !== "") {
+                    let prev = ctBpnCostFuel;
+
                     setCtBpnCostFuel(parseInt(e.target.value.trim()));
                     let val = parseInt(e.target.value.trim());
+
+                    setExpences((exp) => exp - prev);
+                    setTotalFuel((fuel) => fuel - prev);
 
                     setExpences((exp) => exp + val);
                     setTotalFuel((fuel) => fuel + val);
@@ -1922,8 +1971,13 @@ export default function Expences() {
                 value={gkCostFuel}
                 onChange={(e) => {
                   if (e.target.value !== "") {
+                    let prev = gkCostFuel;
+
                     setGkCostFuel(parseInt(e.target.value.trim()));
                     let val = parseInt(e.target.value.trim());
+
+                    setExpences((exp) => exp - prev);
+                    setTotalFuel((fuel) => fuel - prev);
 
                     setExpences((exp) => exp + val);
                     setTotalFuel((fuel) => fuel + val);
@@ -1999,6 +2053,8 @@ export default function Expences() {
                     value={inputsFuel[i].cost}
                     onChange={(e) => {
                       if (e.target.value !== "") {
+                        let prev = inputsFuel[i].cost;
+
                         setInputsFuel({
                           ...inputsFuel,
                           [i]: {
@@ -2008,6 +2064,9 @@ export default function Expences() {
                           },
                         });
                         let val = parseInt(e.target.value.trim());
+
+                        setExpences((exp) => exp - prev);
+                        setTotalFuel((fuel) => fuel - prev);
 
                         setExpences((exp) => exp + val);
                         setTotalFuel((fuel) => fuel + val);
@@ -2020,8 +2079,9 @@ export default function Expences() {
                     key={i + 4}
                     className="rpr_icon"
                     onClick={() => {
-                      setExpences((exp) => exp - inputsFuel[i].cost);
-                      setTotalFuel((fuel) => fuel - inputsFuel[i].cost);
+                      let cost = inputsFuel[i].cost;
+                      setExpences((exp) => exp - cost);
+                      setTotalFuel((fuel) => fuel - cost);
                       delete inputsFuel[i];
                       setInputsFuel({ ...inputsFuel });
                     }}
@@ -2081,8 +2141,12 @@ export default function Expences() {
                 value={otherFuelCost}
                 onChange={(e) => {
                   if (e.target.value !== "") {
+                    let prev = otherFuelCost;
                     setOtherFuelCost(parseInt(e.target.value.trim()));
                     let val = parseInt(e.target.value.trim());
+                    
+                    setExpences((exp) => exp - prev);
+                    setTotalFuel((fuel) => fuel - prev);
 
                     setExpences((exp) => exp + val);
                     setTotalFuel((fuel) => fuel + val);
@@ -2131,8 +2195,13 @@ export default function Expences() {
                 value={rentCost}
                 onChange={(e) => {
                   if (e.target.value !== "") {
+                    
+                    let prev = rentCost;
+                    
                     setRentCost(parseInt(e.target.value.trim()));
                     let val = parseInt(e.target.value.trim());
+                    
+                    setExpences((exp) => exp - prev);
 
                     setExpences((exp) => exp + val);
                   }
@@ -2198,6 +2267,9 @@ export default function Expences() {
                     value={inputsSalary[i].cost}
                     onChange={(e) => {
                       if (e.target.value !== "") {
+                        
+                        let prev = inputsSalary[i].cost;
+                        
                         setInputsSalary({
                           ...inputsSalary,
                           [i]: {
@@ -2206,6 +2278,9 @@ export default function Expences() {
                           },
                         });
                         let val = parseInt(e.target.value.trim());
+                        
+                        setExpences((exp) => exp - prev);
+                        setTotalSalary((exp) => exp - prev);
 
                         setExpences((exp) => exp + val);
                         setTotalSalary((exp) => exp + val);
@@ -2218,8 +2293,9 @@ export default function Expences() {
                     key={i + 4}
                     className="othr_icon"
                     onClick={() => {
-                      setExpences((exp) => exp - inputsSalary[i].cost);
-                      setTotalSalary((exp) => exp - inputsSalary[i].cost);
+                      let cost = inputsSalary[i].cost;
+                      setExpences((exp) => exp - cost);
+                      setTotalSalary((exp) => exp - cost);
                       delete inputsSalary[i];
                       setInputsSalary({ ...inputsSalary });
                     }}
@@ -2278,6 +2354,9 @@ export default function Expences() {
                     value={inputsAdvance[i].cost}
                     onChange={(e) => {
                       if (e.target.value !== "") {
+                        
+                        let prev = inputsAdvance[i].cost;
+                        
                         setInputsAdvance({
                           ...inputsAdvance,
                           [i]: {
@@ -2286,6 +2365,9 @@ export default function Expences() {
                           },
                         });
                         let val = parseInt(e.target.value.trim());
+                        
+                         setExpences((exp) => exp - prev);
+                         setTotalAdvance((exp) => exp - prev);
 
                         setExpences((exp) => exp + val);
                         setTotalAdvance((exp) => exp + val);
@@ -2298,8 +2380,9 @@ export default function Expences() {
                     key={i + 4}
                     className="othr_icon"
                     onClick={() => {
-                      setExpences((exp) => exp - inputsAdvance[i].cost);
-                      setTotalAdvance((exp) => exp - inputsAdvance[i].cost);
+                      let cost = inputsAdvance[i].cost;
+                      setExpences((exp) => exp - cost);
+                      setTotalAdvance((exp) => exp - cost);
                       delete inputsAdvance[i];
                       setInputsAdvance({ ...inputsAdvance });
                     }}
@@ -2358,6 +2441,9 @@ export default function Expences() {
                     value={inputsTemporary[i].cost}
                     onChange={(e) => {
                       if (e.target.value !== "") {
+                        
+                        let prev = inputsTemporary[i].cost;
+                        
                         setInputsTemporary({
                           ...inputsTemporary,
                           [i]: {
@@ -2366,6 +2452,9 @@ export default function Expences() {
                           },
                         });
                         let val = parseInt(e.target.value.trim());
+                        
+                         setExpences((exp) => exp - prev);
+                         setTotalTemp((exp) => exp - prev);
 
                         setExpences((exp) => exp + val);
                         setTotalTemp((exp) => exp + val);
@@ -2378,8 +2467,9 @@ export default function Expences() {
                     key={i + 4}
                     className="othr_icon"
                     onClick={() => {
-                      setExpences((exp) => exp - inputsTemporary[i].cost);
-                      setTotalTemp((exp) => exp - inputsTemporary[i].cost);
+                      let cost = inputsTemporary[i].cost;
+                      setExpences((exp) => exp - cost);
+                      setTotalTemp((exp) => exp - cost);
                       delete inputsTemporary[i];
                       setInputsTemporary({ ...inputsTemporary });
                     }}
@@ -2409,8 +2499,11 @@ export default function Expences() {
                 value={salaryInstallment}
                 onChange={(e) => {
                   if (e.target.value !== "") {
+                    let prev = salaryInstallment;
                     setSalaryInstallment(parseInt(e.target.value.trim()));
                     let val = parseInt(e.target.value.trim());
+                    
+                    setExpences((exp) => exp - prev);
 
                     setExpences((exp) => exp + val);
                   }
@@ -2487,6 +2580,9 @@ export default function Expences() {
                     value={inputsOther[i].cost}
                     onChange={(e) => {
                       if (e.target.value !== "") {
+                        
+                        let prev = inputsOther[i].cost;
+                        
                         setInputsOther({
                           ...inputsOther,
                           [i]: {
@@ -2495,6 +2591,9 @@ export default function Expences() {
                           },
                         });
                         let val = parseInt(e.target.value.trim());
+                        
+                        setExpences((exp) => exp - prev);
+                        setTotalOthers((exp) => exp - prev);
 
                         setExpences((exp) => exp + val);
                         setTotalOthers((exp) => exp + val);
@@ -2507,8 +2606,9 @@ export default function Expences() {
                     key={i + 4}
                     className="othr_icon"
                     onClick={() => {
-                      setExpences((exp) => exp - inputsOther[i].cost);
-                      setTotalOthers((exp) => exp - inputsOther[i].cost);
+                      let cost = inputsOther[i].cost;
+                      setExpences((exp) => exp - cost);
+                      setTotalOthers((exp) => exp - cost);
                       delete inputsOther[i];
                       setInputsOther({ ...inputsOther });
                     }}

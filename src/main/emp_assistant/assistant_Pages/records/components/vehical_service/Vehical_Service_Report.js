@@ -143,40 +143,40 @@ export default function Vehical_Service_Report() {
             data: reEach.data(),
           });
           raw.push({
-            Date: new Date(reEach.date.seconds * 1000).toDateString(),
-            Vehicle: reEach.vehical,
+            Date: new Date(reEach.data().date.seconds * 1000).toDateString(),
+            Vehicle: reEach.data().vehical,
             Oil: (
               <Checkbox
-                checked={reEach.oil}
+                checked={reEach.data().oil}
                 color="primary"
                 inputProps={{ "aria-label": "secondary checkbox" }}
               />
             ),
             Diesel_Filters: (
               <Checkbox
-                checked={reEach.dieselFilter}
+                checked={reEach.data().dieselFilter}
                 color="primary"
                 inputProps={{ "aria-label": "secondary checkbox" }}
               />
             ),
             Oil_Filters: (
               <Checkbox
-                checked={reEach.oilFilter}
+                checked={reEach.data().oilFilter}
                 color="primary"
                 inputProps={{ "aria-label": "secondary checkbox" }}
               />
             ),
-            ServiceKm_Total: reEach.serviceKm,
-            Service_Center: reEach.serviceCenter,
-            Next_ServiceKm: reEach.nextService,
+            ServiceKm_Total: reEach.data().serviceKm,
+            Service_Center: reEach.data().serviceCenter,
+            Next_ServiceKm: reEach.data().nextService,
             Diesel: (
               <Checkbox
-                checked={reEach.diesel}
+                checked={reEach.data().diesel}
                 color="primary"
                 inputProps={{ "aria-label": "secondary checkbox" }}
               />
             ),
-            Other: reEach.other,
+            Other: reEach.data().other,
             Action: <EditIcon className="btnEdit" onClick={UpdateModel} />,
           });
         });

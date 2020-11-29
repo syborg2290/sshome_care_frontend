@@ -19,67 +19,63 @@ import Reload from "./reload_table/Reload";
 import Stationary from "./Stationary/Stationary";
 import Other from "./other_table/Other";
 
-
-
 // styles
 import "./Other_Expences_Model.css";
 
-export default function Other_Expences_Model() {
-
-  
-    return (
-        <>
-        <div>
-        <RentTable />
-            </div>
-             <div>
-        <SalaryTable />
-            </div>
-                  <div>
-        <Advance />
-            </div>
-                     <div>
-        <Temporary />
-        </div>
-             <div>
-        <Short />
-            </div>
-                <div>
-        <SalaryInstallment />
-            </div>
-               <div>
-        <PayforWorkers />
-            </div>
-             <div>
-        <Boc />
-            </div>
-        <div>
-        <UnionBank />
-            </div>
-            <div>
-        <Bankinginstallment />
-            </div>
-                <div>
-        <Loan />
-            </div>
-                   <div>
-        <Sampath />
-            </div>
-                   <div>
-        <Monika />
-            </div>
-                     <div>
-        <Sithu />
-            </div>
-                            <div>
-        <Reload />
-            </div>
-                         <div>
-        <Stationary />
-            </div>
-                         <div>
-        <Other />
-        </div>
-        </>
-    )
+export default function Other_Expences_Model({ data }) {
+  return (
+    <>
+      <div>
+        <RentTable obj={data.rentVehi} />
+      </div>
+      <div>
+        <SalaryTable obj={data.salary} />
+      </div>
+      <div>
+        <Advance obj={data.advance} />
+      </div>
+      <div>
+        <Temporary obj={data.temp} />
+      </div>
+      <div>
+        <Short obj={data.shorts} />
+      </div>
+      <div>
+        <SalaryInstallment obj={data.salaryDeductables} />
+      </div>
+      <div>
+        <PayforWorkers obj={data.pay_for_workers} />
+      </div>
+      <div>
+        <Boc obj={data.boc_bank} />
+      </div>
+      <div>
+        <UnionBank obj={data.unionBank} />
+      </div>
+      <div>
+        <Bankinginstallment obj={data.bankingInstall} />
+      </div>
+      <div>
+        <Loan obj={data.loans_for} />
+      </div>
+      <div>
+        <Sampath obj={data.mr_sampath} />
+      </div>
+      <div>
+        <Monika obj={data.mrs_monika} />
+      </div>
+      <div>
+        <Sithu obj={data.sithu} />
+      </div>
+      <div>
+        <Reload obj={data.cards_reload} />
+      </div>
+      <div>
+        <Stationary obj={data.stationary} />
+      </div>
+      <div>
+        <Other obj={data.other} />
+      </div>
+    </>
+  );
 }

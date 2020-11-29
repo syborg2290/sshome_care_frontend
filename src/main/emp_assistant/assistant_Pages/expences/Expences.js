@@ -127,6 +127,13 @@ export default function Expences() {
   const [previousBalance, setPreviousBalance] = useState(0);
   const [totalFuel, setTotalFuel] = useState(0);
   const [totalRepair, setTotalRepair] = useState(0);
+  const [totalSampath, setTotalSampath] = useState(0);
+  const [totalMonika, setTotalMonika] = useState(0);
+  const [totalSithu, setTotalSithu] = useState(0);
+  const [totalSalary, setTotalSalary] = useState(0);
+  const [totalAdvance, setTotalAdvance] = useState(0);
+  const [totalTemp, setTotalTemp] = useState(0);
+  const [totalOthers, setTotalOthers] = useState(0);
 
   let history = useHistory();
 
@@ -261,6 +268,11 @@ export default function Expences() {
       cost: salaryInstallment,
     };
 
+    var bankingInstall = {
+      description: bankingInstallmentDiscription,
+      cost: bankingInstallment,
+    };
+
     await db
       .collection("expences")
       .add({
@@ -277,6 +289,7 @@ export default function Expences() {
         cards_reload: cards_reload_obj,
         boc_bank: bocBankObj,
         unionBank: unionBank,
+        bankingInstall: bankingInstall,
         loans_for: loansObj,
         vehicles_repairs: repairObj,
         total_repairs: totalRepair,
@@ -288,6 +301,13 @@ export default function Expences() {
         temp: inputsTemporary,
         salaryDeductables: salaryDeductables,
         other: inputsOther,
+        totalSampath: totalSampath,
+        totalMonika: totalMonika,
+        totalSithu: totalSithu,
+        totalSalary: totalSalary,
+        totalAdvance: totalAdvance,
+        totalTemp: totalTemp,
+        totalOthers: totalOthers,
         total: expences,
         balance: expences + parseInt(previousBalance),
       })
@@ -495,6 +515,7 @@ export default function Expences() {
                         let val = parseInt(e.target.value.trim());
 
                         setExpences((exp) => exp + val);
+                        setTotalSampath((exp) => exp + val);
                       }
                     }}
                   />
@@ -505,6 +526,7 @@ export default function Expences() {
                     className="sampath_icon"
                     onClick={() => {
                       setExpences((exp) => exp - inputsSampath[i].cost);
+                      setTotalSampath((exp) => exp - inputsSampath[i].cost);
                       delete inputsSampath[i];
                       setInputsSampath({ ...inputsSampath });
                     }}
@@ -573,6 +595,7 @@ export default function Expences() {
                         let val = parseInt(e.target.value.trim());
 
                         setExpences((exp) => exp + val);
+                        setTotalMonika((exp) => exp + val);
                       }
                     }}
                   />
@@ -583,6 +606,7 @@ export default function Expences() {
                     className="sampath_icon"
                     onClick={() => {
                       setExpences((exp) => exp - inputsMonika[i].cost);
+                      setTotalMonika((exp) => exp - inputsMonika[i].cost);
                       delete inputsMonika[i];
                       setInputsMonika({ ...inputsMonika });
                     }}
@@ -652,6 +676,7 @@ export default function Expences() {
                         let val = parseInt(e.target.value.trim());
 
                         setExpences((exp) => exp + val);
+                        setTotalSithu((exp) => exp + val);
                       }
                     }}
                   />
@@ -662,6 +687,7 @@ export default function Expences() {
                     className="sampath_icon"
                     onClick={() => {
                       setExpences((exp) => exp - inputsSithu[i].cost);
+                      setTotalSithu((exp) => exp - inputsSithu[i].cost);
                       delete inputsSithu[i];
                       setInputsSithu({ ...inputsSithu });
                     }}
@@ -2182,6 +2208,7 @@ export default function Expences() {
                         let val = parseInt(e.target.value.trim());
 
                         setExpences((exp) => exp + val);
+                        setTotalSalary((exp) => exp + val);
                       }
                     }}
                   />
@@ -2192,6 +2219,7 @@ export default function Expences() {
                     className="othr_icon"
                     onClick={() => {
                       setExpences((exp) => exp - inputsSalary[i].cost);
+                      setTotalSalary((exp) => exp - inputsSalary[i].cost);
                       delete inputsSalary[i];
                       setInputsSalary({ ...inputsSalary });
                     }}
@@ -2260,6 +2288,7 @@ export default function Expences() {
                         let val = parseInt(e.target.value.trim());
 
                         setExpences((exp) => exp + val);
+                        setTotalAdvance((exp) => exp + val);
                       }
                     }}
                   />
@@ -2270,6 +2299,7 @@ export default function Expences() {
                     className="othr_icon"
                     onClick={() => {
                       setExpences((exp) => exp - inputsAdvance[i].cost);
+                      setTotalAdvance((exp) => exp - inputsAdvance[i].cost);
                       delete inputsAdvance[i];
                       setInputsAdvance({ ...inputsAdvance });
                     }}
@@ -2338,6 +2368,7 @@ export default function Expences() {
                         let val = parseInt(e.target.value.trim());
 
                         setExpences((exp) => exp + val);
+                        setTotalTemp((exp) => exp + val);
                       }
                     }}
                   />
@@ -2348,6 +2379,7 @@ export default function Expences() {
                     className="othr_icon"
                     onClick={() => {
                       setExpences((exp) => exp - inputsTemporary[i].cost);
+                      setTotalTemp((exp) => exp - inputsTemporary[i].cost);
                       delete inputsTemporary[i];
                       setInputsTemporary({ ...inputsTemporary });
                     }}
@@ -2465,6 +2497,7 @@ export default function Expences() {
                         let val = parseInt(e.target.value.trim());
 
                         setExpences((exp) => exp + val);
+                        setTotalOthers((exp) => exp + val);
                       }
                     }}
                   />
@@ -2475,6 +2508,7 @@ export default function Expences() {
                     className="othr_icon"
                     onClick={() => {
                       setExpences((exp) => exp - inputsOther[i].cost);
+                      setTotalOthers((exp) => exp - inputsOther[i].cost);
                       delete inputsOther[i];
                       setInputsOther({ ...inputsOther });
                     }}

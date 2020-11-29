@@ -1,21 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Grid } from "@material-ui/core";
 import MUIDataTable from "mui-datatables";
 import CurrencyFormat from "react-currency-format";
 
-
-
-export default function Sampath() {
-
-    // eslint-disable-next-line
-  const [currentIndx, setCurrentIndx] = useState(0);
+export default function Sampath({ obj }) {
   // eslint-disable-next-line
-    const [allData, setallData] = useState([]);
- 
+  const [allData, setallData] = useState([]);
 
-
-    const columns = [
-  
+  const columns = [
     {
       name: "Discription",
       options: {
@@ -33,39 +25,40 @@ export default function Sampath() {
           style: { fontSize: "15px", color: "black", fontWeight: "600" },
         }),
       },
-      },
-
-
+    },
   ];
-    // eslint-disable-next-line
-    const tableData = [
-      ["JoeJames",
-        <CurrencyFormat
-                        value={25000}
-                        displayType={"text"}
-                        thousandSeparator={true}
-                        prefix={" "}
-        /> 
-      ],
 
-];
+  useEffect(() => {
+    var raw = [];
+    for (var i = 0; i < Object.keys(obj).length; i++) {
+      raw.push({
+        Discription: obj[i].description,
+        Cost: (
+          <CurrencyFormat
+            value={obj[i].cost}
+            displayType={"text"}
+            thousandSeparator={true}
+            prefix={" "}
+          />
+        ),
+      });
+    }
+    setallData(raw);
+  }, [obj]);
 
-    return (
-<>
-         <Grid container spacing={4}>
+  return (
+    <>
+      <Grid container spacing={4}>
         <Grid item xs={12}>
           <MUIDataTable
             title={<span className="title_Span">MR.Sampath</span>}
             className="salary_table"
             sty
-            data={tableData}
+            data={allData}
             columns={columns}
             options={{
               selectableRows: "none",
               customToolbarSelect: () => {},
-              onRowClick: (rowData, rowMeta) => {
-                setCurrentIndx(rowMeta.dataIndex);
-              },
               filterType: "textField",
               download: false,
               print: false,
@@ -75,8 +68,7 @@ export default function Sampath() {
             }}
           />
         </Grid>
-            </Grid>
-         
-        </>
-    )
+      </Grid>
+    </>
+  );
 }

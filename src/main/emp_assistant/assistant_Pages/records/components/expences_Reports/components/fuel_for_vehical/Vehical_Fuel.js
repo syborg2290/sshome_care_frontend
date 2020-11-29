@@ -1,11 +1,10 @@
- // eslint-disable-next-line
+// eslint-disable-next-line
 import React, { useState, useEffect } from "react";
 import { Grid } from "@material-ui/core";
 import MUIDataTable from "mui-datatables";
 
 import { Modal } from "antd";
-    // eslint-disable-next-line
-import { useHistory } from "react-router-dom";
+
 import CurrencyFormat from "react-currency-format";
 // styles
 import "./Vehical_Fuel.css";
@@ -14,19 +13,21 @@ import VisibilityIcon from "@material-ui/icons/Visibility";
 // components
 import ViewFuel from "./components/View_Fuel";
 
+import db from "../../../../../../../../config/firebase.js";
+
 export default function Vehical_Fuel() {
   const [fuelViewModel, setFuelViewModel] = useState(false); // table model
-    // eslint-disable-next-line
-  const [currentIndx, setCurrentIndx] = useState(0);
-
   // eslint-disable-next-line
-    const [allData, setallData] = useState([]);
-  
-   const FuelView = () => {
+  const [currentIndx, setCurrentIndx] = useState(0);
+  // eslint-disable-next-line
+  const [allData, setallData] = useState([]);
+  const [tableData, setTableData] = useState([]);
+
+  const FuelView = () => {
     setFuelViewModel(true);
   };
-  
-    const columns = [
+
+  const columns = [
     {
       name: "Date",
       options: {
@@ -36,7 +37,8 @@ export default function Vehical_Fuel() {
         }),
       },
     },
-       {
+
+    {
       name: "Cost",
       options: {
         filter: false,
@@ -44,8 +46,8 @@ export default function Vehical_Fuel() {
           style: { fontSize: "15px", color: "black", fontWeight: "600" },
         }),
       },
-      },
-     {
+    },
+    {
       name: "Action",
       options: {
         filter: false,
@@ -53,25 +55,41 @@ export default function Vehical_Fuel() {
           style: { fontSize: "15px", color: "black", fontWeight: "600" },
         }),
       },
-        },
-
+    },
   ];
-    // eslint-disable-next-line
-    const tableData = [
- ["Joe James", <CurrencyFormat
-                        value={35000}
-                        displayType={"text"}
-                        thousandSeparator={true}
-                        prefix={" "}
-      />
-   ,<VisibilityIcon className="btnEdit" onClick={FuelView} />
-        ],
 
-];
+  useEffect(() => {
+    db.collection("expences")
+      .get()
+      .then((reEx) => {
+        var raw = [];
+        var rawAll = [];
+        reEx.docs.forEach((each) => {
+          rawAll.push({
+            id: each.id,
+            data: each.data(),
+          });
+          raw.push({
+            Date: new Date(each.data().date.seconds * 1000).toDateString(),
+            Cost: (
+              <CurrencyFormat
+                value={each.data().total_fuel}
+                displayType={"text"}
+                thousandSeparator={true}
+                prefix={" "}
+              />
+            ),
+            Action: <VisibilityIcon className="btnEdit" onClick={FuelView} />,
+          });
+        });
+        setallData(rawAll);
+        setTableData(raw);
+      });
+  }, []);
 
-    return (
-<>
-       {/*Start view Model */}
+  return (
+    <>
+      {/*Start view Model */}
 
       <Modal
         visible={fuelViewModel}
@@ -84,7 +102,10 @@ export default function Vehical_Fuel() {
         <div>
           <div>
             <div>
-              <ViewFuel  />
+              <ViewFuel
+                key={allData[currentIndx]?.id}
+                obj={allData[currentIndx]?.data.vehicles_repairs}
+              />
             </div>
           </div>
         </div>
@@ -92,7 +113,7 @@ export default function Vehical_Fuel() {
 
       {/* End view Model  */}
 
-         <Grid container spacing={4}>
+      <Grid container spacing={4}>
         <Grid item xs={12}>
           <MUIDataTable
             title={<span className="title_Span">Fuel For Vehical</span>}
@@ -115,7 +136,7 @@ export default function Vehical_Fuel() {
             }}
           />
         </Grid>
-        </Grid>
-        </>
-    )
+      </Grid>
+    </>
+  );
 }

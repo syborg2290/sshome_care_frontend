@@ -1,10 +1,8 @@
- // eslint-disable-next-line
 import React, { useState, useEffect } from "react";
 import { Grid } from "@material-ui/core";
 import MUIDataTable from "mui-datatables";
-    // eslint-disable-next-line
-import { useHistory } from "react-router-dom";
 import { Modal } from "antd";
+import Checkbox from "@material-ui/core/Checkbox";
 
 // icons
 import EditIcon from "@material-ui/icons/Edit";
@@ -15,24 +13,33 @@ import "./Vehical_Service_Report.css";
 // components
 import UpdateServiceModel from "./components/Update_Service_Model";
 
-export default function Vehical_Service_Report() {
+import db from "../../../../../../config/firebase.js";
 
+export default function Vehical_Service_Report() {
   const [updateModel, setUpdateModel] = useState(false); // Update model
 
-    // eslint-disable-next-line
+  // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
   // eslint-disable-next-line
-    const [allData, setallData] = useState([]);
-    
-  
+  const [allData, setallData] = useState([]);
+  const [tableData, setTableData] = useState([]);
+
   const UpdateModel = () => {
     setUpdateModel(true);
   };
-  
-  
-    const columns = [
+
+  const columns = [
     {
       name: "Date",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "Vehicle",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -57,7 +64,7 @@ export default function Vehical_Service_Report() {
           style: { fontSize: "15px", color: "black", fontWeight: "600" },
         }),
       },
-        },
+    },
     {
       name: "Oil_Filters",
       options: {
@@ -66,8 +73,8 @@ export default function Vehical_Service_Report() {
           style: { fontSize: "15px", color: "black", fontWeight: "600" },
         }),
       },
-      },
-     {
+    },
+    {
       name: "ServiceKm_Total",
       options: {
         filter: false,
@@ -75,8 +82,8 @@ export default function Vehical_Service_Report() {
           style: { fontSize: "15px", color: "black", fontWeight: "600" },
         }),
       },
-      },
-     {
+    },
+    {
       name: "Service_Center",
       options: {
         filter: false,
@@ -84,8 +91,8 @@ export default function Vehical_Service_Report() {
           style: { fontSize: "15px", color: "black", fontWeight: "600" },
         }),
       },
-      },
-     {
+    },
+    {
       name: "Next_ServiceKm",
       options: {
         filter: false,
@@ -93,8 +100,8 @@ export default function Vehical_Service_Report() {
           style: { fontSize: "15px", color: "black", fontWeight: "600" },
         }),
       },
-      },
-     {
+    },
+    {
       name: "Diesel",
       options: {
         filter: false,
@@ -102,8 +109,8 @@ export default function Vehical_Service_Report() {
           style: { fontSize: "15px", color: "black", fontWeight: "600" },
         }),
       },
-      },
-     {
+    },
+    {
       name: "Other",
       options: {
         filter: false,
@@ -111,8 +118,8 @@ export default function Vehical_Service_Report() {
           style: { fontSize: "15px", color: "black", fontWeight: "600" },
         }),
       },
-      },
-     {
+    },
+    {
       name: "Action",
       options: {
         filter: false,
@@ -120,22 +127,67 @@ export default function Vehical_Service_Report() {
           style: { fontSize: "15px", color: "black", fontWeight: "600" },
         }),
       },
-        },
-
+    },
   ];
-    // eslint-disable-next-line
-    const tableData = [
-      ["Test Corp", "Yonkers", "Joe James", "Test Corp", "Yonkers", "Joe James", "Test Corp", "Yonkers", "Yonkers"
-        , <EditIcon className="btnEdit"
-          onClick={UpdateModel}
-        />
-       ],
 
-];
+  useEffect(() => {
+    db.collection("vehi_service")
+      .get()
+      .then((reGet) => {
+        var raw = [];
+        var rawAll = [];
+
+        reGet.docs.forEach((reEach) => {
+          rawAll.push({
+            id: reEach.id,
+            data: reEach.data(),
+          });
+          raw.push({
+            Date: new Date(reEach.date.seconds * 1000).toDateString(),
+            Vehicle: reEach.vehical,
+            Oil: (
+              <Checkbox
+                checked={reEach.oil}
+                color="primary"
+                inputProps={{ "aria-label": "secondary checkbox" }}
+              />
+            ),
+            Diesel_Filters: (
+              <Checkbox
+                checked={reEach.dieselFilter}
+                color="primary"
+                inputProps={{ "aria-label": "secondary checkbox" }}
+              />
+            ),
+            Oil_Filters: (
+              <Checkbox
+                checked={reEach.oilFilter}
+                color="primary"
+                inputProps={{ "aria-label": "secondary checkbox" }}
+              />
+            ),
+            ServiceKm_Total: reEach.serviceKm,
+            Service_Center: reEach.serviceCenter,
+            Next_ServiceKm: reEach.nextService,
+            Diesel: (
+              <Checkbox
+                checked={reEach.diesel}
+                color="primary"
+                inputProps={{ "aria-label": "secondary checkbox" }}
+              />
+            ),
+            Other: reEach.other,
+            Action: <EditIcon className="btnEdit" onClick={UpdateModel} />,
+          });
+        });
+        setTableData(raw);
+        setallData(rawAll);
+      });
+  }, []);
 
   return (
-     <>
-       {/*Start Update Model */}
+    <>
+      {/*Start Update Model */}
 
       <Modal
         visible={updateModel}
@@ -148,15 +200,19 @@ export default function Vehical_Service_Report() {
         <div>
           <div>
             <div>
-              <UpdateServiceModel />
+              <UpdateServiceModel
+                data={allData[currentIndx]?.data}
+                id={allData[currentIndx]?.id}
+                key={allData[currentIndx]?.id}
+              />
             </div>
           </div>
         </div>
       </Modal>
 
       {/* End Update Model  */}
-      
-         <Grid container spacing={4}>
+
+      <Grid container spacing={4}>
         <Grid item xs={12}>
           <MUIDataTable
             title={<span className="title_Span">Vehical Service</span>}
@@ -181,5 +237,5 @@ export default function Vehical_Service_Report() {
         </Grid>
       </Grid>
     </>
-    )
+  );
 }

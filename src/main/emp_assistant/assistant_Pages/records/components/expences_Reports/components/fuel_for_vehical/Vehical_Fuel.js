@@ -70,7 +70,7 @@ export default function Vehical_Fuel() {
             data: each.data(),
           });
           raw.push({
-            Date: new Date(each.data().date).toDateString(),
+            Date: new Date(each.data().date.seconds * 1000).toDateString(),
             Cost: (
               <CurrencyFormat
                 value={each.data().total_fuel}

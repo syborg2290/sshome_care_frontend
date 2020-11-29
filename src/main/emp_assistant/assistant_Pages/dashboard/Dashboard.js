@@ -15,9 +15,9 @@ import firebase from "firebase";
 import db from "../../../../config/firebase.js";
 
 //icons
-import FolderOpenIcon from '@material-ui/icons/FolderOpen';
-import PostAddIcon from '@material-ui/icons/PostAdd';
-import SettingsApplicationsIcon from '@material-ui/icons/SettingsApplications';
+import FolderOpenIcon from "@material-ui/icons/FolderOpen";
+import PostAddIcon from "@material-ui/icons/PostAdd";
+import SettingsApplicationsIcon from "@material-ui/icons/SettingsApplications";
 
 // styles
 import "./Dashboard.css";
@@ -37,17 +37,17 @@ function daysCountOfMonth(month, year) {
 }
 
 export default function Dashboard() {
-
   const [vehicalServiceModel, setVehicalServiceModel] = useState(false); //  model service Vehical
 
   const [pendingBlackList, setPendingBlackList] = useState([]);
   const [expiredList, setExpiredList] = useState([]);
+  // eslint-disable-next-line
   const [recordPnl, setRecordPnl] = useState(false);
+  // eslint-disable-next-line
   const [expencesPnl, setExpencesPnl] = useState(false);
   let history = useHistory();
   let history1 = useHistory();
   let history2 = useHistory();
-
 
   const VehicalServiceModel = () => {
     setVehicalServiceModel(true);
@@ -62,8 +62,6 @@ export default function Dashboard() {
     setExpencesPnl(true);
     history2.push("/assistant/pages/expences");
   };
-
-
 
   useEffect(() => {
     window.addEventListener("offline", function (e) {
@@ -154,26 +152,26 @@ export default function Dashboard() {
                       daysCountInitial - 7 <= 7
                         ? 0
                         : (daysCountInitial - 7) / 7 < 2
-                          ? 99
-                          : (daysCountInitial - 7) / 7 > 2 &&
-                            (daysCountInitial - 7) / 7 < 3
-                            ? 198
-                            : (daysCountInitial - 7) / 7 > 3 &&
-                              (daysCountInitial - 7) / 7 < 4
-                              ? 297
-                              : (daysCountInitial - 7) / 7 > 4 &&
-                                (daysCountInitial - 7) / 7 < 5
-                                ? 396
-                                : (daysCountInitial - 7) / 7 > 5 &&
-                                  (daysCountInitial - 7) / 7 < 6
-                                  ? 495
-                                  : (daysCountInitial - 7) / 7 > 6 &&
-                                    (daysCountInitial - 7) / 7 < 7
-                                    ? 594
-                                    : (daysCountInitial - 7) / 7 > 7 &&
-                                      (daysCountInitial - 7) / 7 < 8
-                                      ? 693
-                                      : 693,
+                        ? 99
+                        : (daysCountInitial - 7) / 7 > 2 &&
+                          (daysCountInitial - 7) / 7 < 3
+                        ? 198
+                        : (daysCountInitial - 7) / 7 > 3 &&
+                          (daysCountInitial - 7) / 7 < 4
+                        ? 297
+                        : (daysCountInitial - 7) / 7 > 4 &&
+                          (daysCountInitial - 7) / 7 < 5
+                        ? 396
+                        : (daysCountInitial - 7) / 7 > 5 &&
+                          (daysCountInitial - 7) / 7 < 6
+                        ? 495
+                        : (daysCountInitial - 7) / 7 > 6 &&
+                          (daysCountInitial - 7) / 7 < 7
+                        ? 594
+                        : (daysCountInitial - 7) / 7 > 7 &&
+                          (daysCountInitial - 7) / 7 < 8
+                        ? 693
+                        : 693,
                   });
               } else {
                 db.collection("arrears").add({
@@ -191,26 +189,26 @@ export default function Dashboard() {
                     daysCountInitial - 7 <= 7
                       ? 0
                       : (daysCountInitial - 7) / 7 < 2
-                        ? 99
-                        : (daysCountInitial - 7) / 7 > 2 &&
-                          (daysCountInitial - 7) / 7 < 3
-                          ? 198
-                          : (daysCountInitial - 7) / 7 > 3 &&
-                            (daysCountInitial - 7) / 7 < 4
-                            ? 297
-                            : (daysCountInitial - 7) / 7 > 4 &&
-                              (daysCountInitial - 7) / 7 < 5
-                              ? 396
-                              : (daysCountInitial - 7) / 7 > 5 &&
-                                (daysCountInitial - 7) / 7 < 6
-                                ? 495
-                                : (daysCountInitial - 7) / 7 > 6 &&
-                                  (daysCountInitial - 7) / 7 < 7
-                                  ? 594
-                                  : (daysCountInitial - 7) / 7 > 7 &&
-                                    (daysCountInitial - 7) / 7 < 8
-                                    ? 693
-                                    : 693,
+                      ? 99
+                      : (daysCountInitial - 7) / 7 > 2 &&
+                        (daysCountInitial - 7) / 7 < 3
+                      ? 198
+                      : (daysCountInitial - 7) / 7 > 3 &&
+                        (daysCountInitial - 7) / 7 < 4
+                      ? 297
+                      : (daysCountInitial - 7) / 7 > 4 &&
+                        (daysCountInitial - 7) / 7 < 5
+                      ? 396
+                      : (daysCountInitial - 7) / 7 > 5 &&
+                        (daysCountInitial - 7) / 7 < 6
+                      ? 495
+                      : (daysCountInitial - 7) / 7 > 6 &&
+                        (daysCountInitial - 7) / 7 < 7
+                      ? 594
+                      : (daysCountInitial - 7) / 7 > 7 &&
+                        (daysCountInitial - 7) / 7 < 8
+                      ? 693
+                      : 693,
                   date: firebase.firestore.FieldValue.serverTimestamp(),
                 });
               }
@@ -245,26 +243,26 @@ export default function Dashboard() {
                       daysCountInitial - 14 <= 7
                         ? 0
                         : (daysCountInitial - 14) / 7 < 2
-                          ? 99
-                          : (daysCountInitial - 14) / 7 > 2 &&
-                            (daysCountInitial - 14) / 7 < 3
-                            ? 198
-                            : (daysCountInitial - 14) / 7 > 3 &&
-                              (daysCountInitial - 14) / 7 < 4
-                              ? 297
-                              : (daysCountInitial - 14) / 7 > 4 &&
-                                (daysCountInitial - 14) / 7 < 5
-                                ? 396
-                                : (daysCountInitial - 14) / 7 > 5 &&
-                                  (daysCountInitial - 14) / 7 < 6
-                                  ? 495
-                                  : (daysCountInitial - 14) / 7 > 6 &&
-                                    (daysCountInitial - 14) / 7 < 7
-                                    ? 594
-                                    : (daysCountInitial - 14) / 7 > 7 &&
-                                      (daysCountInitial - 14) / 7 < 8
-                                      ? 693
-                                      : 693,
+                        ? 99
+                        : (daysCountInitial - 14) / 7 > 2 &&
+                          (daysCountInitial - 14) / 7 < 3
+                        ? 198
+                        : (daysCountInitial - 14) / 7 > 3 &&
+                          (daysCountInitial - 14) / 7 < 4
+                        ? 297
+                        : (daysCountInitial - 14) / 7 > 4 &&
+                          (daysCountInitial - 14) / 7 < 5
+                        ? 396
+                        : (daysCountInitial - 14) / 7 > 5 &&
+                          (daysCountInitial - 14) / 7 < 6
+                        ? 495
+                        : (daysCountInitial - 14) / 7 > 6 &&
+                          (daysCountInitial - 14) / 7 < 7
+                        ? 594
+                        : (daysCountInitial - 14) / 7 > 7 &&
+                          (daysCountInitial - 14) / 7 < 8
+                        ? 693
+                        : 693,
                   });
               } else {
                 db.collection("arrears").add({
@@ -282,26 +280,26 @@ export default function Dashboard() {
                     daysCountInitial - 14 <= 7
                       ? 0
                       : (daysCountInitial - 14) / 7 < 2
-                        ? 99
-                        : (daysCountInitial - 14) / 7 > 2 &&
-                          (daysCountInitial - 14) / 7 < 3
-                          ? 198
-                          : (daysCountInitial - 14) / 7 > 3 &&
-                            (daysCountInitial - 14) / 7 < 4
-                            ? 297
-                            : (daysCountInitial - 14) / 7 > 4 &&
-                              (daysCountInitial - 14) / 7 < 5
-                              ? 396
-                              : (daysCountInitial - 14) / 7 > 5 &&
-                                (daysCountInitial - 14) / 7 < 6
-                                ? 495
-                                : (daysCountInitial - 14) / 7 > 6 &&
-                                  (daysCountInitial - 14) / 7 < 7
-                                  ? 594
-                                  : (daysCountInitial - 14) / 7 > 7 &&
-                                    (daysCountInitial - 14) / 7 < 8
-                                    ? 693
-                                    : 693,
+                      ? 99
+                      : (daysCountInitial - 14) / 7 > 2 &&
+                        (daysCountInitial - 14) / 7 < 3
+                      ? 198
+                      : (daysCountInitial - 14) / 7 > 3 &&
+                        (daysCountInitial - 14) / 7 < 4
+                      ? 297
+                      : (daysCountInitial - 14) / 7 > 4 &&
+                        (daysCountInitial - 14) / 7 < 5
+                      ? 396
+                      : (daysCountInitial - 14) / 7 > 5 &&
+                        (daysCountInitial - 14) / 7 < 6
+                      ? 495
+                      : (daysCountInitial - 14) / 7 > 6 &&
+                        (daysCountInitial - 14) / 7 < 7
+                      ? 594
+                      : (daysCountInitial - 14) / 7 > 7 &&
+                        (daysCountInitial - 14) / 7 < 8
+                      ? 693
+                      : 693,
                   date: firebase.firestore.FieldValue.serverTimestamp(),
                 });
               }
@@ -370,20 +368,20 @@ export default function Dashboard() {
                   daysCount - 7 <= 7
                     ? 0
                     : (daysCount - 7) / 7 < 2
-                      ? 99
-                      : (daysCount - 7) / 7 > 2 && (daysCount - 7) / 7 < 3
-                        ? 198
-                        : (daysCount - 7) / 7 > 3 && (daysCount - 7) / 7 < 4
-                          ? 297
-                          : (daysCount - 7) / 7 > 4 && (daysCount - 7) / 7 < 5
-                            ? 396
-                            : (daysCount - 7) / 7 > 5 && (daysCount - 7) / 7 < 6
-                              ? 495
-                              : (daysCount - 7) / 7 > 6 && (daysCount - 7) / 7 < 7
-                                ? 594
-                                : (daysCount - 7) / 7 > 7 && (daysCount - 7) / 7 < 8
-                                  ? 693
-                                  : 99 * Math.round((daysCount - 7) / 7),
+                    ? 99
+                    : (daysCount - 7) / 7 > 2 && (daysCount - 7) / 7 < 3
+                    ? 198
+                    : (daysCount - 7) / 7 > 3 && (daysCount - 7) / 7 < 4
+                    ? 297
+                    : (daysCount - 7) / 7 > 4 && (daysCount - 7) / 7 < 5
+                    ? 396
+                    : (daysCount - 7) / 7 > 5 && (daysCount - 7) / 7 < 6
+                    ? 495
+                    : (daysCount - 7) / 7 > 6 && (daysCount - 7) / 7 < 7
+                    ? 594
+                    : (daysCount - 7) / 7 > 7 && (daysCount - 7) / 7 < 8
+                    ? 693
+                    : 99 * Math.round((daysCount - 7) / 7),
               });
           } else {
             db.collection("arrears").add({
@@ -401,20 +399,20 @@ export default function Dashboard() {
                 daysCount - 7 <= 7
                   ? 0
                   : (daysCount - 7) / 7 < 2
-                    ? 99
-                    : (daysCount - 7) / 7 > 2 && (daysCount - 7) / 7 < 3
-                      ? 198
-                      : (daysCount - 7) / 7 > 3 && (daysCount - 7) / 7 < 4
-                        ? 297
-                        : (daysCount - 7) / 7 > 4 && (daysCount - 7) / 7 < 5
-                          ? 396
-                          : (daysCount - 7) / 7 > 5 && (daysCount - 7) / 7 < 6
-                            ? 495
-                            : (daysCount - 7) / 7 > 6 && (daysCount - 7) / 7 < 7
-                              ? 594
-                              : (daysCount - 7) / 7 > 7 && (daysCount - 7) / 7 < 8
-                                ? 693
-                                : 99 * Math.round((daysCount - 7) / 7),
+                  ? 99
+                  : (daysCount - 7) / 7 > 2 && (daysCount - 7) / 7 < 3
+                  ? 198
+                  : (daysCount - 7) / 7 > 3 && (daysCount - 7) / 7 < 4
+                  ? 297
+                  : (daysCount - 7) / 7 > 4 && (daysCount - 7) / 7 < 5
+                  ? 396
+                  : (daysCount - 7) / 7 > 5 && (daysCount - 7) / 7 < 6
+                  ? 495
+                  : (daysCount - 7) / 7 > 6 && (daysCount - 7) / 7 < 7
+                  ? 594
+                  : (daysCount - 7) / 7 > 7 && (daysCount - 7) / 7 < 8
+                  ? 693
+                  : 99 * Math.round((daysCount - 7) / 7),
               date: firebase.firestore.FieldValue.serverTimestamp(),
             });
           }
@@ -450,20 +448,20 @@ export default function Dashboard() {
                   daysCount - 14 <= 7
                     ? 0
                     : (daysCount - 14) / 7 < 2
-                      ? 99
-                      : (daysCount - 14) / 7 > 2 && (daysCount - 14) / 7 < 3
-                        ? 198
-                        : (daysCount - 14) / 7 > 3 && (daysCount - 14) / 7 < 4
-                          ? 297
-                          : (daysCount - 14) / 7 > 4 && (daysCount - 14) / 7 < 5
-                            ? 396
-                            : (daysCount - 14) / 7 > 5 && (daysCount - 14) / 7 < 6
-                              ? 495
-                              : (daysCount - 14) / 7 > 6 && (daysCount - 14) / 7 < 7
-                                ? 594
-                                : (daysCount - 14) / 7 > 7 && (daysCount - 14) / 7 < 8
-                                  ? 693
-                                  : 99 * Math.round((daysCount - 14) / 7),
+                    ? 99
+                    : (daysCount - 14) / 7 > 2 && (daysCount - 14) / 7 < 3
+                    ? 198
+                    : (daysCount - 14) / 7 > 3 && (daysCount - 14) / 7 < 4
+                    ? 297
+                    : (daysCount - 14) / 7 > 4 && (daysCount - 14) / 7 < 5
+                    ? 396
+                    : (daysCount - 14) / 7 > 5 && (daysCount - 14) / 7 < 6
+                    ? 495
+                    : (daysCount - 14) / 7 > 6 && (daysCount - 14) / 7 < 7
+                    ? 594
+                    : (daysCount - 14) / 7 > 7 && (daysCount - 14) / 7 < 8
+                    ? 693
+                    : 99 * Math.round((daysCount - 14) / 7),
               });
           } else {
             db.collection("arrears").add({
@@ -481,20 +479,20 @@ export default function Dashboard() {
                 daysCount - 14 <= 7
                   ? 0
                   : (daysCount - 14) / 7 < 2
-                    ? 99
-                    : (daysCount - 14) / 7 > 2 && (daysCount - 14) / 7 < 3
-                      ? 198
-                      : (daysCount - 14) / 7 > 3 && (daysCount - 14) / 7 < 4
-                        ? 297
-                        : (daysCount - 14) / 7 > 4 && (daysCount - 14) / 7 < 5
-                          ? 396
-                          : (daysCount - 14) / 7 > 5 && (daysCount - 14) / 7 < 6
-                            ? 495
-                            : (daysCount - 14) / 7 > 6 && (daysCount - 14) / 7 < 7
-                              ? 594
-                              : (daysCount - 14) / 7 > 7 && (daysCount - 14) / 7 < 8
-                                ? 693
-                                : 99 * Math.round((daysCount - 14) / 7),
+                  ? 99
+                  : (daysCount - 14) / 7 > 2 && (daysCount - 14) / 7 < 3
+                  ? 198
+                  : (daysCount - 14) / 7 > 3 && (daysCount - 14) / 7 < 4
+                  ? 297
+                  : (daysCount - 14) / 7 > 4 && (daysCount - 14) / 7 < 5
+                  ? 396
+                  : (daysCount - 14) / 7 > 5 && (daysCount - 14) / 7 < 6
+                  ? 495
+                  : (daysCount - 14) / 7 > 6 && (daysCount - 14) / 7 < 7
+                  ? 594
+                  : (daysCount - 14) / 7 > 7 && (daysCount - 14) / 7 < 8
+                  ? 693
+                  : 99 * Math.round((daysCount - 14) / 7),
               date: firebase.firestore.FieldValue.serverTimestamp(),
             });
           }
@@ -503,111 +501,107 @@ export default function Dashboard() {
     }
   };
 
-  
-    return (
-      <>
+  return (
+    <>
+      {/*Start Vehical Service Model */}
 
-        {/*Start Vehical Service Model */}
-
-        <Modal
-          visible={vehicalServiceModel}
-          footer={null}
-          className="vehical_servicemdl"
-          onCancel={() => {
-            setVehicalServiceModel(false);
-          }}
-        >
+      <Modal
+        visible={vehicalServiceModel}
+        footer={null}
+        className="vehical_servicemdl"
+        onCancel={() => {
+          setVehicalServiceModel(false);
+        }}
+      >
+        <div>
           <div>
             <div>
-              <div>
-                <ModelVehicalService />
-              </div>
+              <ModelVehicalService />
             </div>
           </div>
-        </Modal>
+        </div>
+      </Modal>
 
-        {/* End  Vehical Service Model  */}
-      
+      {/* End  Vehical Service Model  */}
+
+      <Grid container spacing={4}>
+        <Grid item xs={4}>
+          <p className="titl_Dash">DashBoard</p>
+        </Grid>
+        <Grid item xs={3}>
+          <Button
+            variant="contained"
+            className="btn_VehicalService"
+            endIcon={<SettingsApplicationsIcon />}
+            onClick={VehicalServiceModel}
+          >
+            Vehical Services
+          </Button>
+        </Grid>
+        <Grid item xs={3}>
+          <Button
+            variant="contained"
+            className="btn_Expences"
+            endIcon={<PostAddIcon />}
+            onClick={ExpencesPnl}
+          >
+            Add Expences
+          </Button>
+        </Grid>
+        <Grid item xs={2}>
+          <Button
+            variant="contained"
+            className="btn_Dash"
+            endIcon={<FolderOpenIcon />}
+            onClick={RecordPnl}
+          >
+            Reports
+          </Button>
+        </Grid>
+      </Grid>
+
+      <Container component="main" className="main_containerDash">
+        {/*START Arreas Table */}
+
         <Grid container spacing={4}>
-          <Grid item xs={4}>
-            <p className="titl_Dash">DashBoard</p>
-          </Grid>
-          <Grid item xs={3}>
-            <Button
-              variant="contained"
-              className="btn_VehicalService"
-              endIcon={<SettingsApplicationsIcon />}
-              onClick={VehicalServiceModel}
-            >
-              Vehical Services
-          </Button>
-          </Grid>
-          <Grid item xs={3}>
-            <Button
-              variant="contained"
-              className="btn_Expences"
-              endIcon={<PostAddIcon />}
-              onClick={ExpencesPnl}
-            >
-              Add Expences
-          </Button>
-          </Grid>
-          <Grid item xs={2}>
-            <Button
-              variant="contained"
-              className="btn_Dash"
-              endIcon={<FolderOpenIcon />}
-              onClick={RecordPnl}
-            >
-              Reports
-          </Button>
+          <Grid item xs={12}>
+            <ArreasTable />
           </Grid>
         </Grid>
+        {/* END Arreas Table */}
 
-        <Container component="main" className="main_containerDash">
+        {/*START Expire Invoice Table */}
 
-          {/*START Arreas Table */}
-
-          <Grid container spacing={4}>
-            <Grid item xs={12}>
-              <ArreasTable />
-            </Grid>
+        <Grid container spacing={4}>
+          <Grid item xs={12}>
+            <ExpireInvoice expire_list={expiredList} />
           </Grid>
-          {/* END Arreas Table */}
+        </Grid>
+        {/* END Expire Invoice Table */}
 
-          {/*START Expire Invoice Table */}
+        {/*START BlockListPrnding Table */}
 
-          <Grid container spacing={4}>
-            <Grid item xs={12}>
-              <ExpireInvoice expire_list={expiredList} />
-            </Grid>
+        <Grid container spacing={4}>
+          <Grid item xs={12}>
+            <PendingList pendingBlackList={pendingBlackList} />
           </Grid>
-          {/* END Expire Invoice Table */}
+        </Grid>
+        {/*END BlockListPrnding Table */}
 
-          {/*START BlockListPrnding Table */}
+        <br />
 
-          <Grid container spacing={4}>
-            <Grid item xs={12}>
-              <PendingList pendingBlackList={pendingBlackList} />
-            </Grid>
-          </Grid>
-          {/*END BlockListPrnding Table */}
+        {/*START Invoices  Table */}
 
-          <br />
-
-          {/*START Invoices  Table */}
-
-          <Typography className="today_invoices" variant="h4" component="h6">
-            All invoices of issued in recently
+        <Typography className="today_invoices" variant="h4" component="h6">
+          All invoices of issued in recently
         </Typography>
-          <Grid container spacing={4}>
-            <Grid item xs={12}>
-              <InvoiceList />
-            </Grid>
+        <Grid container spacing={4}>
+          <Grid item xs={12}>
+            <InvoiceList />
           </Grid>
-          {/*END Invoices  Table */}
-        </Container>
-      </>
-    );
-  }
-
+        </Grid>
+        {/*END Invoices  Table */}
+      </Container>
+    </>
+  );
+}

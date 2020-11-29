@@ -1,13 +1,10 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-    // eslint-disable-next-line
-import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Box from '@material-ui/core/Box';
-  // eslint-disable-next-line
-import { Grid } from "@material-ui/core";
+import React from "react";
+import PropTypes from "prop-types";
+
+import AppBar from "@material-ui/core/AppBar";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
+import Box from "@material-ui/core/Box";
 
 // styles
 import "./Gass_Reports.css";
@@ -46,7 +43,7 @@ TabPanel.propTypes = {
 function a11yProps(index) {
   return {
     id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
+    "aria-controls": `simple-tabpanel-${index}`,
   };
 }
 
@@ -57,33 +54,36 @@ export default function Gass_Reports() {
     setValue(newValue);
   };
 
-    return (
-        <>
-      <p className="titleGass" >Gass Repots</p>
-    <div className="maindiv_gsaa">
-      <AppBar position="static">
-        <Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
-          <Tab label="Sold Gass" {...a11yProps(0)} />
-              <Tab label="Purchased Gass" {...a11yProps(1)} />
-              <Tab label="The rest of the hand" {...a11yProps(2)} />
-        </Tabs>
-      </AppBar>
-      <TabPanel value={value} index={0}>
-        <SoldGass />
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        <PurchasedGass />
-          </TabPanel>
-           <TabPanel value={value} index={2}>
-        <RestOfHand />
-      </TabPanel>
-      
-        </div>
-         {/* <Grid container spacing={4}>
+  return (
+    <>
+      <p className="titleGass">Gass Repots</p>
+      <div className="maindiv_gsaa">
+        <AppBar position="static">
+          <Tabs
+            value={value}
+            onChange={handleChange}
+            aria-label="simple tabs example"
+          >
+            <Tab label="Sold Gass" {...a11yProps(0)} />
+            <Tab label="Purchased Gass" {...a11yProps(1)} />
+            <Tab label="The rest of the hand" {...a11yProps(2)} />
+          </Tabs>
+        </AppBar>
+        <TabPanel value={value} index={0}>
+          <SoldGass />
+        </TabPanel>
+        <TabPanel value={value} index={1}>
+          <PurchasedGass />
+        </TabPanel>
+        <TabPanel value={value} index={2}>
+          <RestOfHand />
+        </TabPanel>
+      </div>
+      {/* <Grid container spacing={4}>
         <Grid item xs={12}>
             <p className="profitas" > =</p><span>12345.00</span>
           </Grid>
           </Grid> */}
-            </>
+    </>
   );
 }

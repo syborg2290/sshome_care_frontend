@@ -111,12 +111,12 @@ async function getAllPurchaesWithoutDuplicates(purchaesDup) {
         date: reduceDup[indexFor].date,
         purchaes_total:
           parseInt(reduceDup[indexFor].purchaes_total) +
-          parseInt(purchaesDup[i].sold_total),
+          parseInt(purchaesDup[i].purchaes_total),
       };
     } else {
       reduceDup.push({
         date: new Date(purchaesDup[i].date),
-        purchaes_total: purchaesDup[i].purchaes_total,
+        purchaes_total: parseInt(purchaesDup[i].purchaes_total),
       });
     }
   }

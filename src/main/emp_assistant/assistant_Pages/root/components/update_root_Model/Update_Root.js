@@ -163,6 +163,7 @@ export default function Update_Root({
                 label="Root Name"
                 autoFocus
                 size="small"
+                disabled={true}
                 value={rootName}
                 onChange={(e) => {
                   setRootName(e.target.value.trim());

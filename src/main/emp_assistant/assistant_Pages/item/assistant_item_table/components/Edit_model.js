@@ -476,6 +476,7 @@ export default function Edit_model({
               <Input
                 allowClear
                 placeholder="xx Device"
+                disabled={true}
                 value={itemName}
                 onChange={(e) => {
                   setItemName(e.target.value);

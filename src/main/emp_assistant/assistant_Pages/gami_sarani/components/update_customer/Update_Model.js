@@ -1,4 +1,4 @@
-import React, { useState ,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { TextField, Button } from "@material-ui/core";
 import { Spin } from "antd";
 
@@ -41,8 +41,7 @@ export default function Update_Model({
   const [imageUrl, setImageUrl] = useState(imageUrlProp);
   let history = useHistory();
 
-   useEffect(() => {
-
+  useEffect(() => {
     window.addEventListener("offline", function (e) {
       history.push("/connection_lost");
     });
@@ -155,6 +154,7 @@ export default function Update_Model({
                 variant="outlined"
                 required
                 fullWidth
+                disabled={true}
                 id="nic"
                 label="NIC"
                 autoFocus
@@ -178,6 +178,7 @@ export default function Update_Model({
                 fullWidth
                 id="mid"
                 label="Member ID"
+                disabled={true}
                 size="small"
                 value={mid}
                 onChange={(e) => {

@@ -68,6 +68,7 @@ export default function History_Model({ mid }) {
   useEffect(() => {
     db.collection("gami_sarani_deposit")
       .where("mid", "==", mid)
+      .orderBy("date", "desc")
       .onSnapshot((re) => {
         var raw = [];
         re.docs.forEach((each) => {
@@ -115,7 +116,7 @@ export default function History_Model({ mid }) {
           columns={columns}
           options={{
             // selectableRows: false,
-             selectableRows: "none",
+            selectableRows: "none",
             customToolbarSelect: () => {},
             filterType: "textField",
             download: false,

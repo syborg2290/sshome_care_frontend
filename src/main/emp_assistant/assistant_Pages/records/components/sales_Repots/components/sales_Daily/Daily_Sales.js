@@ -4,11 +4,18 @@ import CurrencyFormat from "react-currency-format";
 import { Grid } from "@material-ui/core";
 import MUIDataTable from "mui-datatables";
 import { Spin } from "antd";
+import { Modal } from "antd";
 
 // styles
 import "./Daily_Sales.css";
 
 import db from "../../../../../../../../config/firebase.js";
+
+//components
+import ViewDailySales from "./components/View_Daily_Sales";
+
+// icons
+import VisibilityIcon from "@material-ui/icons/Visibility";
 
 async function getAllSalesSaily() {
   var sales = [];
@@ -118,11 +125,18 @@ async function sumEachSameDaySales(allSales) {
 }
 
 export default function Daily_Sales() {
+
+    const [viewModel, setViewModel] = useState(false); // View model
+
   // eslint-disable-next-line
   const [tableData, setTableData] = useState([]);
   const [allSalesType, setAllSalesType] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentIndx, setCurrentIndx] = useState(0);
+
+   const ViewModel = () => {
+    setViewModel(true);
+  };
 
   const columns = [
     {
@@ -146,6 +160,15 @@ export default function Daily_Sales() {
     },
     {
       name: "Total_Balance",
+      options: {
+        filter: false,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+     {
+      name: "Action",
       options: {
         filter: false,
         setCellHeaderProps: (value) => ({
@@ -210,6 +233,7 @@ export default function Daily_Sales() {
                 prefix={" "}
               />
             ),
+            Action: <VisibilityIcon className="btnEdit" onClick={ViewModel} />,
           });
         });
         setTableData(eachRE);
@@ -219,6 +243,29 @@ export default function Daily_Sales() {
   }, []);
 
   return (
+
+     <>
+      {/*Start View Model */}
+
+      <Modal
+        visible={viewModel}
+        footer={null}
+        className="model_viw"
+        onCancel={() => {
+          setViewModel(false);
+        }}
+      >
+        <div>
+          <div>
+            <div>
+              <ViewDailySales />
+            </div>
+          </div>
+        </div>
+      </Modal>
+
+      {/* End View Model  */}
+
     <Grid container spacing={4}>
       <Grid item xs={12}>
         <MUIDataTable
@@ -251,6 +298,7 @@ export default function Daily_Sales() {
           }}
         />
       </Grid>
-    </Grid>
+      </Grid>
+      </>
   );
 }

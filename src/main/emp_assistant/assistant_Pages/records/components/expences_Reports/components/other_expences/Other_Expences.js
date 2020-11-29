@@ -215,6 +215,7 @@ export default function Other_Expences() {
 
   useEffect(() => {
     db.collection("expences")
+      .orderBy("date", "desc")
       .get()
       .then((reEx) => {
         var raw = [];

@@ -60,6 +60,7 @@ export default function Vehical_Repair() {
 
   useEffect(() => {
     db.collection("expences")
+      .orderBy("date", "desc")
       .get()
       .then((reEx) => {
         var raw = [];

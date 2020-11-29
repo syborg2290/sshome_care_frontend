@@ -60,10 +60,12 @@ export default function Vehical_Fuel() {
 
   useEffect(() => {
     db.collection("expences")
+      .orderBy("date", "desc")
       .get()
       .then((reEx) => {
         var raw = [];
         var rawAll = [];
+
         reEx.docs.forEach((each) => {
           rawAll.push({
             id: each.id,

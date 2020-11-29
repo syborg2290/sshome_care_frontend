@@ -42,6 +42,47 @@ async function sumSameDaySales(allSales) {
           new Date(allSales[i].date).getFullYear() &&
         new Date(ob.date).getMonth() ===
           new Date(allSales[i].date).getMonth() &&
+        new Date(ob.date).getDate() === new Date(allSales[i].date).getDate()
+    );
+
+    if (result) {
+      let indexFor = reduceDup.findIndex(
+        (ob) =>
+          new Date(ob.date).getFullYear() ===
+            new Date(allSales[i].date).getFullYear() &&
+          new Date(ob.date).getMonth() ===
+            new Date(allSales[i].date).getMonth() &&
+          new Date(ob.date).getDate() === new Date(allSales[i].date).getDate()
+      );
+
+      reduceDup[indexFor] = {
+        date: reduceDup[indexFor].date,
+        total:
+          parseInt(reduceDup[indexFor].total) + parseInt(allSales[i].total),
+        type: reduceDup[indexFor].type,
+      };
+    } else {
+      reduceDup.push({
+        date: new Date(allSales[i].date),
+        type: allSales[i].type,
+        total: allSales[i].total,
+      });
+    }
+  }
+
+  return reduceDup;
+}
+
+async function sumEachSameDaySales(allSales) {
+  var reduceDup = [];
+
+  for (let i = 0; i < allSales.length; i++) {
+    let result = reduceDup.some(
+      (ob) =>
+        new Date(ob.date).getFullYear() ===
+          new Date(allSales[i].date).getFullYear() &&
+        new Date(ob.date).getMonth() ===
+          new Date(allSales[i].date).getMonth() &&
         new Date(ob.date).getDate() === new Date(allSales[i].date).getDate() &&
         ob.type === allSales[i].type
     );
@@ -61,8 +102,8 @@ async function sumSameDaySales(allSales) {
       reduceDup[indexFor] = {
         date: reduceDup[indexFor].date,
         total:
-          parseInt(reduceDup[indexFor].total) +
-          parseInt(allSales[i].sold_total),
+          parseInt(reduceDup[indexFor].total) + parseInt(allSales[i].total),
+        type: reduceDup[indexFor].type,
       };
     } else {
       reduceDup.push({
@@ -79,7 +120,9 @@ async function sumSameDaySales(allSales) {
 export default function Daily_Sales() {
   // eslint-disable-next-line
   const [tableData, setTableData] = useState([]);
+  const [allSalesType, setAllSalesType] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [currentIndx, setCurrentIndx] = useState(0);
 
   const columns = [
     {
@@ -91,15 +134,7 @@ export default function Daily_Sales() {
         }),
       },
     },
-    {
-      name: "Type",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
+
     {
       name: "Total",
       options: {
@@ -122,6 +157,24 @@ export default function Daily_Sales() {
 
   useEffect(() => {
     getAllSalesSaily().then((reAllSales) => {
+      sumEachSameDaySales().then((reAllTypesSale) => {
+        let againArrayTypes = reAllTypesSale;
+        againArrayTypes.sort((a, b) => {
+          if (
+            new Date(a.date).getFullYear() === new Date(b.date).getFullYear() &&
+            new Date(a.date).getMonth() === new Date(b.date).getMonth() &&
+            new Date(a.date).getDate() === new Date(b.date).getDate()
+          ) {
+            return -1;
+          } else {
+            return 1;
+          }
+        });
+
+        againArrayTypes.forEach((each) => {
+          setAllSalesType((old) => [...old, each]);
+        });
+      });
       sumSameDaySales(reAllSales).then((reSumWith) => {
         let againArray = reSumWith;
         let eachRE = [];
@@ -141,7 +194,6 @@ export default function Daily_Sales() {
           totalBalance = totalBalance + parseInt(each.total);
           eachRE.push({
             Date: new Date(each.date).toDateString(),
-            Type: each.type,
             Total: (
               <CurrencyFormat
                 value={each.total}
@@ -183,6 +235,9 @@ export default function Daily_Sales() {
             print: false,
             searchPlaceholder: "Search using any column names",
             elevation: 4,
+            onRowClick: (rowData, rowMeta) => {
+              setCurrentIndx(rowMeta.dataIndex);
+            },
             sort: true,
             textLabels: {
               body: {

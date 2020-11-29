@@ -59,8 +59,7 @@ async function sumSameDaySales(allSales) {
       reduceDup[indexFor] = {
         date: reduceDup[indexFor].date,
         total:
-          parseInt(reduceDup[indexFor].total) +
-          parseInt(allSales[i].sold_total),
+          parseInt(reduceDup[indexFor].total) + parseInt(allSales[i].total),
       };
     } else {
       reduceDup.push({

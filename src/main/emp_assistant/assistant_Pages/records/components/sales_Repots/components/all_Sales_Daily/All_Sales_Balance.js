@@ -528,11 +528,11 @@ export default function All_Sales_Balance() {
                             ).then((reAllArray) => {
                               let againArray = reAllArray;
                               let eachRE = [];
-                              let previousSale = [];
-                              let previousCash = [];
-                              let previousCards = [];
-                              let previousIntsll = [];
-                              let previousDocs = [];
+                              let previousSale = 0;
+                              let previousCash = 0;
+                              let previousCards = 0;
+                              let previousIntsll = 0;
+                              let previousDocs = 0;
 
                               againArray.sort((a, b) => {
                                 if (
@@ -550,11 +550,16 @@ export default function All_Sales_Balance() {
                               });
 
                               againArray.forEach((each) => {
-                                previousSale.push(each.sales);
-                                previousCash.push(each.cash);
-                                previousCards.push(each.cards);
-                                previousIntsll.push(each.installment);
-                                previousDocs.push(each.docs);
+                                previousSale =
+                                  previousSale + parseInt(each.sales);
+                                previousCash =
+                                  previousCash + parseInt(each.cash);
+                                previousCards =
+                                  previousCards + parseInt(each.cards);
+                                previousIntsll =
+                                  previousIntsll + parseInt(each.installment);
+                                previousDocs =
+                                  previousDocs + parseInt(each.docs);
                                 eachRE.push({
                                   Date: new Date(each.date).toDateString(),
                                   Total_Sale: (
@@ -567,12 +572,7 @@ export default function All_Sales_Balance() {
                                   ),
                                   Balance: (
                                     <CurrencyFormat
-                                      value={
-                                        parseInt(each.sales) +
-                                        parseInt(
-                                          previousSale[previousSale.length - 1]
-                                        )
-                                      }
+                                      value={previousSale}
                                       displayType={"text"}
                                       thousandSeparator={true}
                                       prefix={" "}
@@ -627,30 +627,11 @@ export default function All_Sales_Balance() {
                                   Total_Balance: (
                                     <CurrencyFormat
                                       value={
-                                        each.sales +
-                                        each.cards +
-                                        each.cash +
-                                        each.installment +
-                                        each.docs +
-                                        parseInt(
-                                          previousSale[previousSale.length - 1]
-                                        ) +
-                                        parseInt(
-                                          previousCards[
-                                            previousCards.length - 1
-                                          ]
-                                        ) +
-                                        parseInt(
-                                          previousCash[previousCash.length - 1]
-                                        ) +
-                                        parseInt(
-                                          previousIntsll[
-                                            previousIntsll.length - 1
-                                          ]
-                                        ) +
-                                        parseInt(
-                                          previousDocs[previousDocs.length - 1]
-                                        )
+                                        previousSale +
+                                        previousCards +
+                                        previousCash +
+                                        previousIntsll +
+                                        previousDocs
                                       }
                                       displayType={"text"}
                                       thousandSeparator={true}

@@ -125,7 +125,7 @@ export default function Daily_Sales() {
       sumSameDaySales(reAllSales).then((reSumWith) => {
         let againArray = reSumWith;
         let eachRE = [];
-        let totalBalance = [];
+        let totalBalance = 0;
         againArray.sort((a, b) => {
           if (
             new Date(a.date).getFullYear() === new Date(b.date).getFullYear() &&
@@ -138,7 +138,7 @@ export default function Daily_Sales() {
           }
         });
         againArray.forEach((each) => {
-          totalBalance.push(parseInt(each.total));
+          totalBalance = totalBalance + parseInt(each.total);
           eachRE.push({
             Date: new Date(each.date).toDateString(),
             Type: each.type,
@@ -152,10 +152,7 @@ export default function Daily_Sales() {
             ),
             Total_Balance: (
               <CurrencyFormat
-                value={
-                  parseInt(each.total) +
-                  parseInt(totalBalance[totalBalance.length - 1])
-                }
+                value={totalBalance}
                 displayType={"text"}
                 thousandSeparator={true}
                 prefix={" "}

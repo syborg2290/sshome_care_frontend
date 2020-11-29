@@ -676,7 +676,7 @@ export default function Expences() {
                         setInputsSithu({
                           ...inputsSithu,
                           [i]: {
-                            description: inputsSithu[i].cost,
+                            description: inputsSithu[i].description,
                             cost: parseInt(e.target.value.trim()),
                           },
                         });
@@ -2144,7 +2144,7 @@ export default function Expences() {
                     let prev = otherFuelCost;
                     setOtherFuelCost(parseInt(e.target.value.trim()));
                     let val = parseInt(e.target.value.trim());
-                    
+
                     setExpences((exp) => exp - prev);
                     setTotalFuel((fuel) => fuel - prev);
 
@@ -2195,12 +2195,11 @@ export default function Expences() {
                 value={rentCost}
                 onChange={(e) => {
                   if (e.target.value !== "") {
-                    
                     let prev = rentCost;
-                    
+
                     setRentCost(parseInt(e.target.value.trim()));
                     let val = parseInt(e.target.value.trim());
-                    
+
                     setExpences((exp) => exp - prev);
 
                     setExpences((exp) => exp + val);
@@ -2267,9 +2266,8 @@ export default function Expences() {
                     value={inputsSalary[i].cost}
                     onChange={(e) => {
                       if (e.target.value !== "") {
-                        
                         let prev = inputsSalary[i].cost;
-                        
+
                         setInputsSalary({
                           ...inputsSalary,
                           [i]: {
@@ -2278,7 +2276,7 @@ export default function Expences() {
                           },
                         });
                         let val = parseInt(e.target.value.trim());
-                        
+
                         setExpences((exp) => exp - prev);
                         setTotalSalary((exp) => exp - prev);
 
@@ -2354,9 +2352,8 @@ export default function Expences() {
                     value={inputsAdvance[i].cost}
                     onChange={(e) => {
                       if (e.target.value !== "") {
-                        
                         let prev = inputsAdvance[i].cost;
-                        
+
                         setInputsAdvance({
                           ...inputsAdvance,
                           [i]: {
@@ -2365,9 +2362,9 @@ export default function Expences() {
                           },
                         });
                         let val = parseInt(e.target.value.trim());
-                        
-                         setExpences((exp) => exp - prev);
-                         setTotalAdvance((exp) => exp - prev);
+
+                        setExpences((exp) => exp - prev);
+                        setTotalAdvance((exp) => exp - prev);
 
                         setExpences((exp) => exp + val);
                         setTotalAdvance((exp) => exp + val);
@@ -2441,9 +2438,8 @@ export default function Expences() {
                     value={inputsTemporary[i].cost}
                     onChange={(e) => {
                       if (e.target.value !== "") {
-                        
                         let prev = inputsTemporary[i].cost;
-                        
+
                         setInputsTemporary({
                           ...inputsTemporary,
                           [i]: {
@@ -2452,9 +2448,9 @@ export default function Expences() {
                           },
                         });
                         let val = parseInt(e.target.value.trim());
-                        
-                         setExpences((exp) => exp - prev);
-                         setTotalTemp((exp) => exp - prev);
+
+                        setExpences((exp) => exp - prev);
+                        setTotalTemp((exp) => exp - prev);
 
                         setExpences((exp) => exp + val);
                         setTotalTemp((exp) => exp + val);
@@ -2502,7 +2498,7 @@ export default function Expences() {
                     let prev = salaryInstallment;
                     setSalaryInstallment(parseInt(e.target.value.trim()));
                     let val = parseInt(e.target.value.trim());
-                    
+
                     setExpences((exp) => exp - prev);
 
                     setExpences((exp) => exp + val);
@@ -2580,9 +2576,8 @@ export default function Expences() {
                     value={inputsOther[i].cost}
                     onChange={(e) => {
                       if (e.target.value !== "") {
-                        
                         let prev = inputsOther[i].cost;
-                        
+
                         setInputsOther({
                           ...inputsOther,
                           [i]: {
@@ -2591,7 +2586,7 @@ export default function Expences() {
                           },
                         });
                         let val = parseInt(e.target.value.trim());
-                        
+
                         setExpences((exp) => exp - prev);
                         setTotalOthers((exp) => exp - prev);
 

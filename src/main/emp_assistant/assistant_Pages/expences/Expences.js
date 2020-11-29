@@ -143,6 +143,7 @@ export default function Expences() {
     });
 
     db.collection("expences")
+      .orderBy("date", "asc")
       .get()
       .then((reExpe) => {
         if (reExpe.docs.length <= 0) {

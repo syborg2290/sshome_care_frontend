@@ -144,7 +144,7 @@ export default function View_Fuel({ obj }) {
       <Grid container spacing={4}>
         <Grid item xs={12}>
           <MUIDataTable
-            title={<span className="title_Span">Repair For Vehical</span>}
+            title={<span className="title_Span">Fuel For Vehical</span>}
             className="salary_table"
             sty
             data={allData}

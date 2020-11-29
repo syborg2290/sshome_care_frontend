@@ -104,7 +104,7 @@ export default function Vehical_Fuel() {
             <div>
               <ViewFuel
                 key={allData[currentIndx]?.id}
-                obj={allData[currentIndx]?.data.vehicles_repairs}
+                obj={allData[currentIndx]?.data.vehicles_fuel}
               />
             </div>
           </div>

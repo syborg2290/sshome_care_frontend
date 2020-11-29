@@ -1,4 +1,4 @@
- // eslint-disable-next-line
+// eslint-disable-next-line
 import React, { useState, useEffect } from "react";
 import { Grid } from "@material-ui/core";
 import MUIDataTable from "mui-datatables";
@@ -110,11 +110,11 @@ export default function View_Fuel({ obj }) {
     });
 
     raw.push({
-      Discription: obj["otherRepair"].description,
+      Discription: obj["otherFuel"].description,
       Vehical: "otherRepair",
       Cost: (
         <CurrencyFormat
-          value={obj["otherRepair"].cost}
+          value={obj["otherFuel"].cost}
           displayType={"text"}
           thousandSeparator={true}
           prefix={" "}

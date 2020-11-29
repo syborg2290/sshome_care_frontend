@@ -30,19 +30,19 @@ export default function Pay_for_Workers({ obj }) {
 
   useEffect(() => {
     var raw = [];
-    for (var i = 0; i < Object.keys(obj).length; i++) {
-      raw.push({
-        Discription: obj[i].description,
-        Cost: (
-          <CurrencyFormat
-            value={obj[i].cost}
-            displayType={"text"}
-            thousandSeparator={true}
-            prefix={" "}
-          />
-        ),
-      });
-    }
+
+    raw.push({
+      Discription: obj.description,
+      Cost: (
+        <CurrencyFormat
+          value={obj.cost}
+          displayType={"text"}
+          thousandSeparator={true}
+          prefix={" "}
+        />
+      ),
+    });
+
     setallData(raw);
   }, [obj]);
 

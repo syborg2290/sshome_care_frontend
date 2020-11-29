@@ -1,11 +1,9 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Grid } from "@material-ui/core";
 import MUIDataTable from "mui-datatables";
 import CurrencyFormat from "react-currency-format";
 
-
-
-export default function Stationary({obj}) {
+export default function Stationary({ obj }) {
   // eslint-disable-next-line
   const [allData, setallData] = useState([]);
 
@@ -32,19 +30,19 @@ export default function Stationary({obj}) {
 
   useEffect(() => {
     var raw = [];
-    for (var i = 0; i < Object.keys(obj).length; i++) {
-      raw.push({
-        Discription: obj[i].description,
-        Cost: (
-          <CurrencyFormat
-            value={obj[i].cost}
-            displayType={"text"}
-            thousandSeparator={true}
-            prefix={" "}
-          />
-        ),
-      });
-    }
+
+    raw.push({
+      Discription: obj.description,
+      Cost: (
+        <CurrencyFormat
+          value={obj.cost}
+          displayType={"text"}
+          thousandSeparator={true}
+          prefix={" "}
+        />
+      ),
+    });
+
     setallData(raw);
   }, [obj]);
 

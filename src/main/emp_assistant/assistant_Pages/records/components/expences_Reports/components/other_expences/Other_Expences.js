@@ -225,7 +225,7 @@ export default function Other_Expences() {
             data: each.data(),
           });
           raw.push({
-            Date: new Date(each.data().date).toDateString(),
+            Date: new Date(each.data().date.seconds * 1000).toDateString(),
             Discription: each.data().mainDescription,
             Rent: (
               <CurrencyFormat
@@ -339,7 +339,7 @@ export default function Other_Expences() {
                 prefix={" "}
               />
             ),
-            Loan: (
+            Loans: (
               <CurrencyFormat
                 value={each.data().loans_for.cost}
                 displayType={"text"}

@@ -50,10 +50,10 @@ export default function Expences_Balance() {
         var raw = [];
         reGet.docs.forEach((each) => {
           raw.push({
-            Date: new Date(each.seconds * 1000).toDateString(),
+            Date: new Date(each.data().date.seconds * 1000).toDateString(),
             Expences: (
               <CurrencyFormat
-                value={each.total}
+                value={each.data().total}
                 displayType={"text"}
                 thousandSeparator={true}
                 prefix={" "}
@@ -61,7 +61,7 @@ export default function Expences_Balance() {
             ),
             Balance: (
               <CurrencyFormat
-                value={each.Balance}
+                value={each.data().balance}
                 displayType={"text"}
                 thousandSeparator={true}
                 prefix={" "}

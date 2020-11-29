@@ -157,7 +157,7 @@ export default function Daily_Sales() {
 
   useEffect(() => {
     getAllSalesSaily().then((reAllSales) => {
-      sumEachSameDaySales().then((reAllTypesSale) => {
+      sumEachSameDaySales(reAllSales).then((reAllTypesSale) => {
         let againArrayTypes = reAllTypesSale;
         againArrayTypes.sort((a, b) => {
           if (

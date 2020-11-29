@@ -4,18 +4,32 @@ import { Grid } from "@material-ui/core";
 import MUIDataTable from "mui-datatables";
     // eslint-disable-next-line
 import { useHistory } from "react-router-dom";
+import { Modal } from "antd";
+
+// icons
+import EditIcon from "@material-ui/icons/Edit";
 
 // styles
 import "./Vehical_Service_Report.css";
 
+// components
+import UpdateServiceModel from "./components/Update_Service_Model";
+
 export default function Vehical_Service_Report() {
+
+  const [updateModel, setUpdateModel] = useState(false); // Update model
+
     // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
   // eslint-disable-next-line
-  const [tableData, setTableData] = useState([]);
-  // eslint-disable-next-line
     const [allData, setallData] = useState([]);
     
+  
+  const UpdateModel = () => {
+    setUpdateModel(true);
+  };
+  
+  
     const columns = [
     {
       name: "Date",
@@ -81,7 +95,7 @@ export default function Vehical_Service_Report() {
       },
       },
      {
-      name: "AAA",
+      name: "Diesel",
       options: {
         filter: false,
         setCellHeaderProps: (value) => ({
@@ -97,18 +111,50 @@ export default function Vehical_Service_Report() {
           style: { fontSize: "15px", color: "black", fontWeight: "600" },
         }),
       },
+      },
+     {
+      name: "Action",
+      options: {
+        filter: false,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
         },
 
   ];
     // eslint-disable-next-line
-    const data = [
-      ["Test Corp", "Yonkers","Joe James", "Test Corp", "Yonkers","Joe James", "Test Corp", "Yonkers", "Yonkers"
+    const tableData = [
+      ["Test Corp", "Yonkers", "Joe James", "Test Corp", "Yonkers", "Joe James", "Test Corp", "Yonkers", "Yonkers"
+        , <EditIcon className="btnEdit"
+          onClick={UpdateModel}
+        />
        ],
 
 ];
 
   return (
-     
+     <>
+       {/*Start Update Model */}
+
+      <Modal
+        visible={updateModel}
+        footer={null}
+        className="modet_update"
+        onCancel={() => {
+          setUpdateModel(false);
+        }}
+      >
+        <div>
+          <div>
+            <div>
+              <UpdateServiceModel />
+            </div>
+          </div>
+        </div>
+      </Modal>
+
+      {/* End Update Model  */}
       
          <Grid container spacing={4}>
         <Grid item xs={12}>
@@ -134,6 +180,6 @@ export default function Vehical_Service_Report() {
           />
         </Grid>
       </Grid>
-    
+    </>
     )
 }

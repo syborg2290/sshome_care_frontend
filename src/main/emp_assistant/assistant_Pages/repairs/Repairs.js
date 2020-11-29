@@ -8,9 +8,6 @@ import db from "../../../../config/firebase.js";
 
 import { useHistory } from "react-router-dom";
 
-// icons
-import PrintRoundedIcon from "@material-ui/icons/PrintRounded";
-
 // components
 import RepairModel from "./repairs_Model/Repair_model";
 import RepairUpdateModel from "./repair_Update_Model/Repair_Update";
@@ -22,6 +19,7 @@ import "./Repairs.css";
 //icons
 import AddIcon from "@material-ui/icons/Add";
 import VisibilityIcon from "@material-ui/icons/Visibility";
+import PrintRoundedIcon from "@material-ui/icons/PrintRounded";
 
 export default function Repairs() {
   // eslint-disable-next-line

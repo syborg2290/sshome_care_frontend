@@ -15,7 +15,7 @@ async function getAllSalesSaily() {
   var sales = [];
   await db
     .collection("invoice")
-    .orderBy("date", "desc")
+    .orderBy("date", "asc")
     .get()
     .then((custIn) => {
       for (let i = 0; i < custIn.docs.length; i++) {
@@ -77,7 +77,7 @@ async function getAllCashSaleSaily() {
   var cashSale = [];
   await db
     .collection("invoice")
-    .orderBy("date", "desc")
+    .orderBy("date", "asc")
     .get()
     .then((custIn) => {
       for (let i = 0; i < custIn.docs.length; i++) {
@@ -121,8 +121,7 @@ async function sumSameDayCashSale(allCash) {
 
       reduceDup[indexFor] = {
         date: reduceDup[indexFor].date,
-        total:
-          parseInt(reduceDup[indexFor].total) + parseInt(allCash[i].sold_total),
+        total: parseInt(reduceDup[indexFor].total) + parseInt(allCash[i].total),
       };
     } else {
       reduceDup.push({
@@ -140,7 +139,7 @@ async function getAllRecievedCardSaleSaily() {
   var cardSale = [];
   await db
     .collection("invoice")
-    .orderBy("date", "desc")
+    .orderBy("date", "asc")
     .get()
     .then((custIn) => {
       for (let i = 0; i < custIn.docs.length; i++) {
@@ -186,8 +185,7 @@ async function sumSameDayCardSale(allCards) {
       reduceDup[indexFor] = {
         date: reduceDup[indexFor].date,
         total:
-          parseInt(reduceDup[indexFor].total) +
-          parseInt(allCards[i].sold_total),
+          parseInt(reduceDup[indexFor].total) + parseInt(allCards[i].total),
       };
     } else {
       reduceDup.push({
@@ -245,8 +243,7 @@ async function sumSameDayIntallmentSale(allIntsall) {
       reduceDup[indexFor] = {
         date: reduceDup[indexFor].date,
         total:
-          parseInt(reduceDup[indexFor].total) +
-          parseInt(allIntsall[i].sold_total),
+          parseInt(reduceDup[indexFor].total) + parseInt(allIntsall[i].total),
       };
     } else {
       reduceDup.push({
@@ -264,7 +261,7 @@ async function getAllDocumentChargesDaily() {
   var cardSale = [];
   await db
     .collection("invoice")
-    .orderBy("date", "desc")
+    .orderBy("date", "asc")
     .get()
     .then((custIn) => {
       for (let i = 0; i < custIn.docs.length; i++) {
@@ -306,8 +303,7 @@ async function sumSameDayDocumentCharges(allDocs) {
 
       reduceDup[indexFor] = {
         date: reduceDup[indexFor].date,
-        total:
-          parseInt(reduceDup[indexFor].total) + parseInt(allDocs[i].sold_total),
+        total: parseInt(reduceDup[indexFor].total) + parseInt(allDocs[i].total),
       };
     } else {
       reduceDup.push({

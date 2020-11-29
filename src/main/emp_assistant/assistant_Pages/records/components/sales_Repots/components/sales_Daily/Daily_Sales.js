@@ -21,7 +21,7 @@ async function getAllSalesSaily() {
   var sales = [];
   await db
     .collection("invoice")
-    .orderBy("date", "desc")
+    .orderBy("date", "asc")
     .get()
     .then((custIn) => {
       for (let i = 0; i < custIn.docs.length; i++) {
@@ -124,17 +124,35 @@ async function sumEachSameDaySales(allSales) {
   return reduceDup;
 }
 
+async function dateEachSameDaySales(allSales, date) {
+  var reduceDup = [];
+
+  for (let i = 0; i < allSales.length; i++) {
+    if (
+      new Date(date).getFullYear() ===
+        new Date(allSales[i].date).getFullYear() &&
+      new Date(date).getMonth() === new Date(allSales[i].date).getMonth() &&
+      new Date(date).getDate() === new Date(allSales[i].date).getDate()
+    ) {
+      reduceDup.push({
+        date: new Date(allSales[i].date),
+        type: allSales[i].type,
+        total: allSales[i].total,
+      });
+    }
+  }
+
+  return reduceDup;
+}
+
 export default function Daily_Sales() {
-
-    const [viewModel, setViewModel] = useState(false); // View model
-
-  // eslint-disable-next-line
+  const [viewModel, setViewModel] = useState(false); // View model
   const [tableData, setTableData] = useState([]);
   const [allSalesType, setAllSalesType] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentIndx, setCurrentIndx] = useState(0);
 
-   const ViewModel = () => {
+  const ViewModel = () => {
     setViewModel(true);
   };
 
@@ -167,7 +185,7 @@ export default function Daily_Sales() {
         }),
       },
     },
-     {
+    {
       name: "Action",
       options: {
         filter: false,
@@ -193,10 +211,15 @@ export default function Daily_Sales() {
             return 1;
           }
         });
-
+        var raw22 = [];
         againArrayTypes.forEach((each) => {
-          setAllSalesType((old) => [...old, each]);
+          dateEachSameDaySales(againArrayTypes, new Date(each.date)).then(
+            (reE) => {
+              raw22.push(reE);
+            }
+          );
         });
+        setAllSalesType(raw22);
       });
       sumSameDaySales(reAllSales).then((reSumWith) => {
         let againArray = reSumWith;
@@ -243,8 +266,7 @@ export default function Daily_Sales() {
   }, []);
 
   return (
-
-     <>
+    <>
       {/*Start View Model */}
 
       <Modal
@@ -258,7 +280,7 @@ export default function Daily_Sales() {
         <div>
           <div>
             <div>
-              <ViewDailySales />
+              <ViewDailySales list={allSalesType[currentIndx]} />
             </div>
           </div>
         </div>
@@ -266,39 +288,39 @@ export default function Daily_Sales() {
 
       {/* End View Model  */}
 
-    <Grid container spacing={4}>
-      <Grid item xs={12}>
-        <MUIDataTable
-          title={<span className="title_Span">Sales Reports</span>}
-          className="salary_table"
-          sty
-          data={tableData}
-          columns={columns}
-          options={{
-            selectableRows: "none",
-            customToolbarSelect: () => {},
-            filterType: "textField",
-            download: false,
-            print: false,
-            searchPlaceholder: "Search using any column names",
-            elevation: 4,
-            onRowClick: (rowData, rowMeta) => {
-              setCurrentIndx(rowMeta.dataIndex);
-            },
-            sort: true,
-            textLabels: {
-              body: {
-                noMatch: isLoading ? (
-                  <Spin className="tblSpinner" size="large" spinning="true" />
-                ) : (
-                  ""
-                ),
+      <Grid container spacing={4}>
+        <Grid item xs={12}>
+          <MUIDataTable
+            title={<span className="title_Span">Sales Reports</span>}
+            className="salary_table"
+            sty
+            data={tableData}
+            columns={columns}
+            options={{
+              selectableRows: "none",
+              customToolbarSelect: () => {},
+              filterType: "textField",
+              download: false,
+              print: false,
+              searchPlaceholder: "Search using any column names",
+              elevation: 4,
+              onRowClick: (rowData, rowMeta) => {
+                setCurrentIndx(rowMeta.dataIndex);
               },
-            },
-          }}
-        />
+              sort: true,
+              textLabels: {
+                body: {
+                  noMatch: isLoading ? (
+                    <Spin className="tblSpinner" size="large" spinning="true" />
+                  ) : (
+                    ""
+                  ),
+                },
+              },
+            }}
+          />
+        </Grid>
       </Grid>
-      </Grid>
-      </>
+    </>
   );
 }

@@ -45,7 +45,7 @@ export default function Expences_Balance() {
 
   useEffect(() => {
     db.collection("expences")
-      .orderBy("date", "desc")
+      .orderBy("date", "asc")
       .get()
       .then((reGet) => {
         var raw = [];

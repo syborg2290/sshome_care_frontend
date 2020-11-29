@@ -10,7 +10,7 @@ async function getAllSold() {
   var rawSold = [];
   await db
     .collection("gas_purchase_history")
-    .orderBy("date", "desc")
+    .orderBy("date", "asc")
     .get()
     .then((snap1) => {
       for (let i = 0; i < snap1.docs.length; i++) {
@@ -68,7 +68,7 @@ async function getAllPurchased() {
   var rawPucrhaes = [];
   await db
     .collection("gas_history")
-    .orderBy("date", "desc")
+    .orderBy("date", "asc")
     .get()
     .then((snap1) => {
       for (let i = 0; i < snap1.docs.length; i++) {

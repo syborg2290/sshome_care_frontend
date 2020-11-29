@@ -132,7 +132,7 @@ export default function Vehical_Service_Report() {
 
   useEffect(() => {
     db.collection("vehi_service")
-      .orderBy("date", "desc")
+      .orderBy("date", "asc")
       .get()
       .then((reGet) => {
         var raw = [];

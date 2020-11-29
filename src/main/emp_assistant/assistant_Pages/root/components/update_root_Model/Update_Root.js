@@ -124,8 +124,8 @@ export default function Update_Root({
             employee2: employee2,
           })
           .then((_) => {
-            setLoadingSubmit(false);
             window.location.reload();
+            setLoadingSubmit(false);
           });
       } else {
         setLoadingSubmit(false);
@@ -210,7 +210,7 @@ export default function Update_Root({
                   </option>
                   {allEmployee.map((reM) => (
                     <option
-                      key={reM.nic + "r"}
+                      key={reM.nic}
                       onChange={handleChange1}
                       value={reM.nic}
                     >
@@ -236,7 +236,7 @@ export default function Update_Root({
                   </option>
                   {allEmployee.map((reM) => (
                     <option
-                      key={reM.nic + "e"}
+                      key={reM.nic}
                       onChange={handleChange2}
                       value={reM.nic}
                     >

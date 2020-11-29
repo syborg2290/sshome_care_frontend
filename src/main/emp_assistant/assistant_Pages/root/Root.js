@@ -27,7 +27,7 @@ export default function Root() {
   const [currentIndx, setCurrentIndx] = useState(0);
 
   let history = useHistory();
-  
+
   const RootAdd = () => {
     setRootAddModel(true);
   };
@@ -129,10 +129,9 @@ export default function Root() {
   ];
 
   useEffect(() => {
-
-        window.addEventListener("offline", function (e) {
+    window.addEventListener("offline", function (e) {
       history.push("/connection_lost");
-     });
+    });
 
     db.collection("root").onSnapshot((snap) => {
       var raw = [];
@@ -192,7 +191,7 @@ export default function Root() {
       setTableData(raw);
       setAllTableData(rawAll);
     });
-      // eslint-disable-next-line
+    // eslint-disable-next-line
   }, []);
 
   return (

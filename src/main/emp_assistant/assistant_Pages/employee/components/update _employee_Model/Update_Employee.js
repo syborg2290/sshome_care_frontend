@@ -83,7 +83,7 @@ export default function Update_Employe({
                       })
                       .then(() => {
                         setLoadingSubmit(false);
-                        close_model();
+                        window.location.reload();
                       });
                   });
               }
@@ -152,7 +152,7 @@ export default function Update_Employe({
                 size="small"
                 value={fname}
                 onChange={(e) => {
-                  setFirstName(e.target.value.trim());
+                  setFirstName(e.target.value);
                 }}
               />
             </Grid>
@@ -174,7 +174,7 @@ export default function Update_Employe({
                 size="small"
                 value={lname}
                 onChange={(e) => {
-                  setLastName(e.target.value.trim());
+                  setLastName(e.target.value);
                 }}
               />
             </Grid>

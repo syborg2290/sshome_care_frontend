@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-
+import { useHistory } from "react-router-dom";
 import {
   TextField,
   Grid,
@@ -912,6 +912,8 @@ export default function Add_Paysheet_Model({ nic }) {
 
   const [date, setDate] = useState(null);
 
+  let history = useHistory();
+
   const AttendanceModel = () => {
     setAttendanceModel(true);
   };
@@ -932,6 +934,9 @@ export default function Add_Paysheet_Model({ nic }) {
   };
 
   useEffect(() => {
+     window.addEventListener("offline", function (e) {
+      history.push("/connection_lost");
+    });
     setLoading(true);
 
     db.collection("salary")

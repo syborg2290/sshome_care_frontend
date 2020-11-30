@@ -513,8 +513,11 @@ export default function Edit_model({
                 placeholder=" 15000.00"
                 value={cashPrice}
                 onChange={(e) => {
-                  setCashPrice(e.target.value);
-                }}
+                  if (e.target.value !== "") {
+                    setCashPrice(e.target.value);
+                  }
+                }
+                }
               />
             </Form.Item>
             <Form.Item label="* Sale Price (LKR)">
@@ -525,8 +528,11 @@ export default function Edit_model({
                 placeholder="17000.00"
                 value={salePrice}
                 onChange={(e) => {
-                  setSalePrice(e.target.value);
-                }}
+                  if (e.target.value !== "") {
+                    setSalePrice(e.target.value);
+                  }
+                }
+                }
               />
             </Form.Item>
             <Form.Item label="* No Of Installments  ">
@@ -537,8 +543,11 @@ export default function Edit_model({
                 placeholder="20"
                 value={noOfInstallments}
                 onChange={(e) => {
-                  setNoOfInstallments(e.target.value);
-                }}
+                  if (e.target.value !== "") {
+                    setNoOfInstallments(e.target.value);
+                  }
+                }
+                }
               />
             </Form.Item>
             <Form.Item label="* Amount Per Installment  (LKR)">
@@ -549,8 +558,11 @@ export default function Edit_model({
                 placeholder="3000.00"
                 value={amountPerInstallment}
                 onChange={(e) => {
-                  setAmountPerInstallment(e.target.value);
-                }}
+                  if (e.target.value !== "") {
+                    setAmountPerInstallment(e.target.value);
+                  }
+                }
+                }
               />
             </Form.Item>
             <Form.Item label="* Guarantee Months / Years  ">
@@ -567,8 +579,11 @@ export default function Edit_model({
                 placeholder="6"
                 value={guaranteePeriod}
                 onChange={(e) => {
-                  setGuaranteePeriod(e.target.value);
-                }}
+                  if (e.target.value !== "") {
+                    setGuaranteePeriod(e.target.value);
+                  }
+                }
+                }
               />
             </Form.Item>
             <Form.Item label="* Down Payment (LKR)">
@@ -579,8 +594,11 @@ export default function Edit_model({
                 placeholder="5000.00"
                 value={downPayment}
                 onChange={(e) => {
-                  setDownPayment(e.target.value);
-                }}
+                  if (e.target.value !== "") {
+                    setDownPayment(e.target.value);
+                  }
+                }
+                }
               />
             </Form.Item>
 
@@ -592,9 +610,9 @@ export default function Edit_model({
                 placeholder="500.00"
                 value={discount}
                 onChange={(e) => {
-                  if (e.target.value < salePrice) {
-                    setDiscount(e.target.value);
-                  }
+                  if (e.target.value < salePrice && e.target.value !== "") {
+                      setDiscount(e.target.value);
+                    }
                 }}
               />
             </Form.Item>
@@ -740,10 +758,17 @@ export default function Edit_model({
 
             <p className="validate_Edit">{validation}</p>
             <Button
-              disabled={!loadingSubmit ? false : true}
+              // disabled={!loadingSubmit ? false : true}
               className="btn"
               type="primary"
               onClick={updateItem}
+              disabled={
+                   brand.length === 0 ||
+                  cInvoiceNo.length === 0 ||
+                  GCardNo.length === 0 
+                      ? true
+                      : false
+                  }
             >
               {loadingSubmit ? (
                 <Spin spinning={loadingSubmit} size="large" />

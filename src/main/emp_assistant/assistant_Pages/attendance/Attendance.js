@@ -1,21 +1,19 @@
 import React, { useState, useEffect } from "react";
 import MUIDataTable from "mui-datatables";
 import { Grid, Button } from "@material-ui/core";
-// eslint-disable-next-line
 import { Modal } from "antd";
+import { useHistory } from "react-router-dom";
 
 // icons
 import VisibilityIcon from "@material-ui/icons/Visibility";
-
-// eslint-disable-next-line
 import AutorenewIcon from "@material-ui/icons/Autorenew";
-import { useHistory } from "react-router-dom";
+
 
 // components
 import ViewEmployee from "./components/view_Employee_Model/View_Employee";
 import UpdateStatus from "./components/status_Update_Model/Update_Status";
 import MarkAttendance from "./components/mark_Attendance_Model/Mark_Attendance";
-// import HistoryAttendance from "./components/attedance_History_Model/History_Attendance";
+
 
 // styles
 import "./Attendance.css";

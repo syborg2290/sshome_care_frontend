@@ -77,8 +77,12 @@ export default function Update_Model({
   const { confirm } = Modal;
 
   let history = useHistory();
+  let history1 = useHistory();
 
   useEffect(() => {
+    window.addEventListener("offline", function (e) {
+      history1.push("/connection_lost");
+    });
     db.collection("customer")
       .doc(customer_id)
       .get()
@@ -289,6 +293,7 @@ export default function Update_Model({
 
         setIsLoading(false);
       });
+     // eslint-disable-next-line
   }, [invoice_no, isEx, instAmountProp, instCount, customer_id]);
 
   const updateInstallment = async () => {

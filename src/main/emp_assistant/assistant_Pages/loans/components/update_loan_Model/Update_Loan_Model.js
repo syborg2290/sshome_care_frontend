@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import { DatePicker, Space, Spin } from "antd";
 import {
   TextField,
@@ -19,6 +20,14 @@ export default function Update_Loan_Model({ docId, balance, amountSe }) {
   const [date, setDate] = useState(null);
   const [validation, setValidation] = useState("");
   const [isLoading, setLoading] = useState(false);
+  let history = useHistory();
+  
+  useEffect(() => {
+    window.addEventListener("offline", function (e) {
+      history.push("/connection_lost");
+    });
+// eslint-disable-next-line
+      }, []);
 
   const updateLoan = () => {
     setLoading(true);

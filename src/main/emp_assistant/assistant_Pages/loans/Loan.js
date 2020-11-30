@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-
 import { Modal } from "antd";
 import { Grid, Button } from "@material-ui/core";
 import MUIDataTable from "mui-datatables";
-
+import { useHistory } from "react-router-dom";
 // components
 import NewLoan from "./components/new_loan_Model/New_Loan_Model";
 import LoanHistory from "./components/history_loan_Model/Loan_History_Model";
@@ -28,6 +27,8 @@ export default function Loan() {
   const [allData, setallData] = useState([]);
   const [tableData, setTableData] = useState([]);
 
+  let history = useHistory();
+  
   const AddNewLoanModel = () => {
     setAddNewLoanModel(true);
   };
@@ -117,6 +118,9 @@ export default function Loan() {
   ];
 
   useEffect(() => {
+       window.addEventListener("offline", function (e) {
+      history.push("/connection_lost");
+    });
     db.collection("loans")
       .orderBy("date", "desc")
       .get()
@@ -166,6 +170,7 @@ export default function Loan() {
         setallData(allRawData);
         setTableData(rawTableData);
       });
+        // eslint-disable-next-line
   }, []);
 
   return (

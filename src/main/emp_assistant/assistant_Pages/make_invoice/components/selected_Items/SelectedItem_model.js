@@ -16,6 +16,9 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
   let history = useHistory();
 
   useEffect(() => {
+     window.addEventListener("offline", function (e) {
+      history.push("/connection_lost");
+    });
     var keepData = [];
     var i = 0;
     itemListProps.forEach((ele) => {

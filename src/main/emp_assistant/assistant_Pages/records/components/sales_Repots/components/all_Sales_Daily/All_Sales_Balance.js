@@ -341,6 +341,7 @@ async function getAllSalesReports(sales, cash, cards, installment, docs) {
           new Date(ob.date).getMonth() === new Date(sales[i].date).getMonth() &&
           new Date(ob.date).getDate() === new Date(sales[i].date).getDate()
       );
+
       let result4 = docs.filter(
         (ob) =>
           new Date(ob.date).getFullYear() ===
@@ -407,6 +408,29 @@ async function getAllSalesReports(sales, cash, cards, installment, docs) {
       });
     }
   }
+
+  for (let n = 0; n < installment.length; n++) {
+    let resultExtraIn = allArray.some(
+      (ob) =>
+        new Date(ob.date).getFullYear() ===
+          new Date(installment[n].date).getFullYear() &&
+        new Date(ob.date).getMonth() ===
+          new Date(installment[n].date).getMonth() &&
+        new Date(ob.date).getDate() === new Date(installment[n].date).getDate()
+    );
+
+    if (!resultExtraIn) {
+      allArray.push({
+        date: new Date(installment[n].date),
+        sales: 0,
+        cash: 0,
+        cards: 0,
+        installment: installment[n].total,
+        docs: docs[n] === 0 ? 0 : docs[n].total,
+      });
+    }
+  }
+
   return allArray;
 }
 

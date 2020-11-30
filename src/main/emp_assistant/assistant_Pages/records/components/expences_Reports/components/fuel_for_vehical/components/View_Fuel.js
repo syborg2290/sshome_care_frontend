@@ -108,33 +108,36 @@ export default function View_Fuel({ obj }) {
         />
       ),
     });
-
-    raw.push({
-      Discription: obj["otherFuel"].description,
-      Vehical: "otherRepair",
-      Cost: (
-        <CurrencyFormat
-          value={obj["otherFuel"].cost}
-          displayType={"text"}
-          thousandSeparator={true}
-          prefix={" "}
-        />
-      ),
-    });
-
-    for (var i = 0; i < Object.keys(obj.extra_inputs).length; i++) {
+    if (obj["otherFuel"].vehi_name !== "") {
       raw.push({
-        Discription: obj.extra_inputs[i].description,
-        Vehical: obj.extra_inputs[i].vehi_name,
+        Discription: obj["otherFuel"].description,
+        Vehical: obj["otherFuel"].vehi_name,
         Cost: (
           <CurrencyFormat
-            value={obj.extra_inputs[i].cost}
+            value={obj["otherFuel"].cost}
             displayType={"text"}
             thousandSeparator={true}
             prefix={" "}
           />
         ),
       });
+    }
+
+    for (var i = 0; i < Object.keys(obj.extra_inputs).length; i++) {
+      if (obj.extra_inputs[i].vehi_name !== "") {
+        raw.push({
+          Discription: obj.extra_inputs[i].description,
+          Vehical: obj.extra_inputs[i].vehi_name,
+          Cost: (
+            <CurrencyFormat
+              value={obj.extra_inputs[i].cost}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={" "}
+            />
+          ),
+        });
+      }
     }
     setallData(raw);
   }, [obj]);

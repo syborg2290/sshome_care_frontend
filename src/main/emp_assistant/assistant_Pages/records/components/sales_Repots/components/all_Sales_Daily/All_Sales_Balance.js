@@ -25,7 +25,8 @@ async function getAllSalesSaily() {
             type: custIn.docs[i].data().selectedType,
             total:
               parseInt(custIn.docs[i].data().items[j].downpayment) *
-              parseInt(custIn.docs[i].data().items[j].qty),
+                parseInt(custIn.docs[i].data().items[j].qty) -
+              custIn.docs[i].data().items[j].discount,
           });
         }
       }
@@ -88,7 +89,8 @@ async function getAllCashSaleSaily() {
               type: custIn.docs[i].data().selectedType,
               total:
                 parseInt(custIn.docs[i].data().items[j].downpayment) *
-                parseInt(custIn.docs[i].data().items[j].qty),
+                  parseInt(custIn.docs[i].data().items[j].qty) -
+                custIn.docs[i].data().items[j].discount,
             });
           }
         }
@@ -148,9 +150,7 @@ async function getAllRecievedCardSaleSaily() {
             cardSale.push({
               date: new Date(custIn.docs[i].data().date.seconds * 1000),
               type: custIn.docs[i].data().selectedType,
-              total:
-                parseInt(custIn.docs[i].data().items[j].downpayment) *
-                parseInt(custIn.docs[i].data().items[j].qty),
+              total: parseInt(custIn.docs[i].data().downpayment),
             });
           }
         }
@@ -608,7 +608,6 @@ export default function All_Sales_Balance() {
                                   Total: (
                                     <CurrencyFormat
                                       value={
-                                        each.sales +
                                         each.cards +
                                         each.cash +
                                         each.installment +
@@ -622,7 +621,6 @@ export default function All_Sales_Balance() {
                                   Total_Balance: (
                                     <CurrencyFormat
                                       value={
-                                        previousSale +
                                         previousCards +
                                         previousCash +
                                         previousIntsll +

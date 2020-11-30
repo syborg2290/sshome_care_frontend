@@ -578,6 +578,7 @@ export default function Areas() {
               customToolbarSelect: () => {},
               filterType: "textfield",
               download: false,
+              rowHover:false,
               print: false,
               searchPlaceholder: "Search using any column names",
               elevation: 4,

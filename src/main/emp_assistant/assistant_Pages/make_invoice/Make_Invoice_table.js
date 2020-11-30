@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-// eslint-disable-next-line
 import { Grid, Button } from "@material-ui/core";
 import { Spin, Modal } from "antd";
 import MUIDataTable from "mui-datatables";

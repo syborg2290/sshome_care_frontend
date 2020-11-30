@@ -275,7 +275,7 @@ class PrintInvoiceClass extends React.Component {
                 <Col className="lbl_signature" span={4}>
                   ...............................
                   <br />
-                  <span className="txt_signature"> Signature</span>
+                  <span className="txt_signature">Name/Signature</span>
                 </Col>
               </Row>
             </form>

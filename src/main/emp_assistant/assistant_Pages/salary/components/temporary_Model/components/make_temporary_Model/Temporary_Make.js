@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { DatePicker, Space, Spin } from "antd";
+import { useHistory } from "react-router-dom";
 
 import {
   TextField,
@@ -20,6 +21,15 @@ export default function Temporary_Make() {
   const [reason, setReason] = useState("");
   const [date, setDate] = useState(null);
   const [isLoading, setLoading] = useState(false);
+  
+  let history = useHistory();
+
+  useEffect(() => {
+    window.addEventListener("offline", function (e) {
+      history.push("/connection_lost");
+    });
+    // eslint-disable-next-line
+      }, []);
 
   const makeTemporary = () => {
     setLoading(true);

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-
 import { Grid } from "@material-ui/core";
 import MUIDataTable from "mui-datatables";
 import moment from "moment";
 import CurrencyFormat from "react-currency-format";
+import { useHistory } from "react-router-dom";
 // styles
 import "./Target_History_Model.css";
 
@@ -14,7 +14,7 @@ export default function Target_History_Model() {
   const [currentIndx, setCurrentIndx] = useState(0);
   // eslint-disable-next-line
   const [allData, setallData] = useState([]);
-
+let history = useHistory();
   const columns = [
     {
       name: "Target_Type",
@@ -65,6 +65,9 @@ export default function Target_History_Model() {
   ];
 
   useEffect(() => {
+     window.addEventListener("offline", function (e) {
+      history.push("/connection_lost");
+    });
     db.collection("targets")
       .get()
       .then((reThen) => {
@@ -95,6 +98,7 @@ export default function Target_History_Model() {
         });
         setallData(rawData);
       });
+        // eslint-disable-next-line
   }, []);
 
   return (

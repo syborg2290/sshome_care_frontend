@@ -39,6 +39,7 @@ export default function Gami_Sarani() {
   // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
   let history = useHistory();
+
   const GamisaraniAddCustomer = () => {
     setGamisaraniModel(true);
   };

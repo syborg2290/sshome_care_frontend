@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { DatePicker, Space, Radio } from "antd";
+import { useHistory } from "react-router-dom";
 
 import {
   TextField,
@@ -29,6 +30,8 @@ export default function Create_Target_Model() {
   const [validation, setValidation] = useState("");
   const [targetType, setTargetType] = useState("sale_target");
 
+  let history = useHistory();
+  
   const handleChange = async (event) => {
     setSelectedType(event.target.value);
 
@@ -130,6 +133,9 @@ export default function Create_Target_Model() {
   };
 
   useEffect(() => {
+       window.addEventListener("offline", function (e) {
+      history.push("/connection_lost");
+    });
     db.collection("root")
       .get()
       .then((re) => {

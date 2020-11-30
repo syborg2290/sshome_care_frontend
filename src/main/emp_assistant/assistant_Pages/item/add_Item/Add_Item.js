@@ -1358,10 +1358,19 @@ export default function Add_Item() {
               <Grid className="txt_Labels" item xs={12} sm={8}></Grid>
               <Grid className="txt_Labels" item xs={12} sm={4}>
                 <Button
-                  disabled={!loadingSubmit ? false : true}
+                  // disabled={!loadingSubmit ? false : true}
                   className="btnAdd"
                   type="primary"
                   onClick={addItem}
+                  disabled={
+                    loadingSubmit ||
+                    itemName.length === 0 ||
+                    brand.length === 0 |
+                    cInvoiceNo.length === 0 ||
+                    GCardNo.length === 0 
+                      ? true
+                      : false
+                  }
                 >
                   {loadingSubmit ? (
                     <Spin spinning={loadingSubmit} size="large" />

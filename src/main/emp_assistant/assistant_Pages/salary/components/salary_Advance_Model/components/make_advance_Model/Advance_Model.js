@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { DatePicker, Space, Spin } from "antd";
 import CurrencyFormat from "react-currency-format";
+import { useHistory } from "react-router-dom";
 
 import {
   TextField,
@@ -22,8 +23,11 @@ export default function Advance_Model({ docId, nic, fname, lname }) {
   const [intialBalance, setInitialBalance] = useState(0);
   const [date, setDate] = useState(null);
   const [isLoading, setLoading] = useState(false);
-
+  let history = useHistory();
   useEffect(() => {
+      window.addEventListener("offline", function (e) {
+      history.push("/connection_lost");
+    });
     setLoading(true);
     db.collection("employee")
       .doc(docId)
@@ -47,6 +51,7 @@ export default function Advance_Model({ docId, nic, fname, lname }) {
             setLoading(false);
           });
       });
+      // eslint-disable-next-line
   }, [docId, nic]);
 
   const makeAdvance = () => {

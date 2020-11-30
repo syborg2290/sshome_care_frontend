@@ -37,7 +37,12 @@ export default function Gass_Model() {
   const [validation, setValidation] = useState("");
   const [shortage, setShortage] = useState(0);
 
+      let history2 = useHistory();
+
   useEffect(() => {
+      window.addEventListener("offline", function (e) {
+      history2.push("/connection_lost");
+    });
     db.collection("gas")
       .get()
       .then((re) => {
@@ -63,6 +68,7 @@ export default function Gass_Model() {
         });
         setAllRoot(rawRoot);
       });
+      // eslint-disable-next-line
   }, []);
 
   const handleChangeWeight = (event) => {

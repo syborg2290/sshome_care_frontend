@@ -37,7 +37,7 @@ export default function Repair_model({ closeModel }) {
 
   useEffect(() => {
     window.addEventListener("offline", function (e) {
-      history2.push("/assistant/connection/error/lost_connection");
+      history2.push("/connection_lost");
     });
   });
 

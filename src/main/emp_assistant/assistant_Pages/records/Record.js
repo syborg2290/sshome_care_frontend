@@ -1,8 +1,7 @@
-// eslint-disable-next-line
-import React, { useState } from "react";
+import React, {useEffect } from "react";
 import Container from "@material-ui/core/Container";
-    // eslint-disable-next-line
-import { Grid, Button } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
+import { useHistory } from "react-router-dom";
 
 // styles
 import "./Record.css";
@@ -14,6 +13,15 @@ import ExpencesReport from "./components/expences_Reports/Expences_Report";
 import VehicalServiceReport from "./components/vehical_service/Vehical_Service_Report";
 
 export default function Record() {
+
+  let history = useHistory();
+  useEffect(() => {
+    window.addEventListener("offline", function (e) {
+      history.push("/connection_lost");
+    });
+      // eslint-disable-next-line
+  }, []);
+  
     return (
         <>
             <Container component="main" className="main_containerRec">

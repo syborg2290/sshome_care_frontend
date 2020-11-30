@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Grid } from "@material-ui/core";
 import MUIDataTable from "mui-datatables";
-
+import { useHistory } from "react-router-dom";
 import moment from "moment";
 
 // styles
@@ -14,7 +14,8 @@ export default function Loan_History_Model({ docId }) {
   const [currentIndx, setCurrentIndx] = useState(0);
   // eslint-disable-next-line
   const [tableData, setallData] = useState([]);
-
+  let history = useHistory();
+  
   const columns = [
     {
       name: "Date",
@@ -46,6 +47,9 @@ export default function Loan_History_Model({ docId }) {
   ];
 
   useEffect(() => {
+     window.addEventListener("offline", function (e) {
+      history.push("/connection_lost");
+    });
     db.collection("loan_history")
       .where("docId", "==", docId)
       .get()
@@ -62,6 +66,7 @@ export default function Loan_History_Model({ docId }) {
         });
         setallData(rawData);
       });
+        // eslint-disable-next-line
   }, [docId]);
 
   return (

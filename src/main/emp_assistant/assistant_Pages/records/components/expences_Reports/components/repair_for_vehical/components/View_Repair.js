@@ -109,32 +109,36 @@ export default function View_Repair({ obj }) {
       ),
     });
 
-    raw.push({
-      Discription: obj["otherRepair"].description,
-      Vehical: "otherRepair",
-      Cost: (
-        <CurrencyFormat
-          value={obj["otherRepair"].cost}
-          displayType={"text"}
-          thousandSeparator={true}
-          prefix={" "}
-        />
-      ),
-    });
-
-    for (var i = 0; i < Object.keys(obj.extra_inputs).length; i++) {
+    if (obj["otherRepair"].vehi_name !== "") {
       raw.push({
-        Discription: obj.extra_inputs[i].description,
-        Vehical: obj.extra_inputs[i].vehi_name,
+        Discription: obj["otherRepair"].description,
+        Vehical: obj["otherRepair"].vehi_name,
         Cost: (
           <CurrencyFormat
-            value={obj.extra_inputs[i].cost}
+            value={obj["otherRepair"].cost}
             displayType={"text"}
             thousandSeparator={true}
             prefix={" "}
           />
         ),
       });
+    }
+
+    for (var i = 0; i < Object.keys(obj.extra_inputs).length; i++) {
+      if (obj.extra_inputs[i].vehi_name !== "") {
+        raw.push({
+          Discription: obj.extra_inputs[i].description,
+          Vehical: obj.extra_inputs[i].vehi_name,
+          Cost: (
+            <CurrencyFormat
+              value={obj.extra_inputs[i].cost}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={" "}
+            />
+          ),
+        });
+      }
     }
     setallData(raw);
   }, [obj]);

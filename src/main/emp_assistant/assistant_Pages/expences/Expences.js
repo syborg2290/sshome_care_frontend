@@ -223,6 +223,7 @@ export default function Expences() {
         cost: gkCost,
       },
       otherRepair: {
+        vehi_name: otherRepair,
         description: otherRepairDiscription,
         cost: otherRepairCost,
       },
@@ -252,6 +253,7 @@ export default function Expences() {
         cost: gkCostFuel,
       },
       otherFuel: {
+        vehi_name: otherFuel,
         description: otherFuelDiscription,
         cost: otherFuelCost,
       },
@@ -1641,6 +1643,7 @@ export default function Expences() {
                 fullWidth
                 label="Discription"
                 autoFocus
+                disabled={otherRepair.length === 0}
                 size="small"
                 value={otherRepairDiscription}
                 onChange={(e) => {
@@ -1658,6 +1661,7 @@ export default function Expences() {
                 autoFocus
                 size="small"
                 type="number"
+                disabled={otherRepair.length === 0}
                 InputProps={{ inputProps: { min: 0 } }}
                 value={otherRepairCost}
                 onChange={(e) => {
@@ -2122,6 +2126,7 @@ export default function Expences() {
                 label="Discription"
                 autoFocus
                 size="small"
+                disabled={otherFuel.length === 0}
                 value={otherFuelDiscription}
                 onChange={(e) => {
                   setOtherFuelDiscription(e.target.value);
@@ -2140,6 +2145,7 @@ export default function Expences() {
                 type="number"
                 InputProps={{ inputProps: { min: 0 } }}
                 value={otherFuelCost}
+                disabled={otherFuel.length === 0}
                 onChange={(e) => {
                   if (e.target.value !== "") {
                     let prev = otherFuelCost;

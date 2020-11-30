@@ -9,12 +9,10 @@ import MUIDataTable from "mui-datatables";
 import "./Gass_History.css";
 import db from "../../../../../../config/firebase.js";
 
-
 export default function Gass_History() {
-   
   const [tableData, setTableData] = useState([]);
-  
-   const columns = [
+
+  const columns = [
     {
       name: "Weight",
       options: {
@@ -62,29 +60,31 @@ export default function Gass_History() {
   ];
 
   useEffect(() => {
-    db.collection("gas_history").onSnapshot((snap) => {
-      var raw = [];
+    db.collection("gas_history")
+      .orderBy("date", "desc")
+      .onSnapshot((snap) => {
+        var raw = [];
 
-      snap.docs.forEach((each) => {
-        raw.push({
-          Weight: each.data().weight + " Kg",
-          Date: moment(each.data()?.date?.toDate()).format(
-            "dddd, MMMM Do YYYY"
-          ),
-          Qty: each.data().qty,
-          Purchased_Price: (
-            <CurrencyFormat
-              value={each.data().price}
-              displayType={"text"}
-              thousandSeparator={true}
-              prefix={" "}
-            />
-          ),
+        snap.docs.forEach((each) => {
+          raw.push({
+            Weight: each.data().weight + " Kg",
+            Date: moment(each.data()?.date?.toDate()).format(
+              "dddd, MMMM Do YYYY"
+            ),
+            Qty: each.data().qty,
+            Purchased_Price: (
+              <CurrencyFormat
+                value={each.data().price}
+                displayType={"text"}
+                thousandSeparator={true}
+                prefix={" "}
+              />
+            ),
+          });
         });
-      });
 
-      setTableData(raw);
-    });
+        setTableData(raw);
+      });
   }, []);
 
   return (
@@ -97,7 +97,7 @@ export default function Gass_History() {
           data={tableData}
           columns={columns}
           options={{
-             selectableRows: "none",
+            selectableRows: "none",
             customToolbarSelect: () => {},
             filterType: "textField",
             download: false,
@@ -111,7 +111,3 @@ export default function Gass_History() {
     </Grid>
   );
 }
-
-  
-    
-

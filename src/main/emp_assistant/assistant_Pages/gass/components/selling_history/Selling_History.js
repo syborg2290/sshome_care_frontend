@@ -67,30 +67,32 @@ export default function Selling_History() {
   ];
 
   useEffect(() => {
-    db.collection("gas_purchase_history").onSnapshot((snap) => {
-      var raw = [];
+    db.collection("gas_purchase_history")
+      .orderBy("date", "desc")
+      .onSnapshot((snap) => {
+        var raw = [];
 
-      snap.docs.forEach((each) => {
-        raw.push({
-          Weight: each.data().weight + " Kg",
-          Type:each.data().type,
-          Date: moment(each.data()?.date?.toDate()).format(
-            "dddd, MMMM Do YYYY"
-          ),
-          Qty: each.data().qty,
-          Total: (
-            <CurrencyFormat
-              value={each.data().price}
-              displayType={"text"}
-              thousandSeparator={true}
-              prefix={" "}
-            />
-          ),
+        snap.docs.forEach((each) => {
+          raw.push({
+            Weight: each.data().weight + " Kg",
+            Type: each.data().type,
+            Date: moment(each.data()?.date?.toDate()).format(
+              "dddd, MMMM Do YYYY"
+            ),
+            Qty: each.data().qty,
+            Total: (
+              <CurrencyFormat
+                value={each.data().price}
+                displayType={"text"}
+                thousandSeparator={true}
+                prefix={" "}
+              />
+            ),
+          });
         });
-      });
 
-      setTableData(raw);
-    });
+        setTableData(raw);
+      });
   }, []);
 
   return (

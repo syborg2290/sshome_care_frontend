@@ -290,6 +290,7 @@ export default function Create_Target_Model() {
                 type="number"
                 label="Target Amount"
                 size="small"
+                disabled={targetType === ""}
                 InputProps={{ inputProps: { min: 0 } }}
                 value={
                   targetType === "sale_target"

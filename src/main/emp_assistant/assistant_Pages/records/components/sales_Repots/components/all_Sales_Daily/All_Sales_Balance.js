@@ -265,14 +265,12 @@ async function getAllDocumentChargesDaily() {
     .get()
     .then((custIn) => {
       for (let i = 0; i < custIn.docs.length; i++) {
-        if (custIn.docs[i].data().paymentWay === "PayandGo") {
-          for (let j = 0; j < custIn.docs[i].data().items.length; j++) {
-            cardSale.push({
-              date: new Date(custIn.docs[i].data().date.seconds * 1000),
-              type: custIn.docs[i].data().selectedType,
-              total: custIn.docs[i].data().document_charges,
-            });
-          }
+        for (let j = 0; j < custIn.docs[i].data().items.length; j++) {
+          cardSale.push({
+            date: new Date(custIn.docs[i].data().date.seconds * 1000),
+            type: custIn.docs[i].data().selectedType,
+            total: custIn.docs[i].data().document_charges,
+          });
         }
       }
     });
@@ -320,95 +318,69 @@ async function sumSameDayDocumentCharges(allDocs) {
 async function getAllSalesReports(sales, cash, cards, installment, docs) {
   let allArray = [];
 
-  if (sales.length >= installment.length) {
-    for (let i = 0; i < sales.length; i++) {
-      let result = cash.filter(
-        (ob) =>
-          new Date(ob.date).getFullYear() ===
-            new Date(sales[i].date).getFullYear() &&
-          new Date(ob.date).getMonth() === new Date(sales[i].date).getMonth() &&
-          new Date(ob.date).getDate() === new Date(sales[i].date).getDate()
-      );
-      let result2 = cards.filter(
-        (ob) =>
-          new Date(ob.date).getFullYear() ===
-            new Date(sales[i].date).getFullYear() &&
-          new Date(ob.date).getMonth() === new Date(sales[i].date).getMonth() &&
-          new Date(ob.date).getDate() === new Date(sales[i].date).getDate()
-      );
-      let result3 = installment.filter(
-        (ob) =>
-          new Date(ob.date).getFullYear() ===
-            new Date(sales[i].date).getFullYear() &&
-          new Date(ob.date).getMonth() === new Date(sales[i].date).getMonth() &&
-          new Date(ob.date).getDate() === new Date(sales[i].date).getDate()
-      );
-      let result4 = docs.filter(
-        (ob) =>
-          new Date(ob.date).getFullYear() ===
-            new Date(sales[i].date).getFullYear() &&
-          new Date(ob.date).getMonth() === new Date(sales[i].date).getMonth() &&
-          new Date(ob.date).getDate() === new Date(sales[i].date).getDate()
-      );
+  for (let i = 0; i < sales.length; i++) {
+    let result = cash.filter(
+      (ob) =>
+        new Date(ob.date).getFullYear() ===
+          new Date(sales[i].date).getFullYear() &&
+        new Date(ob.date).getMonth() === new Date(sales[i].date).getMonth() &&
+        new Date(ob.date).getDate() === new Date(sales[i].date).getDate()
+    );
+    let result2 = cards.filter(
+      (ob) =>
+        new Date(ob.date).getFullYear() ===
+          new Date(sales[i].date).getFullYear() &&
+        new Date(ob.date).getMonth() === new Date(sales[i].date).getMonth() &&
+        new Date(ob.date).getDate() === new Date(sales[i].date).getDate()
+    );
+    let result3 = installment.filter(
+      (ob) =>
+        new Date(ob.date).getFullYear() ===
+          new Date(sales[i].date).getFullYear() &&
+        new Date(ob.date).getMonth() === new Date(sales[i].date).getMonth() &&
+        new Date(ob.date).getDate() === new Date(sales[i].date).getDate()
+    );
 
-      allArray.push({
-        date: new Date(sales[i].date),
-        sales: sales[i].total,
-        cash: result.length === 0 ? 0 : result[0].total,
-        cards: result2.length === 0 ? 0 : result2[0].total,
-        installment: result3.length === 0 ? 0 : result3[0].total,
-        docs: result4.length === 0 ? 0 : result4[0].total,
-      });
-    }
-  } else {
-    for (let i = 0; i < installment.length; i++) {
-      let result = cash.filter(
-        (ob) =>
-          new Date(ob.date).getFullYear() ===
-            new Date(installment[i].date).getFullYear() &&
-          new Date(ob.date).getMonth() ===
-            new Date(installment[i].date).getMonth() &&
-          new Date(ob.date).getDate() ===
-            new Date(installment[i].date).getDate()
-      );
-      let result2 = cards.filter(
-        (ob) =>
-          new Date(ob.date).getFullYear() ===
-            new Date(installment[i].date).getFullYear() &&
-          new Date(ob.date).getMonth() ===
-            new Date(installment[i].date).getMonth() &&
-          new Date(ob.date).getDate() ===
-            new Date(installment[i].date).getDate()
-      );
-      let result3 = sales.filter(
-        (ob) =>
-          new Date(ob.date).getFullYear() ===
-            new Date(installment[i].date).getFullYear() &&
-          new Date(ob.date).getMonth() ===
-            new Date(installment[i].date).getMonth() &&
-          new Date(ob.date).getDate() ===
-            new Date(installment[i].date).getDate()
-      );
-      let result4 = docs.filter(
-        (ob) =>
-          new Date(ob.date).getFullYear() ===
-            new Date(installment[i].date).getFullYear() &&
-          new Date(ob.date).getMonth() ===
-            new Date(installment[i].date).getMonth() &&
-          new Date(ob.date).getDate() ===
-            new Date(installment[i].date).getDate()
-      );
+    let result4 = docs.filter(
+      (ob) =>
+        new Date(ob.date).getFullYear() ===
+          new Date(sales[i].date).getFullYear() &&
+        new Date(ob.date).getMonth() === new Date(sales[i].date).getMonth() &&
+        new Date(ob.date).getDate() === new Date(sales[i].date).getDate()
+    );
 
+    allArray.push({
+      date: new Date(sales[i].date),
+      sales: sales[i].total,
+      cash: result.length === 0 ? 0 : result[0].total,
+      cards: result2.length === 0 ? 0 : result2[0].total,
+      installment: result3.length === 0 ? 0 : result3[0].total,
+      docs: result4.length === 0 ? 0 : result4[0].total,
+    });
+  }
+
+  for (let n = 0; n < installment.length; n++) {
+    let resultExtraIn = allArray.some(
+      (ob) =>
+        new Date(ob.date).getFullYear() ===
+          new Date(installment[n].date).getFullYear() &&
+        new Date(ob.date).getMonth() ===
+          new Date(installment[n].date).getMonth() &&
+        new Date(ob.date).getDate() === new Date(installment[n].date).getDate()
+    );
+
+    if (!resultExtraIn) {
       allArray.push({
-        date: new Date(installment[i].date),
-        sales: result3.length === 0 ? 0 : result3[0].total,
-        cash: result.length === 0 ? 0 : result[0].total,
-        cards: result2.length === 0 ? 0 : result2[0].total,
-        installment: installment[i].total,
-        docs: result4.length === 0 ? 0 : result4[0].total,
+        date: new Date(installment[n].date),
+        sales: 0,
+        cash: 0,
+        cards: 0,
+        installment: installment[n].total,
+        docs: docs[n] === 0 ? 0 : docs[n].total,
       });
     }
   }
+
   return allArray;
 }
 

@@ -26,7 +26,6 @@ export default function Deposit_Model({ midProp, nicProp, close_model }) {
   let history = useHistory();
 
   useEffect(() => {
-
     window.addEventListener("offline", function (e) {
       history.push("/connection_lost");
     });
@@ -37,7 +36,7 @@ export default function Deposit_Model({ midProp, nicProp, close_model }) {
       .then((re) => {
         setCurrentBalance(re.docs[0].data().currentDeposit);
       });
-      // eslint-disable-next-line
+    // eslint-disable-next-line
   }, [midProp]);
 
   const depositSubmit = () => {
@@ -77,7 +76,7 @@ export default function Deposit_Model({ midProp, nicProp, close_model }) {
                             })
                             .then((_) => {
                               setLoadingSubmit(false);
-                              close_model();
+                              window.location.reload();
                             });
                         });
                     });

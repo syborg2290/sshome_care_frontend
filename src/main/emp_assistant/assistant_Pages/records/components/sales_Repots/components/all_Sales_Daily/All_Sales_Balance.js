@@ -265,14 +265,12 @@ async function getAllDocumentChargesDaily() {
     .get()
     .then((custIn) => {
       for (let i = 0; i < custIn.docs.length; i++) {
-        if (custIn.docs[i].data().paymentWay === "PayandGo") {
-          for (let j = 0; j < custIn.docs[i].data().items.length; j++) {
-            cardSale.push({
-              date: new Date(custIn.docs[i].data().date.seconds * 1000),
-              type: custIn.docs[i].data().selectedType,
-              total: custIn.docs[i].data().document_charges,
-            });
-          }
+        for (let j = 0; j < custIn.docs[i].data().items.length; j++) {
+          cardSale.push({
+            date: new Date(custIn.docs[i].data().date.seconds * 1000),
+            type: custIn.docs[i].data().selectedType,
+            total: custIn.docs[i].data().document_charges,
+          });
         }
       }
     });

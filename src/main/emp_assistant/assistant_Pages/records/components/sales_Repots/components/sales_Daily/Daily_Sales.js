@@ -24,9 +24,9 @@ async function sumSameDaySales(allSales) {
     let result = reduceDup.some(
       (ob) =>
         new Date(ob.date).getFullYear() ===
-        new Date(allSales[i].date).getFullYear() &&
+          new Date(allSales[i].date).getFullYear() &&
         new Date(ob.date).getMonth() ===
-        new Date(allSales[i].date).getMonth() &&
+          new Date(allSales[i].date).getMonth() &&
         new Date(ob.date).getDate() === new Date(allSales[i].date).getDate()
     );
 
@@ -34,9 +34,9 @@ async function sumSameDaySales(allSales) {
       let indexFor = reduceDup.findIndex(
         (ob) =>
           new Date(ob.date).getFullYear() ===
-          new Date(allSales[i].date).getFullYear() &&
+            new Date(allSales[i].date).getFullYear() &&
           new Date(ob.date).getMonth() ===
-          new Date(allSales[i].date).getMonth() &&
+            new Date(allSales[i].date).getMonth() &&
           new Date(ob.date).getDate() === new Date(allSales[i].date).getDate()
       );
 
@@ -65,9 +65,9 @@ async function sumEachSameDaySales(allSales) {
     let result = reduceDup.some(
       (ob) =>
         new Date(ob.date).getFullYear() ===
-        new Date(allSales[i].date).getFullYear() &&
+          new Date(allSales[i].date).getFullYear() &&
         new Date(ob.date).getMonth() ===
-        new Date(allSales[i].date).getMonth() &&
+          new Date(allSales[i].date).getMonth() &&
         new Date(ob.date).getDate() === new Date(allSales[i].date).getDate() &&
         ob.type === allSales[i].type
     );
@@ -76,11 +76,11 @@ async function sumEachSameDaySales(allSales) {
       let indexFor = reduceDup.findIndex(
         (ob) =>
           new Date(ob.date).getFullYear() ===
-          new Date(allSales[i].date).getFullYear() &&
+            new Date(allSales[i].date).getFullYear() &&
           new Date(ob.date).getMonth() ===
-          new Date(allSales[i].date).getMonth() &&
+            new Date(allSales[i].date).getMonth() &&
           new Date(ob.date).getDate() ===
-          new Date(allSales[i].date).getDate() &&
+            new Date(allSales[i].date).getDate() &&
           ob.type === allSales[i].type
       );
 
@@ -108,7 +108,7 @@ async function dateEachSameDaySales(allSales, date) {
   for (let i = 0; i < allSales.length; i++) {
     if (
       new Date(date).getFullYear() ===
-      new Date(allSales[i].date).getFullYear() &&
+        new Date(allSales[i].date).getFullYear() &&
       new Date(date).getMonth() === new Date(allSales[i].date).getMonth() &&
       new Date(date).getDate() === new Date(allSales[i].date).getDate()
     ) {
@@ -184,7 +184,8 @@ export default function Daily_Sales() {
               type: custIn.docs[i].data().selectedType,
               total:
                 parseInt(custIn.docs[i].data().items[j].downpayment) *
-                parseInt(custIn.docs[i].data().items[j].qty),
+                  parseInt(custIn.docs[i].data().items[j].qty) -
+                custIn.docs[i].data().items[j].discount,
             });
           }
         }
@@ -277,7 +278,7 @@ export default function Daily_Sales() {
             columns={columns}
             options={{
               selectableRows: "none",
-              customToolbarSelect: () => { },
+              customToolbarSelect: () => {},
               filterType: "textField",
               download: false,
               print: false,
@@ -289,8 +290,8 @@ export default function Daily_Sales() {
                   noMatch: isLoading ? (
                     <Spin className="tblSpinner" size="large" spinning="true" />
                   ) : (
-                      ""
-                    ),
+                    ""
+                  ),
                 },
               },
             }}

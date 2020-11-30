@@ -25,7 +25,8 @@ async function getAllSalesSaily() {
             type: custIn.docs[i].data().selectedType,
             total:
               parseInt(custIn.docs[i].data().items[j].downpayment) *
-              parseInt(custIn.docs[i].data().items[j].qty),
+                parseInt(custIn.docs[i].data().items[j].qty) -
+              custIn.docs[i].data().items[j].discount,
           });
         }
       }
@@ -88,7 +89,8 @@ async function getAllCashSaleSaily() {
               type: custIn.docs[i].data().selectedType,
               total:
                 parseInt(custIn.docs[i].data().items[j].downpayment) *
-                parseInt(custIn.docs[i].data().items[j].qty),
+                  parseInt(custIn.docs[i].data().items[j].qty) -
+                custIn.docs[i].data().items[j].discount,
             });
           }
         }
@@ -148,9 +150,7 @@ async function getAllRecievedCardSaleSaily() {
             cardSale.push({
               date: new Date(custIn.docs[i].data().date.seconds * 1000),
               type: custIn.docs[i].data().selectedType,
-              total:
-                parseInt(custIn.docs[i].data().items[j].downpayment) *
-                parseInt(custIn.docs[i].data().items[j].qty),
+              total: parseInt(custIn.docs[i].data().downpayment),
             });
           }
         }

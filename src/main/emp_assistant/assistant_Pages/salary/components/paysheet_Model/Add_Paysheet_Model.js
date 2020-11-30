@@ -379,7 +379,8 @@ async function getSaleTarget(root, currentDate) {
             saleTargetValue =
               parseInt(saleTargetValue) +
               parseInt(saleRe.docs[i].data().items[n].downpayment) *
-                parseInt(saleRe.docs[i].data().items[n].qty);
+                parseInt(saleRe.docs[i].data().items[n].qty) -
+              parseInt(saleRe.docs[i].data().items[n].discount);
           }
         }
       }
@@ -418,7 +419,8 @@ async function getSaleTargetForTable(
           serail_number: saleRe.docs[i].data().items[n].serialNo,
           total:
             parseInt(saleRe.docs[i].data().items[n].downpayment) *
-            parseInt(saleRe.docs[i].data().items[n].qty),
+              parseInt(saleRe.docs[i].data().items[n].qty) -
+            parseInt(saleRe.docs[i].data().items[n].discount),
         });
       }
     } else {
@@ -437,7 +439,8 @@ async function getSaleTargetForTable(
             serail_number: saleRe.docs[i].data().items[n].serialNo,
             total:
               parseInt(saleRe.docs[i].data().items[n].downpayment) *
-              parseInt(saleRe.docs[i].data().items[n].qty),
+                parseInt(saleRe.docs[i].data().items[n].qty) -
+              parseInt(saleRe.docs[i].data().items[n].discount),
           });
         }
       }
@@ -683,7 +686,8 @@ async function getCashSaleFunc(
             parseInt(cashSale) +
             (parseInt(
               saleRe.docs[i].data().items[n].downpayment *
-                saleRe.docs[i].data().items[n].qty
+                saleRe.docs[i].data().items[n].qty -
+                saleRe.docs[i].data().items[n].discount
             ) *
               2.5) /
               100;
@@ -701,7 +705,8 @@ async function getCashSaleFunc(
               parseInt(cashSale) +
               (parseInt(
                 saleRe.docs[i].data().items[n].downpayment *
-                  saleRe.docs[i].data().items[n].qty
+                  saleRe.docs[i].data().items[n].qty -
+                  saleRe.docs[i].data().items[n].discount
               ) *
                 2.5) /
                 100;
@@ -742,7 +747,8 @@ async function getCashSaleFuncForTable(
             invoice_no: saleRe.docs[i].data().invoice_number,
             total: parseInt(
               saleRe.docs[i].data().items[n].downpayment *
-                saleRe.docs[i].data().items[n].qty
+                saleRe.docs[i].data().items[n].qty -
+                saleRe.docs[i].data().items[n].discount
             ),
             qty: saleRe.docs[i].data().items[n].qty,
             item_name: saleRe.docs[i].data().items[n].item_name,
@@ -763,7 +769,8 @@ async function getCashSaleFuncForTable(
               invoice_no: saleRe.docs[i].data().invoice_number,
               total: parseInt(
                 saleRe.docs[i].data().items[n].downpayment *
-                  saleRe.docs[i].data().items[n].qty
+                  saleRe.docs[i].data().items[n].qty -
+                  saleRe.docs[i].data().items[n].discount
               ),
               qty: saleRe.docs[i].data().items[n].qty,
               item_name: saleRe.docs[i].data().items[n].item_name,

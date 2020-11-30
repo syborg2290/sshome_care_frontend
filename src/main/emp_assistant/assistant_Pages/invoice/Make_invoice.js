@@ -1441,6 +1441,7 @@ function Make_invoice() {
                             type="number"
                             InputProps={{ inputProps: { min: 0 } }}
                             fullWidth
+                            disabled={true}
                             value={totalDiscount}
                             onChange={(e) => {
                               if (e.target.value !== "") {

@@ -1231,7 +1231,10 @@ export default function Add_Paysheet_Model({ nic }) {
           }
 
           if (eachRoot.data().employee2 === nic) {
-            getSaleTarget(rootName).then((reSaleTarget) => {
+            getSaleTarget(
+              rootName,
+              firebase.firestore.Timestamp.fromDate(new Date())
+            ).then((reSaleTarget) => {
               setSaleTarget(reSaleTarget);
             });
 
@@ -2073,7 +2076,7 @@ export default function Add_Paysheet_Model({ nic }) {
           }
 
           if (eachRoot.data().employee2 === nic) {
-            getSaleTarget(rootName).then((reSaleTarget) => {
+            getSaleTarget(rootName, currentdateRe).then((reSaleTarget) => {
               setSaleTarget(reSaleTarget);
             });
 

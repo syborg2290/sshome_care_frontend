@@ -238,6 +238,7 @@ export default function Pay_History_Model() {
     if (location?.state?.detail !== undefined) {
       db.collection("salary")
         .where("nic", "==", location?.state?.detail)
+        .orderBy("date", "desc")
         .get()
         .then((reSal) => {
           let rawAllData = [];

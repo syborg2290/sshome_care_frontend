@@ -975,8 +975,11 @@ export default function Add_Item() {
                   required={true}
                   value={cashPrice}
                   onChange={(e) => {
-                    setCashPrice(e.target.value);
-                  }}
+                    if (e.target.value !== "") {
+                      setCashPrice(e.target.value);
+                    }
+                  }
+                  }
                   label="Cash Price of Item"
                   size="small"
                 />
@@ -1014,9 +1017,11 @@ export default function Add_Item() {
                         }
                       }
                     }
-
-                    setSalePrice(e.target.value);
-                  }}
+                    if (e.target.value !== "") {
+                      setSalePrice(e.target.value);
+                    }
+                  }
+                  }
                   label="sale Price"
                   size="small"
                 />
@@ -1052,12 +1057,17 @@ export default function Add_Item() {
                           } else {
                             setNoOfInstallments(0);
                           }
+                         
+                           
                         }
                       }
                     }
-
-                    setDownPayment(e.target.value);
-                  }}
+                    if (e.target.value !== "") {
+                      setDownPayment(e.target.value);
+                    
+                    }
+                  }
+                  }
                   label="Down payment"
                   size="small"
                 />
@@ -1079,8 +1089,11 @@ export default function Add_Item() {
                   required={true}
                   value={noOfInstallments}
                   onChange={(e) => {
-                    setNoOfInstallments(e.target.value);
-                  }}
+                    if (e.target.value !== "") {
+                      setNoOfInstallments(e.target.value);
+                    }
+                  }
+                  }
                   label="Installments"
                   size="small"
                 />
@@ -1102,8 +1115,11 @@ export default function Add_Item() {
                   required={true}
                   value={amountPerInstallment}
                   onChange={(e) => {
-                    setAmountPerInstallment(e.target.value);
-                  }}
+                    if (e.target.value !== "") {
+                      setAmountPerInstallment(e.target.value);
+                    }
+                  }
+                  }
                   label="Installments Amount"
                   size="small"
                 />
@@ -1133,8 +1149,11 @@ export default function Add_Item() {
                   required={true}
                   value={guaranteePeriod}
                   onChange={(e) => {
-                    setGuaranteePeriod(e.target.value);
-                  }}
+                    if (e.target.value !== "") {
+                      setGuaranteePeriod(e.target.value);
+                    }
+                  }
+                  }
                   label="Guarantee"
                   size="small"
                 />
@@ -1153,8 +1172,11 @@ export default function Add_Item() {
                   fullWidth
                   value={discount}
                   onChange={(e) => {
-                    setDiscount(e.target.value);
-                  }}
+                    if (e.target.value !== "") {
+                      setDiscount(e.target.value);
+                    }
+                  }
+                  }
                   label="Discount"
                   size="small"
                 />

@@ -267,7 +267,7 @@ export default function Create_Target_Model() {
   return (
     <Container component="main" className="conctainefr_main">
       <Typography className="titleffs" variant="h5" gutterBottom>
-        Make Salary
+        Make Target
       </Typography>
       <Grid item xs={12} sm={12}>
         <hr className="titl_hr" />

@@ -56,7 +56,7 @@ export default function Gass_Reports() {
 
   return (
     <>
-      <p className="titleGass">Gass Repots</p>
+      <p className="titleGass">Gass Reports</p>
       <div className="maindiv_gsaa">
         <AppBar position="static">
           <Tabs

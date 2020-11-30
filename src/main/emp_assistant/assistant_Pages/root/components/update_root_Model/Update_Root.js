@@ -189,7 +189,8 @@ export default function Update_Root({
                 size="small"
                 value={description}
                 onChange={(e) => {
-                  setDescription(e.target.value.trim());
+                  // setDescription(e.target.value.trim());
+                   setDescription(e.target.value);
                 }}
               />
             </Grid>

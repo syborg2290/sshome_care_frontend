@@ -31,7 +31,7 @@ export default function Create_Target_Model() {
   const [targetType, setTargetType] = useState("sale_target");
 
   let history = useHistory();
-  
+
   const handleChange = async (event) => {
     setSelectedType(event.target.value);
 
@@ -68,7 +68,9 @@ export default function Create_Target_Model() {
             ) {
               reEa.data().items.forEach((eachItem) => {
                 setSaleAmount(
-                  parseInt(sale_taregt_amount) + parseInt(eachItem.downpayment)
+                  parseInt(sale_taregt_amount) +
+                    parseInt(eachItem.downpayment) -
+                    parseInt(eachItem.discount)
                 );
               });
             }
@@ -133,7 +135,7 @@ export default function Create_Target_Model() {
   };
 
   useEffect(() => {
-       window.addEventListener("offline", function (e) {
+    window.addEventListener("offline", function (e) {
       history.push("/connection_lost");
     });
     db.collection("root")
@@ -214,7 +216,9 @@ export default function Create_Target_Model() {
             ) {
               reEa.data().items.forEach((eachItem) => {
                 setSaleAmount(
-                  parseInt(sale_taregt_amount) + parseInt(eachItem.downpayment)
+                  parseInt(sale_taregt_amount) +
+                    parseInt(eachItem.downpayment) -
+                    parseInt(eachItem.discount)
                 );
               });
             }
@@ -282,6 +286,34 @@ export default function Create_Target_Model() {
         <form className="form" noValidate>
           <Grid container spacing={2}>
             <Grid className="lbl_topi" item xs={12} sm={4}>
+              Type
+            </Grid>
+            <Grid item xs={12} sm={1}>
+              :
+            </Grid>
+            <Grid item xs={12} sm={7}>
+              <Space direction="vertical">
+                <FormControl variant="outlined" className="fcontrol">
+                  <Select
+                    className="roll_selector"
+                    size="small"
+                    native
+                    onChange={handleChange}
+                    value={selectedType}
+                  >
+                    <option onChange={handleChange} value={""}>
+                      Select a type
+                    </option>
+                    {allRoot.map((each) => (
+                      <option onChange={handleChange} key={each} value={each}>
+                        {each}
+                      </option>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Space>
+            </Grid>
+            <Grid className="lbl_topi" item xs={12} sm={4}>
               Target Amount(LKR)
             </Grid>
             <Grid item xs={12} sm={1}>
@@ -313,34 +345,6 @@ export default function Create_Target_Model() {
                   }
                 }}
               />
-            </Grid>
-            <Grid className="lbl_topi" item xs={12} sm={4}>
-              Type
-            </Grid>
-            <Grid item xs={12} sm={1}>
-              :
-            </Grid>
-            <Grid item xs={12} sm={7}>
-              <Space direction="vertical">
-                <FormControl variant="outlined" className="fcontrol">
-                  <Select
-                    className="roll_selector"
-                    size="small"
-                    native
-                    onChange={handleChange}
-                    value={selectedType}
-                  >
-                    <option onChange={handleChange} value={""}>
-                      Select a type
-                    </option>
-                    {allRoot.map((each) => (
-                      <option onChange={handleChange} key={each} value={each}>
-                        {each}
-                      </option>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Space>
             </Grid>
             <Grid className="lbl_topi" item xs={12} sm={4}>
               Start Date

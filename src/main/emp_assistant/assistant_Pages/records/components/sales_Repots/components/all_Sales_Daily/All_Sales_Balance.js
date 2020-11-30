@@ -608,7 +608,6 @@ export default function All_Sales_Balance() {
                                   Total: (
                                     <CurrencyFormat
                                       value={
-                                        each.sales +
                                         each.cards +
                                         each.cash +
                                         each.installment +
@@ -622,7 +621,6 @@ export default function All_Sales_Balance() {
                                   Total_Balance: (
                                     <CurrencyFormat
                                       value={
-                                        previousSale +
                                         previousCards +
                                         previousCash +
                                         previousIntsll +

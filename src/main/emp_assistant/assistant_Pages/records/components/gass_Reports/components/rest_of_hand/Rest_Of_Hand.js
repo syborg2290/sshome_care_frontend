@@ -154,48 +154,18 @@ async function getSameDateWithTotals(sold, purchased) {
           rest:
             parseInt(sold[i].sold_total) -
               parseInt(purchased[indexFor].purchaes_total) <
-            0 ? (
-              <CurrencyFormat
-                value={
-                  parseInt(purchased[indexFor].purchaes_total) -
-                  parseInt(sold[i].sold_total)
-                }
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={" "}
-              />
-            ) : (
-              <CurrencyFormat
-                value={
-                  parseInt(sold[i].sold_total) -
-                  parseInt(purchased[indexFor].purchaes_total)
-                }
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={" "}
-              />
-            ),
+            0
+              ? parseInt(purchased[indexFor].purchaes_total) -
+                parseInt(sold[i].sold_total)
+              : parseInt(sold[i].sold_total) -
+                parseInt(purchased[indexFor].purchaes_total),
         });
       } else {
         restTable.push({
           date: sold[i].date,
           purchased_total: 0,
-          sold_total: (
-            <CurrencyFormat
-              value={sold[i].sold_total}
-              displayType={"text"}
-              thousandSeparator={true}
-              prefix={" "}
-            />
-          ),
-          rest: (
-            <CurrencyFormat
-              value={parseInt(sold[i].sold_total)}
-              displayType={"text"}
-              thousandSeparator={true}
-              prefix={" "}
-            />
-          ),
+          sold_total: sold[i].sold_total,
+          rest: parseInt(sold[i].sold_total),
         });
       }
     }
@@ -221,67 +191,24 @@ async function getSameDateWithTotals(sold, purchased) {
         );
         restTable.push({
           date: sold[indexFor].date,
-          sold_total: (
-            <CurrencyFormat
-              value={sold[indexFor].sold_total}
-              displayType={"text"}
-              thousandSeparator={true}
-              prefix={" "}
-            />
-          ),
-          purchased_total: (
-            <CurrencyFormat
-              value={purchased[i].purchaes_total}
-              displayType={"text"}
-              thousandSeparator={true}
-              prefix={" "}
-            />
-          ),
+          sold_total: sold[indexFor].sold_total,
+
+          purchased_total: purchased[i].purchaes_total,
           rest:
             parseInt(sold[indexFor].sold_total) -
               parseInt(purchased[i].purchaes_total) <
-            0 ? (
-              <CurrencyFormat
-                value={
-                  parseInt(purchased[i].purchaes_total) -
-                  parseInt(sold[indexFor].sold_total)
-                }
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={" "}
-              />
-            ) : (
-              <CurrencyFormat
-                value={
-                  parseInt(sold[indexFor].sold_total) -
-                  parseInt(purchased[i].purchaes_total)
-                }
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={" "}
-              />
-            ),
+            0
+              ? parseInt(purchased[i].purchaes_total) -
+                parseInt(sold[indexFor].sold_total)
+              : parseInt(sold[indexFor].sold_total) -
+                parseInt(purchased[i].purchaes_total),
         });
       } else {
         restTable.push({
           date: purchased[i].date,
           sold_total: 0,
-          purchased_total: (
-            <CurrencyFormat
-              value={purchased[i].purchaes_total}
-              displayType={"text"}
-              thousandSeparator={true}
-              prefix={" "}
-            />
-          ),
-          rest: (
-            <CurrencyFormat
-              value={parseInt(purchased[i].purchaes_total)}
-              displayType={"text"}
-              thousandSeparator={true}
-              prefix={" "}
-            />
-          ),
+          purchased_total: purchased[i].purchaes_total,
+          rest: parseInt(purchased[i].purchaes_total),
         });
       }
     }
@@ -343,12 +270,36 @@ export default function Rest_Of_Hand() {
               getSameDateWithTotals(reDupSold, reDupPurcahes).then(
                 (reTotalCal) => {
                   var rawTable = [];
+                  let prevRest = 0;
                   reTotalCal.forEach((each) => {
+                    prevRest = prevRest + each.rest;
                     rawTable.push({
                       Date: new Date(each.date).toDateString(),
-                      Sold_Amount: each.sold_total,
-                      Purchased_Amount: each.purchased_total,
-                      Rest_of_the_Hand: each.rest,
+
+                      Sold_Amount: (
+                        <CurrencyFormat
+                          value={each.sold_total}
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          prefix={" "}
+                        />
+                      ),
+                      Purchased_Amount: (
+                        <CurrencyFormat
+                          value={each.purchased_total}
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          prefix={" "}
+                        />
+                      ),
+                      Rest_of_the_Hand: (
+                        <CurrencyFormat
+                          value={prevRest}
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          prefix={" "}
+                        />
+                      ),
                     });
                   });
                   setTableData(rawTable);

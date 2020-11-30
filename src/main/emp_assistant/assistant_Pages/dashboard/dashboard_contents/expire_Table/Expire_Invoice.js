@@ -121,7 +121,20 @@ export default function Expire_invoice({ expire_list }) {
   useEffect(() => {
     var rawData = [];
     var rawAllData = [];
-    expire_list.forEach((each) => {
+    var reArray = expire_list;
+    reArray.sort((a, b) => {
+      if (
+        new Date(a.data.date).getFullYear() ===
+          new Date(b.data.date).getFullYear() &&
+        new Date(a.data.date).getMonth() === new Date(b.data.date).getMonth() &&
+        new Date(a.data.date).getDate() === new Date(b.data.date).getDate()
+      ) {
+        return -1;
+      } else {
+        return 1;
+      }
+    });
+    reArray.forEach((each) => {
       rawAllData.push({
         id: each.id,
         data: each.data,

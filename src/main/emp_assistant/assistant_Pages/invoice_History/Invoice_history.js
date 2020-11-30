@@ -363,14 +363,30 @@ export default function Invoice_history() {
         });
       });
     db.collection("invoice")
-      .orderBy("customer_id", "desc")
-      .orderBy("date", "desc")
+      // .orderBy("customer_id", "desc")
       .where("customer_id", "!=", null)
+      // .orderBy("date", "desc")
       .onSnapshot((cust) => {
         var rawData = [];
         var rawAllData = [];
 
-        cust.docs.forEach((siDoc) => {
+        var reArray = cust.docs;
+        reArray.sort((a, b) => {
+          if (
+            new Date(a.data().date.seconds * 1000).getFullYear() ===
+              new Date(b.data().date.seconds * 1000).getFullYear() &&
+            new Date(a.data().date.seconds * 1000).getMonth() ===
+              new Date(b.data().date.seconds * 1000).getMonth() &&
+            new Date(a.data().date.seconds * 1000).getDate() ===
+              new Date(b.data().date.seconds * 1000).getDate()
+          ) {
+            return -1;
+          } else {
+            return 1;
+          }
+        });
+
+        reArray.forEach((siDoc) => {
           rawAllData.push({
             id: siDoc.id,
             data: siDoc.data(),

@@ -956,14 +956,18 @@ export default function Add_Customer() {
                         size="small"
                       />
 
-                      <MinusCircleOutlined
-                        key={i + 3}
-                        className="rmov_icon"
-                        onClick={() => {
-                          delete inputsNic[i];
-                          setInputsNic({ ...inputsNic });
-                        }}
-                      />
+                      {i >= Object.keys(inputsNic).length - 1 ? (
+                        <MinusCircleOutlined
+                          key={i + 3}
+                          className="rmov_icon"
+                          onClick={() => {
+                            delete inputsNic[i];
+                            setInputsNic({ ...inputsNic });
+                          }}
+                        />
+                      ) : (
+                        ""
+                      )}
                     </div>
                   ))}
                 </div>

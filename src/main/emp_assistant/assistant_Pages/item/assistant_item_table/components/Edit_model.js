@@ -607,6 +607,10 @@ export default function Edit_model({
             }
           }
         }
+      } else {
+        NotificationManager.info(
+          "Serail,model and chassis number's count must be equal!"
+        );
       }
     });
   };

@@ -1008,6 +1008,10 @@ export default function Add_Item() {
             }
           }
         }
+      } else {
+        NotificationManager.info(
+          "Serail,model and chassis number's count must be equal!"
+        );
       }
     });
   };

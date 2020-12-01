@@ -950,9 +950,7 @@ export default function Add_Paysheet_Model({ nic }) {
             new Date(ob.data().date.seconds * 1000).getFullYear() ===
               new Date().getFullYear() &&
             new Date(ob.data().date.seconds * 1000).getMonth() ===
-              new Date().getMonth() &&
-            new Date(ob.data().date.seconds * 1000).getDate() ===
-              new Date().getDate()
+              new Date().getMonth()
         );
 
         if (currentSalaryStatus) {
@@ -1588,9 +1586,7 @@ export default function Add_Paysheet_Model({ nic }) {
             new Date(ob.data().date.seconds * 1000).getFullYear() ===
               new Date(date.seconds * 1000).getFullYear() &&
             new Date(ob.data().date.seconds * 1000).getMonth() ===
-              new Date(date.seconds * 1000).getMonth() &&
-            new Date(ob.data().date.seconds * 1000).getDate() ===
-              new Date(date.seconds * 1000).getDate()
+              new Date(date.seconds * 1000).getMonth()
         );
 
         if (currentSalaryStatus) {
@@ -2911,6 +2907,7 @@ export default function Add_Paysheet_Model({ nic }) {
                 <Space direction="vertical">
                   <DatePicker
                     onChange={(e) => {
+                      setLoading(true);
                       if (e !== null) {
                         setDate(
                           firebase.firestore.Timestamp.fromDate(e.toDate())
@@ -2918,11 +2915,65 @@ export default function Add_Paysheet_Model({ nic }) {
                         getChangedValuesFromdate(
                           firebase.firestore.Timestamp.fromDate(e.toDate())
                         );
+                        db.collection("salary")
+                          .where("nic", "==", nic)
+                          .get()
+                          .then((reCheckStatus) => {
+                            let currentSalaryStatus = reCheckStatus.docs.some(
+                              (ob) =>
+                                new Date(
+                                  ob.data().date.seconds * 1000
+                                ).getFullYear() ===
+                                  new Date(e.toDate()).getFullYear() &&
+                                new Date(
+                                  ob.data().date.seconds * 1000
+                                ).getMonth() === new Date(e.toDate()).getMonth()
+                            );
+
+                            if (currentSalaryStatus) {
+                              setLoading(false);
+                              setAlreadyPaid(true);
+                              setValidation(
+                                "Already paid for selected month ! "
+                              );
+                            } else {
+                              setLoading(false);
+                              setAlreadyPaid(false);
+                              setValidation("");
+                            }
+                          });
                       } else {
                         setDate(null);
                         getChangedValuesFromdate(
                           firebase.firestore.Timestamp.fromDate(new Date())
                         );
+
+                        db.collection("salary")
+                          .where("nic", "==", nic)
+                          .get()
+                          .then((reCheckStatus) => {
+                            let currentSalaryStatus = reCheckStatus.docs.some(
+                              (ob) =>
+                                new Date(
+                                  ob.data().date.seconds * 1000
+                                ).getFullYear() === new Date().getFullYear() &&
+                                new Date(
+                                  ob.data().date.seconds * 1000
+                                ).getMonth() === new Date().getMonth()
+                            );
+
+                            if (currentSalaryStatus) {
+                              setLoading(false);
+                              setAlreadyPaid(true);
+                              setValidation(
+                                "Already paid for current month ! "
+                              );
+                            } else {
+                              setLoading(false);
+                              setAlreadyPaid(false);
+                              setValidation("");
+                            }
+                          });
                       }
                     }}
                   />

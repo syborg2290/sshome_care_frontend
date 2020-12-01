@@ -1476,14 +1476,18 @@ export default function Add_Item() {
                       onChange={(e) => handleChangeAddChassisNoInputs(e, i)}
                     />
 
-                    <MinusCircleOutlined
-                      key={i + 3}
-                      className="rmov_iconss"
-                      onClick={() => {
-                        delete inputsChassisNo[i];
-                        setInputsChassisNo({ ...inputsChassisNo });
-                      }}
-                    />
+                    {i >= Object.keys(inputsChassisNo).length - 1 ? (
+                      <MinusCircleOutlined
+                        key={i + 3}
+                        className="rmov_iconss"
+                        onClick={() => {
+                          delete inputsChassisNo[i];
+                          setInputsChassisNo({ ...inputsChassisNo });
+                        }}
+                      />
+                    ) : (
+                      ""
+                    )}
                   </div>
                 ))}
               </Grid>
@@ -1511,14 +1515,18 @@ export default function Add_Item() {
                       onChange={(e) => handleChangeAddSerialNoInputs(e, i)}
                     />
 
-                    <MinusCircleOutlined
-                      key={i + 3}
-                      className="rmov_iconss"
-                      onClick={() => {
-                        delete inputsSerialNo[i];
-                        setInputsSerialNo({ ...inputsSerialNo });
-                      }}
-                    />
+                    {i >= Object.keys(inputsSerialNo).length - 1 ? (
+                      <MinusCircleOutlined
+                        key={i + 3}
+                        className="rmov_iconss"
+                        onClick={() => {
+                          delete inputsSerialNo[i];
+                          setInputsSerialNo({ ...inputsSerialNo });
+                        }}
+                      />
+                    ) : (
+                      ""
+                    )}
                   </div>
                 ))}
               </Grid>
@@ -1546,14 +1554,18 @@ export default function Add_Item() {
                       onChange={(e) => handleChangeAddModelNoInputs(e, i)}
                     />
 
-                    <MinusCircleOutlined
-                      key={i + 3}
-                      className="rmov_iconss"
-                      onClick={() => {
-                        delete inputsModelNo[i];
-                        setInputsModelNo({ ...inputsModelNo });
-                      }}
-                    />
+                    {i >= Object.keys(inputsModelNo).length - 1 ? (
+                      <MinusCircleOutlined
+                        key={i + 3}
+                        className="rmov_iconss"
+                        onClick={() => {
+                          delete inputsModelNo[i];
+                          setInputsModelNo({ ...inputsModelNo });
+                        }}
+                      />
+                    ) : (
+                      ""
+                    )}
                   </div>
                 ))}
               </Grid>

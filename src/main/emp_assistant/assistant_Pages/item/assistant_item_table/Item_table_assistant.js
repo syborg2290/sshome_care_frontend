@@ -94,7 +94,7 @@ export default function Item_table_assistant() {
               ? " - "
               : element.data().guaranteePeriod +
                 " " +
-                element.data().guarantee.value,
+                element.data().guarantee.value.toLowerCase(),
             <CurrencyFormat
               value={element.data().salePrice}
               displayType={"text"}

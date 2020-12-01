@@ -526,17 +526,21 @@ export default function Expences() {
                   />
                 </Grid>
                 <Grid item xs={12} sm={2}>
-                  <MinusCircleOutlined
-                    key={i + 4}
-                    className="sampath_icon"
-                    onClick={() => {
-                      let costExp = inputsSampath[i].cost;
-                      setExpences((exp) => exp - costExp);
-                      setTotalSampath((exp) => exp - costExp);
-                      delete inputsSampath[i];
-                      setInputsSampath({ ...inputsSampath });
-                    }}
-                  />
+                  {i >= Object.keys(inputsSampath).length - 1 ? (
+                    <MinusCircleOutlined
+                      key={i + 4}
+                      className="sampath_icon"
+                      onClick={() => {
+                        let costExp = inputsSampath[i].cost;
+                        setExpences((exp) => exp - costExp);
+                        setTotalSampath((exp) => exp - costExp);
+                        delete inputsSampath[i];
+                        setInputsSampath({ ...inputsSampath });
+                      }}
+                    />
+                  ) : (
+                    ""
+                  )}
                 </Grid>
               </Grid>
             </div>
@@ -609,17 +613,21 @@ export default function Expences() {
                   />
                 </Grid>
                 <Grid item xs={12} sm={2}>
-                  <MinusCircleOutlined
-                    key={i + 4}
-                    className="sampath_icon"
-                    onClick={() => {
-                      let cost = inputsMonika[i].cost;
-                      setExpences((exp) => exp - cost);
-                      setTotalMonika((exp) => exp - cost);
-                      delete inputsMonika[i];
-                      setInputsMonika({ ...inputsMonika });
-                    }}
-                  />
+                  {i >= Object.keys(inputsMonika).length - 1 ? (
+                    <MinusCircleOutlined
+                      key={i + 4}
+                      className="sampath_icon"
+                      onClick={() => {
+                        let cost = inputsMonika[i].cost;
+                        setExpences((exp) => exp - cost);
+                        setTotalMonika((exp) => exp - cost);
+                        delete inputsMonika[i];
+                        setInputsMonika({ ...inputsMonika });
+                      }}
+                    />
+                  ) : (
+                    ""
+                  )}
                 </Grid>
               </Grid>
             </div>
@@ -693,17 +701,21 @@ export default function Expences() {
                   />
                 </Grid>
                 <Grid item xs={12} sm={2}>
-                  <MinusCircleOutlined
-                    key={i + 4}
-                    className="sampath_icon"
-                    onClick={() => {
-                      let cost = inputsSithu[i].cost;
-                      setExpences((exp) => exp - cost);
-                      setTotalSithu((exp) => exp - cost);
-                      delete inputsSithu[i];
-                      setInputsSithu({ ...inputsSithu });
-                    }}
-                  />
+                  {i >= Object.keys(inputsSithu).length - 1 ? (
+                    <MinusCircleOutlined
+                      key={i + 4}
+                      className="sampath_icon"
+                      onClick={() => {
+                        let cost = inputsSithu[i].cost;
+                        setExpences((exp) => exp - cost);
+                        setTotalSithu((exp) => exp - cost);
+                        delete inputsSithu[i];
+                        setInputsSithu({ ...inputsSithu });
+                      }}
+                    />
+                  ) : (
+                    ""
+                  )}
                 </Grid>
               </Grid>
             </div>
@@ -1598,17 +1610,21 @@ export default function Expences() {
                   />
                 </Grid>
                 <Grid item xs={12} sm={2}>
-                  <MinusCircleOutlined
-                    key={i + 4}
-                    className="rpr_icon"
-                    onClick={() => {
-                      let cost = inputsRepair[i].cost;
-                      setExpences((exp) => exp - cost);
-                      setTotalRepair((repir) => repir - cost);
-                      delete inputsRepair[i];
-                      setInputsRepair({ ...inputsRepair });
-                    }}
-                  />
+                  {i >= Object.keys(inputsRepair).length - 1 ? (
+                    <MinusCircleOutlined
+                      key={i + 4}
+                      className="rpr_icon"
+                      onClick={() => {
+                        let cost = inputsRepair[i].cost;
+                        setExpences((exp) => exp - cost);
+                        setTotalRepair((repir) => repir - cost);
+                        delete inputsRepair[i];
+                        setInputsRepair({ ...inputsRepair });
+                      }}
+                    />
+                  ) : (
+                    ""
+                  )}
                 </Grid>
               </Grid>
             </div>
@@ -2080,17 +2096,21 @@ export default function Expences() {
                   />
                 </Grid>
                 <Grid item xs={12} sm={2}>
-                  <MinusCircleOutlined
-                    key={i + 4}
-                    className="rpr_icon"
-                    onClick={() => {
-                      let cost = inputsFuel[i].cost;
-                      setExpences((exp) => exp - cost);
-                      setTotalFuel((fuel) => fuel - cost);
-                      delete inputsFuel[i];
-                      setInputsFuel({ ...inputsFuel });
-                    }}
-                  />
+                  {i >= Object.keys(inputsFuel).length - 1 ? (
+                    <MinusCircleOutlined
+                      key={i + 4}
+                      className="rpr_icon"
+                      onClick={() => {
+                        let cost = inputsFuel[i].cost;
+                        setExpences((exp) => exp - cost);
+                        setTotalFuel((fuel) => fuel - cost);
+                        delete inputsFuel[i];
+                        setInputsFuel({ ...inputsFuel });
+                      }}
+                    />
+                  ) : (
+                    ""
+                  )}
                 </Grid>
               </Grid>
             </div>
@@ -2294,17 +2314,21 @@ export default function Expences() {
                   />
                 </Grid>
                 <Grid item xs={12} sm={2}>
-                  <MinusCircleOutlined
-                    key={i + 4}
-                    className="othr_icon"
-                    onClick={() => {
-                      let cost = inputsSalary[i].cost;
-                      setExpences((exp) => exp - cost);
-                      setTotalSalary((exp) => exp - cost);
-                      delete inputsSalary[i];
-                      setInputsSalary({ ...inputsSalary });
-                    }}
-                  />
+                  {i >= Object.keys(inputsSalary).length - 1 ? (
+                    <MinusCircleOutlined
+                      key={i + 4}
+                      className="othr_icon"
+                      onClick={() => {
+                        let cost = inputsSalary[i].cost;
+                        setExpences((exp) => exp - cost);
+                        setTotalSalary((exp) => exp - cost);
+                        delete inputsSalary[i];
+                        setInputsSalary({ ...inputsSalary });
+                      }}
+                    />
+                  ) : (
+                    ""
+                  )}
                 </Grid>
               </Grid>
             </div>
@@ -2380,17 +2404,21 @@ export default function Expences() {
                   />
                 </Grid>
                 <Grid item xs={12} sm={2}>
-                  <MinusCircleOutlined
-                    key={i + 4}
-                    className="othr_icon"
-                    onClick={() => {
-                      let cost = inputsAdvance[i].cost;
-                      setExpences((exp) => exp - cost);
-                      setTotalAdvance((exp) => exp - cost);
-                      delete inputsAdvance[i];
-                      setInputsAdvance({ ...inputsAdvance });
-                    }}
-                  />
+                  {i >= Object.keys(inputsAdvance).length - 1 ? (
+                    <MinusCircleOutlined
+                      key={i + 4}
+                      className="othr_icon"
+                      onClick={() => {
+                        let cost = inputsAdvance[i].cost;
+                        setExpences((exp) => exp - cost);
+                        setTotalAdvance((exp) => exp - cost);
+                        delete inputsAdvance[i];
+                        setInputsAdvance({ ...inputsAdvance });
+                      }}
+                    />
+                  ) : (
+                    ""
+                  )}
                 </Grid>
               </Grid>
             </div>
@@ -2466,17 +2494,21 @@ export default function Expences() {
                   />
                 </Grid>
                 <Grid item xs={12} sm={2}>
-                  <MinusCircleOutlined
-                    key={i + 4}
-                    className="othr_icon"
-                    onClick={() => {
-                      let cost = inputsTemporary[i].cost;
-                      setExpences((exp) => exp - cost);
-                      setTotalTemp((exp) => exp - cost);
-                      delete inputsTemporary[i];
-                      setInputsTemporary({ ...inputsTemporary });
-                    }}
-                  />
+                  {i >= Object.keys(inputsTemporary).length - 1 ? (
+                    <MinusCircleOutlined
+                      key={i + 4}
+                      className="othr_icon"
+                      onClick={() => {
+                        let cost = inputsTemporary[i].cost;
+                        setExpences((exp) => exp - cost);
+                        setTotalTemp((exp) => exp - cost);
+                        delete inputsTemporary[i];
+                        setInputsTemporary({ ...inputsTemporary });
+                      }}
+                    />
+                  ) : (
+                    ""
+                  )}
                 </Grid>
               </Grid>
             </div>
@@ -2604,17 +2636,21 @@ export default function Expences() {
                   />
                 </Grid>
                 <Grid item xs={12} sm={2}>
-                  <MinusCircleOutlined
-                    key={i + 4}
-                    className="othr_icon"
-                    onClick={() => {
-                      let cost = inputsOther[i].cost;
-                      setExpences((exp) => exp - cost);
-                      setTotalOthers((exp) => exp - cost);
-                      delete inputsOther[i];
-                      setInputsOther({ ...inputsOther });
-                    }}
-                  />
+                  {i >= Object.keys(inputsOther).length - 1 ? (
+                    <MinusCircleOutlined
+                      key={i + 4}
+                      className="othr_icon"
+                      onClick={() => {
+                        let cost = inputsOther[i].cost;
+                        setExpences((exp) => exp - cost);
+                        setTotalOthers((exp) => exp - cost);
+                        delete inputsOther[i];
+                        setInputsOther({ ...inputsOther });
+                      }}
+                    />
+                  ) : (
+                    ""
+                  )}
                 </Grid>
               </Grid>
             </div>

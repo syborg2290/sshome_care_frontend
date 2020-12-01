@@ -180,6 +180,7 @@ export default function Edit_model({
 
   const updateItem = async (e) => {
     e.preventDefault();
+
     checkSerialNumber().then((reCheckS) => {
       let modelNosList = [];
       let serialNosList = [];
@@ -815,14 +816,18 @@ export default function Edit_model({
                         end="true"
                       />
 
-                      <MinusCircleOutlined
-                        key={i + 3}
-                        className="rmov_icos"
-                        onClick={() => {
-                          delete inputsChassisNo[i];
-                          setInputsChassisNo({ ...inputsChassisNo });
-                        }}
-                      />
+                      {i >= Object.keys(inputsChassisNo).length - 1 ? (
+                        <MinusCircleOutlined
+                          key={i + 3}
+                          className="rmov_icos"
+                          onClick={() => {
+                            delete inputsChassisNo[i];
+                            setInputsChassisNo({ ...inputsChassisNo });
+                          }}
+                        />
+                      ) : (
+                        ""
+                      )}
                     </Form.Item>
                   </div>
                 ))}
@@ -850,14 +855,18 @@ export default function Edit_model({
                         onChange={(e) => handleOnChangeAddSerialNoInputs(e, i)}
                       />
 
-                      <MinusCircleOutlined
-                        key={i + 3}
-                        className="rmov_icos"
-                        onClick={() => {
-                          delete inputsSerialNo[i];
-                          setInputsSerialNo({ ...inputsSerialNo });
-                        }}
-                      />
+                      {i >= Object.keys(inputsSerialNo).length - 1 ? (
+                        <MinusCircleOutlined
+                          key={i + 3}
+                          className="rmov_icos"
+                          onClick={() => {
+                            delete inputsSerialNo[i];
+                            setInputsSerialNo({ ...inputsSerialNo });
+                          }}
+                        />
+                      ) : (
+                        ""
+                      )}
                     </Form.Item>
                   </div>
                 ))}
@@ -884,14 +893,18 @@ export default function Edit_model({
                         onChange={(e) => handleChangeAddModelNoInputs(e, i)}
                       />
 
-                      <MinusCircleOutlined
-                        key={i + 3}
-                        className="rmov_icos"
-                        onClick={() => {
-                          delete inputsModelNo[i];
-                          setInputsModelNo({ ...inputsModelNo });
-                        }}
-                      />
+                      {i >= Object.keys(inputsModelNo).length - 1 ? (
+                        <MinusCircleOutlined
+                          key={i + 3}
+                          className="rmov_icos"
+                          onClick={() => {
+                            delete inputsModelNo[i];
+                            setInputsModelNo({ ...inputsModelNo });
+                          }}
+                        />
+                      ) : (
+                        ""
+                      )}
                     </Form.Item>
                   </div>
                 ))}

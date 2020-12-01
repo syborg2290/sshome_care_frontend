@@ -93,11 +93,14 @@ export default function Temporary_Make() {
                 variant="outlined"
                 required
                 fullWidth
+                 multiline
+                rowsMax={5}
                 label="Reason"
                 size="small"
                 value={reason}
                 onChange={(e) => {
-                  setReason(e.target.value.trim());
+                  // setReason(e.target.value.trim());
+                   setReason(e.target.value);
                 }}
               />
             </Grid>

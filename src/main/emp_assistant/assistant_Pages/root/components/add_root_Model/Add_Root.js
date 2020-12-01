@@ -175,8 +175,7 @@ export default function Add_Root() {
             </Grid>
             <Grid item xs={12} sm={8}>
               <TextField
-                // className="txt_discp_root"
-                autoComplete="discription"
+               autoComplete="discription"
                 variant="outlined"
                 multiline
                 rowsMax={5}
@@ -185,7 +184,8 @@ export default function Add_Root() {
                 size="small"
                 value={description}
                 onChange={(e) => {
-                  setDescription(e.target.value.trim());
+                  // setDescription(e.target.value.trim());
+                   setDescription(e.target.value);
                 }}
               />
             </Grid>

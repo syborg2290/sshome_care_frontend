@@ -9,6 +9,7 @@ import {
   PersonAddDisabled as PersonAddDisabledIcon,
   LibraryBooks as LibraryIcon,
   ArrowBack as ArrowBackIcon,
+  LocalShipping as LocalShippingIcon,
   BatteryStd as BatteryStdIcon,
 } from "@material-ui/icons";
 
@@ -78,7 +79,15 @@ const structure = [
     link: "/showroom/ui/blackList",
     icon: <PersonAddDisabledIcon className="icons" />,
   },
+
   { id: 2, type: "divider" },
+
+   {
+    id: 13,
+    label: "Gami Sarani",
+    link: "/showroom/ui/Gamisarani",
+    icon: <LocalShippingIcon className="icons" />,
+  },
   {
     id: 12,
     label: "Gass",

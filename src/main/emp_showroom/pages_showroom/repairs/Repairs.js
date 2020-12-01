@@ -8,13 +8,10 @@ import db from "../../../../config/firebase.js";
 
 import { useHistory } from "react-router-dom";
 
-// icons
-import PrintRoundedIcon from "@material-ui/icons/PrintRounded";
-
 // components
-import RepairModel from "../repairs/repairs_Model/Repair_model";
-import RepairUpdateModel from "../repairs/repair_Update_Model/Repair_Update";
-import RepairViewModel from "../repairs/repair_view_Model/Repair_View";
+import RepairModel from "./repairs_Model/Repair_model";
+import RepairUpdateModel from "./repair_Update_Model/Repair_Update";
+import RepairViewModel from "./repair_view_Model/Repair_View";
 
 // styles
 import "./Repairs.css";
@@ -22,6 +19,7 @@ import "./Repairs.css";
 //icons
 import AddIcon from "@material-ui/icons/Add";
 import VisibilityIcon from "@material-ui/icons/Visibility";
+import PrintRoundedIcon from "@material-ui/icons/PrintRounded";
 
 export default function Repairs() {
   // eslint-disable-next-line
@@ -38,6 +36,7 @@ export default function Repairs() {
   const [repairAllData, setRepairAllData] = useState([]);
 
   let history = useHistory();
+  let history2 = useHistory();
 
   const showVisibleConfirmPrintModal = () => {
     setVisibleConfirmPrint(true);
@@ -50,14 +49,13 @@ export default function Repairs() {
       .then((reRepair) => {
         var passingWithCustomerObj = {
           invoice_no: reRepair.data().invoice_no,
+          serail_no: reRepair.data().serail_no,
           model_no: reRepair.data().model_no,
-          serial_no: reRepair.data().serial_no,
           nic: reRepair.data().nic,
           item_name: reRepair.data().item_name,
         };
         let moveWith = {
-          pathname:
-            "/showroom/repairs/repairs_Model/repair_update_Recipt/Repair_recipt",
+          pathname: "/showroom/repair/repairRecipt",
           search: "?query=abc",
           state: { detail: passingWithCustomerObj },
         };
@@ -88,7 +86,16 @@ export default function Repairs() {
   //START pay And Go Columns
   const repairTableColomns = [
     {
-      name: "InvoiceNo",
+      name: "Serial_No",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "Type",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -106,15 +113,6 @@ export default function Repairs() {
       },
     },
     {
-      name: "SerialNo",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
-    {
       name: "Item_Name",
       options: {
         filter: true,
@@ -123,6 +121,7 @@ export default function Repairs() {
         }),
       },
     },
+
     {
       name: "NIC",
       options: {
@@ -180,6 +179,10 @@ export default function Repairs() {
   ];
 
   useEffect(() => {
+    window.addEventListener("offline", function (e) {
+      history2.push("/connection_lost");
+    });
+
     db.collection("repair").onSnapshot((snap) => {
       var rawData = [];
       var allRawData = [];
@@ -189,9 +192,9 @@ export default function Repairs() {
           data: re.data(),
         });
         rawData.push({
-          InvoiceNo: re.data().invoice_no,
+          Serial_No: re.data().serail_no,
+          Type: re.data().type,
           ModalNo: re.data().model_no,
-          SerialNo: re.data().serial_no,
           Item_Name: re.data().item_name,
           NIC: re.data().nic,
           Status: (
@@ -243,7 +246,7 @@ export default function Repairs() {
   return (
     <>
       <Modal
-        className="confo_model"
+        className="confo_modelRpr"
         closable={null}
         visible={visibleConfirmPrint}
         cancelText="No"
@@ -255,8 +258,8 @@ export default function Repairs() {
         }}
       >
         <div className="confoModel_body">
-          <PrintRoundedIcon className="confo_Icon" />
-          <h3 className="txtConfoModel_body">
+          <PrintRoundedIcon className="confo_IconRpr" />
+          <h3 className="txtConfoModel_bodyRpr">
             Do you want to print an reciept?{" "}
           </h3>
         </div>
@@ -351,7 +354,8 @@ export default function Repairs() {
             data={repairTableData}
             columns={repairTableColomns}
             options={{
-              selectableRows: false,
+              // selectableRows: false,
+              selectableRows: "none",
               customToolbarSelect: () => {},
               filterType: "textfield",
               download: false,

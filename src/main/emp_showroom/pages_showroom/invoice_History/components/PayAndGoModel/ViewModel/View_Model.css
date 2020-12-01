@@ -33,3 +33,7 @@
   margin-bottom: 10px !important;
   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.16), 0 1px 5px rgba(0, 0, 0, 0.23) !important;
 }
+
+.main_containerNom {
+  margin-bottom: 40px !important;
+}

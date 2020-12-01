@@ -18,7 +18,7 @@ import "./Customer_table_assistant.css";
 
 import { useHistory } from "react-router-dom";
 
-export default function ItemTable() {
+export default function CustomerTable() {
   // eslint-disable-next-line
   const [isLoading, setIsLoading] = useState(true);
   const [visible, setVisible] = useState(false); // customer table models

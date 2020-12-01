@@ -1,7 +1,9 @@
 import React from "react";
+
 import { Row, Col } from "antd";
 import Typography from "@material-ui/core/Typography";
 import moment from "moment";
+
 // styles
 import "./CustomerDetailsModel.css";
 
@@ -9,6 +11,7 @@ export default function customerDetailsModel({
   photo,
   fname,
   lname,
+  mid,
   nic,
   mobile1,
   mobile2,
@@ -18,6 +21,8 @@ export default function customerDetailsModel({
   status,
   createdAt,
 }) {
+
+ 
   return (
     <Row>
       <Col className="space_col" span={12}>
@@ -26,7 +31,7 @@ export default function customerDetailsModel({
         </Typography>
       </Col>
       <Col className="space_col" span={12}></Col>
-      <Col className="img_span" span={12}>
+      <Col className="img_span" span={24}>
         {" "}
         <img
           alt="Empty data"
@@ -37,12 +42,6 @@ export default function customerDetailsModel({
               : require("../../../../../../../assets/avatar.png")
           }
         />
-      </Col>
-      <Col className="lbl_member" span={6}>
-        Member ID:
-      </Col>
-      <Col className="img_span" span={6}>
-        1231
       </Col>
 
       <Col className="space_col" span={24}></Col>
@@ -64,6 +63,16 @@ export default function customerDetailsModel({
       </Col>
       <Col className="customer" span={14}>
         {lname}
+      </Col>
+
+      <Col className="customer_details" span={8}>
+        MemeberID
+      </Col>
+      <Col className="customer" span={2}>
+        :
+      </Col>
+      <Col className="customer" span={14}>
+        {mid}
       </Col>
 
       <Col className="customer_details" span={8}>

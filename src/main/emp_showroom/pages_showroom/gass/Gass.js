@@ -11,6 +11,7 @@ import { Modal } from "antd";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import CurrencyFormat from "react-currency-format";
+import { useHistory } from "react-router-dom";
 
 // styles
 import "./Gass.css";
@@ -21,25 +22,34 @@ import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 // components
 import GassModel from "./components/Gass_Model";
 
-import "./Gass.css";
+
+
 
 import db from "../../../../config/firebase.js";
 
-function createData(Weight, Qty, Price) {
-  return { Weight, Qty, Price };
+function createData(Weight, Qty, Price, Action) {
+  return { Weight, Qty, Price, Action };
 }
 
 export default function Gass() {
   // eslint-disable-next-line
   const [allTableData, setAllTableData] = useState([]);
   const [tableData, setTableData] = useState([]);
-  const [gassModal, setGassModal] = useState(false);
+  const [gassModal, setGassModal] = useState(false); //models
+ 
+  let history = useHistory();
 
   const showModalGass = () => {
     setGassModal(true);
   };
 
+
   useEffect(() => {
+    
+    window.addEventListener("offline", function (e) {
+      history.push("/connection_lost");
+    });
+
     db.collection("gas").onSnapshot((snap) => {
       var raw = [];
       var rawAll = [];
@@ -65,6 +75,7 @@ export default function Gass() {
       setAllTableData(rawAll);
       setTableData(raw);
     });
+      // eslint-disable-next-line
   }, []);
 
   return (
@@ -87,10 +98,11 @@ export default function Gass() {
           Gass
         </Typography>
         <Grid container spacing={2}>
-          <Grid item xs={12} sm={2}>
+          <Grid item xs={12} sm={1}>
             <hr className="titles_hr" />
+           
           </Grid>
-          <Grid item xs={12} sm={8}></Grid>
+       
           <Grid item xs={12} sm={2}>
             <Button
               variant="contained"
@@ -102,12 +114,13 @@ export default function Gass() {
               Sell
             </Button>
           </Grid>
+         
         </Grid>
         <TableContainer component={Paper} className="main_containerGass">
           <Table className="gass_Table" size="small" aria-label="a dense table">
             <TableHead className="gass_Table_head">
               <TableRow>
-                <TableCell>Weight</TableCell>
+                <TableCell>Weight(kg)</TableCell>
                 <TableCell align="right">Qty</TableCell>
                 <TableCell align="right">Price&nbsp;(LKR)</TableCell>
               </TableRow>

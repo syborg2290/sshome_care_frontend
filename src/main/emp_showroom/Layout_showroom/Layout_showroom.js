@@ -18,10 +18,10 @@ import InvoiceHistory from "../pages_showroom/invoice_History/Invoice_history";
 import Arreas from "../pages_showroom/arreas/Areas";
 import Repairs from "../pages_showroom/repairs/Repairs";
 import BlackList from "../pages_showroom/black_list/Black_List";
+import GamiSarani from "../pages_showroom/gami_sarani/Gami_Sarani";
 import Gass from "../pages_showroom/gass/Gass";
 
 import PrintReceipt from "../pages_showroom/invoice_History/components/PayAndGoModel/UpdateModel/Make_Recipt/Recipt";
-import ArriesReceipt from "../pages_showroom/arreas/arreas_update_Model/arreas_update_Recipt/Arreas_recipt";
 import RepairReceipt from "../pages_showroom/repairs/repairs_Model/repair_update_Recipt/Repair_recipt";
 import GassRecipt from "../pages_showroom/gass/components/Make_Recipt/Gass_Recipt";
 
@@ -43,15 +43,15 @@ function LayoutShowroom(props) {
             />
 
             <Route
-              path="/showroom/invoice_history/payAndGo/updateModel/PrintReceipt"
+              path="/showroom/invoice/printInvoice"
               component={PrintReceipt}
             />
-            <Route
+            {/* <Route
               path="/showroom/arreas/arreasUpdateModel/ArreasReceipt"
               component={ArriesReceipt}
-            />
+            /> */}
             <Route
-              path="/showroom/repairs/repairs_Model/repair_update_Recipt/Repair_recipt"
+              path="/showroom/repair/repairRecipt"
               component={RepairReceipt}
             />
             <Route
@@ -62,6 +62,7 @@ function LayoutShowroom(props) {
             <Route path="/showroom/ui/arreas" component={Arreas} />
             <Route path="/showroom/ui/repairs" component={Repairs} />
             <Route path="/showroom/ui/blackList" component={BlackList} />
+              <Route path="/showroom/ui/Gamisarani" component={GamiSarani} />
             <Route path="/showroom/ui/gass" component={Gass} />
           </Switch>
         </div>

@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { Radio } from "antd";
 import { Grid, Container, Typography, Button } from "@material-ui/core";
 import firebase from "firebase";
 import moment from "moment";
+import { useHistory } from "react-router-dom";
 
 import db from "../../../../../config/firebase.js";
 
@@ -16,6 +17,16 @@ export default function Repair_Update({
   closeModel,
 }) {
   const [status, setStatus] = useState(statusProp);
+
+  let history = useHistory();
+  
+
+   useEffect(() => {
+
+    window.addEventListener("offline", function (e) {
+      history.push("/connection_lost");
+    });
+  });
 
   const updateStatus = () => {
     db.collection("repair")

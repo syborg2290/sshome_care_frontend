@@ -217,6 +217,14 @@ async function getSameDateWithTotals(sold, purchased) {
   return restTable;
 }
 
+async function totalRestBalance(restTable) {
+  var restTotalBalance = 0;
+  for (let i = 0; i < restTable.length; i++) {
+    restTotalBalance = restTotalBalance + restTable[i].rest;
+  }
+  return restTotalBalance;
+}
+
 export default function Rest_Of_Hand() {
   // eslint-disable-next-line
   const [tableData, setTableData] = useState([]);
@@ -269,41 +277,43 @@ export default function Rest_Of_Hand() {
             (reDupPurcahes) => {
               getSameDateWithTotals(reDupSold, reDupPurcahes).then(
                 (reTotalCal) => {
-                  var rawTable = [];
-                  let prevRest = 0;
-                  reTotalCal.forEach((each) => {
-                    prevRest = prevRest + each.rest;
-                    rawTable.push({
-                      Date: new Date(each.date).toDateString(),
+                  totalRestBalance(reTotalCal).then((reRestTotalBa) => {
+                    var rawTable = [];
+                    let prevRest = reRestTotalBa;
+                    reTotalCal.forEach((each) => {
+                      prevRest = prevRest - each.rest;
+                      rawTable.push({
+                        Date: new Date(each.date).toDateString(),
 
-                      Sold_Amount: (
-                        <CurrencyFormat
-                          value={each.sold_total}
-                          displayType={"text"}
-                          thousandSeparator={true}
-                          prefix={" "}
-                        />
-                      ),
-                      Purchased_Amount: (
-                        <CurrencyFormat
-                          value={each.purchased_total}
-                          displayType={"text"}
-                          thousandSeparator={true}
-                          prefix={" "}
-                        />
-                      ),
-                      Rest_of_the_Hand: (
-                        <CurrencyFormat
-                          value={prevRest}
-                          displayType={"text"}
-                          thousandSeparator={true}
-                          prefix={" "}
-                        />
-                      ),
+                        Sold_Amount: (
+                          <CurrencyFormat
+                            value={each.sold_total}
+                            displayType={"text"}
+                            thousandSeparator={true}
+                            prefix={" "}
+                          />
+                        ),
+                        Purchased_Amount: (
+                          <CurrencyFormat
+                            value={each.purchased_total}
+                            displayType={"text"}
+                            thousandSeparator={true}
+                            prefix={" "}
+                          />
+                        ),
+                        Rest_of_the_Hand: (
+                          <CurrencyFormat
+                            value={prevRest}
+                            displayType={"text"}
+                            thousandSeparator={true}
+                            prefix={" "}
+                          />
+                        ),
+                      });
                     });
+                    setTableData(rawTable);
+                    setIsLoading(false);
                   });
-                  setTableData(rawTable);
-                  setIsLoading(false);
                 }
               );
             }

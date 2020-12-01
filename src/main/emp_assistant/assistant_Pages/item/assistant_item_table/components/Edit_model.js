@@ -922,7 +922,7 @@ export default function Edit_model({
               }
             >
               {loadingSubmit ? (
-                <Spin spinning={loadingSubmit} size="large" />
+                <Spin spinning={loadingSubmit} size="default" />
               ) : (
                 "Update"
               )}

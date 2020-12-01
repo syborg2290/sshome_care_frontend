@@ -120,6 +120,16 @@ async function dateEachSameDaySales(allSales, date) {
   return reduceDup;
 }
 
+async function totalBalance(allSalesTotals) {
+  var reduceDup = 0;
+
+  for (let i = 0; i < allSalesTotals.length; i++) {
+    reduceDup = reduceDup + allSalesTotals[i].total;
+  }
+
+  return reduceDup;
+}
+
 export default function Daily_Sales() {
   const [viewVarModel, setViewModel] = useState(false); // View model
   const [tableData, setTableData] = useState([]);
@@ -188,43 +198,43 @@ export default function Daily_Sales() {
         }
 
         sumSameDaySales(sales).then((reSumWith) => {
-          let totalBalance = 0;
+          totalBalance(reSumWith).then((reTotalBalance) => {
+            let totalBalance = parseInt(reTotalBalance);
+            for (let n = 0; n < reSumWith.length; n++) {
+              totalBalance = totalBalance - parseInt(reSumWith[n].total);
 
-          for (let n = 0; n < reSumWith.length; n++) {
-            totalBalance = totalBalance + parseInt(reSumWith[n].total);
-
-            tableDataRE.push({
-              Date: new Date(reSumWith[n].date).toDateString(),
-              Total: (
-                <CurrencyFormat
-                  value={reSumWith[n].total}
-                  displayType={"text"}
-                  thousandSeparator={true}
-                  prefix={" "}
-                />
-              ),
-              Total_Balance: (
-                <CurrencyFormat
-                  value={totalBalance}
-                  displayType={"text"}
-                  thousandSeparator={true}
-                  prefix={" "}
-                />
-              ),
-              Action: (
-                <div>
-                  <VisibilityIcon
-                    className="btnEdit"
-                    onClick={(e) =>
-                      viewModel(new Date(reSumWith[n].date), sales)
-                    }
+              tableDataRE.push({
+                Date: new Date(reSumWith[n].date).toDateString(),
+                Total: (
+                  <CurrencyFormat
+                    value={reSumWith[n].total}
+                    displayType={"text"}
+                    thousandSeparator={true}
+                    prefix={" "}
                   />
-                </div>
-              ),
-            });
-          }
-
-          setTableData(tableDataRE);
+                ),
+                Total_Balance: (
+                  <CurrencyFormat
+                    value={totalBalance}
+                    displayType={"text"}
+                    thousandSeparator={true}
+                    prefix={" "}
+                  />
+                ),
+                Action: (
+                  <div>
+                    <VisibilityIcon
+                      className="btnEdit"
+                      onClick={(e) =>
+                        viewModel(new Date(reSumWith[n].date), sales)
+                      }
+                    />
+                  </div>
+                ),
+              });
+            }
+            setTableData(tableDataRE);
+          });
         });
         setIsLoading(false);
       });

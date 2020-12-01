@@ -86,7 +86,7 @@ export default function Make_Invoice_table() {
               ? " - "
               : element.data().guaranteePeriod +
                 " " +
-                element.data().guarantee.value,
+                element.data().guarantee.value.toLowerCase(),
             <CurrencyFormat
               value={element.data().salePrice}
               displayType={"text"}
@@ -254,7 +254,7 @@ export default function Make_Invoice_table() {
             data={itemTableData}
             columns={columns}
             options={{
-              rowHover: true, 
+              rowHover: true,
               customToolbarSelect: () => {},
               filterType: "textField",
               download: false,

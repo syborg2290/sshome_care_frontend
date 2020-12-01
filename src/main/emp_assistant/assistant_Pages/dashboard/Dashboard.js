@@ -10,6 +10,7 @@ import PendingList from "../dashboard/dashboard_contents/pending_Blacklist/Pendi
 import InvoiceList from "../dashboard/dashboard_contents/invoice_List/Invoice_List";
 import ExpireInvoice from "../dashboard/dashboard_contents/expire_Table/Expire_Invoice";
 import ModelVehicalService from "./components/Vehical_Service_Model";
+import ReportCards from "./dashboard_contents/reports_cards/Report_Cards";
 
 import firebase from "firebase";
 import db from "../../../../config/firebase.js";
@@ -560,15 +561,26 @@ export default function Dashboard() {
         </Grid>
       </Grid>
 
-      <Container component="main" className="main_containerDash">
-        {/*START Arreas Table */}
 
+       {/*START Arreas Table */}
+        <Grid container spacing={4}>
+          <Grid item xs={12}>
+            <ReportCards />
+          </Grid>
+        </Grid>
+        {/* END Arreas Table */}
+      
+      <Container component="main" className="main_containerDash">
+        
+          {/*START Cards */}
         <Grid container spacing={4}>
           <Grid item xs={12}>
             <ArreasTable />
           </Grid>
         </Grid>
-        {/* END Arreas Table */}
+        {/* END Cards  */}
+
+       
 
         {/*START Expire Invoice Table */}
 

@@ -575,8 +575,8 @@ export default function Add_Item() {
                                                                               discount
                                                                             ),
                                                                       description: description,
-                                                                      cInvoiceNo: cInvoiceNo.trim(),
-                                                                      GCardNo: GCardNo.trim(),
+                                                                      cInvoiceNo: cInvoiceNo,
+                                                                      GCardNo: GCardNo,
                                                                       guarantee: guarantee,
                                                                       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                                                                     };
@@ -738,8 +738,8 @@ export default function Add_Item() {
                                                                               discount
                                                                             ),
                                                                       description: description,
-                                                                      cInvoiceNo: cInvoiceNo.trim(),
-                                                                      GCardNo: GCardNo.trim(),
+                                                                      cInvoiceNo: cInvoiceNo,
+                                                                      GCardNo: GCardNo,
                                                                       guarantee: guarantee,
                                                                       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                                                                     };
@@ -890,8 +890,8 @@ export default function Add_Item() {
                                                                             discount
                                                                           ),
                                                                     description: description,
-                                                                    cInvoiceNo: cInvoiceNo.trim(),
-                                                                    GCardNo: GCardNo.trim(),
+                                                                    cInvoiceNo: cInvoiceNo,
+                                                                    GCardNo: GCardNo,
                                                                     guarantee: guarantee,
                                                                     timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                                                                   };
@@ -1410,7 +1410,7 @@ export default function Add_Item() {
               <Grid className="txt_Labels" item xs={12} sm={4}></Grid>
 
               <Grid className="txt_Labels" item xs={12} sm={2}>
-                * Company Invoice No
+                Company Invoice No :
               </Grid>
               <Grid item xs={12} sm={4}>
                 <TextField
@@ -1419,7 +1419,6 @@ export default function Add_Item() {
                   variant="outlined"
                   fullWidth
                   id="cInvoiceNo"
-                  required={true}
                   value={cInvoiceNo}
                   onChange={(e) => {
                     setCInvoiceNo(e.target.value);
@@ -1430,7 +1429,7 @@ export default function Add_Item() {
               </Grid>
 
               <Grid className="txt_Labels" item xs={12} sm={2}>
-                * Guarantee Card No
+                Guarantee Card No :
               </Grid>
               <Grid item xs={12} sm={4}>
                 <TextField
@@ -1440,7 +1439,6 @@ export default function Add_Item() {
                   variant="outlined"
                   fullWidth
                   id="gCardNo"
-                  required={true}
                   value={GCardNo}
                   onChange={(e) => {
                     setGCardNo(e.target.value);
@@ -1585,7 +1583,7 @@ export default function Add_Item() {
                   }
                 >
                   {loadingSubmit ? (
-                    <Spin spinning={loadingSubmit} size="large" />
+                    <Spin spinning={loadingSubmit} size="default" />
                   ) : (
                     "Submit"
                   )}

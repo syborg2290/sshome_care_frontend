@@ -396,6 +396,56 @@ async function getAllSalesReports(sales, cash, cards, installment, docs) {
   return allArray;
 }
 
+async function saleTotalBalance(allSalesTotals) {
+  var reduceDup = 0;
+
+  for (let i = 0; i < allSalesTotals.length; i++) {
+    reduceDup = reduceDup + allSalesTotals[i].sales;
+  }
+
+  return reduceDup;
+}
+
+async function cashTotalBalance(allSalesTotals) {
+  var reduceDup = 0;
+
+  for (let i = 0; i < allSalesTotals.length; i++) {
+    reduceDup = reduceDup + allSalesTotals[i].cash;
+  }
+
+  return reduceDup;
+}
+
+async function cardsTotalBalance(allSalesTotals) {
+  var reduceDup = 0;
+
+  for (let i = 0; i < allSalesTotals.length; i++) {
+    reduceDup = reduceDup + allSalesTotals[i].cards;
+  }
+
+  return reduceDup;
+}
+
+async function installTotalBalance(allSalesTotals) {
+  var reduceDup = 0;
+
+  for (let i = 0; i < allSalesTotals.length; i++) {
+    reduceDup = reduceDup + allSalesTotals[i].installment;
+  }
+
+  return reduceDup;
+}
+
+async function docsTotalBalance(allSalesTotals) {
+  var reduceDup = 0;
+
+  for (let i = 0; i < allSalesTotals.length; i++) {
+    reduceDup = reduceDup + allSalesTotals[i].docs;
+  }
+
+  return reduceDup;
+}
+
 export default function All_Sales_Balance() {
   // eslint-disable-next-line
   const [tableData, setTableData] = useState([]);
@@ -507,103 +557,151 @@ export default function All_Sales_Balance() {
                             ).then((reAllArray) => {
                               let againArray = reAllArray;
                               let eachRE = [];
-                              let previousSale = 0;
-                              let previousCash = 0;
-                              let previousCards = 0;
-                              let previousIntsll = 0;
-                              let previousDocs = 0;
 
-                              againArray.forEach((each) => {
-                                previousSale =
-                                  previousSale + parseInt(each.sales);
-                                previousCash =
-                                  previousCash + parseInt(each.cash);
-                                previousCards =
-                                  previousCards + parseInt(each.cards);
-                                previousIntsll =
-                                  previousIntsll + parseInt(each.installment);
-                                previousDocs =
-                                  previousDocs + parseInt(each.docs);
-                                eachRE.push({
-                                  Date: new Date(each.date).toDateString(),
-                                  Total_Sale: (
-                                    <CurrencyFormat
-                                      value={each.sales}
-                                      displayType={"text"}
-                                      thousandSeparator={true}
-                                      prefix={" "}
-                                    />
-                                  ),
-                                  Balance: (
-                                    <CurrencyFormat
-                                      value={previousSale}
-                                      displayType={"text"}
-                                      thousandSeparator={true}
-                                      prefix={" "}
-                                    />
-                                  ),
-                                  Cash_Sale: (
-                                    <CurrencyFormat
-                                      value={each.cash}
-                                      displayType={"text"}
-                                      thousandSeparator={true}
-                                      prefix={" "}
-                                    />
-                                  ),
-                                  Recived_Card_Sale: (
-                                    <CurrencyFormat
-                                      value={each.cards}
-                                      displayType={"text"}
-                                      thousandSeparator={true}
-                                      prefix={" "}
-                                    />
-                                  ),
-                                  Credit_Recived: (
-                                    <CurrencyFormat
-                                      value={each.installment}
-                                      displayType={"text"}
-                                      thousandSeparator={true}
-                                      prefix={" "}
-                                    />
-                                  ),
-                                  Document_Charges: (
-                                    <CurrencyFormat
-                                      value={each.docs}
-                                      displayType={"text"}
-                                      thousandSeparator={true}
-                                      prefix={" "}
-                                    />
-                                  ),
-                                  Total: (
-                                    <CurrencyFormat
-                                      value={
-                                        each.cards +
-                                        each.cash +
-                                        each.installment +
-                                        each.docs
-                                      }
-                                      displayType={"text"}
-                                      thousandSeparator={true}
-                                      prefix={" "}
-                                    />
-                                  ),
-                                  Total_Balance: (
-                                    <CurrencyFormat
-                                      value={
-                                        previousCards +
-                                        previousCash +
-                                        previousIntsll +
-                                        previousDocs
-                                      }
-                                      displayType={"text"}
-                                      thousandSeparator={true}
-                                      prefix={" "}
-                                    />
-                                  ),
-                                });
-                              });
-                              setTableData(eachRE);
-                              setIsLoading(false);
+                              saleTotalBalance(againArray).then(
+                                (reSaleBalance) => {
+                                  cashTotalBalance(againArray).then(
+                                    (reCashBalance) => {
+                                      cardsTotalBalance(againArray).then(
+                                        (reCards) => {
+                                          installTotalBalance(againArray).then(
+                                            (reInstall) => {
+                                              docsTotalBalance(againArray).then(
+                                                (reDocs) => {
+                                                  let previousSale = reSaleBalance;
+                                                  let previousCash = reCashBalance;
+                                                  let previousCards = reCards;
+                                                  let previousIntsll = reInstall;
+                                                  let previousDocs = reDocs;
+
+                                                  againArray.forEach((each) => {
+                                                    previousSale =
+                                                      previousSale -
+                                                      parseInt(each.sales);
+                                                    previousCash =
+                                                      previousCash -
+                                                      parseInt(each.cash);
+                                                    previousCards =
+                                                      previousCards -
+                                                      parseInt(each.cards);
+                                                    previousIntsll =
+                                                      previousIntsll -
+                                                      parseInt(
+                                                        each.installment
+                                                      );
+                                                    previousDocs =
+                                                      previousDocs -
+                                                      parseInt(each.docs);
+                                                    eachRE.push({
+                                                      Date: new Date(
+                                                        each.date
+                                                      ).toDateString(),
+                                                      Total_Sale: (
+                                                        <CurrencyFormat
+                                                          value={each.sales}
+                                                          displayType={"text"}
+                                                          thousandSeparator={
+                                                            true
+                                                          }
+                                                          prefix={" "}
+                                                        />
+                                                      ),
+                                                      Balance: (
+                                                        <CurrencyFormat
+                                                          value={previousSale}
+                                                          displayType={"text"}
+                                                          thousandSeparator={
+                                                            true
+                                                          }
+                                                          prefix={" "}
+                                                        />
+                                                      ),
+                                                      Cash_Sale: (
+                                                        <CurrencyFormat
+                                                          value={each.cash}
+                                                          displayType={"text"}
+                                                          thousandSeparator={
+                                                            true
+                                                          }
+                                                          prefix={" "}
+                                                        />
+                                                      ),
+                                                      Recived_Card_Sale: (
+                                                        <CurrencyFormat
+                                                          value={each.cards}
+                                                          displayType={"text"}
+                                                          thousandSeparator={
+                                                            true
+                                                          }
+                                                          prefix={" "}
+                                                        />
+                                                      ),
+                                                      Credit_Recived: (
+                                                        <CurrencyFormat
+                                                          value={
+                                                            each.installment
+                                                          }
+                                                          displayType={"text"}
+                                                          thousandSeparator={
+                                                            true
+                                                          }
+                                                          prefix={" "}
+                                                        />
+                                                      ),
+                                                      Document_Charges: (
+                                                        <CurrencyFormat
+                                                          value={each.docs}
+                                                          displayType={"text"}
+                                                          thousandSeparator={
+                                                            true
+                                                          }
+                                                          prefix={" "}
+                                                        />
+                                                      ),
+                                                      Total: (
+                                                        <CurrencyFormat
+                                                          value={
+                                                            each.cards +
+                                                            each.cash +
+                                                            each.installment +
+                                                            each.docs
+                                                          }
+                                                          displayType={"text"}
+                                                          thousandSeparator={
+                                                            true
+                                                          }
+                                                          prefix={" "}
+                                                        />
+                                                      ),
+                                                      Total_Balance: (
+                                                        <CurrencyFormat
+                                                          value={
+                                                            previousCards +
+                                                            previousCash +
+                                                            previousIntsll +
+                                                            previousDocs
+                                                          }
+                                                          displayType={"text"}
+                                                          thousandSeparator={
+                                                            true
+                                                          }
+                                                          prefix={" "}
+                                                        />
+                                                      ),
+                                                    });
+                                                  });
+                                                  setTableData(eachRE);
+                                                  setIsLoading(false);
+                                                }
+                                              );
+                                            }
+                                          );
+                                        }
+                                      );
+                                    }
+                                  );
+                                }
+                              );
                             });
                           }
                         );

@@ -879,6 +879,8 @@ export default function Add_Paysheet_Model({ nic }) {
   const [shortageModel, setShortageModel] = useState(false);
 
   const [loading, setLoading] = useState(false);
+  const [validation, setValidation] = useState("");
+  const [alreadyPaid, setAlreadyPaid] = useState(false);
 
   // eslint-disable-next-line
   const [root, setRoot] = useState("");
@@ -934,10 +936,28 @@ export default function Add_Paysheet_Model({ nic }) {
   };
 
   useEffect(() => {
-     window.addEventListener("offline", function (e) {
+    window.addEventListener("offline", function (e) {
       history.push("/connection_lost");
     });
     setLoading(true);
+
+    db.collection("salary")
+      .where("nic", "==", nic)
+      .get()
+      .then((reCheckStatus) => {
+        let currentSalaryStatus = reCheckStatus.docs.some(
+          (ob) =>
+            new Date(ob.data().date.seconds * 1000).getFullYear() ===
+              new Date().getFullYear() &&
+            new Date(ob.data().date.seconds * 1000).getMonth() ===
+              new Date().getMonth()
+        );
+
+        if (currentSalaryStatus) {
+          setValidation("Already paid for currrent month ! ");
+          setAlreadyPaid(true);
+        }
+      });
 
     db.collection("salary")
       .where("nic", "==", nic)
@@ -1557,231 +1577,267 @@ export default function Add_Paysheet_Model({ nic }) {
       net_Salery: netSalary,
     };
 
-    db.collection("employee")
+    db.collection("salary")
       .where("nic", "==", nic)
       .get()
-      .then((reEmployeeSe) => {
-        db.collection("employee")
-          .doc(reEmployeeSe.docs[0].id)
-          .update({
-            security_deposit:
-              parseInt(reEmployeeSe.docs[0].data().security_deposit) +
-              parseInt(securityDeposit),
-          });
-      });
+      .then((reCheckStatus) => {
+        let currentSalaryStatus = reCheckStatus.docs.some(
+          (ob) =>
+            new Date(ob.data().date.seconds * 1000).getFullYear() ===
+              new Date(date.seconds * 1000).getFullYear() &&
+            new Date(ob.data().date.seconds * 1000).getMonth() ===
+              new Date(date.seconds * 1000).getMonth()
+        );
 
-    db.collection("salary")
-      .add(dbList)
-      .then(async (_) => {
-        let rootCur = await db
-          .collection("root")
-          .where("root", "==", root)
-          .get();
-
-        if (rootCur.docs.length > 0) {
-          let isSalary = await db
-            .collection("salary")
+        if (currentSalaryStatus) {
+          setLoading(false);
+          setAlreadyPaid(true);
+          setValidation("Already paid for selected month ! ");
+        } else {
+          setAlreadyPaid(false);
+          setValidation("");
+          db.collection("employee")
             .where("nic", "==", nic)
-            .orderBy("date", "asc")
-            .get();
-          let emp1 = await db
-            .collection("salary")
-            .where("nic", "==", rootCur.docs[0].data().employee1)
-            .orderBy("date", "asc")
-            .get();
-          let emp2 = await db
-            .collection("salary")
+            .get()
+            .then((reEmployeeSe) => {
+              db.collection("employee")
+                .doc(reEmployeeSe.docs[0].id)
+                .update({
+                  security_deposit:
+                    parseInt(reEmployeeSe.docs[0].data().security_deposit) +
+                    parseInt(securityDeposit),
+                });
+            });
 
-            .where("nic", "==", rootCur.docs[0].data().employee2)
-            .orderBy("date", "asc")
-            .get();
-          if (isSalary.docs.length > 0) {
-            if (nic === rootCur.docs[0].data().employee1) {
-              if (rootCur.docs[0].data().employee2 === "") {
-                db.collection("targets")
-                  .where("selectedType", "==", root)
-                  .get()
-                  .then((reTarget) => {
-                    if (reTarget.docs.length > 0) {
-                      reTarget.docs.forEach((reEach) => {
-                        db.collection("targets").doc(reEach.id).update({
-                          status: "Expired",
-                        });
-                      });
-                    }
-                  });
-              } else {
-                if (emp2.docs.length === 0) {
-                } else {
-                  if (
-                    new Date(
-                      emp2.docs[emp2.docs.length - 1]?.data().date.seconds *
-                        1000
-                    ).getFullYear() ===
-                      new Date(date.seconds * 1000).getFullYear() &&
-                    new Date(
-                      emp2.docs[emp2.docs.length - 1]?.data().date.seconds *
-                        1000
-                    ).getMonth() === new Date(date.seconds * 1000).getMonth()
-                  ) {
-                    db.collection("targets")
-                      .where("selectedType", "==", root)
-                      .get()
-                      .then((reTarget) => {
-                        if (reTarget.docs.length > 0) {
-                          reTarget.docs.forEach((reEach) => {
-                            db.collection("targets").doc(reEach.id).update({
-                              status: "Expired",
+          db.collection("salary")
+            .add(dbList)
+            .then(async (_) => {
+              let rootCur = await db
+                .collection("root")
+                .where("root", "==", root)
+                .get();
+
+              if (rootCur.docs.length > 0) {
+                let isSalary = await db
+                  .collection("salary")
+                  .where("nic", "==", nic)
+                  .orderBy("date", "asc")
+                  .get();
+                let emp1 = await db
+                  .collection("salary")
+                  .where("nic", "==", rootCur.docs[0].data().employee1)
+                  .orderBy("date", "asc")
+                  .get();
+                let emp2 = await db
+                  .collection("salary")
+
+                  .where("nic", "==", rootCur.docs[0].data().employee2)
+                  .orderBy("date", "asc")
+                  .get();
+                if (isSalary.docs.length > 0) {
+                  if (nic === rootCur.docs[0].data().employee1) {
+                    if (rootCur.docs[0].data().employee2 === "") {
+                      db.collection("targets")
+                        .where("selectedType", "==", root)
+                        .get()
+                        .then((reTarget) => {
+                          if (reTarget.docs.length > 0) {
+                            reTarget.docs.forEach((reEach) => {
+                              db.collection("targets").doc(reEach.id).update({
+                                status: "Expired",
+                              });
                             });
-                          });
+                          }
+                        });
+                    } else {
+                      if (emp2.docs.length === 0) {
+                      } else {
+                        if (
+                          new Date(
+                            emp2.docs[emp2.docs.length - 1]?.data().date
+                              .seconds * 1000
+                          ).getFullYear() ===
+                            new Date(date.seconds * 1000).getFullYear() &&
+                          new Date(
+                            emp2.docs[emp2.docs.length - 1]?.data().date
+                              .seconds * 1000
+                          ).getMonth() ===
+                            new Date(date.seconds * 1000).getMonth()
+                        ) {
+                          db.collection("targets")
+                            .where("selectedType", "==", root)
+                            .get()
+                            .then((reTarget) => {
+                              if (reTarget.docs.length > 0) {
+                                reTarget.docs.forEach((reEach) => {
+                                  db.collection("targets")
+                                    .doc(reEach.id)
+                                    .update({
+                                      status: "Expired",
+                                    });
+                                });
+                              }
+                            });
                         }
-                      });
+                      }
+                    }
+                  }
+
+                  if (nic === rootCur.docs[0].data().employee2) {
+                    if (emp1.docs.length === 0) {
+                    } else {
+                      if (
+                        new Date(
+                          emp1.docs[emp1.docs.length - 1]?.data().date.seconds *
+                            1000
+                        ).getFullYear() ===
+                          new Date(date.seconds * 1000).getFullYear() &&
+                        new Date(
+                          emp1.docs[emp1.docs.length - 1]?.data().date.seconds *
+                            1000
+                        ).getMonth() ===
+                          new Date(date.seconds * 1000).getMonth()
+                      ) {
+                        db.collection("targets")
+                          .where("selectedType", "==", root)
+                          .get()
+                          .then((reTarget) => {
+                            if (reTarget.docs.length > 0) {
+                              reTarget.docs.forEach((reEach) => {
+                                db.collection("targets").doc(reEach.id).update({
+                                  status: "Expired",
+                                });
+                              });
+                            }
+                          });
+                      }
+                    }
+                  }
+                } else {
+                  if (nic === rootCur.docs[0].data().employee1) {
+                    if (rootCur.docs[0].data().employee2 === "") {
+                      db.collection("targets")
+                        .where("selectedType", "==", root)
+                        .get()
+                        .then((reTarget) => {
+                          if (reTarget.docs.length > 0) {
+                            reTarget.docs.forEach((reEach) => {
+                              db.collection("targets").doc(reEach.id).update({
+                                status: "Expired",
+                              });
+                            });
+                          }
+                        });
+                    } else {
+                      if (
+                        new Date(
+                          emp2.docs[emp2.docs.length - 1]?.data().date.seconds *
+                            1000
+                        ).getFullYear() ===
+                          new Date(date.seconds * 1000).getFullYear() &&
+                        new Date(
+                          emp2.docs[emp2.docs.length - 1]?.data().date.seconds *
+                            1000
+                        ).getMonth() ===
+                          new Date(date.seconds * 1000).getMonth()
+                      ) {
+                        db.collection("targets")
+                          .where("selectedType", "==", root)
+                          .get()
+                          .then((reTarget) => {
+                            if (reTarget.docs.length > 0) {
+                              reTarget.docs.forEach((reEach) => {
+                                db.collection("targets").doc(reEach.id).update({
+                                  status: "Expired",
+                                });
+                              });
+                            }
+                          });
+                      }
+                    }
+                  } else {
+                    if (
+                      new Date(
+                        emp1.docs[emp1.docs.length - 1]?.data().date.seconds *
+                          1000
+                      ).getFullYear() ===
+                        new Date(date.seconds * 1000).getFullYear() &&
+                      new Date(
+                        emp1.docs[emp1.docs.length - 1]?.data().date.seconds *
+                          1000
+                      ).getMonth() === new Date(date.seconds * 1000).getMonth()
+                    ) {
+                      db.collection("targets")
+                        .where("selectedType", "==", root)
+                        .get()
+                        .then((reTarget) => {
+                          if (reTarget.docs.length > 0) {
+                            reTarget.docs.forEach((reEach) => {
+                              db.collection("targets").doc(reEach.id).update({
+                                status: "Expired",
+                              });
+                            });
+                          }
+                        });
+                    }
                   }
                 }
               }
-            }
 
-            if (nic === rootCur.docs[0].data().employee2) {
-              if (emp1.docs.length === 0) {
-              } else {
-                if (
-                  new Date(
-                    emp1.docs[emp1.docs.length - 1]?.data().date.seconds * 1000
-                  ).getFullYear() ===
-                    new Date(date.seconds * 1000).getFullYear() &&
-                  new Date(
-                    emp1.docs[emp1.docs.length - 1]?.data().date.seconds * 1000
-                  ).getMonth() === new Date(date.seconds * 1000).getMonth()
-                ) {
-                  db.collection("targets")
-                    .where("selectedType", "==", root)
-                    .get()
-                    .then((reTarget) => {
-                      if (reTarget.docs.length > 0) {
-                        reTarget.docs.forEach((reEach) => {
-                          db.collection("targets").doc(reEach.id).update({
-                            status: "Expired",
-                          });
-                        });
-                      }
-                    });
-                }
-              }
-            }
-          } else {
-            if (nic === rootCur.docs[0].data().employee1) {
-              if (rootCur.docs[0].data().employee2 === "") {
-                db.collection("targets")
-                  .where("selectedType", "==", root)
-                  .get()
-                  .then((reTarget) => {
-                    if (reTarget.docs.length > 0) {
-                      reTarget.docs.forEach((reEach) => {
-                        db.collection("targets").doc(reEach.id).update({
-                          status: "Expired",
-                        });
+              db.collection("salary_advance")
+                .where("nic", "==", nic)
+                .get()
+                .then((reAdd) => {
+                  reAdd.docs.forEach((reEa) => {
+                    if (reEa.data().status === "unpaid") {
+                      db.collection("salary_advance").doc(reEa.id).update({
+                        status: "paid",
                       });
                     }
                   });
-              } else {
-                if (
-                  new Date(
-                    emp2.docs[emp2.docs.length - 1]?.data().date.seconds * 1000
-                  ).getFullYear() ===
-                    new Date(date.seconds * 1000).getFullYear() &&
-                  new Date(
-                    emp2.docs[emp2.docs.length - 1]?.data().date.seconds * 1000
-                  ).getMonth() === new Date(date.seconds * 1000).getMonth()
-                ) {
-                  db.collection("targets")
-                    .where("selectedType", "==", root)
-                    .get()
-                    .then((reTarget) => {
-                      if (reTarget.docs.length > 0) {
-                        reTarget.docs.forEach((reEach) => {
-                          db.collection("targets").doc(reEach.id).update({
-                            status: "Expired",
-                          });
-                        });
-                      }
-                    });
-                }
-              }
-            } else {
-              if (
-                new Date(
-                  emp1.docs[emp1.docs.length - 1]?.data().date.seconds * 1000
-                ).getFullYear() ===
-                  new Date(date.seconds * 1000).getFullYear() &&
-                new Date(
-                  emp1.docs[emp1.docs.length - 1]?.data().date.seconds * 1000
-                ).getMonth() === new Date(date.seconds * 1000).getMonth()
-              ) {
-                db.collection("targets")
-                  .where("selectedType", "==", root)
-                  .get()
-                  .then((reTarget) => {
-                    if (reTarget.docs.length > 0) {
-                      reTarget.docs.forEach((reEach) => {
-                        db.collection("targets").doc(reEach.id).update({
-                          status: "Expired",
-                        });
-                      });
-                    }
-                  });
-              }
-            }
-          }
-        }
-
-        db.collection("salary_advance")
-          .where("nic", "==", nic)
-          .get()
-          .then((reAdd) => {
-            reAdd.docs.forEach((reEa) => {
-              if (reEa.data().status === "unpaid") {
-                db.collection("salary_advance").doc(reEa.id).update({
-                  status: "paid",
                 });
-              }
+              db.collection("loans")
+                .where("nic", "==", nic)
+                .get()
+                .then((reLoan) => {
+                  reLoan.docs.forEach((reEachL) => {
+                    if (reEachL.data().status === "Ongoing") {
+                      if (
+                        parseInt(reEachL.data().balance) - parseInt(loan) >
+                        0
+                      ) {
+                        db.collection("loans")
+                          .doc(reEachL.id)
+                          .update({
+                            balance:
+                              parseInt(reEachL.data().balance) - parseInt(loan),
+                          });
+                        db.collection("loan_history").add({
+                          date: date,
+                          amount: reEachL.data().amount,
+                          balance:
+                            parseInt(reEachL.data().balance) - parseInt(loan),
+                          docId: reEachL.id,
+                        });
+                      } else {
+                        db.collection("loans").doc(reEachL.id).update({
+                          balance: 0,
+                          status: "Done",
+                        });
+                        db.collection("loan_history").add({
+                          date: date,
+                          amount: reEachL.data().amount,
+                          balance: 0,
+                          docId: reEachL.id,
+                        });
+                      }
+                    }
+                  });
+                  setLoading(false);
+                  window.location.reload();
+                });
             });
-          });
-        db.collection("loans")
-          .where("nic", "==", nic)
-          .get()
-          .then((reLoan) => {
-            reLoan.docs.forEach((reEachL) => {
-              if (reEachL.data().status === "Ongoing") {
-                if (parseInt(reEachL.data().balance) - parseInt(loan) > 0) {
-                  db.collection("loans")
-                    .doc(reEachL.id)
-                    .update({
-                      balance:
-                        parseInt(reEachL.data().balance) - parseInt(loan),
-                    });
-                  db.collection("loan_history").add({
-                    date: date,
-                    amount: reEachL.data().amount,
-                    balance: parseInt(reEachL.data().balance) - parseInt(loan),
-                    docId: reEachL.id,
-                  });
-                } else {
-                  db.collection("loans").doc(reEachL.id).update({
-                    balance: 0,
-                    status: "Done",
-                  });
-                  db.collection("loan_history").add({
-                    date: date,
-                    amount: reEachL.data().amount,
-                    balance: 0,
-                    docId: reEachL.id,
-                  });
-                }
-              }
-            });
-            setLoading(false);
-            window.location.reload();
-          });
+        }
       });
   };
 
@@ -2445,6 +2501,7 @@ export default function Add_Paysheet_Model({ nic }) {
         <Grid item xs={12} sm={12}>
           <hr className="titl_hr" />
         </Grid>
+        <p className="validate_Edit">{validation}</p>
         <div className="paper">
           <form className="form" noValidate>
             <Grid container spacing={2}>
@@ -2850,6 +2907,7 @@ export default function Add_Paysheet_Model({ nic }) {
                 <Space direction="vertical">
                   <DatePicker
                     onChange={(e) => {
+                      setLoading(true);
                       if (e !== null) {
                         setDate(
                           firebase.firestore.Timestamp.fromDate(e.toDate())
@@ -2857,11 +2915,65 @@ export default function Add_Paysheet_Model({ nic }) {
                         getChangedValuesFromdate(
                           firebase.firestore.Timestamp.fromDate(e.toDate())
                         );
+                        db.collection("salary")
+                          .where("nic", "==", nic)
+                          .get()
+                          .then((reCheckStatus) => {
+                            let currentSalaryStatus = reCheckStatus.docs.some(
+                              (ob) =>
+                                new Date(
+                                  ob.data().date.seconds * 1000
+                                ).getFullYear() ===
+                                  new Date(e.toDate()).getFullYear() &&
+                                new Date(
+                                  ob.data().date.seconds * 1000
+                                ).getMonth() === new Date(e.toDate()).getMonth()
+                            );
+
+                            if (currentSalaryStatus) {
+                              setLoading(false);
+                              setAlreadyPaid(true);
+                              setValidation(
+                                "Already paid for selected month ! "
+                              );
+                            } else {
+                              setLoading(false);
+                              setAlreadyPaid(false);
+                              setValidation("");
+                            }
+                          });
                       } else {
                         setDate(null);
                         getChangedValuesFromdate(
                           firebase.firestore.Timestamp.fromDate(new Date())
                         );
+
+                        db.collection("salary")
+                          .where("nic", "==", nic)
+                          .get()
+                          .then((reCheckStatus) => {
+                            let currentSalaryStatus = reCheckStatus.docs.some(
+                              (ob) =>
+                                new Date(
+                                  ob.data().date.seconds * 1000
+                                ).getFullYear() === new Date().getFullYear() &&
+                                new Date(
+                                  ob.data().date.seconds * 1000
+                                ).getMonth() === new Date().getMonth()
+                            );
+
+                            if (currentSalaryStatus) {
+                              setLoading(false);
+                              setAlreadyPaid(true);
+                              setValidation(
+                                "Already paid for current month ! "
+                              );
+                            } else {
+                              setLoading(false);
+                              setAlreadyPaid(false);
+                              setValidation("");
+                            }
+                          });
                       }
                     }}
                   />
@@ -2960,7 +3072,7 @@ export default function Add_Paysheet_Model({ nic }) {
             </Card>
             {/* </Grid>
             </Grid> */}
-
+            <p className="validate_Edit">{validation}</p>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={9}></Grid>
               <Grid item xs={12} sm={3}>
@@ -2970,6 +3082,7 @@ export default function Add_Paysheet_Model({ nic }) {
                   className="btn_update"
                   onClick={makeSalary}
                   disabled={
+                    alreadyPaid ||
                     loading ||
                     basicSalary.length === 0 ||
                     insentive.length === 0 ||

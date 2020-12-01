@@ -721,7 +721,7 @@ export default function Add_Customer() {
                   variant="outlined"
                   required
                   fullWidth
-                  id="nic"
+                  id="niccustomer"
                   label="NIC"
                   autoFocus
                   size="small"
@@ -1016,7 +1016,7 @@ export default function Add_Customer() {
                   variant="outlined"
                   required
                   fullWidth
-                  id="nic"
+                  id="nic1trustee"
                   label="NIC"
                   size="small"
                   onKeyUp={trustee1NicValidation}
@@ -1167,7 +1167,7 @@ export default function Add_Customer() {
                   variant="outlined"
                   required
                   fullWidth
-                  id="nic"
+                  id="nic2trustee"
                   label="NIC"
                   size="small"
                   onKeyUp={trustee2NicValidation}

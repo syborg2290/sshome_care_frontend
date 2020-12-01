@@ -259,7 +259,7 @@ export default function Black_List() {
                               shortage: 0,
                               type:
                                 allDataBlacklist[currentIndx]?.data
-                                  .selectedType,
+                                  .Type,
                               delayed: 0,
                               balance: 0,
                               date: firebase.firestore.FieldValue.serverTimestamp(),

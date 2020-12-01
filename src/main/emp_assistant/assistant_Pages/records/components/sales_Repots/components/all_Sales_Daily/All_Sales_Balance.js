@@ -15,7 +15,7 @@ async function getAllSalesSaily() {
   var sales = [];
   await db
     .collection("invoice")
-    .orderBy("date", "asc")
+    .orderBy("date", "desc")
     .get()
     .then((custIn) => {
       for (let i = 0; i < custIn.docs.length; i++) {
@@ -78,7 +78,7 @@ async function getAllCashSaleSaily() {
   var cashSale = [];
   await db
     .collection("invoice")
-    .orderBy("date", "asc")
+    .orderBy("date", "desc")
     .get()
     .then((custIn) => {
       for (let i = 0; i < custIn.docs.length; i++) {
@@ -141,7 +141,7 @@ async function getAllRecievedCardSaleSaily() {
   var cardSale = [];
   await db
     .collection("invoice")
-    .orderBy("date", "asc")
+    .orderBy("date", "desc")
     .get()
     .then((custIn) => {
       for (let i = 0; i < custIn.docs.length; i++) {
@@ -261,7 +261,7 @@ async function getAllDocumentChargesDaily() {
   var cardSale = [];
   await db
     .collection("invoice")
-    .orderBy("date", "asc")
+    .orderBy("date", "desc")
     .get()
     .then((custIn) => {
       for (let i = 0; i < custIn.docs.length; i++) {
@@ -380,6 +380,18 @@ async function getAllSalesReports(sales, cash, cards, installment, docs) {
       });
     }
   }
+
+  allArray.sort((a, b) => {
+    if (
+      new Date(a.date).getFullYear() > new Date(b.date).getFullYear() &&
+      new Date(a.date).getMonth() > new Date(b.date).getMonth() &&
+      new Date(a.date).getDate() > new Date(b.date).getDate()
+    ) {
+      return -1;
+    } else {
+      return 1;
+    }
+  });
 
   return allArray;
 }
@@ -500,21 +512,6 @@ export default function All_Sales_Balance() {
                               let previousCards = 0;
                               let previousIntsll = 0;
                               let previousDocs = 0;
-
-                              againArray.sort((a, b) => {
-                                if (
-                                  new Date(a.date).getFullYear() ===
-                                    new Date(b.date).getFullYear() &&
-                                  new Date(a.date).getMonth() ===
-                                    new Date(b.date).getMonth() &&
-                                  new Date(a.date).getDate() ===
-                                    new Date(b.date).getDate()
-                                ) {
-                                  return -1;
-                                } else {
-                                  return 1;
-                                }
-                              });
 
                               againArray.forEach((each) => {
                                 previousSale =

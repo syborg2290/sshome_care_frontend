@@ -516,8 +516,7 @@ export default function Edit_model({
                   if (e.target.value !== "") {
                     setCashPrice(e.target.value);
                   }
-                }
-                }
+                }}
               />
             </Form.Item>
             <Form.Item label="* Sale Price (LKR)">
@@ -531,8 +530,7 @@ export default function Edit_model({
                   if (e.target.value !== "") {
                     setSalePrice(e.target.value);
                   }
-                }
-                }
+                }}
               />
             </Form.Item>
             <Form.Item label="* No Of Installments  ">
@@ -546,8 +544,7 @@ export default function Edit_model({
                   if (e.target.value !== "") {
                     setNoOfInstallments(e.target.value);
                   }
-                }
-                }
+                }}
               />
             </Form.Item>
             <Form.Item label="* Amount Per Installment  (LKR)">
@@ -561,8 +558,7 @@ export default function Edit_model({
                   if (e.target.value !== "") {
                     setAmountPerInstallment(e.target.value);
                   }
-                }
-                }
+                }}
               />
             </Form.Item>
             <Form.Item label="* Guarantee Months / Years  ">
@@ -582,8 +578,7 @@ export default function Edit_model({
                   if (e.target.value !== "") {
                     setGuaranteePeriod(e.target.value);
                   }
-                }
-                }
+                }}
               />
             </Form.Item>
             <Form.Item label="* Down Payment (LKR)">
@@ -597,8 +592,7 @@ export default function Edit_model({
                   if (e.target.value !== "") {
                     setDownPayment(e.target.value);
                   }
-                }
-                }
+                }}
               />
             </Form.Item>
 
@@ -611,8 +605,8 @@ export default function Edit_model({
                 value={discount}
                 onChange={(e) => {
                   if (e.target.value < salePrice && e.target.value !== "") {
-                      setDiscount(e.target.value);
-                    }
+                    setDiscount(e.target.value);
+                  }
                 }}
               />
             </Form.Item>
@@ -762,13 +756,7 @@ export default function Edit_model({
               className="btn"
               type="primary"
               onClick={updateItem}
-              disabled={
-                   brand.length === 0 ||
-                  cInvoiceNo.length === 0 ||
-                  GCardNo.length === 0 
-                      ? true
-                      : false
-                  }
+              disabled={brand.length === 0 ? true : false}
             >
               {loadingSubmit ? (
                 <Spin spinning={loadingSubmit} size="large" />

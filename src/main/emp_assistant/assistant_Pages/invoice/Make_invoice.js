@@ -83,7 +83,7 @@ function Make_invoice() {
       "popstate",
       (event) => {
         if (event.state) {
-          history.push("/assistant/ui/ItemTable");
+          history.push("/assistant/ui/MakeInvoiceTable");
         }
       },
       false
@@ -317,7 +317,7 @@ function Make_invoice() {
                   },
                   async onCancel() {
                     await invoiceIntoDb().then((_) => {
-                      history.push("/assistant/ui/ItemTable");
+                      history.push("/assistant/ui/MakeInvoiceTable");
                     });
                   },
                 });
@@ -402,7 +402,7 @@ function Make_invoice() {
           },
           async onCancel() {
             await invoiceIntoDb().then((_) => {
-              history.push("/assistant/ui/ItemTable");
+              history.push("/assistant/ui/MakeInvoiceTable");
             });
           },
         });

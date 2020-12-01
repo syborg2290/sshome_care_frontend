@@ -60,7 +60,7 @@ export default function Vehical_Fuel() {
 
   useEffect(() => {
     db.collection("expences")
-      .orderBy("date", "asc")
+      .orderBy("date", "desc")
       .get()
       .then((reEx) => {
         var raw = [];

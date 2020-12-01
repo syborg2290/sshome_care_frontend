@@ -1365,9 +1365,7 @@ export default function Add_Item() {
                   disabled={
                     loadingSubmit ||
                     itemName.length === 0 ||
-                    brand.length === 0 |
-                    cInvoiceNo.length === 0 ||
-                    GCardNo.length === 0 
+                    brand.length === 0
                       ? true
                       : false
                   }

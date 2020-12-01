@@ -168,7 +168,7 @@ export default function Daily_Sales() {
 
   useEffect(() => {
     db.collection("invoice")
-      .orderBy("date", "asc")
+      .orderBy("date", "desc")
       .get()
       .then((custIn) => {
         var sales = [];

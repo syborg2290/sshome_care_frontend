@@ -303,7 +303,7 @@ export default function PrintInvoice() {
       (event) => {
         if (event.state) {
           if (location.state?.detail.backto === "item_list") {
-            history.push("/assistant/ui/ItemTable");
+            history.push("/assistant/ui/MakeInvoiceTable");
           } else {
             history.push("/assistant/ui/InvoiceHistory");
           }

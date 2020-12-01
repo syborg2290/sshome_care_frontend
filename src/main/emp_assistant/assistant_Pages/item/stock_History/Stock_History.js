@@ -435,7 +435,7 @@ export default function Stock_History() {
       <Grid className="tbl_Container" container spacing={4}>
         <Grid item xs={12}>
           <MUIDataTable
-            title={<span className="title_Span">Stcok history</span>}
+            title={<span className="title_Span">Stock history</span>}
             className="item_table"
             data={itemTableData}
             columns={columns}

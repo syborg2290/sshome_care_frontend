@@ -2,6 +2,15 @@ import React, { useEffect, useState } from "react";
 import { Grid, Container, Typography } from "@material-ui/core";
 import CurrencyFormat from "react-currency-format";
 import { Spin } from "antd";
+import moment from "moment";
+
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import Paper from "@material-ui/core/Paper";
 
 import db from "../../../../../../../config/firebase.js";
 
@@ -48,7 +57,19 @@ export default function View_Model({ items_list_props, data }) {
       });
 
     items_list_props.forEach((each) => {
-     
+      let itemDataSeMo = [];
+      let listOfSerilNo = [];
+      let listOfModelNo = [];
+      let listOfChassisNo = [];
+      listOfSerilNo = each.serialNo;
+      listOfModelNo = each.modelNo;
+      listOfChassisNo = each.chassisNo;
+
+      itemDataSeMo.push({
+        serialNo: listOfSerilNo,
+        modelNo: listOfModelNo,
+        chassisNo: listOfChassisNo,
+      });
       db.collection("item")
         .doc(each.item_id)
         .get()
@@ -57,11 +78,12 @@ export default function View_Model({ items_list_props, data }) {
             ...old,
             {
               item_name: th.data().itemName,
-              dp: each.downpayment,
+              dp: data.total,
+              listSe: itemDataSeMo,
               discount: each.discount,
               qty: each.qty,
               color: th.data().color,
-              model_no: th.data().modelNo,
+              model_no: each.modelNo,
               gurantee_type: th.data().guarantee,
               gurantee_period: th.data().guaranteePeriod,
             },
@@ -98,41 +120,118 @@ export default function View_Model({ items_list_props, data }) {
                   :
                 </Grid>
                 <Grid item xs={12} sm={7}>
-                  <p>{data.installmentType}</p>
+                  <p>{data.selectedType}</p>
                 </Grid>
                 <Grid className="lbl_topis" item xs={12} sm={4}>
-                  Installmanet (day/Date)
+                  Installmanet day
                 </Grid>
                 <Grid item xs={12} sm={1}>
                   :
                 </Grid>
                 <Grid item xs={12} sm={7}>
-                  {data.installmentType === "Weekly"
-                    ? parseInt(data.installemtnDayDate) === 1
-                      ? "Monday"
-                      : parseInt(data.installemtnDayDate) === 2
-                      ? "Tuesday"
-                      : parseInt(data.installemtnDayDate) === 3
-                      ? "Wednesday"
-                      : parseInt(data.installemtnDayDate) === 4
-                      ? "Thursday"
-                      : parseInt(data.installemtnDayDate) === 5
-                      ? "Friday"
-                      : parseInt(data.installemtnDayDate) === 6
-                      ? "Saturday"
-                      : parseInt(data.installemtnDayDate) === 0
-                      ? "Sunday"
-                      : ""
-                    : data.installemtnDayDate}
+                  {parseInt(data.installemtnDay) === 1
+                    ? "Monday"
+                    : parseInt(data.installemtnDay) === 2
+                    ? "Tuesday"
+                    : parseInt(data.installemtnDay) === 3
+                    ? "Wednesday"
+                    : parseInt(data.installemtnDay) === 4
+                    ? "Thursday"
+                    : parseInt(data.installemtnDay) === 5
+                    ? "Friday"
+                    : parseInt(data.installemtnDay) === 6
+                    ? "Saturday"
+                    : parseInt(data.installemtnDay) === 0
+                    ? "Sunday"
+                    : ""}
                 </Grid>
                 <Grid className="lbl_topis" item xs={12} sm={4}>
-                  Qty
+                  Installmanet Date
                 </Grid>
                 <Grid item xs={12} sm={1}>
                   :
                 </Grid>
                 <Grid item xs={12} sm={7}>
-                  <p>{items_list_props.length}</p>
+                  {data.installemtnDate}
+                </Grid>
+                <Grid className="lbl_topis" item xs={12} sm={4}>
+                  No of inastallments
+                </Grid>
+                <Grid item xs={12} sm={1}>
+                  :
+                </Grid>
+                <Grid item xs={12} sm={7}>
+                  {data.noOfInstallment}
+                </Grid>
+
+                <Grid className="lbl_topis" item xs={12} sm={4}>
+                  Amount of installment(LKR)
+                </Grid>
+                <Grid item xs={12} sm={1}>
+                  :
+                </Grid>
+                <Grid item xs={12} sm={7}>
+                  {data.amountPerInstallment}
+                </Grid>
+                <Grid className="lbl_topis" item xs={12} sm={12}>
+                  <hr />
+                </Grid>
+                <Grid className="lbl_topis" item xs={12} sm={5}>
+                  Purchase date
+                </Grid>
+                <Grid item xs={12} sm={1}>
+                  :
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  {moment(data.date.toDate()).format("dddd, MMMM Do YYYY")}
+                </Grid>
+                <Grid className="lbl_topis" item xs={12} sm={5}>
+                  Installment deadline
+                </Grid>
+                <Grid item xs={12} sm={1}>
+                  :
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  {moment(data.deadlineTimestamp.toDate()).format(
+                    "dddd, MMMM Do YYYY"
+                  )}
+                </Grid>
+                <Grid className="lbl_topis" item xs={12} sm={5}>
+                  Gamisarani
+                </Grid>
+                <Grid item xs={12} sm={1}>
+                  :
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  {data.gamisarani ? "Yes" : "No"}
+                </Grid>
+                <Grid className="lbl_topis" item xs={12} sm={5}>
+                  Gamisarani withdrawal Amount(LKR)
+                </Grid>
+                <Grid item xs={12} sm={1}>
+                  :
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <CurrencyFormat
+                    value={data.gamisarani_amount}
+                    displayType={"text"}
+                    thousandSeparator={true}
+                    prefix={" "}
+                  />
+                </Grid>
+                <Grid className="lbl_topis" item xs={12} sm={5}>
+                  Downpayment Amount(LKR)
+                </Grid>
+                <Grid item xs={12} sm={1}>
+                  :
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <CurrencyFormat
+                    value={data.downpayment}
+                    displayType={"text"}
+                    thousandSeparator={true}
+                    prefix={" "}
+                  />
                 </Grid>
               </Grid>
               <Grid className="lbl_topiSub" item xs={12} sm={12}>
@@ -155,6 +254,15 @@ export default function View_Model({ items_list_props, data }) {
               </Grid>
               <Grid item xs={12} sm={3}>
                 <p></p>
+              </Grid>
+              <Grid className="lbl_topis" item xs={12} sm={3}>
+                MID
+              </Grid>
+              <Grid item xs={12} sm={1}>
+                :
+              </Grid>
+              <Grid item xs={12} sm={8}>
+                <p>{customer.mid}</p>
               </Grid>
               <Grid className="lbl_topis" item xs={12} sm={3}>
                 NIC
@@ -270,7 +378,7 @@ export default function View_Model({ items_list_props, data }) {
                     <p>{eachItem.item_name}</p>
                   </Grid>
                   <Grid className="lbl_topis" item xs={12} sm={4}>
-                    Basic Payment(LKR)
+                    Sale price(LKR)
                   </Grid>
                   <Grid item xs={12} sm={1}>
                     :
@@ -316,15 +424,6 @@ export default function View_Model({ items_list_props, data }) {
                     <p>{eachItem.color}</p>
                   </Grid>
                   <Grid className="lbl_topis" item xs={12} sm={4}>
-                    Model No.
-                  </Grid>
-                  <Grid item xs={12} sm={1}>
-                    :
-                  </Grid>
-                  <Grid item xs={12} sm={7}>
-                    <p>{eachItem.model_no}</p>
-                  </Grid>
-                  <Grid className="lbl_topis" item xs={12} sm={4}>
                     Guarantee Period
                   </Grid>
                   <Grid item xs={12} sm={1}>
@@ -336,6 +435,60 @@ export default function View_Model({ items_list_props, data }) {
                         " " +
                         eachItem.gurantee_type.value.toString()}
                     </p>
+                  </Grid>
+                  <TableContainer
+                    component={Paper}
+                    className="main_containerNom"
+                  >
+                    <Table
+                      className="gass_Table"
+                      size="small"
+                      aria-label="a dense table"
+                    >
+                      <TableHead className="No_Table_head">
+                        <TableRow>
+                          <TableCell className="tbl_cell">SerialNo</TableCell>
+                          <TableCell className="tbl_cell" align="left">
+                            ModelNo
+                          </TableCell>
+                          <TableCell className="tbl_cell" align="left">
+                            ChasisseNo
+                          </TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {eachItem.listSe.length > 0
+                          ? eachItem?.listSe?.map((row) => (
+                              <TableRow key={0}>
+                                <TableCell component="th" scope="row">
+                                  {eachItem.listSe[0]?.serialNo?.map(
+                                    (serailNoT) => (
+                                      <h5 key={serailNoT}>{serailNoT}</h5>
+                                    )
+                                  )}
+                                </TableCell>
+                                <TableCell component="th" scope="row">
+                                  {eachItem.listSe[0]?.modelNo?.map(
+                                    (modelNoT) => (
+                                      <h5 key={modelNoT}>{modelNoT}</h5>
+                                    )
+                                  )}
+                                </TableCell>
+                                <TableCell component="th" scope="row">
+                                  {eachItem.listSe[0]?.chassisNo?.map(
+                                    (chassisNoT) => (
+                                      <h5 key={chassisNoT}>{chassisNoT}</h5>
+                                    )
+                                  )}
+                                </TableCell>
+                              </TableRow>
+                            ))
+                          : ""}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                  <Grid item xs={12} sm={12}>
+                    <hr />
                   </Grid>
                 </Grid>
               );

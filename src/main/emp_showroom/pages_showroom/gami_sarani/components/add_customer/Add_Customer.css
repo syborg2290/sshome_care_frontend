@@ -1,0 +1,48 @@
+.main_container_sarani {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.16), 0 1px 2px rgba(0, 0, 0, 0.23);
+  background-color: white;
+  padding-bottom: 50px;
+  border-radius: 6px;
+  overflow: hidden !important;
+  margin-top: 30px !important;
+}
+
+.title_sarani {
+  padding-top: 30px !important;
+}
+
+.trustee_title_sarani {
+  padding-top: 30px !important;
+}
+
+.titles_hr_sarani {
+  background-color: #222a44 !important;
+  height: 1px !important;
+}
+
+.txt_Labels_sarani {
+  margin: auto !important;
+}
+
+.paper_sarani {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  margin-top: 20px !important;
+}
+
+.form_sarani {
+  width: 100% !important;
+  margin-top: 30px !important;
+}
+
+.btn_addCust {
+  margin-top: 40px !important;
+  float: right !important;
+}
+
+.validate_Edit {
+  color: red;
+  text-align: center !important;
+  font-weight: 600 !important;
+}

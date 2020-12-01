@@ -7,6 +7,7 @@ import moment from "moment";
 import CurrencyFormat from "react-currency-format";
 import { Button, Box, Tab, Tabs, AppBar, Grid } from "@material-ui/core";
 
+import { useHistory } from "react-router-dom";
 import db from "../../../../config/firebase.js";
 
 // components
@@ -21,6 +22,7 @@ import "./Invoice_history.css";
 // icons
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import HistoryIcon from "@material-ui/icons/History";
+import PrintRoundedIcon from "@material-ui/icons/PrintRounded";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -61,10 +63,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+function isDateBeforeToday(date) {
+  return new Date(date.toDateString()) < new Date(new Date().toDateString());
+}
+
 export default function Invoice_history() {
-  // eslint-disable-next-line
   const [isLoading, setIsLoading] = useState(true);
-  // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
   const [currentIndx2, setCurrentIndx2] = useState(0);
   const classes = useStyles();
@@ -78,6 +82,73 @@ export default function Invoice_history() {
   const [installmentvisible, setInstallmentVisible] = useState(false); //  table models
   const [installmentHistory, setInstallmentHistory] = useState(false); //  table models
   const [installmentFullPayment, setInstallmentFullPayment] = useState(false); //  table models
+  const [visibleConfirmPrint, setVisibleConfirmPrint] = useState(false);
+  const [printType, setPrintType] = useState("fullpayment");
+
+  let history = useHistory();
+  let history2 = useHistory();
+
+  const showVisibleConfirmPrintModal = (type) => {
+    setPrintType(type);
+    setVisibleConfirmPrint(true);
+  };
+
+  const PrintInvoice = async () => {
+    if (printType === "fullpayment") {
+      let passingWithCustomerObj = {
+        invoice_number: fullPaymentAllData[currentIndx].data?.invoice_number,
+        customerDetails: null,
+        installmentType: null,
+        installemtnDayDate: null,
+        discount: fullPaymentAllData[currentIndx].data?.discount,
+        subTotal:
+          parseInt(fullPaymentAllData[currentIndx].data?.total) +
+          parseInt(fullPaymentAllData[currentIndx].data?.discount),
+        total: fullPaymentAllData[currentIndx].data?.total,
+        discription: "",
+        balance: 0,
+        itemsList: fullPaymentAllData[currentIndx].data?.items,
+        backto: "invoice_history",
+      };
+
+      let moveWith = {
+        pathname: "/showroom/invoice/printInvoice",
+        search: "?query=abc",
+        state: { detail: passingWithCustomerObj },
+      };
+      history.push(moveWith);
+    } else {
+      db.collection("customer")
+        .doc(payangoAllData[currentIndx2]?.data?.customer_id)
+        .get()
+        .then((reCust) => {
+          let passingWithCustomerObj = {
+            invoice_number: payangoAllData[currentIndx2]?.data?.invoice_number,
+            customerDetails: reCust.data(),
+            installmentType:
+              payangoAllData[currentIndx2]?.data?.installmentType,
+            installemtnDayDate:
+              payangoAllData[currentIndx2]?.data?.installemtnDayDate,
+            discount: payangoAllData[currentIndx2]?.data?.discount,
+            subTotal:
+              parseInt(payangoAllData[currentIndx2]?.data?.total) +
+              parseInt(payangoAllData[currentIndx2]?.data?.discount),
+            total: payangoAllData[currentIndx2]?.data?.total,
+            discription: "",
+            balance: payangoAllData[currentIndx2]?.data?.balance,
+            itemsList: payangoAllData[currentIndx2]?.data?.items,
+            backto: "invoice_history",
+          };
+
+          let moveWith = {
+            pathname: "/showroom/invoice/printInvoice",
+            search: "?query=abc",
+            state: { detail: passingWithCustomerObj },
+          };
+          history.push(moveWith);
+        });
+    }
+  };
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -114,6 +185,16 @@ export default function Invoice_history() {
         }),
       },
     },
+
+    {
+      name: "Type",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
     {
       name: "Date",
       options: {
@@ -123,8 +204,9 @@ export default function Invoice_history() {
         }),
       },
     },
+
     {
-      name: "MemberID",
+      name: "MID",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -143,16 +225,22 @@ export default function Invoice_history() {
     },
 
     {
-      name: "Discount",
+      name: "Total_Discount",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+          style: {
+            fontSize: "15px",
+            color: "black",
+            fontWeight: "600",
+            minWidth: "15px",
+          },
         }),
       },
     },
+
     {
-      name: "Basic_Payment",
+      name: "Balance",
       options: {
         filter: false,
         setCellHeaderProps: (value) => ({
@@ -179,6 +267,8 @@ export default function Invoice_history() {
             fontSize: "15px",
             color: "black",
             fontWeight: "600",
+            minWidth: "215px",
+            // maxWidth: "800px",
           },
         }),
       },
@@ -198,6 +288,15 @@ export default function Invoice_history() {
       },
     },
     {
+      name: "Type",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
       name: "Date",
       options: {
         filter: true,
@@ -208,7 +307,7 @@ export default function Invoice_history() {
     },
 
     {
-      name: "Discount",
+      name: "Total_Discount",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -245,13 +344,49 @@ export default function Invoice_history() {
   //START pay And Go Rows
 
   useEffect(() => {
+    window.addEventListener("offline", function (e) {
+      history2.push("/connection_lost");
+    });
+
     db.collection("invoice")
+      .where("status_of_payandgo", "==", "onGoing")
+      .onSnapshot((custIn) => {
+        custIn.docs.forEach((siDoc) => {
+          let isBeforeDate = isDateBeforeToday(
+            new Date(siDoc.data()?.deadlineTimestamp?.seconds * 1000)
+          );
+          if (isBeforeDate) {
+            db.collection("invoice").doc(siDoc.id).update({
+              status_of_payandgo: "expired",
+            });
+          }
+        });
+      });
+    db.collection("invoice")
+      // .orderBy("customer_id", "desc")
       .where("customer_id", "!=", null)
+      // .orderBy("date", "desc")
       .onSnapshot((cust) => {
         var rawData = [];
         var rawAllData = [];
 
-        cust.docs.forEach((siDoc) => {
+        var reArray = cust.docs;
+        reArray.sort((a, b) => {
+          if (
+            new Date(a.data().date.seconds * 1000).getFullYear() ===
+              new Date(b.data().date.seconds * 1000).getFullYear() &&
+            new Date(a.data().date.seconds * 1000).getMonth() ===
+              new Date(b.data().date.seconds * 1000).getMonth() &&
+            new Date(a.data().date.seconds * 1000).getDate() ===
+              new Date(b.data().date.seconds * 1000).getDate()
+          ) {
+            return -1;
+          } else {
+            return 1;
+          }
+        });
+
+        reArray.forEach((siDoc) => {
           rawAllData.push({
             id: siDoc.id,
             data: siDoc.data(),
@@ -259,12 +394,14 @@ export default function Invoice_history() {
 
           rawData.push({
             InvoiceNo: siDoc.data().invoice_number,
+            // SerialNo: siDoc.data().items[0].serialNo,
+            Type: siDoc.data().selectedType,
             Date: moment(siDoc.data()?.date?.toDate()).format(
               "dddd, MMMM Do YYYY"
             ),
-            MemberID: siDoc.data().mid,
+            MID: siDoc.data().mid,
             NIC: siDoc.data().nic,
-            Discount: (
+            Total_Discount: (
               <CurrencyFormat
                 value={siDoc.data().discount}
                 displayType={"text"}
@@ -272,9 +409,10 @@ export default function Invoice_history() {
                 prefix={" "}
               />
             ),
-            Basic_Payment: (
+
+            Balance: (
               <CurrencyFormat
-                value={siDoc.data().total}
+                value={siDoc.data().balance}
                 displayType={"text"}
                 thousandSeparator={true}
                 prefix={" "}
@@ -297,13 +435,25 @@ export default function Invoice_history() {
                 <span
                   style={{
                     color: "white",
-                    backgroundColor: " #009900",
+                    backgroundColor: "#009900",
                     padding: "6px",
                     borderRadius: "20px",
                     width: "100%",
                   }}
                 >
                   Done
+                </span>
+              ) : siDoc.data().status_of_payandgo === "expired" ? (
+                <span
+                  style={{
+                    color: "white",
+                    backgroundColor: "#ff8c00",
+                    padding: "6px",
+                    borderRadius: "20px",
+                    width: "100%",
+                  }}
+                >
+                  Expired
                 </span>
               ) : (
                 <span
@@ -320,7 +470,8 @@ export default function Invoice_history() {
               ),
             Action: (
               <div>
-                {siDoc.data().status_of_payandgo === "onGoing" ? (
+                {siDoc.data().status_of_payandgo === "onGoing" ||
+                siDoc.data().status_of_payandgo === "expired" ? (
                   <Button
                     variant="contained"
                     color="primary"
@@ -339,6 +490,11 @@ export default function Invoice_history() {
                 <span className="icon_Edit">
                   <VisibilityIcon onClick={showInstallmentView} />
                 </span>
+                <span className="icon_print">
+                  <PrintRoundedIcon
+                    onClick={() => showVisibleConfirmPrintModal("payandgo")}
+                  />
+                </span>
               </div>
             ),
           });
@@ -350,6 +506,8 @@ export default function Invoice_history() {
 
     //START Full Payment Rows
     db.collection("invoice")
+      // .orderBy("customer_id", "desc")
+      .orderBy("date", "desc")
       .where("customer_id", "==", null)
       .onSnapshot((cust) => {
         var rawDataFull = [];
@@ -361,10 +519,11 @@ export default function Invoice_history() {
           });
           rawDataFull.push({
             InvoiceNo: siDoc.data().invoice_number,
+            Type: siDoc.data().selectedType,
             Date: moment(siDoc.data()?.date?.toDate()).format(
               "dddd, MMMM Do YYYY"
             ),
-            Discount: (
+            Total_Discount: (
               <CurrencyFormat
                 value={siDoc.data().discount}
                 displayType={"text"}
@@ -385,6 +544,11 @@ export default function Invoice_history() {
                 <span className="icon_visibl">
                   <VisibilityIcon onClick={showInstallmentFullPayment} />
                 </span>
+                <span className="icon_print">
+                  <PrintRoundedIcon
+                    onClick={() => showVisibleConfirmPrintModal("fullpayment")}
+                  />
+                </span>
               </div>
             ),
           });
@@ -401,6 +565,25 @@ export default function Invoice_history() {
 
   return (
     <>
+      <Modal
+        className="confo_model"
+        closable={null}
+        visible={visibleConfirmPrint}
+        cancelText="No"
+        okText="Yes"
+        bodyStyle={{ borderRadius: "30px" }}
+        onOk={PrintInvoice}
+        onCancel={() => {
+          setVisibleConfirmPrint(false);
+        }}
+      >
+        <div className="confoModel_body">
+          <PrintRoundedIcon className="confo_Icon" />
+          <h3 className="txtConfoModel_body">
+            Do you want to print an invoice?{" "}
+          </h3>
+        </div>
+      </Modal>
       {/*Start Installment Model Update */}
       <Modal
         visible={installmentUpdate}
@@ -417,14 +600,18 @@ export default function Invoice_history() {
                 key={payangoAllData[currentIndx2]?.id}
                 invoice_no={payangoAllData[currentIndx2]?.data?.invoice_number}
                 instAmountProp={
-                  payangoAllData[currentIndx2]?.data?.items[0]
-                    .amountPerInstallment
+                  payangoAllData[currentIndx2]?.data?.amountPerInstallment
                 }
-                instCount={
-                  payangoAllData[currentIndx2]?.data?.items[0].noOfInstallment
-                }
-                customer_id={payangoAllData[currentIndx]?.data?.customer_id}
+                instCount={payangoAllData[currentIndx2]?.data?.noOfInstallment}
+                customer_id={payangoAllData[currentIndx2]?.data?.customer_id}
                 closeModal={closeModalUpdate}
+                type={payangoAllData[currentIndx2]?.data?.selectedType}
+                isEx={
+                  payangoAllData[currentIndx2]?.data?.status_of_payandgo ===
+                  "expired"
+                    ? true
+                    : false
+                }
               />
             </div>
           </div>
@@ -491,6 +678,7 @@ export default function Invoice_history() {
               <InstallmentFullPayment
                 key={fullPaymentAllData[currentIndx]?.id}
                 items_list_props={fullPaymentAllData[currentIndx]?.data?.items}
+                data={fullPaymentAllData[currentIndx]?.data}
               />
             </div>
           </div>
@@ -517,7 +705,8 @@ export default function Invoice_history() {
                 data={payangoTableData}
                 columns={payAndGoColumns}
                 options={{
-                  selectableRows: false,
+                  // selectableRows: false,
+                  selectableRows: "none",
                   customToolbarSelect: () => {},
                   filterType: "textField",
                   download: false,
@@ -555,7 +744,8 @@ export default function Invoice_history() {
                 data={fullPaymentTableData}
                 columns={fullPaymentColumns}
                 options={{
-                  selectableRows: false,
+                  // selectableRows: false,
+                  selectableRows: "none",
                   customToolbarSelect: () => {},
                   filterType: "textField",
                   download: false,

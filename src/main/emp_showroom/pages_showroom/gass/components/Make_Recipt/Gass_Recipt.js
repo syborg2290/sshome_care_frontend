@@ -18,13 +18,28 @@ import moment from "moment";
 // styles
 import "./Gass_Recipt.css";
 
-function createData(item, qty, price) {
-  return { item, qty, price };
+function createData(item, qty, unit, price) {
+  return { item, qty, unit, price };
 }
 
-const rows = [createData("5kg", 1, 1000), createData("2kg", 2, 5000)];
-
 class GassRecipt extends React.Component {
+  state = {
+    rows: [],
+    total: 0,
+  };
+
+  constructor(props) {
+    super(props);
+    this.state.total = this.props.prop?.total;
+    if (this.props.prop?.list !== undefined) {
+      this.props.prop.list.forEach((ele) => {
+        this.state.rows.push(
+          createData(ele?.weight + " Kg", ele?.qty, ele?.unit, ele?.price)
+        );
+      });
+    }
+  }
+
   render() {
     return (
       <div>
@@ -78,18 +93,28 @@ class GassRecipt extends React.Component {
                     <Table className="ytsd" aria-label="simple table">
                       <TableHead>
                         <TableRow>
-                          <TableCell>Item</TableCell>
+                          <TableCell>Weight(Kg)</TableCell>
                           <TableCell align="center">Qty</TableCell>
-                          <TableCell align="right">Price</TableCell>
+                          <TableCell align="center">Unit Price(LKR)</TableCell>
+                          <TableCell align="right">Price(LKR)</TableCell>
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {rows.map((row) => (
+                        {this.state.rows.map((row) => (
                           <TableRow key={row.item}>
                             <TableCell component="th" scope="row">
                               {row.item}
                             </TableCell>
                             <TableCell align="center">{row.qty}</TableCell>
+                            <TableCell align="right">
+                              {" "}
+                              <CurrencyFormat
+                                value={row.unit}
+                                displayType={"text"}
+                                thousandSeparator={true}
+                                prefix={" "}
+                              />
+                            </TableCell>
                             <TableCell align="right">
                               {" "}
                               <CurrencyFormat
@@ -103,12 +128,12 @@ class GassRecipt extends React.Component {
                         ))}
                         <TableRow>
                           <TableCell rowSpan={1} />
-                          <TableCell align="right" colSpan={1}>
+                          <TableCell align="right" colSpan={2}>
                             Total(LKR)
                           </TableCell>
                           <TableCell align="right" colSpan={2}>
                             <CurrencyFormat
-                              value={"84738"}
+                              value={this.state.total}
                               displayType={"text"}
                               thousandSeparator={true}
                               prefix={" "}

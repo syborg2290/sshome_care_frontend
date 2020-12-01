@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Grid, Button } from "@material-ui/core";
 import { Spin, Modal } from "antd";
 import MUIDataTable from "mui-datatables";
+import { useHistory } from "react-router-dom";
 
 import db from "../../../../../config/firebase.js";
 
@@ -25,6 +26,7 @@ export default function ItemTable() {
   const [currentIndx, setCurrentIndx] = useState(0);
   const [customerTableData, setCustomerTableData] = useState([]);
   const [customerAllData, setCustomerAllData] = useState([]);
+    let history2 = useHistory();
 
   const showModal = () => {
     setVisible(true);
@@ -67,7 +69,7 @@ export default function ItemTable() {
       },
     },
     {
-      name: "MemebrID",
+      name: "MID",
       options: {
         filter: false,
         setCellHeaderProps: (value) => ({
@@ -106,6 +108,11 @@ export default function ItemTable() {
   ];
 
   useEffect(() => {
+
+      window.addEventListener("offline", function (e) {
+      history2.push("/connection_lost");
+      });
+    
     db.collection("customer")
       .orderBy("date", "desc")
       .onSnapshot((custDoc) => {
@@ -130,7 +137,7 @@ export default function ItemTable() {
             ),
             FirstName: siDoc.data().fname,
             LastName: siDoc.data().lname,
-            MemberID: siDoc.data().mid,
+            MID: siDoc.data().mid,
             NIC: siDoc.data().nic,
             Telephone: siDoc.data().mobile1,
             Action: (
@@ -147,6 +154,7 @@ export default function ItemTable() {
         setCustomerAllData(rawAllData);
         setIsLoading(false);
       });
+    // eslint-disable-next-line
   }, []);
 
   return (

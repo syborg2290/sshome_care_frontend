@@ -15,7 +15,19 @@
 .btn_gass {
   float: right !important;
   margin-top: 5px !important;
-  margin-right: 120px !important;
+  margin-right: 30px !important;
+}
+
+.btn_gass_Add {
+  margin-top: 5px !important;
+  background-color: rgba(6, 5, 100, 0.747) !important;
+  color: aliceblue !important;
+}
+
+.btn_gassHis {
+  margin-top: 5px !important;
+  background-color: rgba(57, 55, 180, 0.747) !important;
+  color: aliceblue !important;
 }
 
 .gass_Table_head {
@@ -41,4 +53,19 @@
   border-radius: 6px;
   overflow: hidden !important;
   margin-top: 70px !important;
+}
+
+.purchesModel_model {
+  width: 50% !important;
+}
+
+.btn_pHistry {
+  float: right !important;
+  margin-top: 5px !important;
+  margin-right: 30px !important;
+  background-color: rgba(32, 76, 148, 0.719) !important;
+}
+
+.gassHistory_model {
+  width: 60% !important;
 }

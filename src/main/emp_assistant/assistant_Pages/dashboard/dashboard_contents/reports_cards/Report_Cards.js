@@ -1277,7 +1277,7 @@ export default function Report_Cards() {
                     color="text"
                     colorBrightness="secondary"
                   >
-                    The Rest of the Hand
+                    Total Profit
                   </Typography>
                   <Typography className="total_cx" size="xl">
                     <CurrencyFormat

@@ -1,426 +1,36 @@
-.card {
+.card_cx {
   min-height: 100%;
   display: flex;
   flex-direction: column;
-  /* flex-grow: 1;
-  overflow: hidden; */
+  cursor: pointer;
+}
+.card_Bttm {
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
 }
 
-.status {
-  font-size: small !important;
-  font-family: Helvetica, sans-serif !important;
-  margin: auto !important;
-  font-weight: 100 !important;
-}
-
-.px-2 {
-  background-color: #09b66d !important;
-  color: aliceblue;
-  margin: auto;
-  text-align: center !important;
-  border-radius: 4px !important;
-  padding: 2px 0px 2px 0px !important;
-}
-
-.px-3 {
-  background-color: #ff9900 !important;
-  color: black !important;
-  margin: auto;
-  text-align: center !important;
-  border-radius: 4px !important;
-  padding: 2px 0px 2px 0px !important;
-}
-
-.px-4 {
-  background-color: #ff3d57 !important;
-  color: aliceblue;
-  margin: auto;
-  text-align: center !important;
-  border-radius: 4px !important;
-  padding: 2px 0px 2px 0px !important;
-}
-
-.visitsNumberContainer {
+.visitsNumberContainer_cx {
   display: flex;
   align-items: center;
   flex-grow: 1;
   padding-bottom: 20px;
 }
 
-.cost {
+.cost_cx {
   margin-bottom: 15px !important;
   display: flex;
   align-items: center;
   flex-grow: 1;
 }
 
-.tipics_cards {
+.tipics_cards_cx {
   color: rgba(24, 24, 24, 0.521) !important;
 }
 
-.mostSales_tbl {
+.mostSales_tbl_cx {
   margin-top: 50px !important;
 }
-
-.status_dash {
-  background-color: rgb(36, 172, 23) !important;
-  border-radius: 7px !important;
-  color: aliceblue !important;
-  font-weight: 600 !important;
-  padding-top: 5px !important;
-  padding-bottom: 5px !important;
-  margin: auto !important;
-  text-align: center !important;
-}
-
-.tbl_cell {
-  font-weight: 600 !important;
-}
-
-.chrt {
-  color: skyblue !important;
-}
-
-.icon_customers {
-  color: steelblue !important;
-  margin: auto !important;
-}
-
-@media screen and (min-width: 280px) and (max-width: 653px) {
-  .tipics_cards {
-    margin: auto !important;
-    text-align: center !important;
-    font-size: 25px !important;
-  }
-}
-@media screen and (min-width: 280px) and (max-width: 653px) {
-  .total {
-    margin-left: -40px !important;
-    margin-top: 15px !important;
-    font-size: 15px !important;
-  }
-}
-@media screen and (min-width: 280px) and (max-width: 653px) {
-  .line_chart {
-    display: flex !important;
-    margin-left: -30px !important;
-    margin-top: 15px !important;
-  }
-}
-
-@media screen and (min-width: 280px) and (max-width: 653px) {
-  .payGoing {
-    display: flex !important;
-    margin-left: 28px !important;
-  }
-}
-@media screen and (min-width: 280px) and (max-width: 653px) {
-  .payGoing_lbl {
-    margin-left: 30px !important;
-    font-size: 15px !important;
-    display: flex !important;
-  }
-}
-@media screen and (min-width: 280px) and (max-width: 653px) {
-  .fullPaying {
-    display: flex !important;
-    margin-left: 28px !important;
-  }
-}
-@media screen and (min-width: 280px) and (max-width: 653px) {
-  .fullPaying_lbl {
-    margin-left: 30px !important;
-    font-size: 15px !important;
-    display: flex !important;
-  }
-}
-
-@media screen and (min-width: 280px) and (max-width: 653px) {
-  .Customers_lbl {
-    text-align: center !important;
-    margin-top: 10px !important;
-    font-size: 20px !important;
-    font-weight: 600 !important;
-  }
-}
-
-@media screen and (min-width: 280px) and (max-width: 653px) {
-  .icon_customers {
-    align-items: center !important;
-    margin-top: -10px !important;
-    margin-left: 95px !important;
-    font-size: 30px !important;
-  }
-}
-
-/* Start 320 */
-
-@media screen and (min-width: 320px) and (max-width: 568px) {
-  .payGoing_lbl {
-    margin-left: 60px !important;
-    font-size: 15px !important;
-    display: flex !important;
-    flex-direction: column;
-  }
-}
-
-@media screen and (min-width: 320px) and (max-width: 568px) {
-  .fullPaying_lbl {
-    margin-left: 60px !important;
-    font-size: 15px !important;
-    display: flex !important;
-  }
-}
-
-@media screen and (min-width: 320px) and (max-width: 568px) {
-  .icon_customers {
-    align-items: center !important;
-    margin-top: -10px !important;
-    margin-left: 110px !important;
-    font-size: 35px !important;
-  }
-}
-
-@media screen and (min-width: 320px) and (max-width: 568px) {
-  .Customers_lbl {
-    float: right !important;
-    margin-right: 40px !important;
-    margin-top: -25px !important;
-    font-size: 20px !important;
-  }
-}
-
-/* END 320 */
-
-/* START 360 */
-@media screen and (min-width: 360px) and (max-width: 640px) {
-  .payGoing_lbl {
-    margin-left: 100px !important;
-    font-size: 15px !important;
-    display: flex !important;
-    flex-direction: column;
-  }
-}
-@media screen and (min-width: 360px) and (max-width: 640px) {
-  .fullPaying_lbl {
-    margin-left: 100px !important;
-    font-size: 15px !important;
-    display: flex !important;
-    flex-direction: column;
-  }
-}
-@media screen and (min-width: 360px) and (max-width: 640px) {
-  .icon_customers {
-    align-items: center !important;
-    margin-top: -10px !important;
-    margin-left: 130px !important;
-    font-size: 35px !important;
-  }
-}
-
-/* END 360 */
-
-/* START 384 */
-
-@media screen and (min-width: 360px) and (max-width: 640px) {
-  .icon_customers {
-    align-items: center !important;
-    margin-top: 10px !important;
-    margin-left: 130px !important;
-    font-size: 35px !important;
-  }
-}
-
-/* END 384 */
-
-/* START 411 */
-
-@media screen and (min-width: 411px) and (max-width: 731px) {
-  .payGoing_lbl {
-    margin-left: 150px !important;
-    font-size: 15px !important;
-    display: flex !important;
-    flex-direction: column;
-  }
-}
-@media screen and (min-width: 411px) and (max-width: 731px) {
-  .fullPaying_lbl {
-    margin-left: 150px !important;
-    font-size: 15px !important;
-    display: flex !important;
-    flex-direction: column;
-  }
-}
-@media screen and (min-width: 411px) and (max-width: 731px) {
-  .icon_customers {
-    align-items: center !important;
-    margin-top: 15px !important;
-    margin-left: 160px !important;
-    font-size: 35px !important;
-  }
-}
-
-/* END 411 */
-
-/* START 412 */
-
-@media screen and (min-width: 412px) and (max-width: 732px) {
-  .payGoing_lbl {
-    margin-left: 150px !important;
-    font-size: 15px !important;
-    display: flex !important;
-    flex-direction: column;
-  }
-}
-@media screen and (min-width: 412px) and (max-width: 732px) {
-  .fullPaying_lbl {
-    margin-left: 150px !important;
-    font-size: 15px !important;
-    display: flex !important;
-    flex-direction: column;
-  }
-}
-@media screen and (min-width: 412px) and (max-width: 732px) {
-  .icon_customers {
-    align-items: center !important;
-    margin-top: 15px !important;
-    margin-left: 160px !important;
-    font-size: 35px !important;
-  }
-}
-
-/* END 412 */
-
-/* START 480 */
-
-@media screen and (min-width: 480px) and (max-width: 854px) {
-  .payGoing_lbl {
-    margin-left: 200px !important;
-    font-size: 15px !important;
-    display: flex !important;
-    flex-direction: column;
-  }
-}
-@media screen and (min-width: 480px) and (max-width: 854px) {
-  .fullPaying_lbl {
-    margin-left: 200px !important;
-    font-size: 15px !important;
-    display: flex !important;
-    flex-direction: column;
-  }
-}
-@media screen and (min-width: 480px) and (max-width: 854px) {
-  .icon_customers {
-    align-items: center !important;
-    margin-top: 15px !important;
-    margin-left: 205px !important;
-    font-size: 35px !important;
-  }
-}
-
-/* END 480 */
-
-/* START 540 */
-
-@media screen and (min-width: 540px) and (max-width: 720px) {
-  .payGoing_lbl {
-    margin-left: 250px !important;
-    font-size: 15px !important;
-    display: flex !important;
-    flex-direction: column;
-  }
-}
-@media screen and (min-width: 540px) and (max-width: 720px) {
-  .fullPaying_lbl {
-    margin-left: 250px !important;
-    font-size: 15px !important;
-    display: flex !important;
-    flex-direction: column;
-  }
-}
-@media screen and (min-width: 540px) and (max-width: 720px) {
-  .icon_customers {
-    align-items: center !important;
-    margin-top: 15px !important;
-    margin-left: 215px !important;
-    font-size: 35px !important;
-  }
-}
-
-/* END 540 */
-
-/* START 600 */
-
-@media screen and (min-width: 600px) and (max-width: 1024px) {
-  .tipics_cards {
-    margin: auto !important;
-    text-align: center !important;
-    font-size: 20px !important;
-  }
-}
-
-@media screen and (min-width: 600px) and (max-width: 1024px) {
-  .line_chart {
-    display: flex !important;
-    margin-left: 10px !important;
-    margin-top: 15px !important;
-    width: 30px !important;
-  }
-}
-
-@media screen and (min-width: 600px) and (max-width: 1024px) {
-  .total {
-    margin-left: 20px !important;
-    margin-top: 15px !important;
-    font-size: 15px !important;
-  }
-}
-
-@media screen and (min-width: 600px) and (max-width: 1024px) {
-  .payGoing {
-    margin-right: 80px !important;
-    font-size: 15px !important;
-    display: flex !important;
-    flex-direction: column;
-  }
-}
-
-@media screen and (min-width: 600px) and (max-width: 1024px) {
-  .payGoing_lbl {
-    margin-left: 40px !important;
-    margin-top: -50px !important;
-    font-size: 15px !important;
-    display: flex !important;
-    flex-direction: column;
-  }
-}
-
-@media screen and (min-width: 600px) and (max-width: 1024px) {
-  .fullPaying {
-    margin-right: 80px !important;
-    font-size: 15px !important;
-    margin-top: 50px !important;
-    display: flex !important;
-    flex-direction: column;
-  }
-}
-
-@media screen and (min-width: 600px) and (max-width: 1024px) {
-  .fullPaying_lbl {
-    margin-left: 10px !important;
-    font-size: 15px !important;
-    display: flex !important;
-    flex-direction: column;
-  }
-}
-
-@media screen and (min-width: 540px) and (max-width: 720px) {
-  .icon_customers {
-    display: none !important;
-  }
-}
-
-/* END 600 */
 
 .Botm_crd_grid {
   margin-top: 30px !important;
@@ -428,5 +38,332 @@
 
 .date_pikr {
   margin-top: 10px !important;
- 
+}
+
+.credit_recvd {
+  margin-top: 15px !important;
+}
+
+.vlo {
+  margin-top: 10px;
+  border-left: 2px solid rgb(58, 211, 135);
+  height: 70px;
+  margin-left: 15px;
+}
+
+.vloGss {
+  margin-top: 10px;
+  border-left: 2px solid rgb(223, 170, 56);
+  height: 70px;
+  margin-left: 15px;
+}
+
+.vloEx {
+  margin-top: 10px;
+  border-left: 2px solid rgb(54, 0, 202);
+  height: 70px;
+  margin-left: 15px;
+}
+
+@media screen and (min-width: 200px) and (max-width: 359px) {
+  .vlo {
+    height: 60px;
+    margin-top: -30px;
+  }
+}
+@media screen and (min-width: 280px) and (max-width: 359px) {
+  .vloGss {
+    height: 60px;
+    margin-top: -30px;
+  }
+}
+@media screen and (min-width: 280px) and (max-width: 359px) {
+  .vloEx {
+    height: 60px;
+    margin-top: -30px;
+  }
+}
+
+@media screen and (min-width: 280px) and (max-width: 359px) {
+  .select_txt_cx {
+    margin-top: -80px !important;
+    margin-left: 20px !important;
+  }
+}
+
+@media screen and (min-width: 280px) and (max-width: 359px) {
+  .date_pikr {
+    margin-top: 1px !important;
+    margin-left: 14px !important;
+  }
+}
+
+@media screen and (min-width: 280px) and (max-width: 359px) {
+  .mainTotal_txt_cx {
+    margin-left: -30px !important;
+  }
+}
+@media screen and (min-width: 280px) and (max-width: 359px) {
+  .total_cx {
+    margin-left: -30px !important;
+  }
+}
+
+@media screen and (min-width: 280px) and (max-width: 359px) {
+  .line_chart_cx {
+    display: none;
+  }
+}
+@media screen and (min-width: 280px) and (max-width: 359px) {
+  .visitsNumberContainer_cx {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+}
+
+@media screen and (min-width: 280px) and (max-width: 359px) {
+  .credit_recvd_txt_cx {
+    margin-left: -30px !important;
+  }
+}
+
+@media screen and (min-width: 280px) and (max-width: 359px) {
+  .cost {
+    display: flex !important;
+    flex-direction: column !important;
+    margin-top: -20px !important;
+  }
+}
+@media screen and (min-width: 280px) and (max-width: 359px) {
+  .Cash_txt_cx {
+    margin-left: -30px !important;
+  }
+}
+
+@media screen and (min-width: 280px) and (max-width: 359px) {
+  .Soldgrid {
+    margin-top: 10px !important;
+  }
+}
+
+/* 360 start */
+
+@media screen and (min-width: 360px) and (max-width: 400px) {
+  .vlo {
+    height: 60px;
+    margin-top: -30px;
+    margin-left: 35px;
+  }
+}
+@media screen and (min-width: 360px) and (max-width: 400px) {
+  .vloGss {
+    height: 60px;
+    margin-top: -30px;
+    margin-left: 35px;
+  }
+}
+
+@media screen and (min-width: 360px) and (max-width: 400px) {
+  .vloEx {
+    height: 60px;
+    margin-top: -30px;
+    margin-left: 35px;
+  }
+}
+
+@media screen and (min-width: 360px) and (max-width: 400px) {
+  .select_txt_cx {
+    margin-top: -80px !important;
+    margin-left: 35px !important;
+  }
+}
+
+@media screen and (min-width: 360px) and (max-width: 400px) {
+  .date_pikr {
+    margin-top: 1px !important;
+    margin-left: 30px !important;
+  }
+}
+
+@media screen and (min-width: 360px) and (max-width: 400px) {
+  .mainTotal_txt_cx {
+    margin-left: -30px !important;
+    font-size: 15px;
+  }
+}
+@media screen and (min-width: 360px) and (max-width: 400px) {
+  .total_cx {
+    margin-left: -30px !important;
+  }
+}
+
+@media screen and (min-width: 360px) and (max-width: 400px) {
+  .line_chart_cx {
+    display: none;
+  }
+}
+@media screen and (min-width: 360px) and (max-width: 400px) {
+  .visitsNumberContainer_cx {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+}
+
+@media screen and (min-width: 360px) and (max-width: 400px) {
+  .credit_recvd_txt_cx {
+    margin-left: -30px !important;
+  }
+}
+
+@media screen and (min-width: 360px) and (max-width: 400px) {
+  .cost {
+    display: flex !important;
+    flex-direction: column !important;
+    margin-top: -20px !important;
+  }
+}
+@media screen and (min-width: 360px) and (max-width: 400px) {
+  .Cash_txt_cx {
+    margin-left: -30px !important;
+  }
+}
+
+@media screen and (min-width: 360px) and (max-width: 400px) {
+  .Soldgrid {
+    margin-top: 10px !important;
+  }
+}
+
+/* 401 start */
+
+@media screen and (min-width: 401px) and (max-width: 610px) {
+  .vlo {
+    margin-top: -15px;
+    border-left: 2px solid rgb(58, 211, 135);
+    height: 70px;
+    margin-left: 35px;
+  }
+}
+@media screen and (min-width: 401px) and (max-width: 610px) {
+  .vloGss {
+    margin-top: -15px;
+    border-left: 2px solid rgb(223, 170, 56);
+    height: 70px;
+    margin-left: 35px;
+  }
+}
+@media screen and (min-width: 401px) and (max-width: 610px) {
+  .vloEx {
+    margin-top: -15px;
+    border-left: 2px solid rgb(223, 170, 56);
+    height: 70px;
+    margin-left: 35px;
+  }
+}
+@media screen and (min-width: 401px) and (max-width: 610px) {
+  .select_txt_cx {
+    margin-top: -100px !important;
+    margin-left: 45px !important;
+    display: flex !important;
+  }
+}
+
+@media screen and (min-width: 401px) and (max-width: 610px) {
+  .date_pikr {
+    margin-top: 10px !important;
+    margin-left: 35px !important;
+  }
+}
+
+@media screen and (min-width: 401px) and (max-width: 610px) {
+  .mainTotal_txt_cx {
+    margin-left: -65px !important;
+  }
+}
+@media screen and (min-width: 401px) and (max-width: 610px) {
+  .total_cx {
+    margin-left: -60px !important;
+  }
+}
+
+@media screen and (min-width: 401px) and (max-width: 610px) {
+  .line_chart_cx {
+    display: none;
+  }
+}
+@media screen and (min-width: 401px) and (max-width: 610px) {
+  .visitsNumberContainer_cx {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+}
+
+@media screen and (min-width: 401px) and (max-width: 610px) {
+  .credit_recvd {
+    display: flex !important;
+    flex-direction: row !important;
+    margin-left: -110px !important;
+  }
+}
+
+@media screen and (min-width: 401px) and (max-width: 610px) {
+  .payGoing_cx {
+    display: flex !important;
+    flex-direction: row !important;
+  }
+}
+@media screen and (min-width: 401px) and (max-width: 610px) {
+  .payGoing_cx > .top {
+    margin-top: -60px !important;
+  }
+}
+
+@media screen and (min-width: 401px) and (max-width: 610px) {
+  .Credit_lbl_cx {
+    margin-left: 50px !important;
+    font-size: 16px !important;
+  }
+}
+
+@media screen and (min-width: 401px) and (max-width: 610px) {
+  .Soldgrid {
+    display: flex !important;
+    flex-direction: row !important;
+  }
+}
+
+.excx_servicemdl {
+  width: 60% !important;
+}
+
+.gasscxModel {
+  width: 60% !important;
+}
+
+.salescxModel {
+  width: 60% !important;
+}
+
+.btn_Dash {
+  background-color: blueviolet !important;
+  color: whitesmoke !important;
+  /* margin-top: 70px !important; */
+  /* display: flex !important;
+  flex-direction: column !important; */
+}
+
+.btn_Expences {
+  color: whitesmoke !important;
+  /* margin-top: 70px !important; */
+  /* display: flex !important;
+  flex-direction: column !important; */
+  background-color: #160558e7 !important;
+}
+
+.btn_VehicalService {
+  color: whitesmoke !important;
+  /* margin-top: 70px !important; */
+  /* display: flex !important;
+  flex-direction: column !important; */
+  background-color: #33a124 !important;
 }

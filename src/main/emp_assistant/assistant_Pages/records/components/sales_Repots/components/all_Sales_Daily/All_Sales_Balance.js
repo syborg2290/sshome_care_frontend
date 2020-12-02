@@ -721,7 +721,7 @@ export default function All_Sales_Balance() {
     <Grid container spacing={4}>
       <Grid item xs={12}>
         <MUIDataTable
-          title={<span className="title_Span">All Sales Balance</span>}
+          title={<span className="title_Span">Complete view</span>}
           className="salary_table"
           sty
           data={tableData}

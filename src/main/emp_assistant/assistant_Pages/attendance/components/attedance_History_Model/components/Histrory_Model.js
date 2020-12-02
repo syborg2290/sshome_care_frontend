@@ -42,6 +42,7 @@ export default function History_Model({ nic }) {
 
   useEffect(() => {
     db.collection("attendance_history")
+      .orderBy("date", "desc")
       .where("nic", "==", nic)
       .get()
       .then((snap) => {

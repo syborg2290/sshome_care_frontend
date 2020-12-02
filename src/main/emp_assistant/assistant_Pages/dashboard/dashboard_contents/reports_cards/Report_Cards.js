@@ -10,6 +10,7 @@ import { DatePicker, Space } from 'antd';
 import { makeStyles } from '@material-ui/core/styles';
 import { Modal } from "antd";
 
+
 // components
 import ExpencesModel from "./components/expences/Expences_Model";
 import GassModel from "./components/gass/Gass_Model";
@@ -21,6 +22,7 @@ import ModelVehicalService from "../../components/Vehical_Service_Model";
 import FolderOpenIcon from "@material-ui/icons/FolderOpen";
 import PostAddIcon from "@material-ui/icons/PostAdd";
 import SettingsApplicationsIcon from "@material-ui/icons/SettingsApplications";
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 // styles
 import "./Report_Cards.css";
@@ -164,22 +166,34 @@ export default function Report_Cards() {
        <div className="widgetWrappe">
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6} className="card_body1_cx">
-            <Paper  className="card_cx" onClick={ViewSalesModel}>
+            <Paper  className="card_cx">
             <Grid  container spacing={3}>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={4}>
                 <h2 className="tipics_cards_cx">All Sales Balance</h2>
+                  </Grid>
+                  <Grid item xs={12} sm={2}>
+                    <Button className="btn_moreCard" size="small"
+                      onClick={ViewSalesModel}
+                      endIcon={<MoreVertIcon />}
+                    >
+                      More
+                    </Button>
                   </Grid>
                   <Grid item xs={12} sm={1}>
                     <div className="vlo"></div>
                   </Grid>
-                  <Grid className="date_pikr" item xs={12} sm={5}>
+                  <Grid className="date_pikr" item xs={12} sm={4}>
                      <Typography className="select_txt_cx" color="text" colorBrightness="secondary">
                        Select Year & Month
                       </Typography> 
                     <Space direction="vertical">
-                         <DatePicker className="date_pikr" picker="month" />   
-                     </Space>             
-                      </Grid>
+                      <DatePicker className="date_pikr" picker="month" /> 
+                    </Space>
+                    
+                  </Grid>
+                  <Grid className="date_allGrid" item xs={12} sm={1}>
+                      <p className="date_all">All</p>
+                  </Grid>
                        </Grid>
               <div className="visitsNumberContainer_cx">
                 <Grid item xs={12} sm={1}></Grid>
@@ -286,28 +300,38 @@ export default function Report_Cards() {
                     />
                   </Typography>
                 </Grid>
-              </Grid>
+                </Grid>
             </Paper>
           </Grid>
 
           <Grid item xs={12} sm={6} className="card_body2_cx">
-            <Paper title="Gass Balance" className="card_cx"  onClick={ViewGassModel}>
+            <Paper title="Gass Balance" className="card_cx"  >
                <Grid  container spacing={3}>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={4}>
                 <h2 className="tipics_cards_cx">All Gass Balance </h2>
-                 </Grid>
+                  </Grid>
+                    <Grid item xs={12} sm={2}>
+                    <Button className="btn_moreCard" size="small"
+                      onClick={ViewGassModel}
+                      endIcon={<MoreVertIcon />}
+                    >
+                      More
+                    </Button>
+                  </Grid>
                   <Grid item xs={12} sm={1}>
                     <div className="vloGss"></div>
                   </Grid>
-                  <Grid className="date_pikr" item xs={12} sm={5}>
+                  <Grid className="date_pikr" item xs={12} sm={4}>
                     <Typography className="select_txt_cx" color="text" colorBrightness="secondary">
                        Select Year & Month
                       </Typography> 
                     <Space direction="vertical">
                          <DatePicker className="date_pikr" picker="month" />   
-                     </Space> 
-                                 
-                      </Grid>
+                     </Space>         
+                  </Grid>
+                    <Grid className="date_allGrid" item xs={12} sm={1}>
+                      <p className="date_all">All</p>
+                  </Grid>
                        </Grid>
               <div className="visitsNumberContainer_cx">
                 <Grid item xs={12} sm={1}></Grid>
@@ -395,24 +419,34 @@ export default function Report_Cards() {
             
       <Grid  container spacing={3}>
       <Grid item xs={12} sm={6}>
-      <Card className="card_Bttm" onClick={ViewExpencesModel}>
+      <Card className="card_Bttm">
       <CardContent>
         <Grid  container spacing={3}>
-              <Grid item xs={12} sm={6}>
-                <h2 className="tipics_cards_cx">All Expences Balance </h2>
-                 </Grid>
+              <Grid item xs={12} sm={4}>
+                <h2 className="tipics_cards_cx">All Expences </h2>
+                  </Grid>
+                  <Grid item xs={12} sm={2}>
+                    <Button className="btn_moreCard" size="small"
+                      onClick={ViewExpencesModel}
+                      endIcon={<MoreVertIcon />}
+                    >
+                      More
+                    </Button>
+                  </Grid>
                   <Grid item xs={12} sm={1}>
                     <div className="vloEx"></div>
                   </Grid>
-                  <Grid className="date_pikr" item xs={12} sm={5}>
+                  <Grid className="date_pikr" item xs={12} sm={4}>
                     <Typography className="select_txt_cx" color="text" colorBrightness="secondary">
                        Select Year & Month
                       </Typography> 
                     <Space direction="vertical">
                          <DatePicker className="date_pikr" picker="month" />   
-                     </Space> 
-                                 
-                      </Grid>
+                     </Space>         
+                  </Grid>
+                   <Grid className="date_allGrid" item xs={12} sm={1}>
+                      <p className="date_allExpences">All</p>
+                  </Grid>
                 </Grid>
                  <div className="visitsNumberContainer_cx">
                 <Grid item xs={12} sm={1}></Grid>

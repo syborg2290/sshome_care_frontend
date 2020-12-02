@@ -151,7 +151,9 @@ export default function Mark_Attendance() {
                               : false
                           }
                           onChange={(e) => {
-                            onChangeCheck(reEmployeeAd);
+                            if (!submitLoading) {
+                              onChangeCheck(reEmployeeAd);
+                            }
                           }}
                         />
                       ),

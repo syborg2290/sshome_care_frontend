@@ -1,23 +1,18 @@
 import React, { useState, useEffect } from "react";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
-import { Grid, Button } from "@material-ui/core";
-import { Modal } from "antd";
+import { Grid } from "@material-ui/core";
+
 
 //components
 import ArreasTable from "../dashboard/dashboard_contents/arreas_Table/Arreas_Table";
 import PendingList from "../dashboard/dashboard_contents/pending_Blacklist/Pending_List";
 import InvoiceList from "../dashboard/dashboard_contents/invoice_List/Invoice_List";
 import ExpireInvoice from "../dashboard/dashboard_contents/expire_Table/Expire_Invoice";
-import ModelVehicalService from "./components/Vehical_Service_Model";
-
+import ReportCards from "./dashboard_contents/reports_cards/Report_Cards";
 import firebase from "firebase";
 import db from "../../../../config/firebase.js";
 
-//icons
-import FolderOpenIcon from "@material-ui/icons/FolderOpen";
-import PostAddIcon from "@material-ui/icons/PostAdd";
-import SettingsApplicationsIcon from "@material-ui/icons/SettingsApplications";
 
 // styles
 import "./Dashboard.css";
@@ -37,31 +32,11 @@ function daysCountOfMonth(month, year) {
 }
 
 export default function Dashboard() {
-  const [vehicalServiceModel, setVehicalServiceModel] = useState(false); //  model service Vehical
-
   const [pendingBlackList, setPendingBlackList] = useState([]);
   const [expiredList, setExpiredList] = useState([]);
-  // eslint-disable-next-line
-  const [recordPnl, setRecordPnl] = useState(false);
-  // eslint-disable-next-line
-  const [expencesPnl, setExpencesPnl] = useState(false);
   let history = useHistory();
-  let history1 = useHistory();
-  let history2 = useHistory();
 
-  const VehicalServiceModel = () => {
-    setVehicalServiceModel(true);
-  };
 
-  const RecordPnl = () => {
-    setRecordPnl(true);
-    history1.push("/assistant/pages/records");
-  };
-
-  const ExpencesPnl = () => {
-    setExpencesPnl(true);
-    history2.push("/assistant/pages/expences");
-  };
 
   useEffect(() => {
     window.addEventListener("offline", function (e) {
@@ -503,72 +478,33 @@ export default function Dashboard() {
 
   return (
     <>
-      {/*Start Vehical Service Model */}
 
-      <Modal
-        visible={vehicalServiceModel}
-        footer={null}
-        className="vehical_servicemdl"
-        onCancel={() => {
-          setVehicalServiceModel(false);
-        }}
-      >
-        <div>
-          <div>
-            <div>
-              <ModelVehicalService />
-            </div>
-          </div>
-        </div>
-      </Modal>
-
-      {/* End  Vehical Service Model  */}
-
-      <Grid container spacing={4}>
-        <Grid item xs={4}>
-          <p className="titl_Dash">DashBoard</p>
-        </Grid>
-        <Grid item xs={3}>
-          <Button
-            variant="contained"
-            className="btn_VehicalService"
-            endIcon={<SettingsApplicationsIcon />}
-            onClick={VehicalServiceModel}
-          >
-            Vehical Services
-          </Button>
-        </Grid>
-        <Grid item xs={3}>
-          <Button
-            variant="contained"
-            className="btn_Expences"
-            endIcon={<PostAddIcon />}
-            onClick={ExpencesPnl}
-          >
-            Add Expences
-          </Button>
-        </Grid>
-        <Grid item xs={2}>
-          <Button
-            variant="contained"
-            className="btn_Dash"
-            endIcon={<FolderOpenIcon />}
-            onClick={RecordPnl}
-          >
-            Reports
-          </Button>
+     <Grid container spacing={4}>
+        <Grid className="titl_Dash" item xs={12}>
+        
         </Grid>
       </Grid>
 
-      <Container component="main" className="main_containerDash">
-        {/*START Arreas Table */}
 
+       {/*START Arreas Table */}
+        <Grid container spacing={4}>
+          <Grid item xs={12}>
+            <ReportCards />
+          </Grid>
+        </Grid>
+        {/* END Arreas Table */}
+      
+      <Container component="main" className="main_containerDash">
+        
+          {/*START Cards */}
         <Grid container spacing={4}>
           <Grid item xs={12}>
             <ArreasTable />
           </Grid>
         </Grid>
-        {/* END Arreas Table */}
+        {/* END Cards  */}
+
+       
 
         {/*START Expire Invoice Table */}
 

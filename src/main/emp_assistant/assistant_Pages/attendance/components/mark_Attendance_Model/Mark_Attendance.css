@@ -18,10 +18,13 @@
 }
 
 .checkboxAtt {
-  padding-top: 2px;
+  /* padding-top: 2px;
   padding-right: 2px;
-  padding-left: 2px;
-  padding-bottom: 0 !important;
-  background-color: rgba(232, 232, 255, 0.979);
+   padding-bottom: 0 !important;
+  padding-left: 2px; */
+  margin: auto !important;
+  color: aliceblue !important;
+  text-transform: none !important;
+  background-color: rgba(21, 21, 105, 0.897) !important;
   border-radius: 5px !important;
 }

@@ -1281,7 +1281,9 @@ export default function Report_Cards() {
                   </Typography>
                   <Typography className="total_cx" size="xl">
                     <CurrencyFormat
-                      value={purchasedGas - soldGas}
+                      value={
+                        soldGas - purchasedGas <= 0 ? 0 : soldGas - purchasedGas
+                      }
                       displayType={"text"}
                       thousandSeparator={true}
                       prefix={""}

@@ -45,14 +45,16 @@ async function getAllSalesSaily(isAll, year, month) {
     .then((custIn) => {
       for (let i = 0; i < custIn.docs.length; i++) {
         for (let j = 0; j < custIn.docs[i].data().items.length; j++) {
-          sales.push({
-            date: new Date(custIn.docs[i].data().date.seconds * 1000),
-            type: custIn.docs[i].data().selectedType,
-            total:
-              parseInt(custIn.docs[i].data().items[j].downpayment) *
-                parseInt(custIn.docs[i].data().items[j].qty) -
-              custIn.docs[i].data().items[j].discount,
-          });
+          if (isAll) {
+            sales.push({
+              date: new Date(custIn.docs[i].data().date.seconds * 1000),
+              type: custIn.docs[i].data().selectedType,
+              total:
+                parseInt(custIn.docs[i].data().items[j].downpayment) *
+                  parseInt(custIn.docs[i].data().items[j].qty) -
+                custIn.docs[i].data().items[j].discount,
+            });
+          }
         }
       }
     });
@@ -109,14 +111,16 @@ async function getAllCashSaleSaily(isAll, year, month) {
       for (let i = 0; i < custIn.docs.length; i++) {
         if (custIn.docs[i].data().paymentWay === "FullPayment") {
           for (let j = 0; j < custIn.docs[i].data().items.length; j++) {
-            cashSale.push({
-              date: new Date(custIn.docs[i].data().date.seconds * 1000),
-              type: custIn.docs[i].data().selectedType,
-              total:
-                parseInt(custIn.docs[i].data().items[j].downpayment) *
-                  parseInt(custIn.docs[i].data().items[j].qty) -
-                custIn.docs[i].data().items[j].discount,
-            });
+            if (isAll) {
+              cashSale.push({
+                date: new Date(custIn.docs[i].data().date.seconds * 1000),
+                type: custIn.docs[i].data().selectedType,
+                total:
+                  parseInt(custIn.docs[i].data().items[j].downpayment) *
+                    parseInt(custIn.docs[i].data().items[j].qty) -
+                  custIn.docs[i].data().items[j].discount,
+              });
+            }
           }
         }
       }
@@ -172,11 +176,13 @@ async function getAllRecievedCardSaleSaily(isAll, year, month) {
       for (let i = 0; i < custIn.docs.length; i++) {
         if (custIn.docs[i].data().paymentWay === "PayandGo") {
           for (let j = 0; j < custIn.docs[i].data().items.length; j++) {
-            cardSale.push({
-              date: new Date(custIn.docs[i].data().date.seconds * 1000),
-              type: custIn.docs[i].data().selectedType,
-              total: parseInt(custIn.docs[i].data().downpayment),
-            });
+            if (isAll) {
+              cardSale.push({
+                date: new Date(custIn.docs[i].data().date.seconds * 1000),
+                type: custIn.docs[i].data().selectedType,
+                total: parseInt(custIn.docs[i].data().downpayment),
+              });
+            }
           }
         }
       }
@@ -232,11 +238,13 @@ async function getAllInstallments(isAll, year, month) {
     .get()
     .then((reInst) => {
       for (let i = 0; i < reInst.docs.length; i++) {
-        creditRecieved.push({
-          date: new Date(reInst.docs[i].data().date.seconds * 1000),
-          type: reInst.docs[i].data().type,
-          total: reInst.docs[i].data().amount,
-        });
+        if (isAll) {
+          creditRecieved.push({
+            date: new Date(reInst.docs[i].data().date.seconds * 1000),
+            type: reInst.docs[i].data().type,
+            total: reInst.docs[i].data().amount,
+          });
+        }
       }
     });
   return creditRecieved;
@@ -291,11 +299,13 @@ async function getAllDocumentChargesDaily(isAll, year, month) {
     .then((custIn) => {
       for (let i = 0; i < custIn.docs.length; i++) {
         for (let j = 0; j < custIn.docs[i].data().items.length; j++) {
-          cardSale.push({
-            date: new Date(custIn.docs[i].data().date.seconds * 1000),
-            type: custIn.docs[i].data().selectedType,
-            total: custIn.docs[i].data().document_charges,
-          });
+          if (isAll) {
+            cardSale.push({
+              date: new Date(custIn.docs[i].data().date.seconds * 1000),
+              type: custIn.docs[i].data().selectedType,
+              total: custIn.docs[i].data().document_charges,
+            });
+          }
         }
       }
     });
@@ -530,38 +540,46 @@ export default function Report_Cards() {
   };
 
   useEffect(() => {
-    getAllSalesSaily().then((reAllSales) => {
+    getAllSalesSaily(saleIsAll, saleYear, saleMonth).then((reAllSales) => {
       sumSameDaySales(reAllSales).then((reSumWith) => {
-        getAllCashSaleSaily().then((reCash) => {
+        getAllCashSaleSaily(saleIsAll, saleYear, saleMonth).then((reCash) => {
           sumSameDayCashSale(reCash).then((reCashAllSum) => {
-            getAllRecievedCardSaleSaily().then((reCardSale) => {
-              sumSameDayCardSale(reCardSale).then((reCardSaleSum) => {
-                getAllInstallments().then((reInstallments) => {
-                  sumSameDayIntallmentSale(reInstallments).then(
-                    (reInstallmentsSum) => {
-                      getAllDocumentChargesDaily().then((reDocsCharges) => {
-                        sumSameDayDocumentCharges(reDocsCharges).then(
-                          (reDocsSum) => {
-                            getAllSalesReports(
-                              reSumWith,
-                              reCashAllSum,
-                              reCardSaleSum,
-                              reInstallmentsSum,
-                              reDocsSum
-                            ).then((reAllArray) => {
-                              let againArray = reAllArray;
-                              // let eachRE = [];
+            getAllRecievedCardSaleSaily(saleIsAll, saleYear, saleMonth).then(
+              (reCardSale) => {
+                sumSameDayCardSale(reCardSale).then((reCardSaleSum) => {
+                  getAllInstallments(saleIsAll, saleYear, saleMonth).then(
+                    (reInstallments) => {
+                      sumSameDayIntallmentSale(reInstallments).then(
+                        (reInstallmentsSum) => {
+                          getAllDocumentChargesDaily(
+                            saleIsAll,
+                            saleYear,
+                            saleMonth
+                          ).then((reDocsCharges) => {
+                            sumSameDayDocumentCharges(reDocsCharges).then(
+                              (reDocsSum) => {
+                                getAllSalesReports(
+                                  reSumWith,
+                                  reCashAllSum,
+                                  reCardSaleSum,
+                                  reInstallmentsSum,
+                                  reDocsSum
+                                ).then((reAllArray) => {
+                                  let againArray = reAllArray;
+                                  // let eachRE = [];
 
-                              saleTotalBalance(againArray).then(
-                                (reSaleBalance) => {
-                                  cashTotalBalance(againArray).then(
-                                    (reCashBalance) => {
-                                      cardsTotalBalance(againArray).then(
-                                        (reCards) => {
-                                          installTotalBalance(againArray).then(
-                                            (reInstall) => {
-                                              docsTotalBalance(againArray).then(
-                                                (reDocs) => {
+                                  saleTotalBalance(againArray).then(
+                                    (reSaleBalance) => {
+                                      cashTotalBalance(againArray).then(
+                                        (reCashBalance) => {
+                                          cardsTotalBalance(againArray).then(
+                                            (reCards) => {
+                                              installTotalBalance(
+                                                againArray
+                                              ).then((reInstall) => {
+                                                docsTotalBalance(
+                                                  againArray
+                                                ).then((reDocs) => {
                                                   let previousSale = reSaleBalance;
                                                   let previousCash = reCashBalance;
                                                   let previousCards = reCards;
@@ -693,25 +711,25 @@ export default function Report_Cards() {
                                                   //   });
                                                   // });
                                                   // setAllSalesTable(eachRE);
-                                                }
-                                              );
+                                                });
+                                              });
                                             }
                                           );
                                         }
                                       );
                                     }
                                   );
-                                }
-                              );
-                            });
-                          }
-                        );
-                      });
+                                });
+                              }
+                            );
+                          });
+                        }
+                      );
                     }
                   );
                 });
-              });
-            });
+              }
+            );
           });
         });
       });

@@ -14,14 +14,30 @@ import db from "../../../../../../config/firebase.js";
 import firebase from "firebase";
 
 async function doStuff(nics, allNames) {
-  for (var i = 0; i < nics.length; i++) {
-    await db.collection("attendance_history").add({
-      date: firebase.firestore.FieldValue.serverTimestamp(),
-      nic: nics[i],
-      fname: allNames[i].fname,
-      lname: allNames[i].lname,
-      status: "full",
-    });
+  for (let i = 0; i < nics.length; i++) {
+    db.collection("attendance_history")
+      .where("nic", "==", nics[i])
+      .get()
+      .then(async (reCheck) => {
+        let result = await reCheck.docs.some(
+          (ob) =>
+            new Date(ob.data().date.seconds * 1000).getFullYear() ===
+              new Date().getFullYear() &&
+            new Date(ob.data().date.seconds * 1000).getMonth() ===
+              new Date().getMonth() &&
+            new Date(ob.data().date.seconds * 1000).getDate() ===
+              new Date().getDate()
+        );
+        if (!result) {
+          await db.collection("attendance_history").add({
+            date: firebase.firestore.FieldValue.serverTimestamp(),
+            nic: nics[i],
+            fname: allNames[i].fname,
+            lname: allNames[i].lname,
+            status: "full",
+          });
+        }
+      });
   }
 }
 

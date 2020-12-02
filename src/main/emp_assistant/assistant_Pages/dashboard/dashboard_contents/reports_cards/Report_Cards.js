@@ -728,7 +728,7 @@ export default function Report_Cards() {
     db.collection("expences")
       .orderBy("date", "desc")
       .onSnapshot((reGet) => {
-        setAllExpencesBalance(reGet.docs[0].data().balance);
+        setAllExpencesBalance(reGet.docs[0]?.data().balance);
       });
     // eslint-disable-next-line
   }, []);

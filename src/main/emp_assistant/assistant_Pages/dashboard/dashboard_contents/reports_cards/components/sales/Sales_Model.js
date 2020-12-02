@@ -1,18 +1,3 @@
-// import React from 'react'
-
-// // styles
-// import "./Sales_Model.css";
-
-// // components
-// import SalesReport from "../../../../../records/components/sales_Repots/Sales_Report";
-
-// export default function Sales_Model() {
-//     return (
-//         <div>
-//             <SalesReport />
-//         </div>
-//     )
-// }
 import React from "react";
 import PropTypes from "prop-types";
 import AppBar from "@material-ui/core/AppBar";
@@ -60,7 +45,7 @@ function a11yProps(index) {
   };
 }
 
-export default function Sales_Model() {
+export default function Sales_Model({ year, month }) {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
@@ -82,10 +67,10 @@ export default function Sales_Model() {
           </Tabs>
         </AppBar>
         <TabPanel value={value} index={0}>
-          <DailySales />
+          <DailySales year={year} month={month} />
         </TabPanel>
         <TabPanel value={value} index={1}>
-          <CompleteView />
+          <CompleteView year={year} month={month} />
         </TabPanel>
       </div>
     </>

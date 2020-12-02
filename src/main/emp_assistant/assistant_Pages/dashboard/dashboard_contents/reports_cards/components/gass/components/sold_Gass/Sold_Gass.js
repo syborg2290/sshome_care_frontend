@@ -5,7 +5,7 @@ import CurrencyFormat from "react-currency-format";
 import moment from "moment";
 import db from "../../../../../../../../../../config/firebase.js";
 
-export default function Sold_Gass() {
+export default function Sold_Gass({ year, month }) {
   const [allTableData, setTableData] = useState([]);
   const columns = [
     {
@@ -74,34 +74,41 @@ export default function Sold_Gass() {
         var raw = [];
 
         snap.docs.forEach((each) => {
-          raw.push({
-            Weight: each.data().weight + " Kg",
-            Date: moment(each.data()?.date?.toDate()).format(
-              "dddd, MMMM Do YYYY"
-            ),
-            Qty: each.data().qty,
-            Unit_Price: (
-              <CurrencyFormat
-                value={each.data().price}
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={" "}
-              />
-            ),
-            Total: (
-              <CurrencyFormat
-                value={parseInt(each.data().price) * parseInt(each.data().qty)}
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={" "}
-              />
-            ),
-          });
+          if (
+            new Date(each.data().date.seconds * 1000).getFullYear() === year &&
+            new Date(each.data().date.seconds * 1000).getMonth() === month
+          ) {
+            raw.push({
+              Weight: each.data().weight + " Kg",
+              Date: moment(each.data()?.date?.toDate()).format(
+                "dddd, MMMM Do YYYY"
+              ),
+              Qty: each.data().qty,
+              Unit_Price: (
+                <CurrencyFormat
+                  value={each.data().price}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+              Total: (
+                <CurrencyFormat
+                  value={
+                    parseInt(each.data().price) * parseInt(each.data().qty)
+                  }
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+            });
+          }
         });
 
         setTableData(raw);
       });
-  }, []);
+  }, [year, month]);
 
   return (
     <Grid container spacing={4}>

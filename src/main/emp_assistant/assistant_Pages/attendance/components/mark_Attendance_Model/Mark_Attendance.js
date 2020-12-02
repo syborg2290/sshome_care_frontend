@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import MUIDataTable from "mui-datatables";
 import { Grid, Button } from "@material-ui/core";
-import { Spin, Checkbox } from "antd";
+import { Spin } from "antd";
 
 // styles
 import "./Mark_Attendance.css";
@@ -156,7 +156,8 @@ export default function Mark_Attendance() {
                       LastName: reEmployeeAd.docs[0].data().lname,
                       NIC: reEmployeeAd.docs[0].data().nic,
                       Mark: (
-                        <Checkbox
+                        <Button
+                        size="small"
                           disabled={isLoadingCheck}
                           className="checkboxAtt"
                           id={reEmployeeAd.docs[0].data().nic}
@@ -171,7 +172,9 @@ export default function Mark_Attendance() {
                               onChangeCheck(reEmployeeAd);
                             }
                           }}
-                        />
+                        >
+                       Mark
+                      </Button>
                       ),
                     },
                   ]);

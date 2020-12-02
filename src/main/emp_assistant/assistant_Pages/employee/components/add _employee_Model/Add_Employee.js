@@ -125,7 +125,7 @@ export default function Add_Employee({ close_model }) {
                 size="small"
                 value={fname}
                 onChange={(e) => {
-                  setFirstName(e.target.value.trim());
+                  setFirstName(e.target.value);
                 }}
               />
             </Grid>
@@ -143,7 +143,7 @@ export default function Add_Employee({ close_model }) {
                 size="small"
                 value={lname}
                 onChange={(e) => {
-                  setLastName(e.target.value.trim());
+                  setLastName(e.target.value);
                 }}
               />
             </Grid>
@@ -165,7 +165,7 @@ export default function Add_Employee({ close_model }) {
                 size="small"
                 value={addres1}
                 onChange={(e) => {
-                  setAddres1(e.target.value.trim());
+                  setAddres1(e.target.value);
                 }}
               />
             </Grid>
@@ -187,7 +187,7 @@ export default function Add_Employee({ close_model }) {
                 size="small"
                 value={addres2}
                 onChange={(e) => {
-                  setAddres2(e.target.value.trim());
+                  setAddres2(e.target.value);
                 }}
               />
             </Grid>

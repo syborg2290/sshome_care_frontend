@@ -50,9 +50,11 @@ export default function AddNew_Model({ close_model }) {
                 weight: weight,
                 qty: parseInt(qty.trim()),
                 price:
-                  price === 0 || price === "" || price === null
-                    ? re.docs[0].data().price
-                    : parseInt(price.trim()),
+                  purchesPrice === 0 ||
+                  purchesPrice === "" ||
+                  purchesPrice === null
+                    ? purchesPrice
+                    : parseInt(purchesPrice.trim()),
                 date: firebase.firestore.FieldValue.serverTimestamp(),
               });
 
@@ -71,7 +73,7 @@ export default function AddNew_Model({ close_model }) {
               db.collection("gas_history").add({
                 weight: weight,
                 qty: qty,
-                price: price,
+                price: purchesPrice,
                 date: firebase.firestore.FieldValue.serverTimestamp(),
               });
               window.location.reload();

@@ -130,7 +130,7 @@ async function totalBalance(allSalesTotals) {
   return reduceDup;
 }
 
-export default function Daily_Sales() {
+export default function Daily_Sales({ year, month }) {
   const [viewVarModel, setViewModel] = useState(false); // View model
   const [tableData, setTableData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -186,14 +186,22 @@ export default function Daily_Sales() {
 
         for (let i = 0; i < custIn.docs.length; i++) {
           for (let j = 0; j < custIn.docs[i].data().items.length; j++) {
-            sales.push({
-              date: new Date(custIn.docs[i].data().date.seconds * 1000),
-              type: custIn.docs[i].data().selectedType,
-              total:
-                parseInt(custIn.docs[i].data().items[j].downpayment) *
-                  parseInt(custIn.docs[i].data().items[j].qty) -
-                custIn.docs[i].data().items[j].discount,
-            });
+            if (
+              new Date(
+                custIn.docs[i].data().date.seconds * 1000
+              ).getFullYear() === year &&
+              new Date(custIn.docs[i].data().date.seconds * 1000).getMonth() ===
+                month
+            ) {
+              sales.push({
+                date: new Date(custIn.docs[i].data().date.seconds * 1000),
+                type: custIn.docs[i].data().selectedType,
+                total:
+                  parseInt(custIn.docs[i].data().items[j].downpayment) *
+                    parseInt(custIn.docs[i].data().items[j].qty) -
+                  custIn.docs[i].data().items[j].discount,
+              });
+            }
           }
         }
 
@@ -238,7 +246,7 @@ export default function Daily_Sales() {
         });
         setIsLoading(false);
       });
-  }, []);
+  }, [month, year]);
 
   const viewModel = async (date, sales) => {
     sumEachSameDaySales(sales).then((reAllTypesSale) => {

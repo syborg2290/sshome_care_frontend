@@ -16,7 +16,7 @@ import "./Other_Expences.css";
 
 import db from "../../../../../../../../../../config/firebase.js";
 
-export default function Other_Expences() {
+export default function Other_Expences({ year, month }) {
   const [expencesViewModel, setExpencesViewModel] = useState(false); // table model
 
   // eslint-disable-next-line
@@ -221,158 +221,163 @@ export default function Other_Expences() {
         var raw = [];
         var rawAll = [];
         reEx.docs.forEach((each) => {
-          rawAll.push({
-            id: each.id,
-            data: each.data(),
-          });
-          raw.push({
-            Date: new Date(each.data().date.seconds * 1000).toDateString(),
-            Discription: each.data().mainDescription,
-            Rent: (
-              <CurrencyFormat
-                value={each.data().rentVehi.cost}
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={" "}
-              />
-            ),
-            Salary: (
-              <CurrencyFormat
-                value={each.data().totalSalary}
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={" "}
-              />
-            ),
-            Advance: (
-              <CurrencyFormat
-                value={each.data().totalAdvance}
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={" "}
-              />
-            ),
-            Temporary: (
-              <CurrencyFormat
-                value={each.data().totalTemp}
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={" "}
-              />
-            ),
-            Salary_Installments: (
-              <CurrencyFormat
-                value={each.data().salaryDeductables.cost}
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={" "}
-              />
-            ),
-            Stationary: (
-              <CurrencyFormat
-                value={each.data().stationary.cost}
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={" "}
-              />
-            ),
-            MR_sampath: (
-              <CurrencyFormat
-                value={each.data().totalSampath}
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={" "}
-              />
-            ),
-            MRS_Monika: (
-              <CurrencyFormat
-                value={each.data().totalMonika}
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={" "}
-              />
-            ),
-            Sithu: (
-              <CurrencyFormat
-                value={each.data().totalSithu}
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={" "}
-              />
-            ),
-            Shorts: (
-              <CurrencyFormat
-                value={each.data().shorts.cost}
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={" "}
-              />
-            ),
-            BOC_Bank: (
-              <CurrencyFormat
-                value={each.data().boc_bank.cost}
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={" "}
-              />
-            ),
-            Union_Bank: (
-              <CurrencyFormat
-                value={each.data().unionBank.cost}
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={" "}
-              />
-            ),
-            Banking_Installments: (
-              <CurrencyFormat
-                value={each.data().bankingInstall.cost}
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={" "}
-              />
-            ),
-            Pay_for_workers: (
-              <CurrencyFormat
-                value={each.data().pay_for_workers.cost}
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={" "}
-              />
-            ),
-            Loans: (
-              <CurrencyFormat
-                value={each.data().loans_for.cost}
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={" "}
-              />
-            ),
-            Reload_cards: (
-              <CurrencyFormat
-                value={each.data().cards_reload.cost}
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={" "}
-              />
-            ),
-            Other: (
-              <CurrencyFormat
-                value={each.data().totalOthers}
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={" "}
-              />
-            ),
-            Action: (
-              <VisibilityIcon className="btnEdit" onClick={ExpencesView} />
-            ),
-          });
+          if (
+            new Date(each.data().date.seconds * 1000).getFullYear() === year &&
+            new Date(each.data().date.seconds * 1000).getMonth() === month
+          ) {
+            rawAll.push({
+              id: each.id,
+              data: each.data(),
+            });
+            raw.push({
+              Date: new Date(each.data().date.seconds * 1000).toDateString(),
+              Discription: each.data().mainDescription,
+              Rent: (
+                <CurrencyFormat
+                  value={each.data().rentVehi.cost}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+              Salary: (
+                <CurrencyFormat
+                  value={each.data().totalSalary}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+              Advance: (
+                <CurrencyFormat
+                  value={each.data().totalAdvance}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+              Temporary: (
+                <CurrencyFormat
+                  value={each.data().totalTemp}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+              Salary_Installments: (
+                <CurrencyFormat
+                  value={each.data().salaryDeductables.cost}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+              Stationary: (
+                <CurrencyFormat
+                  value={each.data().stationary.cost}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+              MR_sampath: (
+                <CurrencyFormat
+                  value={each.data().totalSampath}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+              MRS_Monika: (
+                <CurrencyFormat
+                  value={each.data().totalMonika}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+              Sithu: (
+                <CurrencyFormat
+                  value={each.data().totalSithu}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+              Shorts: (
+                <CurrencyFormat
+                  value={each.data().shorts.cost}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+              BOC_Bank: (
+                <CurrencyFormat
+                  value={each.data().boc_bank.cost}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+              Union_Bank: (
+                <CurrencyFormat
+                  value={each.data().unionBank.cost}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+              Banking_Installments: (
+                <CurrencyFormat
+                  value={each.data().bankingInstall.cost}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+              Pay_for_workers: (
+                <CurrencyFormat
+                  value={each.data().pay_for_workers.cost}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+              Loans: (
+                <CurrencyFormat
+                  value={each.data().loans_for.cost}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+              Reload_cards: (
+                <CurrencyFormat
+                  value={each.data().cards_reload.cost}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+              Other: (
+                <CurrencyFormat
+                  value={each.data().totalOthers}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+              Action: (
+                <VisibilityIcon className="btnEdit" onClick={ExpencesView} />
+              ),
+            });
+          }
         });
         setTableData(raw);
         setallData(rawAll);
       });
-  }, []);
+  }, [year, month]);
 
   return (
     <>

@@ -10,7 +10,6 @@ import { DatePicker, Space, Spin } from "antd";
 import { makeStyles } from "@material-ui/core/styles";
 import { Modal } from "antd";
 
-
 // components
 import ExpencesModel from "./components/expences/Expences_Model";
 import GassModel from "./components/gass/Gass_Model";
@@ -22,7 +21,7 @@ import ModelVehicalService from "../../components/Vehical_Service_Model";
 import FolderOpenIcon from "@material-ui/icons/FolderOpen";
 import PostAddIcon from "@material-ui/icons/PostAdd";
 import SettingsApplicationsIcon from "@material-ui/icons/SettingsApplications";
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+import MoreVertIcon from "@material-ui/icons/MoreVert";
 
 import db from "../../../../../../config/firebase.js";
 
@@ -56,6 +55,23 @@ async function getAllSalesSaily(isAll, year, month) {
                   parseInt(custIn.docs[i].data().items[j].qty) -
                 custIn.docs[i].data().items[j].discount,
             });
+          } else {
+            if (
+              new Date(
+                custIn.docs[i].data().date.seconds * 1000
+              ).getFullYear() === year &&
+              new Date(custIn.docs[i].data().date.seconds * 1000).getMonth() ===
+                month
+            ) {
+              sales.push({
+                date: new Date(custIn.docs[i].data().date.seconds * 1000),
+                type: custIn.docs[i].data().selectedType,
+                total:
+                  parseInt(custIn.docs[i].data().items[j].downpayment) *
+                    parseInt(custIn.docs[i].data().items[j].qty) -
+                  custIn.docs[i].data().items[j].discount,
+              });
+            }
           }
         }
       }
@@ -122,6 +138,24 @@ async function getAllCashSaleSaily(isAll, year, month) {
                     parseInt(custIn.docs[i].data().items[j].qty) -
                   custIn.docs[i].data().items[j].discount,
               });
+            } else {
+              if (
+                new Date(
+                  custIn.docs[i].data().date.seconds * 1000
+                ).getFullYear() === year &&
+                new Date(
+                  custIn.docs[i].data().date.seconds * 1000
+                ).getMonth() === month
+              ) {
+                cashSale.push({
+                  date: new Date(custIn.docs[i].data().date.seconds * 1000),
+                  type: custIn.docs[i].data().selectedType,
+                  total:
+                    parseInt(custIn.docs[i].data().items[j].downpayment) *
+                      parseInt(custIn.docs[i].data().items[j].qty) -
+                    custIn.docs[i].data().items[j].discount,
+                });
+              }
             }
           }
         }
@@ -184,6 +218,21 @@ async function getAllRecievedCardSaleSaily(isAll, year, month) {
                 type: custIn.docs[i].data().selectedType,
                 total: parseInt(custIn.docs[i].data().downpayment),
               });
+            } else {
+              if (
+                new Date(
+                  custIn.docs[i].data().date.seconds * 1000
+                ).getFullYear() === year &&
+                new Date(
+                  custIn.docs[i].data().date.seconds * 1000
+                ).getMonth() === month
+              ) {
+                cardSale.push({
+                  date: new Date(custIn.docs[i].data().date.seconds * 1000),
+                  type: custIn.docs[i].data().selectedType,
+                  total: parseInt(custIn.docs[i].data().downpayment),
+                });
+              }
             }
           }
         }
@@ -246,6 +295,20 @@ async function getAllInstallments(isAll, year, month) {
             type: reInst.docs[i].data().type,
             total: reInst.docs[i].data().amount,
           });
+        } else {
+          if (
+            new Date(
+              reInst.docs[i].data().date.seconds * 1000
+            ).getFullYear() === year &&
+            new Date(reInst.docs[i].data().date.seconds * 1000).getMonth() ===
+              month
+          ) {
+            creditRecieved.push({
+              date: new Date(reInst.docs[i].data().date.seconds * 1000),
+              type: reInst.docs[i].data().type,
+              total: reInst.docs[i].data().amount,
+            });
+          }
         }
       }
     });
@@ -307,6 +370,20 @@ async function getAllDocumentChargesDaily(isAll, year, month) {
               type: custIn.docs[i].data().selectedType,
               total: custIn.docs[i].data().document_charges,
             });
+          } else {
+            if (
+              new Date(
+                custIn.docs[i].data().date.seconds * 1000
+              ).getFullYear() === year &&
+              new Date(custIn.docs[i].data().date.seconds * 1000).getMonth() ===
+                month
+            ) {
+              cardSale.push({
+                date: new Date(custIn.docs[i].data().date.seconds * 1000),
+                type: custIn.docs[i].data().selectedType,
+                total: custIn.docs[i].data().document_charges,
+              });
+            }
           }
         }
       }
@@ -501,7 +578,6 @@ export default function Report_Cards() {
   const [expencesYear, setExpencesYear] = useState(null);
   const [expencesMonth, setExpencesMonth] = useState(null);
   const [expencesIsAll, setExpencesIsAll] = useState(true);
-  const [allSalesTableData, setAllSalesTable] = useState([]);
   const [saleBalance, setSaleBalance] = useState(0);
   const [cashTotal, setCashTotal] = useState(0);
   const [creditTotal, setCreditTotal] = useState(0);
@@ -511,6 +587,9 @@ export default function Report_Cards() {
   const [purchasedGas, setPurchasedGas] = useState(0);
   const [allExpencesBalance, setAllExpencesBalance] = useState(0);
   const [isLoding, setIsLoading] = useState(true);
+  const [saleDate, setSaleDate] = useState(null);
+  const [gasDate, setGasDate] = useState(null);
+  const [expencesDate, setExpencesDate] = useState(null);
   let history = useHistory();
 
   var theme = useTheme();
@@ -568,7 +647,6 @@ export default function Report_Cards() {
                                   reDocsSum
                                 ).then((reAllArray) => {
                                   let againArray = reAllArray;
-                                  // let eachRE = [];
 
                                   saleTotalBalance(againArray).then(
                                     (reSaleBalance) => {
@@ -596,123 +674,7 @@ export default function Report_Cards() {
                                                   setDownpayment(previousCards);
 
                                                   setDocsTotal(previousDocs);
-                                                  // againArray.forEach((each) => {
-                                                  //   previousSale =
-                                                  //     previousSale -
-                                                  //     parseInt(each.sales);
-                                                  //   previousCash =
-                                                  //     previousCash -
-                                                  //     parseInt(each.cash);
-                                                  //   previousCards =
-                                                  //     previousCards -
-                                                  //     parseInt(each.cards);
-                                                  //   previousIntsll =
-                                                  //     previousIntsll -
-                                                  //     parseInt(
-                                                  //       each.installment
-                                                  //     );
-                                                  //   previousDocs =
-                                                  //     previousDocs -
-                                                  //     parseInt(each.docs);
-                                                  //   eachRE.push({
-                                                  //     Date: new Date(
-                                                  //       each.date
-                                                  //     ).toDateString(),
-                                                  //     Total_Sale: (
-                                                  //       <CurrencyFormat
-                                                  //         value={each.sales}
-                                                  //         displayType={"text"}
-                                                  //         thousandSeparator={
-                                                  //           true
-                                                  //         }
-                                                  //         prefix={" "}
-                                                  //       />
-                                                  //     ),
-                                                  //     Balance: (
-                                                  //       <CurrencyFormat
-                                                  //         value={previousSale}
-                                                  //         displayType={"text"}
-                                                  //         thousandSeparator={
-                                                  //           true
-                                                  //         }
-                                                  //         prefix={" "}
-                                                  //       />
-                                                  //     ),
-                                                  //     Cash_Sale: (
-                                                  //       <CurrencyFormat
-                                                  //         value={each.cash}
-                                                  //         displayType={"text"}
-                                                  //         thousandSeparator={
-                                                  //           true
-                                                  //         }
-                                                  //         prefix={" "}
-                                                  //       />
-                                                  //     ),
-                                                  //     Recived_Card_Sale: (
-                                                  //       <CurrencyFormat
-                                                  //         value={each.cards}
-                                                  //         displayType={"text"}
-                                                  //         thousandSeparator={
-                                                  //           true
-                                                  //         }
-                                                  //         prefix={" "}
-                                                  //       />
-                                                  //     ),
-                                                  //     Credit_Recived: (
-                                                  //       <CurrencyFormat
-                                                  //         value={
-                                                  //           each.installment
-                                                  //         }
-                                                  //         displayType={"text"}
-                                                  //         thousandSeparator={
-                                                  //           true
-                                                  //         }
-                                                  //         prefix={" "}
-                                                  //       />
-                                                  //     ),
-                                                  //     Document_Charges: (
-                                                  //       <CurrencyFormat
-                                                  //         value={each.docs}
-                                                  //         displayType={"text"}
-                                                  //         thousandSeparator={
-                                                  //           true
-                                                  //         }
-                                                  //         prefix={" "}
-                                                  //       />
-                                                  //     ),
-                                                  //     Total: (
-                                                  //       <CurrencyFormat
-                                                  //         value={
-                                                  //           each.cards +
-                                                  //           each.cash +
-                                                  //           each.installment +
-                                                  //           each.docs
-                                                  //         }
-                                                  //         displayType={"text"}
-                                                  //         thousandSeparator={
-                                                  //           true
-                                                  //         }
-                                                  //         prefix={" "}
-                                                  //       />
-                                                  //     ),
-                                                  //     Total_Balance: (
-                                                  //       <CurrencyFormat
-                                                  //         value={
-                                                  //           previousCards +
-                                                  //           previousCash +
-                                                  //           previousIntsll +
-                                                  //           previousDocs
-                                                  //         }
-                                                  //         displayType={"text"}
-                                                  //         thousandSeparator={
-                                                  //           true
-                                                  //         }
-                                                  //         prefix={" "}
-                                                  //       />
-                                                  //     ),
-                                                  //   });
-                                                  // });
-                                                  // setAllSalesTable(eachRE);
+                                                  setIsLoading(false);
                                                 });
                                               });
                                             }
@@ -765,12 +727,181 @@ export default function Report_Cards() {
 
     db.collection("expences")
       .orderBy("date", "desc")
-      .get()
-      .then((reGet) => {
+      .onSnapshot((reGet) => {
         setAllExpencesBalance(reGet.docs[0].data().balance);
+      });
+    // eslint-disable-next-line
+  }, []);
+
+  const getSalesReportsUpdated = (isAllRe, yearRe, monthRe) => {
+    setIsLoading(true);
+    getAllSalesSaily(isAllRe, yearRe, monthRe).then((reAllSales) => {
+      sumSameDaySales(reAllSales).then((reSumWith) => {
+        getAllCashSaleSaily(isAllRe, yearRe, monthRe).then((reCash) => {
+          sumSameDayCashSale(reCash).then((reCashAllSum) => {
+            getAllRecievedCardSaleSaily(isAllRe, yearRe, monthRe).then(
+              (reCardSale) => {
+                sumSameDayCardSale(reCardSale).then((reCardSaleSum) => {
+                  getAllInstallments(isAllRe, yearRe, monthRe).then(
+                    (reInstallments) => {
+                      sumSameDayIntallmentSale(reInstallments).then(
+                        (reInstallmentsSum) => {
+                          getAllDocumentChargesDaily(
+                            isAllRe,
+                            yearRe,
+                            monthRe
+                          ).then((reDocsCharges) => {
+                            sumSameDayDocumentCharges(reDocsCharges).then(
+                              (reDocsSum) => {
+                                getAllSalesReports(
+                                  reSumWith,
+                                  reCashAllSum,
+                                  reCardSaleSum,
+                                  reInstallmentsSum,
+                                  reDocsSum
+                                ).then((reAllArray) => {
+                                  let againArray = reAllArray;
+
+                                  saleTotalBalance(againArray).then(
+                                    (reSaleBalance) => {
+                                      cashTotalBalance(againArray).then(
+                                        (reCashBalance) => {
+                                          cardsTotalBalance(againArray).then(
+                                            (reCards) => {
+                                              installTotalBalance(
+                                                againArray
+                                              ).then((reInstall) => {
+                                                docsTotalBalance(
+                                                  againArray
+                                                ).then((reDocs) => {
+                                                  let previousSale = reSaleBalance;
+                                                  let previousCash = reCashBalance;
+                                                  let previousCards = reCards;
+                                                  let previousIntsll = reInstall;
+                                                  let previousDocs = reDocs;
+
+                                                  setSaleBalance(previousSale);
+                                                  setCashTotal(previousCash);
+                                                  setCreditTotal(
+                                                    previousIntsll
+                                                  );
+                                                  setDownpayment(previousCards);
+
+                                                  setDocsTotal(previousDocs);
+
+                                                  setIsLoading(false);
+                                                });
+                                              });
+                                            }
+                                          );
+                                        }
+                                      );
+                                    }
+                                  );
+                                });
+                              }
+                            );
+                          });
+                        }
+                      );
+                    }
+                  );
+                });
+              }
+            );
+          });
+        });
+      });
+    });
+  };
+
+  const getGasReportsUpdated = (isAllRe, yearRe, monthRe) => {
+    setIsLoading(true);
+
+    db.collection("gas_history")
+      .orderBy("date", "desc")
+      .get()
+      .then((snap) => {
+        var purchasedTotal = 0;
+
+        snap.docs.forEach((each) => {
+          if (isAllRe) {
+            let totalRe =
+              parseInt(each.data().price) * parseInt(each.data().qty);
+
+            purchasedTotal = purchasedTotal + totalRe;
+          } else {
+            if (
+              new Date(each.data().date.seconds * 1000).getFullYear() ===
+                yearRe &&
+              new Date(each.data().date.seconds * 1000).getMonth() === monthRe
+            ) {
+              let totalRe =
+                parseInt(each.data().price) * parseInt(each.data().qty);
+
+              purchasedTotal = purchasedTotal + totalRe;
+            }
+          }
+        });
+
+        setPurchasedGas(purchasedTotal);
+      });
+
+    db.collection("gas_purchase_history")
+      .orderBy("date", "desc")
+      .get()
+      .then((snap) => {
+        var soldTotal = 0;
+
+        snap.docs.forEach((each) => {
+          if (isAllRe) {
+            let totalRe =
+              parseInt(each.data().price) * parseInt(each.data().qty);
+            soldTotal = soldTotal + totalRe;
+          } else {
+            if (
+              new Date(each.data().date.seconds * 1000).getFullYear() ===
+                yearRe &&
+              new Date(each.data().date.seconds * 1000).getMonth() === monthRe
+            ) {
+              let totalRe =
+                parseInt(each.data().price) * parseInt(each.data().qty);
+              soldTotal = soldTotal + totalRe;
+            }
+          }
+        });
+        setSoldGas(soldTotal);
         setIsLoading(false);
       });
-  }, []);
+  };
+
+  const getExpencesReportsUpdated = (isAllRe, yearRe, monthRe) => {
+    setIsLoading(true);
+    db.collection("expences")
+      .orderBy("date", "desc")
+      .get()
+      .then((reGet) => {
+        if (isAllRe) {
+          setAllExpencesBalance(reGet.docs[0].data().balance);
+          setIsLoading(false);
+        } else {
+          for (let i = 0; i < reGet.docs.length; i++) {
+            if (
+              new Date(
+                reGet.docs[i].data().date.seconds * 1000
+              ).getFullYear() === yearRe &&
+              new Date(reGet.docs[i].data().date.seconds * 1000).getMonth() ===
+                monthRe
+            ) {
+              setAllExpencesBalance(reGet.docs[i].data().balance);
+            } else {
+              setAllExpencesBalance(0);
+            }
+          }
+          setIsLoading(false);
+        }
+      });
+  };
 
   return (
     <>
@@ -808,7 +939,7 @@ export default function Report_Cards() {
         <div>
           <div>
             <div>
-              <ExpencesModel />
+              <ExpencesModel month={expencesMonth} year={expencesYear} />
             </div>
           </div>
         </div>
@@ -829,7 +960,7 @@ export default function Report_Cards() {
         <div>
           <div>
             <div>
-              <GassModel />
+              <GassModel month={gasMonth} year={gasYear} />
             </div>
           </div>
         </div>
@@ -850,7 +981,7 @@ export default function Report_Cards() {
         <div>
           <div>
             <div>
-              <SalesModel />
+              <SalesModel year={saleYear} month={saleMonth} />
             </div>
           </div>
         </div>
@@ -861,42 +992,79 @@ export default function Report_Cards() {
       <div className="widgetWrappe">
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6} className="card_body1_cx">
-            <Paper  className="card_cx">
-            <Grid  container spacing={3}>
-              <Grid item xs={12} sm={4}>
-                 <h2 className="tipics_cards_cx">
+            <Paper className="card_cx">
+              <Grid container spacing={3}>
+                <Grid item xs={12} sm={4}>
+                  <h2 className="tipics_cards_cx">
                     {isLoding ? <Spin size="small" /> : "All Sales"}
                   </h2>
-
-                  </Grid>
-                  <Grid item xs={12} sm={2}>
-                    <Button className="btn_moreCard" size="small"
-                      onClick={ViewSalesModel}
-                      endIcon={<MoreVertIcon />}
-                    >
-                      More
-                    </Button>
-                  </Grid>
-                  <Grid item xs={12} sm={1}>
-                    <div className="vlo"></div>
-                  </Grid>
-                  <Grid className="date_pikr" item xs={12} sm={4}>
-                     <Typography className="select_txt_cx" color="text" colorBrightness="secondary">
-                       Select Year & Month
-                      </Typography> 
-                    <Space direction="vertical">
-                    <DatePicker className="date_pikr" picker="month"
-                     onChange={(e) => {
-                        console.log(e);
+                </Grid>
+                <Grid item xs={12} sm={2}>
+                  <Button
+                    className="btn_moreCard"
+                    size="small"
+                    disabled={isLoding}
+                    onClick={(e) => (!saleIsAll ? ViewSalesModel() : null)}
+                    endIcon={<MoreVertIcon />}
+                  >
+                    More
+                  </Button>
+                </Grid>
+                <Grid item xs={12} sm={1}>
+                  <div className="vlo"></div>
+                </Grid>
+                <Grid className="date_pikr" item xs={12} sm={4}>
+                  <Typography
+                    className="select_txt_cx"
+                    color="text"
+                    colorBrightness="secondary"
+                  >
+                    Select Year & Month
+                  </Typography>
+                  <Space direction="vertical">
+                    <DatePicker
+                      className="date_pikr"
+                      picker="month"
+                      value={saleDate}
+                      disabled={isLoding}
+                      onChange={(e) => {
+                        if (e !== null) {
+                          setSaleYear(new Date(e).getFullYear());
+                          setSaleMonth(new Date(e).getMonth());
+                          setSaleIsAll(false);
+                          getSalesReportsUpdated(
+                            false,
+                            new Date(e).getFullYear(),
+                            new Date(e).getMonth()
+                          );
+                          setSaleDate(e);
+                        } else {
+                          setSaleYear(null);
+                          setSaleMonth(null);
+                          setSaleIsAll(true);
+                          getSalesReportsUpdated(true, null, null);
+                          setSaleDate(null);
+                        }
                       }}
-                    /> 
-                    </Space>
-                    
-                  </Grid>
-                  <Grid className="date_allGrid" item xs={12} sm={1}>
-                      <p className="date_all">All</p>
-                  </Grid>
-                       </Grid>
+                    />
+                  </Space>
+                </Grid>
+                <Grid className="date_allGrid" item xs={12} sm={1}>
+                  <p
+                    className="date_all"
+                    disabled={isLoding}
+                    onClick={(e) => {
+                      setSaleIsAll(true);
+                      setSaleMonth(null);
+                      setSaleYear(null);
+                      getSalesReportsUpdated(true, null, null);
+                      setSaleDate(null);
+                    }}
+                  >
+                    All
+                  </p>
+                </Grid>
+              </Grid>
               <div className="visitsNumberContainer_cx">
                 <Grid item xs={12} sm={1}></Grid>
                 <Grid item xs={12} sm={4}>
@@ -1022,42 +1190,85 @@ export default function Report_Cards() {
                     />
                   </Typography>
                 </Grid>
-                </Grid>
+              </Grid>
             </Paper>
           </Grid>
 
           <Grid item xs={12} sm={6} className="card_body2_cx">
-            <Paper title="Gass Balance" className="card_cx"  >
-               <Grid  container spacing={3}>
-              <Grid item xs={12} sm={4}>
-                <h2 className="tipics_cards_cx">
+            <Paper title="Gass Balance" className="card_cx">
+              <Grid container spacing={3}>
+                <Grid item xs={12} sm={4}>
+                  <h2 className="tipics_cards_cx">
                     {" "}
                     {isLoding ? <Spin size="small" /> : "All Gas History"}
                   </h2>
-                  </Grid>
-                    <Grid item xs={12} sm={2}>
-                    <Button className="btn_moreCard" size="small"
-                      onClick={ViewGassModel}
-                      endIcon={<MoreVertIcon />}
-                    >
-                      More
-                    </Button>
-                  </Grid>
-                  <Grid item xs={12} sm={1}>
-                    <div className="vloGss"></div>
-                  </Grid>
-                  <Grid className="date_pikr" item xs={12} sm={4}>
-                    <Typography className="select_txt_cx" color="text" colorBrightness="secondary">
-                       Select Year & Month
-                      </Typography> 
-                    <Space direction="vertical">
-                         <DatePicker className="date_pikr" picker="month" />   
-                     </Space>         
-                  </Grid>
-                    <Grid className="date_allGrid" item xs={12} sm={1}>
-                      <p className="date_all">All</p>
-                  </Grid>
-                       </Grid>
+                </Grid>
+                <Grid item xs={12} sm={2}>
+                  <Button
+                    className="btn_moreCard"
+                    disabled={isLoding}
+                    size="small"
+                    onClick={(e) => (!gasIsAll ? ViewGassModel() : null)}
+                    endIcon={<MoreVertIcon />}
+                  >
+                    More
+                  </Button>
+                </Grid>
+                <Grid item xs={12} sm={1}>
+                  <div className="vloGss"></div>
+                </Grid>
+                <Grid className="date_pikr" item xs={12} sm={4}>
+                  <Typography
+                    className="select_txt_cx"
+                    color="text"
+                    colorBrightness="secondary"
+                  >
+                    Select Year & Month
+                  </Typography>
+                  <Space direction="vertical">
+                    <DatePicker
+                      className="date_pikr"
+                      picker="month"
+                      value={gasDate}
+                      disabled={isLoding}
+                      onChange={(e) => {
+                        if (e !== null) {
+                          setGasYear(new Date(e).getFullYear());
+                          setGasMonth(new Date(e).getMonth());
+                          setGasIsAll(false);
+                          setGasDate(e);
+                          getGasReportsUpdated(
+                            false,
+                            new Date(e).getFullYear(),
+                            new Date(e).getMonth()
+                          );
+                        } else {
+                          setGasYear(null);
+                          setGasMonth(null);
+                          setGasIsAll(true);
+                          setGasDate(null);
+                          getGasReportsUpdated(true, null, null);
+                        }
+                      }}
+                    />
+                  </Space>
+                </Grid>
+                <Grid className="date_allGrid" item xs={12} sm={1}>
+                  <p
+                    className="date_all"
+                    disabled={isLoding}
+                    onClick={(e) => {
+                      setGasYear(null);
+                      setGasMonth(null);
+                      setGasIsAll(true);
+                      setGasDate(null);
+                      getGasReportsUpdated(true, null, null);
+                    }}
+                  >
+                    All
+                  </p>
+                </Grid>
+              </Grid>
               <div className="visitsNumberContainer_cx">
                 <Grid item xs={12} sm={1}></Grid>
                 <Grid item xs={12} sm={4}>
@@ -1149,20 +1360,25 @@ export default function Report_Cards() {
 
       <Grid container spacing={3}>
         <Grid item xs={12} sm={6}>
-          <Card className="card_Bttm" onClick={ViewExpencesModel}>
+          <Card className="card_Bttm">
             <CardContent>
               <Grid container spacing={3}>
                 <Grid item xs={12} sm={4}>
                   <h2 className="tipics_cards_cx">All Expences History</h2>
                 </Grid>
                 <Grid item xs={12} sm={2}>
-                    <Button className="btn_moreCard" size="small"
-                      onClick={ViewExpencesModel}
-                      endIcon={<MoreVertIcon />}
-                    >
-                      More
-                    </Button>
-                  </Grid>
+                  <Button
+                    className="btn_moreCard"
+                    size="small"
+                    disabled={isLoding}
+                    onClick={(e) =>
+                      !expencesIsAll ? ViewExpencesModel() : null
+                    }
+                    endIcon={<MoreVertIcon />}
+                  >
+                    More
+                  </Button>
+                </Grid>
                 <Grid item xs={12} sm={1}>
                   <div className="vloEx"></div>
                 </Grid>
@@ -1175,12 +1391,48 @@ export default function Report_Cards() {
                     Select Year & Month
                   </Typography>
                   <Space direction="vertical">
-                    <DatePicker className="date_pikr" picker="month" />
+                    <DatePicker
+                      className="date_pikr"
+                      picker="month"
+                      value={expencesDate}
+                      disabled={isLoding}
+                      onChange={(e) => {
+                        if (e !== null) {
+                          setExpencesYear(new Date(e).getFullYear());
+                          setExpencesMonth(new Date(e).getMonth());
+                          setExpencesIsAll(false);
+                          setExpencesDate(e);
+                          getExpencesReportsUpdated(
+                            false,
+                            new Date(e).getFullYear(),
+                            new Date(e).getMonth()
+                          );
+                        } else {
+                          setExpencesIsAll(true);
+                          setExpencesYear(null);
+                          setExpencesMonth(null);
+                          setExpencesDate(null);
+                          getExpencesReportsUpdated(true, null, null);
+                        }
+                      }}
+                    />
                   </Space>
                 </Grid>
-                 <Grid className="date_allGrid" item xs={12} sm={1}>
-                      <p className="date_allExpences">All</p>
-                  </Grid>
+                <Grid className="date_allGrid" item xs={12} sm={1}>
+                  <p
+                    className="date_allExpences"
+                    disabled={isLoding}
+                    onClick={(e) => {
+                      setExpencesIsAll(true);
+                      setExpencesYear(null);
+                      setExpencesMonth(null);
+                      setExpencesDate(null);
+                      getExpencesReportsUpdated(true, null, null);
+                    }}
+                  >
+                    All
+                  </p>
+                </Grid>
               </Grid>
               <div className="visitsNumberContainer_cx">
                 <Grid item xs={12} sm={1}></Grid>

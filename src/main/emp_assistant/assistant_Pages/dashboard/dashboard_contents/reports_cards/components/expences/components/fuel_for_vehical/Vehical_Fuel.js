@@ -15,7 +15,7 @@ import ViewFuel from "./components/View_Fuel";
 
 import db from "../../../../../../../../../../config/firebase.js";
 
-export default function Vehical_Fuel() {
+export default function Vehical_Fuel({ year, month }) {
   const [fuelViewModel, setFuelViewModel] = useState(false); // table model
   // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
@@ -67,27 +67,32 @@ export default function Vehical_Fuel() {
         var rawAll = [];
 
         reEx.docs.forEach((each) => {
-          rawAll.push({
-            id: each.id,
-            data: each.data(),
-          });
-          raw.push({
-            Date: new Date(each.data().date.seconds * 1000).toDateString(),
-            Cost: (
-              <CurrencyFormat
-                value={each.data().total_fuel}
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={" "}
-              />
-            ),
-            Action: <VisibilityIcon className="btnEdit" onClick={FuelView} />,
-          });
+          if (
+            new Date(each.data().date.seconds * 1000).getFullYear() === year &&
+            new Date(each.data().date.seconds * 1000).getMonth() === month
+          ) {
+            rawAll.push({
+              id: each.id,
+              data: each.data(),
+            });
+            raw.push({
+              Date: new Date(each.data().date.seconds * 1000).toDateString(),
+              Cost: (
+                <CurrencyFormat
+                  value={each.data().total_fuel}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+              Action: <VisibilityIcon className="btnEdit" onClick={FuelView} />,
+            });
+          }
         });
         setallData(rawAll);
         setTableData(raw);
       });
-  }, []);
+  }, [year, month]);
 
   return (
     <>

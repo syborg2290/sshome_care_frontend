@@ -6,7 +6,7 @@ import CurrencyFormat from "react-currency-format";
 import db from "../../../../../../../../../../config/firebase.js";
 import { Spin } from "antd";
 
-async function getAllSold() {
+async function getAllSold(year, month) {
   var rawSold = [];
   await db
     .collection("gas_purchase_history")
@@ -14,12 +14,19 @@ async function getAllSold() {
     .get()
     .then((snap1) => {
       for (let i = 0; i < snap1.docs.length; i++) {
-        rawSold.push({
-          date: new Date(snap1.docs[i].data().date.seconds * 1000),
-          sold_total:
-            parseInt(snap1.docs[i].data().price) *
-            parseInt(snap1.docs[i].data().qty),
-        });
+        if (
+          new Date(snap1.docs[i].data().date.seconds * 1000).getFullYear() ===
+            year &&
+          new Date(snap1.docs[i].data().date.seconds * 1000).getMonth() ===
+            month
+        ) {
+          rawSold.push({
+            date: new Date(snap1.docs[i].data().date.seconds * 1000),
+            sold_total:
+              parseInt(snap1.docs[i].data().price) *
+              parseInt(snap1.docs[i].data().qty),
+          });
+        }
       }
     });
   return rawSold;
@@ -64,7 +71,7 @@ async function getAllSoldWithoutDuplicates(soldDup) {
   return reduceDup;
 }
 
-async function getAllPurchased() {
+async function getAllPurchased(year, month) {
   var rawPucrhaes = [];
   await db
     .collection("gas_history")
@@ -72,12 +79,19 @@ async function getAllPurchased() {
     .get()
     .then((snap1) => {
       for (let i = 0; i < snap1.docs.length; i++) {
-        rawPucrhaes.push({
-          date: new Date(snap1.docs[i].data().date.seconds * 1000),
-          purchaes_total:
-            parseInt(snap1.docs[i].data().price) *
-            parseInt(snap1.docs[i].data().qty),
-        });
+        if (
+          new Date(snap1.docs[i].data().date.seconds * 1000).getFullYear() ===
+            year &&
+          new Date(snap1.docs[i].data().date.seconds * 1000).getMonth() ===
+            month
+        ) {
+          rawPucrhaes.push({
+            date: new Date(snap1.docs[i].data().date.seconds * 1000),
+            purchaes_total:
+              parseInt(snap1.docs[i].data().price) *
+              parseInt(snap1.docs[i].data().qty),
+          });
+        }
       }
     });
   return rawPucrhaes;
@@ -225,7 +239,7 @@ async function totalRestBalance(restTable) {
   return restTotalBalance;
 }
 
-export default function Rest_Of_Hand() {
+export default function Rest_Of_Hand({ year, month }) {
   // eslint-disable-next-line
   const [tableData, setTableData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -270,9 +284,9 @@ export default function Rest_Of_Hand() {
   ];
 
   useEffect(() => {
-    getAllSold().then((reSoldRe) => {
+    getAllSold(year, month).then((reSoldRe) => {
       getAllSoldWithoutDuplicates(reSoldRe).then((reDupSold) => {
-        getAllPurchased().then((rePurchaseRe) => {
+        getAllPurchased(year, month).then((rePurchaseRe) => {
           getAllPurchaesWithoutDuplicates(rePurchaseRe).then(
             (reDupPurcahes) => {
               getSameDateWithTotals(reDupSold, reDupPurcahes).then(
@@ -321,7 +335,7 @@ export default function Rest_Of_Hand() {
         });
       });
     });
-  }, []);
+  }, [year, month]);
 
   return (
     <Grid container spacing={4}>

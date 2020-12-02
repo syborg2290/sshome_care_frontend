@@ -7,8 +7,7 @@ import CurrencyFormat from "react-currency-format";
 import "./Expences_Balance.css";
 import db from "../../../../../../../../../../config/firebase.js";
 
-
-export default function Expences_Balance() {
+export default function Expences_Balance({ year, month }) {
   const [tableData, setTableData] = useState([]);
 
   const columns = [
@@ -50,29 +49,34 @@ export default function Expences_Balance() {
       .then((reGet) => {
         var raw = [];
         reGet.docs.forEach((each) => {
-          raw.push({
-            Date: new Date(each.data().date.seconds * 1000).toDateString(),
-            Expences: (
-              <CurrencyFormat
-                value={each.data().total}
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={" "}
-              />
-            ),
-            Balance: (
-              <CurrencyFormat
-                value={each.data().balance}
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={" "}
-              />
-            ),
-          });
+          if (
+            new Date(each.data().date.seconds * 1000).getFullYear() === year &&
+            new Date(each.data().date.seconds * 1000).getMonth() === month
+          ) {
+            raw.push({
+              Date: new Date(each.data().date.seconds * 1000).toDateString(),
+              Expences: (
+                <CurrencyFormat
+                  value={each.data().total}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+              Balance: (
+                <CurrencyFormat
+                  value={each.data().balance}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+            });
+          }
         });
         setTableData(raw);
       });
-  }, []);
+  }, [year, month]);
 
   return (
     <Grid container spacing={4}>

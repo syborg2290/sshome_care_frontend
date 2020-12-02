@@ -47,7 +47,7 @@ function a11yProps(index) {
   };
 }
 
-export default function Gass_Model() {
+export default function Gass_Model({ year, month }) {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
@@ -70,13 +70,13 @@ export default function Gass_Model() {
           </Tabs>
         </AppBar>
         <TabPanel value={value} index={0}>
-          <SoldGass />
+          <SoldGass year={year} month={month} />
         </TabPanel>
         <TabPanel value={value} index={1}>
-          <PurchasedGass />
+          <PurchasedGass year={year} month={month} />
         </TabPanel>
         <TabPanel value={value} index={2}>
-          <RestOfHand />
+          <RestOfHand year={year} month={month} />
         </TabPanel>
       </div>
       {/* <Grid container spacing={4}>

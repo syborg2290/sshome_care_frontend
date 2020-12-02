@@ -882,7 +882,7 @@ export default function Report_Cards() {
       .get()
       .then((reGet) => {
         if (isAllRe) {
-          setAllExpencesBalance(reGet.docs[0].data().balance);
+          setAllExpencesBalance(reGet.docs[0]?.data().balance);
           setIsLoading(false);
         } else {
           for (let i = 0; i < reGet.docs.length; i++) {

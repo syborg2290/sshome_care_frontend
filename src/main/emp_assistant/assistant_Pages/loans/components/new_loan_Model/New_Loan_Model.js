@@ -101,7 +101,7 @@ export default function New_Loan_Model() {
             });
         } else {
           setLoading(false);
-          setValidation("Could not found any employee as entered NIC ! ");
+          setValidation("Could not found any employee as the entered NIC ! ");
         }
       });
   };

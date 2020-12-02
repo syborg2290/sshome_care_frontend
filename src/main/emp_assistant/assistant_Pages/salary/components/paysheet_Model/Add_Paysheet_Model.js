@@ -954,7 +954,7 @@ export default function Add_Paysheet_Model({ nic }) {
         );
 
         if (currentSalaryStatus) {
-          setValidation("Already paid for currrent month ! ");
+          setValidation("Already paid for the currrent month ! ");
           setAlreadyPaid(true);
         }
       });
@@ -1592,7 +1592,7 @@ export default function Add_Paysheet_Model({ nic }) {
         if (currentSalaryStatus) {
           setLoading(false);
           setAlreadyPaid(true);
-          setValidation("Already paid for selected month ! ");
+          setValidation("Already paid for the selected month ! ");
         } else {
           setAlreadyPaid(false);
           setValidation("");
@@ -2934,7 +2934,7 @@ export default function Add_Paysheet_Model({ nic }) {
                               setLoading(false);
                               setAlreadyPaid(true);
                               setValidation(
-                                "Already paid for selected month ! "
+                                "Already paid for the selected month ! "
                               );
                             } else {
                               setLoading(false);
@@ -2966,7 +2966,7 @@ export default function Add_Paysheet_Model({ nic }) {
                               setLoading(false);
                               setAlreadyPaid(true);
                               setValidation(
-                                "Already paid for current month ! "
+                                "Already paid for the current month ! "
                               );
                             } else {
                               setLoading(false);

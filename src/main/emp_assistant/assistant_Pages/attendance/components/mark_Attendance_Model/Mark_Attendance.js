@@ -151,32 +151,7 @@ export default function Mark_Attendance() {
                               : false
                           }
                           onChange={(e) => {
-                            if (
-                              marks[reEmployeeAd.docs[0].data().nic] === true
-                            ) {
-                              nics.splice(
-                                nics.indexOf(reEmployeeAd.docs[0].data().nic),
-                                1
-                              );
-                              allNames.splice(
-                                nics.indexOf(reEmployeeAd.docs[0].data().nic),
-                                1
-                              );
-                              setMarks({
-                                ...marks,
-                                [reEmployeeAd.docs[0].data().nic]: false,
-                              });
-                            } else {
-                              nics.push(reEmployeeAd.docs[0].data().nic);
-                              allNames.push({
-                                fname: reEmployeeAd.docs[0].data().fname,
-                                lname: reEmployeeAd.docs[0].data().lname,
-                              });
-                              setMarks({
-                                ...marks,
-                                [reEmployeeAd.docs[0].data().nic]: true,
-                              });
-                            }
+                            onChangeCheck(reEmployeeAd);
                           }}
                         />
                       ),
@@ -192,12 +167,34 @@ export default function Mark_Attendance() {
     // eslint-disable-next-line
   }, []);
 
+  const onChangeCheck = (reEmployeeAd) => {
+    if (!isLoadingCheck) {
+      if (marks[reEmployeeAd.docs[0].data().nic] === true) {
+        nics.splice(nics.indexOf(reEmployeeAd.docs[0].data().nic), 1);
+        allNames.splice(nics.indexOf(reEmployeeAd.docs[0].data().nic), 1);
+        setMarks({
+          ...marks,
+          [reEmployeeAd.docs[0].data().nic]: false,
+        });
+      } else {
+        nics.push(reEmployeeAd.docs[0].data().nic);
+        allNames.push({
+          fname: reEmployeeAd.docs[0].data().fname,
+          lname: reEmployeeAd.docs[0].data().lname,
+        });
+        setMarks({
+          ...marks,
+          [reEmployeeAd.docs[0].data().nic]: true,
+        });
+      }
+    }
+  };
+
   const markFunc = () => {
     setSubmitLoading(true);
     setIsLoadingCheck(true);
     doStuff(nics, allNames).then((_) => {
       setSubmitLoading(false);
-      setIsLoadingCheck(false);
       window.location.reload();
     });
   };

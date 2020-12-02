@@ -8,12 +8,10 @@ import { useHistory } from "react-router-dom";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import AutorenewIcon from "@material-ui/icons/Autorenew";
 
-
 // components
 import ViewEmployee from "./components/view_Employee_Model/View_Employee";
 import UpdateStatus from "./components/status_Update_Model/Update_Status";
 import MarkAttendance from "./components/mark_Attendance_Model/Mark_Attendance";
-
 
 // styles
 import "./Attendance.css";
@@ -248,7 +246,7 @@ export default function Attendance() {
                 Employee Attendance{" / "}
                 {new Date().getFullYear() +
                   " - " +
-                  new Date().getMonth() +
+                  (parseInt(new Date().getMonth()) + 1) +
                   " - " +
                   new Date().getDate()}
               </span>

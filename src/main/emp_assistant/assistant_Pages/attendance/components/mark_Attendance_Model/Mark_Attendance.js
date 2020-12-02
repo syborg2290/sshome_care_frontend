@@ -30,6 +30,7 @@ export default function Mark_Attendance() {
   const [currentIndx, setCurrentIndx] = useState(0);
   const [attendanceMarkTable, setAttendanceMarkTable] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingCheck, setIsLoadingCheck] = useState(false);
   const [submitLoading, setSubmitLoading] = useState(false);
   const [marks, setMarks] = useState({});
   // eslint-disable-next-line
@@ -140,6 +141,7 @@ export default function Mark_Attendance() {
                       NIC: reEmployeeAd.docs[0].data().nic,
                       Mark: (
                         <Checkbox
+                          disabled={isLoadingCheck}
                           className="checkboxAtt"
                           id={reEmployeeAd.docs[0].data().nic}
                           key={reEmployeeAd.docs[0].data().nic}
@@ -192,8 +194,10 @@ export default function Mark_Attendance() {
 
   const markFunc = () => {
     setSubmitLoading(true);
+    setIsLoadingCheck(true);
     doStuff(nics, allNames).then((_) => {
       setSubmitLoading(false);
+      setIsLoadingCheck(false);
       window.location.reload();
     });
   };

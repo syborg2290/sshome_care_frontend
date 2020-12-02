@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import MUIDataTable from "mui-datatables";
-import { Grid, Button } from "@material-ui/core";
+import { Grid, Button, Checkbox } from "@material-ui/core";
 import { Spin } from "antd";
 
 // styles
@@ -18,8 +18,8 @@ async function doStuff(nics, allNames) {
     db.collection("attendance_history")
       .where("nic", "==", nics[i])
       .get()
-      .then(async (reCheck) => {
-        let result = await reCheck.docs.some(
+      .then((reCheck) => {
+        let result = reCheck.docs.some(
           (ob) =>
             new Date(ob.data().date.seconds * 1000).getFullYear() ===
               new Date().getFullYear() &&
@@ -28,14 +28,21 @@ async function doStuff(nics, allNames) {
             new Date(ob.data().date.seconds * 1000).getDate() ===
               new Date().getDate()
         );
+
         if (!result) {
-          await db.collection("attendance_history").add({
-            date: firebase.firestore.FieldValue.serverTimestamp(),
-            nic: nics[i],
-            fname: allNames[i].fname,
-            lname: allNames[i].lname,
-            status: "full",
-          });
+          db.collection("attendance_history")
+            .add({
+              date: firebase.firestore.FieldValue.serverTimestamp(),
+              nic: nics[i],
+              fname: allNames[i].fname,
+              lname: allNames[i].lname,
+              status: "full",
+            })
+            .then((_) => {
+              if (nics.length - 1 <= i) {
+                window.location.reload();
+              }
+            });
         }
       });
   }
@@ -46,7 +53,6 @@ export default function Mark_Attendance() {
   const [currentIndx, setCurrentIndx] = useState(0);
   const [attendanceMarkTable, setAttendanceMarkTable] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isLoadingCheck, setIsLoadingCheck] = useState(false);
   const [submitLoading, setSubmitLoading] = useState(false);
   const [marks, setMarks] = useState({});
   // eslint-disable-next-line
@@ -156,25 +162,40 @@ export default function Mark_Attendance() {
                       LastName: reEmployeeAd.docs[0].data().lname,
                       NIC: reEmployeeAd.docs[0].data().nic,
                       Mark: (
-                        <Button
-                        size="small"
-                          disabled={isLoadingCheck}
+                        <Checkbox
+                          size="small"
                           className="checkboxAtt"
-                          id={reEmployeeAd.docs[0].data().nic}
                           key={reEmployeeAd.docs[0].data().nic}
-                          value={
-                            marks[reEmployeeAd.docs[0].data().nic] === true
-                              ? true
-                              : false
-                          }
+                          value={marks[reEmployeeAd.docs[0].data().nic]}
                           onChange={(e) => {
-                            if (!submitLoading) {
-                              onChangeCheck(reEmployeeAd);
+                            if (
+                              marks[reEmployeeAd.docs[0].data().nic] === true
+                            ) {
+                              nics.splice(
+                                nics.indexOf(reEmployeeAd.docs[0].data().nic),
+                                1
+                              );
+                              allNames.splice(
+                                nics.indexOf(reEmployeeAd.docs[0].data().nic),
+                                1
+                              );
+                              setMarks({
+                                ...marks,
+                                [reEmployeeAd.docs[0].data().nic]: false,
+                              });
+                            } else {
+                              nics.push(reEmployeeAd.docs[0].data().nic);
+                              allNames.push({
+                                fname: reEmployeeAd.docs[0].data().fname,
+                                lname: reEmployeeAd.docs[0].data().lname,
+                              });
+                              setMarks({
+                                ...marks,
+                                [reEmployeeAd.docs[0].data().nic]: true,
+                              });
                             }
                           }}
-                        >
-                       Mark
-                      </Button>
+                        />
                       ),
                     },
                   ]);
@@ -188,35 +209,10 @@ export default function Mark_Attendance() {
     // eslint-disable-next-line
   }, []);
 
-  const onChangeCheck = (reEmployeeAd) => {
-    if (!isLoadingCheck) {
-      if (marks[reEmployeeAd.docs[0].data().nic] === true) {
-        nics.splice(nics.indexOf(reEmployeeAd.docs[0].data().nic), 1);
-        allNames.splice(nics.indexOf(reEmployeeAd.docs[0].data().nic), 1);
-        setMarks({
-          ...marks,
-          [reEmployeeAd.docs[0].data().nic]: false,
-        });
-      } else {
-        nics.push(reEmployeeAd.docs[0].data().nic);
-        allNames.push({
-          fname: reEmployeeAd.docs[0].data().fname,
-          lname: reEmployeeAd.docs[0].data().lname,
-        });
-        setMarks({
-          ...marks,
-          [reEmployeeAd.docs[0].data().nic]: true,
-        });
-      }
-    }
-  };
-
   const markFunc = () => {
     setSubmitLoading(true);
-    setIsLoadingCheck(true);
     doStuff(nics, allNames).then((_) => {
-      setSubmitLoading(false);
-      window.location.reload();
+      // window.location.reload();
     });
   };
 

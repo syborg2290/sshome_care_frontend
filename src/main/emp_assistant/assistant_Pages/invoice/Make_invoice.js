@@ -789,6 +789,10 @@ function Make_invoice() {
             });
         } else {
           if (tablerows[0].customer.customerId !== null) {
+            let customerImageUrl = await db
+              .collection("customer")
+              .doc(tablerows[0].customer.customerId)
+              .get();
             db.collection("customer")
               .doc(tablerows[0].customer.customerId)
               .update({
@@ -802,7 +806,7 @@ function Make_invoice() {
                 relations_nics: tablerows[0].customer.customerRelatedNics,
                 mobile1: tablerows[0].customer.customerMobile1,
                 mobile2: tablerows[0].customer.customerMobile2,
-                photo: null,
+                photo: customerImageUrl.data().photo,
               })
               .then((cust) => {
                 let arrayItems = [];

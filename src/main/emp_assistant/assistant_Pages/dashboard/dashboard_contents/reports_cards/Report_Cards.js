@@ -1458,15 +1458,15 @@ export default function Report_Cards() {
                 <Grid item xs={12} sm={7}>
                   <LineChart
                     className="line_chart_cx"
-                    width={55}
-                    height={30}
+                    width={70}
+                    height={50}
                     data={[
-                      { value: 10 },
-                      { value: 20 },
-                      { value: 15 },
                       { value: 50 },
-                      { value: 60 },
-                      { value: 35 },
+                      { value: 40 },
+                      { value: 30 },
+                      { value: 20 },
+                      { value: 10 },
+                      { value: 5 },
                     ]}
                   >
                     <Line

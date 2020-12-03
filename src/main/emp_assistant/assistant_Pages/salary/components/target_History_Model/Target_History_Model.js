@@ -14,7 +14,7 @@ export default function Target_History_Model() {
   const [currentIndx, setCurrentIndx] = useState(0);
   // eslint-disable-next-line
   const [allData, setallData] = useState([]);
-let history = useHistory();
+  let history = useHistory();
   const columns = [
     {
       name: "Target_Type",
@@ -65,14 +65,16 @@ let history = useHistory();
   ];
 
   useEffect(() => {
-     window.addEventListener("offline", function (e) {
+    window.addEventListener("offline", function (e) {
       history.push("/connection_lost");
     });
     db.collection("targets")
       .get()
       .then((reThen) => {
         var rawData = [];
-        reThen.docs.forEach((each) => {
+        var reArray = reThen.docs;
+
+        reArray.forEach((each) => {
           rawData.push({
             Target_Type: each.data().target_type,
             Start_Date: moment(each.data()?.start_date?.toDate()).format(
@@ -98,7 +100,7 @@ let history = useHistory();
         });
         setallData(rawData);
       });
-        // eslint-disable-next-line
+    // eslint-disable-next-line
   }, []);
 
   return (

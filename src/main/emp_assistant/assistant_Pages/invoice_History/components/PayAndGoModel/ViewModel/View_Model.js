@@ -78,7 +78,7 @@ export default function View_Model({ items_list_props, data }) {
             ...old,
             {
               item_name: th.data().itemName,
-              dp: data.total,
+              dp: each.downpayment,
               listSe: itemDataSeMo,
               discount: each.discount,
               qty: each.qty,

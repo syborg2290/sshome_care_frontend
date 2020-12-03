@@ -412,7 +412,7 @@ export default function Expences() {
   return (
     <Container component="main" className="main_container">
       <Typography className="titles" variant="h5" gutterBottom>
-        Add Expences
+        Add Expenses
       </Typography>
       <Grid item xs={12} sm={2}>
         <hr className="titles_hr" />
@@ -2664,7 +2664,7 @@ export default function Expences() {
                 <CardContent>
                   <Grid container spacing={2}>
                     <Grid className="txt_Labels" item xs={12} sm={4}>
-                      Total Expences(LKR) :
+                      Total Expenses(LKR) :
                     </Grid>
                     <Grid item xs={12} sm={5}>
                       <TextField

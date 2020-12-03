@@ -23,7 +23,7 @@ export default function Expences_Balance() {
     },
 
     {
-      name: "Expences",
+      name: "Expenses",
       options: {
         filter: false,
         setCellHeaderProps: (value) => ({
@@ -52,7 +52,7 @@ export default function Expences_Balance() {
         reGet.docs.forEach((each) => {
           raw.push({
             Date: new Date(each.data().date.seconds * 1000).toDateString(),
-            Expences: (
+            Expenses: (
               <CurrencyFormat
                 value={each.data().total}
                 displayType={"text"}
@@ -78,7 +78,7 @@ export default function Expences_Balance() {
     <Grid container spacing={4}>
       <Grid item xs={12}>
         <MUIDataTable
-          title={<span className="title_Span">Expences Balance</span>}
+          title={<span className="title_Span">Expenses Balance</span>}
           className="salary_table"
           sty
           data={tableData}

@@ -60,14 +60,14 @@ export default function Expences_Report() {
 
     return (
         <>
-      <p className="titleGass" >Daily Expences</p>
+      <p className="titleGass" >Daily Expenses</p>
     <div className="maindiv_gsaa">
       <AppBar position="static">
         <Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
           <Tab label="Repair For Vehical" {...a11yProps(0)} />
               <Tab label="Fuel For Vehical" {...a11yProps(1)} />
-              <Tab label="More Expences" {...a11yProps(2)} />
-              <Tab label="Expences Balance" {...a11yProps(3)} />
+              <Tab label="More Expenses" {...a11yProps(2)} />
+              <Tab label="Expenses Balance" {...a11yProps(3)} />
               
         </Tabs>
       </AppBar>

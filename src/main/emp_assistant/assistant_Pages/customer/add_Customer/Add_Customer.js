@@ -176,67 +176,67 @@ export default function Add_Customer() {
                         } else {
                           NotificationManager.info(
                             "Trustee 1's contact number is required!",
-                            "Remember validations"
+                           
                           );
                         }
                       } else {
                         NotificationManager.info(
                           "Trustee 1's address is required!",
-                          "Remember validations"
+                         
                         );
                       }
                     } else {
                       NotificationManager.info(
                         "Trustee 1's last name is required!",
-                        "Remember validations"
+                       
                       );
                     }
                   } else {
                     NotificationManager.info(
                       "Trustee 1's first name is required!",
-                      "Remember validations"
+                      
                     );
                   }
                 } else {
                   NotificationManager.info(
                     "Trustee 1's NIC is required!",
-                    "Remember validations"
+                   
                   );
                 }
               } else {
                 NotificationManager.info(
                   "Customer's contact number is required!",
-                  "Remember validations"
+                 
                 );
               }
             } else {
               NotificationManager.info(
                 "Customer's address is required!",
-                "Remember validations"
+               
               );
             }
           } else {
             NotificationManager.info(
               "Customer's last name is required!",
-              "Remember validations"
+             
             );
           }
         } else {
           NotificationManager.info(
             "Customer's first name is required!",
-            "Remember validations"
+           
           );
         }
       } else {
         NotificationManager.info(
           "Customer's MID is required!",
-          "Remember validations"
+          
         );
       }
     } else {
       NotificationManager.info(
         "Customer's NIC is required!",
-        "Remember validations"
+       
       );
     }
   };
@@ -317,7 +317,7 @@ export default function Add_Customer() {
           loaderModalClose();
           NotificationManager.warning(
             "Entered customer have some relations with ongoing 'pay and go' list!",
-            "Attention!"
+          
           );
         } else {
           db.collection("customer")
@@ -334,7 +334,7 @@ export default function Add_Customer() {
 
                       NotificationManager.warning(
                         "Entered customer in the blacklist !",
-                        "Attention!"
+                       
                       );
                     } else {
                       db.collection("arrears")
@@ -354,7 +354,7 @@ export default function Add_Customer() {
                             setImageUrl(doc.docs[0].data().imgUrl);
                             NotificationManager.warning(
                               "Entered customer not payed and closed arrears as a customer !",
-                              "Can not proceed with this customer, until pay and close the previous arrears as a customer"
+                             
                             );
                           } else {
                             db.collection("invoice")
@@ -375,10 +375,11 @@ export default function Add_Customer() {
                                   setImageUrl(doc.docs[0].data().imgUrl);
                                   NotificationManager.warning(
                                     "Entered customer already on status of 'pay an go' !",
-                                    "Please complete the previous 'pay and go'"
+                                    
                                   );
                                 } else {
                                   setCustomerId(doc.docs[0].id);
+                                  setMid(doc.docs[0].data().mid);
                                   setFirstName(doc.docs[0].data().fname);
                                   setLastName(doc.docs[0].data().lname);
                                   setAddres1(doc.docs[0].data().address1);
@@ -403,7 +404,7 @@ export default function Add_Customer() {
       } else {
         NotificationManager.warning(
           "Customer's NIC format is invalid!",
-          "Remember validations"
+          
         );
       }
     }
@@ -430,7 +431,7 @@ export default function Add_Customer() {
                     loaderModalClose();
                     NotificationManager.warning(
                       "Entered trustee in the blacklist !",
-                      "Can not proceed with this trustee, please try with another trustee"
+                      
                     );
                   } else {
                     db.collection("arrears")
@@ -448,7 +449,7 @@ export default function Add_Customer() {
                           setTrustee1Mobile2(arrDoc.docs[0].data().mobile2);
                           NotificationManager.warning(
                             "Entered trustee not payed and closed arrears as a customer !",
-                            "Can not proceed with this trustee, until pay and close the previous arrears as a customer"
+                            
                           );
                         } else {
                           db.collection("invoice")
@@ -475,7 +476,7 @@ export default function Add_Customer() {
                                 );
                                 NotificationManager.warning(
                                   "Entered trustee already on status of 'pay an go' as a customer !",
-                                  "Can not proceed with this trustee, until complete the previous 'pay and go' as a customer"
+                                 
                                 );
                               } else {
                                 db.collection("trustee")
@@ -520,7 +521,7 @@ export default function Add_Customer() {
 
                                             NotificationManager.warning(
                                               "Entered trustee already on status of 'pay an go' as a trustee !",
-                                              "Can not proceed with this trustee, until complete the previous 'pay and go' as a trustee"
+                                             
                                             );
                                           } else {
                                             setTrustee1Id(doc.docs[0].id);
@@ -582,7 +583,7 @@ export default function Add_Customer() {
                           setTrustee1Mobile2(doc.docs[0].data().mobile2);
                           NotificationManager.warning(
                             "Entered trustee already on status of 'pay an go' as a trustee !",
-                            "Can not proceed with this trustee, until complete the previous 'pay and go' as a trustee"
+                           
                           );
                         } else {
                           setTrustee1Id(doc.docs[0].id);
@@ -605,7 +606,7 @@ export default function Add_Customer() {
       } else {
         NotificationManager.warning(
           "Trustee 1's NIC format is invalid!",
-          "Remember validations"
+         
         );
       }
     }
@@ -632,7 +633,7 @@ export default function Add_Customer() {
                     loaderModalClose();
                     NotificationManager.warning(
                       "Entered trustee in the blacklist !",
-                      "Can not proceed with this trustee, please try with another trustee"
+                     
                     );
                   } else {
                     db.collection("arrears")
@@ -650,7 +651,7 @@ export default function Add_Customer() {
                           loaderModalClose();
                           NotificationManager.warning(
                             "Entered trustee not payed and closed arrears as a customer !",
-                            "Can not proceed with this trustee, until pay and close the previous arrears as a customer"
+                           
                           );
                         } else {
                           db.collection("invoice")
@@ -677,7 +678,7 @@ export default function Add_Customer() {
                                 );
                                 NotificationManager.warning(
                                   "Entered trustee already on status of 'pay an go' as a customer !",
-                                  "Can not proceed with this trustee, until complete the previous 'pay and go' as a customer"
+                                 
                                 );
                               } else {
                                 db.collection("trustee")
@@ -721,7 +722,7 @@ export default function Add_Customer() {
                                             );
                                             NotificationManager.warning(
                                               "Entered trustee already on status of 'pay an go' as a trustee !",
-                                              "Can not proceed with this trustee, until complete the previous 'pay and go' as a trustee"
+                                              
                                             );
                                           } else {
                                             setTrustee2Id(doc.docs[0].id);
@@ -783,7 +784,7 @@ export default function Add_Customer() {
                           setTrustee2Mobile2(doc.docs[0].data().mobile2);
                           NotificationManager.warning(
                             "Entered trustee already on status of 'pay an go' as a trustee !",
-                            "Can not proceed with this trustee, until complete the previous 'pay and go' as a trustee"
+                           
                           );
                         } else {
                           setTrustee2Id(doc.docs[0].id);
@@ -806,7 +807,7 @@ export default function Add_Customer() {
       } else {
         NotificationManager.warning(
           "Trustee 2's NIC format is invalid!",
-          "Remember validations"
+          
         );
       }
     }
@@ -1131,6 +1132,7 @@ export default function Add_Customer() {
                 setMobile1("");
                 setMobile2("");
                 setRoot("");
+                setMid("");
                 setImageFile(null);
                 setImageUrl(null);
               }}

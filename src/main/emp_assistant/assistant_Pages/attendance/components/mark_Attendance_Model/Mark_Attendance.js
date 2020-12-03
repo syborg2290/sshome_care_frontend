@@ -14,7 +14,9 @@ import db from "../../../../../../config/firebase.js";
 import firebase from "firebase";
 
 async function doStuff(nics, allNames) {
+  let prevNics = [];
   for (let i = 0; i < nics.length; i++) {
+    prevNics.push(nics[i]);
     db.collection("attendance_history")
       .where("nic", "==", nics[i])
       .get()
@@ -30,19 +32,21 @@ async function doStuff(nics, allNames) {
         );
 
         if (!result) {
-          db.collection("attendance_history")
-            .add({
-              date: firebase.firestore.FieldValue.serverTimestamp(),
-              nic: nics[i],
-              fname: allNames[i].fname,
-              lname: allNames[i].lname,
-              status: "full",
-            })
-            .then((_) => {
-              if (nics.length - 1 <= i) {
-                window.location.reload();
-              }
-            });
+          if (!prevNics.includes(nics[i])) {
+            db.collection("attendance_history")
+              .add({
+                date: firebase.firestore.FieldValue.serverTimestamp(),
+                nic: nics[i],
+                fname: allNames[i].fname,
+                lname: allNames[i].lname,
+                status: "full",
+              })
+              .then((_) => {
+                if (nics.length - 1 <= i) {
+                  window.location.reload();
+                }
+              });
+          }
         }
       });
   }

@@ -135,7 +135,7 @@ export default function CustomerHistoryModel({ customerId }) {
             data={installmentsTableData}
             columns={columns}
             options={{
-              selectableRows: false,
+             selectableRows: "none",
               customToolbarSelect: () => {},
               filterType: "textField",
               download: false,

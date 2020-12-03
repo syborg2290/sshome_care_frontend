@@ -243,7 +243,6 @@ export default function CustomerTable() {
                   };
                 }
               },
-              // selectableRows: false,
               selectableRows: "none",
               draggableColumns: {
                enabled: true

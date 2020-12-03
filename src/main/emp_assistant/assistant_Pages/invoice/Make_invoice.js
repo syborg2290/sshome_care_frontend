@@ -513,32 +513,17 @@ function Make_invoice() {
                         nextDate: firebase.firestore.Timestamp.fromDate(times),
                       })
                       .then((invDoc) => {
-                        if (tablerows[0].customer.trustee1Id !== null) {
-                          db.collection("trustee")
-                            .doc(tablerows[0].customer.trustee1Id)
-                            .update({
-                              fname: tablerows[0].customer.trustee1Fname,
-                              lname: tablerows[0].customer.trustee1Lname,
-                              nic: tablerows[0].customer.trustee1Nic,
-                              address1: tablerows[0].customer.trustee1Address1,
-                              address2: tablerows[0].customer.trustee1Address2,
-                              mobile1: tablerows[0].customer.trustee1Mobile1,
-                              mobile2: tablerows[0].customer.trustee1Mobile2,
-                              invoice_number: invoiceNumber,
-                            });
-                        } else {
-                          db.collection("trustee").add({
-                            fname: tablerows[0].customer.trustee1Fname,
-                            lname: tablerows[0].customer.trustee1Lname,
-                            nic: tablerows[0].customer.trustee1Nic,
-                            address1: tablerows[0].customer.trustee1Address1,
-                            address2: tablerows[0].customer.trustee1Address2,
-                            mobile1: tablerows[0].customer.trustee1Mobile1,
-                            mobile2: tablerows[0].customer.trustee1Mobile2,
-                            invoice_number: invoiceNumber,
-                            date: firebase.firestore.FieldValue.serverTimestamp(),
-                          });
-                        }
+                        db.collection("trustee").add({
+                          fname: tablerows[0].customer.trustee1Fname,
+                          lname: tablerows[0].customer.trustee1Lname,
+                          nic: tablerows[0].customer.trustee1Nic,
+                          address1: tablerows[0].customer.trustee1Address1,
+                          address2: tablerows[0].customer.trustee1Address2,
+                          mobile1: tablerows[0].customer.trustee1Mobile1,
+                          mobile2: tablerows[0].customer.trustee1Mobile2,
+                          invoice_number: invoiceNumber,
+                          date: firebase.firestore.FieldValue.serverTimestamp(),
+                        });
 
                         if (
                           tablerows[0].customer.trustee2Nic &&
@@ -547,34 +532,17 @@ function Make_invoice() {
                           tablerows[0].customer.trustee2Address1 &&
                           tablerows[0].customer.trustee2Mobile1
                         ) {
-                          if (tablerows[0].customer.trustee2Id !== null) {
-                            db.collection("trustee")
-                              .doc(tablerows[0].customer.trustee2Id)
-                              .update({
-                                fname: tablerows[0].customer.trustee2Fname,
-                                lname: tablerows[0].customer.trustee2Lname,
-                                nic: tablerows[0].customer.trustee2Nic,
-                                address1:
-                                  tablerows[0].customer.trustee2Address1,
-                                address2:
-                                  tablerows[0].customer.trustee2Address2,
-                                mobile1: tablerows[0].customer.trustee2Mobile1,
-                                mobile2: tablerows[0].customer.trustee2Mobile2,
-                                invoice_number: invoiceNumber,
-                              });
-                          } else {
-                            db.collection("trustee").add({
-                              fname: tablerows[0].customer.trustee2Fname,
-                              lname: tablerows[0].customer.trustee2Lname,
-                              nic: tablerows[0].customer.trustee2Nic,
-                              address1: tablerows[0].customer.trustee2Address1,
-                              address2: tablerows[0].customer.trustee2Address2,
-                              mobile1: tablerows[0].customer.trustee2Mobile1,
-                              mobile2: tablerows[0].customer.trustee2Mobile2,
-                              invoice_number: invoiceNumber,
-                              date: firebase.firestore.FieldValue.serverTimestamp(),
-                            });
-                          }
+                          db.collection("trustee").add({
+                            fname: tablerows[0].customer.trustee2Fname,
+                            lname: tablerows[0].customer.trustee2Lname,
+                            nic: tablerows[0].customer.trustee2Nic,
+                            address1: tablerows[0].customer.trustee2Address1,
+                            address2: tablerows[0].customer.trustee2Address2,
+                            mobile1: tablerows[0].customer.trustee2Mobile1,
+                            mobile2: tablerows[0].customer.trustee2Mobile2,
+                            invoice_number: invoiceNumber,
+                            date: firebase.firestore.FieldValue.serverTimestamp(),
+                          });
                         }
 
                         tablerows.forEach(async (itemUDoc) => {
@@ -691,32 +659,17 @@ function Make_invoice() {
                         nextDate: firebase.firestore.Timestamp.fromDate(times),
                       })
                       .then((invDoc) => {
-                        if (tablerows[0].customer.trustee1Id !== null) {
-                          db.collection("trustee")
-                            .doc(tablerows[0].customer.trustee1Id)
-                            .update({
-                              fname: tablerows[0].customer.trustee1Fname,
-                              lname: tablerows[0].customer.trustee1Lname,
-                              nic: tablerows[0].customer.trustee1Nic,
-                              address1: tablerows[0].customer.trustee1Address1,
-                              address2: tablerows[0].customer.trustee1Address2,
-                              mobile1: tablerows[0].customer.trustee1Mobile1,
-                              mobile2: tablerows[0].customer.trustee1Mobile2,
-                              invoice_number: invoiceNumber,
-                            });
-                        } else {
-                          db.collection("trustee").add({
-                            fname: tablerows[0].customer.trustee1Fname,
-                            lname: tablerows[0].customer.trustee1Lname,
-                            nic: tablerows[0].customer.trustee1Nic,
-                            address1: tablerows[0].customer.trustee1Address1,
-                            address2: tablerows[0].customer.trustee1Address2,
-                            mobile1: tablerows[0].customer.trustee1Mobile1,
-                            mobile2: tablerows[0].customer.trustee1Mobile2,
-                            invoice_number: invoiceNumber,
-                            date: firebase.firestore.FieldValue.serverTimestamp(),
-                          });
-                        }
+                        db.collection("trustee").add({
+                          fname: tablerows[0].customer.trustee1Fname,
+                          lname: tablerows[0].customer.trustee1Lname,
+                          nic: tablerows[0].customer.trustee1Nic,
+                          address1: tablerows[0].customer.trustee1Address1,
+                          address2: tablerows[0].customer.trustee1Address2,
+                          mobile1: tablerows[0].customer.trustee1Mobile1,
+                          mobile2: tablerows[0].customer.trustee1Mobile2,
+                          invoice_number: invoiceNumber,
+                          date: firebase.firestore.FieldValue.serverTimestamp(),
+                        });
 
                         if (
                           tablerows[0].customer.trustee2Nic &&
@@ -725,34 +678,17 @@ function Make_invoice() {
                           tablerows[0].customer.trustee2Address1 &&
                           tablerows[0].customer.trustee2Mobile1
                         ) {
-                          if (tablerows[0].customer.trustee2Id !== null) {
-                            db.collection("trustee")
-                              .doc(tablerows[0].customer.trustee2Id)
-                              .update({
-                                fname: tablerows[0].customer.trustee2Fname,
-                                lname: tablerows[0].customer.trustee2Lname,
-                                nic: tablerows[0].customer.trustee2Nic,
-                                address1:
-                                  tablerows[0].customer.trustee2Address1,
-                                address2:
-                                  tablerows[0].customer.trustee2Address2,
-                                mobile1: tablerows[0].customer.trustee2Mobile1,
-                                mobile2: tablerows[0].customer.trustee2Mobile2,
-                                invoice_number: invoiceNumber,
-                              });
-                          } else {
-                            db.collection("trustee").add({
-                              fname: tablerows[0].customer.trustee2Fname,
-                              lname: tablerows[0].customer.trustee2Lname,
-                              nic: tablerows[0].customer.trustee2Nic,
-                              address1: tablerows[0].customer.trustee2Address1,
-                              address2: tablerows[0].customer.trustee2Address2,
-                              mobile1: tablerows[0].customer.trustee2Mobile1,
-                              mobile2: tablerows[0].customer.trustee2Mobile2,
-                              invoice_number: invoiceNumber,
-                              date: firebase.firestore.FieldValue.serverTimestamp(),
-                            });
-                          }
+                          db.collection("trustee").add({
+                            fname: tablerows[0].customer.trustee2Fname,
+                            lname: tablerows[0].customer.trustee2Lname,
+                            nic: tablerows[0].customer.trustee2Nic,
+                            address1: tablerows[0].customer.trustee2Address1,
+                            address2: tablerows[0].customer.trustee2Address2,
+                            mobile1: tablerows[0].customer.trustee2Mobile1,
+                            mobile2: tablerows[0].customer.trustee2Mobile2,
+                            invoice_number: invoiceNumber,
+                            date: firebase.firestore.FieldValue.serverTimestamp(),
+                          });
                         }
 
                         tablerows.forEach(async (itemUDoc) => {
@@ -871,32 +807,17 @@ function Make_invoice() {
                     nextDate: firebase.firestore.Timestamp.fromDate(times),
                   })
                   .then((invDoc) => {
-                    if (tablerows[0].customer.trustee1Id !== null) {
-                      db.collection("trustee")
-                        .doc(tablerows[0].customer.trustee1Id)
-                        .update({
-                          fname: tablerows[0].customer.trustee1Fname,
-                          lname: tablerows[0].customer.trustee1Lname,
-                          nic: tablerows[0].customer.trustee1Nic,
-                          address1: tablerows[0].customer.trustee1Address1,
-                          address2: tablerows[0].customer.trustee1Address2,
-                          mobile1: tablerows[0].customer.trustee1Mobile1,
-                          mobile2: tablerows[0].customer.trustee1Mobile2,
-                          invoice_number: invoiceNumber,
-                        });
-                    } else {
-                      db.collection("trustee").add({
-                        fname: tablerows[0].customer.trustee1Fname,
-                        lname: tablerows[0].customer.trustee1Lname,
-                        nic: tablerows[0].customer.trustee1Nic,
-                        address1: tablerows[0].customer.trustee1Address1,
-                        address2: tablerows[0].customer.trustee1Address2,
-                        mobile1: tablerows[0].customer.trustee1Mobile1,
-                        mobile2: tablerows[0].customer.trustee1Mobile2,
-                        invoice_number: invoiceNumber,
-                        date: firebase.firestore.FieldValue.serverTimestamp(),
-                      });
-                    }
+                    db.collection("trustee").add({
+                      fname: tablerows[0].customer.trustee1Fname,
+                      lname: tablerows[0].customer.trustee1Lname,
+                      nic: tablerows[0].customer.trustee1Nic,
+                      address1: tablerows[0].customer.trustee1Address1,
+                      address2: tablerows[0].customer.trustee1Address2,
+                      mobile1: tablerows[0].customer.trustee1Mobile1,
+                      mobile2: tablerows[0].customer.trustee1Mobile2,
+                      invoice_number: invoiceNumber,
+                      date: firebase.firestore.FieldValue.serverTimestamp(),
+                    });
 
                     if (
                       tablerows[0].customer.trustee2Nic &&
@@ -905,32 +826,17 @@ function Make_invoice() {
                       tablerows[0].customer.trustee2Address1 &&
                       tablerows[0].customer.trustee2Mobile1
                     ) {
-                      if (tablerows[0].customer.trustee2Id !== null) {
-                        db.collection("trustee")
-                          .doc(tablerows[0].customer.trustee2Id)
-                          .update({
-                            fname: tablerows[0].customer.trustee2Fname,
-                            lname: tablerows[0].customer.trustee2Lname,
-                            nic: tablerows[0].customer.trustee2Nic,
-                            address1: tablerows[0].customer.trustee2Address1,
-                            address2: tablerows[0].customer.trustee2Address2,
-                            mobile1: tablerows[0].customer.trustee2Mobile1,
-                            mobile2: tablerows[0].customer.trustee2Mobile2,
-                            invoice_number: invoiceNumber,
-                          });
-                      } else {
-                        db.collection("trustee").add({
-                          fname: tablerows[0].customer.trustee2Fname,
-                          lname: tablerows[0].customer.trustee2Lname,
-                          nic: tablerows[0].customer.trustee2Nic,
-                          address1: tablerows[0].customer.trustee2Address1,
-                          address2: tablerows[0].customer.trustee2Address2,
-                          mobile1: tablerows[0].customer.trustee2Mobile1,
-                          mobile2: tablerows[0].customer.trustee2Mobile2,
-                          invoice_number: invoiceNumber,
-                          date: firebase.firestore.FieldValue.serverTimestamp(),
-                        });
-                      }
+                      db.collection("trustee").add({
+                        fname: tablerows[0].customer.trustee2Fname,
+                        lname: tablerows[0].customer.trustee2Lname,
+                        nic: tablerows[0].customer.trustee2Nic,
+                        address1: tablerows[0].customer.trustee2Address1,
+                        address2: tablerows[0].customer.trustee2Address2,
+                        mobile1: tablerows[0].customer.trustee2Mobile1,
+                        mobile2: tablerows[0].customer.trustee2Mobile2,
+                        invoice_number: invoiceNumber,
+                        date: firebase.firestore.FieldValue.serverTimestamp(),
+                      });
                     }
 
                     tablerows.forEach(async (itemUDoc) => {
@@ -1043,32 +949,17 @@ function Make_invoice() {
                     nextDate: firebase.firestore.Timestamp.fromDate(times),
                   })
                   .then((invDoc) => {
-                    if (tablerows[0].customer.trustee1Id !== null) {
-                      db.collection("trustee")
-                        .doc(tablerows[0].customer.trustee1Id)
-                        .update({
-                          fname: tablerows[0].customer.trustee1Fname,
-                          lname: tablerows[0].customer.trustee1Lname,
-                          nic: tablerows[0].customer.trustee1Nic,
-                          address1: tablerows[0].customer.trustee1Address1,
-                          address2: tablerows[0].customer.trustee1Address2,
-                          mobile1: tablerows[0].customer.trustee1Mobile1,
-                          mobile2: tablerows[0].customer.trustee1Mobile2,
-                          invoice_number: invoiceNumber,
-                        });
-                    } else {
-                      db.collection("trustee").add({
-                        fname: tablerows[0].customer.trustee1Fname,
-                        lname: tablerows[0].customer.trustee1Lname,
-                        nic: tablerows[0].customer.trustee1Nic,
-                        address1: tablerows[0].customer.trustee1Address1,
-                        address2: tablerows[0].customer.trustee1Address2,
-                        mobile1: tablerows[0].customer.trustee1Mobile1,
-                        mobile2: tablerows[0].customer.trustee1Mobile2,
-                        invoice_number: invoiceNumber,
-                        date: firebase.firestore.FieldValue.serverTimestamp(),
-                      });
-                    }
+                    db.collection("trustee").add({
+                      fname: tablerows[0].customer.trustee1Fname,
+                      lname: tablerows[0].customer.trustee1Lname,
+                      nic: tablerows[0].customer.trustee1Nic,
+                      address1: tablerows[0].customer.trustee1Address1,
+                      address2: tablerows[0].customer.trustee1Address2,
+                      mobile1: tablerows[0].customer.trustee1Mobile1,
+                      mobile2: tablerows[0].customer.trustee1Mobile2,
+                      invoice_number: invoiceNumber,
+                      date: firebase.firestore.FieldValue.serverTimestamp(),
+                    });
 
                     if (
                       tablerows[0].customer.trustee2Nic &&
@@ -1077,32 +968,17 @@ function Make_invoice() {
                       tablerows[0].customer.trustee2Address1 &&
                       tablerows[0].customer.trustee2Mobile1
                     ) {
-                      if (tablerows[0].customer.trustee2Id !== null) {
-                        db.collection("trustee")
-                          .doc(tablerows[0].customer.trustee2Id)
-                          .update({
-                            fname: tablerows[0].customer.trustee2Fname,
-                            lname: tablerows[0].customer.trustee2Lname,
-                            nic: tablerows[0].customer.trustee2Nic,
-                            address1: tablerows[0].customer.trustee2Address1,
-                            address2: tablerows[0].customer.trustee2Address2,
-                            mobile1: tablerows[0].customer.trustee2Mobile1,
-                            mobile2: tablerows[0].customer.trustee2Mobile2,
-                            invoice_number: invoiceNumber,
-                          });
-                      } else {
-                        db.collection("trustee").add({
-                          fname: tablerows[0].customer.trustee2Fname,
-                          lname: tablerows[0].customer.trustee2Lname,
-                          nic: tablerows[0].customer.trustee2Nic,
-                          address1: tablerows[0].customer.trustee2Address1,
-                          address2: tablerows[0].customer.trustee2Address2,
-                          mobile1: tablerows[0].customer.trustee2Mobile1,
-                          mobile2: tablerows[0].customer.trustee2Mobile2,
-                          invoice_number: invoiceNumber,
-                          date: firebase.firestore.FieldValue.serverTimestamp(),
-                        });
-                      }
+                      db.collection("trustee").add({
+                        fname: tablerows[0].customer.trustee2Fname,
+                        lname: tablerows[0].customer.trustee2Lname,
+                        nic: tablerows[0].customer.trustee2Nic,
+                        address1: tablerows[0].customer.trustee2Address1,
+                        address2: tablerows[0].customer.trustee2Address2,
+                        mobile1: tablerows[0].customer.trustee2Mobile1,
+                        mobile2: tablerows[0].customer.trustee2Mobile2,
+                        invoice_number: invoiceNumber,
+                        date: firebase.firestore.FieldValue.serverTimestamp(),
+                      });
                     }
 
                     tablerows.forEach(async (itemUDoc) => {

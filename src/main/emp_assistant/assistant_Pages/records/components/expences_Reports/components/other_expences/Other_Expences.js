@@ -403,7 +403,7 @@ export default function Other_Expences() {
       <Grid container spacing={4}>
         <Grid item xs={12}>
           <MUIDataTable
-            title={<span className="title_Span">Expences</span>}
+            title={<span className="title_Span">Expenses</span>}
             className="salary_table"
             sty
             data={tableData}

@@ -1366,7 +1366,7 @@ export default function Report_Cards() {
             <CardContent>
               <Grid container spacing={3}>
                 <Grid item xs={12} sm={4}>
-                  <h2 className="tipics_cards_cx">All Expences History</h2>
+                  <h2 className="tipics_cards_cx">All Expenses History</h2>
                 </Grid>
                 <Grid item xs={12} sm={2}>
                   <Button
@@ -1444,7 +1444,7 @@ export default function Report_Cards() {
                     color="text"
                     colorBrightness="secondary"
                   >
-                    Total Expences
+                    Total Expenses
                   </Typography>
                   <Typography className="total_cx" size="xl">
                     <CurrencyFormat
@@ -1505,7 +1505,7 @@ export default function Report_Cards() {
                     endIcon={<PostAddIcon />}
                     onClick={ExpencesPnl}
                   >
-                    Add Expences
+                    Add Expenses
                   </Button>
                 </Grid>
                 <Grid item xs={12} sm={12}>

@@ -659,7 +659,6 @@ export default function Add_Item() {
                                                                           valuesInitialState();
                                                                           NotificationManager.success(
                                                                             "Item creation successfully!",
-                                                                            "Done"
                                                                           );
                                                                         }
                                                                       )
@@ -810,7 +809,7 @@ export default function Add_Item() {
                                                                           valuesInitialState();
                                                                           NotificationManager.success(
                                                                             "Item creation successfully!",
-                                                                            "Done"
+                                                                           
                                                                           );
                                                                         }
                                                                       )
@@ -962,7 +961,7 @@ export default function Add_Item() {
                                                                         valuesInitialState();
                                                                         NotificationManager.success(
                                                                           "Item creation successfully!",
-                                                                          "Done"
+                                                                         
                                                                         );
                                                                       }
                                                                     )

@@ -3064,7 +3064,8 @@ export default function Add_Paysheet_Model({ nic }) {
                         displayType={"text"}
                         thousandSeparator={true}
                         prefix={" "}
-                      />{" "}
+                      />
+                      {" /= "}
                     </Typography>
                   </Grid>
                 </Grid>

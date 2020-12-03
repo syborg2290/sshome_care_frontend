@@ -305,6 +305,7 @@ export default function Add_Customer() {
                   .then((blackDoc) => {
                     if (blackDoc.docs.length > 0) {
                       loaderModalClose();
+
                       NotificationManager.warning(
                         "Entered customer in the blacklist !",
                        
@@ -316,6 +317,15 @@ export default function Add_Customer() {
                         .then((arrsDoc) => {
                           if (arrsDoc.docs.length > 0) {
                             loaderModalClose();
+                            setCustomerId(doc.docs[0].id);
+                            setFirstName(doc.docs[0].data().fname);
+                            setLastName(doc.docs[0].data().lname);
+                            setAddres1(doc.docs[0].data().address1);
+                            setAddres2(doc.docs[0].data().address2);
+                            setMobile1(doc.docs[0].data().mobile1);
+                            setMobile2(doc.docs[0].data().mobile2);
+                            setRoot(doc.docs[0].data().root);
+                            setImageUrl(doc.docs[0].data().imgUrl);
                             NotificationManager.warning(
                               "Entered customer not payed and closed arrears as a customer !",
                              
@@ -328,6 +338,15 @@ export default function Add_Customer() {
                               .then((doc2) => {
                                 if (doc2.docs.length > 0) {
                                   loaderModalClose();
+                                  setCustomerId(doc.docs[0].id);
+                                  setFirstName(doc.docs[0].data().fname);
+                                  setLastName(doc.docs[0].data().lname);
+                                  setAddres1(doc.docs[0].data().address1);
+                                  setAddres2(doc.docs[0].data().address2);
+                                  setMobile1(doc.docs[0].data().mobile1);
+                                  setMobile2(doc.docs[0].data().mobile2);
+                                  setRoot(doc.docs[0].data().root);
+                                  setImageUrl(doc.docs[0].data().imgUrl);
                                   NotificationManager.warning(
                                     "Entered customer already on status of 'pay an go' !",
                                     
@@ -395,6 +414,13 @@ export default function Add_Customer() {
                       .then((arrDoc) => {
                         if (arrDoc.docs.length > 0) {
                           loaderModalClose();
+                          setTrustee1Id(arrDoc.docs[0].id);
+                          setTrustee1Fname(arrDoc.docs[0].data().fname);
+                          setTrustee1Lname(arrDoc.docs[0].data().lname);
+                          setTrustee1Addres1(arrDoc.docs[0].data().address1);
+                          setTrustee1Addres2(arrDoc.docs[0].data().address2);
+                          setTrustee1Mobile1(arrDoc.docs[0].data().mobile1);
+                          setTrustee1Mobile2(arrDoc.docs[0].data().mobile2);
                           NotificationManager.warning(
                             "Entered trustee not payed and closed arrears as a customer !",
                             
@@ -407,6 +433,21 @@ export default function Add_Customer() {
                             .then((custRe) => {
                               if (custRe.docs.length > 0) {
                                 loaderModalClose();
+                                setTrustee1Id(arrDoc.docs[0].id);
+                                setTrustee1Fname(arrDoc.docs[0].data().fname);
+                                setTrustee1Lname(arrDoc.docs[0].data().lname);
+                                setTrustee1Addres1(
+                                  arrDoc.docs[0].data().address1
+                                );
+                                setTrustee1Addres2(
+                                  arrDoc.docs[0].data().address2
+                                );
+                                setTrustee1Mobile1(
+                                  arrDoc.docs[0].data().mobile1
+                                );
+                                setTrustee1Mobile2(
+                                  arrDoc.docs[0].data().mobile2
+                                );
                                 NotificationManager.warning(
                                   "Entered trustee already on status of 'pay an go' as a customer !",
                                  
@@ -432,6 +473,26 @@ export default function Add_Customer() {
                                         .then((doc2) => {
                                           if (doc2.docs.length > 0) {
                                             loaderModalClose();
+                                            setTrustee1Id(doc.docs[0].id);
+                                            setTrustee1Fname(
+                                              doc.docs[0].data().fname
+                                            );
+                                            setTrustee1Lname(
+                                              doc.docs[0].data().lname
+                                            );
+                                            setTrustee1Addres1(
+                                              doc.docs[0].data().address1
+                                            );
+                                            setTrustee1Addres2(
+                                              doc.docs[0].data().address2
+                                            );
+                                            setTrustee1Mobile1(
+                                              doc.docs[0].data().mobile1
+                                            );
+                                            setTrustee1Mobile2(
+                                              doc.docs[0].data().mobile2
+                                            );
+
                                             NotificationManager.warning(
                                               "Entered trustee already on status of 'pay an go' as a trustee !",
                                              
@@ -487,6 +548,13 @@ export default function Add_Customer() {
                       .then((doc2) => {
                         if (doc2.docs.length > 0) {
                           loaderModalClose();
+                          setTrustee1Id(doc.docs[0].id);
+                          setTrustee1Fname(doc.docs[0].data().fname);
+                          setTrustee1Lname(doc.docs[0].data().lname);
+                          setTrustee1Addres1(doc.docs[0].data().address1);
+                          setTrustee1Addres2(doc.docs[0].data().address2);
+                          setTrustee1Mobile1(doc.docs[0].data().mobile1);
+                          setTrustee1Mobile2(doc.docs[0].data().mobile2);
                           NotificationManager.warning(
                             "Entered trustee already on status of 'pay an go' as a trustee !",
                            
@@ -547,6 +615,13 @@ export default function Add_Customer() {
                       .get()
                       .then((arrDoc) => {
                         if (arrDoc.docs.length > 0) {
+                          setTrustee2Id(arrDoc.docs[0].id);
+                          setTrustee2Fname(arrDoc.docs[0].data().fname);
+                          setTrustee2Lname(arrDoc.docs[0].data().lname);
+                          setTrustee2Address1(arrDoc.docs[0].data().address1);
+                          setTrustee2Address2(arrDoc.docs[0].data().address2);
+                          setTrustee2Mobile1(arrDoc.docs[0].data().mobile1);
+                          setTrustee2Mobile2(arrDoc.docs[0].data().mobile2);
                           loaderModalClose();
                           NotificationManager.warning(
                             "Entered trustee not payed and closed arrears as a customer !",
@@ -560,6 +635,21 @@ export default function Add_Customer() {
                             .then((custRe) => {
                               if (custRe.docs.length > 0) {
                                 loaderModalClose();
+                                setTrustee2Id(arrDoc.docs[0].id);
+                                setTrustee2Fname(arrDoc.docs[0].data().fname);
+                                setTrustee2Lname(arrDoc.docs[0].data().lname);
+                                setTrustee2Address1(
+                                  arrDoc.docs[0].data().address1
+                                );
+                                setTrustee2Address2(
+                                  arrDoc.docs[0].data().address2
+                                );
+                                setTrustee2Mobile1(
+                                  arrDoc.docs[0].data().mobile1
+                                );
+                                setTrustee2Mobile2(
+                                  arrDoc.docs[0].data().mobile2
+                                );
                                 NotificationManager.warning(
                                   "Entered trustee already on status of 'pay an go' as a customer !",
                                  
@@ -585,6 +675,25 @@ export default function Add_Customer() {
                                         .then((doc2) => {
                                           if (doc2.docs.length > 0) {
                                             loaderModalClose();
+                                            setTrustee2Id(doc.docs[0].id);
+                                            setTrustee2Fname(
+                                              doc.docs[0].data().fname
+                                            );
+                                            setTrustee2Lname(
+                                              doc.docs[0].data().lname
+                                            );
+                                            setTrustee2Address1(
+                                              doc.docs[0].data().address1
+                                            );
+                                            setTrustee2Address2(
+                                              doc.docs[0].data().address2
+                                            );
+                                            setTrustee2Mobile1(
+                                              doc.docs[0].data().mobile1
+                                            );
+                                            setTrustee2Mobile2(
+                                              doc.docs[0].data().mobile2
+                                            );
                                             NotificationManager.warning(
                                               "Entered trustee already on status of 'pay an go' as a trustee !",
                                               
@@ -640,6 +749,13 @@ export default function Add_Customer() {
                       .then((doc2) => {
                         if (doc2.docs.length > 0) {
                           loaderModalClose();
+                          setTrustee2Id(doc.docs[0].id);
+                          setTrustee2Fname(doc.docs[0].data().fname);
+                          setTrustee2Lname(doc.docs[0].data().lname);
+                          setTrustee2Address1(doc.docs[0].data().address1);
+                          setTrustee2Address2(doc.docs[0].data().address2);
+                          setTrustee2Mobile1(doc.docs[0].data().mobile1);
+                          setTrustee2Mobile2(doc.docs[0].data().mobile2);
                           NotificationManager.warning(
                             "Entered trustee already on status of 'pay an go' as a trustee !",
                            

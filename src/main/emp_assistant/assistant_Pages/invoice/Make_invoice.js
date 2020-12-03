@@ -837,7 +837,7 @@ function Make_invoice() {
                   .add({
                     invoice_number: invoiceNumber,
                     items: arrayItems,
-                    customer_id: cust.id,
+                    customer_id: tablerows[0].customer.customerId,
                     nic: tablerows[0].customer.customerNic,
                     mid: tablerows[0].customer.mid,
                     installemtnDay: days,

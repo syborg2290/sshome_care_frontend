@@ -728,7 +728,12 @@ export default function Report_Cards() {
     db.collection("expences")
       .orderBy("date", "desc")
       .onSnapshot((reGet) => {
-        setAllExpencesBalance(reGet.docs[0]?.data().balance);
+        let allExp = 0;
+
+        reGet.docs.forEach((eachExp) => {
+          allExp = allExp + eachExp.data().total;
+        });
+        setAllExpencesBalance(allExp);
       });
     // eslint-disable-next-line
   }, []);
@@ -882,9 +887,15 @@ export default function Report_Cards() {
       .get()
       .then((reGet) => {
         if (isAllRe) {
-          setAllExpencesBalance(reGet.docs[0]?.data().balance);
+          let allExp = 0;
+
+          reGet.docs.forEach((eachExp) => {
+            allExp = allExp + eachExp.data().total;
+          });
+          setAllExpencesBalance(allExp);
           setIsLoading(false);
         } else {
+          let allExp2 = 0;
           for (let i = 0; i < reGet.docs.length; i++) {
             if (
               new Date(
@@ -893,11 +904,10 @@ export default function Report_Cards() {
               new Date(reGet.docs[i].data().date.seconds * 1000).getMonth() ===
                 monthRe
             ) {
-              setAllExpencesBalance(reGet.docs[i].data().balance);
-            } else {
-              setAllExpencesBalance(0);
+              allExp2 = allExp2 + reGet.docs[i].data().total;
             }
           }
+          setAllExpencesBalance(allExp2);
           setIsLoading(false);
         }
       });
@@ -1458,15 +1468,15 @@ export default function Report_Cards() {
                 <Grid item xs={12} sm={7}>
                   <LineChart
                     className="line_chart_cx"
-                    width={55}
-                    height={30}
+                    width={70}
+                    height={50}
                     data={[
-                      { value: 10 },
-                      { value: 20 },
-                      { value: 15 },
                       { value: 50 },
-                      { value: 60 },
-                      { value: 35 },
+                      { value: 40 },
+                      { value: 30 },
+                      { value: 20 },
+                      { value: 10 },
+                      { value: 5 },
                     ]}
                   >
                     <Line

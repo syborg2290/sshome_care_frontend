@@ -1210,6 +1210,7 @@ export default function Add_Customer() {
                 setMid("");
                 setImageFile(null);
                 setImageUrl(null);
+                setFromDbImage(null);
               }}
             >
               Clear All

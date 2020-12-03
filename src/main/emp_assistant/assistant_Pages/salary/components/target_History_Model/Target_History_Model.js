@@ -75,28 +75,56 @@ export default function Target_History_Model() {
         var reArray = reThen.docs;
 
         reArray.forEach((each) => {
-          rawData.push({
-            Target_Type: each.data().target_type,
-            Start_Date: moment(each.data()?.start_date?.toDate()).format(
-              "dddd, MMMM Do YYYY"
-            ),
-            Target_Amount: (
-              <CurrencyFormat
-                value={each.data().amount}
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={" "}
-              />
-            ),
-
-            Type: each.data().selectedType,
-            Status:
-              each.data().status === "ongoing" ? (
-                <div className="sttLondone">Ongoing</div>
-              ) : (
-                <div className="sttLon">Expired</div>
+          if (each.data().status === "ongoing") {
+            rawData.push({
+              Target_Type: each.data().target_type,
+              Start_Date: moment(each.data()?.start_date?.toDate()).format(
+                "dddd, MMMM Do YYYY"
               ),
-          });
+              Target_Amount: (
+                <CurrencyFormat
+                  value={each.data().amount}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+
+              Type: each.data().selectedType,
+              Status:
+                each.data().status === "ongoing" ? (
+                  <div className="sttLondone">Ongoing</div>
+                ) : (
+                  <div className="sttLon">Expired</div>
+                ),
+            });
+          }
+        });
+        reArray.forEach((each) => {
+          if (each.data().status !== "ongoing") {
+            rawData.push({
+              Target_Type: each.data().target_type,
+              Start_Date: moment(each.data()?.start_date?.toDate()).format(
+                "dddd, MMMM Do YYYY"
+              ),
+              Target_Amount: (
+                <CurrencyFormat
+                  value={each.data().amount}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+
+              Type: each.data().selectedType,
+              Status:
+                each.data().status === "ongoing" ? (
+                  <div className="sttLondone">Ongoing</div>
+                ) : (
+                  <div className="sttLon">Expired</div>
+                ),
+            });
+          }
         });
         setallData(rawData);
       });

@@ -1083,7 +1083,7 @@ export default function Report_Cards() {
                     color="text"
                     colorBrightness="secondary"
                   >
-                    Total Sale
+                    Total Sales
                   </Typography>
                   <Typography className="total_cx" size="xl">
                     <CurrencyFormat
@@ -1152,7 +1152,7 @@ export default function Report_Cards() {
                     className="Cash_txt_cx"
                     colorBrightness="secondary"
                   >
-                    {bull}Cash Sale
+                    {bull}Cash Sales
                   </Typography>
                   <Typography size="md" className="Credit_lbl_cx">
                     {" "}
@@ -1170,7 +1170,7 @@ export default function Report_Cards() {
                     className="Cash_txt_cx"
                     colorBrightness="secondary"
                   >
-                    {bull}Down Payment
+                    {bull}Card sales
                   </Typography>
                   <Typography className="Credit_lbl_cx" size="md">
                     {" "}
@@ -1188,7 +1188,7 @@ export default function Report_Cards() {
                     className="Cash_txt_cx"
                     colorBrightness="secondary"
                   >
-                    {bull}Document Charge
+                    {bull}Document Charges
                   </Typography>
                   <Typography size="md" className="Credit_lbl_cx">
                     {" "}

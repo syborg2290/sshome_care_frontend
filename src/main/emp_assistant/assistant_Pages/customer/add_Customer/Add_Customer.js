@@ -134,7 +134,10 @@ export default function Add_Customer() {
                                             ? null
                                             : trustee2Doc.docs[0].id,
                                         customerNic: nic.trim(),
-                                        mid: doc.docs[0].data().mid,
+                                        mid:
+                                          doc.docs.length === 0
+                                            ? mid.trim()
+                                            : doc.docs[0].data().mid,
                                         customerFname: fname.trim(),
                                         customerLname: lname.trim(),
                                         customerAddress1: addres1.trim(),

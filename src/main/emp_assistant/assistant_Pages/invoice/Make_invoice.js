@@ -429,8 +429,12 @@ function Make_invoice() {
             .ref("images")
             .child(tablerows[0].customer.customerImageFile.name)
             .getDownloadURL()
-            .then((url) => {
+            .then(async (url) => {
               if (tablerows[0].customer.customerId !== null) {
+                let prevCust = await db
+                  .collection("customer")
+                  .doc(tablerows[0].customer.customerId)
+                  .get();
                 db.collection("customer")
                   .doc(tablerows[0].customer.customerId)
                   .update({
@@ -440,7 +444,7 @@ function Make_invoice() {
                     address2: tablerows[0].customer.customerAddress2,
                     root: tablerows[0].customer.customerRootToHome,
                     nic: tablerows[0].customer.customerNic,
-                    mid: tablerows[0].customer.mid,
+                    mid: prevCust.data().mid,
                     relations_nics: tablerows[0].customer.customerRelatedNics,
                     mobile1: tablerows[0].customer.customerMobile1,
                     mobile2: tablerows[0].customer.customerMobile2,
@@ -802,7 +806,7 @@ function Make_invoice() {
                 address2: tablerows[0].customer.customerAddress2,
                 root: tablerows[0].customer.customerRootToHome,
                 nic: tablerows[0].customer.customerNic,
-                mid: tablerows[0].customer.mid,
+                mid: customerImageUrl.data().mid,
                 relations_nics: tablerows[0].customer.customerRelatedNics,
                 mobile1: tablerows[0].customer.customerMobile1,
                 mobile2: tablerows[0].customer.customerMobile2,

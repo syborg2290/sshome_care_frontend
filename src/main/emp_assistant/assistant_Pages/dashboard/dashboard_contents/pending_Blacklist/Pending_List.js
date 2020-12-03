@@ -295,9 +295,9 @@ export default function View_Model({ pendingBlackList }) {
                   mobil1: reThen.docs[0].data().mobile1,
                   mobil2: reThen.docs[0].data().mobile2,
                   t_name:
-                    reTruste.docs[0].data().fname +
+                    reTruste.docs[0]?.data().fname +
                     " " +
-                    reTruste.docs[0].data().lname,
+                    reTruste.docs[0]?.data().lname,
                   t_nic: reTruste.docs[0].data().nic,
                   t_address1: reTruste.docs[0].data().address1,
                   t_address2: reTruste.docs[0].data().address2,

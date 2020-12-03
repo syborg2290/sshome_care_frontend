@@ -14,10 +14,10 @@ import db from "../../../../../../config/firebase.js";
 import firebase from "firebase";
 
 async function doStuff(nics, allNames) {
-  let prevNics = [];
+  var prevNics = [];
   for (let i = 0; i < nics.length; i++) {
-    prevNics.push(nics[i]);
-    db.collection("attendance_history")
+    await db
+      .collection("attendance_history")
       .where("nic", "==", nics[i])
       .get()
       .then((reCheck) => {
@@ -42,7 +42,8 @@ async function doStuff(nics, allNames) {
                 status: "full",
               })
               .then((_) => {
-                if (nics.length - 1 <= i) {
+                prevNics.push(nics[i]);
+                if (prevNics.length === nics.length) {
                   window.location.reload();
                 }
               });
@@ -213,11 +214,10 @@ export default function Mark_Attendance() {
     // eslint-disable-next-line
   }, []);
 
-  const markFunc = () => {
+  const markFunc = async () => {
     setSubmitLoading(true);
-    doStuff(nics, allNames).then((_) => {
-      // window.location.reload();
-    });
+    await doStuff(nics, allNames);
+    setSubmitLoading(false);
   };
 
   return (

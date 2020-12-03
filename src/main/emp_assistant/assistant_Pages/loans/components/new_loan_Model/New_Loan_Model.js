@@ -175,7 +175,7 @@ export default function New_Loan_Model() {
                 size="small"
                 value={nic}
                 onChange={(e) => {
-                  setNic(e.target.value);
+                  setNic(e.target.value.trim());
                 }}
               />
             </Grid>

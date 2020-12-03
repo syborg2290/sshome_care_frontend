@@ -826,7 +826,7 @@ export default function Add_Customer() {
                   size="small"
                   onKeyUp={customerNicValidation}
                   onChange={(e) => {
-                    setNic(e.target.value);
+                    setNic(e.target.value.trim());
                   }}
                 />
               </Grid>
@@ -948,7 +948,7 @@ export default function Add_Customer() {
                   label="Contact Number 1"
                   size="small"
                   onChange={(e) => {
-                    setMobile1(e.target.value);
+                    setMobile1(e.target.value.trim());
                   }}
                 />
               </Grid>
@@ -966,7 +966,7 @@ export default function Add_Customer() {
                   label="Contact Number 2"
                   size="small"
                   onChange={(e) => {
-                    setMobile2(e.target.value);
+                    setMobile2(e.target.value.trim());
                   }}
                 />
               </Grid>
@@ -1125,7 +1125,7 @@ export default function Add_Customer() {
                   size="small"
                   onKeyUp={trustee1NicValidation}
                   onChange={(e) => {
-                    setTrustee1Nic(e.target.value);
+                    setTrustee1Nic(e.target.value.trim());
                   }}
                 />
               </Grid>
@@ -1227,7 +1227,7 @@ export default function Add_Customer() {
                   label="Contact Number 1"
                   size="small"
                   onChange={(e) => {
-                    setTrustee1Mobile1(e.target.value);
+                    setTrustee1Mobile1(e.target.value.trim());
                   }}
                 />
               </Grid>
@@ -1245,7 +1245,7 @@ export default function Add_Customer() {
                   label="Contact Number 2"
                   size="small"
                   onChange={(e) => {
-                    setTrustee1Mobile2(e.target.value);
+                    setTrustee1Mobile2(e.target.value.trim());
                   }}
                 />
               </Grid>
@@ -1276,7 +1276,7 @@ export default function Add_Customer() {
                   size="small"
                   onKeyUp={trustee2NicValidation}
                   onChange={(e) => {
-                    setTrustee2Nic(e.target.value);
+                    setTrustee2Nic(e.target.value.trim());
                   }}
                 />
               </Grid>
@@ -1378,7 +1378,7 @@ export default function Add_Customer() {
                   label="Contact Number 1"
                   size="small"
                   onChange={(e) => {
-                    setTrustee2Mobile1(e.target.value);
+                    setTrustee2Mobile1(e.target.value.trim());
                   }}
                 />
               </Grid>
@@ -1396,7 +1396,7 @@ export default function Add_Customer() {
                   label="Contact Number 2"
                   size="small"
                   onChange={(e) => {
-                    setTrustee2Mobile2(e.target.value);
+                    setTrustee2Mobile2(e.target.value.trim());
                   }}
                 />
               </Grid>

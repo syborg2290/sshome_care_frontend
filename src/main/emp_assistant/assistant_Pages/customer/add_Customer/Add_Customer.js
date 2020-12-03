@@ -35,6 +35,7 @@ export default function Add_Customer() {
   // eslint-disable-next-line
   const [imageFile, setImageFile] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
+  const [fromDbImage, setFromDbImage] = useState(null);
 
   const [trustee1Nic, setTrustee1Nic] = useState("");
   const [trustee1Fname, setTrustee1Fname] = useState("");
@@ -90,6 +91,7 @@ export default function Add_Customer() {
         setImageUrl(e.target.result);
       };
       reader.readAsDataURL(event.target.files[0]);
+      setFromDbImage(null);
     }
   };
 
@@ -327,7 +329,7 @@ export default function Add_Customer() {
                             setMobile2(doc.docs[0].data().mobile2);
                             setRoot(doc.docs[0].data().root);
                             setMid(doc.docs[0].data().mid);
-                            setImageUrl(doc.docs[0].data().imgUrl);
+                            setFromDbImage(doc.docs[0].data().photo);
                             NotificationManager.warning(
                               "Entered customer not payed and closed arrears as a customer !"
                             );
@@ -348,7 +350,7 @@ export default function Add_Customer() {
                                   setMobile2(doc.docs[0].data().mobile2);
                                   setRoot(doc.docs[0].data().root);
                                   setMid(doc.docs[0].data().mid);
-                                  setImageUrl(doc.docs[0].data().imgUrl);
+                                  setFromDbImage(doc.docs[0].data().photo);
                                   NotificationManager.warning(
                                     "Entered customer already on status of 'pay an go' !"
                                   );
@@ -363,7 +365,7 @@ export default function Add_Customer() {
                                   setMobile2(doc.docs[0].data().mobile2);
                                   setRoot(doc.docs[0].data().root);
                                   setMid(doc.docs[0].data().mid);
-                                  setImageUrl(doc.docs[0].data().imgUrl);
+                                  setFromDbImage(doc.docs[0].data().photo);
                                   loaderModalClose();
                                 }
                               });
@@ -429,21 +431,78 @@ export default function Add_Customer() {
                             .then((custRe) => {
                               if (custRe.docs.length > 0) {
                                 loaderModalClose();
-                                setTrustee1Id(arrDoc.docs[0].id);
-                                setTrustee1Fname(arrDoc.docs[0].data().fname);
-                                setTrustee1Lname(arrDoc.docs[0].data().lname);
-                                setTrustee1Addres1(
-                                  arrDoc.docs[0].data().address1
-                                );
-                                setTrustee1Addres2(
-                                  arrDoc.docs[0].data().address2
-                                );
-                                setTrustee1Mobile1(
-                                  arrDoc.docs[0].data().mobile1
-                                );
-                                setTrustee1Mobile2(
-                                  arrDoc.docs[0].data().mobile2
-                                );
+                                db.collection("trustee")
+                                  .where("nic", "==", value.trim())
+                                  .get()
+                                  .then((doc) => {
+                                    if (doc.docs.length > 0) {
+                                      db.collection("invoice")
+                                        .where(
+                                          "invoice_number",
+                                          "==",
+                                          doc.docs[0].data().invoice_number
+                                        )
+                                        .where(
+                                          "status_of_payandgo",
+                                          "==",
+                                          "onGoing"
+                                        )
+                                        .get()
+                                        .then((doc2) => {
+                                          if (doc2.docs.length > 0) {
+                                            loaderModalClose();
+                                            setTrustee1Id(doc.docs[0].id);
+                                            setTrustee1Fname(
+                                              doc.docs[0].data().fname
+                                            );
+                                            setTrustee1Lname(
+                                              doc.docs[0].data().lname
+                                            );
+                                            setTrustee1Addres1(
+                                              doc.docs[0].data().address1
+                                            );
+                                            setTrustee1Addres2(
+                                              doc.docs[0].data().address2
+                                            );
+                                            setTrustee1Mobile1(
+                                              doc.docs[0].data().mobile1
+                                            );
+                                            setTrustee1Mobile2(
+                                              doc.docs[0].data().mobile2
+                                            );
+
+                                            NotificationManager.warning(
+                                              "Entered trustee already on status of 'pay an go' as a trustee !"
+                                            );
+                                          } else {
+                                            setTrustee1Id(doc.docs[0].id);
+                                            setTrustee1Fname(
+                                              doc.docs[0].data().fname
+                                            );
+                                            setTrustee1Lname(
+                                              doc.docs[0].data().lname
+                                            );
+                                            setTrustee1Addres1(
+                                              doc.docs[0].data().address1
+                                            );
+                                            setTrustee1Addres2(
+                                              doc.docs[0].data().address2
+                                            );
+                                            setTrustee1Mobile1(
+                                              doc.docs[0].data().mobile1
+                                            );
+                                            setTrustee1Mobile2(
+                                              doc.docs[0].data().mobile2
+                                            );
+
+                                            loaderModalClose();
+                                          }
+                                        });
+                                    } else {
+                                      loaderModalClose();
+                                    }
+                                  });
+
                                 NotificationManager.warning(
                                   "Entered trustee already on status of 'pay an go' as a customer !"
                                 );
@@ -623,21 +682,76 @@ export default function Add_Customer() {
                             .then((custRe) => {
                               if (custRe.docs.length > 0) {
                                 loaderModalClose();
-                                setTrustee2Id(arrDoc.docs[0].id);
-                                setTrustee2Fname(arrDoc.docs[0].data().fname);
-                                setTrustee2Lname(arrDoc.docs[0].data().lname);
-                                setTrustee2Address1(
-                                  arrDoc.docs[0].data().address1
-                                );
-                                setTrustee2Address2(
-                                  arrDoc.docs[0].data().address2
-                                );
-                                setTrustee2Mobile1(
-                                  arrDoc.docs[0].data().mobile1
-                                );
-                                setTrustee2Mobile2(
-                                  arrDoc.docs[0].data().mobile2
-                                );
+                                db.collection("trustee")
+                                  .where("nic", "==", value.trim())
+                                  .get()
+                                  .then((doc) => {
+                                    if (doc.docs.length > 0) {
+                                      db.collection("invoice")
+                                        .where(
+                                          "invoice_number",
+                                          "==",
+                                          doc.docs[0].data().invoice_number
+                                        )
+                                        .where(
+                                          "status_of_payandgo",
+                                          "==",
+                                          "onGoing"
+                                        )
+                                        .get()
+                                        .then((doc2) => {
+                                          if (doc2.docs.length > 0) {
+                                            loaderModalClose();
+                                            setTrustee2Id(doc.docs[0].id);
+                                            setTrustee2Fname(
+                                              doc.docs[0].data().fname
+                                            );
+                                            setTrustee2Lname(
+                                              doc.docs[0].data().lname
+                                            );
+                                            setTrustee2Address1(
+                                              doc.docs[0].data().address1
+                                            );
+                                            setTrustee2Address2(
+                                              doc.docs[0].data().address2
+                                            );
+                                            setTrustee2Mobile1(
+                                              doc.docs[0].data().mobile1
+                                            );
+                                            setTrustee2Mobile2(
+                                              doc.docs[0].data().mobile2
+                                            );
+                                            NotificationManager.warning(
+                                              "Entered trustee already on status of 'pay an go' as a trustee !"
+                                            );
+                                          } else {
+                                            setTrustee2Id(doc.docs[0].id);
+                                            setTrustee2Fname(
+                                              doc.docs[0].data().fname
+                                            );
+                                            setTrustee2Lname(
+                                              doc.docs[0].data().lname
+                                            );
+                                            setTrustee2Address1(
+                                              doc.docs[0].data().address1
+                                            );
+                                            setTrustee2Address2(
+                                              doc.docs[0].data().address2
+                                            );
+                                            setTrustee2Mobile1(
+                                              doc.docs[0].data().mobile1
+                                            );
+                                            setTrustee2Mobile2(
+                                              doc.docs[0].data().mobile2
+                                            );
+
+                                            loaderModalClose();
+                                          }
+                                        });
+                                    } else {
+                                      loaderModalClose();
+                                    }
+                                  });
                                 NotificationManager.warning(
                                   "Entered trustee already on status of 'pay an go' as a customer !"
                                 );
@@ -1019,7 +1133,9 @@ export default function Add_Customer() {
                   }}
                   src={
                     imageUrl == null
-                      ? require("../../../../../assets/avatar.png")
+                      ? fromDbImage !== null
+                        ? fromDbImage
+                        : require("../../../../../assets/avatar.png")
                       : imageUrl
                   }
                   className="image"

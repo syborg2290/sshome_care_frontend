@@ -54,8 +54,11 @@ export default function Add_Customer() {
 
   const [loaderModalOpenV, setloaderModalOpen] = useState(false);
   const [inputsNic, setInputsNic] = useState({});
+  // eslint-disable-next-line
   const [customerId, setCustomerId] = useState(null);
+  // eslint-disable-next-line
   const [trustee1Id, setTrustee1Id] = useState(null);
+  // eslint-disable-next-line
   const [trustee2Id, setTrustee2Id] = useState(null);
   const [isItNull, setIsItNull] = useState(null);
 
@@ -103,50 +106,73 @@ export default function Add_Customer() {
                       if (trustee1Addres1.length > 0) {
                         if (trustee1Mobile1.length > 0) {
                           //Rest of code
+                          db.collection("trustee")
+                            .where("nic", "==", trustee1Nic.trim())
+                            .get()
+                            .then((trustee1Doc) => {
+                              db.collection("trustee")
+                                .where("nic", "==", trustee2Nic.trim())
+                                .get()
+                                .then((trustee2Doc) => {
+                                  db.collection("customer")
+                                    .where("nic", "==", nic.trim())
+                                    .get()
+                                    .then((doc) => {
+                                      var customerObj = {
+                                        customerId:
+                                          doc.docs.length === 0
+                                            ? null
+                                            : doc.docs[0].id,
+                                        trustee1Id:
+                                          trustee1Doc.docs.length === 0
+                                            ? null
+                                            : trustee1Doc.docs[0].id,
+                                        trustee2Id:
+                                          trustee2Doc.docs.length === 0
+                                            ? null
+                                            : trustee2Doc.docs[0].id,
+                                        customerNic: nic.trim(),
+                                        mid: mid.trim(),
+                                        customerFname: fname.trim(),
+                                        customerLname: lname.trim(),
+                                        customerAddress1: addres1.trim(),
+                                        customerAddress2: addres2.trim(),
+                                        customerRootToHome: root.trim(),
+                                        customerMobile1: mobile1.trim(),
+                                        customerMobile2: mobile2.trim(),
+                                        customerRelatedNics: inputsNic,
+                                        customerImageUrl: imageUrl,
+                                        customerImageFile: imageFile,
+                                        trustee1Nic: trustee1Nic.trim(),
+                                        trustee1Fname: trustee1Fname.trim(),
+                                        trustee1Lname: trustee1Lname.trim(),
+                                        trustee1Address1: trustee1Addres1.trim(),
+                                        trustee1Address2: trustee1Addres2.trim(),
+                                        trustee1Mobile1: trustee1Mobile1.trim(),
+                                        trustee1Mobile2: trustee1Mobile2.trim(),
+                                        trustee2Nic: trustee2Nic.trim(),
+                                        trustee2Fname: trustee2Fname.trim(),
+                                        trustee2Lname: trustee2Lname.trim(),
+                                        trustee2Address1: trustee2Address1.trim(),
+                                        trustee2Address2: trustee2Address2.trim(),
+                                        trustee2Mobile1: trustee2Mobile1.trim(),
+                                        trustee2Mobile2: trustee2Mobile2.trim(),
+                                      };
 
-                          var customerObj = {
-                            customerId: customerId,
-                            trustee1Id: trustee1Id,
-                            trustee2Id: trustee2Id,
-                            customerNic: nic.trim(),
-                            mid: mid.trim(),
-                            customerFname: fname.trim(),
-                            customerLname: lname.trim(),
-                            customerAddress1: addres1.trim(),
-                            customerAddress2: addres2.trim(),
-                            customerRootToHome: root.trim(),
-                            customerMobile1: mobile1.trim(),
-                            customerMobile2: mobile2.trim(),
-                            customerRelatedNics: inputsNic,
-                            customerImageUrl: imageUrl,
-                            customerImageFile: imageFile,
-                            trustee1Nic: trustee1Nic.trim(),
-                            trustee1Fname: trustee1Fname.trim(),
-                            trustee1Lname: trustee1Lname.trim(),
-                            trustee1Address1: trustee1Addres1.trim(),
-                            trustee1Address2: trustee1Addres2.trim(),
-                            trustee1Mobile1: trustee1Mobile1.trim(),
-                            trustee1Mobile2: trustee1Mobile2.trim(),
-                            trustee2Nic: trustee2Nic.trim(),
-                            trustee2Fname: trustee2Fname.trim(),
-                            trustee2Lname: trustee2Lname.trim(),
-                            trustee2Address1: trustee2Address1.trim(),
-                            trustee2Address2: trustee2Address2.trim(),
-                            trustee2Mobile1: trustee2Mobile1.trim(),
-                            trustee2Mobile2: trustee2Mobile2.trim(),
-                          };
+                                      var passedObj = location.state?.detail;
 
-                          var passedObj = location.state?.detail;
+                                      passedObj[0].customer = customerObj;
 
-                          passedObj[0].customer = customerObj;
+                                      let moveWith = {
+                                        pathname: "/assistant/ui/makeInvoice",
+                                        search: "?query=abc",
+                                        state: { detail: passedObj },
+                                      };
 
-                          let moveWith = {
-                            pathname: "/assistant/ui/makeInvoice",
-                            search: "?query=abc",
-                            state: { detail: passedObj },
-                          };
-
-                          history.push(moveWith);
+                                      history.push(moveWith);
+                                    });
+                                });
+                            });
                         } else {
                           NotificationManager.info(
                             "Trustee 1's contact number is required!",

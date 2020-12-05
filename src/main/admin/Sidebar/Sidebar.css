@@ -3,19 +3,23 @@
   margin-right: 36px;
 }
 
+/* .MuiList-root {
+  overflow: hidden !important;
+  white-space: nowrap;
+} */
+
 .sidebarList {
   margin-top: 12px !important;
 }
 
-.icons{
+.icons {
   color: white !important;
 }
 
-.divider{
-
+.divider {
   background-color: rgba(255, 255, 255, 0.199) !important;
 }
 
-.mobileBackButton{
+.mobileBackButton {
   color: aliceblue !important;
 }

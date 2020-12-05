@@ -180,7 +180,7 @@ export default function Example() {
       "popstate",
       (event) => {
         if (event.state) {
-          history.push("/admin/ui/invoiceHistory");
+          history.push("/admin/ui/InvoiceHistory");
         }
       },
       false

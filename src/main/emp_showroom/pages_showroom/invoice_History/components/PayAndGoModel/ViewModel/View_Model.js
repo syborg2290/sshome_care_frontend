@@ -78,7 +78,7 @@ export default function View_Model({ items_list_props, data }) {
             ...old,
             {
               item_name: th.data().itemName,
-              dp: data.total,
+              dp: each.downpayment,
               listSe: itemDataSeMo,
               discount: each.discount,
               qty: each.qty,
@@ -302,7 +302,11 @@ export default function View_Model({ items_list_props, data }) {
             </Grid>
             {trustees.map((si) => {
               return (
-                <Grid key={si.fname.toString() + "33333"} container spacing={2}>
+                <Grid
+                  key={si.fname.toString() + si.lname.toString()}
+                  container
+                  spacing={2}
+                >
                   <Grid className="lbl_topis" item xs={12} sm={3}>
                     Full Name
                   </Grid>

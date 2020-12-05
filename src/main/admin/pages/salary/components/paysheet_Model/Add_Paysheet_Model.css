@@ -1,0 +1,71 @@
+.icon1Fab {
+  background-color: rgba(28, 4, 116, 0.89) !important;
+  color: #ffffff !important;
+}
+
+.model_attendce_add {
+  width: 40% !important;
+}
+
+.model_CashSale {
+  width: 60% !important;
+}
+
+.model_cashTargetModel_add {
+  width: 60% !important;
+}
+
+.model_exCardModel_add {
+  width: 60% !important;
+}
+
+.model_saleTarget_add {
+  width: 60% !important;
+}
+
+.model_shortage_add {
+  width: 60% !important;
+}
+
+.card_container {
+  margin-top: 15px !important;
+}
+
+.titlexy {
+  margin-top: 5px !important;
+  font-size: small !important;
+  font-weight: 600 !important;
+  color: rgb(43, 51, 56) !important;
+  font: bold !important;
+}
+
+.titleNety {
+  margin-top: 8px !important;
+  float: right !important;
+  font-weight: 700 !important;
+  color: rgb(161, 6, 19) !important;
+  font-size: large !important;
+  font-family: "Times New Roman", Times, serif !important;
+  font-size: 16px;
+}
+
+.titlexyww {
+  margin-bottom: 10px !important;
+  font-weight: 800 !important;
+  color: rgb(30, 5, 99) !important;
+  font-size: 14px !important;
+}
+
+.vl {
+  border-left: 3px solid rgb(13, 2, 51);
+  height: 150px;
+  margin-left: 15px !important;
+}
+
+.validate_Edit {
+  color: red;
+  text-align: center !important;
+  font-weight: 600 !important;
+  padding-top: 10px !important;
+  font-size: 20px !important;
+}

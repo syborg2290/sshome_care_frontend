@@ -9,13 +9,11 @@ import BlackListHistory from "./histry_model/History_Model";
 
 // icons
 import VisibilityIcon from "@material-ui/icons/Visibility";
-// import { ExclamationCircleOutlined } from "@ant-design/icons";
 import HistoryIcon from "@material-ui/icons/History";
 
 // styles
 import "./Black_List.css";
 import db from "../../../../config/firebase";
-// import firebase from "firebase";
 
 export default function Black_List() {
   // eslint-disable-next-line
@@ -23,14 +21,10 @@ export default function Black_List() {
 
   const [visibleCustomer, setVisibleCustomer] = useState(false); // customer table models
   const [customerhistory, setCustomerhistory] = useState(false); // customer table models
-  // const [confirmVisible, setConfirmVisible] = useState(false);
+
   const [blacklistTableRow, setBlackListTableRow] = useState([]);
   const [allDataBlacklist, setAllData] = useState([]);
   let history = useHistory();
-
-  // const showModalConfirmModal = () => {
-  //   setConfirmVisible(true);
-  // };
 
   const showModalCustomer = () => {
     setVisibleCustomer(true);
@@ -187,16 +181,6 @@ export default function Black_List() {
               <span className="icon_Edit">
                 <HistoryIcon onClick={showModalCustomerHistory} />
               </span>
-              {/* <span className="done_btn">
-                <Button
-                  variant="contained"
-                  size="small"
-                  className="btnDone"
-                  onClick={showModalConfirmModal}
-                >
-                  Done
-                </Button>
-              </span> */}
             </div>
           ),
         });
@@ -207,102 +191,8 @@ export default function Black_List() {
     // eslint-disable-next-line
   }, []);
 
-  // const onOkConfirm = () => {
-  //   db.collection("blacklist")
-  //     .doc(allDataBlacklist[currentIndx]?.id)
-  //     .delete()
-  //     .then((_) => {
-  //       db.collection("customer")
-  //         .where("nic", "==", allDataBlacklist[currentIndx]?.data.NIC)
-  //         .get()
-  //         .then((reCu) => {
-  //           db.collection("customer")
-  //             .doc(reCu.docs[0].id)
-  //             .update({
-  //               status: "normal",
-  //             })
-  //             .then((_) => {
-  //               db.collection("invoice")
-  //                 .where(
-  //                   "invoice_number",
-  //                   "==",
-  //                   allDataBlacklist[currentIndx]?.data.InvoiceNo
-  //                 )
-  //                 .get()
-  //                 .then((getIn) => {
-  //                   db.collection("invoice")
-  //                     .doc(getIn.docs[0].id)
-  //                     .update({
-  //                       status_of_payandgo: "Done",
-  //                     })
-  //                     .then((_) => {
-  //                       db.collection("installment")
-  //                         .where(
-  //                           "invoice_number",
-  //                           "==",
-  //                           allDataBlacklist[currentIndx]?.data.InvoiceNo
-  //                         )
-  //                         .get()
-  //                         .then((reInst) => {
-  //                           let isExC =
-  //                             allDataBlacklist[currentIndx].data
-  //                               .status_of_payandgo === "expired"
-  //                               ? true
-  //                               : false;
-  //                           db.collection("installment").add({
-  //                             invoice_number:
-  //                               allDataBlacklist[currentIndx]?.data.InvoiceNo,
-  //                             isEx: isExC,
-  //                             amount: parseInt(
-  //                               allDataBlacklist[currentIndx]?.data.balance
-  //                             ),
-  //                             gamisarani_amount: 0,
-  //                             shortage: 0,
-  //                             type:
-  //                               allDataBlacklist[currentIndx]?.data
-  //                                 .selectedType,
-  //                             delayed: 0,
-  //                             balance: 0,
-  //                             date: firebase.firestore.FieldValue.serverTimestamp(),
-  //                           });
-  //                           setConfirmVisible(false);
-  //                         });
-  //                     });
-  //                 });
-  //             });
-  //         });
-  //     });
-  // };
-
   return (
     <>
-      {/* <Modal
-        className="confo_models"
-        closable={null}
-        visible={confirmVisible}
-        cancelText="No"
-        okText="Yes"
-        bodyStyle={{ borderRadius: "30px" }}
-        onCancel={() => {
-          setConfirmVisible(false);
-        }}
-        onOk={onOkConfirm}
-      >
-        <div className="confoModel_bodyys">
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={1}></Grid>
-            <Grid className="confo_Icons-gri" item xs={12} sm={1}>
-              <ExclamationCircleOutlined className="confo_Icons" />
-            </Grid>
-            <Grid item xs={12} sm={10}>
-              <h3 className="txtConfoModel_bodys">
-                Are you sure to continue?{" "}
-              </h3>
-            </Grid>
-          </Grid>
-        </div>
-      </Modal> */}
-
       {/*Start customer Details models */}
 
       <Modal

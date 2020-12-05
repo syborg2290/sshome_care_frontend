@@ -373,11 +373,11 @@ export default function Invoice_history() {
         var reArray = cust.docs;
         reArray.sort((a, b) => {
           if (
-            new Date(a.data().date.seconds * 1000).getFullYear() ===
+            new Date(a.data().date.seconds * 1000).getFullYear() >=
               new Date(b.data().date.seconds * 1000).getFullYear() &&
-            new Date(a.data().date.seconds * 1000).getMonth() ===
+            new Date(a.data().date.seconds * 1000).getMonth() >=
               new Date(b.data().date.seconds * 1000).getMonth() &&
-            new Date(a.data().date.seconds * 1000).getDate() ===
+            new Date(a.data().date.seconds * 1000).getDate() >=
               new Date(b.data().date.seconds * 1000).getDate()
           ) {
             return -1;

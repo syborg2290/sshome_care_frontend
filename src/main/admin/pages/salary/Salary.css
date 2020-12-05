@@ -1,0 +1,59 @@
+.salary_table {
+  margin-top: 30px !important;
+}
+
+.btn_target {
+  margin-top: 70px !important;
+  text-transform: none !important;
+}
+
+.btn_targetHis {
+  margin-top: 70px !important;
+  text-transform: none !important;
+  background-color: rgba(3, 3, 99, 0.897) !important;
+  color: aliceblue !important;
+  float: right !important;
+}
+
+.btn_advance {
+  margin-top: 70px !important;
+  background-color: rgb(0, 71, 165) !important;
+  text-transform: none !important;
+  color: aliceblue !important;
+}
+
+.btn_tempary {
+  margin-top: 70px !important;
+  background-color: rgba(54, 54, 161, 0.911) !important;
+  text-transform: none !important;
+  color: aliceblue !important;
+}
+
+.btn_advancetHis {
+  margin-top: 70px !important;
+  text-transform: none !important;
+  background-color: rgba(3, 170, 182, 0.979) !important;
+  color: aliceblue !important;
+  float: right !important;
+}
+
+.sttsal {
+  background-color: rgba(30, 173, 1, 0.856);
+  color: aliceblue;
+  border-radius: 6px;
+  width: 70% !important;
+  text-align: center;
+}
+
+.model_histrySal {
+  width: 92% !important;
+  margin-right: 25px !important;
+}
+
+.model_salry_targetHistry {
+  width: 70% !important;
+}
+
+.model_salry_advanceHis {
+  width: 63% !important;
+}

@@ -2,15 +2,14 @@ import React, { useState, useEffect } from "react";
 import MUIDataTable from "mui-datatables";
 import { Grid, Button } from "@material-ui/core";
 import { Spin, Modal } from "antd";
+import { useHistory } from "react-router-dom";
 
 import db from "../../../../config/firebase.js";
 
 // icons
-import VisibilityIcon from "@material-ui/icons/Visibility";
 import AddIcon from "@material-ui/icons/Add";
 
 // components
-import SeizedViewModel from "../seized_items/seized_Model/view_Model/View_Model";
 import SeizedAddModel from "../seized_items/seized_Model/addNew_Model/Add_Model";
 
 // styles
@@ -22,12 +21,9 @@ export default function Seized_item() {
   // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
 
-  const [seizedViewModel, setSeizedViewModel] = useState(false); //  table models
   const [seizedAddModel, setSeizedAddModel] = useState(false); //  table models
 
-  const showModalView = () => {
-    setSeizedViewModel(true);
-  };
+  let history = useHistory();
 
   const showModalAdd = () => {
     setSeizedAddModel(true);
@@ -40,7 +36,16 @@ export default function Seized_item() {
   //START pay And Go Columns
   const seizedTableColomns = [
     {
-      name: "InvoiceNo",
+      name: "Serial_number",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "Type",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -63,6 +68,19 @@ export default function Seized_item() {
         filter: true,
         setCellHeaderProps: (value) => ({
           style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "MID",
+      options: {
+        filter: false,
+        setCellHeaderProps: (value) => ({
+          style: {
+            fontSize: "15px",
+            color: "black",
+            fontWeight: "600",
+          },
         }),
       },
     },
@@ -92,29 +110,17 @@ export default function Seized_item() {
         }),
       },
     },
-
-    {
-      name: "Action",
-
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: {
-            width: "150px",
-            margin: "auto",
-            fontSize: "15px",
-            color: "black",
-            fontWeight: "600",
-          },
-        }),
-      },
-    },
   ];
 
   const [seizedTableData, setSeizedTableData] = useState([]);
+  // eslint-disable-next-line
   const [seizedAllData, setSeizedAllData] = useState([]);
 
   useEffect(() => {
+    window.addEventListener("offline", function (e) {
+      history.push("/connection_lost");
+    });
+
     var rowData = [];
     var rowAllData = [];
     db.collection("seized")
@@ -127,49 +133,26 @@ export default function Seized_item() {
           });
 
           rowData.push({
-            InvoiceNo: RESnap.data()?.invoice_number,
+            // InvoiceNo: RESnap.data()?.invoice_number,
+            Serial_number: RESnap.data()?.serialNo,
+            Type: RESnap.data()?.type,
             Model_No: RESnap.data()?.model_no,
             Item_Name: RESnap.data()?.item_name,
+            MID: RESnap.data()?.mid,
             NIC: RESnap.data()?.nic,
             Sized_date: RESnap.data()?.date,
-            Action: (
-              <div>
-                <VisibilityIcon onClick={showModalView} />
-              </div>
-            ),
           });
         });
         setSeizedTableData(rowData);
         setSeizedAllData(rowAllData);
         setIsLoading(false);
       });
+    // eslint-disable-next-line
   }, []);
 
   return (
     <>
       {/*Start Seized Details models */}
-
-      <Modal
-        visible={seizedViewModel}
-        className="customer_Model"
-        footer={null}
-        onCancel={() => {
-          setSeizedViewModel(false);
-        }}
-      >
-        <div className="customer_Model">
-          <div className="customer_Model_Main">
-            <div className="customer_Modell_Detail">
-              <SeizedViewModel
-                key={seizedAllData[currentIndx]?.id}
-                invoice_num={seizedAllData[currentIndx]?.data?.invoice_number}
-                nic={seizedAllData[currentIndx]?.data?.nic}
-                seized_date={seizedAllData[currentIndx]?.data?.date}
-              />
-            </div>
-          </div>
-        </div>
-      </Modal>
 
       {/*END customer Details models */}
 
@@ -211,7 +194,8 @@ export default function Seized_item() {
             data={seizedTableData}
             columns={seizedTableColomns}
             options={{
-              selectableRows: false,
+              // selectableRows: false,
+              selectableRows: "none",
               customToolbarSelect: () => {},
               filterType: "textfield",
               download: false,

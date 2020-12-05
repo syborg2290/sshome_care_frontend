@@ -3,17 +3,13 @@ import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import { Grid } from "@material-ui/core";
 
-
 //components
 import ArreasTable from "../dashboard/dashboard_contents/arreas_Table/Arreas_Table";
 import PendingList from "../dashboard/dashboard_contents/pending_Blacklist/Pending_List";
 import InvoiceList from "../dashboard/dashboard_contents/invoice_List/Invoice_List";
 import ExpireInvoice from "../dashboard/dashboard_contents/expire_Table/Expire_Invoice";
-// import ModelVehicalService from "./components/Vehical_Service_Model";
-
 import firebase from "firebase";
 import db from "../../../../config/firebase.js";
-
 
 // styles
 import "./Dashboard.css";
@@ -33,14 +29,8 @@ function daysCountOfMonth(month, year) {
 }
 
 export default function Dashboard() {
-  // const [vehicalServiceModel, setVehicalServiceModel] = useState(false); 
-
   const [pendingBlackList, setPendingBlackList] = useState([]);
   const [expiredList, setExpiredList] = useState([]);
-  // eslint-disable-next-line
-  const [recordPnl, setRecordPnl] = useState(false);
-  // eslint-disable-next-line
-  const [expencesPnl, setExpencesPnl] = useState(false);
   let history = useHistory();
 
   useEffect(() => {
@@ -48,27 +38,6 @@ export default function Dashboard() {
       history.push("/connection_lost");
     });
 
-    db.collection("invoice")
-      .where("status_of_payandgo", "==", "onGoing")
-      .get()
-      .then((onSnap) => {
-        onSnap.docs.forEach(async (eachRe) => {
-          let isBeforeDate = isDateBeforeToday(
-            new Date(eachRe.data()?.deadlineTimestamp?.seconds * 1000)
-          );
-          if (isBeforeDate) {
-            db.collection("invoice").doc(eachRe.id).update({
-              status_of_payandgo: "expired",
-            });
-          }
-          checkInstallmentsStatus(eachRe);
-        });
-      });
-
-    // eslint-disable-next-line
-  }, []);
-
-  const checkInstallmentsStatus = async (eachRe) => {
     db.collection("invoice")
       .where("status_of_payandgo", "==", "expired")
       .get()
@@ -85,6 +54,28 @@ export default function Dashboard() {
         setExpiredList(expiredRawData);
       });
 
+    db.collection("invoice")
+      .where("status_of_payandgo", "==", "onGoing")
+      .get()
+      .then((onSnap) => {
+        onSnap.docs.forEach(async (eachRe) => {
+          console.log(eachRe);
+          let isBeforeDate = isDateBeforeToday(
+            new Date(eachRe.data()?.deadlineTimestamp?.seconds * 1000)
+          );
+          if (isBeforeDate) {
+            db.collection("invoice").doc(eachRe.id).update({
+              status_of_payandgo: "expired",
+            });
+          }
+          checkInstallmentsStatus(eachRe);
+        });
+      });
+
+    // eslint-disable-next-line
+  }, []);
+
+  const checkInstallmentsStatus = async (eachRe) => {
     const installmentStatus = await db
       .collection("installment")
       .where("invoice_number", "==", eachRe.data().invoice_number)
@@ -483,23 +474,22 @@ export default function Dashboard() {
 
   return (
     <>
-    
-
       <Grid container spacing={4}>
-        <Grid item xs={12}>
-          <p className="titl_Dash">DashBoard</p>
-        </Grid>
+        <Grid className="titl_Dash" item xs={12}></Grid>
       </Grid>
 
-      <Container component="main" className="main_containerDash">
-        {/*START Arreas Table */}
+      {/*START Arreas Table */}
 
+      {/* END Arreas Table */}
+
+      <Container component="main" className="main_containerDash">
+        {/*START Cards */}
         <Grid container spacing={4}>
           <Grid item xs={12}>
             <ArreasTable />
           </Grid>
         </Grid>
-        {/* END Arreas Table */}
+        {/* END Cards  */}
 
         {/*START Expire Invoice Table */}
 

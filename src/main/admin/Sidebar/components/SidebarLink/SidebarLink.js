@@ -14,8 +14,7 @@ import classnames from "classnames";
 
 // styles
 import useStyles from "../../styles";
-import   "../../Sidebar.css";
-
+import "../../Sidebar.css";
 
 // components
 import Dot from "../Dot";

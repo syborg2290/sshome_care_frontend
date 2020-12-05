@@ -8,18 +8,18 @@ import CurrencyFormat from "react-currency-format";
 import moment from "moment";
 // eslint-disable-next-line
 import db from "../../../../../config/firebase.js";
-
+import { useHistory } from "react-router-dom";
 // styles
 import "./Arreas_History.css";
 
 export default function Arreas_History({ invoice_no }) {
   // eslint-disable-next-line
   const [isLoading, setIsLoading] = useState(true);
-
   // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
-
   const [installments, setInstallments] = useState([]);
+
+   let history = useHistory();
 
   const columns = [
     {
@@ -71,6 +71,12 @@ export default function Arreas_History({ invoice_no }) {
   ];
 
   useEffect(() => {
+
+     window.addEventListener("offline", function (e) {
+      history.push("/connection_lost");
+    });
+    
+
     db.collection("installment")
       .where("invoice_number", "==", invoice_no)
       .get()
@@ -134,7 +140,8 @@ export default function Arreas_History({ invoice_no }) {
             data={installments}
             columns={columns}
             options={{
-              selectableRows: false,
+              // selectableRows: false,
+              selectableRows: "none",
               customToolbarSelect: () => {},
               filterType: "textField",
               download: false,

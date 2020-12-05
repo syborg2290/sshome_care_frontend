@@ -1,0 +1,28 @@
+.root_table {
+  margin-top: 30px !important;
+}
+
+.btnEdit-root {
+  margin-left: 20px !important;
+}
+
+.btn_addRoots {
+  float: right !important;
+  margin-top: 80px !important;
+}
+
+.yes {
+  background-color: rgba(13, 129, 2, 0.829);
+  text-align: center !important;
+  color: aliceblue;
+  border-radius: 8px;
+  width: 60px !important;
+}
+
+.no {
+  background-color: rgba(255, 193, 24, 0.925);
+  text-align: center !important;
+  color: black;
+  border-radius: 8px;
+  width: 60px !important;
+}

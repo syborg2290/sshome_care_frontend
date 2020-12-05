@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+
 import {
   TextField,
   Grid,
@@ -20,9 +21,13 @@ import "./Repair_model.css";
 export default function Repair_model({ closeModel }) {
   const { confirm } = Modal;
   let history = useHistory();
-  const [invoice, setInvoice] = useState("");
+  let history2 = useHistory();
+  // eslint-disable-next-line
+  // const [invoice, setInvoice] = useState("");
+  const [serialNo, setSerialNo] = useState("");
   const [model_no, setModel_no] = useState("");
   const [cust_name, setCust_name] = useState("");
+  // eslint-disable-next-line
   const [nic, setNic] = useState("");
   const [mobil_no1, setMobil_no1] = useState("");
   const [mobil_no2, setMobil_no2] = useState("");
@@ -30,14 +35,22 @@ export default function Repair_model({ closeModel }) {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const showConfirm = (item_name) => {
+  useEffect(() => {
+    window.addEventListener("offline", function (e) {
+      history2.push("/connection_lost");
+    });
+  });
+
+  const showConfirm = (item_name, inv, type) => {
     confirm({
       title: "Do you want to print a receipt?",
       icon: <ExclamationCircleOutlined />,
       onOk() {
         db.collection("repair")
           .add({
-            invoice_no: invoice.trim(),
+            invoice_no: inv,
+            serail_no: serialNo.trim(),
+            type: type,
             model_no: model_no.trim(),
             nic: nic,
             cust_name: cust_name.trim(),
@@ -50,14 +63,13 @@ export default function Repair_model({ closeModel }) {
           })
           .then(() => {
             var passingWithCustomerObj = {
-              invoice_no: invoice.trim(),
+              serail_no: serialNo.trim(),
               model_no: model_no.trim(),
               nic: nic,
               item_name: item_name,
             };
             let moveWith = {
-              pathname:
-                "/admin/repairs/repairs_Model/repair_update_Recipt/Repair_recipt",
+              pathname: "/admin/repair/repairRecipt",
               search: "?query=abc",
               state: { detail: passingWithCustomerObj },
             };
@@ -67,7 +79,9 @@ export default function Repair_model({ closeModel }) {
       onCancel() {
         db.collection("repair")
           .add({
-            invoice_no: invoice.trim(),
+            invoice_no: inv,
+            serail_no: serialNo.trim(),
+            type: type,
             model_no: model_no.trim(),
             nic: nic,
             cust_name: cust_name.trim(),
@@ -79,7 +93,7 @@ export default function Repair_model({ closeModel }) {
             date: firebase.firestore.FieldValue.serverTimestamp(),
           })
           .then(() => {
-            closeModel();
+            window.location.reload();
           });
       },
     });
@@ -87,76 +101,103 @@ export default function Repair_model({ closeModel }) {
 
   const addRepair = async () => {
     setLoading(true);
+    db.collection("invoice")
+      .get()
+      .then((re) => {
+        var count = 0;
+        re.docs.forEach((eachReturn) => {
+          eachReturn.data().items.forEach(async (reItem) => {
+            if (reItem.serialNo[0] === serialNo.trim()) {
+              if (reItem.modelNo[0] === model_no.trim()) {
+                let result = eachReturn.data().invoice_number;
 
-    let statusOfBlacklist = await db
-      .collection("blacklist")
-      .where("InvoiceNo", "==", invoice.trim())
-      .get();
-    let statusOfSeized = await db
-      .collection("seized")
-      .where("invoice_number", "==", invoice.trim())
-      .get();
-    if (statusOfBlacklist.docs.length > 0) {
-      setLoading(false);
-      setError("Invoice number you entered is in the blacklist!");
-    } else {
-      if (statusOfSeized.docs.length > 0) {
-        setLoading(false);
-        setError("Invoice number you entered is in the seized list!");
-      } else {
-        db.collection("invoice")
-          .where("invoice_number", "==", invoice.trim())
-          .get()
-          .then((reThen) => {
-            if (reThen.docs.length > 0) {
-              reThen.docs.forEach((reInvo) => {
-                reInvo.data().items.forEach((reI) => {
-                  db.collection("item")
-                    .doc(reI.item_id)
+                let statusOfSeized = await db
+                  .collection("seized")
+                  .where("invoice_number", "==", result)
+                  .get();
+
+                if (statusOfSeized.docs.length > 0) {
+                  setLoading(false);
+                  setError("Serial number you entered is in the seized list!");
+                } else {
+                  db.collection("invoice")
+                    .where("invoice_number", "==", result)
                     .get()
-                    .then((itRe) => {
-                      if (itRe.data().modelNo === model_no.trim()) {
-                        let daysCountInitial =
-                          (new Date().getTime() -
-                            new Date(
-                              reInvo.data()?.date?.seconds * 1000
-                            ).getTime()) /
-                          (1000 * 3600 * 24);
+                    .then((reThen) => {
+                      if (reThen.docs.length > 0) {
+                        reThen.docs.forEach((reInvo) => {
+                          reInvo.data().items.forEach((reI) => {
+                            db.collection("item")
+                              .doc(reI.item_id)
+                              .get()
+                              .then((itRe) => {
+                                let daysCountInitial =
+                                  (new Date().getTime() -
+                                    new Date(
+                                      reInvo.data()?.date?.seconds * 1000
+                                    ).getTime()) /
+                                  (1000 * 3600 * 24);
 
-                        if (itRe.data().guarantee.value === "Months") {
-                          if (
-                            Math.round(daysCountInitial / 30) <=
-                            itRe.data().guaranteePeriod
-                          ) {
-                            setLoading(false);
-                            showConfirm(itRe.data().itemName);
-                          } else {
-                            setLoading(false);
-                            setError("Item's garuntee period is expired!");
-                          }
-                        } else {
-                          if (
-                            Math.round(daysCountInitial / 365) <=
-                            itRe.data().guaranteePeriod
-                          ) {
-                            setLoading(false);
-                            showConfirm(itRe.data().itemName);
-                          } else {
-                            setLoading(false);
-                            setError("Item's garuntee period is expired!");
-                          }
-                        }
+                                if (itRe.data().guarantee.value === "Months") {
+                                  if (
+                                    Math.round(daysCountInitial / 30) <=
+                                    itRe.data().guaranteePeriod
+                                  ) {
+                                    setError(" ");
+                                    showConfirm(
+                                      itRe.data().itemName,
+                                      result,
+                                      eachReturn.data().selectedType
+                                    );
+                                    setLoading(false);
+                                  } else {
+                                    setLoading(false);
+                                    setError(
+                                      "Item's garuntee period is expired!"
+                                    );
+                                  }
+                                } else {
+                                  if (
+                                    Math.round(daysCountInitial / 365) <=
+                                    itRe.data().guaranteePeriod
+                                  ) {
+                                    setError(" ");
+                                    showConfirm(
+                                      itRe.data().itemName,
+                                      result,
+                                      eachReturn.data().selectedType
+                                    );
+                                    setLoading(false);
+                                  } else {
+                                    setLoading(false);
+                                    setError(
+                                      "Item's garuntee period is expired!"
+                                    );
+                                  }
+                                }
+                              });
+                          });
+                        });
+                      } else {
+                        setLoading(false);
+                        setError("Serial number you entered is not found!");
                       }
                     });
-                });
-              });
-            } else {
-              setLoading(false);
-              setError("Invoice number you entered is not found!");
+                }
+              }
             }
           });
-      }
-    }
+          count = count + 1;
+        });
+        if (re.docs.length < count) {
+          setLoading(false);
+          if (error !== " ") {
+            setError("Serial number you entered is not found!");
+          } else {
+            setError("");
+          }
+        }
+      });
   };
 
   return (
@@ -170,7 +211,7 @@ export default function Repair_model({ closeModel }) {
       <div className="paper">
         <form className="form" noValidate>
           <Grid container spacing={2}>
-            <Grid className="lbl_topi" item xs={12} sm={4}>
+            {/* <Grid className="lbl_topi" item xs={12} sm={4}>
               Invoice No
             </Grid>
             <Grid item xs={12} sm={2}>
@@ -187,6 +228,26 @@ export default function Repair_model({ closeModel }) {
                 value={invoice}
                 onChange={(e) => {
                   setInvoice(e.target.value);
+                }}
+              />
+            </Grid> */}
+            <Grid className="lbl_topi" item xs={12} sm={4}>
+              Serial No
+            </Grid>
+            <Grid item xs={12} sm={2}>
+              :
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                autoComplete="ino"
+                variant="outlined"
+                required
+                fullWidth
+                label=" Serial No"
+                size="small"
+                value={serialNo}
+                onChange={(e) => {
+                  setSerialNo(e.target.value);
                 }}
               />
             </Grid>
@@ -231,6 +292,26 @@ export default function Repair_model({ closeModel }) {
                 }}
               />
             </Grid>
+            {/* <Grid className="lbl_topi" item xs={12} sm={4}>
+              MID
+            </Grid>
+            <Grid item xs={12} sm={2}>
+              :
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                autoComplete="mic"
+                variant="outlined"
+                required
+                fullWidth
+                label="MID"
+                size="small"
+                value={mid}
+                onChange={(e) => {
+                  setMid(e.target.value);
+                }}
+              />
+            </Grid> */}
             <Grid className="lbl_topi" item xs={12} sm={4}>
               NIC
             </Grid>
@@ -259,8 +340,8 @@ export default function Repair_model({ closeModel }) {
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
-                type="number"
                 autoComplete="mobile"
+                type="number"
                 variant="outlined"
                 required
                 fullWidth
@@ -275,11 +356,11 @@ export default function Repair_model({ closeModel }) {
             <Grid className="lbl_topi" item xs={12} sm={6}></Grid>
             <Grid item xs={12} sm={6}>
               <TextField
-                type="number"
                 autoComplete="mobil_no"
                 variant="outlined"
                 fullWidth
                 label="Mobil 2"
+                type="number"
                 size="small"
                 value={mobil_no2}
                 onChange={(e) => {
@@ -336,7 +417,7 @@ export default function Repair_model({ closeModel }) {
                 onClick={addRepair}
                 disabled={
                   loading ||
-                  invoice.length === 0 ||
+                  serialNo.length === 0 ||
                   model_no.length === 0 ||
                   cust_name.length === 0 ||
                   nic.length === 0 ||

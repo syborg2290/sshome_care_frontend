@@ -1,0 +1,52 @@
+.select_type {
+  width: 185px !important;
+}
+.select_label_type {
+  margin-left: 15px !important;
+  margin-top: -8px;
+}
+
+.price {
+  margin: auto !important;
+}
+
+.btn_sellRdio {
+  margin-right: 25px !important;
+}
+
+.txt_qtyGas {
+  width: 60px !important;
+}
+
+.txt_qtyGas2 {
+  width: 60px !important;
+  float: right !important;
+  margin-right: 7px !important;
+}
+
+.lbl_qtyGas2tot {
+  margin-right: 20px !important;
+  float: right !important;
+}
+
+.btn_updateGass {
+  margin-top: 20px !important;
+}
+
+.roll_selector {
+  height: 40px !important;
+}
+
+.rolllbl_selector {
+  margin-top: -8px !important;
+}
+
+.lbl_tots {
+  margin: auto !important;
+}
+
+.validate_Edit {
+  color: red;
+  text-align: center !important;
+  font-weight: 600 !important;
+}

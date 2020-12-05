@@ -11,8 +11,8 @@ import Sidebar from "../Sidebar_showroom/Sidebar_showroom";
 
 // pages
 import Dashboard from "../pages_showroom/dashboard/Dashboard";
-import ItemTable from "../pages_showroom/item/item_table/Item_table_showroom";
-import CustomerTable from "../pages_showroom/customer/customer_table/Customer_table_showroom";
+import ItemTable from "../pages_showroom/item/assistant_item_table/Item_table_assistant";
+import CustomerTable from "../pages_showroom/customer/customer_table/Customer_table_assistant";
 
 import InvoiceHistory from "../pages_showroom/invoice_History/Invoice_history";
 import Arreas from "../pages_showroom/arreas/Areas";
@@ -62,7 +62,7 @@ function LayoutShowroom(props) {
             <Route path="/showroom/ui/arreas" component={Arreas} />
             <Route path="/showroom/ui/repairs" component={Repairs} />
             <Route path="/showroom/ui/blackList" component={BlackList} />
-              <Route path="/showroom/ui/Gamisarani" component={GamiSarani} />
+            <Route path="/showroom/ui/Gamisarani" component={GamiSarani} />
             <Route path="/showroom/ui/gass" component={Gass} />
           </Switch>
         </div>

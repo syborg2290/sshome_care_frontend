@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useHistory } from "react-router-dom";
 import {
   TextField,
@@ -915,6 +915,7 @@ export default function Add_Paysheet_Model({ nic }) {
   const [date, setDate] = useState(null);
 
   let history = useHistory();
+  const isMounted = useRef();
 
   const AttendanceModel = () => {
     setAttendanceModel(true);
@@ -936,6 +937,8 @@ export default function Add_Paysheet_Model({ nic }) {
   };
 
   useEffect(() => {
+    isMounted.current = true;
+
     window.addEventListener("offline", function (e) {
       history.push("/connection_lost");
     });
@@ -1530,6 +1533,9 @@ export default function Add_Paysheet_Model({ nic }) {
               });
           });
       });
+    return () => {
+      isMounted.current = false;
+    };
     // eslint-disable-next-line
   }, [nic]);
 

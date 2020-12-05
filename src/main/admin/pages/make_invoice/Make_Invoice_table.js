@@ -250,7 +250,7 @@ export default function Make_Invoice_table() {
         <Grid item xs={12}>
           <MUIDataTable
             title={<span className="title_Span">All Items</span>}
-            className="makeInvoice_table"
+            className="item_table"
             data={itemTableData}
             columns={columns}
             options={{

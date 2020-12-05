@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Grid, Button } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import { Spin, Modal } from "antd";
 import MUIDataTable from "mui-datatables";
-import { useHistory } from "react-router-dom";
 
 import db from "../../../../../config/firebase.js";
 
@@ -13,20 +12,24 @@ import HistoryIcon from "@material-ui/icons/History";
 // components
 import CustomerDetails from "./components/customerDetailsModel/CustomerDetailsModel";
 import CustomerHistory from "./components/customerHistoryModel/CustomerHistoryModel";
-import CustomerCheck from "./components/checkCustomerModel/Check_Model";
 
 // styles
-import "./Customer_table_showroom.css";
+import "./Customer_table_assistant.css";
 
-export default function ItemTable() {
+import { useHistory } from "react-router-dom";
+
+export default function CustomerTable() {
+  // eslint-disable-next-line
   const [isLoading, setIsLoading] = useState(true);
   const [visible, setVisible] = useState(false); // customer table models
   const [history, setHistory] = useState(false); // customer table models
-  const [visibleCheckModel, setVisibleCheckModel] = useState(false);
+
+  // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
   const [customerTableData, setCustomerTableData] = useState([]);
   const [customerAllData, setCustomerAllData] = useState([]);
-    let history2 = useHistory();
+
+  let history2 = useHistory();
 
   const showModal = () => {
     setVisible(true);
@@ -34,10 +37,6 @@ export default function ItemTable() {
 
   const showModalHistory = () => {
     setHistory(true);
-  };
-
-  const showVisibleCheckModel = () => {
-    setVisibleCheckModel(true);
   };
 
   const columns = [
@@ -109,10 +108,10 @@ export default function ItemTable() {
 
   useEffect(() => {
 
-      window.addEventListener("offline", function (e) {
+    window.addEventListener("offline", function (e) {
       history2.push("/connection_lost");
-      });
-    
+    });
+
     db.collection("customer")
       .orderBy("date", "desc")
       .onSnapshot((custDoc) => {
@@ -184,6 +183,7 @@ export default function ItemTable() {
                 root={customerAllData[currentIndx]?.data.root}
                 status={customerAllData[currentIndx]?.data.status}
                 createdAt={customerAllData[currentIndx]?.data.date}
+                mid={customerAllData[currentIndx]?.data.mid}
                 key={customerAllData[currentIndx]?.id}
               />
             </div>
@@ -215,29 +215,6 @@ export default function ItemTable() {
       </Modal>
       {/*End customer History models */}
 
-      <Modal
-        className="checkModel"
-        footer={null}
-        visible={visibleCheckModel}
-        bodyStyle={{ borderRadius: "60px" }}
-        onCancel={() => {
-          setVisibleCheckModel(false);
-        }}
-      >
-        <div className="checkModel_body">
-          <CustomerCheck />
-        </div>
-      </Modal>
-
-      <Button
-        variant="contained"
-        color="primary"
-        className="btn_check"
-        onClick={showVisibleCheckModel}
-      >
-        Check customer & trustees
-      </Button>
-
       <Grid container spacing={4}>
         <Grid item xs={12}>
           <MUIDataTable
@@ -266,8 +243,12 @@ export default function ItemTable() {
                   };
                 }
               },
-              selectableRows: false,
-              customToolbarSelect: () => {},
+              selectableRows: "none",
+              draggableColumns: {
+               enabled: true
+             },
+              responsive: "standard",
+              customToolbarSelect: () => { },
               filterType: "textField",
               download: false,
               print: false,
@@ -282,8 +263,8 @@ export default function ItemTable() {
                   noMatch: isLoading ? (
                     <Spin className="tblSpinner" size="large" spinning="true" />
                   ) : (
-                    ""
-                  ),
+                      ""
+                    ),
                 },
               },
             }}

@@ -298,7 +298,7 @@ export default function Add_Customer() {
         if (relationsValidations) {
           loaderModalClose();
           NotificationManager.warning(
-            "Entered customer have some relations with ongoing 'pay and go' list!"
+            "Entered customer's have some relations with status of the ongoing list!"
           );
         } else {
           db.collection("customer")
@@ -314,7 +314,7 @@ export default function Add_Customer() {
                       loaderModalClose();
 
                       NotificationManager.warning(
-                        "Entered customer in the blacklist !"
+                        "Entered customer already in the blacklist !"
                       );
                     } else {
                       db.collection("arrears")
@@ -334,7 +334,7 @@ export default function Add_Customer() {
                             setMid(doc.docs[0].data().mid);
                             setFromDbImage(doc.docs[0].data().photo);
                             NotificationManager.warning(
-                              "Entered customer not payed and closed arrears as a customer !"
+                              "There have some arrears as a customer !"
                             );
                           } else {
                             db.collection("invoice")
@@ -355,7 +355,7 @@ export default function Add_Customer() {
                                   setMid(doc.docs[0].data().mid);
                                   setFromDbImage(doc.docs[0].data().photo);
                                   NotificationManager.warning(
-                                    "Entered customer already on status of 'pay an go' !"
+                                    "Entered customer already in the status of 'Ongoing' !"
                                   );
                                 } else {
                                   setCustomerId(doc.docs[0].id);
@@ -407,7 +407,7 @@ export default function Add_Customer() {
                   if (blackDoc.docs.length > 0) {
                     loaderModalClose();
                     NotificationManager.warning(
-                      "Entered trustee in the blacklist !"
+                      "Entered trustee already in the blacklist !"
                     );
                   } else {
                     db.collection("arrears")
@@ -424,7 +424,7 @@ export default function Add_Customer() {
                           setTrustee1Mobile1(arrDoc.docs[0].data().mobile1);
                           setTrustee1Mobile2(arrDoc.docs[0].data().mobile2);
                           NotificationManager.warning(
-                            "Entered trustee not payed and closed arrears as a customer !"
+                            "There have arrears as a customer for the trustee 1 !"
                           );
                         } else {
                           db.collection("invoice")
@@ -475,7 +475,7 @@ export default function Add_Customer() {
                                             );
 
                                             NotificationManager.warning(
-                                              "Entered trustee already on status of 'pay an go' as a trustee !"
+                                              "Entered trustee 1 already in the status of 'Ongoing' as a trustee !"
                                             );
                                           } else {
                                             setTrustee1Id(doc.docs[0].id);
@@ -507,7 +507,7 @@ export default function Add_Customer() {
                                   });
 
                                 NotificationManager.warning(
-                                  "Entered trustee already on status of 'pay an go' as a customer !"
+                                  "Entered trustee 1 already in the status of 'Ongoing' as a customer !"
                                 );
                               } else {
                                 db.collection("trustee")
@@ -551,7 +551,7 @@ export default function Add_Customer() {
                                             );
 
                                             NotificationManager.warning(
-                                              "Entered trustee already on status of 'pay an go' as a trustee !"
+                                              "Entered trustee 1 already in the  status of 'Ongoing' as a trustee !"
                                             );
                                           } else {
                                             setTrustee1Id(doc.docs[0].id);
@@ -612,7 +612,7 @@ export default function Add_Customer() {
                           setTrustee1Mobile1(doc.docs[0].data().mobile1);
                           setTrustee1Mobile2(doc.docs[0].data().mobile2);
                           NotificationManager.warning(
-                            "Entered trustee already on status of 'pay an go' as a trustee !"
+                            "Entered trustee 1 already in the  status of 'Ongoing' as a trustee !"
                           );
                         } else {
                           setTrustee1Id(doc.docs[0].id);
@@ -658,7 +658,7 @@ export default function Add_Customer() {
                   if (blackDoc.docs.length > 0) {
                     loaderModalClose();
                     NotificationManager.warning(
-                      "Entered trustee in the blacklist !"
+                      "Entered trustee already in the blacklist !"
                     );
                   } else {
                     db.collection("arrears")
@@ -675,7 +675,7 @@ export default function Add_Customer() {
                           setTrustee2Mobile2(arrDoc.docs[0].data().mobile2);
                           loaderModalClose();
                           NotificationManager.warning(
-                            "Entered trustee not payed and closed arrears as a customer !"
+                            "There have some arrears as a customer for trustee 2 !"
                           );
                         } else {
                           db.collection("invoice")
@@ -725,7 +725,7 @@ export default function Add_Customer() {
                                               doc.docs[0].data().mobile2
                                             );
                                             NotificationManager.warning(
-                                              "Entered trustee already on status of 'pay an go' as a trustee !"
+                                              "Entered trustee 2 already in the status of 'Ongoing' as a trustee !"
                                             );
                                           } else {
                                             setTrustee2Id(doc.docs[0].id);
@@ -756,7 +756,7 @@ export default function Add_Customer() {
                                     }
                                   });
                                 NotificationManager.warning(
-                                  "Entered trustee already on status of 'pay an go' as a customer !"
+                                  "Entered trustee 2 already in the status of 'Ongoing' as a customer !"
                                 );
                               } else {
                                 db.collection("trustee")
@@ -799,7 +799,7 @@ export default function Add_Customer() {
                                               doc.docs[0].data().mobile2
                                             );
                                             NotificationManager.warning(
-                                              "Entered trustee already on status of 'pay an go' as a trustee !"
+                                              "Entered trustee 2 already in the status of 'Ongoing' as a trustee !"
                                             );
                                           } else {
                                             setTrustee2Id(doc.docs[0].id);
@@ -860,7 +860,7 @@ export default function Add_Customer() {
                           setTrustee2Mobile1(doc.docs[0].data().mobile1);
                           setTrustee2Mobile2(doc.docs[0].data().mobile2);
                           NotificationManager.warning(
-                            "Entered trustee already on status of 'pay an go' as a trustee !"
+                            "Entered trustee 2 already in the status of 'Ongoing' as a trustee !"
                           );
                         } else {
                           setTrustee2Id(doc.docs[0].id);

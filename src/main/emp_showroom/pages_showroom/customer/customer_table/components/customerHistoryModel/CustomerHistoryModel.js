@@ -4,6 +4,7 @@ import { Grid } from "@material-ui/core";
 import { Spin } from "antd";
 import CurrencyFormat from "react-currency-format";
 import moment from "moment";
+import { useHistory } from "react-router-dom";
 
 // styles
 import "./CustomerHistoryModel.css";
@@ -16,6 +17,8 @@ export default function CustomerHistoryModel({ customerId }) {
 
   // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
+
+  let history = useHistory();
 
   const columns = [
     {
@@ -64,10 +67,14 @@ export default function CustomerHistoryModel({ customerId }) {
         }),
       },
     },
-  
   ];
 
   useEffect(() => {
+
+     window.addEventListener("offline", function (e) {
+      history.push("/connection_lost");
+    });
+
     db.collection("invoice")
       .where("customer_id", "==", customerId)
       .get()
@@ -115,7 +122,7 @@ export default function CustomerHistoryModel({ customerId }) {
             });
         });
       });
-    // eslint-disable-next-line
+      // eslint-disable-next-line
   }, [customerId]);
 
   return (
@@ -128,7 +135,7 @@ export default function CustomerHistoryModel({ customerId }) {
             data={installmentsTableData}
             columns={columns}
             options={{
-              selectableRows: false,
+             selectableRows: "none",
               customToolbarSelect: () => {},
               filterType: "textField",
               download: false,

@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import MUIDataTable from "mui-datatables";
 import { Grid } from "@material-ui/core";
 import moment from "moment";
@@ -10,7 +10,7 @@ import db from "../../../../../../../../config/firebase.js";
 import "./History_Model.css";
 
 export default function History_Model({ invoice_no }) {
- // eslint-disable-next-line
+  // eslint-disable-next-line
   const [isLoading, setIsLoading] = useState(true);
   // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
@@ -63,7 +63,6 @@ export default function History_Model({ invoice_no }) {
         }),
       },
     },
-    
   ];
 
   useEffect(() => {
@@ -130,7 +129,8 @@ export default function History_Model({ invoice_no }) {
             data={installments}
             columns={columns}
             options={{
-              selectableRows: false,
+              // selectableRows: false,
+              selectableRows: "none",
               customToolbarSelect: () => {},
               filterType: "textField",
               download: false,

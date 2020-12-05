@@ -23,11 +23,11 @@ import VisibilityIcon from "@material-ui/icons/Visibility";
 import EditIcon from "@material-ui/icons/Edit";
 
 // styles
-import "./Item_table.css";
+import "./Item_table_assistant.css";
 
 import db from "../../../../../config/firebase.js";
 
-export default function Item_table() {
+export default function Item_table_assistant() {
   // const [selectedItemtVisible, setSelectedItemtVisible] = useState(false);
   const [itemTableData, setItemTableData] = useState([]);
   const [allTtemData, setAllItemData] = useState([]);
@@ -661,7 +661,7 @@ export default function Item_table() {
         <Grid item xs={12}>
           <MUIDataTable
             title={<span className="title_Span">All Items</span>}
-            className="item_table_xc"
+            className="item_table"
             data={itemTableData}
             columns={columns}
             options={{

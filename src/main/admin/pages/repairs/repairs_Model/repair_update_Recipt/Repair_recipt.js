@@ -48,7 +48,7 @@ class RepairRecipt extends React.Component {
           <div className="paper_repair">
             <form className="form_repair" noValidate>
               <Row>
-                 <Col className="tiles_repair" span={6}>
+                <Col className="tiles_repair" span={6}>
                   Serial No.
                 </Col>
                 <Col className="tiles_details_repair" span={6}>
@@ -62,7 +62,6 @@ class RepairRecipt extends React.Component {
                     firebase.firestore.FieldValue.serverTimestamp()
                   ).format("dddd, MMMM Do YYYY, h:mm:ss a")}
                 </Col>
-              
                 <Col className="tiles_repair" span={6}>
                   Model No.
                 </Col>

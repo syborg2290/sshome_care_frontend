@@ -1,11 +1,5 @@
-/* .customer_table {
-  margin-bottom: -60px !important;
-} */
-
-.btn_check {
-  float: right !important;
+.customer_table {
   margin-top: 70px !important;
-  margin-bottom: -30px !important;
 }
 
 @media screen and (min-width: 280px) {

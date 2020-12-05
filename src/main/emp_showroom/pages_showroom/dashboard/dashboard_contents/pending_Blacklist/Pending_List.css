@@ -2,11 +2,11 @@
   width: 60% !important;
 }
 
-.btnublock {
+.btnblockss {
   border-radius: 10px !important;
   font-size: 10px !important;
-  margin-left: 15px !important;
-  margin-top: -15px !important;
+  /* margin-left: 15px !important;
+  margin-top: -15px !important; */
   background-color: rgba(207, 9, 9, 0.829) !important;
   color: aliceblue !important;
 }
@@ -18,5 +18,31 @@
 
 .icon_histry {
   text-align: center !important;
-  margin-left: 5px !important;
+  margin-right: 8px !important;
+}
+
+.btn_paydash {
+  border-radius: 10px !important;
+  font-size: 10px !important;
+  margin-right: 1px !important;
+
+  margin-top: -15px !important;
+}
+
+.confo_Icons {
+  color: rgba(255, 145, 0, 0.945);
+  font-size: 18px !important;
+  font-weight: 900 !important;
+  margin: auto !important;
+  margin-top: 3px !important;
+}
+.txtConfoModel_bodys {
+  margin-left: 10px !important;
+}
+
+.confo_models {
+  width: 25% !important;
+  border-top: 8px #ffffff !important;
+  margin-top: 50px !important;
+  border-radius: 8px 8px 8px 8px !important;
 }

@@ -3,7 +3,6 @@ import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import { Grid } from "@material-ui/core";
 
-
 //components
 import ArreasTable from "../dashboard/dashboard_contents/arreas_Table/Arreas_Table";
 import PendingList from "../dashboard/dashboard_contents/pending_Blacklist/Pending_List";
@@ -12,7 +11,6 @@ import ExpireInvoice from "../dashboard/dashboard_contents/expire_Table/Expire_I
 import ReportCards from "./dashboard_contents/reports_cards/Report_Cards";
 import firebase from "firebase";
 import db from "../../../../config/firebase.js";
-
 
 // styles
 import "./Dashboard.css";
@@ -36,12 +34,26 @@ export default function Dashboard() {
   const [expiredList, setExpiredList] = useState([]);
   let history = useHistory();
 
-
-
   useEffect(() => {
     window.addEventListener("offline", function (e) {
       history.push("/connection_lost");
     });
+
+    db.collection("invoice")
+      .where("status_of_payandgo", "==", "expired")
+      .get()
+      .then((onSnap) => {
+        var expiredRawData = [];
+        onSnap.docs.forEach((each) => {
+          expiredRawData.push({
+            invoice_number: each.data().invoice_number,
+            nic: each.data()?.nic,
+            data: each.data(),
+            id: each.id,
+          });
+        });
+        setExpiredList(expiredRawData);
+      });
 
     db.collection("invoice")
       .where("status_of_payandgo", "==", "onGoing")
@@ -64,22 +76,6 @@ export default function Dashboard() {
   }, []);
 
   const checkInstallmentsStatus = async (eachRe) => {
-    db.collection("invoice")
-      .where("status_of_payandgo", "==", "expired")
-      .get()
-      .then((onSnap) => {
-        var expiredRawData = [];
-        onSnap.docs.forEach((each) => {
-          expiredRawData.push({
-            invoice_number: each.data().invoice_number,
-            nic: each.data()?.nic,
-            data: each.data(),
-            id: each.id,
-          });
-        });
-        setExpiredList(expiredRawData);
-      });
-
     const installmentStatus = await db
       .collection("installment")
       .where("invoice_number", "==", eachRe.data().invoice_number)
@@ -478,33 +474,26 @@ export default function Dashboard() {
 
   return (
     <>
-
-     <Grid container spacing={4}>
-        <Grid className="titl_Dash" item xs={12}>
-        
-        </Grid>
+      <Grid container spacing={4}>
+        <Grid className="titl_Dash" item xs={12}></Grid>
       </Grid>
 
-
-       {/*START Arreas Table */}
-        <Grid container spacing={4}>
-          <Grid item xs={12}>
-            <ReportCards />
-          </Grid>
+      {/*START Arreas Table */}
+      <Grid container spacing={4}>
+        <Grid item xs={12}>
+          <ReportCards />
         </Grid>
-        {/* END Arreas Table */}
-      
+      </Grid>
+      {/* END Arreas Table */}
+
       <Container component="main" className="main_containerDash">
-        
-          {/*START Cards */}
+        {/*START Cards */}
         <Grid container spacing={4}>
           <Grid item xs={12}>
             <ArreasTable />
           </Grid>
         </Grid>
         {/* END Cards  */}
-
-       
 
         {/*START Expire Invoice Table */}
 

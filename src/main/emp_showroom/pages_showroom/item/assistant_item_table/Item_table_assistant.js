@@ -15,19 +15,19 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import { useHistory } from "react-router-dom";
-
-
+// components
+import EditModel from "./components/Edit_model";
 
 // icons
 import VisibilityIcon from "@material-ui/icons/Visibility";
-
+import EditIcon from "@material-ui/icons/Edit";
 
 // styles
-import "./Item_table_showroom.css";
+import "./Item_table_assistant.css";
 
 import db from "../../../../../config/firebase.js";
 
-export default function Item_table_showroom() {
+export default function Item_table_assistant() {
   // const [selectedItemtVisible, setSelectedItemtVisible] = useState(false);
   const [itemTableData, setItemTableData] = useState([]);
   const [allTtemData, setAllItemData] = useState([]);
@@ -35,7 +35,7 @@ export default function Item_table_showroom() {
   const [visible, setVisible] = useState(false);
   // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
-
+  const [editVisible, setEditVisible] = useState(false);
 
   // let socket = socketIOClient(RealtimeServerApi);
 
@@ -49,7 +49,9 @@ export default function Item_table_showroom() {
     setVisible(true);
   };
 
- 
+  const editModal = () => {
+    setEditVisible(true);
+  };
 
   useEffect(() => {
     window.addEventListener("offline", function (e) {
@@ -92,7 +94,7 @@ export default function Item_table_showroom() {
               ? " - "
               : element.data().guaranteePeriod +
                 " " +
-                element.data().guarantee.value,
+                element.data().guarantee.value.toLowerCase(),
             <CurrencyFormat
               value={element.data().salePrice}
               displayType={"text"}
@@ -123,7 +125,12 @@ export default function Item_table_showroom() {
             </div>,
             <div className="table_icon">
               <VisibilityIcon onClick={showModal} />
-
+              <span className="icon_Edit">
+                <EditIcon onClick={editModal} />
+              </span>
+              {/* <span className="icon_delete">
+                <DeleteIcon onClick={showModalConfirmModal} />
+              </span> */}
             </div>,
           ]);
         });
@@ -136,7 +143,30 @@ export default function Item_table_showroom() {
     // eslint-disable-next-line
   }, []);
 
- 
+  // const showDeleteItemsConfirm = async () => {
+  //   await db
+  //     .collection("item")
+  //     .doc(
+  //       allTtemData[currentIndx] && allTtemData[currentIndx].id
+  //         ? allTtemData[currentIndx].id
+  //         : ""
+  //     )
+  //     .delete()
+  //     .then(function () {
+  //       NotificationManager.success("Item deletion successfully!", "Done");
+  //       setConfirmVisible(false);
+  //     })
+  //     .catch(function (error) {
+  //       NotificationManager.warning(
+  //         "Failed to continue the process!",
+  //         "Please try again"
+  //       );
+  //     });
+  // };
+
+  const editModalClose = () => {
+    setEditVisible(false);
+  };
 
   const columns = [
     {
@@ -215,7 +245,26 @@ export default function Item_table_showroom() {
 
   return (
     <>
-           <Modal
+      {/* <Modal
+        className="confo_model"
+        closable={null}
+        visible={confirmVisible}
+        cancelText="No"
+        okText="Yes"
+        bodyStyle={{ borderRadius: "30px" }}
+        onOk={showDeleteItemsConfirm}
+        onCancel={() => {
+          setConfirmVisible(false);
+        }}
+      >
+        <div className="confoModel_body">
+          <HelpIcon className="confo_Icon" />
+          <h3 className="txtConfoModel_body">
+            Do you want to delete this item?{" "}
+          </h3>
+        </div>
+      </Modal> */}
+      <Modal
         title={
           <span className="model_title">
             {allTtemData[currentIndx] && allTtemData[currentIndx].data
@@ -483,6 +532,126 @@ export default function Item_table_showroom() {
                   </TableBody>
                 </Table>
               </TableContainer>
+            </div>
+          </div>
+        </div>
+      </Modal>
+
+      <Modal
+        title="Edit item"
+        visible={editVisible}
+        footer={null}
+        className="model_edit_Item"
+        onCancel={() => {
+          setEditVisible(false);
+        }}
+      >
+        <div className="table_edit_Model">
+          <div className="model_edit_Main">
+            <div className="model_edit_Detail">
+              <EditModel
+                key={
+                  allTtemData[currentIndx] && allTtemData[currentIndx].id
+                    ? allTtemData[currentIndx].id
+                    : ""
+                }
+                itemNameProp={
+                  allTtemData[currentIndx] && allTtemData[currentIndx].data
+                    ? allTtemData[currentIndx].data.itemName
+                    : ""
+                }
+                brandProp={
+                  allTtemData[currentIndx] && allTtemData[currentIndx].data
+                    ? allTtemData[currentIndx].data.brand
+                    : ""
+                }
+                modelNoProp={
+                  allTtemData[currentIndx] && allTtemData[currentIndx].data
+                    ? allTtemData[currentIndx].data.modelNo
+                    : ""
+                }
+                serialNoProp={
+                  allTtemData[currentIndx] && allTtemData[currentIndx].data
+                    ? allTtemData[currentIndx].data.serialNo
+                    : ""
+                }
+                chassisNoProp={
+                  allTtemData[currentIndx] && allTtemData[currentIndx].data
+                    ? allTtemData[currentIndx].data.chassisNo
+                    : ""
+                }
+                colorProp={
+                  allTtemData[currentIndx] && allTtemData[currentIndx].data
+                    ? allTtemData[currentIndx].data.color
+                    : ""
+                }
+                qtyProp={
+                  allTtemData[currentIndx] && allTtemData[currentIndx].data
+                    ? allTtemData[currentIndx].data.qty
+                    : 1
+                }
+                cashpriceProp={
+                  allTtemData[currentIndx] && allTtemData[currentIndx].data
+                    ? allTtemData[currentIndx].data.cashPrice
+                    : 0
+                }
+                salepriceProp={
+                  allTtemData[currentIndx] && allTtemData[currentIndx].data
+                    ? allTtemData[currentIndx].data.salePrice
+                    : 0
+                }
+                noOfInstallmentsProp={
+                  allTtemData[currentIndx] && allTtemData[currentIndx].data
+                    ? allTtemData[currentIndx].data.noOfInstallments
+                    : 0
+                }
+                amountPerInstallmentProp={
+                  allTtemData[currentIndx] && allTtemData[currentIndx].data
+                    ? allTtemData[currentIndx].data.amountPerInstallment
+                    : 0
+                }
+                downPaymentProp={
+                  allTtemData[currentIndx] && allTtemData[currentIndx].data
+                    ? allTtemData[currentIndx].data.downPayment
+                    : 0
+                }
+                guaranteePeriodProp={
+                  allTtemData[currentIndx] && allTtemData[currentIndx].data
+                    ? allTtemData[currentIndx].data.guaranteePeriod
+                    : 0
+                }
+                discountProp={
+                  allTtemData[currentIndx] && allTtemData[currentIndx].data
+                    ? allTtemData[currentIndx].data.discount
+                    : 0
+                }
+                descriptionProp={
+                  allTtemData[currentIndx] && allTtemData[currentIndx].data
+                    ? allTtemData[currentIndx].data.description
+                    : ""
+                }
+                cInvoiceNoProp={
+                  allTtemData[currentIndx] && allTtemData[currentIndx].data
+                    ? allTtemData[currentIndx].data.cInvoiceNo
+                    : ""
+                }
+                GCardNoProp={
+                  allTtemData[currentIndx] && allTtemData[currentIndx].data
+                    ? allTtemData[currentIndx].data.GCardNo
+                    : ""
+                }
+                guaranteeProp={
+                  allTtemData[currentIndx] && allTtemData[currentIndx].data
+                    ? allTtemData[currentIndx].data.guarantee.value
+                    : "Years"
+                }
+                editModalClose={editModalClose}
+                docId={
+                  allTtemData[currentIndx] && allTtemData[currentIndx].id
+                    ? allTtemData[currentIndx].id
+                    : ""
+                }
+              />
             </div>
           </div>
         </div>

@@ -1284,7 +1284,7 @@ function Make_invoice() {
                                     tablerows.splice(index, 1);
                                     setTableRows([...tablerows]);
                                     if (tablerows.length === 0) {
-                                      history.push("/admin/ui/ItemTable");
+                                      history.push("/assistant/ui/ItemTable");
                                     }
                                     delete itemQty[row.i];
                                     delete itemDP[row.i];

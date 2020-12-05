@@ -1,0 +1,17 @@
+.cash_taget_tot {
+  margin-left: 30px !important;
+  font-weight: 600 !important;
+  color: rgb(1, 1, 12) !important;
+}
+
+.cash_tagets {
+  font-weight: 600 !important;
+  font-size: large !important;
+  color: rgb(7, 7, 100) !important;
+}
+
+.cash_tagetPer {
+  font-size: smaller !important;
+  font-weight: 600 !important;
+  margin-left: 8px !important;
+}

@@ -1,609 +1,543 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
+import Container from "@material-ui/core/Container";
+import Typography from "@material-ui/core/Typography";
 import { Grid } from "@material-ui/core";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import { Paper } from "@material-ui/core";
-import Table from "@material-ui/core/Table";
-import { LineChart, Line } from "recharts";
-import { useTheme } from "@material-ui/styles";
 
+
+//components
+import ArreasTable from "../dashboard/dashboard_contents/arreas_Table/Arreas_Table";
+import PendingList from "../dashboard/dashboard_contents/pending_Blacklist/Pending_List";
+import InvoiceList from "../dashboard/dashboard_contents/invoice_List/Invoice_List";
+import ExpireInvoice from "../dashboard/dashboard_contents/expire_Table/Expire_Invoice";
+import ReportCards from "./dashboard_contents/reports_cards/Report_Cards";
+import firebase from "firebase";
 import db from "../../../../config/firebase.js";
-import CurrencyFormat from "react-currency-format";
+
 
 // styles
 import "./Dashboard.css";
 
-// components
-import PageTitle from "../../PageTitle/PageTitle";
-import { Typography } from "../../Wrappers/Wrappers";
+import { useHistory } from "react-router-dom";
 
-function createData(
-  name,
-  modelNo,
-  salePrice,
-  cashPrice,
-  downPayament,
-  qty,
-  status
-) {
-  return { name, modelNo, salePrice, cashPrice, downPayament, qty, status };
+function isDateBeforeToday(date) {
+  return new Date(date.toDateString()) < new Date(new Date().toDateString());
 }
 
-export default function Dashboard(props) {
-  var theme = useTheme();
+// function isDateBeforeNextDate(date) {
+//   return new Date(date.toDateString()) > new Date(new Date().toDateString());
+// }
 
-  const [payandgoAllSales, setPayandgoAllSales] = useState(0);
-  const [fullpaymentAllSales, setFullpaymentAllSales] = useState(0);
-  const [payandgoTodaySales, setPayandgoTodaySales] = useState(0);
-  const [fullpaymentTodaySales, setFullpaymentTodaySales] = useState(0);
-  const [payandgoMonthSales, setPayandgoMonthSales] = useState(0);
-  const [fullpaymentMonthSales, setFullpaymentMonthSales] = useState(0);
-  const [mostSalesItems, setMostSalesItems] = useState([]);
-  const [installmentToday, setInstallmentToday] = useState(0);
-  const [installmentMonth, setInstallmentMonth] = useState(0);
-  const [installmentAll, setInstallmentAll] = useState(0);
+function daysCountOfMonth(month, year) {
+  return parseInt(new Date(year, month, 0).getDate());
+}
 
-  const getIndex = (value, arr, prop) => {
-    for (var i = 0; i < arr.length; i++) {
-      if (arr[i][prop] === value) {
-        return i;
-      }
-    }
-    return -1; //to handle the case where the value doesn't exist
-  };
+export default function Dashboard() {
+  const [pendingBlackList, setPendingBlackList] = useState([]);
+  const [expiredList, setExpiredList] = useState([]);
+  let history = useHistory();
+
+
 
   useEffect(() => {
-    var raw1 = [];
-    var count = 0;
+    window.addEventListener("offline", function (e) {
+      history.push("/connection_lost");
+    });
 
     db.collection("invoice")
+      .where("status_of_payandgo", "==", "onGoing")
       .get()
-      .then((reProfit) => {
-        reProfit.docs.forEach((eachPro) => {
-          eachPro.data().items.forEach((eachItems) => {
-            var index = getIndex(eachItems.item_id, raw1, "items_id");
-            if (index === -1) {
-              raw1.push({
-                items_id: eachItems.item_id,
-                qty: eachItems.qty,
-              });
-            } else {
-              let plusQty = eachItems.qty + raw1[index].qty;
-              raw1[index] = {
-                items_id: eachItems.item_id,
-                qty: plusQty,
-              };
-            }
-          });
-
-          if (eachPro.data().installmentType !== null) {
-            db.collection("installment")
-              .where("invoice_number", "==", eachPro.data().invoice_number)
-              .get()
-              .then((instReDoc) => {
-                instReDoc.docs.forEach((reInstall) => {
-                  // today installments
-                  if (
-                    new Date().getDate() ===
-                    new Date(reInstall.data()?.date?.seconds * 1000).getDate()
-                  ) {
-                    if (
-                      new Date().getMonth() ===
-                      new Date(
-                        reInstall.data()?.date?.seconds * 1000
-                      ).getMonth()
-                    ) {
-                      if (
-                        new Date().getFullYear() ===
-                        new Date(
-                          reInstall.data()?.date?.seconds * 1000
-                        ).getFullYear()
-                      ) {
-                        var reInst =
-                          reInstall.data().amount + reInstall.data().delayed;
-                        setInstallmentToday(
-                          (installmentTodaySoo) => installmentTodaySoo + reInst
-                        );
-                      }
-                    }
-                  }
-
-                  // current month installments
-
-                  if (
-                    new Date().getMonth() ===
-                    new Date(reInstall.data()?.date?.seconds * 1000).getMonth()
-                  ) {
-                    if (
-                      new Date().getFullYear() ===
-                      new Date(
-                        reInstall.data()?.date?.seconds * 1000
-                      ).getFullYear()
-                    ) {
-                      var reMonthInst =
-                        reInstall.data().amount + reInstall.data().delayed;
-
-                      setInstallmentMonth(
-                        (installmentMonthSoo) =>
-                          installmentMonthSoo + reMonthInst
-                      );
-                    }
-                  }
-
-                  //all installments
-
-                  var reInstAll =
-                    reInstall.data().amount + reInstall.data().delayed;
-
-                  setInstallmentAll(
-                    (installmentAllSoo) => installmentAllSoo + reInstAll
-                  );
-                });
-              });
-
-            if (
-              new Date().getDate() ===
-              new Date(eachPro.data()?.date?.seconds * 1000).getDate()
-            ) {
-              if (
-                new Date().getMonth() ===
-                new Date(eachPro.data()?.date?.seconds * 1000).getMonth()
-              ) {
-                if (
-                  new Date().getFullYear() ===
-                  new Date(eachPro.data()?.date?.seconds * 1000).getFullYear()
-                ) {
-                  let befToday = eachPro.data().total;
-
-                  setPayandgoTodaySales(
-                    (passPayandgoToday) => passPayandgoToday + befToday
-                  );
-                }
-              }
-            }
-
-            if (
-              new Date().getMonth() ===
-              new Date(eachPro.data()?.date?.seconds * 1000).getMonth()
-            ) {
-              if (
-                new Date().getFullYear() ===
-                new Date(eachPro.data()?.date?.seconds * 1000).getFullYear()
-              ) {
-                let befMonth = eachPro.data().total;
-
-                setPayandgoMonthSales(
-                  (passPayandgoMonth) => passPayandgoMonth + befMonth
-                );
-              }
-            }
-
-            let bef = eachPro.data().total;
-            setPayandgoAllSales((payandgoAll) => payandgoAll + bef);
-          } else {
-            if (
-              new Date().getDate() ===
-              new Date(eachPro.data()?.date?.seconds * 1000).getDate()
-            ) {
-              if (
-                new Date().getMonth() ===
-                new Date(eachPro.data()?.date?.seconds * 1000).getMonth()
-              ) {
-                if (
-                  new Date().getFullYear() ===
-                  new Date(eachPro.data()?.date?.seconds * 1000).getFullYear()
-                ) {
-                  setFullpaymentTodaySales(
-                    (fPayDaySales) => fPayDaySales + eachPro.data().total
-                  );
-                }
-              }
-            }
-            if (
-              new Date().getMonth() ===
-              new Date(eachPro.data()?.date?.seconds * 1000).getMonth()
-            ) {
-              if (
-                new Date().getFullYear() ===
-                new Date(eachPro.data()?.date?.seconds * 1000).getFullYear()
-              ) {
-                setFullpaymentMonthSales(
-                  (fpayMonthSales) => fpayMonthSales + eachPro.data().total
-                );
-              }
-            }
-
-            setFullpaymentAllSales(
-              (fpayAllSales) => fpayAllSales + eachPro.data().total
-            );
+      .then((onSnap) => {
+        onSnap.docs.forEach(async (eachRe) => {
+          let isBeforeDate = isDateBeforeToday(
+            new Date(eachRe.data()?.deadlineTimestamp?.seconds * 1000)
+          );
+          if (isBeforeDate) {
+            db.collection("invoice").doc(eachRe.id).update({
+              status_of_payandgo: "expired",
+            });
           }
+          checkInstallmentsStatus(eachRe);
         });
-      })
-      .then((re) => {
-        raw1.sort((a, b) => {
-          if (a.qty > b.qty) {
-            return -1;
-          } else {
-            return 1;
-          }
-        });
-
-        if (count <= 5) {
-          raw1.forEach((getItems) => {
-            db.collection("item")
-              .doc(getItems.items_id)
-              .get()
-              .then((reEachIten) => {
-                setMostSalesItems((old) => [
-                  ...old,
-                  createData(
-                    reEachIten.data().itemName,
-                    reEachIten.data().modelNo,
-                    reEachIten.data().serialNo,
-                    reEachIten.data().salePrice,
-                    reEachIten.data().cashPrice,
-                    reEachIten.data().downPayment,
-                    getItems.qty,
-
-                    <div
-                      color="secondary"
-                      size="small"
-                      className={
-                        reEachIten.data().qty !== 0
-                          ? reEachIten.data().qty >= 3
-                            ? "px-2"
-                            : "px-3"
-                          : "px-4"
-                      }
-                      variant="contained"
-                    >
-                      {reEachIten.data().qty !== 0 ? (
-                        reEachIten.data().qty >= 3 ? (
-                          <p className="status">Available</p>
-                        ) : (
-                          <p className="status">Low Stock</p>
-                        )
-                      ) : (
-                        <p className="status">Out Of Stock</p>
-                      )}
-                    </div>
-                  ),
-                ]);
-              });
-            count++;
-          });
-        }
       });
 
     // eslint-disable-next-line
   }, []);
 
+  const checkInstallmentsStatus = async (eachRe) => {
+    db.collection("invoice")
+      .where("status_of_payandgo", "==", "expired")
+      .get()
+      .then((onSnap) => {
+        var expiredRawData = [];
+        onSnap.docs.forEach((each) => {
+          expiredRawData.push({
+            invoice_number: each.data().invoice_number,
+            nic: each.data()?.nic,
+            data: each.data(),
+            id: each.id,
+          });
+        });
+        setExpiredList(expiredRawData);
+      });
+
+    const installmentStatus = await db
+      .collection("installment")
+      .where("invoice_number", "==", eachRe.data().invoice_number)
+      .get();
+
+    if (installmentStatus.docs.length === 0) {
+      intialStateOfArreasCheck(eachRe);
+    } else {
+      afterStateOfArreasCheck(installmentStatus, eachRe);
+    }
+  };
+
+  const intialStateOfArreasCheck = async (eachRe) => {
+    let daysCountNode1 =
+      (new Date().getTime() -
+        new Date(eachRe.data()?.date?.seconds * 1000).getTime()) /
+      (1000 * 3600 * 24);
+    let daysCountInitial = daysCountNode1;
+    if (eachRe.data().selectedType === "shop") {
+      if (7 - daysCountInitial >= 0) {
+      } else {
+        if (daysCountInitial - 7 > 7) {
+          if (Math.round(daysCountInitial) - 7 >= 49) {
+            setPendingBlackList([
+              ...pendingBlackList,
+              {
+                invoice_number: eachRe.data().invoice_number,
+                nic: eachRe.data()?.nic,
+              },
+            ]);
+          }
+
+          db.collection("arrears")
+            .where("invoice_number", "==", eachRe.data().invoice_number)
+            .get()
+            .then((reArreas) => {
+              if (reArreas.docs.length > 0) {
+                db.collection("arrears")
+                  .doc(reArreas.docs[0].id)
+                  .update({
+                    delayed_days: Math.round(daysCountInitial) - 7,
+                    status_of_payandgo: eachRe.data().status_of_payandgo,
+                    balance: eachRe.data().balance,
+                    delayed_charges:
+                      daysCountInitial - 7 <= 7
+                        ? 0
+                        : (daysCountInitial - 7) / 7 < 2
+                        ? 99
+                        : (daysCountInitial - 7) / 7 > 2 &&
+                          (daysCountInitial - 7) / 7 < 3
+                        ? 198
+                        : (daysCountInitial - 7) / 7 > 3 &&
+                          (daysCountInitial - 7) / 7 < 4
+                        ? 297
+                        : (daysCountInitial - 7) / 7 > 4 &&
+                          (daysCountInitial - 7) / 7 < 5
+                        ? 396
+                        : (daysCountInitial - 7) / 7 > 5 &&
+                          (daysCountInitial - 7) / 7 < 6
+                        ? 495
+                        : (daysCountInitial - 7) / 7 > 6 &&
+                          (daysCountInitial - 7) / 7 < 7
+                        ? 594
+                        : (daysCountInitial - 7) / 7 > 7 &&
+                          (daysCountInitial - 7) / 7 < 8
+                        ? 693
+                        : 693,
+                  });
+              } else {
+                db.collection("arrears").add({
+                  invoice_number: eachRe.data().invoice_number,
+                  type: eachRe.data().selectedType,
+                  mid: eachRe.data().mid,
+                  customer_id: eachRe.data().customer_id,
+                  nic: eachRe.data().nic,
+                  balance: eachRe.data().balance,
+                  amountPerInstallment: eachRe.data().amountPerInstallment,
+                  noOfInstallment: eachRe.data().noOfInstallment,
+                  status_of_payandgo: eachRe.data().status_of_payandgo,
+                  delayed_days: Math.round(daysCountInitial) - 7,
+                  delayed_charges:
+                    daysCountInitial - 7 <= 7
+                      ? 0
+                      : (daysCountInitial - 7) / 7 < 2
+                      ? 99
+                      : (daysCountInitial - 7) / 7 > 2 &&
+                        (daysCountInitial - 7) / 7 < 3
+                      ? 198
+                      : (daysCountInitial - 7) / 7 > 3 &&
+                        (daysCountInitial - 7) / 7 < 4
+                      ? 297
+                      : (daysCountInitial - 7) / 7 > 4 &&
+                        (daysCountInitial - 7) / 7 < 5
+                      ? 396
+                      : (daysCountInitial - 7) / 7 > 5 &&
+                        (daysCountInitial - 7) / 7 < 6
+                      ? 495
+                      : (daysCountInitial - 7) / 7 > 6 &&
+                        (daysCountInitial - 7) / 7 < 7
+                      ? 594
+                      : (daysCountInitial - 7) / 7 > 7 &&
+                        (daysCountInitial - 7) / 7 < 8
+                      ? 693
+                      : 693,
+                  date: firebase.firestore.FieldValue.serverTimestamp(),
+                });
+              }
+            });
+        }
+      }
+    } else {
+      if (14 - daysCountInitial >= 0) {
+      } else {
+        if (daysCountInitial - 14 > 7) {
+          if (Math.round(daysCountInitial) - 14 >= 49) {
+            setPendingBlackList([
+              ...pendingBlackList,
+              {
+                invoice_number: eachRe.data().invoice_number,
+                nic: eachRe.data()?.nic,
+              },
+            ]);
+          }
+          db.collection("arrears")
+            .where("invoice_number", "==", eachRe.data().invoice_number)
+            .get()
+            .then((reArreas) => {
+              if (reArreas.docs.length > 0) {
+                db.collection("arrears")
+                  .doc(reArreas.docs[0].id)
+                  .update({
+                    delayed_days: Math.round(daysCountInitial) - 14,
+                    status_of_payandgo: eachRe.data().status_of_payandgo,
+                    balance: eachRe.data().balance,
+                    delayed_charges:
+                      daysCountInitial - 14 <= 7
+                        ? 0
+                        : (daysCountInitial - 14) / 7 < 2
+                        ? 99
+                        : (daysCountInitial - 14) / 7 > 2 &&
+                          (daysCountInitial - 14) / 7 < 3
+                        ? 198
+                        : (daysCountInitial - 14) / 7 > 3 &&
+                          (daysCountInitial - 14) / 7 < 4
+                        ? 297
+                        : (daysCountInitial - 14) / 7 > 4 &&
+                          (daysCountInitial - 14) / 7 < 5
+                        ? 396
+                        : (daysCountInitial - 14) / 7 > 5 &&
+                          (daysCountInitial - 14) / 7 < 6
+                        ? 495
+                        : (daysCountInitial - 14) / 7 > 6 &&
+                          (daysCountInitial - 14) / 7 < 7
+                        ? 594
+                        : (daysCountInitial - 14) / 7 > 7 &&
+                          (daysCountInitial - 14) / 7 < 8
+                        ? 693
+                        : 693,
+                  });
+              } else {
+                db.collection("arrears").add({
+                  invoice_number: eachRe.data().invoice_number,
+                  customer_id: eachRe.data().customer_id,
+                  type: eachRe.data().selectedType,
+                  mid: eachRe.data().mid,
+                  nic: eachRe.data().nic,
+                  balance: eachRe.data().balance,
+                  amountPerInstallment: eachRe.data().amountPerInstallment,
+                  noOfInstallment: eachRe.data().noOfInstallment,
+                  status_of_payandgo: eachRe.data().status_of_payandgo,
+                  delayed_days: Math.round(daysCountInitial) - 7,
+                  delayed_charges:
+                    daysCountInitial - 14 <= 7
+                      ? 0
+                      : (daysCountInitial - 14) / 7 < 2
+                      ? 99
+                      : (daysCountInitial - 14) / 7 > 2 &&
+                        (daysCountInitial - 14) / 7 < 3
+                      ? 198
+                      : (daysCountInitial - 14) / 7 > 3 &&
+                        (daysCountInitial - 14) / 7 < 4
+                      ? 297
+                      : (daysCountInitial - 14) / 7 > 4 &&
+                        (daysCountInitial - 14) / 7 < 5
+                      ? 396
+                      : (daysCountInitial - 14) / 7 > 5 &&
+                        (daysCountInitial - 14) / 7 < 6
+                      ? 495
+                      : (daysCountInitial - 14) / 7 > 6 &&
+                        (daysCountInitial - 14) / 7 < 7
+                      ? 594
+                      : (daysCountInitial - 14) / 7 > 7 &&
+                        (daysCountInitial - 14) / 7 < 8
+                      ? 693
+                      : 693,
+                  date: firebase.firestore.FieldValue.serverTimestamp(),
+                });
+              }
+            });
+        }
+      }
+    }
+  };
+
+  const afterStateOfArreasCheck = async (instReDoc, eachRe) => {
+    let daysCountNode2 =
+      (new Date().getTime() -
+        new Date(
+          instReDoc.docs[0].data()?.nextDate?.seconds * 1000
+        ).getTime()) /
+      (1000 * 3600 * 24);
+    let daysCount =
+      daysCountNode2 +
+      daysCountOfMonth(new Date().getMonth(), new Date().getFullYear());
+
+    let instRECheckCount = 0;
+
+    instReDoc.docs.forEach((instCheckRe) => {
+      if (instCheckRe.data().delayed > 0) {
+        instRECheckCount = instRECheckCount + 1;
+      }
+    });
+
+    if (instRECheckCount >= 7) {
+      setPendingBlackList([
+        ...pendingBlackList,
+        {
+          invoice_number: eachRe.data()?.invoice_number,
+          nic: eachRe.data()?.nic,
+        },
+      ]);
+    }
+
+    if (eachRe.data().selectedType === "shop") {
+      if (7 - daysCount >= 0) {
+      } else {
+        if (daysCount - 7 > 7) {
+          if (Math.round(daysCount) - 7 >= 49) {
+            setPendingBlackList([
+              ...pendingBlackList,
+              {
+                invoice_number: eachRe.data().invoice_number,
+                nic: eachRe.data()?.nic,
+              },
+            ]);
+          }
+
+          let statusMonth = await db
+            .collection("arrears")
+            .where("invoice_number", "==", eachRe.data().invoice_number)
+            .get();
+
+          if (statusMonth.docs.length > 0) {
+            db.collection("arrears")
+              .doc(statusMonth.docs[0].id)
+              .update({
+                delayed_days: daysCount - 7,
+                status_of_payandgo: eachRe.data().status_of_payandgo,
+                balance: eachRe.data().balance,
+                delayed_charges:
+                  daysCount - 7 <= 7
+                    ? 0
+                    : (daysCount - 7) / 7 < 2
+                    ? 99
+                    : (daysCount - 7) / 7 > 2 && (daysCount - 7) / 7 < 3
+                    ? 198
+                    : (daysCount - 7) / 7 > 3 && (daysCount - 7) / 7 < 4
+                    ? 297
+                    : (daysCount - 7) / 7 > 4 && (daysCount - 7) / 7 < 5
+                    ? 396
+                    : (daysCount - 7) / 7 > 5 && (daysCount - 7) / 7 < 6
+                    ? 495
+                    : (daysCount - 7) / 7 > 6 && (daysCount - 7) / 7 < 7
+                    ? 594
+                    : (daysCount - 7) / 7 > 7 && (daysCount - 7) / 7 < 8
+                    ? 693
+                    : 99 * Math.round((daysCount - 7) / 7),
+              });
+          } else {
+            db.collection("arrears").add({
+              invoice_number: eachRe.data().invoice_number,
+              customer_id: eachRe.data().customer_id,
+              type: eachRe.data().selectedType,
+              mid: eachRe.data().mid,
+              nic: eachRe.data().nic,
+              balance: eachRe.data().balance,
+              amountPerInstallment: eachRe.data().amountPerInstallment,
+              noOfInstallment: eachRe.data().noOfInstallment,
+              status_of_payandgo: eachRe.data().status_of_payandgo,
+              delayed_days: Math.round(daysCount) - 7,
+              delayed_charges:
+                daysCount - 7 <= 7
+                  ? 0
+                  : (daysCount - 7) / 7 < 2
+                  ? 99
+                  : (daysCount - 7) / 7 > 2 && (daysCount - 7) / 7 < 3
+                  ? 198
+                  : (daysCount - 7) / 7 > 3 && (daysCount - 7) / 7 < 4
+                  ? 297
+                  : (daysCount - 7) / 7 > 4 && (daysCount - 7) / 7 < 5
+                  ? 396
+                  : (daysCount - 7) / 7 > 5 && (daysCount - 7) / 7 < 6
+                  ? 495
+                  : (daysCount - 7) / 7 > 6 && (daysCount - 7) / 7 < 7
+                  ? 594
+                  : (daysCount - 7) / 7 > 7 && (daysCount - 7) / 7 < 8
+                  ? 693
+                  : 99 * Math.round((daysCount - 7) / 7),
+              date: firebase.firestore.FieldValue.serverTimestamp(),
+            });
+          }
+        }
+      }
+    } else {
+      if (14 - daysCount >= 0) {
+      } else {
+        if (daysCount - 14 > 7) {
+          if (Math.round(daysCount) - 14 >= 49) {
+            setPendingBlackList([
+              ...pendingBlackList,
+              {
+                invoice_number: eachRe.data().invoice_number,
+                nic: eachRe.data()?.nic,
+              },
+            ]);
+          }
+
+          let statusWeek = await db
+            .collection("arrears")
+            .where("invoice_number", "==", eachRe.data().invoice_number)
+            .get();
+
+          if (statusWeek.docs.length > 0) {
+            db.collection("arrears")
+              .doc(statusWeek.docs[0].id)
+              .update({
+                delayed_days: Math.round(daysCount) - 14,
+                status_of_payandgo: eachRe.data().status_of_payandgo,
+                balance: eachRe.data().balance,
+                delayed_charges:
+                  daysCount - 14 <= 7
+                    ? 0
+                    : (daysCount - 14) / 7 < 2
+                    ? 99
+                    : (daysCount - 14) / 7 > 2 && (daysCount - 14) / 7 < 3
+                    ? 198
+                    : (daysCount - 14) / 7 > 3 && (daysCount - 14) / 7 < 4
+                    ? 297
+                    : (daysCount - 14) / 7 > 4 && (daysCount - 14) / 7 < 5
+                    ? 396
+                    : (daysCount - 14) / 7 > 5 && (daysCount - 14) / 7 < 6
+                    ? 495
+                    : (daysCount - 14) / 7 > 6 && (daysCount - 14) / 7 < 7
+                    ? 594
+                    : (daysCount - 14) / 7 > 7 && (daysCount - 14) / 7 < 8
+                    ? 693
+                    : 99 * Math.round((daysCount - 14) / 7),
+              });
+          } else {
+            db.collection("arrears").add({
+              invoice_number: eachRe.data().invoice_number,
+              customer_id: eachRe.data().customer_id,
+              type: eachRe.data().selectedType,
+              mid: eachRe.data().mid,
+              nic: eachRe.data().nic,
+              balance: eachRe.data().balance,
+              amountPerInstallment: eachRe.data().amountPerInstallment,
+              noOfInstallment: eachRe.data().noOfInstallment,
+              status_of_payandgo: eachRe.data().status_of_payandgo,
+              delayed_days: Math.round(daysCount) - 14,
+              delayed_charges:
+                daysCount - 14 <= 7
+                  ? 0
+                  : (daysCount - 14) / 7 < 2
+                  ? 99
+                  : (daysCount - 14) / 7 > 2 && (daysCount - 14) / 7 < 3
+                  ? 198
+                  : (daysCount - 14) / 7 > 3 && (daysCount - 14) / 7 < 4
+                  ? 297
+                  : (daysCount - 14) / 7 > 4 && (daysCount - 14) / 7 < 5
+                  ? 396
+                  : (daysCount - 14) / 7 > 5 && (daysCount - 14) / 7 < 6
+                  ? 495
+                  : (daysCount - 14) / 7 > 6 && (daysCount - 14) / 7 < 7
+                  ? 594
+                  : (daysCount - 14) / 7 > 7 && (daysCount - 14) / 7 < 8
+                  ? 693
+                  : 99 * Math.round((daysCount - 14) / 7),
+              date: firebase.firestore.FieldValue.serverTimestamp(),
+            });
+          }
+        }
+      }
+    }
+  };
+
   return (
     <>
-      <PageTitle title="Dashboard" />
-      <div className="widgetWrappe">
-        <Grid container spacing={3}>
-          <Grid item xs={12} sm={4} className="card_body1">
-            <Paper title="All Income" className="card">
-              <Grid item xs={12} sm={2}></Grid>
-              <Grid item xs={12} sm={10}>
-                <h2 className="tipics_cards">All Income(LKR)</h2>
-              </Grid>
-              <div className="visitsNumberContainer">
-                <Grid item xs={12} sm={1}></Grid>
-                <Grid item xs={12} sm={5}>
-                  <Typography className="total" size="xl">
-                    <CurrencyFormat
-                      value={
-                        payandgoAllSales + installmentAll + fullpaymentAllSales
-                      }
-                      displayType={"text"}
-                      thousandSeparator={true}
-                      prefix={""}
-                    />
-                  </Typography>
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <LineChart
-                    className="line_chart"
-                    width={55}
-                    height={30}
-                    data={[
-                      { value: 10 },
-                      { value: 15 },
-                      { value: 10 },
-                      { value: 17 },
-                      { value: 18 },
-                    ]}
-                  >
-                    <Line
-                      stroke={theme.palette.success.main}
-                      type="natural"
-                      dataKey="value"
-                      strokeWidth={2}
-                      dot={false}
-                    />
-                  </LineChart>
-                </Grid>
-              </div>
-              <Grid
-                item
-                xs={12}
-                sm={12}
-                container
-                direction="row"
-                className="cost"
-                justify="space-between"
-                alignItems="center"
-              >
-                <Grid item xs={12} sm={1}></Grid>
-                <Grid className="payGoing" item xs={12} sm={5}>
-                  <Typography color="text" colorBrightness="secondary">
-                    Pay and Go
-                  </Typography>
-                  <Typography size="md" className="payGoing_lbl">
-                    {" "}
-                    <CurrencyFormat
-                      value={payandgoAllSales + installmentAll}
-                      displayType={"text"}
-                      thousandSeparator={true}
-                      prefix={" "}
-                    />
-                  </Typography>
-                </Grid>
-                <Grid className="fullPaying" item xs={12} sm={6}>
-                  <Typography color="text" colorBrightness="secondary">
-                    Full Payment
-                  </Typography>
-                  <Typography className="fullPaying_lbl" size="md">
-                    {" "}
-                    <CurrencyFormat
-                      value={fullpaymentAllSales}
-                      displayType={"text"}
-                      thousandSeparator={true}
-                      prefix={" "}
-                    />
-                  </Typography>
-                </Grid>
-              </Grid>
-            </Paper>
-          </Grid>
 
-          <Grid item xs={12} sm={4} className="card_body2">
-            <Paper title="Today Income" className="card">
-              <Grid item xs={12} sm={2}></Grid>
-              <Grid item xs={12} sm={10}>
-                <h2 className="tipics_cards">Today Income(LKR)</h2>
-              </Grid>
-              <div className="visitsNumberContainer">
-                <Grid item xs={12} sm={1}></Grid>
-                <Grid item xs={12} sm={5}>
-                  <Typography className="total" size="xl">
-                    <CurrencyFormat
-                      value={
-                        payandgoTodaySales +
-                        installmentToday +
-                        fullpaymentTodaySales
-                      }
-                      displayType={"text"}
-                      thousandSeparator={true}
-                      prefix={""}
-                    />
-                  </Typography>
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <LineChart
-                    className="line_chart"
-                    width={55}
-                    height={30}
-                    data={[
-                      { value: 10 },
-                      { value: 15 },
-                      { value: 10 },
-                      { value: 17 },
-                      { value: 18 },
-                    ]}
-                  >
-                    <Line
-                      type="natural"
-                      dataKey="value"
-                      stroke={theme.palette.warning.main}
-                      strokeWidth={2}
-                      dot={false}
-                    />
-                  </LineChart>
-                </Grid>
-              </div>
-              <Grid
-                item
-                xs={12}
-                sm={12}
-                container
-                direction="row"
-                className="cost"
-                justify="space-between"
-                alignItems="center"
-              >
-                <Grid item xs={12} sm={1}></Grid>
-                <Grid className="payGoing" item xs={12} sm={5}>
-                  <Typography color="text" colorBrightness="secondary">
-                    Pay and Go
-                  </Typography>
-                  <Typography size="md" className="payGoing_lbl">
-                    {" "}
-                    <CurrencyFormat
-                      value={payandgoTodaySales + installmentToday}
-                      displayType={"text"}
-                      thousandSeparator={true}
-                      prefix={""}
-                    />
-                  </Typography>
-                </Grid>
-                <Grid className="fullPaying" item xs={12} sm={6}>
-                  <Typography color="text" colorBrightness="secondary">
-                    Full Payment
-                  </Typography>
-                  <Typography size="md" className="fullPaying_lbl">
-                    {" "}
-                    <CurrencyFormat
-                      value={fullpaymentTodaySales}
-                      displayType={"text"}
-                      thousandSeparator={true}
-                      prefix={""}
-                    />
-                  </Typography>
-                </Grid>
-              </Grid>
-            </Paper>
-          </Grid>
+     <Grid container spacing={4}>
+        <Grid className="titl_Dash" item xs={12}>
+        
+        </Grid>
+      </Grid>
 
-          <Grid item xs={12} sm={4} className="card_body3">
-            <Paper title="Current Month Income" className="card">
-              <Grid item xs={12} sm={2}></Grid>
-              <Grid item xs={12} sm={10}>
-                <h2 className="tipics_cards">Current Month Income(LKR)</h2>
-              </Grid>
-              <div className="visitsNumberContainer">
-                <Grid item xs={12} sm={1}></Grid>
-                <Grid item xs={12} sm={5}>
-                  <Typography className="total" size="xl">
-                    <CurrencyFormat
-                      value={
-                        payandgoMonthSales +
-                        installmentMonth +
-                        fullpaymentMonthSales
-                      }
-                      displayType={"text"}
-                      thousandSeparator={true}
-                      prefix={""}
-                    />
-                  </Typography>
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <LineChart
-                    className="line_chart"
-                    width={55}
-                    height={30}
-                    data={[
-                      { value: 10 },
-                      { value: 15 },
-                      { value: 10 },
-                      { value: 17 },
-                      { value: 18 },
-                    ]}
-                  >
-                    <Line
-                      type="natural"
-                      dataKey="value"
-                      stroke={theme.palette.secondary.main}
-                      strokeWidth={2}
-                      dot={false}
-                    />
-                  </LineChart>
-                </Grid>
-              </div>
-              <Grid
-                item
-                xs={12}
-                sm={12}
-                container
-                direction="row"
-                className="cost"
-                justify="space-between"
-                alignItems="center"
-              >
-                <Grid item xs={12} sm={1}></Grid>
-                <Grid className="payGoing" item xs={12} sm={5}>
-                  <Typography color="text" colorBrightness="secondary">
-                    Pay and Go
-                  </Typography>
-                  <Typography size="md" className="payGoing_lbl">
-                    <CurrencyFormat
-                      value={payandgoMonthSales + installmentMonth}
-                      displayType={"text"}
-                      thousandSeparator={true}
-                      prefix={""}
-                    />
-                  </Typography>
-                </Grid>
-                <Grid className="fullPaying" item xs={12} sm={6}>
-                  <Typography color="text" colorBrightness="secondary">
-                    Full Payment
-                  </Typography>
-                  <Typography size="md" className="fullPaying_lbl">
-                    <CurrencyFormat
-                      value={fullpaymentMonthSales}
-                      displayType={"text"}
-                      thousandSeparator={true}
-                      prefix={""}
-                    />
-                  </Typography>
-                </Grid>
-              </Grid>
-            </Paper>
-          </Grid>
 
-          <Grid item xs={12} sm={12} className="mostSales_tbl">
-            <Typography size="xl">Most Sales Items</Typography>
-            <br />
-            <hr />
-          </Grid>
-
-          <Grid item xs={12} sm={12}>
-            <TableContainer component={Paper}>
-              <Table className="table" aria-label="simple table">
-                <TableHead>
-                  <TableRow>
-                    <TableCell className="tbl_cell" align="left">
-                      Item&nbsp;Name
-                    </TableCell>
-                    <TableCell className="tbl_cell" align="left">
-                      Model&nbsp;No.
-                    </TableCell>
-                    <TableCell className="tbl_cell" align="left">
-                      Serial&nbsp;No.
-                    </TableCell>
-                    <TableCell className="tbl_cell" align="left">
-                      Sales&nbsp;Price
-                    </TableCell>
-                    <TableCell className="tbl_cell" align="left">
-                      Cash&nbsp;Price
-                    </TableCell>
-                    <TableCell className="tbl_cell" align="left">
-                      Down&nbsp;Payment
-                    </TableCell>
-                    <TableCell className="tbl_cell" align="left">
-                      Qty
-                    </TableCell>
-                    <TableCell className="tbl_cell" align="left">
-                      Status
-                    </TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {mostSalesItems.map((row) => (
-                    <TableRow key={row.name}>
-                      <TableCell component="th" scope="row">
-                        {row.name}
-                      </TableCell>
-                      <TableCell align="left">{row.modelNo}</TableCell>
-                      <TableCell align="left">{row.serialNo}</TableCell>
-                      <TableCell align="left">{row.salePrice}</TableCell>
-                      <TableCell align="left">{row.cashPrice}</TableCell>
-                      <TableCell align="left">{row.downPayament}</TableCell>
-                      <TableCell align="left">{row.qty}</TableCell>
-                      <TableCell align="left">{row.status}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
+       {/*START Arreas Table */}
+        <Grid container spacing={4}>
+          <Grid item xs={12}>
+            <ReportCards />
           </Grid>
         </Grid>
-      </div>
+        {/* END Arreas Table */}
+      
+      <Container component="main" className="main_containerDash">
+        
+          {/*START Cards */}
+        <Grid container spacing={4}>
+          <Grid item xs={12}>
+            <ArreasTable />
+          </Grid>
+        </Grid>
+        {/* END Cards  */}
+
+       
+
+        {/*START Expire Invoice Table */}
+
+        <Grid container spacing={4}>
+          <Grid item xs={12}>
+            <ExpireInvoice expire_list={expiredList} />
+          </Grid>
+        </Grid>
+        {/* END Expire Invoice Table */}
+
+        {/*START BlockListPrnding Table */}
+
+        <Grid container spacing={4}>
+          <Grid item xs={12}>
+            <PendingList pendingBlackList={pendingBlackList} />
+          </Grid>
+        </Grid>
+        {/*END BlockListPrnding Table */}
+
+        <br />
+
+        {/*START Invoices  Table */}
+
+        <Typography className="today_invoices" variant="h4" component="h6">
+          All invoices of issued in recently
+        </Typography>
+        <Grid container spacing={4}>
+          <Grid item xs={12}>
+            <InvoiceList />
+          </Grid>
+        </Grid>
+        {/*END Invoices  Table */}
+      </Container>
     </>
   );
 }

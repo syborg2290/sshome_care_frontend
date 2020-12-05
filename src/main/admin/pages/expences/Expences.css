@@ -1,0 +1,92 @@
+.topiccssse {
+  font-weight: 600 !important;
+  color: rgba(5, 15, 102, 0.801) !important;
+  margin-top: 20px !important;
+  font-size: 18px !important;
+}
+
+.rpr_add {
+  background-color: rgba(11, 1, 70, 0.897) !important;
+  color: aliceblue !important;
+  margin-top: 30px !important;
+}
+
+.txt_rprion {
+  margin-top: 20px !important;
+}
+
+.tt_rprion {
+  margin-top: -95px !important;
+  padding: 35px !important;
+}
+
+.rpr_icon {
+  margin-top: 35px !important;
+}
+
+.txt_othrtn {
+  margin-top: 20px !important;
+}
+
+.txt_othrGrid {
+  margin-top: -95px !important;
+  padding: 35px !important;
+}
+.tt_dfltGrid {
+  margin-top: -75px !important;
+  padding: 35px !important;
+}
+
+.othr_icon {
+  margin-top: 35px !important;
+}
+
+.othr_add {
+  background-color: rgba(11, 1, 70, 0.897) !important;
+  color: aliceblue !important;
+  margin-top: 30px !important;
+}
+
+.txt_Labelsoth {
+  font-weight: 600 !important;
+  color: rgba(0, 0, 0, 0.801) !important;
+  margin: auto !important;
+}
+
+.txtt_oth {
+  margin-left: 23px !important;
+}
+.brre {
+  margin-top: 10px !important;
+}
+.sampath_add {
+  background-color: rgba(11, 1, 70, 0.897) !important;
+  color: aliceblue !important;
+  margin-top: 40px !important;
+}
+.txt_sampathGrid {
+  margin-top: -98px !important;
+  padding: 35px !important;
+}
+.txt_sampath {
+  margin-top: 20px !important;
+  margin-left: -20px !important;
+}
+.sampath_icon {
+  margin-top: 35px !important;
+}
+
+.grid_deductibles {
+  margin-top: 25px !important;
+}
+
+.txt_blnceEx {
+  font-weight: 700 !important;
+  font-size: 18px !important;
+}
+.expences_card {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  margin-top: 20px !important;
+}

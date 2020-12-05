@@ -1,54 +1,52 @@
 import React, { useState, useEffect } from "react";
 import { Grid } from "@material-ui/core";
 import { Spin, Modal } from "antd";
-import HelpIcon from "@material-ui/icons/Help";
-// import axios from "axios";
 import MUIDataTable from "mui-datatables";
-// import socketIOClient from "socket.io-client";
 import { Row, Col } from "antd";
 
-import {
-  NotificationContainer,
-  NotificationManager,
-} from "react-notifications";
-import "react-notifications/lib/notifications.css";
 import CurrencyFormat from "react-currency-format";
 import moment from "moment";
 
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import Paper from "@material-ui/core/Paper";
+import { useHistory } from "react-router-dom";
 // components
 import EditModel from "./components/Edit_model";
+
 // icons
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import EditIcon from "@material-ui/icons/Edit";
-import DeleteIcon from "@material-ui/icons/Delete";
 
 // styles
 import "./Item_table.css";
 
-// const {
-//   RealtimeServerApi,
-//   SeverApi,
-// } = require("../../../../../config/settings.js");
-
 import db from "../../../../../config/firebase.js";
 
-export default function ItemTable() {
+export default function Item_table() {
+  // const [selectedItemtVisible, setSelectedItemtVisible] = useState(false);
   const [itemTableData, setItemTableData] = useState([]);
-  // eslint-disable-next-line
   const [allTtemData, setAllItemData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [visible, setVisible] = useState(false);
+  // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
   const [editVisible, setEditVisible] = useState(false);
-  const [confirmVisible, setConfirmVisible] = useState(false);
+
   // let socket = socketIOClient(RealtimeServerApi);
+
+  const [itemListSeMo, setItemListSeMo] = useState([]);
+
+  const [itemListSeMoCon, setItemListSeMoCon] = useState([]);
+
+  let history = useHistory();
 
   const showModal = () => {
     setVisible(true);
-  };
-
-  const showModalConfirmModal = () => {
-    setConfirmVisible(true);
   };
 
   const editModal = () => {
@@ -56,23 +54,47 @@ export default function ItemTable() {
   };
 
   useEffect(() => {
+    window.addEventListener("offline", function (e) {
+      history.push("/connection_lost");
+    });
+
     db.collection("item")
       .orderBy("timestamp", "desc")
       .onSnapshot((snapshot) => {
         var newData = [];
         var itemData = [];
+        var itemDataSeMo = [];
+        var itemDataSeMoCon = [];
+
+        if (snapshot.docs.length > 0) {
+          itemDataSeMoCon.push({
+            serialNo: snapshot.docs[0].data().serialNo,
+            modelNo: snapshot.docs[0].modelNo,
+            chassisNo: snapshot.docs[0].chassisNo,
+          });
+        }
         snapshot.docs.forEach((element) => {
           itemData.push({
             id: element.id,
             data: element.data(),
           });
 
+          itemDataSeMo.push({
+            serialNo: element.data().serialNo,
+            modelNo: element.data().modelNo,
+            chassisNo: element.data().chassisNo,
+          });
+
           newData.push([
             element.data().itemName,
             element.data().brand,
             element.data().qty,
-            element.data().serialNo,
-            element.data().modelNo,
+            element.data().color === "" ? " - " : element.data().color,
+            element.data().guaranteePeriod === ""
+              ? " - "
+              : element.data().guaranteePeriod +
+                " " +
+                element.data().guarantee.value.toLowerCase(),
             <CurrencyFormat
               value={element.data().salePrice}
               displayType={"text"}
@@ -106,99 +128,41 @@ export default function ItemTable() {
               <span className="icon_Edit">
                 <EditIcon onClick={editModal} />
               </span>
-              <span className="icon_delete">
+              {/* <span className="icon_delete">
                 <DeleteIcon onClick={showModalConfirmModal} />
-              </span>
+              </span> */}
             </div>,
           ]);
         });
         setItemTableData(newData);
         setAllItemData(itemData);
+        setItemListSeMo(itemDataSeMo);
+        setItemListSeMoCon(itemDataSeMoCon);
         setIsLoading(false);
       });
     // eslint-disable-next-line
   }, []);
 
-  // useEffect(() => {
-  //   socket.on("messageFromServer", (data) => {
-  //     var newData = [];
-  //     if (itemTableData.length < 1) {
-  //       data.forEach((element) => {
-  //         allTtemData.push(element);
-
-  //         newData.push([
-  //           <img
-  //             alt="img"
-  //             className="Item_img"
-  //             src={
-  //               element["photo"] !== "null"
-  //                 ? element["photo"]
-  //                 : require("../../../../../assets/empty_item.png")
-  //             }
-  //           />,
-  //           element["item_name"],
-  //           element["brand"],
-  //           element["qty"],
-  //           element["color"],
-  //           element["model_no"],
-  //           <CurrencyFormat
-  //             value={element["sale_price"]}
-  //             displayType={"text"}
-  //             thousandSeparator={true}
-  //             prefix={" "}
-  //           />,
-  //           <div
-  //             color="secondary"
-  //             size="small"
-  //             className={
-  //               element["qty"] !== 0
-  //                 ? element["qty"] >= 3
-  //                   ? "px-2"
-  //                   : "px-3"
-  //                 : "px-4"
-  //             }
-  //             variant="contained"
-  //           >
-  //             {element["qty"] !== 0
-  //               ? element["qty"] >= 3
-  //                 ? "Available"
-  //                 : "Low Stock"
-  //               : "Out Of Stock"}
-  //           </div>,
-  //           <div className="table_icon">
-  //             <VisibilityIcon onClick={showModal} />,
-  //             <span className="icon_Edit">
-  //               <EditIcon onClick={editModal} />
-  //             </span>
-  //           </div>,
-  //         ]);
-  //       });
-  //       setItemTableData(newData);
-  //     }
-  //   });
-  //   // eslint-disable-next-line
-  // }, [itemTableData]);
-
-  const showDeleteItemsConfirm = async () => {
-    await db
-      .collection("item")
-      .doc(
-        allTtemData[currentIndx] && allTtemData[currentIndx].id
-          ? allTtemData[currentIndx].id
-          : ""
-      )
-      .delete()
-      .then(function () {
-        NotificationManager.success("Item deletion successfully!", "Done");
-        setConfirmVisible(false);
-      })
-      .catch(function (error) {
-        NotificationManager.warning(
-          "Failed to continue the process!",
-          "Please try again"
-        );
-      });
-  };
+  // const showDeleteItemsConfirm = async () => {
+  //   await db
+  //     .collection("item")
+  //     .doc(
+  //       allTtemData[currentIndx] && allTtemData[currentIndx].id
+  //         ? allTtemData[currentIndx].id
+  //         : ""
+  //     )
+  //     .delete()
+  //     .then(function () {
+  //       NotificationManager.success("Item deletion successfully!", "Done");
+  //       setConfirmVisible(false);
+  //     })
+  //     .catch(function (error) {
+  //       NotificationManager.warning(
+  //         "Failed to continue the process!",
+  //         "Please try again"
+  //       );
+  //     });
+  // };
 
   const editModalClose = () => {
     setEditVisible(false);
@@ -233,18 +197,18 @@ export default function ItemTable() {
       },
     },
     {
-      name: "Serial no",
+      name: "Color",
       options: {
-        filter: true,
+        filter: false,
         setCellHeaderProps: (value) => ({
           style: { fontSize: "15px", color: "black", fontWeight: "600" },
         }),
       },
     },
     {
-      name: "Model no",
+      name: "Gurantee period",
       options: {
-        filter: true,
+        filter: false,
         setCellHeaderProps: (value) => ({
           style: { fontSize: "15px", color: "black", fontWeight: "600" },
         }),
@@ -281,7 +245,7 @@ export default function ItemTable() {
 
   return (
     <>
-      <Modal
+      {/* <Modal
         className="confo_model"
         closable={null}
         visible={confirmVisible}
@@ -299,7 +263,7 @@ export default function ItemTable() {
             Do you want to delete this item?{" "}
           </h3>
         </div>
-      </Modal>
+      </Modal> */}
       <Modal
         title={
           <span className="model_title">
@@ -350,26 +314,7 @@ export default function ItemTable() {
                       : " - "}{" "}
                   </span>
                 </Col>
-                <Col span={12}>MODEL NO</Col>
-                <Col span={12}>
-                  <span className="load_Item">
-                    {" "}
-                    <span className="colan">:</span>{" "}
-                    {allTtemData[currentIndx] && allTtemData[currentIndx].data
-                      ? allTtemData[currentIndx].data.modelNo
-                      : " - "}{" "}
-                  </span>
-                </Col>
-                <Col span={12}>SERIAL NO</Col>
-                <Col span={12}>
-                  <span className="load_Item">
-                    {" "}
-                    <span className="colan">:</span>{" "}
-                    {allTtemData[currentIndx] && allTtemData[currentIndx].data
-                      ? allTtemData[currentIndx].data.serialNo
-                      : " - "}{" "}
-                  </span>
-                </Col>
+
                 <Col span={12}>SALE PRICE(LKR)</Col>
                 <Col span={12}>
                   <span className="load_Item">
@@ -388,16 +333,7 @@ export default function ItemTable() {
                     )}{" "}
                   </span>
                 </Col>
-                <Col span={12}>CHASSIS NO</Col>
-                <Col span={12}>
-                  <span className="load_Item">
-                    {" "}
-                    <span className="colan">:</span>{" "}
-                    {allTtemData[currentIndx] && allTtemData[currentIndx].data
-                      ? allTtemData[currentIndx].data.chassisNo
-                      : " - "}{" "}
-                  </span>
-                </Col>
+
                 <Col span={12}>CASH PRICE(LKR)</Col>
                 <Col span={12}>
                   <span className="load_Item">
@@ -539,13 +475,63 @@ export default function ItemTable() {
                     {" "}
                     <span className="colan">:</span>{" "}
                     {moment(
-                      allTtemData[currentIndx] && allTtemData[currentIndx].data
-                        ? allTtemData[currentIndx].data.timestamp.seconds * 1000
+                      allTtemData[currentIndx] && allTtemData[currentIndx]?.data
+                        ? allTtemData[currentIndx]?.data?.timestamp?.seconds *
+                            1000
                         : " - "
                     ).format("dddd, MMMM Do YYYY, h:mm:ss a")}
                   </span>
                 </Col>
               </Row>
+              <hr />
+              <TableContainer component={Paper} className="main_containerNo">
+                <Table
+                  className="gass_Table"
+                  size="small"
+                  aria-label="a dense table"
+                >
+                  <TableHead className="No_Table_head">
+                    <TableRow>
+                      <TableCell className="tbl_cell">SerialNo</TableCell>
+                      <TableCell className="tbl_cell" align="left">
+                        ModelNo
+                      </TableCell>
+                      <TableCell className="tbl_cell" align="left">
+                        ChasisseNo
+                      </TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {itemListSeMoCon.length > 0
+                      ? itemListSeMoCon.map((row) => (
+                          <TableRow key={0}>
+                            <TableCell component="th" scope="row">
+                              {itemListSeMo[currentIndx]?.serialNo.map(
+                                (serailNoT) => (
+                                  <h5 key={serailNoT}>{serailNoT}</h5>
+                                )
+                              )}
+                            </TableCell>
+                            <TableCell component="th" scope="row">
+                              {itemListSeMo[currentIndx]?.modelNo.map(
+                                (modelNoT) => (
+                                  <h5 key={modelNoT}>{modelNoT}</h5>
+                                )
+                              )}
+                            </TableCell>
+                            <TableCell component="th" scope="row">
+                              {itemListSeMo[currentIndx]?.chassisNo.map(
+                                (chassisNoT) => (
+                                  <h5 key={chassisNoT}>{chassisNoT}</h5>
+                                )
+                              )}
+                            </TableCell>
+                          </TableRow>
+                        ))
+                      : ""}
+                  </TableBody>
+                </Table>
+              </TableContainer>
             </div>
           </div>
         </div>
@@ -674,12 +660,18 @@ export default function ItemTable() {
       <Grid className="tbl_Container" container spacing={4}>
         <Grid item xs={12}>
           <MUIDataTable
-            title={<span className="title_Span">Item List</span>}
-            className="item_table"
+            title={<span className="title_Span">All Items</span>}
+            className="item_table_xc"
             data={itemTableData}
             columns={columns}
             options={{
-              selectableRows: false,
+              rowHover: true,
+              // selectableRows: false,
+              selectableRows: "none",
+              draggableColumns: {
+                enabled: true,
+              },
+              responsive: "standard",
               customToolbarSelect: () => {},
               filterType: "textField",
               download: false,
@@ -687,6 +679,7 @@ export default function ItemTable() {
               searchPlaceholder: "Search using any field",
               elevation: 4,
               sort: true,
+              selectableRowsHeader: false,
               onRowClick: (rowData, rowMeta) => {
                 setCurrentIndx(rowMeta.dataIndex);
               },
@@ -701,7 +694,6 @@ export default function ItemTable() {
               },
             }}
           />
-          <NotificationContainer />
         </Grid>
       </Grid>
     </>

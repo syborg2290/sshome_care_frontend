@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import {
   Grid,
   Container,
@@ -15,7 +16,9 @@ import db from "../../../../../../config/firebase.js";
 import "./Add_Model.css";
 
 export default function Add_Model({ closeModel }) {
-  const [invoice, setInvoice] = useState("");
+  // eslint-disable-next-line
+  // const [invoice, setInvoice] = useState("");
+  const [serial, setSerial] = useState("");
   const [date, setDate] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -24,24 +27,39 @@ export default function Add_Model({ closeModel }) {
     setDate(dateString);
   };
 
+  let history = useHistory();
+
+  useEffect(() => {
+    window.addEventListener("offline", function (e) {
+      history.push("/connection_lost");
+    });
+  });
+
   const addSeized = async () => {
     setLoading(true);
-    db.collection("blacklist")
-      .where("InvoiceNo", "==", invoice.trim())
+    await db
+      .collection("invoice")
       .get()
-      .then((checkBlackList) => {
-        if (checkBlackList.docs.length > 0) {
-          db.collection("seized")
-            .where("invoice_number", "==", invoice.trim())
-            .get()
-            .then((reSeizedCheck) => {
-              if (reSeizedCheck.docs.length <= 0) {
-                db.collection("invoice")
-                  .where("invoice_number", "==", invoice.trim())
-                  .get()
-                  .then((reThen) => {
-                    if (reThen.docs.length > 0) {
-                      if (reThen.docs[0].data()?.customer_id !== null) {
+      .then((re) => {
+        var count = 0;
+        re.docs.forEach((eachReturn) => {
+          if (eachReturn.data().paymentWay === "PayandGo") {
+            eachReturn.data().items.forEach(async (reItem) => {
+              if (reItem.serialNo[0] === serial.trim()) {
+                let invoice = eachReturn.data().invoice_number;
+
+                let reSeizedCheck = await db
+                  .collection("seized")
+                  .where("invoice_number", "==", invoice)
+                  .get();
+
+                if (reSeizedCheck.docs.length === 0) {
+                  db.collection("invoice")
+                    .where("invoice_number", "==", invoice)
+                    .get()
+                    .then((reThen) => {
+                      if (reThen.docs.length > 0) {
+                        setError(" ");
                         reThen.docs[0].data().items.forEach((reI) => {
                           db.collection("item")
                             .doc(reI.item_id)
@@ -49,8 +67,11 @@ export default function Add_Model({ closeModel }) {
                             .then((itRe) => {
                               db.collection("seized")
                                 .add({
-                                  invoice_number: invoice.trim(),
-                                  model_no: itRe.data().modelNo,
+                                  invoice_number: invoice,
+                                  serialNo: serial.trim(),
+                                  type: eachReturn.data().selectedType,
+                                  mid: eachReturn.data().mid,
+                                  model_no: reItem.modelNo[0],
                                   item_name: itRe.data().itemName,
                                   nic: reThen.docs[0].data().nic,
                                   date: date,
@@ -63,27 +84,32 @@ export default function Add_Model({ closeModel }) {
                                 });
                             });
                         });
-                      } else {
-                        setLoading(false);
-                        setError(
-                          "Invoice number you entered is not 'pay and go' item!"
-                        );
                       }
-                    } else {
-                      setLoading(false);
-                      setError("Invoice number you entered is not found!");
-                    }
-                  });
+                    });
+                } else {
+                  setLoading(false);
+                  setError(
+                    "Serial number you entered already in the seized list!"
+                  );
+                }
               } else {
                 setLoading(false);
-                setError(
-                  "Invoice number you entered already in the seized list!"
-                );
+                setError("Serial number you entered is not found!");
               }
+              count = count + 1;
             });
-        } else {
+          } else {
+            setLoading(false);
+            setError("Serial number you entered is not found!");
+          }
+        });
+        if (re.docs.length < count) {
           setLoading(false);
-          setError("Invoice number you entered not in the blacklist!");
+          if (error === " ") {
+            setError("");
+          } else {
+            setError("Serial number that you entered is not found!");
+          }
         }
       });
   };
@@ -100,22 +126,22 @@ export default function Add_Model({ closeModel }) {
         <form className="form" noValidate>
           <Grid container spacing={2}>
             <Grid className="lbl_topi" item xs={12} sm={4}>
-              Invoice No
+              Serial No
             </Grid>
             <Grid item xs={12} sm={2}>
               :
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
-                autoComplete="ino"
+                autoComplete="sio"
                 variant="outlined"
                 required
                 fullWidth
-                label="Invoice No"
+                label="Serial No"
                 size="small"
-                value={invoice}
+                value={serial}
                 onChange={(e) => {
-                  setInvoice(e.target.value);
+                  setSerial(e.target.value.trim());
                 }}
               />
             </Grid>
@@ -143,7 +169,10 @@ export default function Add_Model({ closeModel }) {
                 className="btn_add"
                 onClick={addSeized}
                 disabled={
-                  loading || invoice.length === 0 || date.length === 0
+                  loading ||
+                  serial.length === 0 ||
+                  date.length === 0 ||
+                  date === null
                     ? true
                     : false
                 }

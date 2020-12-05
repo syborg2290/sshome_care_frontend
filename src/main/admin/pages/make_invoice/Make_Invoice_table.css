@@ -1,0 +1,25 @@
+.t1 {
+  margin-top: 70px !important;
+}
+
+.btn_MakeInvoice_itm {
+  margin-top: 70px !important;
+  float: right !important;
+  margin-bottom: -30px !important;
+}
+
+.main_containerNo {
+  margin-top: 30px;
+}
+
+.No_Table_head {
+  background-color: rgb(154, 154, 255);
+}
+
+.makeInvoice_table {
+  margin-top: 30px !important;
+}
+
+.model_selected_Item {
+  width: 30% !important;
+}

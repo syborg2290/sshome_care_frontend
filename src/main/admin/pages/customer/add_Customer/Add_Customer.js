@@ -70,7 +70,7 @@ export default function Add_Customer() {
     setIsItNull(passedObj);
 
     window.addEventListener("offline", function (e) {
-      history.push("/assistant/ui/ItemTable");
+      history.push("/admin/ui/ItemTable");
     });
     // eslint-disable-next-line
   }, []);
@@ -169,7 +169,7 @@ export default function Add_Customer() {
                                       passedObj[0].customer = customerObj;
 
                                       let moveWith = {
-                                        pathname: "/assistant/ui/makeInvoice",
+                                        pathname: "/admin/ui/makeInvoice",
                                         search: "?query=abc",
                                         state: { detail: passedObj },
                                       };

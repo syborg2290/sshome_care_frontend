@@ -45,12 +45,12 @@ export default function Salary() {
 
   const SalaryAdvanceModels = () => {
     setSalaryAdvanceModel(true);
-    history.push("/assistant/salary/advance");
+    history.push("/admin/salary/advance");
   };
 
   const SalaryTemporaryModel = () => {
     setTemporaryModel(true);
-    history.push("/assistant/salary/Temporary");
+    history.push("/admin/salary/Temporary");
   };
 
   const TrgetModelCreate = () => {

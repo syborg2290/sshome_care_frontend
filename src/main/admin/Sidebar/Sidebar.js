@@ -66,7 +66,7 @@ const structure = [
       { label: "Stock History", link: "/admin/ui/StockHistory" },
     ],
   },
-     {
+  {
     id: 4,
     label: "Customers",
     link: "/admin/ui/Customer",
@@ -81,7 +81,7 @@ const structure = [
   },
 
   { id: 5, type: "divider" },
-  
+
   {
     id: 10,
     label: "Arreas",

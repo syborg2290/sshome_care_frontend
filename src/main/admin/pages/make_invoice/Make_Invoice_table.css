@@ -16,9 +16,21 @@
   background-color: rgb(154, 154, 255);
 }
 
+<<<<<<< HEAD
 /* .tbl_cell {
   color: aliceblue !important;
 } */
+=======
+<<<<<<< HEAD
+/* .tbl_cell {
+  color: aliceblue !important;
+} */
+=======
+.makeInvoice_table {
+  margin-top: 30px !important;
+}
+>>>>>>> 3207b7658ec35f990544e993c357b42673da03fc
+>>>>>>> 842c1e4f4947454420fc1fc2ce359f3f0b91b582
 
 .model_selected_Item {
   width: 30% !important;

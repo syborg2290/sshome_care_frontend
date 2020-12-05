@@ -66,7 +66,6 @@ const structure = [
       { label: "Stock History", link: "/admin/ui/StockHistory" },
     ],
   },
-
   {
     id: 4,
     label: "Customers",
@@ -82,6 +81,7 @@ const structure = [
   },
 
   { id: 5, type: "divider" },
+
   {
     id: 10,
     label: "Arreas",
@@ -94,7 +94,6 @@ const structure = [
     link: "/admin/ui/Repair",
     icon: <BuildIcon className="icons" />,
   },
-
   {
     id: 13,
     label: "Gami Sarani",
@@ -145,7 +144,6 @@ const structure = [
     link: "/admin/ui/BlackList",
     icon: <PersonAddDisabledIcon className="icons" />,
   },
-
   {
     id: 12,
     label: "Seized Item",

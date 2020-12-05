@@ -62,7 +62,6 @@ class RepairRecipt extends React.Component {
                     firebase.firestore.FieldValue.serverTimestamp()
                   ).format("dddd, MMMM Do YYYY, h:mm:ss a")}
                 </Col>
-
                 <Col className="tiles_repair" span={6}>
                   Model No.
                 </Col>

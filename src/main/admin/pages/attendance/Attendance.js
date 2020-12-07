@@ -46,7 +46,7 @@ export default function Attendance() {
 
   const showModalHistoryAttendance = () => {
     setHistoryAttendanceModel(true);
-    history.push("/assistant/attendant/attendat_history");
+    history.push("/admin/attendant/attendat_history");
   };
 
   //START Attendance Table Colomns

@@ -164,7 +164,7 @@ export default function Salary() {
   const PayHistoryModels = (nic) => {
     setpayHistoryModel(true);
     let moveWith = {
-      pathname: "/assistant/salary/pay_history",
+      pathname: "/admin/salary/pay_history",
       search: "?query=abc",
       state: { detail: nic },
     };

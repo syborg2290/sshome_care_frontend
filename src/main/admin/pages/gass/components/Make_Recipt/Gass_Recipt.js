@@ -48,7 +48,7 @@ class GassRecipt extends React.Component {
             SS HOME CARE CITY
           </Typography>
           <Typography
-            className="company_sub__title_repair"
+            className="company_sub__title_gass"
             variant="h5"
             gutterBottom
           >
@@ -56,7 +56,7 @@ class GassRecipt extends React.Component {
             <hr />
           </Typography>
           <div className="paper_gass">
-            <form className="form_repair" noValidate>
+            <form className="form_gass" noValidate>
               <Row>
                 <Col span={24}>
                   <br />
@@ -88,7 +88,7 @@ class GassRecipt extends React.Component {
                   <hr />
                   <br />
                 </Col>
-                <Col className="tiles_settlement_repair" span={24}>
+                <Col className="tiles_settlement_gass" span={24}>
                   <TableContainer component={Paper}>
                     <Table className="ytsd" aria-label="simple table">
                       <TableHead>
@@ -145,7 +145,7 @@ class GassRecipt extends React.Component {
                   </TableContainer>
                 </Col>
 
-                <Col className="tiles_settlement_repair" span={24}>
+                <Col className="tiles_settlement_gass" span={24}>
                   Thank You!
                 </Col>
               </Row>

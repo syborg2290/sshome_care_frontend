@@ -102,7 +102,7 @@ export default function Gass() {
   return (
     <>
       <Modal
-        className="confo_model"
+        className="gassSell_model"
         visible={gassModal}
         footer={null}
         onCancel={() => {

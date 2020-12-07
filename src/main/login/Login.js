@@ -118,47 +118,50 @@ function Login(props) {
                 </Typography>
                 <div className={classes.formDivider} />
               </div>
-              <TextField
-                id="name"
-                className="txt_login"
-                value={loginValue}
-                onChange={(e) => setLoginValue(e.target.value)}
-                placeholder="Username"
-                type="name"
-                label="Username"
-                variant="outlined"
-                fullWidth
-              />
-              <TextField
-                id="password"
-                className="txt_login"
-                value={passwordValue}
-                onChange={(e) => setPasswordValue(e.target.value)}
-                margin="normal"
-                placeholder="Password"
-                type="password"
-                label="Password"
-                variant="outlined"
-                fullWidth
-              />
-              <div className={classes.formButtons}>
-                {isLoading ? (
-                  <CircularProgress size={26} className="loginLoader" />
-                ) : (
-                  <Button
-                    className="btn_Login"
-                    disabled={
-                      loginValue.length === 0 || passwordValue.length === 0
-                    }
-                    onClick={onLogin}
-                    variant="contained"
-                    color="primary"
-                    size="large"
-                  >
-                    Login
-                  </Button>
-                )}
-              </div>
+              <form>
+                <TextField
+                  id="name"
+                  className="txt_login"
+                  value={loginValue}
+                  onChange={(e) => setLoginValue(e.target.value)}
+                  placeholder="Username"
+                  type="name"
+                  label="Username"
+                  variant="outlined"
+                  fullWidth
+                />
+                <TextField
+                  id="password"
+                  className="txt_login"
+                  value={passwordValue}
+                  onChange={(e) => setPasswordValue(e.target.value)}
+                  margin="normal"
+                  placeholder="Password"
+                  type="password"
+                  label="Password"
+                  variant="outlined"
+                  fullWidth
+                />
+                <div className={classes.formButtons}>
+                  {isLoading ? (
+                    <CircularProgress size={26} className="loginLoader" />
+                  ) : (
+                    <Button
+                      className="btn_Login"
+                      disabled={
+                        loginValue.length === 0 || passwordValue.length === 0
+                      }
+                      onClick={onLogin}
+                      variant="contained"
+                      color="primary"
+                      size="large"
+                      type="submit"
+                    >
+                      Login
+                    </Button>
+                  )}
+                </div>
+              </form>
             </React.Fragment>
           </div>
         </div>

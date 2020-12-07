@@ -165,7 +165,7 @@ export default function Accounts() {
             data={users}
             columns={columns}
             options={{
-              selectableRows: false,
+              selectableRows: "none",
               customToolbarSelect: () => {},
               onRowClick: (rowData, rowMeta) => {
                 setCurrentIndx(rowMeta.dataIndex);

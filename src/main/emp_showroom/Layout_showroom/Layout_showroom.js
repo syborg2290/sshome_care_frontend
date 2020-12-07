@@ -20,7 +20,6 @@ import Repairs from "../pages_showroom/repairs/Repairs";
 import BlackList from "../pages_showroom/black_list/Black_List";
 import GamiSarani from "../pages_showroom/gami_sarani/Gami_Sarani";
 import Gass from "../pages_showroom/gass/Gass";
-
 import PrintInvoice from "../pages_showroom/invoice_History/printInvoice/Print_invoice";
 import PrintReceipt from "../pages_showroom/invoice_History/components/PayAndGoModel/UpdateModel/Make_Recipt/Recipt";
 import RepairReceipt from "../pages_showroom/repairs/repairs_Model/repair_update_Recipt/Repair_recipt";
@@ -42,15 +41,15 @@ function LayoutShowroom(props) {
               path="/showroom/ui/invoiceHistory"
               component={InvoiceHistory}
             />
-
             <Route
               path="/showroom/invoice/printInvoice"
-              component={PrintReceipt}
-            />
-            <Route
-              path="/showroom/invoice/printInvoiceOrg"
               component={PrintInvoice}
             />
+            <Route
+              path="/showroom/invoice/PrintReceipt"
+              component={PrintReceipt}
+            />
+
             {/* <Route
               path="/showroom/arreas/arreasUpdateModel/ArreasReceipt"
               component={ArriesReceipt}

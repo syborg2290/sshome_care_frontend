@@ -28,8 +28,6 @@ import AddNewModel from "./components/add_new_Gass/AddNew_Model";
 import SellingHistory from "./components/selling_history/Selling_History";
 import GassHistoryModel from "./components/gass_history/Gass_History";
 
-
-
 import db from "../../../../config/firebase.js";
 
 function createData(Weight, Qty, Price, Action) {
@@ -61,12 +59,11 @@ export default function Gass() {
     setPurchaseHistory(true);
   };
 
-    const GassHistory = () => {
+  const GassHistory = () => {
     setGassHistory(true);
   };
 
   useEffect(() => {
-    
     window.addEventListener("offline", function (e) {
       history.push("/connection_lost");
     });
@@ -96,7 +93,7 @@ export default function Gass() {
       setAllTableData(rawAll);
       setTableData(raw);
     });
-      // eslint-disable-next-line
+    // eslint-disable-next-line
   }, []);
 
   return (
@@ -106,7 +103,7 @@ export default function Gass() {
         visible={gassModal}
         footer={null}
         onCancel={() => {
-          setGassModal(false);
+          window.location.reload();
         }}
       >
         <div className="confoModel_body">
@@ -148,7 +145,6 @@ export default function Gass() {
 
       {/* END add gass Purches History model */}
 
-      
       {/* START  gass History model */}
 
       <Modal
@@ -173,9 +169,8 @@ export default function Gass() {
         <Grid container spacing={2}>
           <Grid item xs={12} sm={1}>
             <hr className="titles_hr" />
-           
           </Grid>
-       
+
           <Grid item xs={12} sm={2}>
             <Button
               variant="contained"
@@ -198,17 +193,16 @@ export default function Gass() {
               Selling History
             </Button>
           </Grid>
-             <Grid item xs={12} sm={3}>
-           <Button
+          <Grid item xs={12} sm={3}>
+            <Button
               variant="contained"
               onClick={GassHistory}
               endIcon={<HistoryIcon />}
               color="primary"
               className="btn_gassHis"
             >
-             Gass History
+              Gass History
             </Button>
-
           </Grid>
           <Grid item xs={12} sm={3}>
             <Button

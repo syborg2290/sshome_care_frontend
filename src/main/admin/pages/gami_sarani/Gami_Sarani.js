@@ -232,7 +232,7 @@ export default function Gami_Sarani() {
         footer={null}
         className="model_Gamisarani_Cutomer"
         onCancel={() => {
-          setGamisaraniModel(false);
+          window.location.reload();
         }}
       >
         <div className="table_Gamisarani_Cutomer">

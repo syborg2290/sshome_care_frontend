@@ -28,7 +28,7 @@ export default function Loan() {
   const [tableData, setTableData] = useState([]);
 
   let history = useHistory();
-  
+
   const AddNewLoanModel = () => {
     setAddNewLoanModel(true);
   };
@@ -118,7 +118,7 @@ export default function Loan() {
   ];
 
   useEffect(() => {
-       window.addEventListener("offline", function (e) {
+    window.addEventListener("offline", function (e) {
       history.push("/connection_lost");
     });
     db.collection("loans")
@@ -170,7 +170,7 @@ export default function Loan() {
         setallData(allRawData);
         setTableData(rawTableData);
       });
-        // eslint-disable-next-line
+    // eslint-disable-next-line
   }, []);
 
   return (
@@ -182,7 +182,7 @@ export default function Loan() {
         footer={null}
         className="model_loan_add"
         onCancel={() => {
-          setAddNewLoanModel(false);
+          window.location.reload();
         }}
       >
         <div>

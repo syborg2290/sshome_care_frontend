@@ -270,7 +270,7 @@ export default function Repairs() {
         className="Item_repairt_Model"
         footer={null}
         onCancel={() => {
-          setrepairModel(false);
+          window.location.reload();
         }}
       >
         <div className="Repairt_Model">

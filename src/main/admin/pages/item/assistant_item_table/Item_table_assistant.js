@@ -23,7 +23,7 @@ import VisibilityIcon from "@material-ui/icons/Visibility";
 import EditIcon from "@material-ui/icons/Edit";
 
 // styles
-import "./Item_table_assistant.css";
+import "./Item_table_admin.css";
 
 import db from "../../../../../config/firebase.js";
 

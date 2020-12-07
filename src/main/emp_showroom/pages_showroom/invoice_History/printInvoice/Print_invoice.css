@@ -1,0 +1,80 @@
+.papers {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  margin-top: 20px !important;
+  overflow: hidden !important;
+}
+
+.forms {
+  width: 100% !important;
+  margin-top: 30px !important;
+}
+
+.company_title {
+  text-align: center !important;
+  font-weight: 700 !important;
+  font-family: "Times New Roman", Times, serif !important;
+  margin-top: 20px !important;
+}
+
+.company_sub__title {
+  text-align: center !important;
+  font-size: smaller !important;
+}
+
+.tbl {
+  margin-top: 50px !important;
+}
+.btn_print {
+  margin-top: 30px !important;
+  width: 10% !important;
+  float: right !important;
+  background-color: blue !important;
+  color: aliceblue !important;
+  text-transform: lowercase !important;
+}
+
+.mainsPrint_container {
+  margin-top: 70px !important;
+  padding-top: 15px !important;
+  width: 595px !important;
+  /* height: 842px !important; */
+  background-color: rgb(255, 255, 255) !important;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+
+.txt_labelr {
+  float: left !important;
+}
+
+.lbl_address {
+  font-weight: 600 !important;
+}
+
+.invo_number {
+  font-weight: 600 !important;
+}
+
+.cell_total {
+  font-weight: 800 !important;
+}
+
+.row_signature {
+  margin-top: 50px !important;
+  float: right !important;
+  padding-bottom: 15px !important;
+}
+
+.txt_signature {
+  margin-left: 15px !important;
+  margin-top: 10px !important;
+}
+
+.hr_installmentPrint {
+  margin-bottom: 50px !important;
+}
+
+.installment_titls {
+  font-weight: 600 !important;
+}

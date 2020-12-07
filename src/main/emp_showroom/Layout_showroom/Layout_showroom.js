@@ -1,6 +1,6 @@
 import React from "react";
 // eslint-disable-next-line
-import { Route, Switch, Redirect, withRouter } from "react-router-dom";
+import { Route, Switch, withRouter } from "react-router-dom";
 
 // styles
 import "./Layout_showroom.css";
@@ -21,6 +21,7 @@ import BlackList from "../pages_showroom/black_list/Black_List";
 import GamiSarani from "../pages_showroom/gami_sarani/Gami_Sarani";
 import Gass from "../pages_showroom/gass/Gass";
 
+import PrintInvoice from "../pages_showroom/invoice_History/printInvoice/Print_invoice";
 import PrintReceipt from "../pages_showroom/invoice_History/components/PayAndGoModel/UpdateModel/Make_Recipt/Recipt";
 import RepairReceipt from "../pages_showroom/repairs/repairs_Model/repair_update_Recipt/Repair_recipt";
 import GassRecipt from "../pages_showroom/gass/components/Make_Recipt/Gass_Recipt";
@@ -45,6 +46,10 @@ function LayoutShowroom(props) {
             <Route
               path="/showroom/invoice/printInvoice"
               component={PrintReceipt}
+            />
+            <Route
+              path="/showroom/invoice/printInvoiceOrg"
+              component={PrintInvoice}
             />
             {/* <Route
               path="/showroom/arreas/arreasUpdateModel/ArreasReceipt"

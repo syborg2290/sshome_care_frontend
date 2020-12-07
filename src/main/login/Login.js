@@ -50,6 +50,7 @@ function Login(props) {
 
   const onLogin = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     var itemsProcessed = 0;
     var iUsernameNot = true;
     var isPasswordNot = true;
@@ -75,6 +76,7 @@ function Login(props) {
           await db.collection("user").doc(user.id).update({
             lastlog: firebase.firestore.FieldValue.serverTimestamp(),
           });
+          setIsLoading(false);
 
           loginUser(
             userDispatch,

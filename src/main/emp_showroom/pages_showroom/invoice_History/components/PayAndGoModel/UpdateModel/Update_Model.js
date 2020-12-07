@@ -494,7 +494,7 @@ export default function Update_Model({
             };
 
             let moveWith = {
-              pathname: "/showroom/invoice/printInvoice",
+              pathname: "/showroom/invoice/PrintReceipt",
               search: "?query=abc",
               state: { detail: passingWithCustomerObj },
             };

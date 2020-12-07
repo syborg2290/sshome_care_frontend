@@ -116,7 +116,7 @@ export default function Example() {
       "popstate",
       (event) => {
         if (event.state) {
-          history.push("/showroom/ui/Repair");
+          history.push("/showroom/ui/Repairs");
         }
       },
       false

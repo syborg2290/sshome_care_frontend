@@ -20,7 +20,7 @@ import Repairs from "../pages_showroom/repairs/Repairs";
 import BlackList from "../pages_showroom/black_list/Black_List";
 import GamiSarani from "../pages_showroom/gami_sarani/Gami_Sarani";
 import Gass from "../pages_showroom/gass/Gass";
-
+import PrintInvoice from "../pages_showroom/invoice/printInvoice/Print_invoice";
 import PrintReceipt from "../pages_showroom/invoice_History/components/PayAndGoModel/UpdateModel/Make_Recipt/Recipt";
 import RepairReceipt from "../pages_showroom/repairs/repairs_Model/repair_update_Recipt/Repair_recipt";
 import GassRecipt from "../pages_showroom/gass/components/Make_Recipt/Gass_Recipt";
@@ -41,9 +41,12 @@ function LayoutShowroom(props) {
               path="/showroom/ui/invoiceHistory"
               component={InvoiceHistory}
             />
-
-            <Route
+                    <Route
               path="/showroom/invoice/printInvoice"
+              component={PrintInvoice}
+            />
+            <Route
+              path="/showroom/invoice/PrintReceipt"
               component={PrintReceipt}
             />
             {/* <Route

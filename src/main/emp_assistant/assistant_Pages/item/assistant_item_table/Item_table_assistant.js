@@ -23,7 +23,7 @@ import VisibilityIcon from "@material-ui/icons/Visibility";
 import EditIcon from "@material-ui/icons/Edit";
 
 // styles
-import "./Item_table_styles.css";
+import "./Item_table_assistant.css";
 
 import db from "../../../../../config/firebase.js";
 
@@ -484,7 +484,7 @@ export default function Item_table_assistant() {
                 </Col>
               </Row>
               <hr />
-              <TableContainer className="main_containerNo" component={Paper}>
+              <TableContainer component={Paper} className="main_containerNo">
                 <Table
                   className="gass_Table"
                   size="small"

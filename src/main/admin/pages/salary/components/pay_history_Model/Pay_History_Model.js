@@ -403,7 +403,7 @@ export default function Pay_History_Model() {
       };
 
       let moveWith = {
-        pathname: "/assistant/salary/history_reports",
+        pathname: "/admin/salary/history_reports",
         search: "?query=abc",
         state: { detail: passingObj },
       };

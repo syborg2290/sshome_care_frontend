@@ -31,7 +31,6 @@
   position: absolute;
   top: 0;
   left: 0;
- 
 }
 
 .lock_Icon {
@@ -50,4 +49,16 @@
   font-weight: 500 !important;
   text-align: center;
   margin-top: 10px;
+}
+
+.particles_login {
+  height: 100vh !important;
+  width: 100vw !important;
+  display: flex !important;
+  /* justify-content: center;
+  align-items: center;
+  position: absolute; */
+  /* top: 0;
+  left: 0; */
+  background-color: #000022 !important;
 }

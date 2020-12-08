@@ -1,5 +1,7 @@
 {
   "projects": {
-    "default": "sshomecare-26068"
+    "default": "sshomecare-26068",
+    " staging": "homecarecity",
+    "my-stagging": "homecarecity"
   }
 }

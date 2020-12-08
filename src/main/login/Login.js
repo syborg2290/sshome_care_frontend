@@ -93,6 +93,7 @@ function Login(props) {
     });
     if (itemsProcessed === length) {
       if (iUsernameNot || isPasswordNot) {
+        setIsLoading(false);
         NotificationManager.info(
           "Username and password not matched,please try again!"
         );

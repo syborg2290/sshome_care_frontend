@@ -103,7 +103,7 @@ function Login(props) {
   return (
     <>
       <div style={{ position: "absolute", background: "#000022" }}>
-        <Particles height="100vh" width="100vw" params={particlesConfig} />
+        <Particles className="particles_login" params={particlesConfig} />
       </div>
       <Grid container className="container">
         <div className="formContainer">

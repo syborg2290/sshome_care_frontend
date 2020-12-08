@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import MUIDataTable from "mui-datatables";
 import { Modal } from "antd";
-import { Button, Grid } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import db from "../../../../../../config/firebase.js";
 
 // styles
@@ -13,7 +13,7 @@ import PendingHistoryModel from "./blackList_Models/History_Model/History_Model"
 import UpdateInstallment from "../../../invoice_History/components/PayAndGoModel/UpdateModel/Update_Model";
 
 //icone
-import { ExclamationCircleOutlined } from "@ant-design/icons";
+// import { ExclamationCircleOutlined } from "@ant-design/icons";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import HistoryIcon from "@material-ui/icons/History";
 
@@ -24,7 +24,7 @@ export default function View_Model({ pendingBlackList }) {
   const [pendingHistoryModel, setPendingHistoryModel] = useState(false); //  table models
   const [allViewData, setAllViewData] = useState([]);
   const [allPendingBlacklistData, setAllPendingBlacklistData] = useState([]);
-  const [visibleConfirmPrint, setVisibleConfirmPrint] = useState(false);
+  // const [visibleConfirmPrint, setVisibleConfirmPrint] = useState(false);
   const [installmentUpdate, setInstallmentUpdate] = useState(false); //  table models
 
   const showModalUpdate = () => {
@@ -35,75 +35,75 @@ export default function View_Model({ pendingBlackList }) {
     setInstallmentUpdate(false);
   };
 
-  const showVisibleConfirmModal = () => {
-    setVisibleConfirmPrint(true);
-  };
+  // const showVisibleConfirmModal = () => {
+  //   setVisibleConfirmPrint(true);
+  // };
 
-  const changeToBlacklist = () => {
-    db.collection("arrears")
-      .where("invoice_number", "==", allViewData[currentIndx]?.invoice_no)
-      .get()
-      .then(async (reArreas) => {
-        await db.collection("arrears").doc(reArreas.docs[0].id).delete();
-        await db
-          .collection("invoice")
-          .where("invoice_number", "==", allViewData[currentIndx]?.invoice_no)
-          .get()
-          .then(async (reInVo) => {
-            await db.collection("invoice").doc(reInVo.docs[0].id).update({
-              status_of_payandgo: "blacklist",
-            });
-          });
-        await db
-          .collection("customer")
-          .doc(reArreas.docs[0].data().customer_id)
-          .update({
-            status: "blacklist",
-          });
+  // const changeToBlacklist = () => {
+  //   db.collection("arrears")
+  //     .where("invoice_number", "==", allViewData[currentIndx]?.invoice_no)
+  //     .get()
+  //     .then(async (reArreas) => {
+  //       await db.collection("arrears").doc(reArreas.docs[0].id).delete();
+  //       await db
+  //         .collection("invoice")
+  //         .where("invoice_number", "==", allViewData[currentIndx]?.invoice_no)
+  //         .get()
+  //         .then(async (reInVo) => {
+  //           await db.collection("invoice").doc(reInVo.docs[0].id).update({
+  //             status_of_payandgo: "blacklist",
+  //           });
+  //         });
+  //       await db
+  //         .collection("customer")
+  //         .doc(reArreas.docs[0].data().customer_id)
+  //         .update({
+  //           status: "blacklist",
+  //         });
 
-        await db
-          .collection("blacklist")
-          .add({
-            InvoiceNo: allViewData[currentIndx]?.invoice_no,
-            FirstName: await (
-              await db
-                .collection("customer")
-                .doc(reArreas.docs[0].data().customer_id)
-                .get()
-            ).data().fname,
-            LastName: await (
-              await db
-                .collection("customer")
-                .doc(reArreas.docs[0].data().customer_id)
-                .get()
-            ).data().lname,
-            Type: allPendingBlacklistData[currentIndx].data?.selectedType,
-            MID: await (
-              await db
-                .collection("customer")
-                .doc(reArreas.docs[0].data().customer_id)
-                .get()
-            ).data().mid,
-            NIC: await (
-              await db
-                .collection("customer")
-                .doc(reArreas.docs[0].data().customer_id)
-                .get()
-            ).data().nic,
-            Telephone: await (
-              await db
-                .collection("customer")
-                .doc(reArreas.docs[0].data().customer_id)
-                .get()
-            ).data().mobile1,
-            balance: allPendingBlacklistData[currentIndx].data?.balance,
-          })
-          .then((_) => {
-            setVisibleConfirmPrint(false);
-            window.location.reload();
-          });
-      });
-  };
+  //       await db
+  //         .collection("blacklist")
+  //         .add({
+  //           InvoiceNo: allViewData[currentIndx]?.invoice_no,
+  //           FirstName: await (
+  //             await db
+  //               .collection("customer")
+  //               .doc(reArreas.docs[0].data().customer_id)
+  //               .get()
+  //           ).data().fname,
+  //           LastName: await (
+  //             await db
+  //               .collection("customer")
+  //               .doc(reArreas.docs[0].data().customer_id)
+  //               .get()
+  //           ).data().lname,
+  //           Type: allPendingBlacklistData[currentIndx].data?.selectedType,
+  //           MID: await (
+  //             await db
+  //               .collection("customer")
+  //               .doc(reArreas.docs[0].data().customer_id)
+  //               .get()
+  //           ).data().mid,
+  //           NIC: await (
+  //             await db
+  //               .collection("customer")
+  //               .doc(reArreas.docs[0].data().customer_id)
+  //               .get()
+  //           ).data().nic,
+  //           Telephone: await (
+  //             await db
+  //               .collection("customer")
+  //               .doc(reArreas.docs[0].data().customer_id)
+  //               .get()
+  //           ).data().mobile1,
+  //           balance: allPendingBlacklistData[currentIndx].data?.balance,
+  //         })
+  //         .then((_) => {
+  //           setVisibleConfirmPrint(false);
+  //           window.location.reload();
+  //         });
+  //     });
+  // };
 
   const showModalView = () => {
     setPendingViewModel(true);
@@ -261,7 +261,7 @@ export default function View_Model({ pendingBlackList }) {
                           Update
                         </Button>
                       </span>
-                      <span>
+                      {/* <span>
                         <Button
                           variant="contained"
                           size="small"
@@ -270,7 +270,7 @@ export default function View_Model({ pendingBlackList }) {
                         >
                           Blacklist
                         </Button>
-                      </span>
+                      </span> */}
                     </div>
                   ),
                 },
@@ -382,7 +382,7 @@ export default function View_Model({ pendingBlackList }) {
 
       {/*Start Blacklist Confo   model */}
 
-      <Modal
+      {/* <Modal
         className="confo_models"
         closable={null}
         visible={visibleConfirmPrint}
@@ -407,7 +407,7 @@ export default function View_Model({ pendingBlackList }) {
             </Grid>
           </Grid>
         </div>
-      </Modal>
+      </Modal> */}
 
       {/*END Blacklist Confo   model */}
 

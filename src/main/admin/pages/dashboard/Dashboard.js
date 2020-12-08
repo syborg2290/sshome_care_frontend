@@ -60,7 +60,6 @@ export default function Dashboard() {
       .get()
       .then((onSnap) => {
         onSnap.docs.forEach(async (eachRe) => {
-          console.log(eachRe);
           let isBeforeDate = isDateBeforeToday(
             new Date(eachRe.data()?.deadlineTimestamp?.seconds * 1000)
           );

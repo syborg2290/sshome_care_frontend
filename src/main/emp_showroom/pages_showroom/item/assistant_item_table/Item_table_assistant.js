@@ -16,11 +16,11 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import { useHistory } from "react-router-dom";
 // components
-import EditModel from "./components/Edit_model";
+// import EditModel from "./components/Edit_model";
 
 // icons
 import VisibilityIcon from "@material-ui/icons/Visibility";
-import EditIcon from "@material-ui/icons/Edit";
+// import EditIcon from "@material-ui/icons/Edit";
 
 // styles
 import "./Item_table_assistant.css";
@@ -35,7 +35,7 @@ export default function Item_table_assistant() {
   const [visible, setVisible] = useState(false);
   // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
-  const [editVisible, setEditVisible] = useState(false);
+  // const [editVisible, setEditVisible] = useState(false);
 
   // let socket = socketIOClient(RealtimeServerApi);
 
@@ -49,9 +49,9 @@ export default function Item_table_assistant() {
     setVisible(true);
   };
 
-  const editModal = () => {
-    setEditVisible(true);
-  };
+  // const editModal = () => {
+  //   setEditVisible(true);
+  // };
 
   useEffect(() => {
     window.addEventListener("offline", function (e) {
@@ -125,9 +125,9 @@ export default function Item_table_assistant() {
             </div>,
             <div className="table_icon">
               <VisibilityIcon onClick={showModal} />
-              <span className="icon_Edit">
+              {/* <span className="icon_Edit">
                 <EditIcon onClick={editModal} />
-              </span>
+              </span> */}
               {/* <span className="icon_delete">
                 <DeleteIcon onClick={showModalConfirmModal} />
               </span> */}
@@ -164,9 +164,9 @@ export default function Item_table_assistant() {
   //     });
   // };
 
-  const editModalClose = () => {
-    setEditVisible(false);
-  };
+  // const editModalClose = () => {
+  //   setEditVisible(false);
+  // };
 
   const columns = [
     {
@@ -537,7 +537,7 @@ export default function Item_table_assistant() {
         </div>
       </Modal>
 
-      <Modal
+      {/* <Modal
         title="Edit item"
         visible={editVisible}
         footer={null}
@@ -655,7 +655,7 @@ export default function Item_table_assistant() {
             </div>
           </div>
         </div>
-      </Modal>
+      </Modal> */}
 
       <Grid className="tbl_Container" container spacing={4}>
         <Grid item xs={12}>

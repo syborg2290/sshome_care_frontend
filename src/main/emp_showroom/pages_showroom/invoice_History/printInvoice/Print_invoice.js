@@ -302,11 +302,7 @@ export default function PrintInvoice() {
       "popstate",
       (event) => {
         if (event.state) {
-          if (location.state?.detail.backto === "item_list") {
-            history.push("/showroom/ui/itemTable");
-          } else {
-            history.push("/showroom/ui/InvoiceHistory");
-          }
+          history.push("/showroom/ui/InvoiceHistory");
         }
       },
       false

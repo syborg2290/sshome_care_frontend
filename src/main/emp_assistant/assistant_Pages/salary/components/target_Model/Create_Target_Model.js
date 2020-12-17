@@ -21,12 +21,13 @@ function daysCountOfMonth(month, year) {
 }
 
 export default function Create_Target_Model() {
-  const [allRoot, setAllRoot] = useState([]);
+   const [allRoot, setAllRoot] = useState([]);
   const [sale_taregt_amount, setSaleAmount] = useState(0);
   const [cash_taregt_amount, setCashAmount] = useState(0);
   const [startDate, setStartdate] = useState(null);
   const [loading, setLoading] = useState(false);
   const [selectedType, setSelectedType] = useState("");
+  // eslint-disable-next-line
   const [validation, setValidation] = useState("");
   const [targetType, setTargetType] = useState("sale_target");
 
@@ -231,30 +232,32 @@ export default function Create_Target_Model() {
 
   const createTarget = async () => {
     setLoading(true);
+    // eslint-disable-next-line
     var dueCashTaregt = [];
 
+    // eslint-disable-next-line
     var cashTaregtRpp = await db
       .collection("targets")
       .where("selectedType", "==", selectedType)
       .get();
 
-    if (targetType === "sale_target") {
-      dueCashTaregt = cashTaregtRpp.docs.filter(
-        (ob) =>
-          ob.data().status === "ongoing" &&
-          ob.data().target_type === "Sale target"
-      );
-    } else {
-      dueCashTaregt = cashTaregtRpp.docs.filter(
-        (ob) =>
-          ob.data().status === "ongoing" &&
-          ob.data().target_type === "Cash target"
-      );
-    }
+    // if (targetType === "sale_target") {
+    //   dueCashTaregt = cashTaregtRpp.docs.filter(
+    //     (ob) =>
+    //       ob.data().status === "ongoing" &&
+    //       ob.data().target_type === "Sale target"
+    //   );
+    // } else {
+    //   dueCashTaregt = cashTaregtRpp.docs.filter(
+    //     (ob) =>
+    //       ob.data().status === "ongoing" &&
+    //       ob.data().target_type === "Cash target"
+    //   );
+    // }
 
     let totAmount =
       targetType === "sale_target" ? sale_taregt_amount : cash_taregt_amount;
-    if (dueCashTaregt.length === 0) {
+    
       db.collection("targets")
         .add({
           target_type:
@@ -268,10 +271,7 @@ export default function Create_Target_Model() {
           setLoading(false);
           window.location.reload();
         });
-    } else {
-      setLoading(false);
-      setValidation("Previous target is still on 'ONGOING' ");
-    }
+    
   };
 
   return (

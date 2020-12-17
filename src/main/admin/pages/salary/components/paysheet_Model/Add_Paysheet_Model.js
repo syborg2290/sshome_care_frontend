@@ -1559,6 +1559,7 @@ export default function Add_Paysheet_Model({ nic }) {
       phoneBill +
       saleTarget +
       cashTarget +
+      arresTarget +
       exCard +
       cashSale +
       basicSalary;
@@ -1581,6 +1582,7 @@ export default function Add_Paysheet_Model({ nic }) {
       shortage: shortage,
       saleTarget: saleTarget,
       cashTarget: cashTarget,
+      arresTarget: arresTarget,
       exCard: exCard,
       cashSale: cashSale,
       root: root,
@@ -3080,6 +3082,7 @@ export default function Add_Paysheet_Model({ nic }) {
                             saleTarget +
                             cashTarget +
                             exCard +
+                            arresTarget +
                             cashSale +
                             basicSalary -
                             (epf +
@@ -3095,6 +3098,7 @@ export default function Add_Paysheet_Model({ nic }) {
                               saleTarget +
                               cashTarget +
                               exCard +
+                              arresTarget +
                               cashSale +
                               basicSalary -
                               (epf +

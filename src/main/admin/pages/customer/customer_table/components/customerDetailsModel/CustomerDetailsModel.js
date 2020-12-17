@@ -31,19 +31,26 @@ export default function customerDetailsModel({
         </Typography>
       </Col>
       <Col className="space_col" span={12}></Col>
-      <Col className="img_span" span={24}>
+      <Col className="img_span" span={12}>
         {" "}
         <img
           alt="Empty data"
-          className="avatar_customer"
+          className="imageFront"
           src={
             photo !== null
               ? photo
-              : require("../../../../../../../assets/avatar.png")
+              : require("../../../../../../../assets/avatar1132.jpg")
           }
         />
       </Col>
-
+      <Col className="img_span" span={12}>
+        {" "}
+        <img
+          alt="Empty data"
+          className="imageBack"
+          src={require("../../../../../../../assets/avater232.jpg")}
+        />
+      </Col>
       <Col className="space_col" span={24}></Col>
 
       <Col className="customer_details" span={8}>

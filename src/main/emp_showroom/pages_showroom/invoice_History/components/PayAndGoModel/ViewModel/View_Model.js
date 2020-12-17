@@ -60,15 +60,15 @@ export default function View_Model({ items_list_props, data }) {
       let itemDataSeMo = [];
       let listOfSerilNo = [];
       let listOfModelNo = [];
-      let listOfChassisNo = [];
+      // let listOfChassisNo = [];
       listOfSerilNo = each.serialNo;
       listOfModelNo = each.modelNo;
-      listOfChassisNo = each.chassisNo;
+      // listOfChassisNo = each.chassisNo;
 
       itemDataSeMo.push({
         serialNo: listOfSerilNo,
         modelNo: listOfModelNo,
-        chassisNo: listOfChassisNo,
+        // chassisNo: listOfChassisNo,
       });
       db.collection("item")
         .doc(each.item_id)
@@ -240,6 +240,14 @@ export default function View_Model({ items_list_props, data }) {
               <Grid item xs={12} sm={6}>
                 <hr className="hr_topiSub" />
               </Grid>
+                <Grid item xs={12} sm={6}></Grid>
+                  <Grid item xs={12} sm={6}>
+                <img
+                  alt="Empty data"
+                    className="avatar_customer"
+                  src={require("../../../../../../../assets/avatar.png")}
+                 />
+              </Grid>
               <Grid item xs={12} sm={6}></Grid>
               <Grid className="lbl_topis" item xs={12} sm={3}>
                 Full Name
@@ -307,6 +315,14 @@ export default function View_Model({ items_list_props, data }) {
                   container
                   spacing={2}
                 >
+                    <Grid item xs={12} sm={6}>
+                <img
+                  alt="Empty data"
+                    className="avatar_customer"
+                  src={require("../../../../../../../assets/avatar.png")}
+                 />
+              </Grid>
+              <Grid item xs={12} sm={6}></Grid>
                   <Grid className="lbl_topis" item xs={12} sm={3}>
                     Full Name
                   </Grid>
@@ -455,9 +471,9 @@ export default function View_Model({ items_list_props, data }) {
                           <TableCell className="tbl_cell" align="left">
                             ModelNo
                           </TableCell>
-                          <TableCell className="tbl_cell" align="left">
+                          {/* <TableCell className="tbl_cell" align="left">
                             ChasisseNo
-                          </TableCell>
+                          </TableCell> */}
                         </TableRow>
                       </TableHead>
                       <TableBody>
@@ -478,13 +494,13 @@ export default function View_Model({ items_list_props, data }) {
                                     )
                                   )}
                                 </TableCell>
-                                <TableCell component="th" scope="row">
+                                {/* <TableCell component="th" scope="row">
                                   {eachItem.listSe[0]?.chassisNo?.map(
                                     (chassisNoT) => (
                                       <h5 key={chassisNoT}>{chassisNoT}</h5>
                                     )
                                   )}
-                                </TableCell>
+                                </TableCell> */}
                               </TableRow>
                             ))
                           : ""}

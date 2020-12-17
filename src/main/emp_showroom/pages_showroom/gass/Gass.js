@@ -18,13 +18,13 @@ import "./Gass.css";
 
 // icons
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
-import AddIcon from "@material-ui/icons/Add";
+// import AddIcon from "@material-ui/icons/Add";
 import ShoppingBasketIcon from "@material-ui/icons/ShoppingBasket";
 import HistoryIcon from "@material-ui/icons/History";
 
 // components
 import GassModel from "./components/Gass_Model";
-import AddNewModel from "./components/add_new_Gass/AddNew_Model";
+// import AddNewModel from "./components/add_new_Gass/AddNew_Model";
 import SellingHistory from "./components/selling_history/Selling_History";
 import GassHistoryModel from "./components/gass_history/Gass_History";
 
@@ -39,7 +39,7 @@ export default function Gass() {
   const [allTableData, setAllTableData] = useState([]);
   const [tableData, setTableData] = useState([]);
   const [gassModal, setGassModal] = useState(false); //models
-  const [addNewGassModal, setAddNewGassModal] = useState(false); // Table models
+  // const [addNewGassModal, setAddNewGassModal] = useState(false); 
   const [purchaseHistory, setPurchaseHistory] = useState(false); // Table models
   const [gassHistory, setGassHistory] = useState(false); //models
   let history = useHistory();
@@ -48,13 +48,13 @@ export default function Gass() {
     setGassModal(true);
   };
 
-  const showModalAddGass = () => {
-    setAddNewGassModal(true);
-  };
+  // const showModalAddGass = () => {
+  //   setAddNewGassModal(true);
+  // };
 
-  const closeModalAddGass = () => {
-    setAddNewGassModal(false);
-  };
+  // const closeModalAddGass = () => {
+  //   setAddNewGassModal(false);
+  // };
   const PurchaseHistory = () => {
     setPurchaseHistory(true);
   };
@@ -113,7 +113,7 @@ export default function Gass() {
 
       {/* START add gass model */}
 
-      <Modal
+      {/* <Modal
         className="confo_model"
         visible={addNewGassModal}
         footer={null}
@@ -124,7 +124,7 @@ export default function Gass() {
         <div className="confoModel_body">
           <AddNewModel close_model={closeModalAddGass} />
         </div>
-      </Modal>
+      </Modal> */}
 
       {/* END add gass model */}
 
@@ -205,14 +205,15 @@ export default function Gass() {
             </Button>
           </Grid>
           <Grid item xs={12} sm={3}>
-            <Button
+            {/* <Button
               variant="contained"
+              disabled={true}
               onClick={showModalAddGass}
               endIcon={<AddIcon />}
               className="btn_gass_Add"
             >
               Add/Update gas
-            </Button>
+            </Button> */}
           </Grid>
         </Grid>
         <TableContainer component={Paper} className="main_containerGass">

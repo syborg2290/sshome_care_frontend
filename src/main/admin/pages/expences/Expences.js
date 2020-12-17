@@ -24,12 +24,12 @@ export default function Expences() {
   const [inputsSalary, setInputsSalary] = useState({});
   const [inputsAdvance, setInputsAdvance] = useState({});
   const [inputsTemporary, setInputsTemporary] = useState({});
-  const [oil, setOil] = useState(0);
-  const [oilDiscription, setOilDiscription] = useState("");
+  // const [oil, setOil] = useState(0);
+  // const [oilDiscription, setOilDiscription] = useState("");
   const [short, setShort] = useState(0);
   const [shortDiscription, setShortDiscription] = useState("");
-  const [food, setFood] = useState(0);
-  const [foodDiscription, setFoodDiscription] = useState("");
+  // const [food, setFood] = useState(0);
+  // const [foodDiscription, setFoodDiscription] = useState("");
   const [worker, setWorker] = useState(0);
   const [workerDiscription, setWorkerDiscription] = useState("");
   const [stationary, setStationary] = useState(0);
@@ -67,11 +67,11 @@ export default function Expences() {
 
   const [inputsRepair, setInputsRepair] = useState({});
 
-  const [fbDaa, setFbDaa] = useState("F/B-DAA 9261");
+  const [fbDaa, setFbDaa] = useState("F/D-DAA 9261");
   const [fbDiscription, setFbDiscription] = useState("");
   const [fbCost, setFbCost] = useState(0);
 
-  const [fdLi, setFdLi] = useState("F/D-LI 5471");
+  const [fdLi, setFdLi] = useState("F/B-LI 5471");
   const [fdDiscription, setFdDiscription] = useState("");
   const [fdCost, setFdCost] = useState(0);
 
@@ -97,11 +97,11 @@ export default function Expences() {
 
   const [inputsFuel, setInputsFuel] = useState({});
 
-  const [fbDaaFuel, setFbDaaFuel] = useState("F/B-DAA 9261");
+  const [fbDaaFuel, setFbDaaFuel] = useState("F/D-DAA 9261");
   const [fbDiscriptionFuel, setFbDiscriptionFuel] = useState("");
   const [fbCostFuel, setFbCostFuel] = useState(0);
 
-  const [fdLiFuel, setFdLiFuel] = useState("F/D-LI 5471");
+  const [fdLiFuel, setFdLiFuel] = useState("F/B-LI 5471");
   const [fdDiscriptionFuel, setFdDiscriptionFuel] = useState("");
   const [fdCostFuel, setFdCostFuel] = useState(0);
 
@@ -161,18 +161,18 @@ export default function Expences() {
   const makeExpences = async () => {
     setLoading(true);
 
-    var coco_oil = {
-      description: oilDiscription,
-      cost: oil,
-    };
+    // var coco_oil = {
+    //   description: oilDiscription,
+    //   cost: oil,
+    // };
     var shortObj = {
       description: shortDiscription,
       cost: short,
     };
-    var foodsObj = {
-      description: foodDiscription,
-      cost: food,
-    };
+    // var foodsObj = {
+    //   description: foodDiscription,
+    //   cost: food,
+    // };
     var workersObj = {
       description: workerDiscription,
       cost: worker,
@@ -202,11 +202,11 @@ export default function Expences() {
     };
 
     var repairObj = {
-      "F/B-DAA_9261": {
+      "F/D-DAA_9261": {
         description: fbDiscription,
         cost: fbCost,
       },
-      "F/D-LI_5471": {
+      "F/B-LI_5471": {
         description: fdDiscription,
         cost: fdCost,
       },
@@ -232,11 +232,11 @@ export default function Expences() {
     };
 
     var fuelObj = {
-      "F/B-DAA_9261": {
+      "F/D-DAA_9261": {
         description: fbDiscriptionFuel,
         cost: fbCostFuel,
       },
-      "F/D-LI_5471": {
+      "F/B-LI_5471": {
         description: fdDiscriptionFuel,
         cost: fdCostFuel,
       },
@@ -284,9 +284,9 @@ export default function Expences() {
         mr_sampath: inputsSampath,
         mrs_monika: inputsMonika,
         sithu: inputsSithu,
-        coconut_oil: coco_oil,
+        // coconut_oil: coco_oil,
         shorts: shortObj,
-        foods: foodsObj,
+        // foods: foodsObj,
         pay_for_workers: workersObj,
         stationary: stationaryObj,
         cards_reload: cards_reload_obj,
@@ -729,7 +729,7 @@ export default function Expences() {
             <Grid className="txt_Labels" item xs={12} sm={12}>
               <hr />
             </Grid>
-            <Grid className="txt_Labels" item xs={12} sm={2}>
+            {/* <Grid className="txt_Labels" item xs={12} sm={2}>
               Coconut Oil :
             </Grid>
             <Grid item xs={12} sm={4}>
@@ -778,7 +778,7 @@ export default function Expences() {
                   setOilDiscription(e.target.value);
                 }}
               />
-            </Grid>
+            </Grid> */}
 
             <Grid className="txt_Labels" item xs={12} sm={2}>
               Short :
@@ -830,7 +830,7 @@ export default function Expences() {
                 }}
               />
             </Grid>
-            <Grid className="txt_Labels" item xs={12} sm={2}>
+            {/* <Grid className="txt_Labels" item xs={12} sm={2}>
               Food :
             </Grid>
             <Grid item xs={12} sm={4}>
@@ -879,7 +879,7 @@ export default function Expences() {
                   setFoodDiscription(e.target.value);
                 }}
               />
-            </Grid>
+            </Grid> */}
             <Grid className="txt_Labels" item xs={12} sm={2}>
               Pay for workers :
             </Grid>
@@ -1242,7 +1242,7 @@ export default function Expences() {
                 name="relation"
                 variant="outlined"
                 fullWidth
-                label="F/B-DAA 9261"
+                label="F/D-DAA 9261"
                 size="small"
                 disabled={true}
                 value={fbDaa}
@@ -1300,7 +1300,7 @@ export default function Expences() {
                 name="relation"
                 variant="outlined"
                 fullWidth
-                label="F/D-LI 5471"
+                label="F/B-LI 5471"
                 size="small"
                 disabled={true}
                 value={fdLi}
@@ -1715,7 +1715,7 @@ export default function Expences() {
                 name="relation"
                 variant="outlined"
                 fullWidth
-                label="F/B-DAA 9261"
+                label="F/D-DAA 9261"
                 disabled={true}
                 size="small"
                 value={fbDaaFuel}
@@ -1773,7 +1773,7 @@ export default function Expences() {
                 name="relation"
                 variant="outlined"
                 fullWidth
-                label="F/D-LI 5471"
+                label="F/B-LI 5471"
                 disabled={true}
                 size="small"
                 value={fdLiFuel}

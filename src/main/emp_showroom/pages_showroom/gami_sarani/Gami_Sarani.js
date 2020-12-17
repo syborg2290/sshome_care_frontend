@@ -12,7 +12,7 @@ import EditIcon from "@material-ui/icons/Edit";
 import HistoryIcon from "@material-ui/icons/History";
 
 // components
-import AddCustomer from "./components/add_customer/Add_Customer";
+// import AddCustomer from "./components/add_customer/Add_Customer";
 import ViewCustomer from "./components/view_customer/view_customer_Model";
 import UpdateCustomer from "./components/update_customer/Update_Model";
 import HistoryCustomer from "./components/customer_history/History_Model";
@@ -25,7 +25,7 @@ import "./Gami_Sarani.css";
 import db from "../../../../config/firebase.js";
 
 export default function Gami_Sarani() {
-  const [gamisaraniModel, setGamisaraniModel] = useState(false); // customer add model
+  // const [gamisaraniModel, setGamisaraniModel] = useState(false); 
   const [gamisaraniViewModel, setGamisaraniViewModel] = useState(false); // customer view model
   const [gamisaraniHistoryModel, setGamisaraniHistoryModel] = useState(false); // customer History model
   const [gamisaraniDepositModel, setGamisaraniDepositModel] = useState(false); // customer Deposit model
@@ -40,13 +40,13 @@ export default function Gami_Sarani() {
   const [currentIndx, setCurrentIndx] = useState(0);
   let history = useHistory();
 
-  const GamisaraniAddCustomer = () => {
-    setGamisaraniModel(true);
-  };
+  // const GamisaraniAddCustomer = () => {
+  //   setGamisaraniModel(true);
+  // };
 
-  const GamisaraniAddCustomerClose = () => {
-    setGamisaraniModel(false);
-  };
+  // const GamisaraniAddCustomerClose = () => {
+  //   setGamisaraniModel(false);
+  // };
 
   const GamisaraniViewCustomer = () => {
     setGamisaraniViewModel(true);
@@ -227,7 +227,7 @@ export default function Gami_Sarani() {
     <>
       {/*Start Add Customer Model */}
 
-      <Modal
+      {/* <Modal
         visible={gamisaraniModel}
         footer={null}
         className="model_Gamisarani_Cutomer"
@@ -242,7 +242,7 @@ export default function Gami_Sarani() {
             </div>
           </div>
         </div>
-      </Modal>
+      </Modal> */}
 
       {/* End Add Customer Model  */}
 
@@ -390,14 +390,15 @@ export default function Gami_Sarani() {
 
       {/* End Deposit Customer Model  */}
 
-      <Button
+      {/* <Button
         variant="contained"
         color="primary"
+        disabled={true}
         className="btn_addSaraniCustomers"
         onClick={GamisaraniAddCustomer}
       >
         New Customer
-      </Button>
+      </Button> */}
 
       <Grid container spacing={4}>
         <Grid item xs={12}>

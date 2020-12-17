@@ -1,8 +1,8 @@
-.avatar_customer_sarani {
+/* .avatar_customer_sarani {
   width: 100px;
   height: 100px;
   margin: auto !important;
-}
+} */
 
 .name_sarani {
   margin: auto !important;
@@ -28,4 +28,24 @@
 .title_sarani {
   font-weight: 600 !important;
   margin-top: -20px !important;
+}
+
+.imageFront {
+  border-radius: 5px;
+  width: 65% !important;
+  height: 80% !important;
+  margin: auto;
+  text-align: center;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.imageBack {
+  border-radius: 5px;
+  width: 50% !important;
+  margin: auto;
+  text-align: center;
+  justify-content: center;
+  margin-top: 35px;
+  transform: rotate(270deg);
 }

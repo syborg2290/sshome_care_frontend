@@ -40,15 +40,15 @@ export default function CustomerTable() {
   };
 
   const columns = [
-    {
-      name: "IMG",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
+    // {
+    //   name: "IMG",
+    //   options: {
+    //     filter: true,
+    //     setCellHeaderProps: (value) => ({
+    //       style: { fontSize: "15px", color: "black", fontWeight: "600" },
+    //     }),
+    //   },
+    // },
     {
       name: "FirstName",
       options: {
@@ -123,17 +123,17 @@ export default function CustomerTable() {
             data: siDoc.data(),
           });
           rawData.push({
-            IMG: (
-              <img
-                alt="Empty data"
-                className="avatar_data"
-                src={
-                  siDoc.data().photo !== null
-                    ? siDoc.data().photo
-                    : require("../../../../../assets/avatar.png")
-                }
-              />
-            ),
+            // IMG: (
+            //   <img
+            //     alt="Empty data"
+            //     className="avatar_data"
+            //     src={
+            //       siDoc.data().photo !== null
+            //         ? siDoc.data().photo
+            //         : require("../../../../../assets/avatar.png")
+            //     }
+            //   />
+            // ),
             FirstName: siDoc.data().fname,
             LastName: siDoc.data().lname,
             MID: siDoc.data().mid,

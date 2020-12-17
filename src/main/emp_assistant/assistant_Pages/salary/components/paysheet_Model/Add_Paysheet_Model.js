@@ -919,6 +919,7 @@ export default function Add_Paysheet_Model({ nic }) {
   const [saleTarget, setSaleTarget] = useState(0);
   const [cashTarget, setCashTarget] = useState(0);
   const [exCard, setExCard] = useState(0);
+  const [arresTarget, setArresTarget] = useState(0);
   const [cashSale, setCashSale] = useState(0);
 
   const [date, setDate] = useState(null);
@@ -2912,6 +2913,32 @@ export default function Add_Paysheet_Model({ nic }) {
                   <HistoryIcon onClick={ExCardModel} />
                 </Fab>
               </Grid>
+
+               <Grid className="lbl_topi" item xs={12} sm={4}>
+                Arreas Target(LKR)
+              </Grid>
+              <Grid item xs={12} sm={1}>
+                :
+              </Grid>
+              <Grid item xs={12} sm={5}>
+                <TextField
+                  autoComplete="arreas"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  type="number"
+                  label="Arreas Target"
+                  size="small"
+                  InputProps={{ inputProps: { min: 0 } }}
+                  value={arresTarget}
+                  onChange={(e) => {
+                    if (e.target.value !== "") {
+                      setArresTarget(parseInt(e.target.value.trim()));
+                    }
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12} sm={2}></Grid>
 
               <Grid className="lbl_topi" item xs={12} sm={4}>
                 Date

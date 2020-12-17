@@ -32,11 +32,17 @@ export default function Add_Customer() {
   const [mobile1, setMobile1] = useState("");
   const [mobile2, setMobile2] = useState("");
   const [root, setRoot] = useState("");
-  // eslint-disable-next-line
+  // Customer Image 1st
   const [imageFile, setImageFile] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
   const [fromDbImage, setFromDbImage] = useState(null);
+  // Customer Image 2nd
+  const [imageFileCust2, setImageFileCust2] = useState(null);
+  const [imageUrlCust2, setImageUrlCust2] = useState(null);
+  const [fromDbImageCust2, setFromDbImageCust2] = useState(null);
 
+
+                    // Trustee1
   const [trustee1Nic, setTrustee1Nic] = useState("");
   const [trustee1Fname, setTrustee1Fname] = useState("");
   const [trustee1Lname, setTrustee1Lname] = useState("");
@@ -44,7 +50,17 @@ export default function Add_Customer() {
   const [trustee1Addres2, setTrustee1Addres2] = useState("");
   const [trustee1Mobile1, setTrustee1Mobile1] = useState("");
   const [trustee1Mobile2, setTrustee1Mobile2] = useState("");
+  // Trustee1 Image 1st
+  const [imageFileT1, setImageFileT1] = useState(null);
+  const [imageUrlT1, setImageUrlT1] = useState(null);
+  const [fromDbImageT1, setFromDbImageT1] = useState(null);
+    // Trustee1 Image 2nd
+  const [imageFileT12, setImageFileT12] = useState(null);
+  const [imageUrlT12, setImageUrlT12] = useState(null);
+  const [fromDbImageT12, setFromDbImageT12] = useState(null);
 
+
+                  // Trustee2
   const [trustee2Nic, setTrustee2Nic] = useState("");
   const [trustee2Fname, setTrustee2Fname] = useState("");
   const [trustee2Lname, setTrustee2Lname] = useState("");
@@ -52,14 +68,22 @@ export default function Add_Customer() {
   const [trustee2Address2, setTrustee2Address2] = useState("");
   const [trustee2Mobile1, setTrustee2Mobile1] = useState("");
   const [trustee2Mobile2, setTrustee2Mobile2] = useState("");
+  // Trustee2 Image 1st
+  const [imageFileT2, setImageFileT2] = useState(null);
+  const [imageUrlT2, setImageUrlT2] = useState(null);
+  const [fromDbImageT2, setFromDbImageT2] = useState(null);
+   // Trustee2 Image 2nd
+  const [imageFileT22, setImageFileT22] = useState(null);
+  const [imageUrlT22, setImageUrlT22] = useState(null);
+  const [fromDbImageT22, setFromDbImageT22] = useState(null);
+
+
+
 
   const [loaderModalOpenV, setloaderModalOpen] = useState(false);
   const [inputsNic, setInputsNic] = useState({});
-  // eslint-disable-next-line
   const [customerId, setCustomerId] = useState(null);
-  // eslint-disable-next-line
   const [trustee1Id, setTrustee1Id] = useState(null);
-  // eslint-disable-next-line
   const [trustee2Id, setTrustee2Id] = useState(null);
   const [isItNull, setIsItNull] = useState(null);
 
@@ -83,6 +107,7 @@ export default function Add_Customer() {
     setloaderModalOpen(true);
   };
 
+    // Customer Image 1st
   const onImageChange = (event) => {
     if (event.target.files && event.target.files[0]) {
       setImageFile(event.target.files[0]);
@@ -92,6 +117,71 @@ export default function Add_Customer() {
       };
       reader.readAsDataURL(event.target.files[0]);
       setFromDbImage(null);
+    }
+  };
+
+   // Customer Image 2nd
+
+  const onImageChangeCust2 = (event) => {
+    if (event.target.files && event.target.files[0]) {
+      setImageFileCust2(event.target.files[0]);
+      let reader = new FileReader();
+      reader.onload = (e) => {
+        setImageUrlCust2(e.target.result);
+      };
+      reader.readAsDataURL(event.target.files[0]);
+      setFromDbImageCust2(null);
+    }
+  };
+
+    // Trustee1 Image 1st
+    const onImageChangeT1 = (event) => {
+    if (event.target.files && event.target.files[0]) {
+      setImageFileT1(event.target.files[0]);
+      let reader = new FileReader();
+      reader.onload = (e) => {
+        setImageUrlT1(e.target.result);
+      };
+      reader.readAsDataURL(event.target.files[0]);
+      setFromDbImageT1(null);
+    }
+  };
+
+  // Trustee1 Image 2nd
+      const onImageChangeT12 = (event) => {
+    if (event.target.files && event.target.files[0]) {
+      setImageFileT12(event.target.files[0]);
+      let reader = new FileReader();
+      reader.onload = (e) => {
+        setImageUrlT12(e.target.result);
+      };
+      reader.readAsDataURL(event.target.files[0]);
+      setFromDbImageT12(null);
+    }
+  };
+
+ // Trustee2 Image 1st
+    const onImageChangeT2 = (event) => {
+    if (event.target.files && event.target.files[0]) {
+      setImageFileT2(event.target.files[0]);
+      let reader = new FileReader();
+      reader.onload = (e) => {
+        setImageUrlT2(e.target.result);
+      };
+      reader.readAsDataURL(event.target.files[0]);
+      setFromDbImageT2(null);
+    }
+  };
+   // Trustee2 Image 2nd
+   const onImageChangeT22 = (event) => {
+    if (event.target.files && event.target.files[0]) {
+      setImageFileT22(event.target.files[0]);
+      let reader = new FileReader();
+      reader.onload = (e) => {
+        setImageUrlT22(e.target.result);
+      };
+      reader.readAsDataURL(event.target.files[0]);
+      setFromDbImageT22(null);
     }
   };
 
@@ -1091,7 +1181,7 @@ export default function Add_Customer() {
               <Grid className="txt_Labels" item xs={12} sm={2}>
                 Root to Home :
               </Grid>
-              <Grid item xs={12} sm={3}>
+              <Grid item xs={12} sm={5}>
                 <TextField
                   value={root}
                   disabled={nic.length === 0 ? true : false}
@@ -1110,27 +1200,25 @@ export default function Add_Customer() {
                   }}
                 />
               </Grid>
+               <Grid item xs={12} sm={5}></Grid>
+              {/* image 1 */}
               <Grid className="txt_LabelsImg" item xs={12} sm={1}>
                 Image :
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={5}>
                 <input
                   type="file"
                   disabled={nic.length === 0 ? true : false}
                   accept="image/*"
                   name=""
                   onChange={onImageChange}
-                  className="image"
+                  className="imagess"
                   id="item_image"
                   hidden
                 />
                 <img
                   disabled={nic.length === 0 ? true : false}
                   alt="Item upload"
-                  // style={{
-                  //   borderRadius: "30px",
-                  //   height: "100px",
-                  // }}
                   onClick={() => {
                     document.getElementById("item_image").click();
                   }}
@@ -1138,13 +1226,43 @@ export default function Add_Customer() {
                     imageUrl == null
                       ? fromDbImage !== null
                         ? fromDbImage
-                        : require("../../../../../assets/avatar.png")
+                        : require("../../../../../assets/avatar1132.jpg")
                       : imageUrl
                   }
-                  className="image"
+                  className="imageFront"
                 />
               </Grid>
-              <Grid item xs={12} sm={6}></Grid>
+
+              {/* image 2 */}
+
+              <Grid item xs={12} sm={6}>
+                <input
+                  type="file"
+                  disabled={nic.length === 0 ? true : false}
+                  accept="image/*"
+                  name=""
+                  onChange={onImageChangeCust2}
+                  className="imageBack"
+                  id="Cust2_image"
+                  hidden
+                />
+                <img
+                  disabled={nic.length === 0 ? true : false}
+                  alt="Cust2 upload"
+                  onClick={() => {
+                    document.getElementById("Cust2_image").click();
+                  }}
+                  src={
+                    imageUrlCust2 == null
+                      ? fromDbImageCust2 !== null
+                        ? fromDbImageCust2
+                        : require("../../../../../assets/avater232.jpg")
+                      : imageUrlCust2
+                  }
+                  className="imageBack"
+                />
+              </Grid>
+              {/* <Grid item xs={12} sm={5}></Grid> */}
             </Grid>
             <Typography className="note_title" gutterBottom>
               Add Family related NIC numbers
@@ -1370,6 +1488,69 @@ export default function Add_Customer() {
                 />
               </Grid>
               <Grid item xs={12} sm={4}></Grid>
+               {/* image 1 */}
+              <Grid className="txt_LabelsImg" item xs={12} sm={2}>
+                Image :
+              </Grid>
+              <Grid item xs={12} sm={5}>
+                <input
+                  type="file"
+                  disabled={trustee1Nic.length === 0 ? true : false}
+                  accept="image/*"
+                  name=""
+                  onChange={onImageChangeT1}
+                  className="imagess"
+                  id="T1_image"
+                  hidden
+                />
+                <img
+                  disabled={trustee1Nic.length === 0 ? true : false}
+                  alt="Item upload"
+                  onClick={() => {
+                    document.getElementById("T1_image").click();
+                  }}
+                  src={
+                    imageUrlT1 == null
+                      ? fromDbImageT1 !== null
+                        ? fromDbImageT1
+                        : require("../../../../../assets/avatar1132.jpg")
+                      : imageUrlT1
+                  }
+                  className="imageFront"
+                />
+              </Grid>
+
+              {/* image 2 */}
+              
+              <Grid item xs={12} sm={5}>
+                <input
+                  type="file"
+                  disabled={trustee1Nic.length === 0 ? true : false}
+                  accept="image/*"
+                  name=""
+                  onChange={onImageChangeT12}
+                  className="image"
+                  id="T12_image"
+                  hidden
+                />
+                <img
+                  disabled={trustee1Nic.length === 0 ? true : false}
+                  alt="Item upload"
+                  onClick={() => {
+                    document.getElementById("T12_image").click();
+                  }}
+                  src={
+                    imageUrlT12 == null
+                      ? fromDbImageT12 !== null
+                        ? fromDbImageT12
+                       : require("../../../../../assets/avater232.jpg")
+                      : imageUrlT12
+                  }
+                  className="imageBack"
+                />
+              </Grid>
+              <Grid item xs={12} sm={4}></Grid>
+              
             </Grid>
 
             {/* 1st trustee form END */}
@@ -1521,6 +1702,69 @@ export default function Add_Customer() {
                 />
               </Grid>
               <Grid item xs={12} sm={4}></Grid>
+              {/* image 1 */}
+                <Grid className="txt_LabelsImg" item xs={12} sm={2}>
+                Image :
+              </Grid>
+              <Grid item xs={12} sm={5}>
+                <input
+                  type="file"
+                  disabled={trustee2Nic.length === 0 ? true : false}
+                  accept="image/*"
+                  name=""
+                  onChange={onImageChangeT2}
+                  className="imagess"
+                  id="T2_image"
+                  hidden
+                />
+                <img
+                  disabled={trustee2Nic.length === 0 ? true : false}
+                  alt="Item upload"
+                  onClick={() => {
+                    document.getElementById("T2_image").click();
+                  }}
+                  src={
+                    imageUrlT2 == null
+                      ? fromDbImageT2 !== null
+                        ? fromDbImageT2
+                        : require("../../../../../assets/avatar1132.jpg")
+                      : imageUrlT2
+                  }
+                  className="imageFront"
+                />
+              </Grid>
+     
+              {/* image 2 */}
+         
+              <Grid item xs={12} sm={5}>
+                <input
+                  type="file"
+                  disabled={trustee2Nic.length === 0 ? true : false}
+                  accept="image/*"
+                  name=""
+                  onChange={onImageChangeT22}
+                  className="image"
+                  id="T22_image"
+                  hidden
+                />
+                <img
+                  disabled={trustee2Nic.length === 0 ? true : false}
+                  alt="Item upload"
+                  onClick={() => {
+                    document.getElementById("T22_image").click();
+                  }}
+                  src={
+                    imageUrlT22 == null
+                      ? fromDbImageT22 !== null
+                        ? fromDbImageT22
+                        : require("../../../../../assets/avater232.jpg")
+                      : imageUrlT22
+                  }
+                  className="imageBack"
+                />
+              </Grid>
+              <Grid item xs={12} sm={4}></Grid>
+
             </Grid>
 
             {/* 2nd trustee form END */}

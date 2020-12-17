@@ -1490,6 +1490,7 @@ function Make_invoice() {
                           size="small"
                           label="Shortage"
                           InputProps={{ inputProps: { min: 0 } }}
+                           disabled={true}
                           type="number"
                           fullWidth
                           value={shortage}

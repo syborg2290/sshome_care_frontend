@@ -78,7 +78,7 @@ export default function New_Loan_Model() {
                 } else {
                   setLoading(false);
                   setValidation(
-                    "Already using loan service that not completed ! "
+                    "Already using the loan service that not completed ! "
                   );
                 }
               } else {

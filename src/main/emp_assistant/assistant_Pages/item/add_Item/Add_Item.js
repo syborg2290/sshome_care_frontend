@@ -23,7 +23,7 @@ import "./Add_Item.css";
 import db from "../../../../../config/firebase.js";
 
 export default function Add_Item() {
-  const [loadingSubmit, setLoadingSubmit] = useState(false);
+ const [loadingSubmit, setLoadingSubmit] = useState(false);
   const [itemName, setItemName] = useState("");
   const [brand, setBrand] = useState("");
   const [color, setColor] = useState("");
@@ -41,6 +41,7 @@ export default function Add_Item() {
   const [inputsSerialNo, setInputsSerialNo] = useState({});
   const [inputsModelNo, setInputsModelNo] = useState({});
   const [isInAlreadySerial, setIsInAlreadySerial] = useState(false);
+  // eslint-disable-next-line
   const [isInAlreadyModel, setIsInAlreadyModel] = useState(false);
 
   let history = useHistory();
@@ -185,14 +186,14 @@ export default function Add_Item() {
         Object.keys(inputsSerialNo).length === Object.keys(inputsModelNo).length
       ) {
         for (var k = 0; k < Object.keys(inputsSerialNo).length; k++) {
-          db.collection("item")
-            .where("modelNo", "==", inputsModelNo[k])
-            .get()
-            .then((reModel) => {
-              if (reModel.docs.length > 0) {
-                setIsInAlreadyModel(true);
-              }
-            });
+          // db.collection("item")
+          //   .where("modelNo", "==", inputsModelNo[k])
+          //   .get()
+          //   .then((reModel) => {
+          //     if (reModel.docs.length > 0) {
+          //       setIsInAlreadyModel(true);
+          //     }
+          //   });
           db.collection("item")
             .where("serialNo", "==", inputsSerialNo[k])
             .get()
@@ -219,26 +220,14 @@ export default function Add_Item() {
 
         let emptySerial = serialNosList.includes("");
 
-        let duplicatesModel = modelNosList.reduce(
-          (acc, currentValue, index, array) => {
-            if (
-              array.indexOf(currentValue) !== index &&
-              !acc.includes(currentValue)
-            )
-              acc.push(currentValue);
-            return acc;
-          },
-          []
-        );
+       
 
         let emptyModels = modelNosList.includes("");
 
         if (duplicatesSerial.length > 0) {
           NotificationManager.info("Serail number must be unique !");
         } else {
-          if (duplicatesModel.length > 0) {
-            NotificationManager.info("Model number must be unique !");
-          } else {
+          
             if (emptySerial) {
               NotificationManager.info("Serail number can not be empty !");
             } else {
@@ -941,11 +930,11 @@ export default function Add_Item() {
                 }
               }
             }
-          }
+          
         }
       } else {
         NotificationManager.info(
-          "Serail,model and chassis number's count must be equal!"
+          "Serail,model number's count must be equal!"
         );
       }
     });

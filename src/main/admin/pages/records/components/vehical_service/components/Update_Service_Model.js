@@ -225,7 +225,7 @@ export default function Update_Service_Model({ data, id }) {
               />
             </Grid>
             <Grid className="txt_Labels" item xs={12} sm={4}>
-              Diesel :
+              Greace Nipples :
             </Grid>
             <Grid className="txt_Labels" item xs={12} sm={8}>
               <Checkbox

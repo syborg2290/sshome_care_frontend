@@ -218,7 +218,7 @@ export default function Vehical_Service_Model() {
               />
             </Grid>
             <Grid className="txt_Labels" item xs={12} sm={4}>
-              Diesel :
+              Grease Nipples :
             </Grid>
             <Grid className="txt_Labels" item xs={12} sm={8}>
               <Checkbox

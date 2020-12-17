@@ -1486,6 +1486,7 @@ function Make_invoice() {
                       <Grid className="lbl_MI" item xs={12} sm={4}>
                         <TextField
                           className="txt_dpayment"
+                          disabled={true}
                           variant="outlined"
                           size="small"
                           label="Shortage"

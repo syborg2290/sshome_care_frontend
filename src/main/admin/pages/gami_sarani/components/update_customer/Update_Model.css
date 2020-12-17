@@ -1,0 +1,19 @@
+.imageFront {
+  border-radius: 5px;
+  width: 65% !important;
+  height: 80% !important;
+  margin: auto;
+  text-align: center;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.imageBack {
+  border-radius: 5px;
+  width: 50% !important;
+  margin: auto;
+  text-align: center;
+  justify-content: center;
+  margin-top: 35px;
+  transform: rotate(270deg);
+}

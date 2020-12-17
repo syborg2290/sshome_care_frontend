@@ -101,6 +101,7 @@ export default function Item_table_assistant() {
               thousandSeparator={true}
               prefix={" "}
             />,
+             element.data().type,
             <div
               color="secondary"
               size="small"
@@ -216,6 +217,15 @@ export default function Item_table_assistant() {
     },
     {
       name: "Sale price(LKR)",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+        {
+      name: "Type",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -482,6 +492,13 @@ export default function Item_table_assistant() {
                     ).format("dddd, MMMM Do YYYY, h:mm:ss a")}
                   </span>
                 </Col>
+                  <Col span={12}>TYPE</Col>
+                <Col span={12}>
+                 <span className="load_Item">
+                    <span className="colan">:</span>
+                  ABC Main
+                  </span>
+                </Col>
               </Row>
               <hr />
               <TableContainer component={Paper} className="main_containerNo">
@@ -496,9 +513,9 @@ export default function Item_table_assistant() {
                       <TableCell className="tbl_cell" align="left">
                         ModelNo
                       </TableCell>
-                      <TableCell className="tbl_cell" align="left">
+                      {/* <TableCell className="tbl_cell" align="left">
                         ChasisseNo
-                      </TableCell>
+                      </TableCell> */}
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -519,13 +536,13 @@ export default function Item_table_assistant() {
                                 )
                               )}
                             </TableCell>
-                            <TableCell component="th" scope="row">
+                            {/* <TableCell component="th" scope="row">
                               {itemListSeMo[currentIndx]?.chassisNo.map(
                                 (chassisNoT) => (
                                   <h5 key={chassisNoT}>{chassisNoT}</h5>
                                 )
                               )}
-                            </TableCell>
+                            </TableCell> */}
                           </TableRow>
                         ))
                       : ""}

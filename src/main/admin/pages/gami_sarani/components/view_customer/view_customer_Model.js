@@ -24,16 +24,25 @@ export default function view_customer_Model({
         </Typography>
       </Col>
       <Col className="space_col__sarani" span={12}></Col>
-      <Col className="img_span__sarani" span={24}>
+      <Col className="img_span__sarani" span={12}>
         {" "}
         <img
-          alt="Empty data"
-          className="avatar_customer_sarani"
+          alt="image Front"
+          className="imageFront"
+          
           src={
             photo !== null
               ? photo
-              : require("../../../../../../assets/avatar.png")
+              : require("../../../../../../assets/avatar1132.jpg")
           }
+        />
+      </Col>
+       <Col className="img_span__sarani" span={12}>
+        {" "}
+        <img
+          alt="image Back"
+          className="imageBack"
+            src={require("../../../../../../assets/avater232.jpg")}
         />
       </Col>
 

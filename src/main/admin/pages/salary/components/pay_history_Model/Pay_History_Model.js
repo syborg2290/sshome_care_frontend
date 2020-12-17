@@ -202,6 +202,19 @@ export default function Pay_History_Model() {
         }),
       },
     },
+      {
+      name: "Arreas_Target",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: {
+            fontSize: "15px",
+            color: "black",
+            fontWeight: "600",
+          },
+        }),
+      },
+    },
     {
       name: "Net_Salary",
       options: {
@@ -353,6 +366,14 @@ export default function Pay_History_Model() {
               Ex_Card: (
                 <CurrencyFormat
                   value={saDoc.data()?.exCard}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+               Arreas_Target: (
+                <CurrencyFormat
+                  value={12323422}
                   displayType={"text"}
                   thousandSeparator={true}
                   prefix={" "}

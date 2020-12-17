@@ -11,6 +11,8 @@ import Sidebar from "../Sidebar/Sidebar";
 import ItemTable from "../pages/item/assistant_item_table/Item_table_assistant";
 import AddItem from "../pages/item/add_Item/Add_Item";
 import StockHistory from "../pages/item/stock_History/Stock_History";
+import ManageStock from "../pages/item/stock_manage/Manage_Stock";
+import SellingHistory from "../pages/item/selling_History/Selling_History";
 import AddCustomer from "../pages/customer/add_Customer/Add_Customer";
 import MakeInvoice from "../pages/invoice/Make_invoice";
 
@@ -78,6 +80,8 @@ function Layout(props) {
             <Route path="/admin/ui/ItemTable" component={ItemTable} />
             <Route path="/admin/ui/AddItem" component={AddItem} />
             <Route path="/admin/ui/StockHistory" component={StockHistory} />
+            <Route path="/admin/ui/ManageStock" component={ManageStock} />
+            <Route path="/admin/ui/SellingHistory" component={SellingHistory} />
             <Route path="/admin/ui/addCustomer" component={AddCustomer} />
 
             <Route

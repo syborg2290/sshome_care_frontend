@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Grid } from "@material-ui/core";
-import { Modal } from "antd";
+import { Spin, Modal } from "antd";
 import MUIDataTable from "mui-datatables";
+import { Row, Col } from "antd";
+import { Grid, Button } from "@material-ui/core";
+
+import CurrencyFormat from "react-currency-format";
+import moment from "moment";
+
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -9,44 +14,62 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
-import { Row, Col } from "antd";
-import CurrencyFormat from "react-currency-format";
-import moment from "moment";
-import { useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom"
 
-// styles
-import "./Stock_History.css";
+// components
+import SelectedItem from "./components/Selected_item_Model/Selected_Item";
 
 // icons
 import VisibilityIcon from "@material-ui/icons/Visibility";
+
+
+// styles
+import "./Manage_Stock.css";
+
 import db from "../../../../../config/firebase.js";
 
-export default function Stock_History() {
+export default function Manage_Stock() {
+  // const [selectedItemtVisible, setSelectedItemtVisible] = useState(false);
   const [itemTableData, setItemTableData] = useState([]);
-  // eslint-disable-next-line
   const [allTtemData, setAllItemData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [visible, setVisible] = useState(false);
+  const [selectedItemModel, setSelectedItemModel] = useState(false);
+  // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
+
+
+  // let socket = socketIOClient(RealtimeServerApi);
+
   const [itemListSeMo, setItemListSeMo] = useState([]);
+
   const [itemListSeMoCon, setItemListSeMoCon] = useState([]);
+
   let history = useHistory();
 
   const showModal = () => {
     setVisible(true);
   };
 
+  const onSelectedItem = () => {
+    setSelectedItemModel(true);
+  };
+
+
+
   useEffect(() => {
     window.addEventListener("offline", function (e) {
       history.push("/connection_lost");
     });
 
-    db.collection("item_history")
+    db.collection("item")
       .orderBy("timestamp", "desc")
       .onSnapshot((snapshot) => {
         var newData = [];
         var itemData = [];
         var itemDataSeMo = [];
         var itemDataSeMoCon = [];
+
         if (snapshot.docs.length > 0) {
           itemDataSeMoCon.push({
             serialNo: snapshot.docs[0].data().serialNo,
@@ -54,7 +77,6 @@ export default function Stock_History() {
             chassisNo: snapshot.docs[0].chassisNo,
           });
         }
-
         snapshot.docs.forEach((element) => {
           itemData.push({
             id: element.id,
@@ -67,40 +89,66 @@ export default function Stock_History() {
             chassisNo: element.data().chassisNo,
           });
 
-          newData.push({
-            Item_name: element.data().itemName,
-            Brand: element.data().brand,
-            Qty: element.data().qty,
-            Cash_price: (
-              <CurrencyFormat
-                value={element.data().cashPrice}
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={" "}
-              />
-            ),
-            Date: moment(element.data()?.timestamp?.toDate()).format(
-              "dddd, MMMM Do YYYY"
-            ),
-             Type: element.data().type,
-            Action: (
-              <div className="table_icon">
-                <VisibilityIcon onClick={showModal} />
-              </div>
-            ),
-          });
+          newData.push([
+            element.data().itemName,
+            element.data().brand,
+            element.data().qty,
+            element.data().color === "" ? " - " : element.data().color,
+            element.data().guaranteePeriod === ""
+              ? " - "
+              : element.data().guaranteePeriod +
+                " " +
+                element.data().guarantee.value.toLowerCase(),
+            <CurrencyFormat
+              value={element.data().salePrice}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={" "}
+            />,
+             element.data().stockType,
+            <div
+              color="secondary"
+              size="small"
+              className={
+                element.data().qty !== 0
+                  ? element.data().qty >= 3
+                    ? "px-2"
+                    : "px-3"
+                  : "px-4"
+              }
+              variant="contained"
+            >
+              {element.data().qty !== 0 ? (
+                element.data().qty >= 3 ? (
+                  <p className="status">Available</p>
+                ) : (
+                  <p className="status">Low Stock</p>
+                )
+              ) : (
+                <p className="status">Out Of Stock</p>
+              )}
+            </div>,
+            <div className="table_icon">
+                <VisibilityIcon
+                    onClick={showModal}
+                />
+             
+            </div>,
+          ]);
         });
         setItemTableData(newData);
         setAllItemData(itemData);
-        setItemListSeMoCon(itemDataSeMoCon);
         setItemListSeMo(itemDataSeMo);
+        setItemListSeMoCon(itemDataSeMoCon);
+        setIsLoading(false);
       });
     // eslint-disable-next-line
   }, []);
 
+
   const columns = [
     {
-      name: "Item_name",
+      name: "Item name",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -127,17 +175,25 @@ export default function Stock_History() {
       },
     },
     {
-      name: "Cash_price",
+      name: "Color",
       options: {
-        filter: true,
+        filter: false,
         setCellHeaderProps: (value) => ({
           style: { fontSize: "15px", color: "black", fontWeight: "600" },
         }),
       },
     },
-
     {
-      name: "Date",
+      name: "Gurantee period",
+      options: {
+        filter: false,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "Sale price(LKR)",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -145,9 +201,8 @@ export default function Stock_History() {
         }),
       },
     },
-
-     {
-      name: "Type",
+      {
+      name: "Stock_Type",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -155,7 +210,15 @@ export default function Stock_History() {
         }),
       },
     },
-
+    {
+      name: "Status",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
     {
       name: "Action",
       options: {
@@ -169,7 +232,6 @@ export default function Stock_History() {
 
   return (
     <>
-      {/*Selected Item Model */}
 
       <Modal
         title={
@@ -382,18 +444,18 @@ export default function Stock_History() {
                     {" "}
                     <span className="colan">:</span>{" "}
                     {moment(
-                      allTtemData[currentIndx] && allTtemData[currentIndx].data
-                        ? allTtemData[currentIndx].data.timestamp.seconds * 1000
+                      allTtemData[currentIndx] && allTtemData[currentIndx]?.data
+                        ? allTtemData[currentIndx]?.data?.timestamp?.seconds *
+                            1000
                         : " - "
                     ).format("dddd, MMMM Do YYYY, h:mm:ss a")}
                   </span>
                 </Col>
                  <Col span={12}>STOCK TYPE</Col>
                 <Col span={12}>
-                  <span className="load_Item">
-                    {" "}
-                    <span className="colan">:</span>{" "}
-                   ABC Main
+                 <span className="load_Item">
+                    <span className="colan">:</span>
+                  ABC Main
                   </span>
                 </Col>
               </Row>
@@ -407,12 +469,9 @@ export default function Stock_History() {
                   <TableHead className="No_Table_head">
                     <TableRow>
                       <TableCell className="tbl_cell">SerialNo</TableCell>
-                      <TableCell className="tbl_cell" align="right">
+                      <TableCell className="tbl_cell" align="left">
                         ModelNo
                       </TableCell>
-                      {/* <TableCell className="tbl_cell" align="right">
-                        ChasisseNo
-                      </TableCell> */}
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -433,13 +492,6 @@ export default function Stock_History() {
                                 )
                               )}
                             </TableCell>
-                            {/* <TableCell component="th" scope="row">
-                              {itemListSeMo[currentIndx]?.chassisNo.map(
-                                (chassisNoT) => (
-                                  <h5 key={chassisNoT}>{chassisNoT}</h5>
-                                )
-                              )}
-                            </TableCell> */}
                           </TableRow>
                         ))
                       : ""}
@@ -451,17 +503,50 @@ export default function Stock_History() {
         </div>
       </Modal>
 
+        {/*Start Selected Item Model */}
+
+      <Modal
+        visible={selectedItemModel}
+        footer={null}
+        className="selectedItems"
+        onCancel={() => {
+          setSelectedItemModel(false);
+        }}
+      >
+        <div >
+          <div>
+            <div>
+              <SelectedItem />
+            </div>
+          </div>
+        </div>
+      </Modal>
+
+      {/* End Selected Item Model  */}
+          
+      <Button
+        variant="contained"
+        color="primary"
+        className="btn_manage_itm"
+        onClick={onSelectedItem}
+      >
+       Manage Item
+      </Button>
+   
+
       <Grid className="tbl_Container" container spacing={4}>
         <Grid item xs={12}>
           <MUIDataTable
-            title={<span className="title_Span">Stock history</span>}
+            title={<span className="title_Span">All Items</span>}
             className="item_table"
             data={itemTableData}
             columns={columns}
             options={{
               rowHover: true,
-              // selectableRows: false,
-              selectableRows: "none",
+              draggableColumns: {
+                enabled: true,
+              },
+              responsive: "standard",
               customToolbarSelect: () => {},
               filterType: "textField",
               download: false,
@@ -472,6 +557,15 @@ export default function Stock_History() {
               selectableRowsHeader: false,
               onRowClick: (rowData, rowMeta) => {
                 setCurrentIndx(rowMeta.dataIndex);
+              },
+              textLabels: {
+                body: {
+                  noMatch: isLoading ? (
+                    <Spin className="tblSpinner" size="large" spinning="true" />
+                  ) : (
+                    ""
+                  ),
+                },
               },
             }}
           />

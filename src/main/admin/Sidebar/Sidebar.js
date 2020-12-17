@@ -64,6 +64,8 @@ const structure = [
       { label: "Item Table", link: "/admin/ui/ItemTable" },
       { label: "Add Item", link: "/admin/ui/AddItem" },
       { label: "Stock History", link: "/admin/ui/StockHistory" },
+      { label: "Manage Stock", link: "/admin/ui/ManageStock" },
+      { label: "Selling History", link: "/admin/ui/SellingHistory" },
     ],
   },
   {

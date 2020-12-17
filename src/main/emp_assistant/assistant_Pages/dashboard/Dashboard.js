@@ -39,6 +39,26 @@ export default function Dashboard() {
       history.push("/connection_lost");
     });
 
+    db.collection("targets")
+      .where("status", "==", "ongoing")
+      .get()
+      .then((reAllTargets) => {
+        reAllTargets.docs.forEach((eachTarget) => {
+          let daysCountTarget =
+            (new Date().getTime() -
+              new Date(
+                eachTarget.data().start_date?.seconds * 1000
+              ).getTime()) /
+            (1000 * 3600 * 24);
+
+          if (daysCountTarget >= 30) {
+            db.collection("targets").doc(eachTarget.id).update({
+              status: "Expired",
+            });
+          }
+        });
+      });
+
     db.collection("invoice")
       .where("status_of_payandgo", "==", "expired")
       .get()

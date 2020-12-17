@@ -363,8 +363,13 @@ async function getSaleTarget(root, currentDate) {
 
   for (var k = 0; k < salesTaregt.docs.length; k++) {
     if (
-      salesTaregt.docs[k].data().status === "ongoing" &&
-      salesTaregt.docs[k].data().target_type === "Sale target"
+      salesTaregt.docs[k].data().target_type === "Sale target" &&
+      new Date(
+        salesTaregt.docs[k].data().start_date?.seconds * 1000
+      ).getFullYear() === new Date().getFullYear() &&
+      new Date(
+        salesTaregt.docs[k].data().start_date?.seconds * 1000
+      ).getMonth() === new Date().getMonth()
     ) {
       targetValue = parseInt(salesTaregt.docs[k].data().amount);
       for (var i = 0; i < saleRe.docs.length; i++) {
@@ -392,7 +397,7 @@ async function getSaleTarget(root, currentDate) {
     : saleTargetValue === 0
     ? 0
     : saleTargetValue >= targetValue
-    ? 5000
+    ? 5000 / 2
     : 0;
 }
 
@@ -474,7 +479,11 @@ async function cashTargetFunc(
 
   var dueCashTaregt = cashTaregtRpp.docs.filter(
     (ob) =>
-      ob.data().status === "ongoing" && ob.data().target_type === "Cash target"
+      ob.data().target_type === "Cash target" &&
+      new Date(ob.data().start_date?.seconds * 1000).getFullYear() ===
+        new Date().getFullYear() &&
+      new Date(ob.data().start_date?.seconds * 1000).getMonth() ===
+        new Date().getMonth()
   );
 
   if (dueCashTaregt.length > 0) {
@@ -1534,6 +1543,7 @@ export default function Add_Paysheet_Model({ nic }) {
               });
           });
       });
+
     return () => {
       isMounted.current = false;
     };
@@ -1644,18 +1654,18 @@ export default function Add_Paysheet_Model({ nic }) {
                 if (isSalary.docs.length > 0) {
                   if (nic === rootCur.docs[0].data().employee1) {
                     if (rootCur.docs[0].data().employee2 === "") {
-                      db.collection("targets")
-                        .where("selectedType", "==", root)
-                        .get()
-                        .then((reTarget) => {
-                          if (reTarget.docs.length > 0) {
-                            reTarget.docs.forEach((reEach) => {
-                              db.collection("targets").doc(reEach.id).update({
-                                status: "Expired",
-                              });
-                            });
-                          }
-                        });
+                      // db.collection("targets")
+                      //   .where("selectedType", "==", root)
+                      //   .get()
+                      //   .then((reTarget) => {
+                      //     if (reTarget.docs.length > 0) {
+                      //       reTarget.docs.forEach((reEach) => {
+                      //         db.collection("targets").doc(reEach.id).update({
+                      //           status: "Expired",
+                      //         });
+                      //       });
+                      //     }
+                      //   });
                     } else {
                       if (emp2.docs.length === 0) {
                       } else {
@@ -1671,20 +1681,20 @@ export default function Add_Paysheet_Model({ nic }) {
                           ).getMonth() ===
                             new Date(date.seconds * 1000).getMonth()
                         ) {
-                          db.collection("targets")
-                            .where("selectedType", "==", root)
-                            .get()
-                            .then((reTarget) => {
-                              if (reTarget.docs.length > 0) {
-                                reTarget.docs.forEach((reEach) => {
-                                  db.collection("targets")
-                                    .doc(reEach.id)
-                                    .update({
-                                      status: "Expired",
-                                    });
-                                });
-                              }
-                            });
+                          // db.collection("targets")
+                          //   .where("selectedType", "==", root)
+                          //   .get()
+                          //   .then((reTarget) => {
+                          //     if (reTarget.docs.length > 0) {
+                          //       reTarget.docs.forEach((reEach) => {
+                          //         db.collection("targets")
+                          //           .doc(reEach.id)
+                          //           .update({
+                          //             status: "Expired",
+                          //           });
+                          //       });
+                          //     }
+                          //   });
                         }
                       }
                     }
@@ -1705,36 +1715,36 @@ export default function Add_Paysheet_Model({ nic }) {
                         ).getMonth() ===
                           new Date(date.seconds * 1000).getMonth()
                       ) {
-                        db.collection("targets")
-                          .where("selectedType", "==", root)
-                          .get()
-                          .then((reTarget) => {
-                            if (reTarget.docs.length > 0) {
-                              reTarget.docs.forEach((reEach) => {
-                                db.collection("targets").doc(reEach.id).update({
-                                  status: "Expired",
-                                });
-                              });
-                            }
-                          });
+                        // db.collection("targets")
+                        //   .where("selectedType", "==", root)
+                        //   .get()
+                        //   .then((reTarget) => {
+                        //     if (reTarget.docs.length > 0) {
+                        //       reTarget.docs.forEach((reEach) => {
+                        //         db.collection("targets").doc(reEach.id).update({
+                        //           status: "Expired",
+                        //         });
+                        //       });
+                        //     }
+                        //   });
                       }
                     }
                   }
                 } else {
                   if (nic === rootCur.docs[0].data().employee1) {
                     if (rootCur.docs[0].data().employee2 === "") {
-                      db.collection("targets")
-                        .where("selectedType", "==", root)
-                        .get()
-                        .then((reTarget) => {
-                          if (reTarget.docs.length > 0) {
-                            reTarget.docs.forEach((reEach) => {
-                              db.collection("targets").doc(reEach.id).update({
-                                status: "Expired",
-                              });
-                            });
-                          }
-                        });
+                      // db.collection("targets")
+                      //   .where("selectedType", "==", root)
+                      //   .get()
+                      //   .then((reTarget) => {
+                      //     if (reTarget.docs.length > 0) {
+                      //       reTarget.docs.forEach((reEach) => {
+                      //         db.collection("targets").doc(reEach.id).update({
+                      //           status: "Expired",
+                      //         });
+                      //       });
+                      //     }
+                      //   });
                     } else {
                       if (
                         new Date(
@@ -1748,18 +1758,18 @@ export default function Add_Paysheet_Model({ nic }) {
                         ).getMonth() ===
                           new Date(date.seconds * 1000).getMonth()
                       ) {
-                        db.collection("targets")
-                          .where("selectedType", "==", root)
-                          .get()
-                          .then((reTarget) => {
-                            if (reTarget.docs.length > 0) {
-                              reTarget.docs.forEach((reEach) => {
-                                db.collection("targets").doc(reEach.id).update({
-                                  status: "Expired",
-                                });
-                              });
-                            }
-                          });
+                        // db.collection("targets")
+                        //   .where("selectedType", "==", root)
+                        //   .get()
+                        //   .then((reTarget) => {
+                        //     if (reTarget.docs.length > 0) {
+                        //       reTarget.docs.forEach((reEach) => {
+                        //         db.collection("targets").doc(reEach.id).update({
+                        //           status: "Expired",
+                        //         });
+                        //       });
+                        //     }
+                        //   });
                       }
                     }
                   } else {
@@ -1774,18 +1784,18 @@ export default function Add_Paysheet_Model({ nic }) {
                           1000
                       ).getMonth() === new Date(date.seconds * 1000).getMonth()
                     ) {
-                      db.collection("targets")
-                        .where("selectedType", "==", root)
-                        .get()
-                        .then((reTarget) => {
-                          if (reTarget.docs.length > 0) {
-                            reTarget.docs.forEach((reEach) => {
-                              db.collection("targets").doc(reEach.id).update({
-                                status: "Expired",
-                              });
-                            });
-                          }
-                        });
+                      // db.collection("targets")
+                      //   .where("selectedType", "==", root)
+                      //   .get()
+                      //   .then((reTarget) => {
+                      //     if (reTarget.docs.length > 0) {
+                      //       reTarget.docs.forEach((reEach) => {
+                      //         db.collection("targets").doc(reEach.id).update({
+                      //           status: "Expired",
+                      //         });
+                      //       });
+                      //     }
+                      //   });
                     }
                   }
                 }

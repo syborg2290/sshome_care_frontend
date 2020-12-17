@@ -27,6 +27,7 @@ export default function Create_Target_Model() {
   const [startDate, setStartdate] = useState(null);
   const [loading, setLoading] = useState(false);
   const [selectedType, setSelectedType] = useState("");
+  // eslint-disable-next-line
   const [validation, setValidation] = useState("");
   const [targetType, setTargetType] = useState("sale_target");
 
@@ -231,53 +232,50 @@ export default function Create_Target_Model() {
 
   const createTarget = async () => {
     setLoading(true);
+    // eslint-disable-next-line
     var dueCashTaregt = [];
 
-    var cashTaregtRpp = await db
-      .collection("targets")
-      .where("selectedType", "==", selectedType)
-      .get();
+    // var cashTaregtRpp = await db
+    //   .collection("targets")
+    //   .where("selectedType", "==", selectedType)
+    //   .get();
 
-    if (targetType === "sale_target") {
-      dueCashTaregt = cashTaregtRpp.docs.filter(
-        (ob) =>
-          ob.data().status === "ongoing" &&
-          ob.data().target_type === "Sale target"
-      );
-    } else {
-      dueCashTaregt = cashTaregtRpp.docs.filter(
-        (ob) =>
-          ob.data().status === "ongoing" &&
-          ob.data().target_type === "Cash target"
-      );
-    }
+    // if (targetType === "sale_target") {
+    //   dueCashTaregt = cashTaregtRpp.docs.filter(
+    //     (ob) =>
+    //       ob.data().status === "ongoing" &&
+    //       ob.data().target_type === "Sale target"
+    //   );
+    // } else {
+    //   dueCashTaregt = cashTaregtRpp.docs.filter(
+    //     (ob) =>
+    //       ob.data().status === "ongoing" &&
+    //       ob.data().target_type === "Cash target"
+    //   );
+    // }
 
     let totAmount =
       targetType === "sale_target" ? sale_taregt_amount : cash_taregt_amount;
-    if (dueCashTaregt.length === 0) {
-      db.collection("targets")
-        .add({
-          target_type:
-            targetType === "sale_target" ? "Sale target" : "Cash target",
-          selectedType: selectedType,
-          start_date: startDate,
-          amount: totAmount,
-          status: "ongoing",
-        })
-        .then((_) => {
-          setLoading(false);
-          window.location.reload();
-        });
-    } else {
-      setLoading(false);
-      setValidation("Previous target is still on 'ONGOING' ");
-    }
+
+    db.collection("targets")
+      .add({
+        target_type:
+          targetType === "sale_target" ? "Sale target" : "Cash target",
+        selectedType: selectedType,
+        start_date: startDate,
+        amount: totAmount,
+        status: "ongoing",
+      })
+      .then((_) => {
+        setLoading(false);
+        window.location.reload();
+      });
   };
 
   return (
     <Container component="main" className="conctainefr_main">
       <Typography className="titleffs" variant="h5" gutterBottom>
-        Make Target
+        Make A Target
       </Typography>
       <Grid item xs={12} sm={12}>
         <hr className="titl_hr" />
@@ -378,6 +376,7 @@ export default function Create_Target_Model() {
                 defaultValue="sale_target"
                 buttonStyle="solid"
                 onChange={(e) => {
+                  setSelectedType("");
                   setTargetType(e.target.value);
                 }}
               >

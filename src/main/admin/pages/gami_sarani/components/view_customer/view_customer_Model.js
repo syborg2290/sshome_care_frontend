@@ -27,7 +27,7 @@ export default function view_customer_Model({
       <Col className="img_span__sarani" span={12}>
         {" "}
         <img
-          alt="image Front"
+          alt="Front"
           className="imageFront"
           
           src={
@@ -40,7 +40,7 @@ export default function view_customer_Model({
        <Col className="img_span__sarani" span={12}>
         {" "}
         <img
-          alt="image Back"
+          alt="Back"
           className="imageBack"
             src={require("../../../../../../assets/avater232.jpg")}
         />

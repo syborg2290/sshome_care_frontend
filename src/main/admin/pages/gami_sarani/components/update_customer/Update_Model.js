@@ -365,7 +365,7 @@ export default function Update_Model({
                 hidden
               />
               <img
-                alt="front image"
+                alt="front"
                 onClick={() => {
                   document.getElementById("front_image").click();
                 }}

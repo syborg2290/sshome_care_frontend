@@ -389,7 +389,7 @@ export default function Add_Customer({ close_model }) {
                 hidden
               />
               <img
-                alt="back image"
+                alt="back"
                 onClick={() => {
                   document.getElementById("back_image").click();
                 }}

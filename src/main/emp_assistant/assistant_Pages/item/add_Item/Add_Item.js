@@ -448,6 +448,8 @@ export default function Add_Item() {
                                                               serialNo: serialNosList,
                                                               chassisNo: chassisNosList,
                                                               color: color.trim(),
+                                                              stock_type:
+                                                                "main",
                                                               qty:
                                                                 serialNoNewList.length,
                                                               cashPrice:
@@ -593,6 +595,8 @@ export default function Add_Item() {
                                                               serialNo: serialNosList,
                                                               chassisNo: chassisNosList,
                                                               color: color.trim(),
+                                                              stock_type:
+                                                                "main",
                                                               qty:
                                                                 serialNosList.length,
                                                               cashPrice:
@@ -726,6 +730,7 @@ export default function Add_Item() {
                                                             serialNo: serialNosList,
                                                             chassisNo: chassisNosList,
                                                             color: color.trim(),
+                                                            stock_type: "main",
                                                             qty:
                                                               serialNosList.length,
                                                             cashPrice:

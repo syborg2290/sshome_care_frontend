@@ -251,7 +251,6 @@ export default function Add_Item() {
                     } else {
                       if (
                         Object.keys(inputsSerialNo).length === 0 ||
-                        
                         serialNosList.includes("")
                       ) {
                         NotificationManager.info(
@@ -449,6 +448,8 @@ export default function Add_Item() {
                                                               serialNo: serialNosList,
                                                               chassisNo: chassisNosList,
                                                               color: color.trim(),
+                                                              stock_type:
+                                                                "main",
                                                               qty:
                                                                 serialNoNewList.length,
                                                               cashPrice:
@@ -594,6 +595,8 @@ export default function Add_Item() {
                                                               serialNo: serialNosList,
                                                               chassisNo: chassisNosList,
                                                               color: color.trim(),
+                                                              stock_type:
+                                                                "main",
                                                               qty:
                                                                 serialNosList.length,
                                                               cashPrice:
@@ -727,6 +730,7 @@ export default function Add_Item() {
                                                             serialNo: serialNosList,
                                                             chassisNo: chassisNosList,
                                                             color: color.trim(),
+                                                            stock_type: "main",
                                                             qty:
                                                               serialNosList.length,
                                                             cashPrice:

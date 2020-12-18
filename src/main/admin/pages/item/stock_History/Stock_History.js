@@ -82,7 +82,7 @@ export default function Stock_History() {
             Date: moment(element.data()?.timestamp?.toDate()).format(
               "dddd, MMMM Do YYYY"
             ),
-             Type: element.data().type,
+             Stock_Type: element.data().type,
             Action: (
               <div className="table_icon">
                 <VisibilityIcon onClick={showModal} />
@@ -147,7 +147,7 @@ export default function Stock_History() {
     },
 
      {
-      name: "Type",
+      name: "Stock_Type",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -407,7 +407,7 @@ export default function Stock_History() {
                   <TableHead className="No_Table_head">
                     <TableRow>
                       <TableCell className="tbl_cell">SerialNo</TableCell>
-                      <TableCell className="tbl_cell" align="right">
+                      <TableCell className="tbl_cell" align="left">
                         ModelNo
                       </TableCell>
                       {/* <TableCell className="tbl_cell" align="right">

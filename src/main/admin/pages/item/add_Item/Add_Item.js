@@ -133,7 +133,7 @@ export default function Add_Item() {
 
   //add InputModel No
   const addInputModelNo = () => {
-    if (Object.keys(inputsModelNo).length <= 1) {
+    if (Object.keys(inputsModelNo).length < 1) {
       setInputsModelNo({
         ...inputsModelNo,
         [Object.keys(inputsModelNo).length]: "",

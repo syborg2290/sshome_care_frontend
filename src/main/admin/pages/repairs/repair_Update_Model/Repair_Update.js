@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Radio } from "antd";
 import { Grid, Container, Typography, Button } from "@material-ui/core";
 import firebase from "firebase";
@@ -19,10 +19,8 @@ export default function Repair_Update({
   const [status, setStatus] = useState(statusProp);
 
   let history = useHistory();
-  
 
-   useEffect(() => {
-
+  useEffect(() => {
     window.addEventListener("offline", function (e) {
       history.push("/connection_lost");
     });

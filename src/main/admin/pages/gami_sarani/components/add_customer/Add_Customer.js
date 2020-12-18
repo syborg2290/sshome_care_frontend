@@ -86,72 +86,53 @@ export default function Add_Customer({ close_model }) {
                   setLoadingSubmit(false);
                   setValidation("Customer already exists by MID");
                 } else {
-                  if (imageFile === null) {
-                    db.collection("gami_sarani")
-                      .add({
-                        mid: mid,
-                        nic: nic,
-                        fname: fname,
-                        lname: lname,
-                        address1: addres1,
-                        addres2: addres2,
-                        mobile1: mobile1,
-                        mobile2: mobile2,
-                        root: root,
-                        currentDeposit: 0,
-                        front: null,
-                        back: null,
-                        date: firebase.firestore.FieldValue.serverTimestamp(),
-                      })
-                      .then((_) => {
-                        setLoadingSubmit(false);
-                        close_model();
-                        window.location.reload();
-                      });
-                  } else {
-                    let randomNumber =
-                      Math.floor(Math.random() * 1000000000) + 1000;
+                  let randomNumber =
+                    Math.floor(Math.random() * 1000000000) + 1000;
+                  if (imageFile !== null) {
                     await storage
                       .ref(`images/${imageFile.name}${randomNumber}`)
                       .put(imageFile);
+                  }
+
+                  if (imageFile2 !== null) {
                     await storage
                       .ref(`images/${imageFile2.name}${randomNumber}`)
                       .put(imageFile2);
-
-                    storage
-                      .ref("images")
-                      .child(imageFile.name + randomNumber)
-                      .getDownloadURL()
-                      .then((front) => {
-                        storage
-                          .ref("images")
-                          .child(imageFile2.name + randomNumber)
-                          .getDownloadURL()
-                          .then((back) => {
-                            db.collection("gami_sarani")
-                              .add({
-                                mid: mid,
-                                nic: nic,
-                                fname: fname,
-                                lname: lname,
-                                address1: addres1,
-                                addres2: addres2,
-                                mobile1: mobile1,
-                                mobile2: mobile2,
-                                root: root,
-                                currentDeposit: 0,
-                                front: front,
-                                back: back,
-                                date: firebase.firestore.FieldValue.serverTimestamp(),
-                              })
-                              .then((_) => {
-                                setLoadingSubmit(false);
-                                close_model();
-                                window.location.reload();
-                              });
-                          });
-                      });
                   }
+
+                  storage
+                    .ref("images")
+                    .child(imageFile.name + randomNumber)
+                    .getDownloadURL()
+                    .then((front) => {
+                      storage
+                        .ref("images")
+                        .child(imageFile2.name + randomNumber)
+                        .getDownloadURL()
+                        .then((back) => {
+                          db.collection("gami_sarani")
+                            .add({
+                              mid: mid,
+                              nic: nic,
+                              fname: fname,
+                              lname: lname,
+                              address1: addres1,
+                              addres2: addres2,
+                              mobile1: mobile1,
+                              mobile2: mobile2,
+                              root: root,
+                              currentDeposit: 0,
+                              front: front,
+                              back: back,
+                              date: firebase.firestore.FieldValue.serverTimestamp(),
+                            })
+                            .then((_) => {
+                              setLoadingSubmit(false);
+                              close_model();
+                              window.location.reload();
+                            });
+                        });
+                    });
                 }
               });
           }

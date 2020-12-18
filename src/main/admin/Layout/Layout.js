@@ -30,7 +30,11 @@ import PayHistoryReports from "../pages/salary/components/pay_history_Model/comp
 
 import Record from "../pages/records/Record";
 import Expences from "../pages/expences/Expences";
-// import VehicalService from "../assistant_Pages/vehical_Service/Vehical_Service";
+
+import EmployeePurchasing from "../pages/employee/components/employee_purchasing/Employee_Purchasing";
+import EmployeeInvoice from "../pages/employee/components/employee_purchasing/components/employee_make_invoice/Employee_Invoice";
+import PurchasedHistory from "../pages/employee/components/purchased_history/Purchased_History";
+
 
 // pages
 import Dashboard from "../pages/dashboard/Dashboard";
@@ -126,6 +130,18 @@ function Layout(props) {
             <Route
               path="/admin/pages/managedHistory"
               component={ManagedHistory}
+            />
+            <Route
+              path="/admin/pages/employeePurchasing"
+              component={EmployeePurchasing}
+            />
+            <Route
+              path="/admin/pages/employeeInvoice"
+              component={EmployeeInvoice}
+            />
+            <Route
+              path="/admin/pages/purchasedHistory"
+              component={PurchasedHistory}
             />
           </Switch>
         </div>

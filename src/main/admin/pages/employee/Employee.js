@@ -11,6 +11,7 @@ import "./Employee.css";
 // icons
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import EditIcon from "@material-ui/icons/Edit";
+import AddShoppingCartRoundedIcon from '@material-ui/icons/AddShoppingCartRounded';
 
 // components
 import AddEmployee from "./components/add _employee_Model/Add_Employee";
@@ -23,11 +24,15 @@ export default function Employee() {
   const [employeeAddModel, setEmployeeAddModel] = useState(false); // Employee add model
   const [employeeUpdateModel, setEmployeeUpdateModel] = useState(false); // Employee Update model
   const [employeeViewModel, setEmployeeViewModel] = useState(false); // Employee View model
+  const [employeePurchasing, setEmployeePurchasing] = useState(false); // Employee Purchasing model
+  const [employeePurchasingHistory, setEmployeePurchasingHistory] = useState(false); // Employee Purchasing history model
   // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
   const [tableData, setTableData] = useState([]);
   const [allData, setallData] = useState([]);
+
   let history = useHistory();
+
   const EmployeeAdd = () => {
     setEmployeeAddModel(true);
   };
@@ -37,6 +42,16 @@ export default function Employee() {
 
   const EmployeeView = () => {
     setEmployeeViewModel(true);
+  };
+
+  const EmployeePurchasing = () => {
+    setEmployeePurchasing(true);
+     history.push("/admin/pages/employeePurchasing");
+  };
+
+    const empPurchasedHistory = () => {
+    setEmployeePurchasingHistory(true);
+     history.push("/admin/pages/purchasedHistory");
   };
 
   const columns = [
@@ -117,6 +132,9 @@ export default function Employee() {
               <span>
                 <EditIcon className="btnEdit" onClick={EmployeeUpdate} />
               </span>
+               <span>
+                <AddShoppingCartRoundedIcon  className="btnShopping" onClick={EmployeePurchasing}/>
+                </span>
             </div>
           ),
         });
@@ -220,6 +238,18 @@ export default function Employee() {
 
       {/* End Update Employee Model  */}
 
+<Grid container spacing={4}>
+   <Grid item xs={10}>
+      <Button
+        variant="contained"
+        color="primary"
+        className="btn_purchsHis"
+        onClick={empPurchasedHistory}
+      >
+       Purchased History
+      </Button>
+      </Grid>
+       <Grid item xs={2}>
       <Button
         variant="contained"
         color="primary"
@@ -228,7 +258,9 @@ export default function Employee() {
       >
         New Employee
       </Button>
-
+      </Grid>
+      </Grid>
+      
       <Grid container spacing={4}>
         <Grid item xs={12}>
           <MUIDataTable

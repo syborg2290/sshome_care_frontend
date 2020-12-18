@@ -44,3 +44,10 @@
 .model_Employee_add {
   width: 60% !important;
 }
+
+.btn_purchsHis {
+  float: right !important;
+  margin-top: 80px !important;
+  color: aliceblue !important;
+  background-color: rgb(5, 5, 54) !important;
+}

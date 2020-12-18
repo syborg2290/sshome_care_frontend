@@ -1,17 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   TextField,
   Button,
-  Select,
-  FormControl,
-  InputLabel,
   Grid,
   Container,
   Typography,
 } from "@material-ui/core";
-import { Checkbox, Spin } from "antd";
-
-import { useHistory } from "react-router-dom";
+import { Spin } from "antd";
 
 import "react-notifications/lib/notifications.css";
 
@@ -21,8 +16,9 @@ import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import "./Add_Serial_Number.css";
 
 export default function Add_Serial_Number() {
-    const [inputsSerialNo, setInputsSerialNo] = useState({});
-      const [isLoadingSubmit, setLoadingSubmit] = useState(false);
+  const [inputsSerialNo, setInputsSerialNo] = useState({});
+  // eslint-disable-next-line
+ const [isLoadingSubmit, setLoadingSubmit] = useState(false);
 
 
       const addInput = () => {

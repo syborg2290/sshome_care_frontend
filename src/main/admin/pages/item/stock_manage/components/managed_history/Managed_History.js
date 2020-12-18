@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Grid } from "@material-ui/core";
 import MUIDataTable from "mui-datatables";
-import moment from "moment";
-import { useLocation, useHistory } from "react-router-dom";
-import CurrencyFormat from "react-currency-format";
+import { useHistory } from "react-router-dom";
+
 
 // icons
 import VisibilityIcon from "@material-ui/icons/Visibility";
@@ -13,6 +12,15 @@ export default function Managed_History() {
   const [currentIndx, setCurrentIndx] = useState(0);
   // eslint-disable-next-line
   const [allData, setAllData] = useState([]);
+
+  let history = useHistory();
+
+ useEffect(() => {
+    window.addEventListener("offline", function (e) {
+      history.push("/connection_lost");
+    });
+    // eslint-disable-next-line
+  }, []);
 
 const columns = [
   {

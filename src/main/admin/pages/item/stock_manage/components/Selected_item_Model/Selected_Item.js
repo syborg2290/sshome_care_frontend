@@ -4,30 +4,18 @@ import {
   Button,
   Select,
   FormControl,
-  InputLabel,
   Grid,
   Container,
   Typography,
 } from "@material-ui/core";
-import { Modal, Spin, DatePicker, Space, Checkbox , Radio } from "antd";
+import {  Spin, DatePicker, Space } from "antd";
 
 
 // icons
 import { CloseOutlined } from "@ant-design/icons";
 
-
 import firebase from "firebase";
-import CurrencyFormat from "react-currency-format";
-
-import {
-  NotificationContainer,
-  NotificationManager,
-} from "react-notifications";
-import "react-notifications/lib/notifications.css";
-
-import db, { storage } from "../../../../../../../config/firebase";
-
-
+import db from "../../../../../../../config/firebase";
 
 // styles
 import "./Selected_Item.css";
@@ -37,7 +25,9 @@ export default function Selected_Item() {
     const [qty, setQty] = useState(0);
     const [allRoot, setAllRoot] = useState([]);
     // eslint-disable-next-line
-    const [isLoadingSubmit, setLoadingSubmit] = useState(false);
+  const [isLoadingSubmit, setLoadingSubmit] = useState(false);
+  // eslint-disable-next-line
+  const [date, setDate] = useState(null);
 
     const handleChange = (event) => {
     setSelectedType(event.target.value);
@@ -149,6 +139,20 @@ export default function Selected_Item() {
                       </Space>
                     </Grid>
               <Grid item xs={12} sm={1}></Grid>
+            <Grid className="txt_Labels" item xs={12} sm={4}>
+              Date :
+            </Grid>
+            <Grid item xs={12} sm={8}>
+              <DatePicker
+                onChange={(e) => {
+                  if (e !== null) {
+                    setDate(firebase.firestore.Timestamp.fromDate(e.toDate()));
+                  } else {
+                    setDate(null);
+                  }
+                }}
+              />
+            </Grid>
               </Grid>
 
             

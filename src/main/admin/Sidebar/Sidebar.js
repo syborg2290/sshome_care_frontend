@@ -20,6 +20,7 @@ import {
   MonetizationOnOutlined as MonetizationOnOutlinedIcon,
   ReceiptOutlined as ReceiptOutlinedIcon,
   LocalAtm as LocalAtmIcon,
+  Store as StoreIcon,
 } from "@material-ui/icons";
 
 import { useTheme } from "@material-ui/styles";
@@ -138,6 +139,12 @@ const structure = [
     label: "Root",
     link: "/admin/ui/root",
     icon: <CommuteIcon className="icons" />,
+  },
+   {
+    id: 23,
+    label: "Shop",
+    link: "/admin/ui/shop",
+    icon: <StoreIcon className="icons" />,
   },
   { id: 2, type: "divider" },
   {

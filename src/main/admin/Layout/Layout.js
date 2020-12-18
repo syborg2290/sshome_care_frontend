@@ -48,6 +48,7 @@ import Employee from "../pages/employee/Employee";
 import Salary from "../pages/salary/Salary";
 import Attendance from "../pages/attendance/Attendance";
 import Root from "../pages/root/Root";
+import Shop from "../pages/shop/Shop";
 
 function Layout(props) {
   return (
@@ -77,6 +78,7 @@ function Layout(props) {
             <Route path="/admin/ui/salary" component={Salary} />
             <Route path="/admin/ui/attendance" component={Attendance} />
             <Route path="/admin/ui/root" component={Root} />
+            <Route path="/admin/ui/shop" component={Shop} />
             {/* components */}
             <Route path="/admin/ui/ItemTable" component={ItemTable} />
             <Route path="/admin/ui/AddItem" component={AddItem} />

@@ -420,603 +420,580 @@ function Make_invoice() {
     );
     if (tablerows.some((ob) => ob.customer !== null)) {
       if (deadlineTimestamp !== null) {
-        if (tablerows[0].customer.customerImageFile) {
+        let randomNumber = Math.floor(Math.random() * 1000000000) + 1000;
+        //customerImageUrlFront
+        if (tablerows[0].customer.customerImageFileFront !== null) {
           await storage
-            .ref(`images/${tablerows[0].customer.customerImageFile.name}`)
-            .put(tablerows[0].customer.customerImageFile);
-
-          storage
-            .ref("images")
-            .child(tablerows[0].customer.customerImageFile.name)
-            .getDownloadURL()
-            .then(async (url) => {
-              if (tablerows[0].customer.customerId !== null) {
-                let prevCust = await db
-                  .collection("customer")
-                  .doc(tablerows[0].customer.customerId)
-                  .get();
-                db.collection("customer")
-                  .doc(tablerows[0].customer.customerId)
-                  .update({
-                    fname: tablerows[0].customer.customerFname,
-                    lname: tablerows[0].customer.customerLname,
-                    address1: tablerows[0].customer.customerAddress1,
-                    address2: tablerows[0].customer.customerAddress2,
-                    root: tablerows[0].customer.customerRootToHome,
-                    nic: tablerows[0].customer.customerNic,
-                    mid: prevCust.data().mid,
-                    relations_nics: tablerows[0].customer.customerRelatedNics,
-                    mobile1: tablerows[0].customer.customerMobile1,
-                    mobile2: tablerows[0].customer.customerMobile2,
-                    photo: url,
-                  })
-                  .then((cust) => {
-                    let arrayItems = [];
-
-                    tablerows.forEach((one) => {
-                      let listOfSerilNo = [];
-                      let listOfModelNo = [];
-                      let listOfChassisNo = [];
-                      for (var n = 0; n < parseInt(itemQty[one.i]); n++) {
-                        listOfSerilNo.push(one.serialNo[n]);
-                        listOfModelNo.push(one.modelNo[n]);
-                        listOfChassisNo.push(one.chassisNo[n]);
-                      }
-                      if (listOfSerilNo.length === parseInt(itemQty[one.i])) {
-                        let objItem = {
-                          item_id: one.id,
-                          serialNo: listOfSerilNo,
-                          modelNo: listOfModelNo,
-                          chassisNo: listOfChassisNo,
-                          downpayment:
-                            itemDP[one.i] === "" ? 0 : parseInt(itemDP[one.i]),
-                          qty: parseInt(itemQty[one.i]),
-                          discount:
-                            itemDiscount[one.i] === ""
-                              ? 0
-                              : itemDiscount[one.i],
-                          item_name: one.title,
-                        };
-                        arrayItems.push(objItem);
-                      }
-                    });
-
-                    db.collection("invoice")
-                      .add({
-                        invoice_number: invoiceNumber,
-                        items: arrayItems,
-                        customer_id: tablerows[0].customer.customerId,
-                        nic: tablerows[0].customer.customerNic,
-                        mid: tablerows[0].customer.mid,
-                        installemtnDay: days,
-                        installemtnDate: dates === "" ? 1 : dates,
-                        gamisarani: gamisarani,
-                        gamisarani_amount:
-                          gamisaraniamount === ""
-                            ? 0
-                            : parseInt(gamisaraniamount),
-                        paymentWay: isFullPayment ? "FullPayment" : "PayandGo",
-                        downpayment: dpayment,
-                        noOfInstallment: itemNOI,
-                        amountPerInstallment: itemAPI,
-                        balance: balance,
-                        deadlineTimestamp: deadlineTimestamp,
-                        selectedType: selectedType,
-                        discount: totalDiscount === "" ? 0 : totalDiscount,
-                        shortage: shortage === "" ? 0 : shortage,
-                        total:
-                          subTotalFunc() -
-                          (totalDiscount === "" ? 0 : totalDiscount),
-                        status_of_payandgo: "onGoing",
-                        date: intialTimestamp,
-                        document_charges: documentCharges,
-                        nextDate: firebase.firestore.Timestamp.fromDate(times),
-                      })
-                      .then((invDoc) => {
-                        db.collection("trustee").add({
-                          fname: tablerows[0].customer.trustee1Fname,
-                          lname: tablerows[0].customer.trustee1Lname,
-                          nic: tablerows[0].customer.trustee1Nic,
-                          address1: tablerows[0].customer.trustee1Address1,
-                          address2: tablerows[0].customer.trustee1Address2,
-                          mobile1: tablerows[0].customer.trustee1Mobile1,
-                          mobile2: tablerows[0].customer.trustee1Mobile2,
-                          invoice_number: invoiceNumber,
-                          date: firebase.firestore.FieldValue.serverTimestamp(),
-                        });
-
-                        if (
-                          tablerows[0].customer.trustee2Nic &&
-                          tablerows[0].customer.trustee2Fname &&
-                          tablerows[0].customer.trustee2Lname &&
-                          tablerows[0].customer.trustee2Address1 &&
-                          tablerows[0].customer.trustee2Mobile1
-                        ) {
-                          db.collection("trustee").add({
-                            fname: tablerows[0].customer.trustee2Fname,
-                            lname: tablerows[0].customer.trustee2Lname,
-                            nic: tablerows[0].customer.trustee2Nic,
-                            address1: tablerows[0].customer.trustee2Address1,
-                            address2: tablerows[0].customer.trustee2Address2,
-                            mobile1: tablerows[0].customer.trustee2Mobile1,
-                            mobile2: tablerows[0].customer.trustee2Mobile2,
-                            invoice_number: invoiceNumber,
-                            date: firebase.firestore.FieldValue.serverTimestamp(),
-                          });
-                        }
-
-                        tablerows.forEach(async (itemUDoc) => {
-                          let newArray = await await db
-                            .collection("item")
-                            .doc(itemUDoc.id)
-                            .get();
-
-                          let serialNoList = [];
-                          let modelNoList = [];
-                          let chassisiNoList = [];
-                          serialNoList = newArray.data().serialNo;
-                          modelNoList = newArray.data().modelNo;
-                          chassisiNoList = newArray.data().chassisNo;
-                          serialNoList.splice(0, itemQty[itemUDoc.i]);
-                          modelNoList.splice(0, itemQty[itemUDoc.i]);
-                          if (chassisiNoList[0] !== null) {
-                            chassisiNoList.splice(0, itemQty[itemUDoc.i]);
-                          }
-
-                          await db
-                            .collection("item")
-                            .doc(itemUDoc.id)
-                            .update({
-                              qty:
-                                Math.round(newArray.data().qty) -
-                                itemQty[itemUDoc.i],
-                              serialNo: serialNoList,
-                              modelNo: modelNoList,
-                              chassisNo: chassisiNoList,
-                            });
-                        });
-
-                        setLoadingSubmit(false);
-                      });
-                  });
-              } else {
-                db.collection("customer")
-                  .add({
-                    fname: tablerows[0].customer.customerFname,
-                    lname: tablerows[0].customer.customerLname,
-                    address1: tablerows[0].customer.customerAddress1,
-                    address2: tablerows[0].customer.customerAddress2,
-                    root: tablerows[0].customer.customerRootToHome,
-                    nic: tablerows[0].customer.customerNic,
-                    mid: tablerows[0].customer.mid,
-                    relations_nics: tablerows[0].customer.customerRelatedNics,
-                    mobile1: tablerows[0].customer.customerMobile1,
-                    mobile2: tablerows[0].customer.customerMobile2,
-                    photo: url,
-                    status: "normal",
-                    date: firebase.firestore.FieldValue.serverTimestamp(),
-                  })
-                  .then((cust) => {
-                    let arrayItems = [];
-
-                    tablerows.forEach((one) => {
-                      let listOfSerilNo = [];
-                      let listOfModelNo = [];
-                      let listOfChassisNo = [];
-                      for (var n = 0; n < parseInt(itemQty[one.i]); n++) {
-                        listOfSerilNo.push(one.serialNo[n]);
-                        listOfModelNo.push(one.modelNo[n]);
-                        listOfChassisNo.push(one.chassisNo[n]);
-                      }
-                      if (listOfSerilNo.length === parseInt(itemQty[one.i])) {
-                        let objItem = {
-                          item_id: one.id,
-                          serialNo: listOfSerilNo,
-                          modelNo: listOfModelNo,
-                          chassisNo: listOfChassisNo,
-                          downpayment:
-                            itemDP[one.i] === "" ? 0 : parseInt(itemDP[one.i]),
-                          qty: parseInt(itemQty[one.i]),
-                          discount:
-                            itemDiscount[one.i] === ""
-                              ? 0
-                              : itemDiscount[one.i],
-                          item_name: one.title,
-                        };
-                        arrayItems.push(objItem);
-                      }
-                    });
-
-                    db.collection("invoice")
-                      .add({
-                        invoice_number: invoiceNumber,
-                        items: arrayItems,
-                        customer_id: cust.id,
-                        nic: tablerows[0].customer.customerNic,
-                        mid: tablerows[0].customer.mid,
-                        installemtnDay: days,
-                        installemtnDate: dates === "" ? 1 : dates,
-                        gamisarani: gamisarani,
-                        gamisarani_amount:
-                          gamisaraniamount === ""
-                            ? 0
-                            : parseInt(gamisaraniamount),
-                        paymentWay: isFullPayment ? "FullPayment" : "PayandGo",
-                        downpayment: dpayment,
-                        noOfInstallment: itemNOI,
-                        amountPerInstallment: itemAPI,
-                        balance: balance,
-                        deadlineTimestamp: deadlineTimestamp,
-                        selectedType: selectedType,
-                        discount: totalDiscount === "" ? 0 : totalDiscount,
-                        shortage: shortage === "" ? 0 : shortage,
-                        total:
-                          subTotalFunc() -
-                          (totalDiscount === "" ? 0 : totalDiscount),
-                        status_of_payandgo: "onGoing",
-                        date: intialTimestamp,
-                        document_charges: documentCharges,
-                        nextDate: firebase.firestore.Timestamp.fromDate(times),
-                      })
-                      .then((invDoc) => {
-                        db.collection("trustee").add({
-                          fname: tablerows[0].customer.trustee1Fname,
-                          lname: tablerows[0].customer.trustee1Lname,
-                          nic: tablerows[0].customer.trustee1Nic,
-                          address1: tablerows[0].customer.trustee1Address1,
-                          address2: tablerows[0].customer.trustee1Address2,
-                          mobile1: tablerows[0].customer.trustee1Mobile1,
-                          mobile2: tablerows[0].customer.trustee1Mobile2,
-                          invoice_number: invoiceNumber,
-                          date: firebase.firestore.FieldValue.serverTimestamp(),
-                        });
-
-                        if (
-                          tablerows[0].customer.trustee2Nic &&
-                          tablerows[0].customer.trustee2Fname &&
-                          tablerows[0].customer.trustee2Lname &&
-                          tablerows[0].customer.trustee2Address1 &&
-                          tablerows[0].customer.trustee2Mobile1
-                        ) {
-                          db.collection("trustee").add({
-                            fname: tablerows[0].customer.trustee2Fname,
-                            lname: tablerows[0].customer.trustee2Lname,
-                            nic: tablerows[0].customer.trustee2Nic,
-                            address1: tablerows[0].customer.trustee2Address1,
-                            address2: tablerows[0].customer.trustee2Address2,
-                            mobile1: tablerows[0].customer.trustee2Mobile1,
-                            mobile2: tablerows[0].customer.trustee2Mobile2,
-                            invoice_number: invoiceNumber,
-                            date: firebase.firestore.FieldValue.serverTimestamp(),
-                          });
-                        }
-
-                        tablerows.forEach(async (itemUDoc) => {
-                          let newArray = await await db
-                            .collection("item")
-                            .doc(itemUDoc.id)
-                            .get();
-
-                          let serialNoList = [];
-                          let modelNoList = [];
-                          let chassisiNoList = [];
-                          serialNoList = newArray.data().serialNo;
-                          modelNoList = newArray.data().modelNo;
-                          chassisiNoList = newArray.data().chassisNo;
-                          serialNoList.splice(0, itemQty[itemUDoc.i]);
-                          modelNoList.splice(0, itemQty[itemUDoc.i]);
-                          if (chassisiNoList[0] !== null) {
-                            chassisiNoList.splice(0, itemQty[itemUDoc.i]);
-                          }
-
-                          await db
-                            .collection("item")
-                            .doc(itemUDoc.id)
-                            .update({
-                              qty:
-                                Math.round(newArray.data().qty) -
-                                itemQty[itemUDoc.i],
-                              serialNo: serialNoList,
-                              modelNo: modelNoList,
-                              chassisNo: chassisiNoList,
-                            });
-                        });
-
-                        setLoadingSubmit(false);
-                      });
-                  });
-              }
-            });
-        } else {
-          if (tablerows[0].customer.customerId !== null) {
-            let customerImageUrl = await db
-              .collection("customer")
-              .doc(tablerows[0].customer.customerId)
-              .get();
-            db.collection("customer")
-              .doc(tablerows[0].customer.customerId)
-              .update({
-                fname: tablerows[0].customer.customerFname,
-                lname: tablerows[0].customer.customerLname,
-                address1: tablerows[0].customer.customerAddress1,
-                address2: tablerows[0].customer.customerAddress2,
-                root: tablerows[0].customer.customerRootToHome,
-                nic: tablerows[0].customer.customerNic,
-                mid: customerImageUrl.data().mid,
-                relations_nics: tablerows[0].customer.customerRelatedNics,
-                mobile1: tablerows[0].customer.customerMobile1,
-                mobile2: tablerows[0].customer.customerMobile2,
-                photo: customerImageUrl.data().photo,
-              })
-              .then((cust) => {
-                let arrayItems = [];
-
-                tablerows.forEach((one) => {
-                  let listOfSerilNo = [];
-                  let listOfModelNo = [];
-                  let listOfChassisNo = [];
-                  for (var n = 0; n < parseInt(itemQty[one.i]); n++) {
-                    listOfSerilNo.push(one.serialNo[n]);
-                    listOfModelNo.push(one.modelNo[n]);
-                    listOfChassisNo.push(one.chassisNo[n]);
-                  }
-                  if (listOfSerilNo.length === parseInt(itemQty[one.i])) {
-                    let objItem = {
-                      item_id: one.id,
-                      serialNo: listOfSerilNo,
-                      modelNo: listOfModelNo,
-                      chassisNo: listOfChassisNo,
-                      downpayment:
-                        itemDP[one.i] === "" ? 0 : parseInt(itemDP[one.i]),
-                      qty: parseInt(itemQty[one.i]),
-                      discount:
-                        itemDiscount[one.i] === "" ? 0 : itemDiscount[one.i],
-                      item_name: one.title,
-                    };
-                    arrayItems.push(objItem);
-                  }
-                });
-
-                db.collection("invoice")
-                  .add({
-                    invoice_number: invoiceNumber,
-                    items: arrayItems,
-                    customer_id: tablerows[0].customer.customerId,
-                    nic: tablerows[0].customer.customerNic,
-                    mid: tablerows[0].customer.mid,
-                    installemtnDay: days,
-                    installemtnDate: dates === "" ? 1 : dates,
-                    gamisarani: gamisarani,
-                    gamisarani_amount:
-                      gamisaraniamount === "" ? 0 : parseInt(gamisaraniamount),
-                    paymentWay: isFullPayment ? "FullPayment" : "PayandGo",
-                    downpayment: dpayment,
-                    noOfInstallment: itemNOI,
-                    amountPerInstallment: itemAPI,
-                    balance: balance,
-                    deadlineTimestamp: deadlineTimestamp,
-                    selectedType: selectedType,
-                    discount: totalDiscount === "" ? 0 : totalDiscount,
-                    shortage: shortage === "" ? 0 : shortage,
-                    total:
-                      subTotalFunc() -
-                      (totalDiscount === "" ? 0 : totalDiscount),
-                    status_of_payandgo: "onGoing",
-                    date: intialTimestamp,
-                    document_charges: documentCharges,
-                    nextDate: firebase.firestore.Timestamp.fromDate(times),
-                  })
-                  .then((invDoc) => {
-                    db.collection("trustee").add({
-                      fname: tablerows[0].customer.trustee1Fname,
-                      lname: tablerows[0].customer.trustee1Lname,
-                      nic: tablerows[0].customer.trustee1Nic,
-                      address1: tablerows[0].customer.trustee1Address1,
-                      address2: tablerows[0].customer.trustee1Address2,
-                      mobile1: tablerows[0].customer.trustee1Mobile1,
-                      mobile2: tablerows[0].customer.trustee1Mobile2,
-                      invoice_number: invoiceNumber,
-                      date: firebase.firestore.FieldValue.serverTimestamp(),
-                    });
-
-                    if (
-                      tablerows[0].customer.trustee2Nic &&
-                      tablerows[0].customer.trustee2Fname &&
-                      tablerows[0].customer.trustee2Lname &&
-                      tablerows[0].customer.trustee2Address1 &&
-                      tablerows[0].customer.trustee2Mobile1
-                    ) {
-                      db.collection("trustee").add({
-                        fname: tablerows[0].customer.trustee2Fname,
-                        lname: tablerows[0].customer.trustee2Lname,
-                        nic: tablerows[0].customer.trustee2Nic,
-                        address1: tablerows[0].customer.trustee2Address1,
-                        address2: tablerows[0].customer.trustee2Address2,
-                        mobile1: tablerows[0].customer.trustee2Mobile1,
-                        mobile2: tablerows[0].customer.trustee2Mobile2,
-                        invoice_number: invoiceNumber,
-                        date: firebase.firestore.FieldValue.serverTimestamp(),
-                      });
-                    }
-
-                    tablerows.forEach(async (itemUDoc) => {
-                      let newArray = await await db
-                        .collection("item")
-                        .doc(itemUDoc.id)
-                        .get();
-
-                      let serialNoList = [];
-                      let modelNoList = [];
-                      let chassisiNoList = [];
-                      serialNoList = newArray.data().serialNo;
-                      modelNoList = newArray.data().modelNo;
-                      chassisiNoList = newArray.data().chassisNo;
-                      serialNoList.splice(0, itemQty[itemUDoc.i]);
-                      modelNoList.splice(0, itemQty[itemUDoc.i]);
-                      if (chassisiNoList[0] !== null) {
-                        chassisiNoList.splice(0, itemQty[itemUDoc.i]);
-                      }
-
-                      await db
-                        .collection("item")
-                        .doc(itemUDoc.id)
-                        .update({
-                          qty:
-                            Math.round(newArray.data().qty) -
-                            itemQty[itemUDoc.i],
-                          serialNo: serialNoList,
-                          modelNo: modelNoList,
-                          chassisNo: chassisiNoList,
-                        });
-                    });
-
-                    setLoadingSubmit(false);
-                  });
-              });
-          } else {
-            db.collection("customer")
-              .add({
-                fname: tablerows[0].customer.customerFname,
-                lname: tablerows[0].customer.customerLname,
-                address1: tablerows[0].customer.customerAddress1,
-                address2: tablerows[0].customer.customerAddress2,
-                root: tablerows[0].customer.customerRootToHome,
-                nic: tablerows[0].customer.customerNic,
-                mid: tablerows[0].customer.mid,
-                relations_nics: tablerows[0].customer.customerRelatedNics,
-                mobile1: tablerows[0].customer.customerMobile1,
-                mobile2: tablerows[0].customer.customerMobile2,
-                photo: null,
-                status: "normal",
-                date: firebase.firestore.FieldValue.serverTimestamp(),
-              })
-              .then((cust) => {
-                let arrayItems = [];
-
-                tablerows.forEach((one) => {
-                  let listOfSerilNo = [];
-                  let listOfModelNo = [];
-                  let listOfChassisNo = [];
-                  for (var n = 0; n < parseInt(itemQty[one.i]); n++) {
-                    listOfSerilNo.push(one.serialNo[n]);
-                    listOfModelNo.push(one.modelNo[n]);
-                    listOfChassisNo.push(one.chassisNo[n]);
-                  }
-                  if (listOfSerilNo.length === parseInt(itemQty[one.i])) {
-                    let objItem = {
-                      item_id: one.id,
-                      serialNo: listOfSerilNo,
-                      modelNo: listOfModelNo,
-                      downpayment:
-                        itemDP[one.i] === "" ? 0 : parseInt(itemDP[one.i]),
-                      chassisNo: listOfChassisNo,
-                      qty: parseInt(itemQty[one.i]),
-                      discount:
-                        itemDiscount[one.i] === "" ? 0 : itemDiscount[one.i],
-                      item_name: one.title,
-                    };
-                    arrayItems.push(objItem);
-                  }
-                });
-
-                db.collection("invoice")
-                  .add({
-                    invoice_number: invoiceNumber,
-                    items: arrayItems,
-                    customer_id: cust.id,
-                    nic: tablerows[0].customer.customerNic,
-                    mid: tablerows[0].customer.mid,
-                    installemtnDay: days,
-                    installemtnDate: dates === "" ? 1 : dates,
-                    gamisarani: gamisarani,
-                    gamisarani_amount:
-                      gamisaraniamount === "" ? 0 : parseInt(gamisaraniamount),
-                    paymentWay: isFullPayment ? "FullPayment" : "PayandGo",
-                    downpayment: dpayment,
-                    noOfInstallment: itemNOI,
-                    amountPerInstallment: itemAPI,
-                    balance: balance,
-                    deadlineTimestamp: deadlineTimestamp,
-                    selectedType: selectedType,
-                    discount: totalDiscount === "" ? 0 : totalDiscount,
-                    shortage: shortage === "" ? 0 : shortage,
-                    total:
-                      subTotalFunc() -
-                      (totalDiscount === "" ? 0 : totalDiscount),
-                    status_of_payandgo: "onGoing",
-                    date: intialTimestamp,
-                    document_charges: documentCharges,
-                    nextDate: firebase.firestore.Timestamp.fromDate(times),
-                  })
-                  .then((invDoc) => {
-                    db.collection("trustee").add({
-                      fname: tablerows[0].customer.trustee1Fname,
-                      lname: tablerows[0].customer.trustee1Lname,
-                      nic: tablerows[0].customer.trustee1Nic,
-                      address1: tablerows[0].customer.trustee1Address1,
-                      address2: tablerows[0].customer.trustee1Address2,
-                      mobile1: tablerows[0].customer.trustee1Mobile1,
-                      mobile2: tablerows[0].customer.trustee1Mobile2,
-                      invoice_number: invoiceNumber,
-                      date: firebase.firestore.FieldValue.serverTimestamp(),
-                    });
-
-                    if (
-                      tablerows[0].customer.trustee2Nic &&
-                      tablerows[0].customer.trustee2Fname &&
-                      tablerows[0].customer.trustee2Lname &&
-                      tablerows[0].customer.trustee2Address1 &&
-                      tablerows[0].customer.trustee2Mobile1
-                    ) {
-                      db.collection("trustee").add({
-                        fname: tablerows[0].customer.trustee2Fname,
-                        lname: tablerows[0].customer.trustee2Lname,
-                        nic: tablerows[0].customer.trustee2Nic,
-                        address1: tablerows[0].customer.trustee2Address1,
-                        address2: tablerows[0].customer.trustee2Address2,
-                        mobile1: tablerows[0].customer.trustee2Mobile1,
-                        mobile2: tablerows[0].customer.trustee2Mobile2,
-                        invoice_number: invoiceNumber,
-                        date: firebase.firestore.FieldValue.serverTimestamp(),
-                      });
-                    }
-
-                    tablerows.forEach(async (itemUDoc) => {
-                      let newArray = await await db
-                        .collection("item")
-                        .doc(itemUDoc.id)
-                        .get();
-
-                      let serialNoList = [];
-                      let modelNoList = [];
-                      let chassisiNoList = [];
-                      serialNoList = newArray.data().serialNo;
-                      modelNoList = newArray.data().modelNo;
-                      chassisiNoList = newArray.data().chassisNo;
-                      serialNoList.splice(0, itemQty[itemUDoc.i]);
-                      modelNoList.splice(0, itemQty[itemUDoc.i]);
-                      if (chassisiNoList[0] !== null) {
-                        chassisiNoList.splice(0, itemQty[itemUDoc.i]);
-                      }
-
-                      await db
-                        .collection("item")
-                        .doc(itemUDoc.id)
-                        .update({
-                          qty:
-                            Math.round(newArray.data().qty) -
-                            itemQty[itemUDoc.i],
-                          serialNo: serialNoList,
-                          modelNo: modelNoList,
-                          chassisNo: chassisiNoList,
-                        });
-                    });
-
-                    setLoadingSubmit(false);
-                  });
-              });
-          }
+            .ref(
+              `images/${tablerows[0].customer.customerImageFileFront.name}${randomNumber}`
+            )
+            .put(tablerows[0].customer.customerImageFileFront);
         }
+
+        //customerImageUrlBack
+        if (tablerows[0].customer.customerImageFile2Back !== null) {
+          await storage
+            .ref(
+              `images/${tablerows[0].customer.customerImageFile2Back.name}${randomNumber}`
+            )
+            .put(tablerows[0].customer.customerImageFile2Back);
+        }
+
+        //trustee1ImageUrlFront
+        if (tablerows[0].customer.trustee1ImageFile1Front !== null) {
+          await storage
+            .ref(
+              `images/${tablerows[0].customer.trustee1ImageFile1Front.name}${randomNumber}`
+            )
+            .put(tablerows[0].customer.trustee1ImageFile1Front);
+        }
+
+        //trustee1ImageUrlBack
+        if (tablerows[0].customer.trustee1ImageFile2Back !== null) {
+          await storage
+            .ref(
+              `images/${tablerows[0].customer.trustee1ImageFile2Back.name}${randomNumber}`
+            )
+            .put(tablerows[0].customer.trustee1ImageFile2Back);
+        }
+
+        //trustee2ImageUrlFront
+        if (tablerows[0].customer.trustee2ImageFile1Front !== null) {
+          await storage
+            .ref(
+              `images/${tablerows[0].customer.trustee2ImageFile1Front.name}${randomNumber}`
+            )
+            .put(tablerows[0].customer.trustee2ImageFile1Front);
+        }
+
+        //trustee2ImageUrlBack
+        if (tablerows[0].customer.trustee2ImageFile1Front !== null) {
+          await storage
+            .ref(
+              `images/${tablerows[0].customer.trustee2ImageFile2Back.name}${randomNumber}`
+            )
+            .put(tablerows[0].customer.trustee2ImageFile2Back);
+        }
+
+        storage
+          .ref("images")
+          .child(
+            tablerows[0].customer.customerImageFileFront.name + randomNumber
+          )
+          .getDownloadURL()
+          .then(async (customerImageURLFront) => {
+            storage
+              .ref("images")
+              .child(
+                tablerows[0].customer.customerImageFile2Back.name + randomNumber
+              )
+              .getDownloadURL()
+              .then(async (customerImageURLBack) => {
+                storage
+                  .ref("images")
+                  .child(
+                    tablerows[0].customer.trustee1ImageFile1Front.name +
+                      randomNumber
+                  )
+                  .getDownloadURL()
+                  .then(async (trustee1ImageURLFront) => {
+                    storage
+                      .ref("images")
+                      .child(
+                        tablerows[0].customer.trustee1ImageFile2Back.name +
+                          randomNumber
+                      )
+                      .getDownloadURL()
+                      .then(async (trustee1ImageURLBack) => {
+                        storage
+                          .ref("images")
+                          .child(
+                            tablerows[0].customer.trustee2ImageFile1Front.name +
+                              randomNumber
+                          )
+                          .getDownloadURL()
+                          .then(async (trustee2ImageURLFront) => {
+                            storage
+                              .ref("images")
+                              .child(
+                                tablerows[0].customer.trustee2ImageFile2Back
+                                  .name + randomNumber
+                              )
+                              .getDownloadURL()
+                              .then(async (trustee2ImageURLBack) => {
+                                //+++++++++++++++++++++++++++++++++++
+
+                                if (tablerows[0].customer.customerId !== null) {
+                                  let prevCust = await db
+                                    .collection("customer")
+                                    .doc(tablerows[0].customer.customerId)
+                                    .get();
+                                  db.collection("customer")
+                                    .doc(tablerows[0].customer.customerId)
+                                    .update({
+                                      fname:
+                                        tablerows[0].customer.customerFname,
+                                      lname:
+                                        tablerows[0].customer.customerLname,
+                                      address1:
+                                        tablerows[0].customer.customerAddress1,
+                                      address2:
+                                        tablerows[0].customer.customerAddress2,
+                                      root:
+                                        tablerows[0].customer
+                                          .customerRootToHome,
+                                      nic: tablerows[0].customer.customerNic,
+                                      mid: prevCust.data().mid,
+                                      relations_nics:
+                                        tablerows[0].customer
+                                          .customerRelatedNics,
+                                      mobile1:
+                                        tablerows[0].customer.customerMobile1,
+                                      mobile2:
+                                        tablerows[0].customer.customerMobile2,
+                                      customerFrontURL: customerImageURLFront,
+                                      customerBackURL: customerImageURLBack,
+                                    })
+                                    .then((cust) => {
+                                      let arrayItems = [];
+
+                                      tablerows.forEach((one) => {
+                                        let listOfSerilNo = [];
+                                        let listOfModelNo = [];
+                                        let listOfChassisNo = [];
+                                        for (
+                                          var n = 0;
+                                          n < parseInt(itemQty[one.i]);
+                                          n++
+                                        ) {
+                                          listOfSerilNo.push(one.serialNo[n]);
+                                          listOfModelNo.push(one.modelNo[n]);
+                                        }
+                                        if (
+                                          listOfSerilNo.length ===
+                                          parseInt(itemQty[one.i])
+                                        ) {
+                                          let objItem = {
+                                            item_id: one.id,
+                                            serialNo: listOfSerilNo,
+                                            modelNo: listOfModelNo,
+                                            chassisNo: listOfChassisNo,
+                                            downpayment:
+                                              itemDP[one.i] === ""
+                                                ? 0
+                                                : parseInt(itemDP[one.i]),
+                                            qty: parseInt(itemQty[one.i]),
+                                            discount:
+                                              itemDiscount[one.i] === ""
+                                                ? 0
+                                                : itemDiscount[one.i],
+                                            item_name: one.title,
+                                          };
+                                          arrayItems.push(objItem);
+                                        }
+                                      });
+
+                                      db.collection("invoice")
+                                        .add({
+                                          invoice_number: invoiceNumber,
+                                          items: arrayItems,
+                                          customer_id:
+                                            tablerows[0].customer.customerId,
+                                          nic:
+                                            tablerows[0].customer.customerNic,
+                                          mid: tablerows[0].customer.mid,
+                                          installemtnDay: days,
+                                          installemtnDate:
+                                            dates === "" ? 1 : dates,
+                                          gamisarani: gamisarani,
+                                          gamisarani_amount:
+                                            gamisaraniamount === ""
+                                              ? 0
+                                              : parseInt(gamisaraniamount),
+                                          paymentWay: isFullPayment
+                                            ? "FullPayment"
+                                            : "PayandGo",
+                                          downpayment: dpayment,
+                                          noOfInstallment: itemNOI,
+                                          amountPerInstallment: itemAPI,
+                                          balance: balance,
+                                          deadlineTimestamp: deadlineTimestamp,
+                                          selectedType: selectedType,
+                                          discount:
+                                            totalDiscount === ""
+                                              ? 0
+                                              : totalDiscount,
+                                          shortage:
+                                            shortage === "" ? 0 : shortage,
+                                          total:
+                                            subTotalFunc() -
+                                            (totalDiscount === ""
+                                              ? 0
+                                              : totalDiscount),
+                                          status_of_payandgo: "onGoing",
+                                          date: intialTimestamp,
+                                          document_charges: documentCharges,
+                                          nextDate: firebase.firestore.Timestamp.fromDate(
+                                            times
+                                          ),
+                                        })
+                                        .then((invDoc) => {
+                                          db.collection("trustee").add({
+                                            fname:
+                                              tablerows[0].customer
+                                                .trustee1Fname,
+                                            lname:
+                                              tablerows[0].customer
+                                                .trustee1Lname,
+                                            nic:
+                                              tablerows[0].customer.trustee1Nic,
+                                            address1:
+                                              tablerows[0].customer
+                                                .trustee1Address1,
+                                            address2:
+                                              tablerows[0].customer
+                                                .trustee1Address2,
+                                            mobile1:
+                                              tablerows[0].customer
+                                                .trustee1Mobile1,
+                                            mobile2:
+                                              tablerows[0].customer
+                                                .trustee1Mobile2,
+                                            invoice_number: invoiceNumber,
+                                            trustee1FrontURL: trustee1ImageURLFront,
+                                            trustee1BackURL: trustee1ImageURLBack,
+                                            date: firebase.firestore.FieldValue.serverTimestamp(),
+                                          });
+
+                                          if (
+                                            tablerows[0].customer.trustee2Nic &&
+                                            tablerows[0].customer
+                                              .trustee2Fname &&
+                                            tablerows[0].customer
+                                              .trustee2Lname &&
+                                            tablerows[0].customer
+                                              .trustee2Address1 &&
+                                            tablerows[0].customer
+                                              .trustee2Mobile1
+                                          ) {
+                                            db.collection("trustee").add({
+                                              fname:
+                                                tablerows[0].customer
+                                                  .trustee2Fname,
+                                              lname:
+                                                tablerows[0].customer
+                                                  .trustee2Lname,
+                                              nic:
+                                                tablerows[0].customer
+                                                  .trustee2Nic,
+                                              address1:
+                                                tablerows[0].customer
+                                                  .trustee2Address1,
+                                              address2:
+                                                tablerows[0].customer
+                                                  .trustee2Address2,
+                                              mobile1:
+                                                tablerows[0].customer
+                                                  .trustee2Mobile1,
+                                              mobile2:
+                                                tablerows[0].customer
+                                                  .trustee2Mobile2,
+                                              invoice_number: invoiceNumber,
+                                              trustee2FrontURL: trustee2ImageURLFront,
+                                              trustee2BackURL: trustee2ImageURLBack,
+                                              date: firebase.firestore.FieldValue.serverTimestamp(),
+                                            });
+                                          }
+
+                                          tablerows.forEach(
+                                            async (itemUDoc) => {
+                                              let newArray = await await db
+                                                .collection("item")
+                                                .doc(itemUDoc.id)
+                                                .get();
+
+                                              let serialNoList = [];
+                                              let modelNoList = [];
+                                              let chassisiNoList = [];
+                                              serialNoList = newArray.data()
+                                                .serialNo;
+                                              modelNoList = newArray.data()
+                                                .modelNo;
+                                              chassisiNoList = newArray.data()
+                                                .chassisNo;
+                                              serialNoList.splice(
+                                                0,
+                                                itemQty[itemUDoc.i]
+                                              );
+                                              modelNoList.splice(
+                                                0,
+                                                itemQty[itemUDoc.i]
+                                              );
+                                              // if (chassisiNoList[0] !== null) {
+                                              //   chassisiNoList.splice(
+                                              //     0,
+                                              //     itemQty[itemUDoc.i]
+                                              //   );
+                                              // }
+
+                                              await db
+                                                .collection("item")
+                                                .doc(itemUDoc.id)
+                                                .update({
+                                                  qty:
+                                                    Math.round(
+                                                      newArray.data().qty
+                                                    ) - itemQty[itemUDoc.i],
+                                                  serialNo: serialNoList,
+                                                  modelNo: modelNoList,
+                                                  chassisNo: chassisiNoList,
+                                                });
+                                            }
+                                          );
+
+                                          setLoadingSubmit(false);
+                                        });
+                                    });
+                                } else {
+                                  db.collection("customer")
+                                    .add({
+                                      fname:
+                                        tablerows[0].customer.customerFname,
+                                      lname:
+                                        tablerows[0].customer.customerLname,
+                                      address1:
+                                        tablerows[0].customer.customerAddress1,
+                                      address2:
+                                        tablerows[0].customer.customerAddress2,
+                                      root:
+                                        tablerows[0].customer
+                                          .customerRootToHome,
+                                      nic: tablerows[0].customer.customerNic,
+                                      mid: tablerows[0].customer.mid,
+                                      relations_nics:
+                                        tablerows[0].customer
+                                          .customerRelatedNics,
+                                      mobile1:
+                                        tablerows[0].customer.customerMobile1,
+                                      mobile2:
+                                        tablerows[0].customer.customerMobile2,
+
+                                      customerFrontURL: customerImageURLFront,
+                                      customerBackURL: customerImageURLBack,
+                                      status: "normal",
+                                      date: firebase.firestore.FieldValue.serverTimestamp(),
+                                    })
+                                    .then((cust) => {
+                                      let arrayItems = [];
+
+                                      tablerows.forEach((one) => {
+                                        let listOfSerilNo = [];
+                                        let listOfModelNo = [];
+                                        let listOfChassisNo = [];
+                                        for (
+                                          var n = 0;
+                                          n < parseInt(itemQty[one.i]);
+                                          n++
+                                        ) {
+                                          listOfSerilNo.push(one.serialNo[n]);
+                                          listOfModelNo.push(one.modelNo[n]);
+                                          // listOfChassisNo.push(
+                                          //   one.chassisNo[n]
+                                          // );
+                                        }
+                                        if (
+                                          listOfSerilNo.length ===
+                                          parseInt(itemQty[one.i])
+                                        ) {
+                                          let objItem = {
+                                            item_id: one.id,
+                                            serialNo: listOfSerilNo,
+                                            modelNo: listOfModelNo,
+                                            chassisNo: listOfChassisNo,
+                                            downpayment:
+                                              itemDP[one.i] === ""
+                                                ? 0
+                                                : parseInt(itemDP[one.i]),
+                                            qty: parseInt(itemQty[one.i]),
+                                            discount:
+                                              itemDiscount[one.i] === ""
+                                                ? 0
+                                                : itemDiscount[one.i],
+                                            item_name: one.title,
+                                          };
+                                          arrayItems.push(objItem);
+                                        }
+                                      });
+
+                                      db.collection("invoice")
+                                        .add({
+                                          invoice_number: invoiceNumber,
+                                          items: arrayItems,
+                                          customer_id: cust.id,
+                                          nic:
+                                            tablerows[0].customer.customerNic,
+                                          mid: tablerows[0].customer.mid,
+                                          installemtnDay: days,
+                                          installemtnDate:
+                                            dates === "" ? 1 : dates,
+                                          gamisarani: gamisarani,
+                                          gamisarani_amount:
+                                            gamisaraniamount === ""
+                                              ? 0
+                                              : parseInt(gamisaraniamount),
+                                          paymentWay: isFullPayment
+                                            ? "FullPayment"
+                                            : "PayandGo",
+                                          downpayment: dpayment,
+                                          noOfInstallment: itemNOI,
+                                          amountPerInstallment: itemAPI,
+                                          balance: balance,
+                                          deadlineTimestamp: deadlineTimestamp,
+                                          selectedType: selectedType,
+                                          discount:
+                                            totalDiscount === ""
+                                              ? 0
+                                              : totalDiscount,
+                                          shortage:
+                                            shortage === "" ? 0 : shortage,
+                                          total:
+                                            subTotalFunc() -
+                                            (totalDiscount === ""
+                                              ? 0
+                                              : totalDiscount),
+                                          status_of_payandgo: "onGoing",
+                                          date: intialTimestamp,
+                                          document_charges: documentCharges,
+                                          nextDate: firebase.firestore.Timestamp.fromDate(
+                                            times
+                                          ),
+                                        })
+                                        .then((invDoc) => {
+                                          db.collection("trustee").add({
+                                            fname:
+                                              tablerows[0].customer
+                                                .trustee1Fname,
+                                            lname:
+                                              tablerows[0].customer
+                                                .trustee1Lname,
+                                            nic:
+                                              tablerows[0].customer.trustee1Nic,
+                                            address1:
+                                              tablerows[0].customer
+                                                .trustee1Address1,
+                                            address2:
+                                              tablerows[0].customer
+                                                .trustee1Address2,
+                                            mobile1:
+                                              tablerows[0].customer
+                                                .trustee1Mobile1,
+                                            mobile2:
+                                              tablerows[0].customer
+                                                .trustee1Mobile2,
+                                            invoice_number: invoiceNumber,
+                                            trustee1FrontURL: trustee1ImageURLFront,
+                                            trustee1BackURL: trustee1ImageURLBack,
+                                            date: firebase.firestore.FieldValue.serverTimestamp(),
+                                          });
+
+                                          if (
+                                            tablerows[0].customer.trustee2Nic &&
+                                            tablerows[0].customer
+                                              .trustee2Fname &&
+                                            tablerows[0].customer
+                                              .trustee2Lname &&
+                                            tablerows[0].customer
+                                              .trustee2Address1 &&
+                                            tablerows[0].customer
+                                              .trustee2Mobile1
+                                          ) {
+                                            db.collection("trustee").add({
+                                              fname:
+                                                tablerows[0].customer
+                                                  .trustee2Fname,
+                                              lname:
+                                                tablerows[0].customer
+                                                  .trustee2Lname,
+                                              nic:
+                                                tablerows[0].customer
+                                                  .trustee2Nic,
+                                              address1:
+                                                tablerows[0].customer
+                                                  .trustee2Address1,
+                                              address2:
+                                                tablerows[0].customer
+                                                  .trustee2Address2,
+                                              mobile1:
+                                                tablerows[0].customer
+                                                  .trustee2Mobile1,
+                                              mobile2:
+                                                tablerows[0].customer
+                                                  .trustee2Mobile2,
+                                              invoice_number: invoiceNumber,
+                                              trustee2FrontURL: trustee2ImageURLFront,
+                                              trustee2BackURL: trustee2ImageURLBack,
+                                              date: firebase.firestore.FieldValue.serverTimestamp(),
+                                            });
+                                          }
+
+                                          tablerows.forEach(
+                                            async (itemUDoc) => {
+                                              let newArray = await await db
+                                                .collection("item")
+                                                .doc(itemUDoc.id)
+                                                .get();
+
+                                              let serialNoList = [];
+                                              let modelNoList = [];
+                                              let chassisiNoList = [];
+                                              serialNoList = newArray.data()
+                                                .serialNo;
+                                              modelNoList = newArray.data()
+                                                .modelNo;
+                                              chassisiNoList = newArray.data()
+                                                .chassisNo;
+                                              serialNoList.splice(
+                                                0,
+                                                itemQty[itemUDoc.i]
+                                              );
+                                              modelNoList.splice(
+                                                0,
+                                                itemQty[itemUDoc.i]
+                                              );
+                                              // if (chassisiNoList[0] !== null) {
+                                              //   chassisiNoList.splice(
+                                              //     0,
+                                              //     itemQty[itemUDoc.i]
+                                              //   );
+                                              // }
+
+                                              await db
+                                                .collection("item")
+                                                .doc(itemUDoc.id)
+                                                .update({
+                                                  qty:
+                                                    Math.round(
+                                                      newArray.data().qty
+                                                    ) - itemQty[itemUDoc.i],
+                                                  serialNo: serialNoList,
+                                                  modelNo: modelNoList,
+                                                  chassisNo: chassisiNoList,
+                                                });
+                                            }
+                                          );
+
+                                          setLoadingSubmit(false);
+                                        });
+                                    });
+                                }
+
+                                //+++++++++++++++++++++++++++++++++++
+                              });
+                          });
+                      });
+                  });
+              });
+          });
       } else {
         NotificationManager.warning("Deadline date is not selected ! )");
       }
@@ -1030,7 +1007,7 @@ function Make_invoice() {
         for (var n = 0; n < parseInt(itemQty[one.i]); n++) {
           listOfSerilNo.push(one.serialNo[n]);
           listOfModelNo.push(one.modelNo[n]);
-          listOfChassisNo.push(one.chassisNo[n]);
+          // listOfChassisNo.push(one.chassisNo[n]);
         }
         if (listOfSerilNo.length === parseInt(itemQty[one.i])) {
           let objItem = {
@@ -1084,9 +1061,9 @@ function Make_invoice() {
         chassisiNoList = newArray.data().chassisNo;
         serialNoList.splice(0, itemQty[itemUDoc.i]);
         modelNoList.splice(0, itemQty[itemUDoc.i]);
-        if (chassisiNoList[0] !== null) {
-          chassisiNoList.splice(0, itemQty[itemUDoc.i]);
-        }
+        // if (chassisiNoList[0] !== null) {
+        //   chassisiNoList.splice(0, itemQty[itemUDoc.i]);
+        // }
 
         await db
           .collection("item")

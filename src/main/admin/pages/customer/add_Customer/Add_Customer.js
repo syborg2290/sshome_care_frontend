@@ -76,11 +76,11 @@ export default function Add_Customer() {
   const [fromDbImageT22, setFromDbImageT22] = useState(null);
   const [loaderModalOpenV, setloaderModalOpen] = useState(false);
   const [inputsNic, setInputsNic] = useState({});
-   // eslint-disable-next-line
+  // eslint-disable-next-line
   const [customerId, setCustomerId] = useState(null);
-   // eslint-disable-next-line
+  // eslint-disable-next-line
   const [trustee1Id, setTrustee1Id] = useState(null);
-   // eslint-disable-next-line
+  // eslint-disable-next-line
   const [trustee2Id, setTrustee2Id] = useState(null);
   const [isItNull, setIsItNull] = useState(null);
 
@@ -233,8 +233,20 @@ export default function Add_Customer() {
                                         customerMobile1: mobile1.trim(),
                                         customerMobile2: mobile2.trim(),
                                         customerRelatedNics: inputsNic,
-                                        customerImageUrl: imageUrl,
-                                        customerImageFile: imageFile,
+                                        //++++++++++++++++++++++++++++++
+                                        customerImageUrlFront: imageUrl,
+                                        customerImageFileFront: imageFile,
+                                        customerImageUrl2Back: imageUrlCust2,
+                                        customerImageFile2Back: imageFileCust2,
+                                        trustee1ImageFile1Front: imageFileT1,
+                                        trustee1ImageUrl1Front: imageUrlT1,
+                                        trustee1ImageFile2Back: imageFileT12,
+                                        trustee1ImageUrl2Back: imageUrlT12,
+                                        trustee2ImageFile1Front: imageFileT2,
+                                        trustee2ImageUrl1Front: imageUrlT2,
+                                        trustee2ImageFile2Back: imageFileT22,
+                                        trustee2ImageUrl2Back: imageUrlT22,
+                                        //++++++++++++++++++++++++++++++
                                         trustee1Nic: trustee1Nic.trim(),
                                         trustee1Fname: trustee1Fname.trim(),
                                         trustee1Lname: trustee1Lname.trim(),

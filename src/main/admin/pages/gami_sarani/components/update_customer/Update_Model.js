@@ -23,7 +23,8 @@ export default function Update_Model({
   address1Prop,
   address2Prop,
   rootProp,
-  imageUrlProp,
+  frontPropUrl,
+  backPropUrl,
 }) {
   const [nic, setNic] = useState(nicProp);
   const [mid, setMId] = useState(midProp);
@@ -39,11 +40,11 @@ export default function Update_Model({
 
   // image 1
   const [imageFile, setImageFile] = useState(null);
-  const [imageUrl, setImageUrl] = useState(imageUrlProp);
+  const [imageUrl, setImageUrl] = useState(frontPropUrl);
 
   // image 2
   const [imageFile2, setImageFile2] = useState(null);
-  const [imageUrl2, setImageUrl2] = useState(null);
+  const [imageUrl2, setImageUrl2] = useState(backPropUrl);
 
   let history = useHistory();
 
@@ -80,38 +81,53 @@ export default function Update_Model({
                       mobile2: mobile2,
                       root: root,
                       currentDeposit: 0,
-                      photo: imageUrl,
+                      front: imageUrl,
+                      back: imageUrl2,
                     })
                     .then(() => {
                       setLoadingSubmit(false);
                       window.location.reload();
                     });
                 } else {
-                  await storage.ref(`images/${imageFile.name}`).put(imageFile);
+                  let randomNumber =
+                    Math.floor(Math.random() * 1000000000) + 1000;
+                  await storage
+                    .ref(`images/${imageFile.name}${randomNumber}`)
+                    .put(imageFile);
+                  await storage
+                    .ref(`images/${imageFile2.name}${randomNumber}`)
+                    .put(imageFile2);
 
                   storage
                     .ref("images")
-                    .child(imageFile.name)
+                    .child(imageFile.name + randomNumber)
                     .getDownloadURL()
-                    .then((url) => {
-                      db.collection("gami_sarani")
-                        .doc(re.docs[0].id)
-                        .update({
-                          mid: mid,
-                          nic: nic,
-                          fname: fname,
-                          lname: lname,
-                          address1: addres1,
-                          addres2: addres2,
-                          mobile1: mobile1,
-                          mobile2: mobile2,
-                          root: root,
-                          currentDeposit: 0,
-                          photo: imageUrl,
-                        })
-                        .then((_) => {
-                          setLoadingSubmit(false);
-                          window.location.reload();
+                    .then((front) => {
+                      storage
+                        .ref("images")
+                        .child(imageFile2.name + randomNumber)
+                        .getDownloadURL()
+                        .then((back) => {
+                          db.collection("gami_sarani")
+                            .doc(re.docs[0].id)
+                            .update({
+                              mid: mid,
+                              nic: nic,
+                              fname: fname,
+                              lname: lname,
+                              address1: addres1,
+                              addres2: addres2,
+                              mobile1: mobile1,
+                              mobile2: mobile2,
+                              root: root,
+                              currentDeposit: 0,
+                              front: front,
+                              back: back,
+                            })
+                            .then((_) => {
+                              setLoadingSubmit(false);
+                              window.location.reload();
+                            });
                         });
                     });
                 }
@@ -140,7 +156,7 @@ export default function Update_Model({
   };
 
   // image 2
-   const onImageChange2 = (event) => {
+  const onImageChange2 = (event) => {
     if (event.target.files && event.target.files[0]) {
       setImageFile2(event.target.files[0]);
       let reader = new FileReader();
@@ -353,7 +369,7 @@ export default function Update_Model({
             </Grid>
 
             {/* image 2 */}
-            
+
             <Grid item xs={12} sm={5}>
               <input
                 type="file"

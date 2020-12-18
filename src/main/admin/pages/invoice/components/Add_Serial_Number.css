@@ -43,3 +43,8 @@
 .rmov_iconss {
   margin-left: -13px !important;
 }
+
+.btn_addSerial {
+  float: right !important;
+  margin-top: 30px !important;
+}

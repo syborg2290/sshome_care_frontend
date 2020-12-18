@@ -544,16 +544,16 @@ export default function Manage_Stock() {
       {/* End Selected Item Model  */}
 
     <Grid container spacing={4}>
-       <Grid item xs={8}>
+       <Grid item xs={10}>
       <Button
         variant="contained"
         className="btn_manage_his"
         onClick={ManagedHistory}
       >
-      Managed History
+      Exchange History
       </Button>
     </Grid>
-    <Grid item xs={4}>
+    <Grid item xs={2}>
        <Button
         variant="contained"
         color="primary"

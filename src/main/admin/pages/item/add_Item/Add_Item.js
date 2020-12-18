@@ -184,14 +184,6 @@ export default function Add_Item() {
       let chassisNosList = [];
 
       for (var k = 0; k < Object.keys(inputsSerialNo).length; k++) {
-        // db.collection("item")
-        //   .where("modelNo", "==", inputsModelNo[k])
-        //   .get()
-        //   .then((reModel) => {
-        //     if (reModel.docs.length > 0) {
-        //       setIsInAlreadyModel(true);
-        //     }
-        //   });
         db.collection("item")
           .where("serialNo", "==", inputsSerialNo[k])
           .get()

@@ -76,8 +76,11 @@ export default function Add_Customer() {
   const [fromDbImageT22, setFromDbImageT22] = useState(null);
   const [loaderModalOpenV, setloaderModalOpen] = useState(false);
   const [inputsNic, setInputsNic] = useState({});
+   // eslint-disable-next-line
   const [customerId, setCustomerId] = useState(null);
+   // eslint-disable-next-line
   const [trustee1Id, setTrustee1Id] = useState(null);
+   // eslint-disable-next-line
   const [trustee2Id, setTrustee2Id] = useState(null);
   const [isItNull, setIsItNull] = useState(null);
 

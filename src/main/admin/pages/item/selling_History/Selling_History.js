@@ -418,9 +418,6 @@ const TableData = [
                       <TableCell className="tbl_cell" align="left">
                         ModelNo
                       </TableCell>
-                      {/* <TableCell className="tbl_cell" align="right">
-                        ChasisseNo
-                      </TableCell> */}
                     </TableRow>
                   </TableHead>
                   <TableBody>

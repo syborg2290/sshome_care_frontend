@@ -41,8 +41,7 @@ export default function Add_Customer() {
   const [imageUrlCust2, setImageUrlCust2] = useState(null);
   const [fromDbImageCust2, setFromDbImageCust2] = useState(null);
 
-
-                    // Trustee1
+  // Trustee1
   const [trustee1Nic, setTrustee1Nic] = useState("");
   const [trustee1Fname, setTrustee1Fname] = useState("");
   const [trustee1Lname, setTrustee1Lname] = useState("");
@@ -54,13 +53,12 @@ export default function Add_Customer() {
   const [imageFileT1, setImageFileT1] = useState(null);
   const [imageUrlT1, setImageUrlT1] = useState(null);
   const [fromDbImageT1, setFromDbImageT1] = useState(null);
-    // Trustee1 Image 2nd
+  // Trustee1 Image 2nd
   const [imageFileT12, setImageFileT12] = useState(null);
   const [imageUrlT12, setImageUrlT12] = useState(null);
   const [fromDbImageT12, setFromDbImageT12] = useState(null);
 
-
-                  // Trustee2
+  // Trustee2
   const [trustee2Nic, setTrustee2Nic] = useState("");
   const [trustee2Fname, setTrustee2Fname] = useState("");
   const [trustee2Lname, setTrustee2Lname] = useState("");
@@ -72,21 +70,17 @@ export default function Add_Customer() {
   const [imageFileT2, setImageFileT2] = useState(null);
   const [imageUrlT2, setImageUrlT2] = useState(null);
   const [fromDbImageT2, setFromDbImageT2] = useState(null);
-   // Trustee2 Image 2nd
+  // Trustee2 Image 2nd
   const [imageFileT22, setImageFileT22] = useState(null);
   const [imageUrlT22, setImageUrlT22] = useState(null);
   const [fromDbImageT22, setFromDbImageT22] = useState(null);
-
-
-
-
   const [loaderModalOpenV, setloaderModalOpen] = useState(false);
   const [inputsNic, setInputsNic] = useState({});
-   // eslint-disable-next-line
+  // eslint-disable-next-line
   const [customerId, setCustomerId] = useState(null);
-   // eslint-disable-next-line
+  // eslint-disable-next-line
   const [trustee1Id, setTrustee1Id] = useState(null);
-   // eslint-disable-next-line
+  // eslint-disable-next-line
   const [trustee2Id, setTrustee2Id] = useState(null);
   const [isItNull, setIsItNull] = useState(null);
 
@@ -110,7 +104,7 @@ export default function Add_Customer() {
     setloaderModalOpen(true);
   };
 
-    // Customer Image 1st
+  // Customer Image 1st
   const onImageChange = (event) => {
     if (event.target.files && event.target.files[0]) {
       setImageFile(event.target.files[0]);
@@ -123,7 +117,7 @@ export default function Add_Customer() {
     }
   };
 
-   // Customer Image 2nd
+  // Customer Image 2nd
 
   const onImageChangeCust2 = (event) => {
     if (event.target.files && event.target.files[0]) {
@@ -137,8 +131,8 @@ export default function Add_Customer() {
     }
   };
 
-    // Trustee1 Image 1st
-    const onImageChangeT1 = (event) => {
+  // Trustee1 Image 1st
+  const onImageChangeT1 = (event) => {
     if (event.target.files && event.target.files[0]) {
       setImageFileT1(event.target.files[0]);
       let reader = new FileReader();
@@ -151,7 +145,7 @@ export default function Add_Customer() {
   };
 
   // Trustee1 Image 2nd
-      const onImageChangeT12 = (event) => {
+  const onImageChangeT12 = (event) => {
     if (event.target.files && event.target.files[0]) {
       setImageFileT12(event.target.files[0]);
       let reader = new FileReader();
@@ -163,8 +157,8 @@ export default function Add_Customer() {
     }
   };
 
- // Trustee2 Image 1st
-    const onImageChangeT2 = (event) => {
+  // Trustee2 Image 1st
+  const onImageChangeT2 = (event) => {
     if (event.target.files && event.target.files[0]) {
       setImageFileT2(event.target.files[0]);
       let reader = new FileReader();
@@ -175,8 +169,8 @@ export default function Add_Customer() {
       setFromDbImageT2(null);
     }
   };
-   // Trustee2 Image 2nd
-   const onImageChangeT22 = (event) => {
+  // Trustee2 Image 2nd
+  const onImageChangeT22 = (event) => {
     if (event.target.files && event.target.files[0]) {
       setImageFileT22(event.target.files[0]);
       let reader = new FileReader();
@@ -239,8 +233,20 @@ export default function Add_Customer() {
                                         customerMobile1: mobile1.trim(),
                                         customerMobile2: mobile2.trim(),
                                         customerRelatedNics: inputsNic,
-                                        customerImageUrl: imageUrl,
-                                        customerImageFile: imageFile,
+                                        //++++++++++++++++++++++++++++++
+                                        customerImageUrlFront: imageUrl,
+                                        customerImageFileFront: imageFile,
+                                        customerImageUrl2Back: imageUrlCust2,
+                                        customerImageFile2Back: imageFileCust2,
+                                        trustee1ImageFile1Front: imageFileT1,
+                                        trustee1ImageUrl1Front: imageUrlT1,
+                                        trustee1ImageFile2Back: imageFileT12,
+                                        trustee1ImageUrl2Back: imageUrlT12,
+                                        trustee2ImageFile1Front: imageFileT2,
+                                        trustee2ImageUrl1Front: imageUrlT2,
+                                        trustee2ImageFile2Back: imageFileT22,
+                                        trustee2ImageUrl2Back: imageUrlT22,
+                                        //++++++++++++++++++++++++++++++
                                         trustee1Nic: trustee1Nic.trim(),
                                         trustee1Fname: trustee1Fname.trim(),
                                         trustee1Lname: trustee1Lname.trim(),
@@ -1203,7 +1209,7 @@ export default function Add_Customer() {
                   }}
                 />
               </Grid>
-               <Grid item xs={12} sm={5}></Grid>
+              <Grid item xs={12} sm={5}></Grid>
               {/* image 1 */}
               <Grid className="txt_LabelsImg" item xs={12} sm={1}>
                 Image :
@@ -1491,7 +1497,7 @@ export default function Add_Customer() {
                 />
               </Grid>
               <Grid item xs={12} sm={4}></Grid>
-               {/* image 1 */}
+              {/* image 1 */}
               <Grid className="txt_LabelsImg" item xs={12} sm={2}>
                 Image :
               </Grid>
@@ -1524,7 +1530,7 @@ export default function Add_Customer() {
               </Grid>
 
               {/* image 2 */}
-              
+
               <Grid item xs={12} sm={5}>
                 <input
                   type="file"
@@ -1546,14 +1552,13 @@ export default function Add_Customer() {
                     imageUrlT12 == null
                       ? fromDbImageT12 !== null
                         ? fromDbImageT12
-                       : require("../../../../../assets/avater232.jpg")
+                        : require("../../../../../assets/avater232.jpg")
                       : imageUrlT12
                   }
                   className="imageBack"
                 />
               </Grid>
               <Grid item xs={12} sm={4}></Grid>
-              
             </Grid>
 
             {/* 1st trustee form END */}
@@ -1706,7 +1711,7 @@ export default function Add_Customer() {
               </Grid>
               <Grid item xs={12} sm={4}></Grid>
               {/* image 1 */}
-                <Grid className="txt_LabelsImg" item xs={12} sm={2}>
+              <Grid className="txt_LabelsImg" item xs={12} sm={2}>
                 Image :
               </Grid>
               <Grid item xs={12} sm={5}>
@@ -1736,9 +1741,9 @@ export default function Add_Customer() {
                   className="imageFront"
                 />
               </Grid>
-     
+
               {/* image 2 */}
-         
+
               <Grid item xs={12} sm={5}>
                 <input
                   type="file"
@@ -1767,7 +1772,6 @@ export default function Add_Customer() {
                 />
               </Grid>
               <Grid item xs={12} sm={4}></Grid>
-
             </Grid>
 
             {/* 2nd trustee form END */}

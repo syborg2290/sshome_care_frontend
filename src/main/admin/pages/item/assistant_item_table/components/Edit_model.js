@@ -66,7 +66,7 @@ export default function Edit_model({
 
   const [inputsSerialNo, setInputsSerialNo] = useState({});
   const [inputsModelNo, setInputsModelNo] = useState({});
-  const [inputsChassisNo, setInputsChassisNo] = useState({});
+  //const [inputsChassisNo, setInputsChassisNo] = useState({});
 
   let history = useHistory();
 
@@ -99,22 +99,28 @@ export default function Edit_model({
               });
               NotificationManager.info("Item serial number must be unique !");
             } else {
+              let randomNumber = Math.floor(Math.random() * 1000000000) + 1000;
+
               setInputsSerialNo({
                 ...inputsSerialNo,
-                [Object.keys(inputsSerialNo).length]: "",
+                [Object.keys(inputsSerialNo).length]: `SE-${randomNumber}`,
               });
             }
           } else {
+            let randomNumber = Math.floor(Math.random() * 1000000000) + 1000;
+
             setInputsSerialNo({
               ...inputsSerialNo,
-              [Object.keys(inputsSerialNo).length]: "",
+              [Object.keys(inputsSerialNo).length]: `SE-${randomNumber}`,
             });
           }
         });
     } else {
+      let randomNumber = Math.floor(Math.random() * 1000000000) + 1000;
+
       setInputsSerialNo({
         ...inputsSerialNo,
-        [Object.keys(inputsSerialNo).length]: "",
+        [Object.keys(inputsSerialNo).length]: `SE-${randomNumber}`,
       });
     }
   };
@@ -151,26 +157,16 @@ export default function Edit_model({
 
   //add InputModel No
   const addInputModelNo = () => {
-    setInputsModelNo({
-      ...inputsModelNo,
-      [Object.keys(inputsModelNo).length]: "",
-    });
+    if (Object.keys(inputsModelNo).length <= 1) {
+      setInputsModelNo({
+        ...inputsModelNo,
+        [Object.keys(inputsModelNo).length]: "",
+      });
+    }
   };
   const handleChangeAddModelNoInputs = (e, i) => {
     setInputsModelNo({ ...inputsModelNo, [i]: e.target.value });
   };
-
-  //add InputChassis No
-  const addInputChassisNo = () => {
-    setInputsChassisNo({
-      ...inputsChassisNo,
-      [Object.keys(inputsChassisNo).length]: "",
-    });
-  };
-  const handleChangeAddChassisNoInputs = (e, i) => {
-    setInputsChassisNo({ ...inputsChassisNo, [i]: e.target.value });
-  };
-  //
 
   const radioOnChange = (e) => {
     setGuarantee({
@@ -186,405 +182,314 @@ export default function Edit_model({
       let serialNosList = [];
       let chassisNosList = [];
 
-      if (
-        Object.keys(inputsSerialNo).length ===
-          Object.keys(inputsModelNo).length &&
-        Object.keys(inputsSerialNo).length ===
-          Object.keys(inputsChassisNo).length &&
-        Object.keys(inputsModelNo).length ===
-          Object.keys(inputsChassisNo).length
-      ) {
-        for (var k = 0; k < Object.keys(inputsSerialNo).length; k++) {
-          chassisNosList.push(
-            inputsChassisNo[k] === "" ? "" : inputsChassisNo[k]
-          );
-          modelNosList.push(inputsModelNo[k]);
-          serialNosList.push(inputsSerialNo[k]);
-        }
+      for (var k = 0; k < Object.keys(inputsSerialNo).length; k++) {
+        modelNosList.push(inputsModelNo[k]);
+        serialNosList.push(inputsSerialNo[k]);
+      }
 
-        let duplicatesSerial = serialNosList.reduce(
-          (acc, currentValue, index, array) => {
-            if (
-              array.indexOf(currentValue) !== index &&
-              !acc.includes(currentValue)
-            )
-              acc.push(currentValue);
-            return acc;
-          },
-          []
-        );
+      let duplicatesSerial = serialNosList.reduce(
+        (acc, currentValue, index, array) => {
+          if (
+            array.indexOf(currentValue) !== index &&
+            !acc.includes(currentValue)
+          )
+            acc.push(currentValue);
+          return acc;
+        },
+        []
+      );
 
-        let duplicatesModel = modelNosList.reduce(
-          (acc, currentValue, index, array) => {
-            if (
-              array.indexOf(currentValue) !== index &&
-              !acc.includes(currentValue)
-            )
-              acc.push(currentValue);
-            return acc;
-          },
-          []
-        );
+      let emptySerial = serialNosList.includes("");
+      let emptyModels = modelNosList.includes("");
 
-        let duplicatesChassis = chassisNosList.reduce(
-          (acc, currentValue, index, array) => {
-            if (
-              array.indexOf(currentValue) !== index &&
-              !acc.includes(currentValue)
-            )
-              acc.push(currentValue);
-            return acc;
-          },
-          []
-        );
-
-        let emptySerial = serialNosList.includes("");
-        let emptyModels = modelNosList.includes("");
-        let emptyChassis = chassisNosList.includes("");
-
-        if (duplicatesSerial.length > 0) {
-          NotificationManager.info("Serail number must be unique !");
+      if (duplicatesSerial.length > 0) {
+        NotificationManager.info("Serail number must be unique !");
+      } else {
+        if (emptySerial) {
+          NotificationManager.info("Serail number can not be empty !");
         } else {
-          if (duplicatesModel.length > 0) {
-            NotificationManager.info("Model number must be unique !");
+          if (emptyModels) {
+            NotificationManager.info("Model number can not be empty !");
           } else {
-            if (duplicatesChassis.length > 0) {
-              NotificationManager.info("Chassis number must be unique !");
-            } else {
-              if (emptySerial) {
-                NotificationManager.info("Serail number can not be empty !");
+            if (serialNosList.length >= Object.keys(inputsSerialNo).length) {
+              if (itemName === "") {
+                setValidation("Item name is required!");
               } else {
-                if (emptyModels) {
-                  NotificationManager.info("Model number can not be empty !");
+                if (brand === "") {
+                  setValidation("Item brand is required!");
                 } else {
-                  if (emptyChassis) {
-                    NotificationManager.info(
-                      "Chassis number can not be empty !"
+                  if (modelNosList.includes("")) {
+                    setValidation(
+                      "Item model number & serial number is required!"
                     );
                   } else {
-                    if (
-                      serialNosList.length >= Object.keys(inputsSerialNo).length
-                    ) {
-                      if (itemName === "") {
-                        setValidation("Item name is required!");
+                    if (serialNosList.includes("")) {
+                      setValidation(
+                        "Item model number & serial number is required!"
+                      );
+                    } else {
+                      if (color === "") {
+                        setValidation("Item color is required!");
                       } else {
-                        if (brand === "") {
-                          setValidation("Item brand is required!");
+                        if (cashPrice === "") {
+                          setValidation("Item cash price is required!");
                         } else {
-                          if (
-                            Object.keys(inputsModelNo).length !==
-                              Object.keys(inputsSerialNo).length ||
-                            modelNosList.includes("")
-                          ) {
-                            setValidation(
-                              "Item model number & serial number is required!"
-                            );
+                          if (salePrice === "") {
+                            setValidation("Item sale price is required!");
                           } else {
-                            if (
-                              Object.keys(inputsModelNo).length !==
-                                Object.keys(inputsSerialNo).length ||
-                              serialNosList.includes("")
-                            ) {
+                            if (noOfInstallments === "") {
                               setValidation(
-                                "Item model number & serial number is required!"
+                                "Number of installment is required!"
                               );
                             } else {
-                              if (color === "") {
-                                setValidation("Item color is required!");
+                              if (amountPerInstallment === "") {
+                                setValidation(
+                                  "Amount per installment is required!"
+                                );
                               } else {
-                                if (cashPrice === "") {
-                                  setValidation("Item cash price is required!");
+                                if (noOfInstallments === "") {
+                                  setValidation(
+                                    "Number of installment is required!"
+                                  );
                                 } else {
-                                  if (salePrice === "") {
+                                  if (guaranteePeriod === "") {
                                     setValidation(
-                                      "Item sale price is required!"
+                                      "Item guarantee period is required!"
                                     );
                                   } else {
-                                    if (noOfInstallments === "") {
+                                    if (downPayment === "") {
                                       setValidation(
-                                        "Number of installment is required!"
+                                        "Item down payment is required!"
                                       );
                                     } else {
-                                      if (amountPerInstallment === "") {
+                                      if (discount === "") {
                                         setValidation(
-                                          "Amount per installment is required!"
+                                          "Item discount is required!"
                                         );
                                       } else {
-                                        if (noOfInstallments === "") {
+                                        if (cashPrice < 0) {
                                           setValidation(
-                                            "Number of installment is required!"
+                                            "Check again the amount of cash price"
                                           );
                                         } else {
-                                          if (guaranteePeriod === "") {
+                                          if (salePrice < 0) {
                                             setValidation(
-                                              "Item guarantee period is required!"
+                                              "Check again the amount of sale price"
                                             );
                                           } else {
-                                            if (downPayment === "") {
+                                            if (noOfInstallments < 0) {
                                               setValidation(
-                                                "Item down payment is required!"
+                                                "Check again the value of installments value"
                                               );
                                             } else {
-                                              if (discount === "") {
+                                              if (amountPerInstallment < 0) {
                                                 setValidation(
-                                                  "Item discount is required!"
+                                                  "Check again the amount per installment"
                                                 );
                                               } else {
-                                                if (cashPrice < 0) {
+                                                if (downPayment < 0) {
                                                   setValidation(
-                                                    "Check again the amount of cash price"
+                                                    "Check again the amount of down payment"
                                                   );
                                                 } else {
-                                                  if (salePrice < 0) {
+                                                  if (guaranteePeriod < 0) {
                                                     setValidation(
-                                                      "Check again the amount of sale price"
+                                                      "Check again the value of gurantee period"
                                                     );
                                                   } else {
-                                                    if (noOfInstallments < 0) {
+                                                    if (discount < 0) {
                                                       setValidation(
-                                                        "Check again the value of installments value"
+                                                        "Check again the amount of discount"
                                                       );
                                                     } else {
-                                                      if (
-                                                        amountPerInstallment < 0
-                                                      ) {
-                                                        setValidation(
-                                                          "Check again the amount per installment"
-                                                        );
-                                                      } else {
-                                                        if (downPayment < 0) {
-                                                          setValidation(
-                                                            "Check again the amount of down payment"
+                                                      //Rest of code here
+                                                      setLoadingSubmit(true);
+                                                      db.collection("item")
+                                                        .doc(docId)
+                                                        .get()
+                                                        .then((docRe) => {
+                                                          let modelNoNewList = modelNosList.concat(
+                                                            docRe.data().modelNo
                                                           );
-                                                        } else {
-                                                          if (
-                                                            guaranteePeriod < 0
-                                                          ) {
-                                                            setValidation(
-                                                              "Check again the value of gurantee period"
-                                                            );
-                                                          } else {
-                                                            if (discount < 0) {
-                                                              setValidation(
-                                                                "Check again the amount of discount"
-                                                              );
-                                                            } else {
-                                                              //Rest of code here
-                                                              setLoadingSubmit(
-                                                                true
-                                                              );
-                                                              db.collection(
-                                                                "item"
-                                                              )
-                                                                .doc(docId)
-                                                                .get()
-                                                                .then(
-                                                                  (docRe) => {
-                                                                    let modelNoNewList = modelNosList.concat(
-                                                                      docRe.data()
-                                                                        .modelNo
-                                                                    );
-                                                                    let serialNoNewList = serialNosList.concat(
-                                                                      docRe.data()
-                                                                        .serialNo
-                                                                    );
-                                                                    let chassisNoNewList = chassisNosList.concat(
-                                                                      docRe.data()
-                                                                        .chassisNo
-                                                                    );
-                                                                    let variable = {
-                                                                      itemName: itemName,
-                                                                      brand: brand,
-                                                                      modelNo: modelNoNewList,
-                                                                      serialNo: serialNoNewList,
-                                                                      chassisNo: chassisNoNewList,
-                                                                      color: color,
-                                                                      qty:
-                                                                        Math.round(
-                                                                          docRe.data()
-                                                                            .qty
-                                                                        ) +
-                                                                        serialNosList.length,
-                                                                      cashPrice:
-                                                                        cashPrice ===
-                                                                        ""
-                                                                          ? 0
-                                                                          : cashPrice,
-                                                                      salePrice:
-                                                                        salePrice ===
-                                                                        ""
-                                                                          ? 0
-                                                                          : salePrice,
-                                                                      noOfInstallments:
-                                                                        noOfInstallments ===
-                                                                        ""
-                                                                          ? 0
-                                                                          : noOfInstallments,
-                                                                      amountPerInstallment:
-                                                                        amountPerInstallment ===
-                                                                        ""
-                                                                          ? 0
-                                                                          : amountPerInstallment,
-                                                                      downPayment:
-                                                                        downPayment ===
-                                                                        ""
-                                                                          ? 0
-                                                                          : downPayment,
-                                                                      guaranteePeriod:
-                                                                        guaranteePeriod ===
-                                                                        ""
-                                                                          ? 0
-                                                                          : guaranteePeriod,
-                                                                      discount:
-                                                                        discount ===
-                                                                        ""
-                                                                          ? 0
-                                                                          : discount,
-                                                                      description: description,
-                                                                      cInvoiceNo: cInvoiceNo,
-                                                                      GCardNo: GCardNo,
-                                                                      guarantee: guarantee,
-                                                                      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                                                                    };
+                                                          let serialNoNewList = serialNosList.concat(
+                                                            docRe.data()
+                                                              .serialNo
+                                                          );
+                                                          let chassisNoNewList = chassisNosList.concat(
+                                                            docRe.data()
+                                                              .chassisNo
+                                                          );
+                                                          let variable = {
+                                                            itemName: itemName,
+                                                            brand: brand,
+                                                            modelNo: modelNoNewList,
+                                                            serialNo: serialNoNewList,
+                                                            chassisNo: chassisNoNewList,
+                                                            color: color,
+                                                            qty:
+                                                              Math.round(
+                                                                docRe.data().qty
+                                                              ) +
+                                                              serialNosList.length,
+                                                            cashPrice:
+                                                              cashPrice === ""
+                                                                ? 0
+                                                                : cashPrice,
+                                                            salePrice:
+                                                              salePrice === ""
+                                                                ? 0
+                                                                : salePrice,
+                                                            noOfInstallments:
+                                                              noOfInstallments ===
+                                                              ""
+                                                                ? 0
+                                                                : noOfInstallments,
+                                                            amountPerInstallment:
+                                                              amountPerInstallment ===
+                                                              ""
+                                                                ? 0
+                                                                : amountPerInstallment,
+                                                            downPayment:
+                                                              downPayment === ""
+                                                                ? 0
+                                                                : downPayment,
+                                                            guaranteePeriod:
+                                                              guaranteePeriod ===
+                                                              ""
+                                                                ? 0
+                                                                : guaranteePeriod,
+                                                            discount:
+                                                              discount === ""
+                                                                ? 0
+                                                                : discount,
+                                                            description: description,
+                                                            cInvoiceNo: cInvoiceNo,
+                                                            GCardNo: GCardNo,
+                                                            guarantee: guarantee,
+                                                            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                                                          };
 
-                                                                    let variable2 = {
-                                                                      itemName: itemName,
-                                                                      brand: brand,
-                                                                      modelNo: modelNosList,
-                                                                      serialNo: serialNosList,
-                                                                      chassisNo: chassisNosList,
-                                                                      color: color,
-                                                                      qty:
-                                                                        serialNosList.length,
-                                                                      cashPrice:
-                                                                        cashPrice ===
-                                                                        ""
-                                                                          ? 0
-                                                                          : cashPrice,
-                                                                      salePrice:
-                                                                        salePrice ===
-                                                                        ""
-                                                                          ? 0
-                                                                          : salePrice,
-                                                                      noOfInstallments:
-                                                                        noOfInstallments ===
-                                                                        ""
-                                                                          ? 0
-                                                                          : noOfInstallments,
-                                                                      amountPerInstallment:
-                                                                        amountPerInstallment ===
-                                                                        ""
-                                                                          ? 0
-                                                                          : amountPerInstallment,
-                                                                      downPayment:
-                                                                        downPayment ===
-                                                                        ""
-                                                                          ? 0
-                                                                          : downPayment,
-                                                                      guaranteePeriod:
-                                                                        guaranteePeriod ===
-                                                                        ""
-                                                                          ? 0
-                                                                          : guaranteePeriod,
-                                                                      discount:
-                                                                        discount ===
-                                                                        ""
-                                                                          ? 0
-                                                                          : discount,
-                                                                      description: description,
-                                                                      cInvoiceNo: cInvoiceNo,
-                                                                      GCardNo: GCardNo,
-                                                                      guarantee: guarantee,
-                                                                      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                                                                    };
+                                                          let variable2 = {
+                                                            itemName: itemName,
+                                                            brand: brand,
+                                                            modelNo: modelNosList,
+                                                            serialNo: serialNosList,
+                                                            chassisNo: chassisNosList,
+                                                            color: color,
+                                                            qty:
+                                                              serialNosList.length,
+                                                            cashPrice:
+                                                              cashPrice === ""
+                                                                ? 0
+                                                                : cashPrice,
+                                                            salePrice:
+                                                              salePrice === ""
+                                                                ? 0
+                                                                : salePrice,
+                                                            noOfInstallments:
+                                                              noOfInstallments ===
+                                                              ""
+                                                                ? 0
+                                                                : noOfInstallments,
+                                                            amountPerInstallment:
+                                                              amountPerInstallment ===
+                                                              ""
+                                                                ? 0
+                                                                : amountPerInstallment,
+                                                            downPayment:
+                                                              downPayment === ""
+                                                                ? 0
+                                                                : downPayment,
+                                                            guaranteePeriod:
+                                                              guaranteePeriod ===
+                                                              ""
+                                                                ? 0
+                                                                : guaranteePeriod,
+                                                            discount:
+                                                              discount === ""
+                                                                ? 0
+                                                                : discount,
+                                                            description: description,
+                                                            cInvoiceNo: cInvoiceNo,
+                                                            GCardNo: GCardNo,
+                                                            guarantee: guarantee,
+                                                            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                                                          };
 
-                                                                    db.collection(
-                                                                      "item"
-                                                                    )
-                                                                      .doc(
-                                                                        docId
-                                                                      )
-                                                                      .update(
-                                                                        variable
-                                                                      )
-                                                                      .then(
-                                                                        function async(
-                                                                          docRef
+                                                          db.collection("item")
+                                                            .doc(docId)
+                                                            .update(variable)
+                                                            .then(
+                                                              function async(
+                                                                docRef
+                                                              ) {
+                                                                if (
+                                                                  serialNoNewList.length >
+                                                                  0
+                                                                ) {
+                                                                  db.collection(
+                                                                    "item_history"
+                                                                  ).add(
+                                                                    variable2
+                                                                  );
+                                                                  db.collection(
+                                                                    "serail_no"
+                                                                  )
+                                                                    .get()
+                                                                    .then(
+                                                                      (
+                                                                        reSerial
+                                                                      ) => {
+                                                                        if (
+                                                                          reSerial
+                                                                            .docs
+                                                                            .length >
+                                                                          0
                                                                         ) {
-                                                                          if (
-                                                                            serialNoNewList.length >
-                                                                            0
-                                                                          ) {
-                                                                            db.collection(
-                                                                              "item_history"
-                                                                            ).add(
-                                                                              variable2
+                                                                          let reSerialChange = reSerial?.docs[0]
+                                                                            ?.data()
+                                                                            .serail_no.concat(
+                                                                              serialNosList
                                                                             );
-                                                                            db.collection(
-                                                                              "serail_no"
+                                                                          db.collection(
+                                                                            "serail_no"
+                                                                          )
+                                                                            .doc(
+                                                                              reSerial
+                                                                                .docs[0]
+                                                                                .id
                                                                             )
-                                                                              .get()
-                                                                              .then(
-                                                                                (
-                                                                                  reSerial
-                                                                                ) => {
-                                                                                  if (
-                                                                                    reSerial
-                                                                                      .docs
-                                                                                      .length >
-                                                                                    0
-                                                                                  ) {
-                                                                                    let reSerialChange = reSerial?.docs[0]
-                                                                                      ?.data()
-                                                                                      .serail_no.concat(
-                                                                                        serialNosList
-                                                                                      );
-                                                                                    db.collection(
-                                                                                      "serail_no"
-                                                                                    )
-                                                                                      .doc(
-                                                                                        reSerial
-                                                                                          .docs[0]
-                                                                                          .id
-                                                                                      )
-                                                                                      .update(
-                                                                                        {
-                                                                                          serail_no: reSerialChange,
-                                                                                        }
-                                                                                      );
-                                                                                  }
-                                                                                }
-                                                                              );
-                                                                          }
+                                                                            .update(
+                                                                              {
+                                                                                serail_no: reSerialChange,
+                                                                              }
+                                                                            );
+                                                                        }
+                                                                      }
+                                                                    );
+                                                                }
 
-                                                                          setLoadingSubmit(
-                                                                            false
-                                                                          );
-                                                                          NotificationManager.success(
-                                                                            "Item updated!"
-                                                                          );
-                                                                          editModalClose();
-                                                                        }
-                                                                      )
-                                                                      .catch(
-                                                                        function (
-                                                                          error
-                                                                        ) {
-                                                                          setLoadingSubmit(
-                                                                            false
-                                                                          );
-                                                                          NotificationManager.warning(
-                                                                            "Failed to update the item!",
-                                                                            "Please try again"
-                                                                          );
-                                                                        }
-                                                                      );
-                                                                  }
+                                                                setLoadingSubmit(
+                                                                  false
                                                                 );
-                                                            }
-                                                          }
-                                                        }
-                                                      }
+                                                                NotificationManager.success(
+                                                                  "Item updated!"
+                                                                );
+                                                                editModalClose();
+                                                              }
+                                                            )
+                                                            .catch(function (
+                                                              error
+                                                            ) {
+                                                              setLoadingSubmit(
+                                                                false
+                                                              );
+                                                              NotificationManager.warning(
+                                                                "Failed to update the item!",
+                                                                "Please try again"
+                                                              );
+                                                            });
+                                                        });
                                                     }
                                                   }
                                                 }
@@ -608,10 +513,6 @@ export default function Edit_model({
             }
           }
         }
-      } else {
-        NotificationManager.info(
-          "Serail,model and chassis number's count must be equal!"
-        );
       }
     });
   };
@@ -794,45 +695,7 @@ export default function Edit_model({
                 <hr />
               </Grid>
             </Grid>
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={4}>
-                <Button className="chassisNo_add" onClick={addInputChassisNo}>
-                  Chassis Numbers
-                  <PlusOutlined className="inpu_addIcon" />
-                </Button>
-              </Grid>
-              <Grid item xs={12} sm={1}></Grid>
-              <Grid item xs={12} sm={7}>
-                {Object.keys(inputsChassisNo).map((i) => (
-                  <div key={i + 1}>
-                    <Form.Item>
-                      <Input
-                        className="finput"
-                        allowClear
-                        key={i + 2}
-                        id={i.toString()}
-                        onChange={(e) => handleChangeAddChassisNoInputs(e, i)}
-                        placeholder="xxx-chas"
-                        end="true"
-                      />
-
-                      {i >= Object.keys(inputsChassisNo).length - 1 ? (
-                        <MinusCircleOutlined
-                          key={i + 3}
-                          className="rmov_icos"
-                          onClick={() => {
-                            delete inputsChassisNo[i];
-                            setInputsChassisNo({ ...inputsChassisNo });
-                          }}
-                        />
-                      ) : (
-                        ""
-                      )}
-                    </Form.Item>
-                  </div>
-                ))}
-              </Grid>
-            </Grid>
+            <Grid container spacing={2}></Grid>
 
             <Grid container spacing={2}>
               <Grid item xs={12} sm={4}>

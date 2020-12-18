@@ -19,7 +19,7 @@ export default function Full_Payment_Model({ items_list_props, data }) {
       let itemDataSeMo = [];
       let listOfSerilNo = [];
       let listOfModelNo = [];
-      let listOfChassisNo = [];
+      //let listOfChassisNo = [];
       listOfSerilNo = each.serialNo;
       listOfModelNo = each.modelNo;
       // listOfChassisNo = each.chassisNo;

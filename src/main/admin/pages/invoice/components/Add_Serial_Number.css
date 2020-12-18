@@ -34,23 +34,12 @@
 .txt_Labels_root {
   margin: auto !important;
 }
-
-.icons_Close {
-  font-size: 13px !important;
-  font-weight: 900 !important;
-  color: rgb(255, 255, 255) !important;
-  float: right !important;
-  background-color: rgb(253, 80, 80) !important;
-  border-radius: 9px !important;
-  width: 25px !important;
-  text-align: center !important;
+.txt_serials {
+  margin-left: 180px !important;
+  /* width: 22% !important; */
+  padding-bottom: 15px !important;
 }
 
-.btn_SelectdeDone {
-  margin-top: 20px !important;
-  float: right !important;
-}
-
-.hr-yt {
-  margin-top: 30px !important;
+.rmov_iconss {
+  margin-left: -13px !important;
 }

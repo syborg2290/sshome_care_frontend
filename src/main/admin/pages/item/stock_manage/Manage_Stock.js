@@ -15,6 +15,11 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import { useHistory } from "react-router-dom"
+import {
+  NotificationContainer,
+  NotificationManager,
+} from "react-notifications";
+import "react-notifications/lib/notifications.css";
 
 // components
 import SelectedItem from "./components/Selected_item_Model/Selected_Item";
@@ -37,6 +42,10 @@ export default function Manage_Stock() {
   const [selectedItemModel, setSelectedItemModel] = useState(false);
   // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
+    // eslint-disable-next-line
+  const [managedHistory, setManagedHistory] = useState(false);
+   // eslint-disable-next-line
+  var [selectedItems, setSelectedItems] = useState([]);
 
 
   // let socket = socketIOClient(RealtimeServerApi);
@@ -51,10 +60,20 @@ export default function Manage_Stock() {
     setVisible(true);
   };
 
-  const onSelectedItem = () => {
-    setSelectedItemModel(true);
+ 
+
+   const onSelectedItem = () => {
+    if (selectedItems.length > 0) {
+     setSelectedItemModel(true);
+    } else {
+      NotificationManager.info("Please select items");
+    }
   };
 
+   const  ManagedHistory = () => {
+    setManagedHistory(true);
+    history.push("/admin/pages/managedHistory");
+  };
 
 
   useEffect(() => {
@@ -523,8 +542,19 @@ export default function Manage_Stock() {
       </Modal>
 
       {/* End Selected Item Model  */}
-          
+
+    <Grid container spacing={4}>
+       <Grid item xs={8}>
       <Button
+        variant="contained"
+        className="btn_manage_his"
+        onClick={ManagedHistory}
+      >
+      Managed History
+      </Button>
+    </Grid>
+    <Grid item xs={4}>
+       <Button
         variant="contained"
         color="primary"
         className="btn_manage_itm"
@@ -532,13 +562,14 @@ export default function Manage_Stock() {
       >
        Manage Item
       </Button>
-   
+        </Grid>
+        </Grid>
 
       <Grid className="tbl_Container" container spacing={4}>
         <Grid item xs={12}>
           <MUIDataTable
             title={<span className="title_Span">All Items</span>}
-            className="item_table"
+            className="manage_item_table"
             data={itemTableData}
             columns={columns}
             options={{
@@ -555,8 +586,15 @@ export default function Manage_Stock() {
               elevation: 4,
               sort: true,
               selectableRowsHeader: false,
-              onRowClick: (rowData, rowMeta) => {
-                setCurrentIndx(rowMeta.dataIndex);
+              onRowSelectionChange: (curRowSelected, allRowsSelected) => {
+                selectedItems = [];
+                allRowsSelected.forEach((single) => {
+                  if (allTtemData[single.dataIndex].data.qty > 0) {
+                    selectedItems.push(allTtemData[single.dataIndex]);
+                  } else {
+                    NotificationManager.warning("Out Of Stock");
+                  }
+                });
               },
               textLabels: {
                 body: {
@@ -569,6 +607,7 @@ export default function Manage_Stock() {
               },
             }}
           />
+          <NotificationContainer />
         </Grid>
       </Grid>
     </>

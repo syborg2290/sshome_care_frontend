@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Spin, DatePicker, Space, Checkbox } from "antd";
+import { Modal, Spin, DatePicker, Space, Checkbox , Radio } from "antd";
 import { PrinterFilled } from "@ant-design/icons";
 import { useLocation, useHistory } from "react-router-dom";
-
 import {
   Button,
   TextField,
@@ -37,6 +36,10 @@ import "./Make_invoice.css";
 // icon
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import CloseOutlinedIcon from "@material-ui/icons/CloseOutlined";
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+
+// components
+import AddSerialNumber from "./components/Add_Serial_Number";
 
 function Make_invoice() {
   const location = useLocation();
@@ -66,12 +69,18 @@ function Make_invoice() {
   const [deadlineTimestamp, setDeadlineTimestamp] = useState(null);
   const [isFullPayment, setIsFullPayment] = useState(false);
   const [documentCharges, setDocumentCharges] = useState(0);
+  const [visibleSerial, setVisibleSerial] = useState(false);
+
   let history = useHistory();
   let history2 = useHistory();
   const { confirm } = Modal;
 
   const handleChange = (event) => {
     setSelectedType(event.target.value);
+  };
+
+   const showModal = () => {
+    setVisibleSerial(true);
   };
 
   useEffect(() => {
@@ -1110,6 +1119,31 @@ function Make_invoice() {
 
   return (
     <>
+
+
+
+        {/*Start Serial Number Model */}
+
+      <Modal
+        visible={visibleSerial}
+        footer={null}
+        className="serialNumberMod"
+        onCancel={() => {
+          setVisibleSerial(false);
+        }}
+      >
+        <div >
+          <div>
+            <div>
+              <AddSerialNumber />
+            </div>
+          </div>
+        </div>
+      </Modal>
+
+      {/* End Serial Number Model  */}
+
+      
       <div className="main_In">
         <Container className="container_In" component="main" maxWidth="xl">
           <div className="paper_in">
@@ -1139,7 +1173,13 @@ function Make_invoice() {
                         >
                           Qty
                         </TableCell>
-
+                         <TableCell
+                          className="tbl_Cell"
+                          align="right"
+                          colSpan={1}
+                        >
+                         Serial Number
+                        </TableCell>
                         <TableCell
                           className="tbl_Cell"
                           align="right"
@@ -1179,6 +1219,9 @@ function Make_invoice() {
                                 }
                               }}
                             />
+                          </TableCell>
+                          <TableCell align="center">
+                            <AddCircleOutlineIcon  onClick={showModal}/>
                           </TableCell>
 
                           <TableCell align="right">
@@ -1277,8 +1320,8 @@ function Make_invoice() {
                       ))}
 
                       <TableRow>
-                        <TableCell rowSpan={3} />
-                        <TableCell align="right" colSpan={3}>
+                        <TableCell rowSpan={4} />
+                        <TableCell align="right" colSpan={4}>
                           Subtotal(LKR)
                         </TableCell>
                         <TableCell align="right" colSpan={1}>
@@ -1291,7 +1334,7 @@ function Make_invoice() {
                         </TableCell>
                       </TableRow>
                       <TableRow>
-                        <TableCell align="right" colSpan={3}>
+                        <TableCell align="right" colSpan={4}>
                           Discount(LKR)
                         </TableCell>
                         <TableCell className="cel" align="right" colSpan={1}>
@@ -1316,7 +1359,7 @@ function Make_invoice() {
                       </TableRow>
 
                       <TableRow>
-                        <TableCell align="right" colSpan={3}>
+                        <TableCell align="right" colSpan={4}>
                           Total(LKR)
                         </TableCell>
                         <TableCell align="right" colSpan={1}>
@@ -1688,6 +1731,59 @@ function Make_invoice() {
                   <br />
 
                   <Grid container spacing={2}>
+                     <Grid className="txt_ip_setting" item xs={12} sm={7}>
+                    Stock Type & Item Status :
+                    </Grid>
+                    <Grid className="txt_ip_setting" item xs={12} sm={5}></Grid>
+                    <Grid className="lbl_MI" item xs={12} sm={4}>
+                     Item Status
+                      </Grid>
+                    <Grid item xs={12} sm={8}>
+                    <Radio.Group defaultValue="a" buttonStyle="solid">
+                      <Radio.Button value="a">New Item</Radio.Button>
+                      <Radio.Button value="b">Old Item</Radio.Button>
+                    </Radio.Group>
+                    </Grid>
+                     <Grid item xs={12} sm={12}><br/></Grid>
+                     <Grid className="lbl_MI" item xs={12} sm={4}>
+                       Stock Type
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                       <Space direction="vertical">
+                        <FormControl variant="outlined" className="fcontrol">
+                          <Select
+                            className="roll_selector"
+                            size="small"
+                            native
+                            label=""
+                            onChange={handleChange}
+                            value={selectedType}
+                          >
+                             <option onChange={handleChange} value={"main"}>
+                              main
+                            </option>
+                             <option onChange={handleChange} value={"shop"}>
+                              shop
+                            </option>
+                            {allRoot.map((each) => (
+                              <option
+                                onChange={handleChange}
+                                key={each}
+                                value={each}
+                              >
+                                {each}
+                              </option>
+                            ))}
+                            {/* <option value={10}>Main</option> */}
+                           
+                          </Select>
+                        </FormControl>
+                      </Space>
+                    </Grid>
+                     <Grid item xs={12} sm={2}></Grid>
+                    <Grid className="txt_ip_setting" item xs={12} sm={12}>
+                      <hr />
+                     </Grid>
                     <Grid className="txt_ip_setting" item xs={12} sm={7}>
                       Invoice Dates :
                     </Grid>

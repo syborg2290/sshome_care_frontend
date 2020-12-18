@@ -13,6 +13,7 @@ import AddItem from "../pages/item/add_Item/Add_Item";
 import StockHistory from "../pages/item/stock_History/Stock_History";
 import ManageStock from "../pages/item/stock_manage/Manage_Stock";
 import SellingHistory from "../pages/item/selling_History/Selling_History";
+import ManagedHistory from "../pages/item/stock_manage/components/managed_history/Managed_History";
 import AddCustomer from "../pages/customer/add_Customer/Add_Customer";
 import MakeInvoice from "../pages/invoice/Make_invoice";
 
@@ -120,10 +121,10 @@ function Layout(props) {
             <Route path="/admin/pages/records" component={Record} />
 
             <Route path="/admin/pages/expences" component={Expences} />
-            {/* <Route
-              path="/admin/pages/vehicalSevice"
-              component={VehicalService}
-            /> */}
+            <Route
+              path="/admin/pages/managedHistory"
+              component={ManagedHistory}
+            />
           </Switch>
         </div>
       </>

@@ -5,16 +5,16 @@ import moment from "moment";
 import { useLocation, useHistory } from "react-router-dom";
 import CurrencyFormat from "react-currency-format";
 
-// styles
-import "./Selling_History.css";
+// icons
+import VisibilityIcon from "@material-ui/icons/Visibility";
 
-export default function Selling_History() {
-     // eslint-disable-next-line
+export default function Managed_History() {
+         // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
   // eslint-disable-next-line
   const [allData, setAllData] = useState([]);
 
- const columns = [
+const columns = [
   {
       name: "Date",
       options: {
@@ -52,7 +52,7 @@ export default function Selling_History() {
       },
     },
      {
-      name: "Type",
+      name: "From",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -61,7 +61,16 @@ export default function Selling_History() {
       },
      },
       {
-      name: "Selling_Price",
+      name: "To",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+        {
+      name: "Action",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -71,23 +80,23 @@ export default function Selling_History() {
     },
 ];
 
-const TableData = [
+
+    const TableData = [
     ["2020", "Test Corp", "Yonkers", "12", "S/H",
-        <CurrencyFormat
-                  value={15252545}
-                  displayType={"text"}
-                  thousandSeparator={true}
-                  prefix={" "}
-                />],
+       "S/H",
+         <VisibilityIcon
+                    // onClick={showModal}
+                />
+        
+        ],
 
 ];
-
     
     return (
-        <Grid container spacing={4}>
+           <Grid container spacing={4}>
       <Grid item xs={12}>
         <MUIDataTable
-          title={<span className="title_Span">Selling History</span>}
+          title={<span className="title_Span">Managed Stock History</span>}
           className="selling_histable"
           sty
           data={TableData}

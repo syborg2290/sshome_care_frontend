@@ -37,9 +37,10 @@ import "./Make_invoice.css";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import CloseOutlinedIcon from "@material-ui/icons/CloseOutlined";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
+import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 
 // components
-import AddSerialNumber from "./components/Add_Serial_Number";
+// import AddSerialNumber from "./components/Add_Serial_Number";
 
 function Make_invoice() {
   const location = useLocation();
@@ -72,6 +73,10 @@ function Make_invoice() {
   const [visibleSerial, setVisibleSerial] = useState(false);
   const [invoiceStatus, setInvoiceStatus] = useState("new");
 
+  const [inputsSerialNo, setInputsSerialNo] = useState({});
+  // eslint-disable-next-line
+  const [isSerialLoadingSubmit, SetSerialLoadingSubmit] = useState(false);
+
   let history = useHistory();
   let history2 = useHistory();
   const { confirm } = Modal;
@@ -82,6 +87,16 @@ function Make_invoice() {
 
   const showModal = () => {
     setVisibleSerial(true);
+  };
+
+  const addInput = () => {
+    setInputsSerialNo({
+      ...inputsSerialNo,
+      [Object.keys(inputsSerialNo).length]: "",
+    });
+  };
+  const handleChangeAddSerialInputs = (e) => {
+    setInputsSerialNo({ ...inputsSerialNo, [e.target.id]: e.target.value });
   };
 
   useEffect(() => {
@@ -1136,7 +1151,73 @@ function Make_invoice() {
         <div>
           <div>
             <div>
-              <AddSerialNumber />
+              <Container component="main" className="main_container_root">
+                <Typography className="title_root" variant="h5" gutterBottom>
+                  Add Serial Numbers
+                </Typography>
+                <Grid item xs={12} sm={2}>
+                  <hr className="titles_hr_root" />
+                </Grid>
+                <div className="paper_root">
+                  <form className="form_root" noValidate>
+                    <Grid container spacing={2}>
+                      <Grid item xs={12} sm={12}>
+                        <div>
+                          <Button className="reltion_add" onClick={addInput}>
+                            Add Numbers
+                            <PlusOutlined className="reltion_addIcon" />
+                          </Button>
+                          {Object.keys(inputsSerialNo).map((i) => (
+                            <div key={i + 1}>
+                              <TextField
+                                key={i + 2}
+                                id={i.toString()}
+                                className="txt_serials"
+                                autoComplete="serial"
+                                name="serial"
+                                variant="outlined"
+                                label="Serial Numbers"
+                                onChange={handleChangeAddSerialInputs}
+                                size="small"
+                              />
+
+                              {i >= Object.keys(inputsSerialNo).length - 1 ? (
+                                <MinusCircleOutlined
+                                  key={i + 3}
+                                  className="rmov_iconss"
+                                  onClick={() => {
+                                    delete inputsSerialNo[i];
+                                    setInputsSerialNo({ ...inputsSerialNo });
+                                  }}
+                                />
+                              ) : (
+                                ""
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      </Grid>
+                    </Grid>
+
+                    {/* <p className="validate_updateRoot">{validation}</p> */}
+                    <Grid container spacing={2}>
+                      <Grid item xs={12} sm={12}>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          className="btn_addSerial"
+                        >
+                          {isSerialLoadingSubmit ? (
+                            <Spin size="large" />
+                          ) : (
+                            "Done"
+                          )}
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  </form>
+                </div>
+              </Container>
             </div>
           </div>
         </div>

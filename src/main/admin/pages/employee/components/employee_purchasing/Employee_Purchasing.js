@@ -126,8 +126,8 @@ export default function Employee_Purchasing() {
        history.push("/admin/pages/employeeInvoice");
     } else {
         setLoaingToInvoice(true);
-        history.push("/admin/pages/employeeInvoice");
-    //   NotificationManager.info("Please select items");
+      
+      NotificationManager.info("Please select items");
     }
   };
 

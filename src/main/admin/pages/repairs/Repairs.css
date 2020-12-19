@@ -66,3 +66,8 @@
   margin-top: 50px !important;
   border-radius: 8px 8px 8px 8px !important;
 }
+
+.btn_AddRevenue {
+  color: rgba(248, 248, 248, 0.945);
+  background-color: rgb(28, 9, 63);
+}

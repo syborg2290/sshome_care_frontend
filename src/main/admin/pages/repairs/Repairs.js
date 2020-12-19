@@ -338,6 +338,14 @@ export default function Repairs() {
 
       <Button
         variant="contained"
+        className="btn_AddRevenue"
+        // onClick={showModalRepair}
+      >
+        Revenue Item
+      </Button>
+      
+      <Button
+        variant="contained"
         color="primary"
         className="btn_AddnewRepair"
         endIcon={<AddIcon />}

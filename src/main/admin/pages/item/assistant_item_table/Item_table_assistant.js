@@ -101,7 +101,7 @@ export default function Item_table_assistant() {
               thousandSeparator={true}
               prefix={" "}
             />,
-             element.data().stockType,
+             element.data().stock_type,
             <div
               color="secondary"
               size="small"
@@ -494,9 +494,11 @@ export default function Item_table_assistant() {
                 </Col>
                  <Col span={12}>STOCK TYPE</Col>
                 <Col span={12}>
-                 <span className="load_Item">
+                <span className="load_Item">
                     <span className="colan">:</span>
-                  ABC Main
+                    {allTtemData[currentIndx] && allTtemData[currentIndx].data
+                      ? allTtemData[currentIndx].data.stock_type
+                      : " - "}{" "}
                   </span>
                 </Col>
               </Row>
@@ -536,13 +538,6 @@ export default function Item_table_assistant() {
                                 )
                               )}
                             </TableCell>
-                            {/* <TableCell component="th" scope="row">
-                              {itemListSeMo[currentIndx]?.chassisNo.map(
-                                (chassisNoT) => (
-                                  <h5 key={chassisNoT}>{chassisNoT}</h5>
-                                )
-                              )}
-                            </TableCell> */}
                           </TableRow>
                         ))
                       : ""}

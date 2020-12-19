@@ -157,7 +157,7 @@ export default function Edit_model({
 
   //add InputModel No
   const addInputModelNo = () => {
-    if (Object.keys(inputsModelNo).length <= 1) {
+    if (Object.keys(inputsModelNo).length < 1) {
       setInputsModelNo({
         ...inputsModelNo,
         [Object.keys(inputsModelNo).length]: "",
@@ -699,6 +699,7 @@ export default function Edit_model({
                         key={i + 2}
                         id={i.toString()}
                         placeholder="xxx-serial"
+                        value={inputsSerialNo[i]}
                         onChange={(e) => handleOnChangeAddSerialNoInputs(e, i)}
                       />
 

@@ -302,11 +302,12 @@ export default function Edit_model({
                                                         k++
                                                       ) {
                                                         modelNoNewList.push(
-                                                          inputsModelNo[0]
+                                                          docRe.data()
+                                                            .modelNo[0]
                                                         );
                                                       }
                                                       modelNoNewList.concat(
-                                                        docRe.data().modelNo()
+                                                        docRe.data().modelNo
                                                       );
 
                                                       let serialNoNewList = serialNosList.concat(

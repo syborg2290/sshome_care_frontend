@@ -8,8 +8,7 @@ import {
   Container,
   Typography,
 } from "@material-ui/core";
-import { Checkbox, Spin } from "antd";
-
+import { Spin } from "antd";
 import { useHistory } from "react-router-dom";
 import db from "../../../../../../config/firebase.js";
 import "react-notifications/lib/notifications.css";
@@ -20,9 +19,7 @@ import "./Add_Employee.css";
 export default function Add_Employee() {
   const [allEmployee, setAllEmployee] = useState([]);
   const [employee1, setEmployee1] = useState("");
-  const [employeeName1, setEmployeeName1] = useState("");
   const [isLoadingSubmit, setLoadingSubmit] = useState(false);
-  // const [validation, setValidation] = useState("");
 
   let history = useHistory();
 
@@ -45,17 +42,36 @@ export default function Add_Employee() {
 
   const handleChange1 = (event) => {
     setEmployee1(event.target.value);
-    allEmployee.forEach((reE) => {
-      if (reE.nic === event.target.value) {
-        setEmployeeName1(reE.fname + " " + reE.lname);
-      }
-    });
+  };
+
+  const submit = () => {
+    setLoadingSubmit(true);
+    if (employee1 !== "") {
+      db.collection("shop")
+        .where("nic", "==", employee1)
+        .get()
+        .then((reEmp) => {
+          if (reEmp.docs.length === 0) {
+            db.collection("shop")
+              .add({
+                nic: employee1,
+              })
+              .then((_) => {
+                setLoadingSubmit(false);
+                window.location.reload();
+              });
+          } else {
+            setLoadingSubmit(false);
+            window.location.reload();
+          }
+        });
+    }
   };
 
   return (
     <Container component="main" className="main_container_root">
       <Typography className="title_root" variant="h5" gutterBottom>
-       Assign Employees to Shop
+        Assign Employees to Shop
       </Typography>
       <Grid item xs={12} sm={2}>
         <hr className="titles_hr_root" />
@@ -97,7 +113,7 @@ export default function Add_Employee() {
             variant="contained"
             color="primary"
             className="btn_addRoot"
-            // onClick={submit}
+            onClick={submit}
           >
             {isLoadingSubmit ? <Spin size="large" /> : "Done"}
           </Button>

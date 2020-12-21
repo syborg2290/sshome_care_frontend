@@ -7,32 +7,18 @@ import { useHistory } from "react-router-dom";
 
 // styles
 import "./Shop.css";
-
-// icons
-import VisibilityIcon from "@material-ui/icons/Visibility";
-
-
-// components
-import ViewEmployee from "./components/View_emplyee_Model/View_Employee";
 import AddEmployee from "./components/add_employee_Model/Add_Employee";
-
 
 import db from "../../../../config/firebase.js";
 
 export default function Shop() {
-    const [employeeViewModel, setEmployeeViewModel] = useState(false); // Employee View model
-    const [employeeAddModel, setEmployeeAddModel] = useState(false); // Employee Add model
+  const [employeeAddModel, setEmployeeAddModel] = useState(false); // Employee Add model
   // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
-  const [allData, setallData] = useState([]);
+  const [alltableData, setTableData] = useState([]);
   let history = useHistory();
 
-
-  const EmployeeView = () => {
-    setEmployeeViewModel(true);
-    };
-    
-      const EmployeeAdd = () => {
+  const EmployeeAdd = () => {
     setEmployeeAddModel(true);
   };
 
@@ -73,40 +59,39 @@ export default function Shop() {
         }),
       },
     },
-
-    {
-      name: "Action",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: {
-            fontSize: "15px",
-            color: "black",
-            fontWeight: "600",
-          },
-        }),
-      },
-    },
   ];
-
-    const tableData = [
-    ["2020", "Test Corp", "Yonkers", "12",   
-    <VisibilityIcon className="btnView" onClick={EmployeeView} />             
-  ],
-
-];
 
   useEffect(() => {
     window.addEventListener("offline", function (e) {
       history.push("/connection_lost");
     });
+
+    db.collection("shop")
+      .get()
+      .then((reShop) => {
+        var raw = [];
+
+        reShop.docs.forEach((each) => {
+          db.collection("employee")
+            .where("nic", "==", each.data().nic)
+            .get()
+            .then((reThe) => {
+              raw.push({
+                FirstName: reThe.docs[0].data().fname,
+                LastName: reThe.docs[0].data().lname,
+                NIC: reThe.docs[0].data().nic,
+                Mobile: reThe.docs[0].data().mobile1,
+              });
+            });
+        });
+        setTableData(raw);
+      });
     // eslint-disable-next-line
   }, []);
 
   return (
-      <>
-          
- {/*Start add Model */}
+    <>
+      {/*Start add Model */}
 
       <Modal
         visible={employeeAddModel}
@@ -127,40 +112,9 @@ export default function Shop() {
 
       {/* End  add Model  */}
 
-
       {/*Start View Employee Model */}
 
-      <Modal
-        visible={employeeViewModel}
-        footer={null}
-        className="model_Employee_View"
-        onCancel={() => {
-          setEmployeeViewModel(false);
-        }}
-      >
-        <div className="table__Employee_View">
-          <div className="model__Employee_Main_View">
-            <div className="model_Employee_Detail_View">
-              <ViewEmployee
-                key={allData[currentIndx]?.id}
-                fname={allData[currentIndx]?.data.fname}
-                lname={allData[currentIndx]?.data.lname}
-                address1={allData[currentIndx]?.data.address1}
-                address2={allData[currentIndx]?.data.addres2}
-                basic={allData[currentIndx]?.data.basic}
-                mobile1={allData[currentIndx]?.data.mobile1}
-                mobile2={allData[currentIndx]?.data.mobile2}
-                nic={allData[currentIndx]?.data.nic}
-                deposit={allData[currentIndx]?.data.security_deposit}
-              />
-            </div>
-          </div>
-        </div>
-      </Modal>
-
       {/* End View Employee Model  */}
-
-   
 
       <Button
         variant="contained"
@@ -168,7 +122,7 @@ export default function Shop() {
         className="btn_addEmployees"
         onClick={EmployeeAdd}
       >
-       Add Employee
+        Add Employee
       </Button>
 
       <Grid container spacing={4}>
@@ -177,7 +131,7 @@ export default function Shop() {
             title={<span className="title_Span">Shop</span>}
             className="Employee_table"
             sty
-            data={tableData}
+            data={alltableData}
             columns={columns}
             options={{
               // selectableRows: false,

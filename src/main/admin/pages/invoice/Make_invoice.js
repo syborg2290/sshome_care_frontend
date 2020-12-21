@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Spin, DatePicker, Space, Checkbox , Radio } from "antd";
+import { Modal, Spin, DatePicker, Space, Checkbox, Radio } from "antd";
 import { PrinterFilled } from "@ant-design/icons";
 import { useLocation, useHistory } from "react-router-dom";
 import {
@@ -71,6 +71,7 @@ function Make_invoice() {
   const [isFullPayment, setIsFullPayment] = useState(false);
   const [documentCharges, setDocumentCharges] = useState(0);
   const [visibleSerial, setVisibleSerial] = useState(false);
+  const [invoiceStatus, setInvoiceStatus] = useState("new");
 
   const [inputsSerialNo, setInputsSerialNo] = useState({});
   // eslint-disable-next-line
@@ -84,7 +85,7 @@ function Make_invoice() {
     setSelectedType(event.target.value);
   };
 
-   const showModal = () => {
+  const showModal = () => {
     setVisibleSerial(true);
   };
 
@@ -756,19 +757,20 @@ function Make_invoice() {
                                               //     itemQty[itemUDoc.i]
                                               //   );
                                               // }
-
-                                              await db
-                                                .collection("item")
-                                                .doc(itemUDoc.id)
-                                                .update({
-                                                  qty:
-                                                    Math.round(
-                                                      newArray.data().qty
-                                                    ) - itemQty[itemUDoc.i],
-                                                  serialNo: serialNoList,
-                                                  modelNo: modelNoList,
-                                                  chassisNo: chassisiNoList,
-                                                });
+                                              if (invoiceStatus === "new") {
+                                                await db
+                                                  .collection("item")
+                                                  .doc(itemUDoc.id)
+                                                  .update({
+                                                    qty:
+                                                      Math.round(
+                                                        newArray.data().qty
+                                                      ) - itemQty[itemUDoc.i],
+                                                    serialNo: serialNoList,
+                                                    modelNo: modelNoList,
+                                                    chassisNo: chassisiNoList,
+                                                  });
+                                              }
                                             }
                                           );
 
@@ -987,19 +989,20 @@ function Make_invoice() {
                                               //     itemQty[itemUDoc.i]
                                               //   );
                                               // }
-
-                                              await db
-                                                .collection("item")
-                                                .doc(itemUDoc.id)
-                                                .update({
-                                                  qty:
-                                                    Math.round(
-                                                      newArray.data().qty
-                                                    ) - itemQty[itemUDoc.i],
-                                                  serialNo: serialNoList,
-                                                  modelNo: modelNoList,
-                                                  chassisNo: chassisiNoList,
-                                                });
+                                              if (invoiceStatus === "new") {
+                                                await db
+                                                  .collection("item")
+                                                  .doc(itemUDoc.id)
+                                                  .update({
+                                                    qty:
+                                                      Math.round(
+                                                        newArray.data().qty
+                                                      ) - itemQty[itemUDoc.i],
+                                                    serialNo: serialNoList,
+                                                    modelNo: modelNoList,
+                                                    chassisNo: chassisiNoList,
+                                                  });
+                                              }
                                             }
                                           );
 
@@ -1085,16 +1088,17 @@ function Make_invoice() {
         // if (chassisiNoList[0] !== null) {
         //   chassisiNoList.splice(0, itemQty[itemUDoc.i]);
         // }
-
-        await db
-          .collection("item")
-          .doc(itemUDoc.id)
-          .update({
-            qty: Math.round(newArray.data().qty) - itemQty[itemUDoc.i],
-            serialNo: serialNoList,
-            modelNo: modelNoList,
-            chassisNo: chassisiNoList,
-          });
+        if (invoiceStatus === "new") {
+          await db
+            .collection("item")
+            .doc(itemUDoc.id)
+            .update({
+              qty: Math.round(newArray.data().qty) - itemQty[itemUDoc.i],
+              serialNo: serialNoList,
+              modelNo: modelNoList,
+              chassisNo: chassisiNoList,
+            });
+        }
       });
       setLoadingSubmit(false);
     }
@@ -1131,10 +1135,7 @@ function Make_invoice() {
 
   return (
     <>
-
-
-
-        {/*Start Serial Number Model */}
+      {/*Start Serial Number Model */}
 
       <Modal
         visible={visibleSerial}
@@ -1144,7 +1145,7 @@ function Make_invoice() {
           setVisibleSerial(false);
         }}
       >
-        <div >
+        <div>
           <div>
             <div>
         <Container component="main" className="main_container_root">
@@ -1220,7 +1221,6 @@ function Make_invoice() {
 
       {/* End Serial Number Model  */}
 
-      
       <div className="main_In">
         <Container className="container_In" component="main" maxWidth="xl">
           <div className="paper_in">
@@ -1250,12 +1250,12 @@ function Make_invoice() {
                         >
                           Qty
                         </TableCell>
-                         <TableCell
+                        <TableCell
                           className="tbl_Cell"
                           align="right"
                           colSpan={1}
                         >
-                         Serial Number
+                          Serial Number
                         </TableCell>
                         <TableCell
                           className="tbl_Cell"
@@ -1298,7 +1298,7 @@ function Make_invoice() {
                             />
                           </TableCell>
                           <TableCell align="center">
-                            <AddCircleOutlineIcon  onClick={showModal}/>
+                            <AddCircleOutlineIcon onClick={showModal} />
                           </TableCell>
 
                           <TableCell align="right">
@@ -1808,25 +1808,33 @@ function Make_invoice() {
                   <br />
 
                   <Grid container spacing={2}>
-                     <Grid className="txt_ip_setting" item xs={12} sm={7}>
-                    Stock Type & Item Status :
+                    <Grid className="txt_ip_setting" item xs={12} sm={7}>
+                      Stock Type & Item Status :
                     </Grid>
                     <Grid className="txt_ip_setting" item xs={12} sm={5}></Grid>
                     <Grid className="lbl_MI" item xs={12} sm={4}>
-                     Item Status
-                      </Grid>
-                    <Grid item xs={12} sm={8}>
-                    <Radio.Group defaultValue="a" buttonStyle="solid">
-                      <Radio.Button value="a">New Item</Radio.Button>
-                      <Radio.Button value="b">Old Item</Radio.Button>
-                    </Radio.Group>
+                      Invoice Status
                     </Grid>
-                     <Grid item xs={12} sm={12}><br/></Grid>
-                     <Grid className="lbl_MI" item xs={12} sm={4}>
-                       Stock Type
-                      </Grid>
-                      <Grid item xs={12} sm={6}>
-                       <Space direction="vertical">
+                    <Grid item xs={12} sm={8}>
+                      <Radio.Group
+                        defaultValue="new"
+                        buttonStyle="solid"
+                        onChange={(e) => {
+                          setInvoiceStatus(e.target.value);
+                        }}
+                      >
+                        <Radio.Button value="new">New record</Radio.Button>
+                        <Radio.Button value="old">Old record</Radio.Button>
+                      </Radio.Group>
+                    </Grid>
+                    <Grid item xs={12} sm={12}>
+                      <br />
+                    </Grid>
+                    <Grid className="lbl_MI" item xs={12} sm={4}>
+                      Stock Type
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <Space direction="vertical">
                         <FormControl variant="outlined" className="fcontrol">
                           <Select
                             className="roll_selector"
@@ -1836,10 +1844,10 @@ function Make_invoice() {
                             onChange={handleChange}
                             value={selectedType}
                           >
-                             <option onChange={handleChange} value={"main"}>
+                            <option onChange={handleChange} value={"main"}>
                               main
                             </option>
-                             <option onChange={handleChange} value={"shop"}>
+                            <option onChange={handleChange} value={"shop"}>
                               shop
                             </option>
                             {allRoot.map((each) => (
@@ -1852,15 +1860,14 @@ function Make_invoice() {
                               </option>
                             ))}
                             {/* <option value={10}>Main</option> */}
-                           
                           </Select>
                         </FormControl>
                       </Space>
                     </Grid>
-                     <Grid item xs={12} sm={2}></Grid>
+                    <Grid item xs={12} sm={2}></Grid>
                     <Grid className="txt_ip_setting" item xs={12} sm={12}>
                       <hr />
-                     </Grid>
+                    </Grid>
                     <Grid className="txt_ip_setting" item xs={12} sm={7}>
                       Invoice Dates :
                     </Grid>

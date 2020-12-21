@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Spin, DatePicker, Space, Checkbox, Radio } from "antd";
-import { ConsoleSqlOutlined, PrinterFilled } from "@ant-design/icons";
+import { PrinterFilled } from "@ant-design/icons";
 import { useLocation, useHistory } from "react-router-dom";
 import {
   Button,
@@ -626,6 +626,22 @@ function Make_invoice() {
                                         }
                                       });
 
+                                      db.collection("selling_history").add({
+                                        invoice_number: invoiceNumber,
+                                        items: arrayItems,
+                                        paymentWay: isFullPayment
+                                          ? "FullPayment"
+                                          : "PayandGo",
+                                        selectedType: selectedType,
+                                        total:
+                                          subTotalFunc() -
+                                          (totalDiscount === ""
+                                            ? 0
+                                            : totalDiscount),
+
+                                        date: intialTimestamp,
+                                      });
+
                                       db.collection("invoice")
                                         .add({
                                           invoice_number: invoiceNumber,
@@ -783,7 +799,7 @@ function Make_invoice() {
                                                     1
                                                   );
                                                 } else {
-                                                  Console.log(
+                                                  console.log(
                                                     "Value does not exists!"
                                                   );
                                                 }
@@ -804,13 +820,6 @@ function Make_invoice() {
                                                 0,
                                                 itemQty[itemUDoc.i]
                                               );
-
-                                              // if (chassisiNoList[0] !== null) {
-                                              //   chassisiNoList.splice(
-                                              //     0,
-                                              //     itemQty[itemUDoc.i]
-                                              //   );
-                                              // }
 
                                               //++++++++++++++++++++++++++++++++++++++++++++
 
@@ -905,6 +914,23 @@ function Make_invoice() {
                                           };
                                           arrayItems.push(objItem);
                                         }
+                                      });
+
+                                      db.collection("selling_history").add({
+                                        invoice_number: invoiceNumber,
+                                        items: arrayItems,
+                                        paymentWay: isFullPayment
+                                          ? "FullPayment"
+                                          : "PayandGo",
+
+                                        selectedType: selectedType,
+                                        total:
+                                          subTotalFunc() -
+                                          (totalDiscount === ""
+                                            ? 0
+                                            : totalDiscount),
+
+                                        date: intialTimestamp,
                                       });
 
                                       db.collection("invoice")
@@ -1063,7 +1089,7 @@ function Make_invoice() {
                                                     1
                                                   );
                                                 } else {
-                                                  Console.log(
+                                                  console.log(
                                                     "Value does not exists!"
                                                   );
                                                 }
@@ -1084,13 +1110,6 @@ function Make_invoice() {
                                                 0,
                                                 itemQty[itemUDoc.i]
                                               );
-
-                                              // if (chassisiNoList[0] !== null) {
-                                              //   chassisiNoList.splice(
-                                              //     0,
-                                              //     itemQty[itemUDoc.i]
-                                              //   );
-                                              // }
 
                                               //++++++++++++++++++++++++++++++++++++++++++++
 
@@ -1154,6 +1173,15 @@ function Make_invoice() {
         }
       });
 
+      db.collection("selling_history").add({
+        invoice_number: invoiceNumber,
+        items: arrayItems,
+        paymentWay: isFullPayment ? "FullPayment" : "PayandGo",
+        selectedType: selectedType,
+        total: subTotalFunc() - (totalDiscount === "" ? 0 : totalDiscount),
+        date: intialTimestamp,
+      });
+
       await db.collection("invoice").add({
         invoice_number: invoiceNumber,
         items: arrayItems,
@@ -1202,7 +1230,7 @@ function Make_invoice() {
             let indexVal = serialNoList.indexOf(inputsSerialNo[itemUDoc.i][q]);
             serialNoList.splice(indexVal, 1);
           } else {
-            Console.log("Value does not exists!");
+            console.log("Value does not exists!");
           }
         }
 

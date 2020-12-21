@@ -12,7 +12,6 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
-import moment from "moment";
 
 // styles
 import "./Selling_History.css";
@@ -22,69 +21,61 @@ import db from "../../../../../config/firebase.js";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 
 export default function Selling_History() {
-     // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
-  // eslint-disable-next-line
-  const [allData, setAllData] = useState([]);
   const [allTtemData, setAllItemData] = useState([]);
   const [itemTableData, setItemTableData] = useState([]);
-  // eslint-disable-next-line
-  const [isLoading, setIsLoading] = useState(true);
   const [visible, setVisible] = useState(false);
-// eslint-disable-next-line
   const [itemListSeMo, setItemListSeMo] = useState([]);
-// eslint-disable-next-line
   const [itemListSeMoCon, setItemListSeMoCon] = useState([]);
 
   let history = useHistory();
 
-   const showModal = () => {
+  const showModal = () => {
     setVisible(true);
   };
-
 
   useEffect(() => {
     window.addEventListener("offline", function (e) {
       history.push("/connection_lost");
     });
 
-    db.collection("item_history")
+    db.collection("selling_history")
       .orderBy("timestamp", "desc")
       .onSnapshot((snapshot) => {
-        var itemData = [];
-        var itemDataSeMo = [];
-        var itemDataSeMoCon = [];
-        if (snapshot.docs.length > 0) {
-          itemDataSeMoCon.push({
-            serialNo: snapshot.docs[0].data().serialNo,
-            modelNo: snapshot.docs[0].modelNo,
-            chassisNo: snapshot.docs[0].chassisNo,
-          });
-        }
+        var allItemData = [];
+        var tableData = [];
 
         snapshot.docs.forEach((element) => {
-          itemData.push({
+          allItemData.push({
             id: element.id,
             data: element.data(),
           });
 
-          itemDataSeMo.push({
-            serialNo: element.data().serialNo,
-            modelNo: element.data().modelNo,
-            chassisNo: element.data().chassisNo,
+          tableData.push({
+            Date: new Date(element.data().date.seconds * 1000).toDateString(),
+            Invoice_number: element.data().invoice_number,
+            Type: element.data().selectedType,
+            Total: (
+              <CurrencyFormat
+                value={element.data().total}
+                displayType={"text"}
+                thousandSeparator={true}
+                prefix={" "}
+              />
+            ),
+            Payment_type: element.data().paymentWay,
+            Action: <VisibilityIcon onClick={showModal} />,
           });
-
         });
-       
-        setAllItemData(itemData);
-        setItemListSeMoCon(itemDataSeMoCon);
-        setItemListSeMo(itemDataSeMo);
+
+        setAllItemData(allItemData);
+        setItemTableData(tableData);
       });
     // eslint-disable-next-line
   }, []);
-  
- const columns = [
-  {
+
+  const columns = [
+    {
       name: "Date",
       options: {
         filter: true,
@@ -92,18 +83,10 @@ export default function Selling_History() {
           style: { fontSize: "15px", color: "black", fontWeight: "600" },
         }),
       },
-     },
-      {
-      name: "Item_Name",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-     },
-       {
-      name: "Brand",
+    },
+
+    {
+      name: "Invoice_number",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -111,25 +94,8 @@ export default function Selling_History() {
         }),
       },
     },
-     {
-      name: "Qty",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
-     {
-      name: "Stock_Type",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-     },
-     {
+
+    {
       name: "Type",
       options: {
         filter: true,
@@ -137,17 +103,29 @@ export default function Selling_History() {
           style: { fontSize: "15px", color: "black", fontWeight: "600" },
         }),
       },
-     },
-      {
-      name: "Selling_Price",
+    },
+
+    {
+      name: "Total",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
           style: { fontSize: "15px", color: "black", fontWeight: "600" },
         }),
       },
-   },
-       {
+    },
+
+    {
+      name: "Payment_type",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+
+    {
       name: "Action",
       options: {
         filter: true,
@@ -156,34 +134,17 @@ export default function Selling_History() {
         }),
       },
     },
-];
+  ];
 
-const TableData = [
-    ["2020", "Test Corp", "Yonkers", "12", "S/H","S/H",
-        <CurrencyFormat
-                  value={15252545}
-                  displayType={"text"}
-                  thousandSeparator={true}
-                  prefix={" "}
-    />,
-     <VisibilityIcon
-                    onClick={showModal}
-                />
-  ],
-
-];
-
-    
-    return (
-
-<>
-   {/*Selected Item Model */}
+  return (
+    <>
+      {/*Selected Item Model */}
 
       <Modal
         title={
           <span className="model_title">
             {allTtemData[currentIndx] && allTtemData[currentIndx].data
-              ? allTtemData[currentIndx].data.itemName
+              ? allTtemData[currentIndx].data.invoice_number
               : null}
           </span>
         }
@@ -197,285 +158,114 @@ const TableData = [
         <div className="table_Model">
           <div className="model_Main">
             <div className="model_Detail">
-              <Row>
-                <Col span={12}>BRAND</Col>
-                <Col span={12}>
-                  <span className="load_Item">
-                    <span className="colan">:</span>{" "}
-                    {allTtemData[currentIndx] && allTtemData[currentIndx].data
-                      ? allTtemData[currentIndx].data.brand
-                      : " - "}
-                  </span>
-                </Col>
+              {allTtemData[currentIndx]?.data.items.map((eachItem) => (
+                <div>
+                  <Row>
+                    <Col span={12}>Item name</Col>
+                    <Col span={12}>
+                      <span className="load_Item">
+                        {" "}
+                        <span className="colan">:</span> {eachItem.item_name}
+                      </span>
+                    </Col>
 
-                <Col span={12}>QTY</Col>
-                <Col span={12}>
-                  <span className="load_Item">
-                    {" "}
-                    <span className="colan">:</span>{" "}
-                    {allTtemData[currentIndx] && allTtemData[currentIndx].data
-                      ? allTtemData[currentIndx].data.qty
-                      : " - "}{" "}
-                  </span>
-                </Col>
+                    <Col span={12}>QTY</Col>
+                    <Col span={12}>
+                      <span className="load_Item">
+                        {" "}
+                        <span className="colan">:</span> {eachItem.qty}
+                      </span>
+                    </Col>
 
-                <Col span={12}> COLOR</Col>
-                <Col span={12}>
-                  <span className="load_Item">
-                    {" "}
-                    <span className="colan">:</span>{" "}
-                    {allTtemData[currentIndx] && allTtemData[currentIndx].data
-                      ? allTtemData[currentIndx].data.color
-                      : " - "}{" "}
-                  </span>
-                </Col>
+                    <Col span={12}>SALE PRICE(LKR)</Col>
+                    <Col span={12}>
+                      <span className="load_Item">
+                        {" "}
+                        <span className="colan">:</span>{" "}
+                        <CurrencyFormat
+                          value={eachItem.downpayment}
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          prefix={"  "}
+                        />
+                      </span>
+                    </Col>
 
-                <Col span={12}>SALE PRICE(LKR)</Col>
-                <Col span={12}>
-                  <span className="load_Item">
-                    {" "}
-                    <span className="colan">:</span>{" "}
-                    {allTtemData[currentIndx] &&
-                    allTtemData[currentIndx].data ? (
-                      <CurrencyFormat
-                        value={allTtemData[currentIndx].data.salePrice}
-                        displayType={"text"}
-                        thousandSeparator={true}
-                        prefix={"  "}
-                      />
-                    ) : (
-                      " - "
-                    )}{" "}
-                  </span>
-                </Col>
-
-                <Col span={12}>CASH PRICE(LKR)</Col>
-                <Col span={12}>
-                  <span className="load_Item">
-                    {" "}
-                    <span className="colan">:</span>{" "}
-                    {allTtemData[currentIndx] &&
-                    allTtemData[currentIndx].data ? (
-                      <CurrencyFormat
-                        value={allTtemData[currentIndx].data.cashPrice}
-                        displayType={"text"}
-                        thousandSeparator={true}
-                        prefix={" "}
-                      />
-                    ) : (
-                      " - "
-                    )}{" "}
-                  </span>
-                </Col>
-                <Col span={12}>DOWN PAYMENT(LKR)</Col>
-                <Col span={12}>
-                  <span className="load_Item">
-                    {" "}
-                    <span className="colan">:</span>{" "}
-                    {allTtemData[currentIndx] &&
-                    allTtemData[currentIndx].data ? (
-                      <CurrencyFormat
-                        value={allTtemData[currentIndx].data.downPayment}
-                        displayType={"text"}
-                        thousandSeparator={true}
-                        prefix={" "}
-                      />
-                    ) : (
-                      " - "
-                    )}{" "}
-                  </span>
-                </Col>
-                <Col span={12}>NO OF INSTALLMENT</Col>
-                <Col span={12}>
-                  <span className="load_Item">
-                    {" "}
-                    <span className="colan">:</span>{" "}
-                    {allTtemData[currentIndx] && allTtemData[currentIndx].data
-                      ? allTtemData[currentIndx].data.noOfInstallments
-                      : " - "}{" "}
-                  </span>
-                </Col>
-                <Col span={12}>AMOUNT PER INSTALLMENT(LKR)</Col>
-                <Col span={12}>
-                  <span className="load_Item">
-                    {" "}
-                    <span className="colan">:</span>{" "}
-                    {allTtemData[currentIndx] &&
-                    allTtemData[currentIndx].data ? (
-                      <CurrencyFormat
-                        value={
-                          allTtemData[currentIndx].data.amountPerInstallment
-                        }
-                        displayType={"text"}
-                        thousandSeparator={true}
-                        prefix={" "}
-                      />
-                    ) : (
-                      " - "
-                    )}{" "}
-                  </span>
-                </Col>
-
-                <Col span={12}>GUARANTEE MONTHS/YEARS</Col>
-                <Col span={12}>
-                  <span className="load_Item">
-                    {" "}
-                    <span className="colan">:</span>{" "}
-                    {allTtemData[currentIndx] && allTtemData[currentIndx].data
-                      ? allTtemData[currentIndx].data.guarantee.value
-                      : " - "}{" "}
-                  </span>
-                </Col>
-                <Col span={12}>GUARANTEE PERIOD</Col>
-                <Col span={12}>
-                  <span className="load_Item">
-                    {" "}
-                    <span className="colan">:</span>{" "}
-                    {allTtemData[currentIndx] && allTtemData[currentIndx].data
-                      ? allTtemData[currentIndx].data.guaranteePeriod
-                      : " - "}{" "}
-                  </span>
-                </Col>
-                <Col span={12}>DISCOUNT(LKR)</Col>
-                <Col span={12}>
-                  <span className="load_Item">
-                    {" "}
-                    <span className="colan">:</span>{" "}
-                    {allTtemData[currentIndx] &&
-                    allTtemData[currentIndx].data ? (
-                      <CurrencyFormat
-                        value={allTtemData[currentIndx].data.discount}
-                        displayType={"text"}
-                        thousandSeparator={true}
-                        prefix={" "}
-                      />
-                    ) : (
-                      " - "
-                    )}{" "}
-                  </span>
-                </Col>
-                <Col span={12}>DESCRIPTION</Col>
-                <Col span={12}>
-                  <span className="load_Item">
-                    {" "}
-                    <span className="colan">:</span>{" "}
-                    {allTtemData[currentIndx] && allTtemData[currentIndx].data
-                      ? allTtemData[currentIndx].data.description
-                      : " - "}{" "}
-                  </span>
-                </Col>
-                <Col span={12}>COMPANY INVOICE NO</Col>
-                <Col span={12}>
-                  <span className="load_Item">
-                    {" "}
-                    <span className="colan">:</span>{" "}
-                    {allTtemData[currentIndx] && allTtemData[currentIndx].data
-                      ? allTtemData[currentIndx].data.cInvoiceNo
-                      : " - "}{" "}
-                  </span>
-                </Col>
-                <Col span={12}>GUARANTEE CARD NO</Col>
-                <Col span={12}>
-                  <span className="load_Item">
-                    {" "}
-                    <span className="colan">:</span>{" "}
-                    {allTtemData[currentIndx] && allTtemData[currentIndx].data
-                      ? allTtemData[currentIndx].data.GCardNo
-                      : " - "}{" "}
-                  </span>
-                </Col>
-                <Col span={12}>CREATED DATE</Col>
-                <Col span={12}>
-                  <span className="load_Item">
-                    {" "}
-                    <span className="colan">:</span>{" "}
-                    {moment(
-                      allTtemData[currentIndx] && allTtemData[currentIndx].data
-                        ? allTtemData[currentIndx].data.timestamp.seconds * 1000
-                        : " - "
-                    ).format("dddd, MMMM Do YYYY, h:mm:ss a")}
-                  </span>
-                </Col>
-                 <Col span={12}>STOCK TYPE</Col>
-                <Col span={12}>
-                  <span className="load_Item">
-                    {" "}
-                    <span className="colan">:</span>{" "}
-                   ABC Main
-                  </span>
-                </Col>
-              </Row>
-              <hr />
-              <TableContainer component={Paper} className="main_containerNo">
-                <Table
-                  className="gass_Table"
-                  size="small"
-                  aria-label="a dense table"
-                >
-                  <TableHead className="No_Table_head">
-                    <TableRow>
-                      <TableCell className="tbl_cell">SerialNo</TableCell>
-                      <TableCell className="tbl_cell" align="left">
-                        ModelNo
-                      </TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {itemListSeMoCon.length > 0
-                      ? itemListSeMoCon.map((row) => (
-                          <TableRow key={0}>
-                            <TableCell component="th" scope="row">
-                              {itemListSeMo[currentIndx]?.serialNo.map(
-                                (serailNoT) => (
-                                  <h5 key={serailNoT}>{serailNoT}</h5>
-                                )
-                              )}
-                            </TableCell>
-                            <TableCell component="th" scope="row">
-                              {itemListSeMo[currentIndx]?.modelNo.map(
-                                (modelNoT) => (
-                                  <h5 key={modelNoT}>{modelNoT}</h5>
-                                )
-                              )}
-                            </TableCell>
-                           
-                          </TableRow>
-                        ))
-                      : ""}
-                  </TableBody>
-                </Table>
-              </TableContainer>
+                    <Col span={12}>STOCK TYPE</Col>
+                    <Col span={12}>
+                      <span className="load_Item">
+                        {" "}
+                        <span className="colan">:</span> {eachItem.stock_type}
+                      </span>
+                    </Col>
+                  </Row>
+                  <hr />
+                  <TableContainer
+                    component={Paper}
+                    className="main_containerNo"
+                  >
+                    <Table
+                      className="gass_Table"
+                      size="small"
+                      aria-label="a dense table"
+                    >
+                      <TableHead className="No_Table_head">
+                        <TableRow>
+                          <TableCell className="tbl_cell">SerialNo</TableCell>
+                          <TableCell className="tbl_cell" align="left">
+                            ModelNo
+                          </TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {eachItem.serialNo.length > 0
+                          ? eachItem.serialNo.map((row) => (
+                              <TableRow key={0}>
+                                <TableCell component="th" scope="row">
+                                  {<h5 key={row}>{row}</h5>}
+                                </TableCell>
+                                <TableCell component="th" scope="row">
+                                  {eachItem.modelNo.map((modelNoT) => (
+                                    <h5 key={modelNoT}>{modelNoT}</h5>
+                                  ))}
+                                </TableCell>
+                              </TableRow>
+                            ))
+                          : ""}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                </div>
+              ))}
             </div>
           </div>
         </div>
       </Modal>
 
-
-        <Grid container spacing={4}>
-      <Grid item xs={12}>
-        <MUIDataTable
-          title={<span className="title_Span">Selling History</span>}
-          className="selling_histable"
-          sty
-          data={TableData}
-          columns={columns}
-          options={{
-            selectableRows: "none",
-            customToolbarSelect: () => {},
-            onRowClick: (rowData, rowMeta) => {
-              setCurrentIndx(rowMeta.dataIndex);
-            },
-            filterType: "textField",
-            download: false,
-            print: false,
-            searchPlaceholder: "Search using any column names",
-            elevation: 4,
-            sort: true,
-          }}
-        />
-      </Grid>
+      <Grid container spacing={4}>
+        <Grid item xs={12}>
+          <MUIDataTable
+            title={<span className="title_Span">Selling History</span>}
+            className="selling_histable"
+            sty
+            data={itemTableData}
+            columns={columns}
+            options={{
+              selectableRows: "none",
+              customToolbarSelect: () => {},
+              onRowClick: (rowData, rowMeta) => {
+                setCurrentIndx(rowMeta.dataIndex);
+              },
+              filterType: "textField",
+              download: false,
+              print: false,
+              searchPlaceholder: "Search using any column names",
+              elevation: 4,
+              sort: true,
+            }}
+          />
         </Grid>
-       
-       </>
-    );
+      </Grid>
+    </>
+  );
 }

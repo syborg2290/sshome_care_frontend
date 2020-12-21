@@ -23,8 +23,7 @@ export default function Update_Model({
   address1Prop,
   address2Prop,
   rootProp,
-  frontPropUrl,
-  backPropUrl,
+  imageUrlProp,
 }) {
   const [nic, setNic] = useState(nicProp);
   const [mid, setMId] = useState(midProp);
@@ -37,15 +36,9 @@ export default function Update_Model({
   const [root, setRoot] = useState(rootProp);
   const [validation, setValidation] = useState("");
   const [isLoadingSubmit, setLoadingSubmit] = useState(false);
-
-  // image 1
+  // eslint-disable-next-line
   const [imageFile, setImageFile] = useState(null);
-  const [imageUrl, setImageUrl] = useState(frontPropUrl);
-
-  // image 2
-  const [imageFile2, setImageFile2] = useState(null);
-  const [imageUrl2, setImageUrl2] = useState(backPropUrl);
-
+  const [imageUrl, setImageUrl] = useState(imageUrlProp);
   let history = useHistory();
 
   useEffect(() => {
@@ -67,52 +60,55 @@ export default function Update_Model({
             .get()
             .then(async (reMid) => {
               if (reMid.docs.length > 0) {
-                let randomNumber =
-                  Math.floor(Math.random() * 1000000000) + 1000;
-                if (imageFile !== null) {
-                  await storage
-                    .ref(`images/${imageFile.name}${randomNumber}`)
-                    .put(imageFile);
-                }
+                if (imageFile === null) {
+                  db.collection("gami_sarani")
+                    .doc(re.docs[0].id)
+                    .update({
+                      mid: mid,
+                      nic: nic,
+                      fname: fname,
+                      lname: lname,
+                      address1: addres1,
+                      addres2: addres2,
+                      mobile1: mobile1,
+                      mobile2: mobile2,
+                      root: root,
+                      currentDeposit: 0,
+                      photo: imageUrl,
+                    })
+                    .then(() => {
+                      setLoadingSubmit(false);
+                      window.location.reload();
+                    });
+                } else {
+                  await storage.ref(`images/${imageFile.name}`).put(imageFile);
 
-                if (imageFile2) {
-                  await storage
-                    .ref(`images/${imageFile2.name}${randomNumber}`)
-                    .put(imageFile2);
+                  storage
+                    .ref("images")
+                    .child(imageFile.name)
+                    .getDownloadURL()
+                    .then((url) => {
+                      db.collection("gami_sarani")
+                        .doc(re.docs[0].id)
+                        .update({
+                          mid: mid,
+                          nic: nic,
+                          fname: fname,
+                          lname: lname,
+                          address1: addres1,
+                          addres2: addres2,
+                          mobile1: mobile1,
+                          mobile2: mobile2,
+                          root: root,
+                          currentDeposit: 0,
+                          photo: imageUrl,
+                        })
+                        .then((_) => {
+                          setLoadingSubmit(false);
+                          window.location.reload();
+                        });
+                    });
                 }
-
-                storage
-                  .ref("images")
-                  .child(imageFile.name + randomNumber)
-                  .getDownloadURL()
-                  .then((front) => {
-                    storage
-                      .ref("images")
-                      .child(imageFile2.name + randomNumber)
-                      .getDownloadURL()
-                      .then((back) => {
-                        db.collection("gami_sarani")
-                          .doc(re.docs[0].id)
-                          .update({
-                            mid: mid,
-                            nic: nic,
-                            fname: fname,
-                            lname: lname,
-                            address1: addres1,
-                            addres2: addres2,
-                            mobile1: mobile1,
-                            mobile2: mobile2,
-                            root: root,
-                            currentDeposit: 0,
-                            front: front === null ? imageUrl : front,
-                            back: back === null ? imageUrl2 : back,
-                          })
-                          .then((_) => {
-                            setLoadingSubmit(false);
-                            window.location.reload();
-                          });
-                      });
-                  });
               } else {
                 setLoadingSubmit(false);
                 setValidation("Any record not found as entered MID");
@@ -125,25 +121,12 @@ export default function Update_Model({
       });
   };
 
-  // image 2
   const onImageChange = (event) => {
     if (event.target.files && event.target.files[0]) {
       setImageFile(event.target.files[0]);
       let reader = new FileReader();
       reader.onload = (e) => {
         setImageUrl(e.target.result);
-      };
-      reader.readAsDataURL(event.target.files[0]);
-    }
-  };
-
-  // image 2
-  const onImageChange2 = (event) => {
-    if (event.target.files && event.target.files[0]) {
-      setImageFile2(event.target.files[0]);
-      let reader = new FileReader();
-      reader.onload = (e) => {
-        setImageUrl2(e.target.result);
       };
       reader.readAsDataURL(event.target.files[0]);
     }
@@ -327,7 +310,7 @@ export default function Update_Model({
             <Grid className="txt_Labels" item xs={12} sm={2}>
               Root to Home:
             </Grid>
-            <Grid item xs={12} sm={8}>
+            <Grid item xs={12} sm={5}>
               <TextField
                 className="txt_rHome"
                 autoComplete="rHome"
@@ -345,45 +328,15 @@ export default function Update_Model({
                 }}
               />
             </Grid>
-            <Grid item xs={12} sm={2}></Grid>
             <Grid className="txt_LabelsImg" item xs={12} sm={1}>
               Image:
             </Grid>
-
-            {/* image 2 */}
-
-            <Grid item xs={12} sm={5}>
+            <Grid item xs={12} sm={4}>
               <input
                 type="file"
                 accept="image/*"
                 name=""
                 onChange={onImageChange}
-                className="image"
-                id="front_image"
-                hidden
-              />
-              <img
-                alt="front"
-                onClick={() => {
-                  document.getElementById("front_image").click();
-                }}
-                src={
-                  imageUrl == null
-                    ? require("../../../../../../assets/avatar1132.jpg")
-                    : imageUrl
-                }
-                className="imageFront"
-              />
-            </Grid>
-
-            {/* image 2 */}
-
-            <Grid item xs={12} sm={6}>
-              <input
-                type="file"
-                accept="image/*"
-                name=""
-                onChange={onImageChange2}
                 className="image"
                 id="item_image"
                 hidden
@@ -394,13 +347,14 @@ export default function Update_Model({
                   document.getElementById("item_image").click();
                 }}
                 src={
-                  imageUrl2 == null
-                    ? require("../../../../../../assets/avater232.jpg")
-                    : imageUrl2
+                  imageUrl == null
+                    ? require("../../../../../../assets/avatar.png")
+                    : imageUrl
                 }
-                className="imageBack"
+                className="image"
               />
             </Grid>
+            <Grid item xs={12} sm={6}></Grid>
           </Grid>
           <p className="validate_Edit">{validation}</p>
           <Grid container spacing={2}>

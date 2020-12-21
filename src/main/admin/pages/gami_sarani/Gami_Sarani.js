@@ -69,15 +69,15 @@ export default function Gami_Sarani() {
   };
 
   const columns = [
-    // {
-    //   name: "IMG",
-    //   options: {
-    //     filter: true,
-    //     setCellHeaderProps: (value) => ({
-    //       style: { fontSize: "15px", color: "black", fontWeight: "600" },
-    //     }),
-    //   },
-    // },
+    {
+      name: "IMG",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
     {
       name: "FirstName",
       options: {
@@ -155,17 +155,17 @@ export default function Gami_Sarani() {
           data: each.data(),
         });
         rawData.push({
-          // IMG: (
-          //   <img
-          //     alt="Empty data"
-          //     className="avatar_data"
-          //     src={
-          //       each.data().photo !== null
-          //         ? each.data().photo
-          //         : require("../../../../assets/avatar.png")
-          //     }
-          //   />
-          // ),
+          IMG: (
+            <img
+              alt="Empty data"
+              className="avatar_data"
+              src={
+                each.data().photo !== null
+                  ? each.data().photo
+                  : require("../../../../assets/avatar.png")
+              }
+            />
+          ),
           FirstName: each.data().fname,
           LastName: each.data().lname,
           NIC: each.data().nic,

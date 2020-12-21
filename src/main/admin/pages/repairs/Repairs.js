@@ -12,6 +12,7 @@ import { useHistory } from "react-router-dom";
 import RepairModel from "./repairs_Model/Repair_model";
 import RepairUpdateModel from "./repair_Update_Model/Repair_Update";
 import RepairViewModel from "./repair_view_Model/Repair_View";
+import RevenueAddModel from "./add_revenue_item/Add_Revenue_Model";
 
 // styles
 import "./Repairs.css";
@@ -31,10 +32,12 @@ export default function Repairs() {
   const [repairModel, setrepairModel] = useState(false); //  table models
   const [repairUpdateModel, setRepairUpdateModel] = useState(false); //  table models
   const [repairViewModel, setRepairViewModel] = useState(false); //  table models
+  const [revenueAddModel, setRevenueAddModel] = useState(false); //  models
+  const [revenueModelHistory, setRevenueModelHistory] = useState(false); // Employee Purchasing history model
   const [visibleConfirmPrint, setVisibleConfirmPrint] = useState(false);
   const [repairTableData, setRepairTableData] = useState([]);
   const [repairAllData, setRepairAllData] = useState([]);
-
+  
   let history = useHistory();
   let history2 = useHistory();
 
@@ -81,6 +84,15 @@ export default function Repairs() {
 
   const showModalViewRepair = () => {
     setRepairViewModel(true);
+  };
+
+   const showModalRevenue = () => {
+    setRevenueAddModel(true);
+  };
+
+    const revenueHistory = () => {
+    setRevenueModelHistory(true);
+     history.push("/admin/pages/revenueHistory");
   };
 
   //START pay And Go Columns
@@ -336,14 +348,48 @@ export default function Repairs() {
 
       {/*END VIEW repairs Model */}
 
+         {/*Start Revenue Add Model  */}
+      <Modal
+        visible={revenueAddModel}
+        className="revenue_Model"
+        footer={null}
+        onCancel={() => {
+          setRevenueAddModel(false);
+        }}
+      >
+        <div>
+          <div>
+            <div>
+              <RevenueAddModel  />
+            </div>
+          </div>
+        </div>
+      </Modal>
+
+      {/*END  Revenue Add Model */}
+
+      <Grid container spacing={4}>
+          <Grid item xs={8}>
+      <Button
+        variant="contained"
+        className="btn_HisRevenue"
+        onClick={revenueHistory}
+      >
+            Revenue History
+      </Button>
+          
+        </Grid>
+        <Grid item xs={2}>
       <Button
         variant="contained"
         className="btn_AddRevenue"
-        // onClick={showModalRepair}
+        onClick={showModalRevenue}
       >
-        Revenue Item
+            Revenue Item
       </Button>
-      
+          
+        </Grid>
+         <Grid item xs={2}>
       <Button
         variant="contained"
         color="primary"
@@ -353,6 +399,8 @@ export default function Repairs() {
       >
         Add New
       </Button>
+</Grid>
+      </Grid>
 
       <Grid container spacing={4}>
         <Grid item xs={12}>

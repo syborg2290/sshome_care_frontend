@@ -970,7 +970,7 @@ export default function Add_Paysheet_Model({ nic }) {
         reEmpPurchased.docs.forEach((eachDataPu) => {
           purchesGoods = purchesGoods + eachDataPu.data().total;
         });
-        purchesGoodsInitial(purchesGoods);
+        purchesGoodsInitial = purchesGoods;
         setItemValue(purchesGoods);
       });
 
@@ -982,7 +982,7 @@ export default function Add_Paysheet_Model({ nic }) {
         reGoods.docs.forEach((eachPaid) => {
           plusValues = plusValues + parseInt(eachPaid.data().paid_value);
         });
-        plusValuesGoodsInitial(plusValues);
+        plusValuesGoodsInitial = plusValues;
         setPaidAmount(plusValues);
       });
 
@@ -2786,28 +2786,17 @@ export default function Add_Paysheet_Model({ nic }) {
                   }}
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={4}></Grid>
+              <Grid item xs={12} sm={8}>
                 <p
                   style={{
                     color: "red",
                     fontWeight: "bold",
-                    fontSize: "12px",
+                    fontSize: "13px",
                     textAlign: "center",
                   }}
                 >
-                  Item Value : {itemValue}
-                </p>
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <p
-                  style={{
-                    color: "red",
-                    fontWeight: "bold",
-                    fontSize: "12px",
-                    textAlign: "center",
-                  }}
-                >
-                  Balance : {goodsBalance}
+                  Due Balance(LKR) : {goodsBalance}
                 </p>
               </Grid>
               <Grid className="lbl_topi" item xs={12} sm={4}>

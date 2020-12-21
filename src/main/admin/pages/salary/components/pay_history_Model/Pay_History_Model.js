@@ -330,7 +330,7 @@ export default function Pay_History_Model() {
               ),
               Purchased_Goods: (
                 <CurrencyFormat
-                  value={678656565}
+                  value={saDoc.data()?.goodsValue}
                   displayType={"text"}
                   thousandSeparator={true}
                   prefix={" "}

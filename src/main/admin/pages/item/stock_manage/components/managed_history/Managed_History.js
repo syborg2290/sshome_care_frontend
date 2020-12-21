@@ -20,69 +20,22 @@ import db from "../../../../../../../config/firebase.js";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 
 export default function Managed_History() {
-     // eslint-disable-next-line
+  // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
   // eslint-disable-next-line
   const [allData, setAllData] = useState([]);
-  const [allTtemData, setAllItemData] = useState([]);
-  const [itemTableData, setItemTableData] = useState([]);
-  // eslint-disable-next-line
-  const [isLoading, setIsLoading] = useState(true);
+  const [tableData, setTableData] = useState([]);
+
   const [visible, setVisible] = useState(false);
-// eslint-disable-next-line
-  const [itemListSeMo, setItemListSeMo] = useState([]);
-// eslint-disable-next-line
-  const [itemListSeMoCon, setItemListSeMoCon] = useState([]);
 
   let history = useHistory();
 
-   const showModal = () => {
+  const showModal = () => {
     setVisible(true);
   };
 
-
-  useEffect(() => {
-    window.addEventListener("offline", function (e) {
-      history.push("/connection_lost");
-    });
-
-    db.collection("item_history")
-      .orderBy("timestamp", "desc")
-      .onSnapshot((snapshot) => {
-        var itemData = [];
-        var itemDataSeMo = [];
-        var itemDataSeMoCon = [];
-        if (snapshot.docs.length > 0) {
-          itemDataSeMoCon.push({
-            serialNo: snapshot.docs[0].data().serialNo,
-            modelNo: snapshot.docs[0].modelNo,
-            chassisNo: snapshot.docs[0].chassisNo,
-          });
-        }
-
-        snapshot.docs.forEach((element) => {
-          itemData.push({
-            id: element.id,
-            data: element.data(),
-          });
-
-          itemDataSeMo.push({
-            serialNo: element.data().serialNo,
-            modelNo: element.data().modelNo,
-            chassisNo: element.data().chassisNo,
-          });
-
-        });
-       
-        setAllItemData(itemData);
-        setItemListSeMoCon(itemDataSeMoCon);
-        setItemListSeMo(itemDataSeMo);
-      });
-    // eslint-disable-next-line
-  }, []);
-
-const columns = [
-  {
+  const columns = [
+    {
       name: "Date",
       options: {
         filter: true,
@@ -90,8 +43,8 @@ const columns = [
           style: { fontSize: "15px", color: "black", fontWeight: "600" },
         }),
       },
-     },
-      {
+    },
+    {
       name: "Item_Name",
       options: {
         filter: true,
@@ -99,8 +52,8 @@ const columns = [
           style: { fontSize: "15px", color: "black", fontWeight: "600" },
         }),
       },
-     },
-       {
+    },
+    {
       name: "Brand",
       options: {
         filter: true,
@@ -109,7 +62,7 @@ const columns = [
         }),
       },
     },
-     {
+    {
       name: "Qty",
       options: {
         filter: true,
@@ -118,7 +71,7 @@ const columns = [
         }),
       },
     },
-     {
+    {
       name: "From",
       options: {
         filter: true,
@@ -126,8 +79,8 @@ const columns = [
           style: { fontSize: "15px", color: "black", fontWeight: "600" },
         }),
       },
-     },
-      {
+    },
+    {
       name: "To",
       options: {
         filter: true,
@@ -136,7 +89,7 @@ const columns = [
         }),
       },
     },
-        {
+    {
       name: "Action",
       options: {
         filter: true,
@@ -145,20 +98,44 @@ const columns = [
         }),
       },
     },
-];
+  ];
 
+  useEffect(() => {
+    window.addEventListener("offline", function (e) {
+      history.push("/connection_lost");
+    });
 
-    const TableData = [
-    ["2020", "Test Corp", "Yonkers", "12", "S/H",
-       "S/H",
-         <VisibilityIcon
-                    onClick={showModal}
-                />
-        
-        ],
+    db.collection("managed_stock_history")
+      .orderBy("timestamp", "desc")
+      .onSnapshot((snapshot) => {
+        var itemDataTable = [];
+        var itemDataAll = [];
 
-];
-    
+        snapshot.docs.forEach((element) => {
+          itemDataAll.push({
+            id: element.id,
+            data: element.data().item,
+            serialNo: element.data().serialNo,
+            modelNo: element.data().modelNo,
+          });
+
+          itemDataTable.push([
+            new Date(element.data().date.seconds * 1000).toDateString(),
+            element.data().item.itemName,
+            element.data().item.brand,
+            element.data().qty,
+            element.data().from,
+            element.data().to,
+            <VisibilityIcon onClick={showModal} />,
+          ]);
+        });
+
+        setTableData(itemDataTable);
+        setAllData(itemDataAll);
+      });
+    // eslint-disable-next-line
+  }, []);
+
   return (
     <>
       {/*Selected Item Model */}
@@ -166,8 +143,8 @@ const columns = [
       <Modal
         title={
           <span className="model_title">
-            {allTtemData[currentIndx] && allTtemData[currentIndx].data
-              ? allTtemData[currentIndx].data.itemName
+            {allData[currentIndx] && allData[currentIndx].data
+              ? allData[currentIndx].data.itemName
               : null}
           </span>
         }
@@ -186,8 +163,8 @@ const columns = [
                 <Col span={12}>
                   <span className="load_Item">
                     <span className="colan">:</span>{" "}
-                    {allTtemData[currentIndx] && allTtemData[currentIndx].data
-                      ? allTtemData[currentIndx].data.brand
+                    {allData[currentIndx] && allData[currentIndx].data
+                      ? allData[currentIndx].data.brand
                       : " - "}
                   </span>
                 </Col>
@@ -197,8 +174,8 @@ const columns = [
                   <span className="load_Item">
                     {" "}
                     <span className="colan">:</span>{" "}
-                    {allTtemData[currentIndx] && allTtemData[currentIndx].data
-                      ? allTtemData[currentIndx].data.qty
+                    {allData[currentIndx] && allData[currentIndx].data
+                      ? allData[currentIndx].data.qty
                       : " - "}{" "}
                   </span>
                 </Col>
@@ -208,8 +185,8 @@ const columns = [
                   <span className="load_Item">
                     {" "}
                     <span className="colan">:</span>{" "}
-                    {allTtemData[currentIndx] && allTtemData[currentIndx].data
-                      ? allTtemData[currentIndx].data.color
+                    {allData[currentIndx] && allData[currentIndx].data
+                      ? allData[currentIndx].data.color
                       : " - "}{" "}
                   </span>
                 </Col>
@@ -219,17 +196,16 @@ const columns = [
                   <span className="load_Item">
                     {" "}
                     <span className="colan">:</span>{" "}
-                    {allTtemData[currentIndx] &&
-                      allTtemData[currentIndx].data ? (
-                        <CurrencyFormat
-                          value={allTtemData[currentIndx].data.salePrice}
-                          displayType={"text"}
-                          thousandSeparator={true}
-                          prefix={"  "}
-                        />
-                      ) : (
-                        " - "
-                      )}{" "}
+                    {allData[currentIndx] && allData[currentIndx].data ? (
+                      <CurrencyFormat
+                        value={allData[currentIndx].data.salePrice}
+                        displayType={"text"}
+                        thousandSeparator={true}
+                        prefix={"  "}
+                      />
+                    ) : (
+                      " - "
+                    )}{" "}
                   </span>
                 </Col>
 
@@ -238,17 +214,16 @@ const columns = [
                   <span className="load_Item">
                     {" "}
                     <span className="colan">:</span>{" "}
-                    {allTtemData[currentIndx] &&
-                      allTtemData[currentIndx].data ? (
-                        <CurrencyFormat
-                          value={allTtemData[currentIndx].data.cashPrice}
-                          displayType={"text"}
-                          thousandSeparator={true}
-                          prefix={" "}
-                        />
-                      ) : (
-                        " - "
-                      )}{" "}
+                    {allData[currentIndx] && allData[currentIndx].data ? (
+                      <CurrencyFormat
+                        value={allData[currentIndx].data.cashPrice}
+                        displayType={"text"}
+                        thousandSeparator={true}
+                        prefix={" "}
+                      />
+                    ) : (
+                      " - "
+                    )}{" "}
                   </span>
                 </Col>
                 <Col span={12}>DOWN PAYMENT(LKR)</Col>
@@ -256,17 +231,16 @@ const columns = [
                   <span className="load_Item">
                     {" "}
                     <span className="colan">:</span>{" "}
-                    {allTtemData[currentIndx] &&
-                      allTtemData[currentIndx].data ? (
-                        <CurrencyFormat
-                          value={allTtemData[currentIndx].data.downPayment}
-                          displayType={"text"}
-                          thousandSeparator={true}
-                          prefix={" "}
-                        />
-                      ) : (
-                        " - "
-                      )}{" "}
+                    {allData[currentIndx] && allData[currentIndx].data ? (
+                      <CurrencyFormat
+                        value={allData[currentIndx].data.downPayment}
+                        displayType={"text"}
+                        thousandSeparator={true}
+                        prefix={" "}
+                      />
+                    ) : (
+                      " - "
+                    )}{" "}
                   </span>
                 </Col>
                 <Col span={12}>NO OF INSTALLMENT</Col>
@@ -274,8 +248,8 @@ const columns = [
                   <span className="load_Item">
                     {" "}
                     <span className="colan">:</span>{" "}
-                    {allTtemData[currentIndx] && allTtemData[currentIndx].data
-                      ? allTtemData[currentIndx].data.noOfInstallments
+                    {allData[currentIndx] && allData[currentIndx].data
+                      ? allData[currentIndx].data.noOfInstallments
                       : " - "}{" "}
                   </span>
                 </Col>
@@ -284,19 +258,16 @@ const columns = [
                   <span className="load_Item">
                     {" "}
                     <span className="colan">:</span>{" "}
-                    {allTtemData[currentIndx] &&
-                      allTtemData[currentIndx].data ? (
-                        <CurrencyFormat
-                          value={
-                            allTtemData[currentIndx].data.amountPerInstallment
-                          }
-                          displayType={"text"}
-                          thousandSeparator={true}
-                          prefix={" "}
-                        />
-                      ) : (
-                        " - "
-                      )}{" "}
+                    {allData[currentIndx] && allData[currentIndx].data ? (
+                      <CurrencyFormat
+                        value={allData[currentIndx].data.amountPerInstallment}
+                        displayType={"text"}
+                        thousandSeparator={true}
+                        prefix={" "}
+                      />
+                    ) : (
+                      " - "
+                    )}{" "}
                   </span>
                 </Col>
 
@@ -305,8 +276,8 @@ const columns = [
                   <span className="load_Item">
                     {" "}
                     <span className="colan">:</span>{" "}
-                    {allTtemData[currentIndx] && allTtemData[currentIndx].data
-                      ? allTtemData[currentIndx].data.guarantee.value
+                    {allData[currentIndx] && allData[currentIndx].data
+                      ? allData[currentIndx].data.guarantee.value
                       : " - "}{" "}
                   </span>
                 </Col>
@@ -315,8 +286,8 @@ const columns = [
                   <span className="load_Item">
                     {" "}
                     <span className="colan">:</span>{" "}
-                    {allTtemData[currentIndx] && allTtemData[currentIndx].data
-                      ? allTtemData[currentIndx].data.guaranteePeriod
+                    {allData[currentIndx] && allData[currentIndx].data
+                      ? allData[currentIndx].data.guaranteePeriod
                       : " - "}{" "}
                   </span>
                 </Col>
@@ -325,17 +296,16 @@ const columns = [
                   <span className="load_Item">
                     {" "}
                     <span className="colan">:</span>{" "}
-                    {allTtemData[currentIndx] &&
-                      allTtemData[currentIndx].data ? (
-                        <CurrencyFormat
-                          value={allTtemData[currentIndx].data.discount}
-                          displayType={"text"}
-                          thousandSeparator={true}
-                          prefix={" "}
-                        />
-                      ) : (
-                        " - "
-                      )}{" "}
+                    {allData[currentIndx] && allData[currentIndx].data ? (
+                      <CurrencyFormat
+                        value={allData[currentIndx].data.discount}
+                        displayType={"text"}
+                        thousandSeparator={true}
+                        prefix={" "}
+                      />
+                    ) : (
+                      " - "
+                    )}{" "}
                   </span>
                 </Col>
                 <Col span={12}>DESCRIPTION</Col>
@@ -343,8 +313,8 @@ const columns = [
                   <span className="load_Item">
                     {" "}
                     <span className="colan">:</span>{" "}
-                    {allTtemData[currentIndx] && allTtemData[currentIndx].data
-                      ? allTtemData[currentIndx].data.description
+                    {allData[currentIndx] && allData[currentIndx].data
+                      ? allData[currentIndx].data.description
                       : " - "}{" "}
                   </span>
                 </Col>
@@ -353,8 +323,8 @@ const columns = [
                   <span className="load_Item">
                     {" "}
                     <span className="colan">:</span>{" "}
-                    {allTtemData[currentIndx] && allTtemData[currentIndx].data
-                      ? allTtemData[currentIndx].data.cInvoiceNo
+                    {allData[currentIndx] && allData[currentIndx].data
+                      ? allData[currentIndx].data.cInvoiceNo
                       : " - "}{" "}
                   </span>
                 </Col>
@@ -363,8 +333,8 @@ const columns = [
                   <span className="load_Item">
                     {" "}
                     <span className="colan">:</span>{" "}
-                    {allTtemData[currentIndx] && allTtemData[currentIndx].data
-                      ? allTtemData[currentIndx].data.GCardNo
+                    {allData[currentIndx] && allData[currentIndx].data
+                      ? allData[currentIndx].data.GCardNo
                       : " - "}{" "}
                   </span>
                 </Col>
@@ -374,8 +344,8 @@ const columns = [
                     {" "}
                     <span className="colan">:</span>{" "}
                     {moment(
-                      allTtemData[currentIndx] && allTtemData[currentIndx].data
-                        ? allTtemData[currentIndx].data.timestamp.seconds * 1000
+                      allData[currentIndx] && allData[currentIndx].data
+                        ? allData[currentIndx].data.timestamp.seconds * 1000
                         : " - "
                     ).format("dddd, MMMM Do YYYY, h:mm:ss a")}
                   </span>
@@ -384,8 +354,7 @@ const columns = [
                 <Col span={12}>
                   <span className="load_Item">
                     {" "}
-                    <span className="colan">:</span>{" "}
-                   ABC Main
+                    <span className="colan">:</span> ABC Main
                   </span>
                 </Col>
               </Row>
@@ -405,26 +374,25 @@ const columns = [
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {itemListSeMoCon.length > 0
-                      ? itemListSeMoCon.map((row) => (
-                        <TableRow key={0}>
-                          <TableCell component="th" scope="row">
-                            {itemListSeMo[currentIndx]?.serialNo.map(
-                              (serailNoT) => (
-                                <h5 key={serailNoT}>{serailNoT}</h5>
-                              )
-                            )}
-                          </TableCell>
-                          <TableCell component="th" scope="row">
-                            {itemListSeMo[currentIndx]?.modelNo.map(
-                              (modelNoT) => (
-                                <h5 key={modelNoT}>{modelNoT}</h5>
-                              )
-                            )}
-                          </TableCell>
-                           
-                        </TableRow>
-                      ))
+                    {allData[currentIndx]?.data.serialNo.length > 0
+                      ? allData[currentIndx]?.data.serialNo.map((row) => (
+                          <TableRow key={0}>
+                            <TableCell component="th" scope="row">
+                              {allData[currentIndx]?.data.serialNo.map(
+                                (serailNoT) => (
+                                  <h5 key={serailNoT}>{serailNoT}</h5>
+                                )
+                              )}
+                            </TableCell>
+                            <TableCell component="th" scope="row">
+                              {allData[currentIndx]?.data.modelNo.map(
+                                (modelNoT) => (
+                                  <h5 key={modelNoT}>{modelNoT}</h5>
+                                )
+                              )}
+                            </TableCell>
+                          </TableRow>
+                        ))
                       : ""}
                   </TableBody>
                 </Table>
@@ -434,18 +402,17 @@ const columns = [
         </div>
       </Modal>
 
-
       <Grid container spacing={4}>
         <Grid item xs={12}>
           <MUIDataTable
             title={<span className="title_Span">Managed Stock History</span>}
             className="selling_histable"
             sty
-            data={TableData}
+            data={tableData}
             columns={columns}
             options={{
               selectableRows: "none",
-              customToolbarSelect: () => { },
+              customToolbarSelect: () => {},
               onRowClick: (rowData, rowMeta) => {
                 setCurrentIndx(rowMeta.dataIndex);
               },

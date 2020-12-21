@@ -375,7 +375,13 @@ export default function Add_Item() {
                                                                 .discount ===
                                                                 Math.round(
                                                                   discount
-                                                                )
+                                                                ) &&
+                                                              ob.data()
+                                                                .stock_type ===
+                                                                "main" &&
+                                                              ob.data()
+                                                                .modelNo ===
+                                                                modelNosList[0]
                                                           )
                                                         ) {
                                                           var newArray = allItems.docs.filter(
@@ -418,7 +424,13 @@ export default function Add_Item() {
                                                                 .discount ===
                                                                 Math.round(
                                                                   discount
-                                                                )
+                                                                ) &&
+                                                              ob.data()
+                                                                .stock_type ===
+                                                                "main" &&
+                                                              ob.data()
+                                                                .modelNo ===
+                                                                modelNosList[0]
                                                           );
                                                           if (newArray) {
                                                             let modelNoNewList = modelNosList.concat(

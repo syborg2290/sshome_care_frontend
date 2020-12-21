@@ -82,7 +82,6 @@ export default function Stock_History() {
             Date: moment(element.data()?.timestamp?.toDate()).format(
               "dddd, MMMM Do YYYY"
             ),
-             Stock_Type: element.data().type,
             Action: (
               <div className="table_icon">
                 <VisibilityIcon onClick={showModal} />
@@ -138,16 +137,6 @@ export default function Stock_History() {
 
     {
       name: "Date",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
-
-     {
-      name: "Stock_Type",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -388,12 +377,11 @@ export default function Stock_History() {
                     ).format("dddd, MMMM Do YYYY, h:mm:ss a")}
                   </span>
                 </Col>
-                 <Col span={12}>STOCK TYPE</Col>
+                <Col span={12}>STOCK TYPE</Col>
                 <Col span={12}>
                   <span className="load_Item">
                     {" "}
-                    <span className="colan">:</span>{" "}
-                   ABC Main
+                    <span className="colan">:</span>Main
                   </span>
                 </Col>
               </Row>

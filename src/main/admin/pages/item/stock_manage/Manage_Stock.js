@@ -14,7 +14,7 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
-import { useHistory } from "react-router-dom"
+import { useHistory } from "react-router-dom";
 import {
   NotificationContainer,
   NotificationManager,
@@ -26,7 +26,6 @@ import SelectedItem from "./components/Selected_item_Model/Selected_Item";
 
 // icons
 import VisibilityIcon from "@material-ui/icons/Visibility";
-
 
 // styles
 import "./Manage_Stock.css";
@@ -42,17 +41,16 @@ export default function Manage_Stock() {
   const [selectedItemModel, setSelectedItemModel] = useState(false);
   // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
-    // eslint-disable-next-line
+  // eslint-disable-next-line
   const [managedHistory, setManagedHistory] = useState(false);
-   // eslint-disable-next-line
+  // eslint-disable-next-line
   var [selectedItems, setSelectedItems] = useState([]);
 
-
-  // let socket = socketIOClient(RealtimeServerApi);
-
   const [itemListSeMo, setItemListSeMo] = useState([]);
-
   const [itemListSeMoCon, setItemListSeMoCon] = useState([]);
+
+  // eslint-disable-next-line
+  const [itemList, setItemList] = useState([]);
 
   let history = useHistory();
 
@@ -60,21 +58,30 @@ export default function Manage_Stock() {
     setVisible(true);
   };
 
- 
+  const selectedModalClose = () => {
+    window.location.reload();
+    setSelectedItemModel(false);
+  };
 
-   const onSelectedItem = () => {
+  const onSelectedItem = () => {
     if (selectedItems.length > 0) {
-     setSelectedItemModel(true);
+      selectedItems.forEach((reItem) => {
+        itemList.push({
+          qty: 1,
+          item: reItem,
+          paymentWay: "PayandGo",
+        });
+      });
+      setSelectedItemModel(true);
     } else {
       NotificationManager.info("Please select items");
     }
   };
 
-   const  ManagedHistory = () => {
+  const ManagedHistory = () => {
     setManagedHistory(true);
     history.push("/admin/pages/managedHistory");
   };
-
 
   useEffect(() => {
     window.addEventListener("offline", function (e) {
@@ -124,7 +131,7 @@ export default function Manage_Stock() {
               thousandSeparator={true}
               prefix={" "}
             />,
-             element.data().stockType,
+            element.data().stock_type,
             <div
               color="secondary"
               size="small"
@@ -148,10 +155,7 @@ export default function Manage_Stock() {
               )}
             </div>,
             <div className="table_icon">
-                <VisibilityIcon
-                    onClick={showModal}
-                />
-             
+              <VisibilityIcon onClick={showModal} />
             </div>,
           ]);
         });
@@ -163,7 +167,6 @@ export default function Manage_Stock() {
       });
     // eslint-disable-next-line
   }, []);
-
 
   const columns = [
     {
@@ -220,7 +223,7 @@ export default function Manage_Stock() {
         }),
       },
     },
-      {
+    {
       name: "Stock_Type",
       options: {
         filter: true,
@@ -251,7 +254,6 @@ export default function Manage_Stock() {
 
   return (
     <>
-
       <Modal
         title={
           <span className="model_title">
@@ -470,11 +472,11 @@ export default function Manage_Stock() {
                     ).format("dddd, MMMM Do YYYY, h:mm:ss a")}
                   </span>
                 </Col>
-                 <Col span={12}>STOCK TYPE</Col>
+                <Col span={12}>STOCK TYPE</Col>
                 <Col span={12}>
-                 <span className="load_Item">
+                  <span className="load_Item">
                     <span className="colan">:</span>
-                  ABC Main
+                    {allTtemData[currentIndx]?.data?.stock_type}
                   </span>
                 </Col>
               </Row>
@@ -522,20 +524,23 @@ export default function Manage_Stock() {
         </div>
       </Modal>
 
-        {/*Start Selected Item Model */}
+      {/*Start Selected Item Model */}
 
       <Modal
         visible={selectedItemModel}
         footer={null}
         className="selectedItems"
         onCancel={() => {
-          setSelectedItemModel(false);
+          window.location.reload();
         }}
       >
-        <div >
+        <div>
           <div>
             <div>
-              <SelectedItem />
+              <SelectedItem
+                closeModel={selectedModalClose}
+                itemListProps={itemList}
+              />
             </div>
           </div>
         </div>
@@ -543,27 +548,27 @@ export default function Manage_Stock() {
 
       {/* End Selected Item Model  */}
 
-    <Grid container spacing={4}>
-       <Grid item xs={10}>
-      <Button
-        variant="contained"
-        className="btn_manage_his"
-        onClick={ManagedHistory}
-      >
-      Exchange History
-      </Button>
-    </Grid>
-    <Grid item xs={2}>
-       <Button
-        variant="contained"
-        color="primary"
-        className="btn_manage_itm"
-        onClick={onSelectedItem}
-      >
-       Manage Item
-      </Button>
+      <Grid container spacing={4}>
+        <Grid item xs={10}>
+          <Button
+            variant="contained"
+            className="btn_manage_his"
+            onClick={ManagedHistory}
+          >
+            Exchange History
+          </Button>
         </Grid>
+        <Grid item xs={2}>
+          <Button
+            variant="contained"
+            color="primary"
+            className="btn_manage_itm"
+            onClick={onSelectedItem}
+          >
+            Manage Item
+          </Button>
         </Grid>
+      </Grid>
 
       <Grid className="tbl_Container" container spacing={4}>
         <Grid item xs={12}>

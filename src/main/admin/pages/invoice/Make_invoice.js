@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Spin, DatePicker, Space, Checkbox, Radio } from "antd";
-import { PrinterFilled } from "@ant-design/icons";
+import { ConsoleSqlOutlined, PrinterFilled } from "@ant-design/icons";
 import { useLocation, useHistory } from "react-router-dom";
 import {
   Button,
@@ -72,6 +72,7 @@ function Make_invoice() {
   const [documentCharges, setDocumentCharges] = useState(0);
   const [visibleSerial, setVisibleSerial] = useState(false);
   const [invoiceStatus, setInvoiceStatus] = useState("new");
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   const [inputsSerialNo, setInputsSerialNo] = useState({});
   // eslint-disable-next-line
@@ -91,12 +92,16 @@ function Make_invoice() {
 
   const addInput = () => {
     setInputsSerialNo({
-      ...inputsSerialNo,
-      [Object.keys(inputsSerialNo).length]: "",
+      [currentIndex]: {
+        ...inputsSerialNo,
+        [Object.keys(inputsSerialNo).length]: "",
+      },
     });
   };
   const handleChangeAddSerialInputs = (e) => {
-    setInputsSerialNo({ ...inputsSerialNo, [e.target.id]: e.target.value });
+    setInputsSerialNo({
+      [currentIndex]: { ...inputsSerialNo, [e.target.id]: e.target.value },
+    });
   };
 
   useEffect(() => {
@@ -443,6 +448,7 @@ function Make_invoice() {
         new Date(intialTimestamp?.seconds * 1000).getMonth() + 1
       )
     );
+
     if (tablerows.some((ob) => ob.customer !== null)) {
       if (deadlineTimestamp !== null) {
         let randomNumber = Math.floor(Math.random() * 1000000000) + 1000;
@@ -613,6 +619,8 @@ function Make_invoice() {
                                                 ? 0
                                                 : itemDiscount[one.i],
                                             item_name: one.title,
+                                            stock_type:
+                                              tablerows[0].item.stock_type,
                                           };
                                           arrayItems.push(objItem);
                                         }
@@ -746,20 +754,66 @@ function Make_invoice() {
                                                 .modelNo;
                                               chassisiNoList = newArray.data()
                                                 .chassisNo;
-                                              serialNoList.splice(
-                                                0,
-                                                itemQty[itemUDoc.i]
-                                              );
+
+                                              //++++++++++++++++++++++++++++++++++++++++++++
+                                              let countOfExist = 0;
+                                              for (
+                                                let q = 0;
+                                                q <
+                                                Object.keys(
+                                                  inputsSerialNo[itemUDoc.i]
+                                                ).length;
+                                                q++
+                                              ) {
+                                                if (
+                                                  serialNoList.indexOf(
+                                                    inputsSerialNo[itemUDoc.i][
+                                                      q
+                                                    ]
+                                                  ) !== -1
+                                                ) {
+                                                  countOfExist++;
+                                                  let indexVal = serialNoList.indexOf(
+                                                    inputsSerialNo[itemUDoc.i][
+                                                      q
+                                                    ]
+                                                  );
+                                                  serialNoList.splice(
+                                                    indexVal,
+                                                    1
+                                                  );
+                                                } else {
+                                                  Console.log(
+                                                    "Value does not exists!"
+                                                  );
+                                                }
+                                              }
+
+                                              let spliceCount =
+                                                itemQty[itemUDoc.i] -
+                                                countOfExist;
+
+                                              if (spliceCount <= 0) {
+                                                serialNoList.splice(
+                                                  0,
+                                                  spliceCount
+                                                );
+                                              }
+
                                               modelNoList.splice(
                                                 0,
                                                 itemQty[itemUDoc.i]
                                               );
+
                                               // if (chassisiNoList[0] !== null) {
                                               //   chassisiNoList.splice(
                                               //     0,
                                               //     itemQty[itemUDoc.i]
                                               //   );
                                               // }
+
+                                              //++++++++++++++++++++++++++++++++++++++++++++
+
                                               if (invoiceStatus === "new") {
                                                 await db
                                                   .collection("item")
@@ -846,6 +900,8 @@ function Make_invoice() {
                                                 ? 0
                                                 : itemDiscount[one.i],
                                             item_name: one.title,
+                                            stock_type:
+                                              tablerows[0].item.stock_type,
                                           };
                                           arrayItems.push(objItem);
                                         }
@@ -978,20 +1034,66 @@ function Make_invoice() {
                                                 .modelNo;
                                               chassisiNoList = newArray.data()
                                                 .chassisNo;
-                                              serialNoList.splice(
-                                                0,
-                                                itemQty[itemUDoc.i]
-                                              );
+
+                                              //++++++++++++++++++++++++++++++++++++++++++++
+                                              let countOfExist = 0;
+                                              for (
+                                                let q = 0;
+                                                q <
+                                                Object.keys(
+                                                  inputsSerialNo[itemUDoc.i]
+                                                ).length;
+                                                q++
+                                              ) {
+                                                if (
+                                                  serialNoList.indexOf(
+                                                    inputsSerialNo[itemUDoc.i][
+                                                      q
+                                                    ]
+                                                  ) !== -1
+                                                ) {
+                                                  countOfExist++;
+                                                  let indexVal = serialNoList.indexOf(
+                                                    inputsSerialNo[itemUDoc.i][
+                                                      q
+                                                    ]
+                                                  );
+                                                  serialNoList.splice(
+                                                    indexVal,
+                                                    1
+                                                  );
+                                                } else {
+                                                  Console.log(
+                                                    "Value does not exists!"
+                                                  );
+                                                }
+                                              }
+
+                                              let spliceCount =
+                                                itemQty[itemUDoc.i] -
+                                                countOfExist;
+
+                                              if (spliceCount <= 0) {
+                                                serialNoList.splice(
+                                                  0,
+                                                  spliceCount
+                                                );
+                                              }
+
                                               modelNoList.splice(
                                                 0,
                                                 itemQty[itemUDoc.i]
                                               );
+
                                               // if (chassisiNoList[0] !== null) {
                                               //   chassisiNoList.splice(
                                               //     0,
                                               //     itemQty[itemUDoc.i]
                                               //   );
                                               // }
+
+                                              //++++++++++++++++++++++++++++++++++++++++++++
+
                                               if (invoiceStatus === "new") {
                                                 await db
                                                   .collection("item")
@@ -1046,6 +1148,7 @@ function Make_invoice() {
             qty: parseInt(itemQty[one.i]),
             discount: itemDiscount[one.i] === "" ? 0 : itemDiscount[one.i],
             item_name: one.title,
+            stock_type: tablerows[0].item.stock_type,
           };
           arrayItems.push(objItem);
         }
@@ -1086,11 +1189,33 @@ function Make_invoice() {
         serialNoList = newArray.data().serialNo;
         modelNoList = newArray.data().modelNo;
         chassisiNoList = newArray.data().chassisNo;
-        serialNoList.splice(0, itemQty[itemUDoc.i]);
+
+        //++++++++++++++++++++++++++++++++++++++++++++
+        let countOfExist = 0;
+        for (
+          let q = 0;
+          q < Object.keys(inputsSerialNo[itemUDoc.i]).length;
+          q++
+        ) {
+          if (serialNoList.indexOf(inputsSerialNo[itemUDoc.i][q]) !== -1) {
+            countOfExist++;
+            let indexVal = serialNoList.indexOf(inputsSerialNo[itemUDoc.i][q]);
+            serialNoList.splice(indexVal, 1);
+          } else {
+            Console.log("Value does not exists!");
+          }
+        }
+
+        let spliceCount = itemQty[itemUDoc.i] - countOfExist;
+
+        if (spliceCount <= 0) {
+          serialNoList.splice(0, spliceCount);
+        }
+
         modelNoList.splice(0, itemQty[itemUDoc.i]);
-        // if (chassisiNoList[0] !== null) {
-        //   chassisiNoList.splice(0, itemQty[itemUDoc.i]);
-        // }
+
+        //++++++++++++++++++++++++++++++++++++++++++++
+
         if (invoiceStatus === "new") {
           await db
             .collection("item")
@@ -1302,7 +1427,12 @@ function Make_invoice() {
                             />
                           </TableCell>
                           <TableCell align="center">
-                            <AddCircleOutlineIcon onClick={showModal} />
+                            <AddCircleOutlineIcon
+                              onClick={() => {
+                                setCurrentIndex(row.i);
+                                showModal();
+                              }}
+                            />
                           </TableCell>
 
                           <TableCell align="right">
@@ -1834,40 +1964,8 @@ function Make_invoice() {
                     <Grid item xs={12} sm={12}>
                       <br />
                     </Grid>
-                    <Grid className="lbl_MI" item xs={12} sm={4}>
-                      Stock Type
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                      <Space direction="vertical">
-                        <FormControl variant="outlined" className="fcontrol">
-                          <Select
-                            className="roll_selector"
-                            size="small"
-                            native
-                            label=""
-                            onChange={handleChange}
-                            value={selectedType}
-                          >
-                            <option onChange={handleChange} value={"main"}>
-                              main
-                            </option>
-                            <option onChange={handleChange} value={"shop"}>
-                              shop
-                            </option>
-                            {allRoot.map((each) => (
-                              <option
-                                onChange={handleChange}
-                                key={each}
-                                value={each}
-                              >
-                                {each}
-                              </option>
-                            ))}
-                            {/* <option value={10}>Main</option> */}
-                          </Select>
-                        </FormControl>
-                      </Space>
-                    </Grid>
+                    <Grid className="lbl_MI" item xs={12} sm={4}></Grid>
+                    <Grid item xs={12} sm={6}></Grid>
                     <Grid item xs={12} sm={2}></Grid>
                     <Grid className="txt_ip_setting" item xs={12} sm={12}>
                       <hr />

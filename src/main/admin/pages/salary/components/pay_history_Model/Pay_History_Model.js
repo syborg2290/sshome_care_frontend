@@ -111,6 +111,19 @@ export default function Pay_History_Model() {
         }),
       },
     },
+     {
+      name: "Purchasing_Goods",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: {
+            fontSize: "15px",
+            color: "black",
+            fontWeight: "600",
+          },
+        }),
+      },
+    },
     {
       name: "Salary_Advance",
       options: {
@@ -314,7 +327,16 @@ export default function Pay_History_Model() {
                   thousandSeparator={true}
                   prefix={" "}
                 />
+              ), 
+               Purchasing_Goods: (
+                <CurrencyFormat
+                  value={678656565}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
               ),
+              
               Salary_Advance: (
                 <CurrencyFormat
                   value={saDoc.data()?.advance}

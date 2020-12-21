@@ -915,9 +915,7 @@ export default function Add_Paysheet_Model({ nic }) {
   const [goods, setGoods] = useState(0);
   const [goodsBalanceInitial, setGoodsBalanceInitial] = useState(0);
   const [goodsBalance, setGoodsBalance] = useState(0);
-  const [itemValue, setItemValue] = useState(0);
-  // eslint-disable-next-line
-  const [paidAmount, setPaidAmount] = useState(0);
+
   const [advance, setAdvance] = useState(0);
   const [loan, setLoan] = useState(0);
   const [loanBalance, setLoanBalance] = useState(0);
@@ -971,7 +969,6 @@ export default function Add_Paysheet_Model({ nic }) {
           purchesGoods = purchesGoods + eachDataPu.data().total;
         });
         purchesGoodsInitial = purchesGoods;
-        setItemValue(purchesGoods);
       });
 
     db.collection("goods_paid")
@@ -983,7 +980,6 @@ export default function Add_Paysheet_Model({ nic }) {
           plusValues = plusValues + parseInt(eachPaid.data().paid_value);
         });
         plusValuesGoodsInitial = plusValues;
-        setPaidAmount(plusValues);
       });
 
     setGoodsBalance(

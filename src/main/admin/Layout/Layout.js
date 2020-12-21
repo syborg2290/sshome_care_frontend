@@ -35,8 +35,6 @@ import EmployeePurchasing from "../pages/employee/components/employee_purchasing
 import EmployeeInvoice from "../pages/employee/components/employee_purchasing/components/employee_make_invoice/Employee_Invoice";
 import PurchasedHistory from "../pages/employee/components/purchased_history/Purchased_History";
 
-import RevenueHistory from "../pages/repairs/revenue_item_history/Revenue_History";
-
 // pages
 import Dashboard from "../pages/dashboard/Dashboard";
 import MakeInvoiceTable from "../pages/make_invoice/Make_Invoice_table";
@@ -144,10 +142,7 @@ function Layout(props) {
               path="/admin/pages/purchasedHistory"
               component={PurchasedHistory}
             />
-             <Route
-              path="/admin/pages/revenueHistory"
-              component={RevenueHistory}
-            />
+            
           </Switch>
         </div>
       </>

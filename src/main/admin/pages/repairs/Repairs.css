@@ -67,16 +67,4 @@
   border-radius: 8px 8px 8px 8px !important;
 }
 
-.btn_AddRevenue {
-  color: rgba(248, 248, 248, 0.945) !important;
-  background-color: rgb(28, 9, 63) !important;
-  margin-top: 80px !important;
-  float: right !important;
-}
-
-.btn_HisRevenue {
-  color: rgba(248, 248, 248, 0.945) !important;
-  background-color: rgb(20, 65, 78) !important;
-  margin-top: 80px !important;
-  float: right !important;
-}
+/* */

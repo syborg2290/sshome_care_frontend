@@ -913,7 +913,10 @@ export default function Add_Paysheet_Model({ nic }) {
   const [securityDeposit, setSecurityDeposit] = useState(0);
   const [deduction, setDeduction] = useState(0);
   const [goods, setGoods] = useState(0);
+  const [goodsBalanceInitial, setGoodsBalanceInitial] = useState(0);
+  const [goodsBalance, setGoodsBalance] = useState(0);
   const [itemValue, setItemValue] = useState(0);
+  // eslint-disable-next-line
   const [paidAmount, setPaidAmount] = useState(0);
   const [advance, setAdvance] = useState(0);
   const [loan, setLoan] = useState(0);
@@ -956,6 +959,8 @@ export default function Add_Paysheet_Model({ nic }) {
       history.push("/connection_lost");
     });
     setLoading(true);
+    let purchesGoodsInitial = 0;
+    let plusValuesGoodsInitial = 0;
 
     db.collection("emp_purchased")
       .where("nic", "==", nic)
@@ -965,6 +970,7 @@ export default function Add_Paysheet_Model({ nic }) {
         reEmpPurchased.docs.forEach((eachDataPu) => {
           purchesGoods = purchesGoods + eachDataPu.data().total;
         });
+        purchesGoodsInitial(purchesGoods);
         setItemValue(purchesGoods);
       });
 
@@ -976,8 +982,26 @@ export default function Add_Paysheet_Model({ nic }) {
         reGoods.docs.forEach((eachPaid) => {
           plusValues = plusValues + parseInt(eachPaid.data().paid_value);
         });
+        plusValuesGoodsInitial(plusValues);
         setPaidAmount(plusValues);
       });
+
+    setGoodsBalance(
+      purchesGoodsInitial - plusValuesGoodsInitial <= 0
+        ? 0
+        : purchesGoodsInitial - plusValuesGoodsInitial
+    );
+    setGoodsBalanceInitial(
+      purchesGoodsInitial - plusValuesGoodsInitial <= 0
+        ? 0
+        : purchesGoodsInitial - plusValuesGoodsInitial
+    );
+
+    setGoods(
+      purchesGoodsInitial - plusValuesGoodsInitial <= 0
+        ? 0
+        : purchesGoodsInitial - plusValuesGoodsInitial
+    );
 
     db.collection("salary")
       .where("nic", "==", nic)
@@ -1610,6 +1634,7 @@ export default function Add_Paysheet_Model({ nic }) {
       arresTarget: arresTarget,
       exCard: exCard,
       cashSale: cashSale,
+      goodsValue: goods,
       root: root,
       attendanceList: JSON.stringify(attendanceList),
       shortageList: JSON.stringify(shortageList),
@@ -2731,7 +2756,7 @@ export default function Add_Paysheet_Model({ nic }) {
                 />
               </Grid>
               <Grid className="lbl_topi" item xs={12} sm={4}>
-                Purchased_Goods(LKR)
+                purchased Goods(LKR)
               </Grid>
               <Grid item xs={12} sm={1}>
                 :
@@ -2743,13 +2768,20 @@ export default function Add_Paysheet_Model({ nic }) {
                   required
                   fullWidth
                   type="number"
-                  label="Purchasing Goods"
+                  label="purchased Goods"
                   size="small"
                   InputProps={{ inputProps: { min: 0 } }}
                   value={goods}
                   onChange={(e) => {
                     if (e.target.value !== "") {
                       setGoods(parseInt(e.target.value.trim()));
+                      setGoodsBalance(
+                        goodsBalanceInitial - parseInt(e.target.value.trim()) <=
+                          0
+                          ? 0
+                          : goodsBalanceInitial -
+                              parseInt(e.target.value.trim())
+                      );
                     }
                   }}
                 />
@@ -2775,7 +2807,7 @@ export default function Add_Paysheet_Model({ nic }) {
                     textAlign: "center",
                   }}
                 >
-                  Paid Amount : {paidAmount}
+                  Balance : {goodsBalance}
                 </p>
               </Grid>
               <Grid className="lbl_topi" item xs={12} sm={4}>

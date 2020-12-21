@@ -45,11 +45,11 @@ function Employee_Invoice() {
   const [tablerows, setTableRows] = useState([]);
   const [itemQty, setItemQty] = useState({});
   const [itemDP, setItemDP] = useState({});
-  const [dpayment, setDpayment] = useState(0);
   const [itemDiscount, setItemDiscount] = useState({});
   const [totalDiscount, setTotalDiscount] = useState(0);
-
+  // eslint-disable-next-line
   const [days, setDays] = useState(new Date().getDay());
+  // eslint-disable-next-line
   const [dates, setDates] = useState(new Date().getDate());
   const [intialTimestamp, setInititialTimestamp] = useState(null);
   const [visibleSerial, setVisibleSerial] = useState(false);
@@ -199,7 +199,6 @@ function Employee_Invoice() {
             nic: reEmployee.data().nic,
             fname: reEmployee.data().fname,
             lname: reEmployee.data().lname,
-            nic: reEmployee.data().nic,
             items: arrayItems,
             total: subTotalFunc() - (totalDiscount === "" ? 0 : totalDiscount),
             discount: totalDiscount === "" ? 0 : totalDiscount,

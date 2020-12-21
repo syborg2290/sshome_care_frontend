@@ -28,6 +28,7 @@ import "./Selected_Item.css";
 export default function Selected_Item({ itemListProps, closeModel }) {
   const [selectedType, setSelectedType] = useState("shop");
   const [itemsData, setItemsData] = useState([]);
+  // eslint-disable-next-line
   const [qty, setQty] = useState({});
   const [allRoot, setAllRoot] = useState([]);
   // eslint-disable-next-line
@@ -409,6 +410,7 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                 variant="contained"
                 color="primary"
                 className="btn_SelectdeDone"
+                onClick={exchangeItems}
               >
                 {isLoadingSubmit ? <Spin size="large" /> : "Done"}
               </Button>

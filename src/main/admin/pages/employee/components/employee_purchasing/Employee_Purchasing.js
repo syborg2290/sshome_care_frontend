@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Grid, Button } from "@material-ui/core";
-import { Spin, Modal } from "antd";
+import { Spin } from "antd";
 import MUIDataTable from "mui-datatables";
 
 import {
@@ -30,6 +30,7 @@ export default function Employee_Purchasing() {
 
   // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
+  // eslint-disable-next-line
   const [isLoaingToInvoice, setLoaingToInvoice] = useState(false);
   // eslint-disable-next-line
   var [selectedItems, setSelectedItems] = useState([]);

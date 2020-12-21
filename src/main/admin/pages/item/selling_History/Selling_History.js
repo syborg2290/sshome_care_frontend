@@ -25,8 +25,6 @@ export default function Selling_History() {
   const [allTtemData, setAllItemData] = useState([]);
   const [itemTableData, setItemTableData] = useState([]);
   const [visible, setVisible] = useState(false);
-  const [itemListSeMo, setItemListSeMo] = useState([]);
-  const [itemListSeMoCon, setItemListSeMoCon] = useState([]);
 
   let history = useHistory();
 

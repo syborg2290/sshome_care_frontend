@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState , useEffect } from "react";
 import { TextField, Button } from "@material-ui/core";
 import { Spin } from "antd";
 
@@ -27,17 +27,13 @@ export default function Add_Customer({ close_model }) {
   const [root, setRoot] = useState("");
   const [validation, setValidation] = useState("");
   const [isLoadingSubmit, setLoadingSubmit] = useState(false);
-
-  // image 1
   const [imageFile, setImageFile] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
-  // image 2
-  const [imageFile2, setImageFile2] = useState(null);
-  const [imageUrl2, setImageUrl2] = useState(null);
-
   let history = useHistory();
+  
 
-  useEffect(() => {
+   useEffect(() => {
+
     window.addEventListener("offline", function (e) {
       history.push("/connection_lost");
     });
@@ -54,16 +50,8 @@ export default function Add_Customer({ close_model }) {
     }
   };
 
-  const onImageChange2 = (event) => {
-    if (event.target.files && event.target.files[0]) {
-      setImageFile2(event.target.files[0]);
-      let reader = new FileReader();
-      reader.onload = (e) => {
-        setImageUrl2(e.target.result);
-      };
-      reader.readAsDataURL(event.target.files[0]);
-    }
-  };
+
+   
 
   const submit = () => {
     setLoadingSubmit(true);
@@ -86,53 +74,59 @@ export default function Add_Customer({ close_model }) {
                   setLoadingSubmit(false);
                   setValidation("Customer already exists by MID");
                 } else {
-                  let randomNumber =
-                    Math.floor(Math.random() * 1000000000) + 1000;
-                  if (imageFile !== null) {
+                  if (imageFile === null) {
+                    db.collection("gami_sarani")
+                      .add({
+                        mid: mid,
+                        nic: nic,
+                        fname: fname,
+                        lname: lname,
+                        address1: addres1,
+                        addres2: addres2,
+                        mobile1: mobile1,
+                        mobile2: mobile2,
+                        root: root,
+                        currentDeposit: 0,
+                        photo: null,
+                        date: firebase.firestore.FieldValue.serverTimestamp(),
+                      })
+                      .then((_) => {
+                        setLoadingSubmit(false);
+                        close_model();
+                        window.location.reload();
+                      });
+                  } else {
                     await storage
-                      .ref(`images/${imageFile.name}${randomNumber}`)
+                      .ref(`images/${imageFile.name}`)
                       .put(imageFile);
-                  }
 
-                  if (imageFile2 !== null) {
-                    await storage
-                      .ref(`images/${imageFile2.name}${randomNumber}`)
-                      .put(imageFile2);
+                    storage
+                      .ref("images")
+                      .child(imageFile.name)
+                      .getDownloadURL()
+                      .then((url) => {
+                        db.collection("gami_sarani")
+                          .add({
+                            mid: mid,
+                            nic: nic,
+                            fname: fname,
+                            lname: lname,
+                            address1: addres1,
+                            addres2: addres2,
+                            mobile1: mobile1,
+                            mobile2: mobile2,
+                            root: root,
+                            currentDeposit: 0,
+                            photo: url,
+                            date: firebase.firestore.FieldValue.serverTimestamp(),
+                          })
+                          .then((_) => {
+                            setLoadingSubmit(false);
+                            close_model();
+                            window.location.reload();
+                          });
+                      });
                   }
-
-                  storage
-                    .ref("images")
-                    .child(imageFile.name + randomNumber)
-                    .getDownloadURL()
-                    .then((front) => {
-                      storage
-                        .ref("images")
-                        .child(imageFile2.name + randomNumber)
-                        .getDownloadURL()
-                        .then((back) => {
-                          db.collection("gami_sarani")
-                            .add({
-                              mid: mid,
-                              nic: nic,
-                              fname: fname,
-                              lname: lname,
-                              address1: addres1,
-                              addres2: addres2,
-                              mobile1: mobile1,
-                              mobile2: mobile2,
-                              root: root,
-                              currentDeposit: 0,
-                              front: front,
-                              back: back,
-                              date: firebase.firestore.FieldValue.serverTimestamp(),
-                            })
-                            .then((_) => {
-                              setLoadingSubmit(false);
-                              close_model();
-                              window.location.reload();
-                            });
-                        });
-                    });
                 }
               });
           }
@@ -142,6 +136,8 @@ export default function Add_Customer({ close_model }) {
       setValidation("Customer's NIC format is invalid!");
     }
   };
+
+
 
   return (
     <Container component="main" className="main_container_sarani">
@@ -319,7 +315,7 @@ export default function Add_Customer({ close_model }) {
             <Grid className="txt_Labels" item xs={12} sm={2}>
               Root to Home :
             </Grid>
-            <Grid item xs={12} sm={8}>
+            <Grid item xs={12} sm={5}>
               <TextField
                 className="txt_rHome"
                 autoComplete="rHome"
@@ -337,11 +333,10 @@ export default function Add_Customer({ close_model }) {
                 }}
               />
             </Grid>
-            <Grid item xs={12} sm={2}></Grid>
             <Grid className="txt_LabelsImg" item xs={12} sm={1}>
               Image :
             </Grid>
-            <Grid item xs={12} sm={5}>
+            <Grid item xs={12} sm={4}>
               <input
                 type="file"
                 accept="image/*"
@@ -358,35 +353,13 @@ export default function Add_Customer({ close_model }) {
                 }}
                 src={
                   imageUrl == null
-                    ? require("../../../../../../assets/avatar1132.jpg")
+                    ? require("../../../../../../assets/avatar.png")
                     : imageUrl
                 }
-                className="imageFront"
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <input
-                type="file"
-                accept="image/*"
-                name=""
-                onChange={onImageChange2}
                 className="image"
-                id="back_image"
-                hidden
-              />
-              <img
-                alt="back"
-                onClick={() => {
-                  document.getElementById("back_image").click();
-                }}
-                src={
-                  imageUrl2 == null
-                    ? require("../../../../../../assets/avater232.jpg")
-                    : imageUrl2
-                }
-                className="imageBack"
               />
             </Grid>
+            <Grid item xs={12} sm={6}></Grid>
           </Grid>
           <p className="validate_Edit">{validation}</p>
           <Grid container spacing={2}>

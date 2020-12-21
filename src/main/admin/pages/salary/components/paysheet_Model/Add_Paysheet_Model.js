@@ -912,6 +912,9 @@ export default function Add_Paysheet_Model({ nic }) {
   const [paidSecurityDepo, setPaidSecurityDepo] = useState(0);
   const [securityDeposit, setSecurityDeposit] = useState(0);
   const [deduction, setDeduction] = useState(0);
+  const [goods, setGoods] = useState(0);
+  const [itemValue, setItemValue] = useState(0);
+  const [paidAmount, setPaidAmount] = useState(0);
   const [advance, setAdvance] = useState(0);
   const [loan, setLoan] = useState(0);
   const [loanBalance, setLoanBalance] = useState(0);
@@ -2698,6 +2701,54 @@ export default function Add_Paysheet_Model({ nic }) {
                     }
                   }}
                 />
+              </Grid>
+               <Grid className="lbl_topi" item xs={12} sm={4}>
+               Purchasing_Goods(LKR)
+              </Grid>
+              <Grid item xs={12} sm={1}>
+                :
+              </Grid>
+              <Grid item xs={12} sm={7}>
+                <TextField
+                  autoComplete="good"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  type="number"
+                  label="Purchasing Goods"
+                  size="small"
+                  InputProps={{ inputProps: { min: 0 } }}
+                  value={goods}
+                  onChange={(e) => {
+                    if (e.target.value !== "") {
+                      setGoods(parseInt(e.target.value.trim()));
+                    }
+                  }}
+                />
+              </Grid>
+                <Grid item xs={12} sm={6}>
+                <p
+                  style={{
+                    color: "red",
+                    fontWeight: "bold",
+                    fontSize: "12px",
+                    textAlign: "center",
+                  }}
+                >
+                  Item Value : {itemValue}
+                </p>
+              </Grid>
+               <Grid item xs={12} sm={6}>
+                <p
+                  style={{
+                    color: "red",
+                    fontWeight: "bold",
+                    fontSize: "12px",
+                    textAlign: "center",
+                  }}
+                >
+                  Paid Amount : {paidAmount}
+                </p>
               </Grid>
               <Grid className="lbl_topi" item xs={12} sm={4}>
                 Salary Advance(LKR)

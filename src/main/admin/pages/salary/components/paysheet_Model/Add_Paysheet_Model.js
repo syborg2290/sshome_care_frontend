@@ -2703,7 +2703,7 @@ export default function Add_Paysheet_Model({ nic }) {
                 />
               </Grid>
                <Grid className="lbl_topi" item xs={12} sm={4}>
-               Purchasing_Goods(LKR)
+               purchased Goods(LKR)
               </Grid>
               <Grid item xs={12} sm={1}>
                 :
@@ -2715,7 +2715,7 @@ export default function Add_Paysheet_Model({ nic }) {
                   required
                   fullWidth
                   type="number"
-                  label="Purchasing Goods"
+                  label="purchased Goods"
                   size="small"
                   InputProps={{ inputProps: { min: 0 } }}
                   value={goods}
@@ -2747,7 +2747,7 @@ export default function Add_Paysheet_Model({ nic }) {
                     textAlign: "center",
                   }}
                 >
-                  Paid Amount : {paidAmount}
+                  Balance : {paidAmount}
                 </p>
               </Grid>
               <Grid className="lbl_topi" item xs={12} sm={4}>

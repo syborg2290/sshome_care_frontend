@@ -8,7 +8,8 @@ import moment from "moment";
 import "./CustomerDetailsModel.css";
 
 export default function customerDetailsModel({
-  photo,
+  front,
+  back,
   fname,
   lname,
   mid,
@@ -21,8 +22,6 @@ export default function customerDetailsModel({
   status,
   createdAt,
 }) {
-
- 
   return (
     <Row>
       <Col className="space_col" span={12}>
@@ -37,8 +36,8 @@ export default function customerDetailsModel({
           alt="Empty data"
           className="imageFront"
           src={
-            photo !== null
-              ? photo
+            front !== null
+              ? front
               : require("../../../../../../../assets/avatar1132.jpg")
           }
         />
@@ -48,7 +47,11 @@ export default function customerDetailsModel({
         <img
           alt="Empty data"
           className="imageBack"
-          src={require("../../../../../../../assets/avater232.jpg")}
+          src={
+            back !== null
+              ? back
+              : require("../../../../../../../assets/avater232.jpg")
+          }
         />
       </Col>
       <Col className="space_col" span={24}></Col>

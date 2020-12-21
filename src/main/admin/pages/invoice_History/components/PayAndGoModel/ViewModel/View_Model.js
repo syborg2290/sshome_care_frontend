@@ -241,19 +241,27 @@ export default function View_Model({ items_list_props, data }) {
                 <hr className="hr_topiSub" />
               </Grid>
               <Grid item xs={12} sm={6}></Grid>
-                <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={6}>
                 <img
                   alt="Empty data"
                   className="imageFront"
-                  src={require("../../../../../../../assets/avatar1132.jpg")}
-                 />
+                  src={
+                    customer.customerFrontURL !== null
+                      ? customer.customerFrontURL
+                      : require("../../../../../../../assets/avatar1132.jpg")
+                  }
+                />
               </Grid>
-                <Grid item xs={12} sm={6}>
-                  <img
+              <Grid item xs={12} sm={6}>
+                <img
                   alt="Empty data"
                   className="imageBack"
-                  src={require("../../../../../../../assets/avater232.jpg")}
-                 />
+                  src={
+                    customer.customerBackURL !== null
+                      ? customer.customerBackURL
+                      : require("../../../../../../../assets/avater232.jpg")
+                  }
+                />
               </Grid>
               <Grid className="lbl_topis" item xs={12} sm={3}>
                 Full Name
@@ -321,20 +329,28 @@ export default function View_Model({ items_list_props, data }) {
                   container
                   spacing={2}
                 >
-                <Grid item xs={12} sm={6}>
-                <img
-                  alt="Empty data"
-                  className="imageFront"
-                  src={require("../../../../../../../assets/avatar1132.jpg")}
-                 />
-              </Grid>
-                <Grid item xs={12} sm={6}>
-                  <img
-                  alt="Empty data"
-                  className="imageBack"
-                  src={require("../../../../../../../assets/avater232.jpg")}
-                 />
-              </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <img
+                      alt="Empty data"
+                      className="imageFront"
+                      src={
+                        si.trusteeFrontURL !== null
+                          ? si.trusteeFrontURL
+                          : require("../../../../../../../assets/avatar1132.jpg")
+                      }
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <img
+                      alt="Empty data"
+                      className="imageBack"
+                      src={
+                        si.trusteeBackURL !== null
+                          ? si.trusteeBackURL
+                          : require("../../../../../../../assets/avater232.jpg")
+                      }
+                    />
+                  </Grid>
                   <Grid className="lbl_topis" item xs={12} sm={3}>
                     Full Name
                   </Grid>
@@ -400,6 +416,15 @@ export default function View_Model({ items_list_props, data }) {
               return (
                 <Grid key={eachItem.item_name} container spacing={2}>
                   {" "}
+                  <Grid className="lbl_topis" item xs={12} sm={4}>
+                    Stock type
+                  </Grid>
+                  <Grid item xs={12} sm={1}>
+                    :
+                  </Grid>
+                  <Grid item xs={12} sm={7}>
+                    <p>{eachItem.stock_type}</p>
+                  </Grid>
                   <Grid className="lbl_topis" item xs={12} sm={4}>
                     Item Name
                   </Grid>

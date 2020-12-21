@@ -709,8 +709,8 @@ function Make_invoice() {
                                               tablerows[0].customer
                                                 .trustee1Mobile2,
                                             invoice_number: invoiceNumber,
-                                            trustee1FrontURL: trustee1ImageURLFront,
-                                            trustee1BackURL: trustee1ImageURLBack,
+                                            trusteeFrontURL: trustee1ImageURLFront,
+                                            trusteeBackURL: trustee1ImageURLBack,
                                             date: firebase.firestore.FieldValue.serverTimestamp(),
                                           });
 
@@ -748,8 +748,8 @@ function Make_invoice() {
                                                 tablerows[0].customer
                                                   .trustee2Mobile2,
                                               invoice_number: invoiceNumber,
-                                              trustee2FrontURL: trustee2ImageURLFront,
-                                              trustee2BackURL: trustee2ImageURLBack,
+                                              trusteeFrontURL: trustee2ImageURLFront,
+                                              trusteeBackURL: trustee2ImageURLBack,
                                               date: firebase.firestore.FieldValue.serverTimestamp(),
                                             });
                                           }

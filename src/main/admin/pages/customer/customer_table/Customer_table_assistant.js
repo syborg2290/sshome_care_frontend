@@ -107,7 +107,6 @@ export default function CustomerTable() {
   ];
 
   useEffect(() => {
-
     window.addEventListener("offline", function (e) {
       history2.push("/connection_lost");
     });
@@ -174,7 +173,8 @@ export default function CustomerTable() {
               <CustomerDetails
                 fname={customerAllData[currentIndx]?.data.fname}
                 lname={customerAllData[currentIndx]?.data.lname}
-                photo={customerAllData[currentIndx]?.data.photo}
+                front={customerAllData[currentIndx]?.data.customerFrontURL}
+                back={customerAllData[currentIndx]?.data.customerBackURL}
                 address1={customerAllData[currentIndx]?.data.address1}
                 address2={customerAllData[currentIndx]?.data.address2}
                 nic={customerAllData[currentIndx]?.data.nic}
@@ -245,10 +245,10 @@ export default function CustomerTable() {
               },
               selectableRows: "none",
               draggableColumns: {
-               enabled: true
-             },
+                enabled: true,
+              },
               responsive: "standard",
-              customToolbarSelect: () => { },
+              customToolbarSelect: () => {},
               filterType: "textField",
               download: false,
               print: false,
@@ -263,8 +263,8 @@ export default function CustomerTable() {
                   noMatch: isLoading ? (
                     <Spin className="tblSpinner" size="large" spinning="true" />
                   ) : (
-                      ""
-                    ),
+                    ""
+                  ),
                 },
               },
             }}

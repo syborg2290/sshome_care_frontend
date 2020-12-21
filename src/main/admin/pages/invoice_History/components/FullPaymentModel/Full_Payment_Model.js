@@ -116,6 +116,15 @@ export default function Full_Payment_Model({ items_list_props, data }) {
                   <Grid container spacing={2}>
                     {" "}
                     <Grid className="lbl_topis" item xs={12} sm={4}>
+                      Stock type
+                    </Grid>
+                    <Grid item xs={12} sm={1}>
+                      :
+                    </Grid>
+                    <Grid item xs={12} sm={7}>
+                      <p>{eachItem.stock_type}</p>
+                    </Grid>
+                    <Grid className="lbl_topis" item xs={12} sm={4}>
                       Item Name
                     </Grid>
                     <Grid item xs={12} sm={1}>

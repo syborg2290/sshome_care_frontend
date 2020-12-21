@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Grid, Container, Typography } from "@material-ui/core";
 import { Spin } from "antd";
 import CurrencyFormat from "react-currency-format";
-import db from "../../../../../../../config/firebase.js";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -11,10 +10,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 
-export default function View_History() {
-  const [itemsList, setItemList] = useState([]);
-
-
+export default function View_History({ itemsList }) {
   return (
     <>
       <Container component="main" className="conctainers_main">
@@ -23,10 +19,9 @@ export default function View_History() {
         </Typography>
         <Grid item xs={12} sm={12}>
           <hr className="titl_hr" />
-              </Grid>
-              
-              {itemsList.length === 0 ?
-                  (
+        </Grid>
+
+        {itemsList.length === 0 ? (
           <Spin
             size="large"
             style={{
@@ -83,28 +78,23 @@ export default function View_History() {
                       <p>{eachItem.qty}</p>
                     </Grid>
                     <Grid className="lbl_topis" item xs={12} sm={4}>
-                      Color
+                      Sale price(LKR)
                     </Grid>
                     <Grid item xs={12} sm={1}>
                       :
                     </Grid>
                     <Grid item xs={12} sm={7}>
-                      <p>{eachItem.color}</p>
+                      <p>{eachItem.downpayment}</p>
                     </Grid>
                     <Grid className="lbl_topis" item xs={12} sm={4}>
-                      Guarantee Period
+                      Stock type
                     </Grid>
                     <Grid item xs={12} sm={1}>
                       :
                     </Grid>
                     <Grid item xs={12} sm={7}>
-                      <p>
-                        {eachItem.gurantee_period.toString() +
-                          " " +
-                          eachItem.gurantee_type.value.toString()}
-                      </p>
+                      <p>{eachItem.stock_type}</p>
                     </Grid>
-                  
                   </Grid>
 
                   <TableContainer
@@ -126,22 +116,18 @@ export default function View_History() {
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {eachItem.listSe.length > 0
-                          ? eachItem?.listSe?.map((row) => (
+                        {eachItem.serialNo.length > 0
+                          ? eachItem?.serialNo?.map((row) => (
                               <TableRow key={0}>
                                 <TableCell component="th" scope="row">
-                                  {eachItem.listSe[0]?.serialNo?.map(
-                                    (serailNoT) => (
-                                      <h5 key={serailNoT}>{serailNoT}</h5>
-                                    )
-                                  )}
+                                  {eachItem?.serialNo?.map((serailNoT) => (
+                                    <h5 key={serailNoT}>{serailNoT}</h5>
+                                  ))}
                                 </TableCell>
                                 <TableCell component="th" scope="row">
-                                  {eachItem.listSe[0]?.modelNo?.map(
-                                    (modelNoT) => (
-                                      <h5 key={modelNoT}>{modelNoT}</h5>
-                                    )
-                                  )}
+                                  {eachItem?.modelNo?.map((modelNoT) => (
+                                    <h5 key={modelNoT}>{modelNoT}</h5>
+                                  ))}
                                 </TableCell>
                               </TableRow>
                             ))

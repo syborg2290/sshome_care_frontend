@@ -9,10 +9,9 @@ import {
 } from "react-notifications";
 import "react-notifications/lib/notifications.css";
 import CurrencyFormat from "react-currency-format";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 
 // components
-
 
 // icons
 import DescriptionIcon from "@material-ui/icons/Description";
@@ -34,18 +33,19 @@ export default function Employee_Purchasing() {
   const [isLoaingToInvoice, setLoaingToInvoice] = useState(false);
   // eslint-disable-next-line
   var [selectedItems, setSelectedItems] = useState([]);
-  // eslint-disable-next-line
-  const [itemList, setItemList] = useState([]);
+  const [empId, setEmpId] = useState(null);
+  const location = useLocation();
 
   let history = useHistory();
-
-
 
   useEffect(() => {
     window.addEventListener("offline", function (e) {
       history.push("/connection_lost");
     });
 
+    if (location.state?.detail !== null) {
+      setEmpId(location.state?.detail);
+    }
     db.collection("item")
       .orderBy("timestamp", "desc")
       .onSnapshot((snapshot) => {
@@ -89,6 +89,7 @@ export default function Employee_Purchasing() {
               thousandSeparator={true}
               prefix={" "}
             />,
+            element.data().stock_type,
             <div
               color="secondary"
               size="small"
@@ -123,11 +124,44 @@ export default function Employee_Purchasing() {
   const onMakeInvoid = () => {
     if (selectedItems.length > 0) {
       setLoaingToInvoice(true);
-       history.push("/admin/pages/employeeInvoice");
+      var nextData = [];
+
+      for (var i = 0; i < selectedItems.length; i++) {
+        let obj = {
+          i: i,
+          id: selectedItems[i].id,
+          serialNo: selectedItems[i].data.serialNo,
+          modelNo: selectedItems[i].data.modelNo,
+          chassisNo: selectedItems[i].data.chassisNo,
+          title: selectedItems[i].data.itemName,
+          unitprice: selectedItems[i].data.salePrice,
+          qty: selectedItems[i].data.qty,
+          item: selectedItems[i].data,
+          employee: empId,
+        };
+        nextData.push(obj);
+      }
+      if (nextData.length === selectedItems.length) {
+        if (empId !== undefined) {
+          let moveWith = {
+            pathname: "/admin/pages/employeeInvoice",
+            search: "?query=abc",
+            state: { detail: nextData },
+          };
+          history.push(moveWith);
+        } else {
+          NotificationManager.info("Please select the employee again(Go back)");
+        }
+      }
     } else {
-        setLoaingToInvoice(true);
-      
-      NotificationManager.info("Please select items");
+      setLoaingToInvoice(true);
+      if (empId !== undefined) {
+        NotificationManager.info("Please select items");
+      } else {
+        NotificationManager.info("Please select the employee again(Go back)");
+      }
+
+      setLoaingToInvoice(false);
     }
   };
 
@@ -187,6 +221,15 @@ export default function Employee_Purchasing() {
       },
     },
     {
+      name: "Stock_type",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
       name: "Status",
       options: {
         filter: true,
@@ -199,15 +242,15 @@ export default function Employee_Purchasing() {
 
   return (
     <>
-     
       <Button
         variant="contained"
         color="primary"
         className="btn_MakeInvoice_itm"
         endIcon={<DescriptionIcon />}
         onClick={onMakeInvoid}
+        disabled={empId === null}
       >
-       Make Invoice
+        Make Invoice
       </Button>
 
       <Grid className="tbl_Container" container spacing={4}>

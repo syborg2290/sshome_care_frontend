@@ -957,6 +957,28 @@ export default function Add_Paysheet_Model({ nic }) {
     });
     setLoading(true);
 
+    db.collection("emp_purchased")
+      .where("nic", "==", nic)
+      .get()
+      .then((reEmpPurchased) => {
+        let purchesGoods = 0;
+        reEmpPurchased.docs.forEach((eachDataPu) => {
+          purchesGoods = purchesGoods + eachDataPu.data().total;
+        });
+        setItemValue(purchesGoods);
+      });
+
+    db.collection("goods_paid")
+      .where("nic", "==", nic)
+      .get()
+      .then((reGoods) => {
+        let plusValues = 0;
+        reGoods.docs.forEach((eachPaid) => {
+          plusValues = plusValues + parseInt(eachPaid.data().paid_value);
+        });
+        setPaidAmount(plusValues);
+      });
+
     db.collection("salary")
       .where("nic", "==", nic)
       .get()
@@ -1598,6 +1620,12 @@ export default function Add_Paysheet_Model({ nic }) {
       date: date,
       net_Salery: netSalary,
     };
+
+    db.collection("goods_paid").add({
+      paid_value: goods,
+      nic: nic,
+      date: date,
+    });
 
     db.collection("salary")
       .where("nic", "==", nic)
@@ -2702,8 +2730,8 @@ export default function Add_Paysheet_Model({ nic }) {
                   }}
                 />
               </Grid>
-               <Grid className="lbl_topi" item xs={12} sm={4}>
-               Purchasing_Goods(LKR)
+              <Grid className="lbl_topi" item xs={12} sm={4}>
+                Purchased_Goods(LKR)
               </Grid>
               <Grid item xs={12} sm={1}>
                 :
@@ -2726,7 +2754,7 @@ export default function Add_Paysheet_Model({ nic }) {
                   }}
                 />
               </Grid>
-                <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={6}>
                 <p
                   style={{
                     color: "red",
@@ -2738,7 +2766,7 @@ export default function Add_Paysheet_Model({ nic }) {
                   Item Value : {itemValue}
                 </p>
               </Grid>
-               <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={6}>
                 <p
                   style={{
                     color: "red",

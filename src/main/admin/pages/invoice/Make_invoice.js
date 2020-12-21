@@ -1971,7 +1971,7 @@ function Make_invoice() {
 
                   <Grid container spacing={2}>
                     <Grid className="txt_ip_setting" item xs={12} sm={7}>
-                      Stock Type & Item Status :
+                      Invoice Status :
                     </Grid>
                     <Grid className="txt_ip_setting" item xs={12} sm={5}></Grid>
                     <Grid className="lbl_MI" item xs={12} sm={4}>

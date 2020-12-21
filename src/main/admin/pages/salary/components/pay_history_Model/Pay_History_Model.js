@@ -111,7 +111,7 @@ export default function Pay_History_Model() {
         }),
       },
     },
-     {
+    {
       name: "Purchasing_Goods",
       options: {
         filter: true,
@@ -215,7 +215,7 @@ export default function Pay_History_Model() {
         }),
       },
     },
-      {
+    {
       name: "Arreas_Target",
       options: {
         filter: true,
@@ -327,8 +327,8 @@ export default function Pay_History_Model() {
                   thousandSeparator={true}
                   prefix={" "}
                 />
-              ), 
-               Purchasing_Goods: (
+              ),
+              Purchased_Goods: (
                 <CurrencyFormat
                   value={678656565}
                   displayType={"text"}
@@ -336,7 +336,7 @@ export default function Pay_History_Model() {
                   prefix={" "}
                 />
               ),
-              
+
               Salary_Advance: (
                 <CurrencyFormat
                   value={saDoc.data()?.advance}
@@ -393,9 +393,9 @@ export default function Pay_History_Model() {
                   prefix={" "}
                 />
               ),
-               Arreas_Target: (
+              Arreas_Target: (
                 <CurrencyFormat
-                  value={12323422}
+                  value={saDoc.data()?.arresTarget}
                   displayType={"text"}
                   thousandSeparator={true}
                   prefix={" "}

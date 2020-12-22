@@ -24,7 +24,7 @@ import EditIcon from "@material-ui/icons/Edit";
 
 // styles
 import "./Item_table_assistant.css";
-
+ 
 import db from "../../../../../config/firebase.js";
 
 export default function Item_table_assistant() {

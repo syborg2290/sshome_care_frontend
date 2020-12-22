@@ -65,7 +65,7 @@ export default function Edit_model({
   const [validation, setValidation] = useState("");
 
   const [inputsSerialNo, setInputsSerialNo] = useState({});
-  const [inputsModelNo, setInputsModelNo] = useState({});
+  // const [inputsModelNo, setInputsModelNo] = useState({});
   //const [inputsChassisNo, setInputsChassisNo] = useState({});
 
   let history = useHistory();
@@ -156,17 +156,17 @@ export default function Edit_model({
   };
 
   //add InputModel No
-  const addInputModelNo = () => {
-    if (Object.keys(inputsModelNo).length < 1) {
-      setInputsModelNo({
-        ...inputsModelNo,
-        [Object.keys(inputsModelNo).length]: "",
-      });
-    }
-  };
-  const handleChangeAddModelNoInputs = (e, i) => {
-    setInputsModelNo({ ...inputsModelNo, [i]: e.target.value });
-  };
+  // const addInputModelNo = () => {
+  //   if (Object.keys(inputsModelNo).length < 1) {
+  //     setInputsModelNo({
+  //       ...inputsModelNo,
+  //       [Object.keys(inputsModelNo).length]: "",
+  //     });
+  //   }
+  // };
+  // const handleChangeAddModelNoInputs = (e, i) => {
+  //   setInputsModelNo({ ...inputsModelNo, [i]: e.target.value });
+  // };
 
   const radioOnChange = (e) => {
     setGuarantee({
@@ -184,7 +184,7 @@ export default function Edit_model({
 
       for (var k = 0; k < Object.keys(inputsSerialNo).length; k++) {
         serialNosList.push(inputsSerialNo[k]);
-        modelNosList.push(inputsModelNo[0]);
+        // modelNosList.push(inputsModelNo[0]);
       }
 
       let duplicatesSerial = serialNosList.reduce(
@@ -722,7 +722,7 @@ export default function Edit_model({
               </Grid>
             </Grid>
 
-            <Grid container spacing={2}>
+            {/* <Grid container spacing={2}>
               <Grid item xs={12} sm={4}>
                 <Button className="inputess" onClick={addInputModelNo}>
                   Model Numbers
@@ -758,7 +758,7 @@ export default function Edit_model({
                   </div>
                 ))}
               </Grid>
-            </Grid>
+            </Grid> */}
 
             <p className="validate_Edit">{validation}</p>
             <Button

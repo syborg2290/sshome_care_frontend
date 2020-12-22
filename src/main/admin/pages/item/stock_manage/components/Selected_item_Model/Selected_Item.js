@@ -65,8 +65,8 @@ export default function Selected_Item({ itemListProps, closeModel }) {
     var keepData = [];
     var i = 0;
     itemListProps.forEach((ele) => {
-      qty[i] = 0;
-      setQty(...qty);
+      qty[i] = 1;
+
       keepData.push({
         i: i,
         id: ele.item.id,

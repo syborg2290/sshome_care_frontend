@@ -122,8 +122,6 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                     ob.data().modelNo === eachItem.item.modelNo[0]
                 )
               ) {
-                console.log("dfghjhgjf");
-
                 var newArray = allItems.docs.filter(
                   (ob) =>
                     ob.data().itemName === eachItem.item.itemName &&
@@ -160,14 +158,11 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                     newArray[0].data().chassisNo
                   );
 
-                  let prevUpdaModel = eachItem.item.modelNo.splice(
-                    0,
-                    qty[eachItem.i]
-                  );
-                  let prevUpdaSerail = eachItem.item.serialNo.splice(
-                    0,
-                    qty[eachItem.i]
-                  );
+                  let eachModelNo = eachItem.item.modelNo;
+                  let eachSerialNo = eachItem.item.serialNo;
+
+                  let prevUpdaModel = eachModelNo.splice(0, qty[eachItem.i]);
+                  let prevUpdaSerail = eachSerialNo.splice(0, qty[eachItem.i]);
                   await db
                     .collection("item")
                     .doc(eachItem.id)
@@ -221,14 +216,11 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                   serialNosList.push(eachItem.item.serialNo[q]);
                 }
 
-                let prevUpdaModel = eachItem.item.modelNo.splice(
-                  0,
-                  qty[eachItem.i]
-                );
-                let prevUpdaSerail = eachItem.item.serialNo.splice(
-                  0,
-                  qty[eachItem.i]
-                );
+                let eachModelNo = eachItem.item.modelNo;
+                let eachSerialNo = eachItem.item.serialNo;
+
+                let prevUpdaModel = eachModelNo.splice(0, qty[eachItem.i]);
+                let prevUpdaSerail = eachSerialNo.splice(0, qty[eachItem.i]);
 
                 await db
                   .collection("item")
@@ -439,12 +431,7 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                 color="primary"
                 className="btn_SelectdeDone"
                 onClick={exchangeItems}
-                  disabled={
-                  date === null ||
-                  isLoadingSubmit
-                    ? true
-                    : false
-                }
+                disabled={date === null || isLoadingSubmit ? true : false}
               >
                 {isLoadingSubmit ? <Spin size="large" /> : "Done"}
               </Button>

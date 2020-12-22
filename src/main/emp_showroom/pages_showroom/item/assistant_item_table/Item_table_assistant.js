@@ -60,6 +60,7 @@ export default function Item_table_assistant() {
 
     db.collection("item")
       .orderBy("timestamp", "desc")
+      .where("stock_type", "==", "shop")
       .onSnapshot((snapshot) => {
         var newData = [];
         var itemData = [];
@@ -101,7 +102,7 @@ export default function Item_table_assistant() {
               thousandSeparator={true}
               prefix={" "}
             />,
-             element.data().type,
+            element.data().type,
             <div
               color="secondary"
               size="small"
@@ -224,7 +225,7 @@ export default function Item_table_assistant() {
         }),
       },
     },
-        {
+    {
       name: "Type",
       options: {
         filter: true,
@@ -492,11 +493,11 @@ export default function Item_table_assistant() {
                     ).format("dddd, MMMM Do YYYY, h:mm:ss a")}
                   </span>
                 </Col>
-                  <Col span={12}>TYPE</Col>
+                <Col span={12}>TYPE</Col>
                 <Col span={12}>
-                 <span className="load_Item">
+                  <span className="load_Item">
                     <span className="colan">:</span>
-                  ABC Main
+                    ABC Main
                   </span>
                 </Col>
               </Row>

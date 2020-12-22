@@ -374,7 +374,7 @@ export default function Edit_model({
                                                         let variable2 = {
                                                           itemName: itemName,
                                                           brand: brand,
-                                                          modelNo: newTTTTMo,
+                                                          modelNo: modelNoNewList,
                                                           serialNo: serialNosList,
                                                           chassisNo: chassisNosList,
                                                           color: color,

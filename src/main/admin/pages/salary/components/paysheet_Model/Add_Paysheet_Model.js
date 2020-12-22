@@ -36,7 +36,11 @@ async function getGasshort(root, isFirstSalary, lastSalaryDate, currentDate) {
     .where("type", "==", root)
     .get();
 
-  var rootStatus = await db.collection("root").where("root", "==", root).get();
+  var rootStatus;
+
+  if (root !== "shop") {
+    rootStatus = await db.collection("shop").where("root", "==", root).get();
+  }
 
   var gasShort = 0;
 
@@ -60,6 +64,8 @@ async function getGasshort(root, isFirstSalary, lastSalaryDate, currentDate) {
   }
   return gasShort === 0
     ? 0
+    : root === "shop"
+    ? Math.round(gasShort * 10) / 10
     : rootStatus.docs[0].data().employee2 === ""
     ? Math.round(gasShort * 10) / 10
     : Math.round((gasShort / 2) * 10) / 10;
@@ -124,7 +130,11 @@ async function getInstallmentshort(
     .where("type", "==", root)
     .get();
 
-  var rootStatus = await db.collection("root").where("root", "==", root).get();
+  var rootStatus;
+
+  if (root !== "shop") {
+    rootStatus = await db.collection("root").where("root", "==", root).get();
+  }
 
   var installShortage = 0;
   for (var i = 0; i < reInstallment.docs.length; i++) {
@@ -151,6 +161,8 @@ async function getInstallmentshort(
 
   return installShortage === 0
     ? 0
+    : root === "shop"
+    ? Math.round(installShortage * 10) / 10
     : rootStatus.docs[0].data().employee2 === ""
     ? Math.round(installShortage * 10) / 10
     : Math.round((installShortage / 2) * 10) / 10;
@@ -206,7 +218,11 @@ async function getShortage(root, isFirstSalary, lastSalaryDate, currentDate) {
     .where("selectedType", "==", root)
     .get();
 
-  var rootStatus = await db.collection("root").where("root", "==", root).get();
+  var rootStatus;
+
+  if (root !== "shop") {
+    rootStatus = await db.collection("root").where("root", "==", root).get();
+  }
 
   var shortage = 0;
   for (var i = 0; i < reInvoice.docs.length; i++) {
@@ -231,6 +247,8 @@ async function getShortage(root, isFirstSalary, lastSalaryDate, currentDate) {
 
   return shortage === 0
     ? 0
+    : root === "shop"
+    ? Math.round(shortage * 10) / 10
     : rootStatus.docs[0].data().employee2 === ""
     ? Math.round(shortage * 10) / 10
     : Math.round((shortage / 2) * 10) / 10;
@@ -587,10 +605,16 @@ async function cashTargetFunc(
     returnValue = threePresentage;
   }
 
-  var rootStatus = await db.collection("root").where("root", "==", root).get();
+  var rootStatus;
+
+  if (root !== "shop") {
+    rootStatus = await db.collection("root").where("root", "==", root).get();
+  }
 
   return returnValue === 0
     ? 0
+    : root === "shop"
+    ? Math.round(returnValue * 10) / 10
     : rootStatus.docs[0].data().employee2 === ""
     ? Math.round(returnValue * 10) / 10
     : Math.round((returnValue / 2) * 10) / 10;
@@ -725,10 +749,16 @@ async function getCashSaleFunc(
     }
   }
 
-  var rootStatus = await db.collection("root").where("root", "==", root).get();
+  var rootStatus;
+
+  if (root !== "shop") {
+    rootStatus = await db.collection("root").where("root", "==", root).get();
+  }
 
   return cashSale === 0
     ? 0
+    : root === "shop"
+    ? Math.round(cashSale * 10) / 10
     : rootStatus.docs[0].data().employee2 === ""
     ? Math.round(cashSale * 10) / 10
     : Math.round((cashSale / 2) * 10) / 10;
@@ -826,10 +856,16 @@ async function getExcardFunc(root, isFirstSalary, lastSalaryDate, currentDate) {
     }
   }
 
-  var rootStatus = await db.collection("root").where("root", "==", root).get();
+  var rootStatus;
+
+  if (root !== "shop") {
+    rootStatus = await db.collection("root").where("root", "==", root).get();
+  }
 
   return excardAmount === 0
     ? 0
+    : root === "shop"
+    ? Math.round(excardAmount * 10) / 10
     : rootStatus.docs[0].data().employee2 === ""
     ? Math.round(excardAmount * 10) / 10
     : Math.round((excardAmount / 2) * 10) / 10;
@@ -893,8 +929,6 @@ export default function Add_Paysheet_Model({ nic }) {
 
   // eslint-disable-next-line
   const [root, setRoot] = useState("");
-  // eslint-disable-next-line
-  const [rootDocId, setRootDocId] = useState("");
 
   const [attendanceList, setAttendanceList] = useState([]);
   // eslint-disable-next-line
@@ -1061,262 +1095,260 @@ export default function Add_Paysheet_Model({ nic }) {
 
     //++++++++++++++++++++++++++++++++
     //Shop
-    // db.collection("shop")
-    //   .get()
-    //   .then((reRoot) => {
-    //     reRoot.docs.forEach((eachRoot) => {
-    //       let rootName = "shop";
+    db.collection("shop")
+      .get()
+      .then((reRoot) => {
+        reRoot.docs.forEach((eachRoot) => {
+          let rootName = "shop";
 
-    //       if (eachRoot.data().nic === nic) {
-    //         getSaleTarget(
-    //           rootName,
-    //           firebase.firestore.Timestamp.fromDate(new Date())
-    //         ).then((reSaleTarget) => {
-    //           setSaleTarget(reSaleTarget);
-    //         });
+          if (eachRoot.data().nic === nic) {
+            getSaleTarget(
+              rootName,
+              firebase.firestore.Timestamp.fromDate(new Date())
+            ).then((reSaleTarget) => {
+              setSaleTarget(reSaleTarget);
+            });
 
-    //         db.collection("salary")
-    //           .where("nic", "==", nic)
-    //           .orderBy("date", "asc")
-    //           .get()
-    //           .then((reSalary) => {
-    //             if (reSalary.docs.length > 0) {
-    //               getSaleTargetForTable(
-    //                 rootName,
-    //                 false,
-    //                 reSalary.docs[reSalary.docs.length - 1]?.data().date,
-    //                 firebase.firestore.Timestamp.fromDate(new Date())
-    //               ).then((reSaleTarget) => {
-    //                 setSaleTargetList(reSaleTarget);
-    //               });
+            db.collection("salary")
+              .where("nic", "==", nic)
+              .orderBy("date", "asc")
+              .get()
+              .then((reSalary) => {
+                if (reSalary.docs.length > 0) {
+                  getSaleTargetForTable(
+                    rootName,
+                    false,
+                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                    firebase.firestore.Timestamp.fromDate(new Date())
+                  ).then((reSaleTarget) => {
+                    setSaleTargetList(reSaleTarget);
+                  });
 
-    //               cashTargetFunc(
-    //                 rootName,
-    //                 false,
-    //                 reSalary.docs[reSalary.docs.length - 1]?.data().date,
-    //                 firebase.firestore.Timestamp.fromDate(new Date())
-    //               ).then((reCashTaregt) => {
-    //                 setCashTarget(reCashTaregt);
-    //               });
+                  cashTargetFunc(
+                    rootName,
+                    false,
+                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                    firebase.firestore.Timestamp.fromDate(new Date())
+                  ).then((reCashTaregt) => {
+                    setCashTarget(reCashTaregt);
+                  });
 
-    //               cashTargetFuncForTable(
-    //                 rootName,
-    //                 false,
-    //                 reSalary.docs[reSalary.docs.length - 1]?.data().date,
-    //                 firebase.firestore.Timestamp.fromDate(new Date())
-    //               ).then((reCashTaregt) => {
-    //                 setCashTargetList(reCashTaregt);
-    //               });
+                  cashTargetFuncForTable(
+                    rootName,
+                    false,
+                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                    firebase.firestore.Timestamp.fromDate(new Date())
+                  ).then((reCashTaregt) => {
+                    setCashTargetList(reCashTaregt);
+                  });
 
-    //               getCashSaleFunc(
-    //                 rootName,
-    //                 false,
-    //                 reSalary.docs[reSalary.docs.length - 1]?.data().date,
-    //                 firebase.firestore.Timestamp.fromDate(new Date())
-    //               ).then((reCashSale) => {
-    //                 setCashSale(reCashSale);
-    //               });
+                  getCashSaleFunc(
+                    rootName,
+                    false,
+                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                    firebase.firestore.Timestamp.fromDate(new Date())
+                  ).then((reCashSale) => {
+                    setCashSale(reCashSale);
+                  });
 
-    //               getCashSaleFuncForTable(
-    //                 rootName,
-    //                 false,
-    //                 reSalary.docs[reSalary.docs.length - 1]?.data().date,
-    //                 firebase.firestore.Timestamp.fromDate(new Date())
-    //               ).then((reCashSale) => {
-    //                 setCashSaleList(reCashSale);
-    //               });
+                  getCashSaleFuncForTable(
+                    rootName,
+                    false,
+                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                    firebase.firestore.Timestamp.fromDate(new Date())
+                  ).then((reCashSale) => {
+                    setCashSaleList(reCashSale);
+                  });
 
-    //               getExcardFunc(
-    //                 rootName,
-    //                 false,
-    //                 reSalary.docs[reSalary.docs.length - 1]?.data().date,
-    //                 firebase.firestore.Timestamp.fromDate(new Date())
-    //               ).then((reEx) => {
-    //                 setExCard(reEx);
-    //               });
+                  getExcardFunc(
+                    rootName,
+                    false,
+                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                    firebase.firestore.Timestamp.fromDate(new Date())
+                  ).then((reEx) => {
+                    setExCard(reEx);
+                  });
 
-    //               getExcardFuncForTable(
-    //                 rootName,
-    //                 false,
-    //                 reSalary.docs[reSalary.docs.length - 1]?.data().date,
-    //                 firebase.firestore.Timestamp.fromDate(new Date())
-    //               ).then((reEx) => {
-    //                 setExcardslist(reEx);
-    //               });
+                  getExcardFuncForTable(
+                    rootName,
+                    false,
+                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                    firebase.firestore.Timestamp.fromDate(new Date())
+                  ).then((reEx) => {
+                    setExcardslist(reEx);
+                  });
 
-    //               getShortage(
-    //                 rootName,
-    //                 false,
-    //                 reSalary.docs[reSalary.docs.length - 1]?.data().date,
-    //                 firebase.firestore.Timestamp.fromDate(new Date())
-    //               ).then((reShort) => {
-    //                 setShortage((sho) => sho + parseInt(reShort));
-    //               });
-    //               getInstallmentshort(
-    //                 rootName,
-    //                 false,
-    //                 reSalary.docs[reSalary.docs.length - 1]?.data().date,
-    //                 firebase.firestore.Timestamp.fromDate(new Date())
-    //               ).then((reShort) => {
-    //                 setShortage((sho) => sho + parseInt(reShort));
-    //               });
-    //               getGasshort(
-    //                 rootName,
-    //                 false,
-    //                 reSalary.docs[reSalary.docs.length - 1]?.data().date,
-    //                 firebase.firestore.Timestamp.fromDate(new Date())
-    //               ).then((reShort) => {
-    //                 setShortage((sho) => sho + parseInt(reShort));
-    //               });
+                  getShortage(
+                    rootName,
+                    false,
+                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                    firebase.firestore.Timestamp.fromDate(new Date())
+                  ).then((reShort) => {
+                    setShortage((sho) => sho + parseInt(reShort));
+                  });
+                  getInstallmentshort(
+                    rootName,
+                    false,
+                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                    firebase.firestore.Timestamp.fromDate(new Date())
+                  ).then((reShort) => {
+                    setShortage((sho) => sho + parseInt(reShort));
+                  });
+                  getGasshort(
+                    rootName,
+                    false,
+                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                    firebase.firestore.Timestamp.fromDate(new Date())
+                  ).then((reShort) => {
+                    setShortage((sho) => sho + parseInt(reShort));
+                  });
 
-    //               //================
+                  //================
 
-    //               getShortageForTable(
-    //                 rootName,
-    //                 false,
-    //                 reSalary.docs[reSalary.docs.length - 1]?.data().date,
-    //                 firebase.firestore.Timestamp.fromDate(new Date())
-    //               ).then((reShort) => {
-    //                 shortageList.push(reShort);
-    //               });
-    //               getInstallmentshortForTable(
-    //                 rootName,
-    //                 false,
-    //                 reSalary.docs[reSalary.docs.length - 1]?.data().date,
-    //                 firebase.firestore.Timestamp.fromDate(new Date())
-    //               ).then((reShort) => {
-    //                 shortageList.push(reShort);
-    //               });
-    //               getGasshortForTable(
-    //                 rootName,
-    //                 false,
-    //                 reSalary.docs[reSalary.docs.length - 1]?.data().date,
-    //                 firebase.firestore.Timestamp.fromDate(new Date())
-    //               ).then((reShort) => {
-    //                 shortageList.push(reShort);
-    //               });
+                  getShortageForTable(
+                    rootName,
+                    false,
+                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                    firebase.firestore.Timestamp.fromDate(new Date())
+                  ).then((reShort) => {
+                    shortageList.push(reShort);
+                  });
+                  getInstallmentshortForTable(
+                    rootName,
+                    false,
+                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                    firebase.firestore.Timestamp.fromDate(new Date())
+                  ).then((reShort) => {
+                    shortageList.push(reShort);
+                  });
+                  getGasshortForTable(
+                    rootName,
+                    false,
+                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                    firebase.firestore.Timestamp.fromDate(new Date())
+                  ).then((reShort) => {
+                    shortageList.push(reShort);
+                  });
 
-    //               //================
-    //             } else {
-    //               getSaleTargetForTable(
-    //                 rootName,
-    //                 true,
-    //                 reSalary.docs[0]?.data().date,
-    //                 firebase.firestore.Timestamp.fromDate(new Date())
-    //               ).then((reSaleTarget) => {
-    //                 setSaleTargetList(reSaleTarget);
-    //               });
-    //               cashTargetFunc(
-    //                 rootName,
-    //                 true,
-    //                 reSalary.docs[0]?.data().date,
-    //                 firebase.firestore.Timestamp.fromDate(new Date())
-    //               ).then((reCashTaregt) => {
-    //                 setCashTarget(reCashTaregt);
-    //               });
-    //               cashTargetFuncForTable(
-    //                 rootName,
-    //                 true,
-    //                 reSalary.docs[0]?.data().date,
-    //                 firebase.firestore.Timestamp.fromDate(new Date())
-    //               ).then((reCashTaregt) => {
-    //                 setCashTargetList(reCashTaregt);
-    //               });
-    //               getCashSaleFunc(
-    //                 rootName,
-    //                 true,
-    //                 reSalary.docs[0]?.data().date,
-    //                 firebase.firestore.Timestamp.fromDate(new Date())
-    //               ).then((reCashSale) => {
-    //                 setCashSale(reCashSale);
-    //               });
+                  //================
+                } else {
+                  getSaleTargetForTable(
+                    rootName,
+                    true,
+                    reSalary.docs[0]?.data().date,
+                    firebase.firestore.Timestamp.fromDate(new Date())
+                  ).then((reSaleTarget) => {
+                    setSaleTargetList(reSaleTarget);
+                  });
+                  cashTargetFunc(
+                    rootName,
+                    true,
+                    reSalary.docs[0]?.data().date,
+                    firebase.firestore.Timestamp.fromDate(new Date())
+                  ).then((reCashTaregt) => {
+                    setCashTarget(reCashTaregt);
+                  });
+                  cashTargetFuncForTable(
+                    rootName,
+                    true,
+                    reSalary.docs[0]?.data().date,
+                    firebase.firestore.Timestamp.fromDate(new Date())
+                  ).then((reCashTaregt) => {
+                    setCashTargetList(reCashTaregt);
+                  });
+                  getCashSaleFunc(
+                    rootName,
+                    true,
+                    reSalary.docs[0]?.data().date,
+                    firebase.firestore.Timestamp.fromDate(new Date())
+                  ).then((reCashSale) => {
+                    setCashSale(reCashSale);
+                  });
 
-    //               getCashSaleFuncForTable(
-    //                 rootName,
-    //                 true,
-    //                 reSalary.docs[0]?.data().date,
-    //                 firebase.firestore.Timestamp.fromDate(new Date())
-    //               ).then((reCashSale) => {
-    //                 setCashSaleList(reCashSale);
-    //               });
+                  getCashSaleFuncForTable(
+                    rootName,
+                    true,
+                    reSalary.docs[0]?.data().date,
+                    firebase.firestore.Timestamp.fromDate(new Date())
+                  ).then((reCashSale) => {
+                    setCashSaleList(reCashSale);
+                  });
 
-    //               getExcardFunc(
-    //                 rootName,
-    //                 true,
-    //                 reSalary.docs[0]?.data().date,
-    //                 firebase.firestore.Timestamp.fromDate(new Date())
-    //               ).then((reEx) => {
-    //                 setExCard(reEx);
-    //               });
-    //               getExcardFuncForTable(
-    //                 rootName,
-    //                 true,
-    //                 reSalary.docs[0]?.data().date,
-    //                 firebase.firestore.Timestamp.fromDate(new Date())
-    //               ).then((reEx) => {
-    //                 setExcardslist(reEx);
-    //               });
-    //               getShortage(
-    //                 rootName,
-    //                 true,
-    //                 reSalary.docs[0]?.data().date,
-    //                 firebase.firestore.Timestamp.fromDate(new Date())
-    //               ).then((reShort) => {
-    //                 setShortage((sho) => sho + parseInt(reShort));
-    //               });
-    //               getInstallmentshort(
-    //                 rootName,
-    //                 true,
-    //                 reSalary.docs[0]?.data().date,
-    //                 firebase.firestore.Timestamp.fromDate(new Date())
-    //               ).then((reShort) => {
-    //                 setShortage((sho) => sho + parseInt(reShort));
-    //               });
-    //               getGasshort(
-    //                 rootName,
-    //                 true,
-    //                 reSalary.docs[0]?.data().date,
-    //                 firebase.firestore.Timestamp.fromDate(new Date())
-    //               ).then((reShort) => {
-    //                 setShortage((sho) => sho + parseInt(reShort));
-    //               });
+                  getExcardFunc(
+                    rootName,
+                    true,
+                    reSalary.docs[0]?.data().date,
+                    firebase.firestore.Timestamp.fromDate(new Date())
+                  ).then((reEx) => {
+                    setExCard(reEx);
+                  });
+                  getExcardFuncForTable(
+                    rootName,
+                    true,
+                    reSalary.docs[0]?.data().date,
+                    firebase.firestore.Timestamp.fromDate(new Date())
+                  ).then((reEx) => {
+                    setExcardslist(reEx);
+                  });
+                  getShortage(
+                    rootName,
+                    true,
+                    reSalary.docs[0]?.data().date,
+                    firebase.firestore.Timestamp.fromDate(new Date())
+                  ).then((reShort) => {
+                    setShortage((sho) => sho + parseInt(reShort));
+                  });
+                  getInstallmentshort(
+                    rootName,
+                    true,
+                    reSalary.docs[0]?.data().date,
+                    firebase.firestore.Timestamp.fromDate(new Date())
+                  ).then((reShort) => {
+                    setShortage((sho) => sho + parseInt(reShort));
+                  });
+                  getGasshort(
+                    rootName,
+                    true,
+                    reSalary.docs[0]?.data().date,
+                    firebase.firestore.Timestamp.fromDate(new Date())
+                  ).then((reShort) => {
+                    setShortage((sho) => sho + parseInt(reShort));
+                  });
 
-    //               //=====================
+                  //=====================
 
-    //               getShortageForTable(
-    //                 rootName,
-    //                 true,
-    //                 reSalary.docs[0]?.data().date,
-    //                 firebase.firestore.Timestamp.fromDate(new Date())
-    //               ).then((reShort) => {
-    //                 shortageList.push(reShort);
-    //               });
-    //               getInstallmentshortForTable(
-    //                 rootName,
-    //                 true,
-    //                 reSalary.docs[0]?.data().date,
-    //                 firebase.firestore.Timestamp.fromDate(new Date())
-    //               ).then((reShort) => {
-    //                 shortageList.push(reShort);
-    //               });
-    //               getGasshortForTable(
-    //                 rootName,
-    //                 true,
-    //                 reSalary.docs[0]?.data().date,
-    //                 firebase.firestore.Timestamp.fromDate(new Date())
-    //               ).then((reShort) => {
-    //                 shortageList.push(reShort);
-    //               });
+                  getShortageForTable(
+                    rootName,
+                    true,
+                    reSalary.docs[0]?.data().date,
+                    firebase.firestore.Timestamp.fromDate(new Date())
+                  ).then((reShort) => {
+                    shortageList.push(reShort);
+                  });
+                  getInstallmentshortForTable(
+                    rootName,
+                    true,
+                    reSalary.docs[0]?.data().date,
+                    firebase.firestore.Timestamp.fromDate(new Date())
+                  ).then((reShort) => {
+                    shortageList.push(reShort);
+                  });
+                  getGasshortForTable(
+                    rootName,
+                    true,
+                    reSalary.docs[0]?.data().date,
+                    firebase.firestore.Timestamp.fromDate(new Date())
+                  ).then((reShort) => {
+                    shortageList.push(reShort);
+                  });
 
-    //               //===========
-    //             }
-    //           });
-    //         setRoot(eachRoot?.data().root);
-    //         setRootDocId(eachRoot.id);
-    //       }
-
-    //     });
-    //   });
+                  //===========
+                }
+              });
+            setRoot("shop");
+          }
+        });
+      });
 
     //+++++++++++++++++++++++++++++++++
 
@@ -1571,7 +1603,6 @@ export default function Add_Paysheet_Model({ nic }) {
                 }
               });
             setRoot(eachRoot?.data().root);
-            setRootDocId(eachRoot.id);
           }
 
           if (eachRoot.data().employee2 === nic) {
@@ -1809,7 +1840,6 @@ export default function Add_Paysheet_Model({ nic }) {
                 }
               });
             setRoot(eachRoot.data().root);
-            setRootDocId(eachRoot.id);
           }
         });
       });
@@ -1944,178 +1974,6 @@ export default function Add_Paysheet_Model({ nic }) {
           db.collection("salary")
             .add(dbList)
             .then(async (_) => {
-              let rootCur = await db
-                .collection("root")
-                .where("root", "==", root)
-                .get();
-
-              if (rootCur.docs.length > 0) {
-                let isSalary = await db
-                  .collection("salary")
-                  .where("nic", "==", nic)
-                  .orderBy("date", "asc")
-                  .get();
-                let emp1 = await db
-                  .collection("salary")
-                  .where("nic", "==", rootCur.docs[0].data().employee1)
-                  .orderBy("date", "asc")
-                  .get();
-                let emp2 = await db
-                  .collection("salary")
-
-                  .where("nic", "==", rootCur.docs[0].data().employee2)
-                  .orderBy("date", "asc")
-                  .get();
-                if (isSalary.docs.length > 0) {
-                  if (nic === rootCur.docs[0].data().employee1) {
-                    if (rootCur.docs[0].data().employee2 === "") {
-                      // db.collection("targets")
-                      //   .where("selectedType", "==", root)
-                      //   .get()
-                      //   .then((reTarget) => {
-                      //     if (reTarget.docs.length > 0) {
-                      //       reTarget.docs.forEach((reEach) => {
-                      //         db.collection("targets").doc(reEach.id).update({
-                      //           status: "Expired",
-                      //         });
-                      //       });
-                      //     }
-                      //   });
-                    } else {
-                      if (emp2.docs.length === 0) {
-                      } else {
-                        if (
-                          new Date(
-                            emp2.docs[emp2.docs.length - 1]?.data().date
-                              .seconds * 1000
-                          ).getFullYear() ===
-                            new Date(date.seconds * 1000).getFullYear() &&
-                          new Date(
-                            emp2.docs[emp2.docs.length - 1]?.data().date
-                              .seconds * 1000
-                          ).getMonth() ===
-                            new Date(date.seconds * 1000).getMonth()
-                        ) {
-                          // db.collection("targets")
-                          //   .where("selectedType", "==", root)
-                          //   .get()
-                          //   .then((reTarget) => {
-                          //     if (reTarget.docs.length > 0) {
-                          //       reTarget.docs.forEach((reEach) => {
-                          //         db.collection("targets")
-                          //           .doc(reEach.id)
-                          //           .update({
-                          //             status: "Expired",
-                          //           });
-                          //       });
-                          //     }
-                          //   });
-                        }
-                      }
-                    }
-                  }
-
-                  if (nic === rootCur.docs[0].data().employee2) {
-                    if (emp1.docs.length === 0) {
-                    } else {
-                      if (
-                        new Date(
-                          emp1.docs[emp1.docs.length - 1]?.data().date.seconds *
-                            1000
-                        ).getFullYear() ===
-                          new Date(date.seconds * 1000).getFullYear() &&
-                        new Date(
-                          emp1.docs[emp1.docs.length - 1]?.data().date.seconds *
-                            1000
-                        ).getMonth() ===
-                          new Date(date.seconds * 1000).getMonth()
-                      ) {
-                        // db.collection("targets")
-                        //   .where("selectedType", "==", root)
-                        //   .get()
-                        //   .then((reTarget) => {
-                        //     if (reTarget.docs.length > 0) {
-                        //       reTarget.docs.forEach((reEach) => {
-                        //         db.collection("targets").doc(reEach.id).update({
-                        //           status: "Expired",
-                        //         });
-                        //       });
-                        //     }
-                        //   });
-                      }
-                    }
-                  }
-                } else {
-                  if (nic === rootCur.docs[0].data().employee1) {
-                    if (rootCur.docs[0].data().employee2 === "") {
-                      // db.collection("targets")
-                      //   .where("selectedType", "==", root)
-                      //   .get()
-                      //   .then((reTarget) => {
-                      //     if (reTarget.docs.length > 0) {
-                      //       reTarget.docs.forEach((reEach) => {
-                      //         db.collection("targets").doc(reEach.id).update({
-                      //           status: "Expired",
-                      //         });
-                      //       });
-                      //     }
-                      //   });
-                    } else {
-                      if (
-                        new Date(
-                          emp2.docs[emp2.docs.length - 1]?.data().date.seconds *
-                            1000
-                        ).getFullYear() ===
-                          new Date(date.seconds * 1000).getFullYear() &&
-                        new Date(
-                          emp2.docs[emp2.docs.length - 1]?.data().date.seconds *
-                            1000
-                        ).getMonth() ===
-                          new Date(date.seconds * 1000).getMonth()
-                      ) {
-                        // db.collection("targets")
-                        //   .where("selectedType", "==", root)
-                        //   .get()
-                        //   .then((reTarget) => {
-                        //     if (reTarget.docs.length > 0) {
-                        //       reTarget.docs.forEach((reEach) => {
-                        //         db.collection("targets").doc(reEach.id).update({
-                        //           status: "Expired",
-                        //         });
-                        //       });
-                        //     }
-                        //   });
-                      }
-                    }
-                  } else {
-                    if (
-                      new Date(
-                        emp1.docs[emp1.docs.length - 1]?.data().date.seconds *
-                          1000
-                      ).getFullYear() ===
-                        new Date(date.seconds * 1000).getFullYear() &&
-                      new Date(
-                        emp1.docs[emp1.docs.length - 1]?.data().date.seconds *
-                          1000
-                      ).getMonth() === new Date(date.seconds * 1000).getMonth()
-                    ) {
-                      // db.collection("targets")
-                      //   .where("selectedType", "==", root)
-                      //   .get()
-                      //   .then((reTarget) => {
-                      //     if (reTarget.docs.length > 0) {
-                      //       reTarget.docs.forEach((reEach) => {
-                      //         db.collection("targets").doc(reEach.id).update({
-                      //           status: "Expired",
-                      //         });
-                      //       });
-                      //     }
-                      //   });
-                    }
-                  }
-                }
-              }
-
               db.collection("salary_advance")
                 .where("nic", "==", nic)
                 .get()
@@ -2218,6 +2076,261 @@ export default function Add_Paysheet_Model({ nic }) {
           });
         }
       });
+
+    //++++++++++++++++++++++++++++++++
+    //Shop
+    db.collection("shop")
+      .get()
+      .then((reRoot) => {
+        reRoot.docs.forEach((eachRoot) => {
+          let rootName = "shop";
+
+          if (eachRoot.data().nic === nic) {
+            getSaleTarget(rootName, currentdateRe).then((reSaleTarget) => {
+              setSaleTarget(reSaleTarget);
+            });
+
+            db.collection("salary")
+              .where("nic", "==", nic)
+              .orderBy("date", "asc")
+              .get()
+              .then((reSalary) => {
+                if (reSalary.docs.length > 0) {
+                  getSaleTargetForTable(
+                    rootName,
+                    false,
+                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                    currentdateRe
+                  ).then((reSaleTarget) => {
+                    setSaleTargetList(reSaleTarget);
+                  });
+
+                  cashTargetFunc(
+                    rootName,
+                    false,
+                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                    currentdateRe
+                  ).then((reCashTaregt) => {
+                    setCashTarget(reCashTaregt);
+                  });
+
+                  cashTargetFuncForTable(
+                    rootName,
+                    false,
+                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                    currentdateRe
+                  ).then((reCashTaregt) => {
+                    setCashTargetList(reCashTaregt);
+                  });
+
+                  getCashSaleFunc(
+                    rootName,
+                    false,
+                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                    currentdateRe
+                  ).then((reCashSale) => {
+                    setCashSale(reCashSale);
+                  });
+
+                  getCashSaleFuncForTable(
+                    rootName,
+                    false,
+                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                    currentdateRe
+                  ).then((reCashSale) => {
+                    setCashSaleList(reCashSale);
+                  });
+
+                  getExcardFunc(
+                    rootName,
+                    false,
+                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                    currentdateRe
+                  ).then((reEx) => {
+                    setExCard(reEx);
+                  });
+
+                  getExcardFuncForTable(
+                    rootName,
+                    false,
+                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                    currentdateRe
+                  ).then((reEx) => {
+                    setExcardslist(reEx);
+                  });
+
+                  getShortage(
+                    rootName,
+                    false,
+                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                    currentdateRe
+                  ).then((reShort) => {
+                    setShortage((sho) => sho + parseInt(reShort));
+                  });
+                  getInstallmentshort(
+                    rootName,
+                    false,
+                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                    currentdateRe
+                  ).then((reShort) => {
+                    setShortage((sho) => sho + parseInt(reShort));
+                  });
+                  getGasshort(
+                    rootName,
+                    false,
+                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                    currentdateRe
+                  ).then((reShort) => {
+                    setShortage((sho) => sho + parseInt(reShort));
+                  });
+
+                  //================
+
+                  getShortageForTable(
+                    rootName,
+                    false,
+                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                    currentdateRe
+                  ).then((reShort) => {
+                    shortageList.push(reShort);
+                  });
+                  getInstallmentshortForTable(
+                    rootName,
+                    false,
+                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                    currentdateRe
+                  ).then((reShort) => {
+                    shortageList.push(reShort);
+                  });
+                  getGasshortForTable(
+                    rootName,
+                    false,
+                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                    currentdateRe
+                  ).then((reShort) => {
+                    shortageList.push(reShort);
+                  });
+
+                  //================
+                } else {
+                  getSaleTargetForTable(
+                    rootName,
+                    true,
+                    reSalary.docs[0]?.data().date,
+                    currentdateRe
+                  ).then((reSaleTarget) => {
+                    setSaleTargetList(reSaleTarget);
+                  });
+                  cashTargetFunc(
+                    rootName,
+                    true,
+                    reSalary.docs[0]?.data().date,
+                    currentdateRe
+                  ).then((reCashTaregt) => {
+                    setCashTarget(reCashTaregt);
+                  });
+                  cashTargetFuncForTable(
+                    rootName,
+                    true,
+                    reSalary.docs[0]?.data().date,
+                    currentdateRe
+                  ).then((reCashTaregt) => {
+                    setCashTargetList(reCashTaregt);
+                  });
+                  getCashSaleFunc(
+                    rootName,
+                    true,
+                    reSalary.docs[0]?.data().date,
+                    currentdateRe
+                  ).then((reCashSale) => {
+                    setCashSale(reCashSale);
+                  });
+
+                  getCashSaleFuncForTable(
+                    rootName,
+                    true,
+                    reSalary.docs[0]?.data().date,
+                    currentdateRe
+                  ).then((reCashSale) => {
+                    setCashSaleList(reCashSale);
+                  });
+
+                  getExcardFunc(
+                    rootName,
+                    true,
+                    reSalary.docs[0]?.data().date,
+                    currentdateRe
+                  ).then((reEx) => {
+                    setExCard(reEx);
+                  });
+                  getExcardFuncForTable(
+                    rootName,
+                    true,
+                    reSalary.docs[0]?.data().date,
+                    currentdateRe
+                  ).then((reEx) => {
+                    setExcardslist(reEx);
+                  });
+                  getShortage(
+                    rootName,
+                    true,
+                    reSalary.docs[0]?.data().date,
+                    currentdateRe
+                  ).then((reShort) => {
+                    setShortage((sho) => sho + parseInt(reShort));
+                  });
+                  getInstallmentshort(
+                    rootName,
+                    true,
+                    reSalary.docs[0]?.data().date,
+                    currentdateRe
+                  ).then((reShort) => {
+                    setShortage((sho) => sho + parseInt(reShort));
+                  });
+                  getGasshort(
+                    rootName,
+                    true,
+                    reSalary.docs[0]?.data().date,
+                    currentdateRe
+                  ).then((reShort) => {
+                    setShortage((sho) => sho + parseInt(reShort));
+                  });
+
+                  //=====================
+
+                  getShortageForTable(
+                    rootName,
+                    true,
+                    reSalary.docs[0]?.data().date,
+                    currentdateRe
+                  ).then((reShort) => {
+                    shortageList.push(reShort);
+                  });
+                  getInstallmentshortForTable(
+                    rootName,
+                    true,
+                    reSalary.docs[0]?.data().date,
+                    currentdateRe
+                  ).then((reShort) => {
+                    shortageList.push(reShort);
+                  });
+                  getGasshortForTable(
+                    rootName,
+                    true,
+                    reSalary.docs[0]?.data().date,
+                    currentdateRe
+                  ).then((reShort) => {
+                    shortageList.push(reShort);
+                  });
+
+                  //===========
+                }
+              });
+          }
+        });
+      });
+
+    //+++++++++++++++++++++++++++++++++
 
     db.collection("root")
       .get()

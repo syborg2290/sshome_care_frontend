@@ -122,6 +122,8 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                     ob.data().modelNo === eachItem.item.modelNo[0]
                 )
               ) {
+                console.log("dfghjhgjf");
+
                 var newArray = allItems.docs.filter(
                   (ob) =>
                     ob.data().itemName === eachItem.item.itemName &&
@@ -187,7 +189,7 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                       serialNo: serialNoNewList,
                       chassisNo: chassisNoNewList,
                     })
-                    .then(function (docRef) {
+                    .then((_) => {
                       db.collection("managed_stock_history")
                         .add({
                           date: date,
@@ -267,7 +269,7 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                 await db
                   .collection("item")
                   .add(variable)
-                  .then(function (docRef) {
+                  .then((_) => {
                     db.collection("managed_stock_history")
                       .add({
                         date: date,

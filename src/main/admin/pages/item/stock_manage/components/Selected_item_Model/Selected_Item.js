@@ -357,10 +357,7 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                                     .doc(item.id)
                                     .get()
                                     .then((doc) => {
-                                      if (
-                                        Math.round(doc.data().qty) >=
-                                        (value === "" ? 1 : value)
-                                      ) {
+                                      if (Math.round(doc.data().qty) >= value) {
                                         qty[item.i] = parseInt(value);
                                       } else {
                                         NotificationManager.warning(

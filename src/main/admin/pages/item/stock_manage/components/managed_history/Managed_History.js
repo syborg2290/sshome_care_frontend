@@ -350,13 +350,6 @@ export default function Managed_History() {
                     ).format("dddd, MMMM Do YYYY, h:mm:ss a")}
                   </span>
                 </Col>
-                <Col span={12}>STOCK TYPE</Col>
-                <Col span={12}>
-                  <span className="load_Item">
-                    {" "}
-                    <span className="colan">:</span> ABC Main
-                  </span>
-                </Col>
               </Row>
               <hr />
               <TableContainer component={Paper} className="main_containerNo">

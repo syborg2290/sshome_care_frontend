@@ -180,7 +180,7 @@ export default function Edit_model({
     checkSerialNumber().then((reCheckS) => {
       let serialNosList = [];
       let chassisNosList = [];
-      let modelNosList = [];
+      // let modelNosList = [];
 
       for (var k = 0; k < Object.keys(inputsSerialNo).length; k++) {
         serialNosList.push(inputsSerialNo[k]);

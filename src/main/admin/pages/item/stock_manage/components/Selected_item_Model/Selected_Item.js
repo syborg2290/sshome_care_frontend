@@ -439,6 +439,12 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                 color="primary"
                 className="btn_SelectdeDone"
                 onClick={exchangeItems}
+                  disabled={
+                  date === null ||
+                  isLoadingSubmit
+                    ? true
+                    : false
+                }
               >
                 {isLoadingSubmit ? <Spin size="large" /> : "Done"}
               </Button>

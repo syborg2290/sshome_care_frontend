@@ -509,7 +509,9 @@ export default function Manage_Stock() {
                             <TableCell component="th" scope="row">
                               {itemListSeMo[currentIndx]?.modelNo.map(
                                 (modelNoT) => (
-                                  <h5 key={Math.random().toString()}>{modelNoT}</h5>
+                                  <h5 key={Math.random().toString()}>
+                                    {modelNoT}
+                                  </h5>
                                 )
                               )}
                             </TableCell>
@@ -591,6 +593,9 @@ export default function Manage_Stock() {
               elevation: 4,
               sort: true,
               selectableRowsHeader: false,
+              onRowClick: (rowData, rowMeta) => {
+                setCurrentIndx(rowMeta.dataIndex);
+              },
               onRowSelectionChange: (curRowSelected, allRowsSelected) => {
                 selectedItems = [];
                 allRowsSelected.forEach((single) => {

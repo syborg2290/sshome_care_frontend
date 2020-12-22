@@ -158,14 +158,11 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                     newArray[0].data().chassisNo
                   );
 
-                  let prevUpdaModel = eachItem.item.modelNo.splice(
-                    0,
-                    qty[eachItem.i]
-                  );
-                  let prevUpdaSerail = eachItem.item.serialNo.splice(
-                    0,
-                    qty[eachItem.i]
-                  );
+                  let eachModelNo = eachItem.item.modelNo;
+                  let eachSerialNo = eachItem.item.serialNo;
+
+                  let prevUpdaModel = eachModelNo.splice(0, qty[eachItem.i]);
+                  let prevUpdaSerail = eachSerialNo.splice(0, qty[eachItem.i]);
                   await db
                     .collection("item")
                     .doc(eachItem.id)
@@ -219,14 +216,11 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                   serialNosList.push(eachItem.item.serialNo[q]);
                 }
 
-                let prevUpdaModel = eachItem.item.modelNo.splice(
-                  0,
-                  qty[eachItem.i]
-                );
-                let prevUpdaSerail = eachItem.item.serialNo.splice(
-                  0,
-                  qty[eachItem.i]
-                );
+                let eachModelNo = eachItem.item.modelNo;
+                let eachSerialNo = eachItem.item.serialNo;
+
+                let prevUpdaModel = eachModelNo.splice(0, qty[eachItem.i]);
+                let prevUpdaSerail = eachSerialNo.splice(0, qty[eachItem.i]);
 
                 await db
                   .collection("item")

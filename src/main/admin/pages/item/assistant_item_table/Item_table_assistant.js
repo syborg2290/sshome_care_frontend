@@ -101,7 +101,7 @@ export default function Item_table_assistant() {
               thousandSeparator={true}
               prefix={" "}
             />,
-             element.data().stock_type,
+            element.data().stock_type,
             <div
               color="secondary"
               size="small"
@@ -126,9 +126,11 @@ export default function Item_table_assistant() {
             </div>,
             <div className="table_icon">
               <VisibilityIcon onClick={showModal} />
-              <span className="icon_Edit">
-                <EditIcon onClick={editModal} />
-              </span>
+              {element.data().stock_type === "main" ? (
+                <span className="icon_Edit">
+                  <EditIcon onClick={editModal} />
+                </span>
+              ) : null}
               {/* <span className="icon_delete">
                 <DeleteIcon onClick={showModalConfirmModal} />
               </span> */}
@@ -224,7 +226,7 @@ export default function Item_table_assistant() {
         }),
       },
     },
-      {
+    {
       name: "Stock_Type",
       options: {
         filter: true,
@@ -492,9 +494,9 @@ export default function Item_table_assistant() {
                     ).format("dddd, MMMM Do YYYY, h:mm:ss a")}
                   </span>
                 </Col>
-                 <Col span={12}>STOCK TYPE</Col>
+                <Col span={12}>STOCK TYPE</Col>
                 <Col span={12}>
-                <span className="load_Item">
+                  <span className="load_Item">
                     <span className="colan">:</span>
                     {allTtemData[currentIndx] && allTtemData[currentIndx].data
                       ? allTtemData[currentIndx].data.stock_type

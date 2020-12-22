@@ -152,14 +152,14 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                     let newArrayModel = newArray[0].data().modelNo;
                     let newArraySerial = newArray[0].data().serialNo;
                     let newArrayChassis = newArray[0].data().chassisNo;
-                    let tikModel = newArrayModel.splice(0, qty[eachItem.i]);
-                    let tikSerial = newArraySerial.splice(0, qty[eachItem.i]);
-
-                    // let modelNoNewList = newArrayModel.concat(modelNosList);
-                    // let serialNoNewList = newArraySerial.concat(serialNosList);
-                    // let chassisNoNewList = newArrayChassis.concat(
-                    //   chassisNosList
-                    // );
+                    let tikModel = newArrayModel.splice(
+                      modelNosList.length,
+                      newArrayModel.length
+                    );
+                    let tikSerial = newArraySerial.splice(
+                      serialNosList.length,
+                      newArraySerial.length
+                    );
 
                     await db
                       .collection("item")
@@ -177,11 +177,8 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                     let eachModelNo = eachItem.item.modelNo;
                     let eachSerialNo = eachItem.item.serialNo;
 
-                    let prevUpdaModel = eachModelNo.splice(0, qty[eachItem.i]);
-                    let prevUpdaSerail = eachSerialNo.splice(
-                      0,
-                      qty[eachItem.i]
-                    );
+                    let prevUpdaModel = eachModelNo.concat(modelNosList);
+                    let prevUpdaSerail = eachSerialNo.concat(serialNosList);
 
                     db.collection("item")
                       .doc(newArray[0].id)
@@ -226,10 +223,13 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                   let newArraySerial = eachItem.item.serialNo;
                   let newArrayChassis = eachItem.item.chassisNo;
 
-                  let modelNoNewList = newArrayModel.splice(0, qty[eachItem.i]);
+                  let modelNoNewList = newArrayModel.splice(
+                    modelNosList.length,
+                    newArrayModel.length
+                  );
                   let serialNoNewList = newArraySerial.splice(
-                    0,
-                    qty[eachItem.i]
+                    serialNosList.length,
+                    newArraySerial.length
                   );
                   let chassisNoNewList = newArrayChassis.splice(
                     0,
@@ -252,8 +252,8 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                   let eachModelNo = eachItem.item.modelNo;
                   let eachSerialNo = eachItem.item.serialNo;
 
-                  let prevUpdaModel = eachModelNo.splice(0, qty[eachItem.i]);
-                  let prevUpdaSerail = eachSerialNo.splice(0, qty[eachItem.i]);
+                  let prevUpdaModel = eachModelNo.concat(modelNosList);
+                  let prevUpdaSerail = eachSerialNo.concat(serialNosList);
 
                   let variable = {
                     itemName: eachItem.item.itemName,

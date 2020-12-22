@@ -169,17 +169,6 @@ export default function Managed_History() {
                   </span>
                 </Col>
 
-                <Col span={12}>QTY</Col>
-                <Col span={12}>
-                  <span className="load_Item">
-                    {" "}
-                    <span className="colan">:</span>{" "}
-                    {allData[currentIndx] && allData[currentIndx].data
-                      ? allData[currentIndx].data.qty
-                      : " - "}{" "}
-                  </span>
-                </Col>
-
                 <Col span={12}> COLOR</Col>
                 <Col span={12}>
                   <span className="load_Item">

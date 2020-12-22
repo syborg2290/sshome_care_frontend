@@ -151,8 +151,8 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                   for (let q = 0; q < qty[eachItem.i]; q++) {
                     tikModel.shift();
                     tikSerial.shift();
-                    modelNosList.push(eachItem.item.modelNo[q]);
                     serialNosList.push(eachItem.item.serialNo[q]);
+                    modelNosList.push(eachItem.item.modelNo[q]);
                   }
 
                   if (qty[eachItem.i] === modelNosList.length) {
@@ -222,8 +222,8 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                 for (let q = 0; q < qty[eachItem.i]; q++) {
                   modelNoNewList.shift();
                   serialNoNewList.shift();
-                  modelNosList.push(eachItem.item.modelNo[q]);
                   serialNosList.push(eachItem.item.serialNo[q]);
+                  modelNosList.push(eachItem.item.modelNo[q]);
                 }
 
                 if (qty[eachItem.i] === modelNosList.length) {
@@ -281,8 +281,8 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                           qty: qty[eachItem.i],
                           from: eachItem.item.stock_type,
                           to: selectedType,
-                          modelNo: modelNoNewList,
-                          serialNo: serialNoNewList,
+                          modelNo: modelNosList,
+                          serialNo: serialNosList,
                         })
                         .then((_) => {
                           setLoadingSubmit(false);

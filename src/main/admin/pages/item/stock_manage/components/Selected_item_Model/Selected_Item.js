@@ -98,6 +98,7 @@ export default function Selected_Item({ itemListProps, closeModel }) {
   };
 
   const exchangeItems = async () => {
+    setLoadingSubmit(true);
     getQtyStatus(qty).then(async (reStatus) => {
       if (reStatus) {
         var allItems = await db.collection("item").get();
@@ -148,63 +149,68 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                     serialNosList.push(eachItem.item.serialNo[q]);
                   }
 
-                  let modelNoNewList = modelNosList.concat(
-                    newArray[0].data().modelNo
-                  );
-                  let serialNoNewList = serialNosList.concat(
-                    newArray[0].data().serialNo
-                  );
-                  let chassisNoNewList = chassisNosList.concat(
-                    newArray[0].data().chassisNo
-                  );
+                  if (qty[eachItem.i] === modelNosList.length) {
+                    let eachModelNo = eachItem.item.modelNo;
+                    let eachSerialNo = eachItem.item.serialNo;
 
-                  let eachModelNo = eachItem.item.modelNo;
-                  let eachSerialNo = eachItem.item.serialNo;
+                    let prevUpdaModel = eachModelNo.splice(0, qty[eachItem.i]);
+                    let prevUpdaSerail = eachSerialNo.splice(
+                      0,
+                      qty[eachItem.i]
+                    );
+                    await db
+                      .collection("item")
+                      .doc(eachItem.id)
+                      .update({
+                        qty:
+                          eachItem.item.qty - qty[eachItem.i] >= 0
+                            ? eachItem.item.qty - qty[eachItem.i]
+                            : 0,
+                        chassisNo: chassisNosList,
+                        modelNo: prevUpdaModel,
+                        serialNo: prevUpdaSerail,
+                      });
 
-                  let prevUpdaModel = eachModelNo.splice(0, qty[eachItem.i]);
-                  let prevUpdaSerail = eachSerialNo.splice(0, qty[eachItem.i]);
-                  await db
-                    .collection("item")
-                    .doc(eachItem.id)
-                    .update({
-                      qty:
-                        eachItem.item.qty - qty[eachItem.i] >= 0
-                          ? eachItem.item.qty - qty[eachItem.i]
-                          : 0,
-                      chassisNo: chassisNoNewList,
-                      modelNo: prevUpdaModel,
-                      serialNo: prevUpdaSerail,
-                    });
-                  await db
-                    .collection("item")
-                    .doc(newArray[0].id)
-                    .update({
-                      qty: newArray[0].data().qty + qty[eachItem.i],
-                      modelNo: modelNoNewList,
-                      serialNo: serialNoNewList,
-                      chassisNo: chassisNoNewList,
-                    })
-                    .then((_) => {
-                      db.collection("managed_stock_history")
-                        .add({
-                          date: date,
-                          itemId: eachItem.id,
-                          item: eachItem.item,
-                          qty: qty[eachItem.i],
-                          from: eachItem.stock_type,
-                          to: selectedType,
-                          modelNo: modelNoNewList,
-                          serialNo: serialNoNewList,
-                        })
-                        .then((_) => {
-                          setLoadingSubmit(false);
-                          window.location.reload();
-                        });
-                    })
-                    .catch(function (error) {
-                      setLoadingSubmit(false);
-                      window.location.reload();
-                    });
+                    let newArrayModel = newArray[0].data().modelNo;
+                    let newArraySerial = newArray[0].data().serialNo;
+                    let newArrayChassis = newArray[0].data().chassisNo;
+
+                    let modelNoNewList = newArrayModel.concat(modelNosList);
+                    let serialNoNewList = newArraySerial.concat(serialNosList);
+                    let chassisNoNewList = newArrayChassis.concat(
+                      chassisNosList
+                    );
+
+                    db.collection("item")
+                      .doc(newArray[0].id)
+                      .update({
+                        qty: newArray[0].data().qty + qty[eachItem.i],
+                        modelNo: modelNoNewList,
+                        serialNo: serialNoNewList,
+                        chassisNo: chassisNoNewList,
+                      })
+                      .then((_) => {
+                        db.collection("managed_stock_history")
+                          .add({
+                            date: date,
+                            itemId: eachItem.id,
+                            item: eachItem.item,
+                            qty: qty[eachItem.i],
+                            from: eachItem.stock_type,
+                            to: selectedType,
+                            modelNo: modelNosList,
+                            serialNo: serialNosList,
+                          })
+                          .then((_) => {
+                            setLoadingSubmit(false);
+                            window.location.reload();
+                          });
+                      })
+                      .catch(function (error) {
+                        setLoadingSubmit(false);
+                        window.location.reload();
+                      });
+                  }
                 }
               } else {
                 let modelNosList = [];
@@ -216,79 +222,90 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                   serialNosList.push(eachItem.item.serialNo[q]);
                 }
 
-                let eachModelNo = eachItem.item.modelNo;
-                let eachSerialNo = eachItem.item.serialNo;
+                if (qty[eachItem.i] === modelNosList.length) {
+                  let eachModelNo = eachItem.item.modelNo;
+                  let eachSerialNo = eachItem.item.serialNo;
 
-                let prevUpdaModel = eachModelNo.splice(0, qty[eachItem.i]);
-                let prevUpdaSerail = eachSerialNo.splice(0, qty[eachItem.i]);
+                  let prevUpdaModel = eachModelNo.splice(0, qty[eachItem.i]);
+                  let prevUpdaSerail = eachSerialNo.splice(0, qty[eachItem.i]);
 
-                await db
-                  .collection("item")
-                  .doc(eachItem.id)
-                  .update({
-                    qty:
-                      eachItem.item.qty - qty[eachItem.i] >= 0
-                        ? eachItem.item.qty - qty[eachItem.i]
-                        : 0,
-                    chassisNo: chassisNosList,
-                    modelNo: prevUpdaModel,
-                    serialNo: prevUpdaSerail,
-                  });
+                  await db
+                    .collection("item")
+                    .doc(eachItem.id)
+                    .update({
+                      qty:
+                        eachItem.item.qty - qty[eachItem.i] >= 0
+                          ? eachItem.item.qty - qty[eachItem.i]
+                          : 0,
+                      chassisNo: chassisNosList,
+                      modelNo: prevUpdaModel,
+                      serialNo: prevUpdaSerail,
+                    });
 
-                let variable = {
-                  itemName: eachItem.item.itemName,
-                  brand: eachItem.item.brand,
-                  modelNo: modelNosList,
-                  serialNo: serialNosList,
-                  chassisNo: chassisNosList,
-                  color: eachItem.item.color,
-                  stock_type: selectedType,
-                  qty: serialNosList.length,
-                  cashPrice: eachItem.item.cashPrice,
-                  salePrice: eachItem.item.salePrice,
-                  noOfInstallments: eachItem.item.noOfInstallments,
-                  amountPerInstallment: eachItem.item.amountPerInstallment,
-                  downPayment: eachItem.item.downPayment,
-                  guaranteePeriod: eachItem.item.guaranteePeriod,
-                  discount: eachItem.item.discount,
-                  description: eachItem.item.description,
-                  cInvoiceNo: eachItem.item.cInvoiceNo,
-                  GCardNo: eachItem.item.GCardNo,
-                  guarantee: eachItem.item.guarantee,
-                  timestamp: date,
-                };
+                  let newArrayModel = eachItem.item.modelNo;
+                  let newArraySerial = eachItem.item.serialNo;
+                  let newArrayChassis = eachItem.item.chassisNo;
 
-                await db
-                  .collection("item")
-                  .add(variable)
-                  .then((_) => {
-                    db.collection("managed_stock_history")
-                      .add({
-                        date: date,
-                        itemId: eachItem.id,
-                        item: eachItem.item,
-                        qty: qty[eachItem.i],
-                        from: eachItem.stock_type,
-                        to: selectedType,
-                        modelNo: modelNosList,
-                        serialNo: serialNosList,
-                      })
-                      .then((_) => {
-                        setLoadingSubmit(false);
-                        window.location.reload();
-                      });
-                  })
-                  .catch(function (error) {
-                    setLoadingSubmit(false);
-                    window.location.reload();
-                  });
+                  let modelNoNewList = newArrayModel.concat(modelNosList);
+                  let serialNoNewList = newArraySerial.concat(serialNosList);
+                  let chassisNoNewList = newArrayChassis.concat(chassisNosList);
+
+                  let variable = {
+                    itemName: eachItem.item.itemName,
+                    brand: eachItem.item.brand,
+                    modelNo: modelNoNewList,
+                    serialNo: serialNoNewList,
+                    chassisNo: chassisNoNewList,
+                    color: eachItem.item.color,
+                    stock_type: selectedType,
+                    qty: serialNosList.length,
+                    cashPrice: eachItem.item.cashPrice,
+                    salePrice: eachItem.item.salePrice,
+                    noOfInstallments: eachItem.item.noOfInstallments,
+                    amountPerInstallment: eachItem.item.amountPerInstallment,
+                    downPayment: eachItem.item.downPayment,
+                    guaranteePeriod: eachItem.item.guaranteePeriod,
+                    discount: eachItem.item.discount,
+                    description: eachItem.item.description,
+                    cInvoiceNo: eachItem.item.cInvoiceNo,
+                    GCardNo: eachItem.item.GCardNo,
+                    guarantee: eachItem.item.guarantee,
+                    timestamp: date,
+                  };
+
+                  db.collection("item")
+                    .add(variable)
+                    .then((_) => {
+                      db.collection("managed_stock_history")
+                        .add({
+                          date: date,
+                          itemId: eachItem.id,
+                          item: eachItem.item,
+                          qty: qty[eachItem.i],
+                          from: eachItem.stock_type,
+                          to: selectedType,
+                          modelNo: modelNosList,
+                          serialNo: serialNosList,
+                        })
+                        .then((_) => {
+                          setLoadingSubmit(false);
+                          window.location.reload();
+                        });
+                    })
+                    .catch(function (error) {
+                      setLoadingSubmit(false);
+                      window.location.reload();
+                    });
+                }
               }
             }
           } else {
+            setLoadingSubmit(false);
             NotificationManager.warning("Please set qty!");
           }
         });
       } else {
+        setLoadingSubmit(false);
         NotificationManager.warning("Please check again qty of each item!");
       }
     });

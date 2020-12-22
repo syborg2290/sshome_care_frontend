@@ -509,7 +509,7 @@ export default function Manage_Stock() {
                             <TableCell component="th" scope="row">
                               {itemListSeMo[currentIndx]?.modelNo.map(
                                 (modelNoT) => (
-                                  <h5 key={modelNoT}>{modelNoT}</h5>
+                                  <h5 key={Math.random().toString()}>{modelNoT}</h5>
                                 )
                               )}
                             </TableCell>

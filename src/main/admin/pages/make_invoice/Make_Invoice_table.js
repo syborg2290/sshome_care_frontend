@@ -93,6 +93,7 @@ export default function Make_Invoice_table() {
               thousandSeparator={true}
               prefix={" "}
             />,
+            element.data().stock_type,
             <div
               color="secondary"
               size="small"
@@ -191,6 +192,15 @@ export default function Make_Invoice_table() {
     },
     {
       name: "Sale price(LKR)",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "Stock type",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({

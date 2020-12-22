@@ -86,42 +86,114 @@ export default function Selected_Item({ itemListProps, closeModel }) {
   };
 
   const exchangeItems = async () => {
-    var allItems = await db.collection("item").get();
-    itemsData.forEach(async (eachItem) => {
-      if (allItems) {
-        if (
-          allItems.docs.some(
-            (ob) =>
-              ob.data().itemName === eachItem.item.itemName &&
-              ob.data().brand === eachItem.item.brand &&
-              ob.data().color === eachItem.item.color &&
-              ob.data().cashPrice === eachItem.item.cashPrice &&
-              ob.data().salePrice === eachItem.item.salePrice &&
-              ob.data().noOfInstallments === eachItem.item.noOfInstallments &&
-              ob.data().amountPerInstallment ===
-                eachItem.item.amountPerInstallment &&
-              ob.data().downPayment === eachItem.item.downPayment &&
-              ob.data().discount === eachItem.item.discount &&
-              ob.data().stock_type === selectedType &&
-              ob.data().modelNo === eachItem.item.modelNo[0]
-          )
-        ) {
-          var newArray = allItems.docs.filter(
-            (ob) =>
-              ob.data().itemName === eachItem.item.itemName &&
-              ob.data().brand === eachItem.item.brand &&
-              ob.data().color === eachItem.item.color &&
-              ob.data().cashPrice === eachItem.item.cashPrice &&
-              ob.data().salePrice === eachItem.item.salePrice &&
-              ob.data().noOfInstallments === eachItem.item.noOfInstallments &&
-              ob.data().amountPerInstallment ===
-                eachItem.item.amountPerInstallment &&
-              ob.data().downPayment === eachItem.item.downPayment &&
-              ob.data().discount === eachItem.item.discount &&
-              ob.data().stock_type === selectedType &&
-              ob.data().modelNo === eachItem.item.modelNo[0]
-          );
-          if (newArray) {
+    if (qty > 0) {
+      var allItems = await db.collection("item").get();
+      itemsData.forEach(async (eachItem) => {
+        if (allItems) {
+          if (
+            allItems.docs.some(
+              (ob) =>
+                ob.data().itemName === eachItem.item.itemName &&
+                ob.data().brand === eachItem.item.brand &&
+                ob.data().color === eachItem.item.color &&
+                ob.data().cashPrice === eachItem.item.cashPrice &&
+                ob.data().salePrice === eachItem.item.salePrice &&
+                ob.data().noOfInstallments === eachItem.item.noOfInstallments &&
+                ob.data().amountPerInstallment ===
+                  eachItem.item.amountPerInstallment &&
+                ob.data().downPayment === eachItem.item.downPayment &&
+                ob.data().discount === eachItem.item.discount &&
+                ob.data().stock_type === selectedType &&
+                ob.data().modelNo === eachItem.item.modelNo[0]
+            )
+          ) {
+            var newArray = allItems.docs.filter(
+              (ob) =>
+                ob.data().itemName === eachItem.item.itemName &&
+                ob.data().brand === eachItem.item.brand &&
+                ob.data().color === eachItem.item.color &&
+                ob.data().cashPrice === eachItem.item.cashPrice &&
+                ob.data().salePrice === eachItem.item.salePrice &&
+                ob.data().noOfInstallments === eachItem.item.noOfInstallments &&
+                ob.data().amountPerInstallment ===
+                  eachItem.item.amountPerInstallment &&
+                ob.data().downPayment === eachItem.item.downPayment &&
+                ob.data().discount === eachItem.item.discount &&
+                ob.data().stock_type === selectedType &&
+                ob.data().modelNo === eachItem.item.modelNo[0]
+            );
+            if (newArray) {
+              let modelNosList = [];
+              let serialNosList = [];
+              let chassisNosList = [];
+
+              for (let q = 0; q < qty[eachItem.i]; q++) {
+                modelNosList.push(eachItem.item.modelNo[q]);
+                serialNosList.push(eachItem.item.serialNo[q]);
+              }
+
+              let modelNoNewList = modelNosList.concat(
+                newArray[0].data().modelNo
+              );
+              let serialNoNewList = serialNosList.concat(
+                newArray[0].data().serialNo
+              );
+              let chassisNoNewList = chassisNosList.concat(
+                newArray[0].data().chassisNo
+              );
+
+              let prevUpdaModel = eachItem.item.modelNo.splice(
+                0,
+                qty[eachItem.i]
+              );
+              let prevUpdaSerail = eachItem.item.serialNo.splice(
+                0,
+                qty[eachItem.i]
+              );
+              await db
+                .collection("item")
+                .doc(eachItem.id)
+                .update({
+                  qty:
+                    eachItem.item.qty - qty[eachItem.i] >= 0
+                      ? eachItem.item.qty - qty[eachItem.i]
+                      : 0,
+                  chassisNo: chassisNoNewList,
+                  modelNo: prevUpdaModel,
+                  serialNo: prevUpdaSerail,
+                });
+              await db
+                .collection("item")
+                .doc(newArray[0].id)
+                .update({
+                  qty: newArray[0].data().qty + qty[eachItem.i],
+                  modelNo: modelNoNewList,
+                  serialNo: serialNoNewList,
+                  chassisNo: chassisNoNewList,
+                })
+                .then(function (docRef) {
+                  db.collection("managed_stock_history")
+                    .add({
+                      date: date,
+                      itemId: eachItem.id,
+                      item: eachItem.item,
+                      qty: qty[eachItem.i],
+                      from: eachItem.stock_type,
+                      to: selectedType,
+                      modelNo: modelNoNewList,
+                      serialNo: serialNoNewList,
+                    })
+                    .then((_) => {
+                      setLoadingSubmit(false);
+                      window.location.reload();
+                    });
+                })
+                .catch(function (error) {
+                  setLoadingSubmit(false);
+                  window.location.reload();
+                });
+            }
+          } else {
             let modelNosList = [];
             let serialNosList = [];
             let chassisNosList = [];
@@ -131,16 +203,6 @@ export default function Selected_Item({ itemListProps, closeModel }) {
               serialNosList.push(eachItem.item.serialNo[q]);
             }
 
-            let modelNoNewList = modelNosList.concat(
-              newArray[0].data().modelNo
-            );
-            let serialNoNewList = serialNosList.concat(
-              newArray[0].data().serialNo
-            );
-            let chassisNoNewList = chassisNosList.concat(
-              newArray[0].data().chassisNo
-            );
-
             let prevUpdaModel = eachItem.item.modelNo.splice(
               0,
               qty[eachItem.i]
@@ -149,6 +211,7 @@ export default function Selected_Item({ itemListProps, closeModel }) {
               0,
               qty[eachItem.i]
             );
+
             await db
               .collection("item")
               .doc(eachItem.id)
@@ -157,19 +220,37 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                   eachItem.item.qty - qty[eachItem.i] >= 0
                     ? eachItem.item.qty - qty[eachItem.i]
                     : 0,
-                chassisNo: chassisNoNewList,
+                chassisNo: chassisNosList,
                 modelNo: prevUpdaModel,
                 serialNo: prevUpdaSerail,
               });
+
+            let variable = {
+              itemName: eachItem.item.itemName,
+              brand: eachItem.item.brand,
+              modelNo: modelNosList,
+              serialNo: serialNosList,
+              chassisNo: chassisNosList,
+              color: eachItem.item.color,
+              stock_type: selectedType,
+              qty: serialNosList.length,
+              cashPrice: eachItem.item.cashPrice,
+              salePrice: eachItem.item.salePrice,
+              noOfInstallments: eachItem.item.noOfInstallments,
+              amountPerInstallment: eachItem.item.amountPerInstallment,
+              downPayment: eachItem.item.downPayment,
+              guaranteePeriod: eachItem.item.guaranteePeriod,
+              discount: eachItem.item.discount,
+              description: eachItem.item.description,
+              cInvoiceNo: eachItem.item.cInvoiceNo,
+              GCardNo: eachItem.item.GCardNo,
+              guarantee: eachItem.item.guarantee,
+              timestamp: date,
+            };
+
             await db
               .collection("item")
-              .doc(newArray[0].id)
-              .update({
-                qty: newArray[0].data().qty + qty[eachItem.i],
-                modelNo: modelNoNewList,
-                serialNo: serialNoNewList,
-                chassisNo: chassisNoNewList,
-              })
+              .add(variable)
               .then(function (docRef) {
                 db.collection("managed_stock_history")
                   .add({
@@ -179,8 +260,8 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                     qty: qty[eachItem.i],
                     from: eachItem.stock_type,
                     to: selectedType,
-                    modelNo: modelNoNewList,
-                    serialNo: serialNoNewList,
+                    modelNo: modelNosList,
+                    serialNo: serialNosList,
                   })
                   .then((_) => {
                     setLoadingSubmit(false);
@@ -192,85 +273,11 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                 window.location.reload();
               });
           }
-        } else {
-          let modelNosList = [];
-          let serialNosList = [];
-          let chassisNosList = [];
-
-          for (let q = 0; q < qty[eachItem.i]; q++) {
-            modelNosList.push(eachItem.item.modelNo[q]);
-            serialNosList.push(eachItem.item.serialNo[q]);
-          }
-
-          let prevUpdaModel = eachItem.item.modelNo.splice(0, qty[eachItem.i]);
-          let prevUpdaSerail = eachItem.item.serialNo.splice(
-            0,
-            qty[eachItem.i]
-          );
-
-          await db
-            .collection("item")
-            .doc(eachItem.id)
-            .update({
-              qty:
-                eachItem.item.qty - qty[eachItem.i] >= 0
-                  ? eachItem.item.qty - qty[eachItem.i]
-                  : 0,
-              chassisNo: chassisNosList,
-              modelNo: prevUpdaModel,
-              serialNo: prevUpdaSerail,
-            });
-
-          let variable = {
-            itemName: eachItem.item.itemName,
-            brand: eachItem.item.brand,
-            modelNo: modelNosList,
-            serialNo: serialNosList,
-            chassisNo: chassisNosList,
-            color: eachItem.item.color,
-            stock_type: selectedType,
-            qty: serialNosList.length,
-            cashPrice: eachItem.item.cashPrice,
-            salePrice: eachItem.item.salePrice,
-            noOfInstallments: eachItem.item.noOfInstallments,
-            amountPerInstallment: eachItem.item.amountPerInstallment,
-            downPayment: eachItem.item.downPayment,
-            guaranteePeriod: eachItem.item.guaranteePeriod,
-            discount: eachItem.item.discount,
-            description: eachItem.item.description,
-            cInvoiceNo: eachItem.item.cInvoiceNo,
-            GCardNo: eachItem.item.GCardNo,
-            guarantee: eachItem.item.guarantee,
-            timestamp: date,
-          };
-
-          await db
-            .collection("item")
-            .add(variable)
-            .then(function (docRef) {
-              db.collection("managed_stock_history")
-                .add({
-                  date: date,
-                  itemId: eachItem.id,
-                  item: eachItem.item,
-                  qty: qty[eachItem.i],
-                  from: eachItem.stock_type,
-                  to: selectedType,
-                  modelNo: modelNosList,
-                  serialNo: serialNosList,
-                })
-                .then((_) => {
-                  setLoadingSubmit(false);
-                  window.location.reload();
-                });
-            })
-            .catch(function (error) {
-              setLoadingSubmit(false);
-              window.location.reload();
-            });
         }
-      }
-    });
+      });
+    } else {
+      NotificationManager.warning("Please set qty!");
+    }
   };
 
   return (
@@ -309,7 +316,6 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                             autoFocus
                             size="small"
                             InputProps={{ inputProps: { min: 0 } }}
-                            value={qty[item.i]}
                             onChange={(e) => {
                               if (e.target.value !== "") {
                                 try {

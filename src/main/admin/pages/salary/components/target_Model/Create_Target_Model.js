@@ -302,6 +302,9 @@ export default function Create_Target_Model() {
                     <option onChange={handleChange} value={""}>
                       Select a type
                     </option>
+                    <option onChange={handleChange} value={"shop"}>
+                      shop
+                    </option>
                     {allRoot.map((each) => (
                       <option onChange={handleChange} key={each} value={each}>
                         {each}

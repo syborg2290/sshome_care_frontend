@@ -106,7 +106,7 @@ export default function Managed_History() {
     });
 
     db.collection("managed_stock_history")
-      .orderBy("timestamp", "desc")
+      .orderBy("date", "desc")
       .onSnapshot((snapshot) => {
         var itemDataTable = [];
         var itemDataAll = [];

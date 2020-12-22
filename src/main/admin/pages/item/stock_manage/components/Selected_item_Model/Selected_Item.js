@@ -142,7 +142,6 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                 if (newArray) {
                   let modelNosList = [];
                   let serialNosList = [];
-                  let chassisNosList = [];
 
                   for (let q = 0; q < qty[eachItem.i]; q++) {
                     modelNosList.push(eachItem.item.modelNo[q]);
@@ -150,14 +149,18 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                   }
 
                   if (qty[eachItem.i] === modelNosList.length) {
-                    let eachModelNo = eachItem.item.modelNo;
-                    let eachSerialNo = eachItem.item.serialNo;
+                    let newArrayModel = newArray[0].data().modelNo;
+                    let newArraySerial = newArray[0].data().serialNo;
+                    let newArrayChassis = newArray[0].data().chassisNo;
+                    let tikModel = newArrayModel.splice(0, qty[eachItem.i]);
+                    let tikSerial = newArraySerial.splice(0, qty[eachItem.i]);
 
-                    let prevUpdaModel = eachModelNo.splice(0, qty[eachItem.i]);
-                    let prevUpdaSerail = eachSerialNo.splice(
-                      0,
-                      qty[eachItem.i]
-                    );
+                    // let modelNoNewList = newArrayModel.concat(modelNosList);
+                    // let serialNoNewList = newArraySerial.concat(serialNosList);
+                    // let chassisNoNewList = newArrayChassis.concat(
+                    //   chassisNosList
+                    // );
+
                     await db
                       .collection("item")
                       .doc(eachItem.id)
@@ -166,28 +169,27 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                           eachItem.item.qty - qty[eachItem.i] >= 0
                             ? eachItem.item.qty - qty[eachItem.i]
                             : 0,
-                        chassisNo: chassisNosList,
-                        modelNo: prevUpdaModel,
-                        serialNo: prevUpdaSerail,
+                        chassisNo: newArrayChassis,
+                        modelNo: tikModel,
+                        serialNo: tikSerial,
                       });
 
-                    let newArrayModel = newArray[0].data().modelNo;
-                    let newArraySerial = newArray[0].data().serialNo;
-                    let newArrayChassis = newArray[0].data().chassisNo;
+                    let eachModelNo = eachItem.item.modelNo;
+                    let eachSerialNo = eachItem.item.serialNo;
 
-                    let modelNoNewList = newArrayModel.concat(modelNosList);
-                    let serialNoNewList = newArraySerial.concat(serialNosList);
-                    let chassisNoNewList = newArrayChassis.concat(
-                      chassisNosList
+                    let prevUpdaModel = eachModelNo.splice(0, qty[eachItem.i]);
+                    let prevUpdaSerail = eachSerialNo.splice(
+                      0,
+                      qty[eachItem.i]
                     );
 
                     db.collection("item")
                       .doc(newArray[0].id)
                       .update({
                         qty: newArray[0].data().qty + qty[eachItem.i],
-                        modelNo: modelNoNewList,
-                        serialNo: serialNoNewList,
-                        chassisNo: chassisNoNewList,
+                        modelNo: prevUpdaModel,
+                        serialNo: prevUpdaSerail,
+                        chassisNo: newArrayChassis,
                       })
                       .then((_) => {
                         db.collection("managed_stock_history")
@@ -205,10 +207,6 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                             setLoadingSubmit(false);
                             window.location.reload();
                           });
-                      })
-                      .catch(function (error) {
-                        setLoadingSubmit(false);
-                        window.location.reload();
                       });
                   }
                 }
@@ -223,11 +221,19 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                 }
 
                 if (qty[eachItem.i] === modelNosList.length) {
-                  let eachModelNo = eachItem.item.modelNo;
-                  let eachSerialNo = eachItem.item.serialNo;
+                  let newArrayModel = eachItem.item.modelNo;
+                  let newArraySerial = eachItem.item.serialNo;
+                  let newArrayChassis = eachItem.item.chassisNo;
 
-                  let prevUpdaModel = eachModelNo.splice(0, qty[eachItem.i]);
-                  let prevUpdaSerail = eachSerialNo.splice(0, qty[eachItem.i]);
+                  let modelNoNewList = newArrayModel.splice(0, qty[eachItem.i]);
+                  let serialNoNewList = newArraySerial.splice(
+                    0,
+                    qty[eachItem.i]
+                  );
+                  let chassisNoNewList = newArrayChassis.splice(
+                    0,
+                    qty[eachItem.i]
+                  );
 
                   await db
                     .collection("item")
@@ -238,27 +244,25 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                           ? eachItem.item.qty - qty[eachItem.i]
                           : 0,
                       chassisNo: chassisNosList,
-                      modelNo: prevUpdaModel,
-                      serialNo: prevUpdaSerail,
+                      modelNo: modelNoNewList,
+                      serialNo: serialNoNewList,
                     });
 
-                  let newArrayModel = eachItem.item.modelNo;
-                  let newArraySerial = eachItem.item.serialNo;
-                  let newArrayChassis = eachItem.item.chassisNo;
+                  let eachModelNo = eachItem.item.modelNo;
+                  let eachSerialNo = eachItem.item.serialNo;
 
-                  let modelNoNewList = newArrayModel.concat(modelNosList);
-                  let serialNoNewList = newArraySerial.concat(serialNosList);
-                  let chassisNoNewList = newArrayChassis.concat(chassisNosList);
+                  let prevUpdaModel = eachModelNo.splice(0, qty[eachItem.i]);
+                  let prevUpdaSerail = eachSerialNo.splice(0, qty[eachItem.i]);
 
                   let variable = {
                     itemName: eachItem.item.itemName,
                     brand: eachItem.item.brand,
-                    modelNo: modelNoNewList,
-                    serialNo: serialNoNewList,
+                    modelNo: prevUpdaModel,
+                    serialNo: prevUpdaSerail,
                     chassisNo: chassisNoNewList,
                     color: eachItem.item.color,
                     stock_type: selectedType,
-                    qty: serialNosList.length,
+                    qty: prevUpdaSerail.length,
                     cashPrice: eachItem.item.cashPrice,
                     salePrice: eachItem.item.salePrice,
                     noOfInstallments: eachItem.item.noOfInstallments,
@@ -291,10 +295,6 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                           setLoadingSubmit(false);
                           window.location.reload();
                         });
-                    })
-                    .catch(function (error) {
-                      setLoadingSubmit(false);
-                      window.location.reload();
                     });
                 }
               }

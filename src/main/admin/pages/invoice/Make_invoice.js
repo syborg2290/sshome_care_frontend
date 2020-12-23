@@ -91,14 +91,19 @@ function Make_invoice() {
   const addInput = () => {
     setInputsSerialNo({
       [currentIndex]: {
-        ...inputsSerialNo,
-        [Object.keys(inputsSerialNo).length]: "",
+        ...inputsSerialNo[currentIndex],
+        [inputsSerialNo[currentIndex] === undefined
+          ? 0
+          : Object.keys(inputsSerialNo[currentIndex]).length]: "",
       },
     });
   };
   const handleChangeAddSerialInputs = (e) => {
     setInputsSerialNo({
-      [currentIndex]: { ...inputsSerialNo, [e.target.id]: e.target.value },
+      [currentIndex]: {
+        ...inputsSerialNo[currentIndex],
+        [e.target.id]: e.target.value,
+      },
     });
   };
 

@@ -54,8 +54,6 @@ function Employee_Invoice() {
   const [intialTimestamp, setInititialTimestamp] = useState(null);
   const [visibleSerial, setVisibleSerial] = useState(false);
   const [inputsSerialNo, setInputsSerialNo] = useState({});
-  // eslint-disable-next-line
-  const [isSerialLoadingSubmit, setSerialLoadingSubmit] = useState(false);
   const [empId, setEmpId] = useState(null);
   const [invoiceStatus, setInvoiceStatus] = useState("new");
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -70,14 +68,19 @@ function Employee_Invoice() {
   const addInput = () => {
     setInputsSerialNo({
       [currentIndex]: {
-        ...inputsSerialNo,
-        [Object.keys(inputsSerialNo).length]: "",
+        ...inputsSerialNo[currentIndex],
+        [inputsSerialNo[currentIndex] === undefined
+          ? 0
+          : Object.keys(inputsSerialNo[currentIndex]).length]: "",
       },
     });
   };
   const handleChangeAddSerialInputs = (e) => {
     setInputsSerialNo({
-      [currentIndex]: { ...inputsSerialNo, [e.target.id]: e.target.value },
+      [currentIndex]: {
+        ...inputsSerialNo[currentIndex],
+        [e.target.id]: e.target.value,
+      },
     });
   };
 

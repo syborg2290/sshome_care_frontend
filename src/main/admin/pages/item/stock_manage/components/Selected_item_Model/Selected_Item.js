@@ -119,8 +119,8 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                       eachItem.item.amountPerInstallment &&
                     ob.data().downPayment === eachItem.item.downPayment &&
                     ob.data().discount === eachItem.item.discount &&
-                    ob.data().stock_type === selectedType &&
-                    ob.data().modelNo[0] === eachItem.item.modelNo[0]
+                    ob.data().stock_type === selectedType
+                  // ob.data().modelNo[0] === eachItem.item.modelNo[0]
                 )
               ) {
                 var newArray = allItems.docs.filter(
@@ -136,8 +136,8 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                       eachItem.item.amountPerInstallment &&
                     ob.data().downPayment === eachItem.item.downPayment &&
                     ob.data().discount === eachItem.item.discount &&
-                    ob.data().stock_type === selectedType &&
-                    ob.data().modelNo[0] === eachItem.item.modelNo[0]
+                    ob.data().stock_type === selectedType
+                  // ob.data().modelNo[0] === eachItem.item.modelNo[0]
                 );
                 if (newArray) {
                   var modelNosList = [];

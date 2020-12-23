@@ -66,7 +66,7 @@ function Employee_Invoice() {
   };
 
   const addInput = () => {
-    setInputsSerialNo({
+    var combined = Object.assign(inputsSerialNo, {
       [currentIndex]: {
         ...inputsSerialNo[currentIndex],
         [inputsSerialNo[currentIndex] === undefined
@@ -74,14 +74,16 @@ function Employee_Invoice() {
           : Object.keys(inputsSerialNo[currentIndex]).length]: "",
       },
     });
+    setInputsSerialNo({ ...combined });
   };
   const handleChangeAddSerialInputs = (e) => {
-    setInputsSerialNo({
+    var combined2 = Object.assign(inputsSerialNo, {
       [currentIndex]: {
         ...inputsSerialNo[currentIndex],
         [e.target.id]: e.target.value,
       },
     });
+    setInputsSerialNo({ ...combined2 });
   };
 
   useEffect(() => {

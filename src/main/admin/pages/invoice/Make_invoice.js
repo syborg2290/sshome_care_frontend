@@ -89,7 +89,7 @@ function Make_invoice() {
   };
 
   const addInput = () => {
-    setInputsSerialNo({
+    var combined = Object.assign(inputsSerialNo, {
       [currentIndex]: {
         ...inputsSerialNo[currentIndex],
         [inputsSerialNo[currentIndex] === undefined
@@ -97,14 +97,16 @@ function Make_invoice() {
           : Object.keys(inputsSerialNo[currentIndex]).length]: "",
       },
     });
+    setInputsSerialNo({ ...combined });
   };
   const handleChangeAddSerialInputs = (e) => {
-    setInputsSerialNo({
+    var combined2 = Object.assign(inputsSerialNo, {
       [currentIndex]: {
         ...inputsSerialNo[currentIndex],
         [e.target.id]: e.target.value,
       },
     });
+    setInputsSerialNo({ ...combined2 });
   };
 
   useEffect(() => {
@@ -1352,6 +1354,7 @@ function Make_invoice() {
                                       label="Serial Numbers"
                                       onChange={handleChangeAddSerialInputs}
                                       size="small"
+                                      value={inputsSerialNo[currentIndex][i]}
                                     />
 
                                     {i >=
@@ -1470,6 +1473,7 @@ function Make_invoice() {
                               onClick={() => {
                                 setCurrentIndex(row.i);
                                 showModal();
+                                
                               }}
                             />
                           </TableCell>

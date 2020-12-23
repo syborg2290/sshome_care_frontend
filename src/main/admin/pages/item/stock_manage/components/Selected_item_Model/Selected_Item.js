@@ -154,32 +154,7 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                   }
 
                   if (qty[eachItem.i] === modelNosList.length) {
-                    for (let q = 0; q < qty[eachItem.i]; q++) {
-                      tikModel.shift();
-                      tikSerial.shift();
-                    }
-
-                    await db
-                      .collection("item")
-                      .doc(eachItem.id)
-                      .update({
-                        qty:
-                          eachItem.item.qty - qty[eachItem.i] >= 0
-                            ? eachItem.item.qty - qty[eachItem.i]
-                            : 0,
-                        chassisNo: newArrayChassis,
-                        modelNo: tikModel,
-                        serialNo: tikSerial,
-                      });
-
-                    let eachModelNo = newArray[0].data().modelNo;
-                    let eachSerialNo = newArray[0].data().serialNo;
-
-                    let prevUpdaModel = eachModelNo.concat(modelNosList);
-                    let prevUpdaSerail = eachSerialNo.concat(serialNosList);
-
-                    await db
-                      .collection("managed_stock_history")
+                    db.collection("managed_stock_history")
                       .add({
                         date: date,
                         itemId: eachItem.id,
@@ -190,7 +165,31 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                         modelNo: modelNosList,
                         serialNo: serialNosList,
                       })
-                      .then((_) => {
+                      .then(async (_) => {
+                        for (let q = 0; q < qty[eachItem.i]; q++) {
+                          tikModel.shift();
+                          tikSerial.shift();
+                        }
+
+                        await db
+                          .collection("item")
+                          .doc(eachItem.id)
+                          .update({
+                            qty:
+                              eachItem.item.qty - qty[eachItem.i] >= 0
+                                ? eachItem.item.qty - qty[eachItem.i]
+                                : 0,
+                            chassisNo: newArrayChassis,
+                            modelNo: tikModel,
+                            serialNo: tikSerial,
+                          });
+
+                        let eachModelNo = newArray[0].data().modelNo;
+                        let eachSerialNo = newArray[0].data().serialNo;
+
+                        let prevUpdaModel = eachModelNo.concat(modelNosList);
+                        let prevUpdaSerail = eachSerialNo.concat(serialNosList);
+
                         db.collection("item")
                           .doc(newArray[0].id)
                           .update({
@@ -228,52 +227,7 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                 }
 
                 if (qty[eachItem.i] === modelNosList2.length) {
-                  for (let q = 0; q < qty[eachItem.i]; q++) {
-                    modelNoNewList2.shift();
-                    serialNoNewList2.shift();
-                  }
-
-                  await db
-                    .collection("item")
-                    .doc(eachItem.id)
-                    .update({
-                      qty:
-                        eachItem.item.qty - qty[eachItem.i] >= 0
-                          ? eachItem.item.qty - qty[eachItem.i]
-                          : 0,
-                      chassisNo: chassisNosList2,
-                      modelNo: modelNoNewList2,
-                      serialNo: serialNoNewList2,
-                    });
-
-                  var prevUpdaModel2 = modelNosList2;
-                  var prevUpdaSerail2 = serialNosList2;
-
-                  let variable = {
-                    itemName: eachItem.item.itemName,
-                    brand: eachItem.item.brand,
-                    modelNo: prevUpdaModel2,
-                    serialNo: prevUpdaSerail2,
-                    chassisNo: chassisNoNewList2,
-                    color: eachItem.item.color,
-                    stock_type: selectedType,
-                    qty: prevUpdaSerail2.length,
-                    cashPrice: eachItem.item.cashPrice,
-                    salePrice: eachItem.item.salePrice,
-                    noOfInstallments: eachItem.item.noOfInstallments,
-                    amountPerInstallment: eachItem.item.amountPerInstallment,
-                    downPayment: eachItem.item.downPayment,
-                    guaranteePeriod: eachItem.item.guaranteePeriod,
-                    discount: eachItem.item.discount,
-                    description: eachItem.item.description,
-                    cInvoiceNo: eachItem.item.cInvoiceNo,
-                    GCardNo: eachItem.item.GCardNo,
-                    guarantee: eachItem.item.guarantee,
-                    timestamp: date,
-                  };
-
-                  await db
-                    .collection("managed_stock_history")
+                  db.collection("managed_stock_history")
                     .add({
                       date: date,
                       itemId: eachItem.id,
@@ -284,7 +238,52 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                       modelNo: modelNosList2,
                       serialNo: serialNosList2,
                     })
-                    .then((_) => {
+                    .then(async (_) => {
+                      for (let q = 0; q < qty[eachItem.i]; q++) {
+                        modelNoNewList2.shift();
+                        serialNoNewList2.shift();
+                      }
+
+                      await db
+                        .collection("item")
+                        .doc(eachItem.id)
+                        .update({
+                          qty:
+                            eachItem.item.qty - qty[eachItem.i] >= 0
+                              ? eachItem.item.qty - qty[eachItem.i]
+                              : 0,
+                          chassisNo: chassisNosList2,
+                          modelNo: modelNoNewList2,
+                          serialNo: serialNoNewList2,
+                        });
+
+                      var prevUpdaModel2 = modelNosList2;
+                      var prevUpdaSerail2 = serialNosList2;
+
+                      let variable = {
+                        itemName: eachItem.item.itemName,
+                        brand: eachItem.item.brand,
+                        modelNo: prevUpdaModel2,
+                        serialNo: prevUpdaSerail2,
+                        chassisNo: chassisNoNewList2,
+                        color: eachItem.item.color,
+                        stock_type: selectedType,
+                        qty: prevUpdaSerail2.length,
+                        cashPrice: eachItem.item.cashPrice,
+                        salePrice: eachItem.item.salePrice,
+                        noOfInstallments: eachItem.item.noOfInstallments,
+                        amountPerInstallment:
+                          eachItem.item.amountPerInstallment,
+                        downPayment: eachItem.item.downPayment,
+                        guaranteePeriod: eachItem.item.guaranteePeriod,
+                        discount: eachItem.item.discount,
+                        description: eachItem.item.description,
+                        cInvoiceNo: eachItem.item.cInvoiceNo,
+                        GCardNo: eachItem.item.GCardNo,
+                        guarantee: eachItem.item.guarantee,
+                        timestamp: date,
+                      };
+
                       db.collection("item")
                         .add(variable)
                         .then((_) => {

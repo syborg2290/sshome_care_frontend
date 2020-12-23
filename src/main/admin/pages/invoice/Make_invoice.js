@@ -588,7 +588,7 @@ function Make_invoice() {
                                       customerFrontURL: customerImageURLFront,
                                       customerBackURL: customerImageURLBack,
                                     })
-                                    .then((cust) => {
+                                    .then((_) => {
                                       let arrayItems = [];
 
                                       tablerows.forEach((one) => {
@@ -689,7 +689,7 @@ function Make_invoice() {
                                             times
                                           ),
                                         })
-                                        .then((invDoc) => {
+                                        .then((_) => {
                                           db.collection("trustee").add({
                                             fname:
                                               tablerows[0].customer
@@ -776,35 +776,40 @@ function Make_invoice() {
 
                                               //++++++++++++++++++++++++++++++++++++++++++++
                                               let countOfExist = 0;
-                                              for (
-                                                let q = 0;
-                                                q <
-                                                Object.keys(
-                                                  inputsSerialNo[itemUDoc.i]
-                                                ).length;
-                                                q++
+                                              if (
+                                                inputsSerialNo[itemUDoc.i] !==
+                                                undefined
                                               ) {
-                                                if (
-                                                  serialNoList.indexOf(
-                                                    inputsSerialNo[itemUDoc.i][
-                                                      q
-                                                    ]
-                                                  ) !== -1
+                                                for (
+                                                  let q = 0;
+                                                  q <
+                                                  Object.keys(
+                                                    inputsSerialNo[itemUDoc.i]
+                                                  ).length;
+                                                  q++
                                                 ) {
-                                                  countOfExist++;
-                                                  let indexVal = serialNoList.indexOf(
-                                                    inputsSerialNo[itemUDoc.i][
-                                                      q
-                                                    ]
-                                                  );
-                                                  serialNoList.splice(
-                                                    indexVal,
-                                                    1
-                                                  );
-                                                } else {
-                                                  console.log(
-                                                    "Value does not exists!"
-                                                  );
+                                                  if (
+                                                    serialNoList.indexOf(
+                                                      inputsSerialNo[
+                                                        itemUDoc.i
+                                                      ][q]
+                                                    ) !== -1
+                                                  ) {
+                                                    countOfExist++;
+                                                    let indexVal = serialNoList.indexOf(
+                                                      inputsSerialNo[
+                                                        itemUDoc.i
+                                                      ][q]
+                                                    );
+                                                    serialNoList.splice(
+                                                      indexVal,
+                                                      1
+                                                    );
+                                                  } else {
+                                                    console.log(
+                                                      "Value does not exists!"
+                                                    );
+                                                  }
                                                 }
                                               }
 
@@ -979,7 +984,7 @@ function Make_invoice() {
                                             times
                                           ),
                                         })
-                                        .then((invDoc) => {
+                                        .then((_) => {
                                           db.collection("trustee").add({
                                             fname:
                                               tablerows[0].customer
@@ -1066,35 +1071,40 @@ function Make_invoice() {
 
                                               //++++++++++++++++++++++++++++++++++++++++++++
                                               let countOfExist = 0;
-                                              for (
-                                                let q = 0;
-                                                q <
-                                                Object.keys(
-                                                  inputsSerialNo[itemUDoc.i]
-                                                ).length;
-                                                q++
+                                              if (
+                                                inputsSerialNo[itemUDoc.i] !==
+                                                undefined
                                               ) {
-                                                if (
-                                                  serialNoList.indexOf(
-                                                    inputsSerialNo[itemUDoc.i][
-                                                      q
-                                                    ]
-                                                  ) !== -1
+                                                for (
+                                                  let q = 0;
+                                                  q <
+                                                  Object.keys(
+                                                    inputsSerialNo[itemUDoc.i]
+                                                  ).length;
+                                                  q++
                                                 ) {
-                                                  countOfExist++;
-                                                  let indexVal = serialNoList.indexOf(
-                                                    inputsSerialNo[itemUDoc.i][
-                                                      q
-                                                    ]
-                                                  );
-                                                  serialNoList.splice(
-                                                    indexVal,
-                                                    1
-                                                  );
-                                                } else {
-                                                  console.log(
-                                                    "Value does not exists!"
-                                                  );
+                                                  if (
+                                                    serialNoList.indexOf(
+                                                      inputsSerialNo[
+                                                        itemUDoc.i
+                                                      ][q]
+                                                    ) !== -1
+                                                  ) {
+                                                    countOfExist++;
+                                                    let indexVal = serialNoList.indexOf(
+                                                      inputsSerialNo[
+                                                        itemUDoc.i
+                                                      ][q]
+                                                    );
+                                                    serialNoList.splice(
+                                                      indexVal,
+                                                      1
+                                                    );
+                                                  } else {
+                                                    console.log(
+                                                      "Value does not exists!"
+                                                    );
+                                                  }
                                                 }
                                               }
 
@@ -1223,17 +1233,21 @@ function Make_invoice() {
 
         //++++++++++++++++++++++++++++++++++++++++++++
         let countOfExist = 0;
-        for (
-          let q = 0;
-          q < Object.keys(inputsSerialNo[itemUDoc.i]).length;
-          q++
-        ) {
-          if (serialNoList.indexOf(inputsSerialNo[itemUDoc.i][q]) !== -1) {
-            countOfExist++;
-            let indexVal = serialNoList.indexOf(inputsSerialNo[itemUDoc.i][q]);
-            serialNoList.splice(indexVal, 1);
-          } else {
-            console.log("Value does not exists!");
+        if (inputsSerialNo[itemUDoc.i] !== undefined) {
+          for (
+            let q = 0;
+            q < Object.keys(inputsSerialNo[itemUDoc.i]).length;
+            q++
+          ) {
+            if (serialNoList.indexOf(inputsSerialNo[itemUDoc.i][q]) !== -1) {
+              countOfExist++;
+              let indexVal = serialNoList.indexOf(
+                inputsSerialNo[itemUDoc.i][q]
+              );
+              serialNoList.splice(indexVal, 1);
+            } else {
+              console.log("Value does not exists!");
+            }
           }
         }
 

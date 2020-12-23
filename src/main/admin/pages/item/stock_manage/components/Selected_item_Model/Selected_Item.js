@@ -65,7 +65,7 @@ export default function Selected_Item({ itemListProps, closeModel }) {
     var keepData = [];
     var i = 0;
     itemListProps.forEach((ele) => {
-      qty[i] = 1;
+      qty[i] = 0;
 
       keepData.push({
         i: i,
@@ -142,25 +142,20 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                 if (newArray) {
                   let modelNosList = [];
                   let serialNosList = [];
+                  let newArrayModel = newArray[0].data().modelNo;
+                  let newArraySerial = newArray[0].data().serialNo;
+                  let newArrayChassis = newArray[0].data().chassisNo;
+                  let tikModel = newArrayModel;
+                  let tikSerial = newArraySerial;
 
                   for (let q = 0; q < qty[eachItem.i]; q++) {
+                    tikModel.shift();
+                    tikSerial.shift();
                     modelNosList.push(eachItem.item.modelNo[q]);
                     serialNosList.push(eachItem.item.serialNo[q]);
                   }
 
                   if (qty[eachItem.i] === modelNosList.length) {
-                    let newArrayModel = newArray[0].data().modelNo;
-                    let newArraySerial = newArray[0].data().serialNo;
-                    let newArrayChassis = newArray[0].data().chassisNo;
-                    let tikModel = newArrayModel.splice(
-                      modelNosList.length,
-                      newArrayModel.length
-                    );
-                    let tikSerial = newArraySerial.splice(
-                      serialNosList.length,
-                      newArraySerial.length
-                    );
-
                     await db
                       .collection("item")
                       .doc(eachItem.id)
@@ -174,8 +169,8 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                         serialNo: tikSerial,
                       });
 
-                    let eachModelNo = eachItem.item.modelNo;
-                    let eachSerialNo = eachItem.item.serialNo;
+                    let eachModelNo = newArray[0].data().modelNo;
+                    let eachSerialNo = newArray[0].data().serialNo;
 
                     let prevUpdaModel = eachModelNo.concat(modelNosList);
                     let prevUpdaSerail = eachSerialNo.concat(serialNosList);
@@ -213,29 +208,25 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                 let serialNosList = [];
                 let chassisNosList = [];
 
+                let newArrayModel = eachItem.item.modelNo;
+                let newArraySerial = eachItem.item.serialNo;
+                let newArrayChassis = eachItem.item.chassisNo;
+
+                let modelNoNewList = newArrayModel;
+                let serialNoNewList = newArraySerial;
+                let chassisNoNewList = newArrayChassis.splice(
+                  0,
+                  qty[eachItem.i]
+                );
+
                 for (let q = 0; q < qty[eachItem.i]; q++) {
+                  modelNoNewList.shift();
+                  serialNoNewList.shift();
                   modelNosList.push(eachItem.item.modelNo[q]);
                   serialNosList.push(eachItem.item.serialNo[q]);
                 }
 
                 if (qty[eachItem.i] === modelNosList.length) {
-                  let newArrayModel = eachItem.item.modelNo;
-                  let newArraySerial = eachItem.item.serialNo;
-                  let newArrayChassis = eachItem.item.chassisNo;
-
-                  let modelNoNewList = newArrayModel.splice(
-                    modelNosList.length,
-                    newArrayModel.length
-                  );
-                  let serialNoNewList = newArraySerial.splice(
-                    serialNosList.length,
-                    newArraySerial.length
-                  );
-                  let chassisNoNewList = newArrayChassis.splice(
-                    0,
-                    qty[eachItem.i]
-                  );
-
                   await db
                     .collection("item")
                     .doc(eachItem.id)
@@ -249,11 +240,11 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                       serialNo: serialNoNewList,
                     });
 
-                  let eachModelNo = eachItem.item.modelNo;
-                  let eachSerialNo = eachItem.item.serialNo;
+                  // let eachModelNo = eachItem.item.modelNo;
+                  // let eachSerialNo = eachItem.item.serialNo;
 
-                  let prevUpdaModel = eachModelNo.concat(modelNosList);
-                  let prevUpdaSerail = eachSerialNo.concat(serialNosList);
+                  let prevUpdaModel = modelNosList;
+                  let prevUpdaSerail = serialNosList;
 
                   let variable = {
                     itemName: eachItem.item.itemName,
@@ -290,8 +281,8 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                           qty: qty[eachItem.i],
                           from: eachItem.item.stock_type,
                           to: selectedType,
-                          modelNo: modelNosList,
-                          serialNo: serialNosList,
+                          modelNo: modelNoNewList,
+                          serialNo: serialNoNewList,
                         })
                         .then((_) => {
                           setLoadingSubmit(false);

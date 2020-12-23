@@ -356,26 +356,26 @@ export default function Managed_History() {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {allData[currentIndx]?.data.serialNo.length > 0
-                      ? allData[currentIndx]?.data.serialNo.map((row) => (
-                          <TableRow key={0}>
-                            <TableCell component="th" scope="row">
-                              {allData[currentIndx]?.data.serialNo.map(
-                                (serailNoT) => (
-                                  <h5 key={serailNoT}>{serailNoT}</h5>
-                                )
-                              )}
-                            </TableCell>
-                            <TableCell component="th" scope="row">
-                              {allData[currentIndx]?.data.modelNo.map(
-                                (modelNoT) => (
-                                  <h5 key={modelNoT}>{modelNoT}</h5>
-                                )
-                              )}
-                            </TableCell>
-                          </TableRow>
-                        ))
-                      : ""}
+                    {allData[currentIndx]?.data.serialNo.length > 0 ? (
+                      <TableRow key={0}>
+                        <TableCell component="th" scope="row">
+                          {allData[currentIndx]?.data.serialNo.map(
+                            (serailNoT) => (
+                              <h5 key={serailNoT}>{serailNoT}</h5>
+                            )
+                          )}
+                        </TableCell>
+                        <TableCell component="th" scope="row">
+                          {allData[currentIndx]?.data.modelNo.map(
+                            (modelNoT) => (
+                              <h5 key={Math.random()}>{modelNoT}</h5>
+                            )
+                          )}
+                        </TableCell>
+                      </TableRow>
+                    ) : (
+                      ""
+                    )}
                   </TableBody>
                 </Table>
               </TableContainer>

@@ -37,6 +37,7 @@ export default function Full_Payment_Model({ items_list_props, data }) {
             ...old,
             {
               item_name: th.data().itemName,
+              stock_type:each.stock_type,
               listSe: itemDataSeMo,
               discount: each.discount,
               qty: each.qty,

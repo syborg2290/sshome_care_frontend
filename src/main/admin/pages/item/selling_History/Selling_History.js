@@ -38,7 +38,7 @@ export default function Selling_History() {
     });
 
     db.collection("selling_history")
-      .orderBy("timestamp", "desc")
+      .orderBy("date", "desc")
       .onSnapshot((snapshot) => {
         var allItemData = [];
         var tableData = [];

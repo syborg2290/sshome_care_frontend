@@ -178,26 +178,26 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                     let prevUpdaModel = eachModelNo.concat(modelNosList);
                     let prevUpdaSerail = eachSerialNo.concat(serialNosList);
 
-                    db.collection("item")
-                      .doc(newArray[0].id)
-                      .update({
-                        qty: newArray[0].data().qty + qty[eachItem.i],
-                        modelNo: prevUpdaModel,
-                        serialNo: prevUpdaSerail,
-                        chassisNo: newArrayChassis,
+                    await db
+                      .collection("managed_stock_history")
+                      .add({
+                        date: date,
+                        itemId: eachItem.id,
+                        item: eachItem.item,
+                        qty: qty[eachItem.i],
+                        from: eachItem.item.stock_type,
+                        to: selectedType,
+                        modelNo: modelNosList,
+                        serialNo: serialNosList,
                       })
-                      .then(async (_) => {
-                        await db
-                          .collection("managed_stock_history")
-                          .add({
-                            date: date,
-                            itemId: eachItem.id,
-                            item: eachItem.item,
-                            qty: qty[eachItem.i],
-                            from: eachItem.item.stock_type,
-                            to: selectedType,
-                            modelNo: modelNosList,
-                            serialNo: serialNosList,
+                      .then((_) => {
+                        db.collection("item")
+                          .doc(newArray[0].id)
+                          .update({
+                            qty: newArray[0].data().qty + qty[eachItem.i],
+                            modelNo: prevUpdaModel,
+                            serialNo: prevUpdaSerail,
+                            chassisNo: newArrayChassis,
                           })
                           .then((_) => {
                             setLoadingSubmit(false);
@@ -272,21 +272,21 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                     timestamp: date,
                   };
 
-                  db.collection("item")
-                    .add(variable)
-                    .then(async (_) => {
-                      await db
-                        .collection("managed_stock_history")
-                        .add({
-                          date: date,
-                          itemId: eachItem.id,
-                          item: eachItem.item,
-                          qty: qty[eachItem.i],
-                          from: eachItem.item.stock_type,
-                          to: selectedType,
-                          modelNo: modelNosList2,
-                          serialNo: serialNosList2,
-                        })
+                  await db
+                    .collection("managed_stock_history")
+                    .add({
+                      date: date,
+                      itemId: eachItem.id,
+                      item: eachItem.item,
+                      qty: qty[eachItem.i],
+                      from: eachItem.item.stock_type,
+                      to: selectedType,
+                      modelNo: modelNosList2,
+                      serialNo: serialNosList2,
+                    })
+                    .then((_) => {
+                      db.collection("item")
+                        .add(variable)
                         .then((_) => {
                           setLoadingSubmit(false);
                           window.location.reload();

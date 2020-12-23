@@ -305,7 +305,7 @@ function Employee_Invoice() {
                             Add Numbers
                             <PlusOutlined className="reltion_addIcon" />
                           </Button>
-                          {Object.keys(inputsSerialNo).length === 0
+                          {inputsSerialNo[currentIndex] === undefined
                             ? null
                             : Object.keys(inputsSerialNo[currentIndex]).map(
                                 (i) => (

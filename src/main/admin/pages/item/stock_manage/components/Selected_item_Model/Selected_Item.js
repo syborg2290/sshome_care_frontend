@@ -149,13 +149,16 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                   var tikSerial = newArraySerial;
 
                   for (let q = 0; q < qty[eachItem.i]; q++) {
-                    tikModel.shift();
-                    tikSerial.shift();
                     serialNosList.push(eachItem.item.serialNo[q]);
                     modelNosList.push(eachItem.item.modelNo[q]);
                   }
 
                   if (qty[eachItem.i] === modelNosList.length) {
+                    for (let q = 0; q < qty[eachItem.i]; q++) {
+                      tikModel.shift();
+                      tikSerial.shift();
+                    }
+
                     await db
                       .collection("item")
                       .doc(eachItem.id)
@@ -212,21 +215,24 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                 var newArraySerial2 = eachItem.item.serialNo;
                 var newArrayChassis2 = eachItem.item.chassisNo;
 
-                var modelNoNewList2 = newArrayModel2;
-                var serialNoNewList2 = newArraySerial2;
+                var modelNoNewList2 = eachItem.item.modelNo;
+                var serialNoNewList2 = eachItem.item.serialNo;
                 var chassisNoNewList2 = newArrayChassis2.splice(
                   0,
                   qty[eachItem.i]
                 );
 
                 for (let q = 0; q < qty[eachItem.i]; q++) {
-                  modelNoNewList2.shift();
-                  serialNoNewList2.shift();
                   serialNosList2.push(newArraySerial2[q]);
                   modelNosList2.push(newArrayModel2[q]);
                 }
 
                 if (qty[eachItem.i] === modelNosList2.length) {
+                  for (let q = 0; q < qty[eachItem.i]; q++) {
+                    modelNoNewList2.shift();
+                    serialNoNewList2.shift();
+                  }
+
                   await db
                     .collection("item")
                     .doc(eachItem.id)
@@ -239,9 +245,6 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                       modelNo: modelNoNewList2,
                       serialNo: serialNoNewList2,
                     });
-
-                  // let eachModelNo = eachItem.item.modelNo;
-                  // let eachSerialNo = eachItem.item.serialNo;
 
                   var prevUpdaModel2 = modelNosList2;
                   var prevUpdaSerail2 = serialNosList2;
@@ -286,7 +289,7 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                         })
                         .then((_) => {
                           setLoadingSubmit(false);
-                          //window.location.reload();
+                          window.location.reload();
                         });
                     });
                 }

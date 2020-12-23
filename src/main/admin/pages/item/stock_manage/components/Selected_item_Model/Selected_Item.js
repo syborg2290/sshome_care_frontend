@@ -400,18 +400,24 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                     onChange={handleChange}
                     value={selectedType}
                   >
-                    <option onChange={handleChange} value={"main"}>
-                      main
-                    </option>
-                    <option onChange={handleChange} value={"shop"}>
-                      shop
-                    </option>
-
-                    {allRoot.map((each) => (
-                      <option onChange={handleChange} key={each} value={each}>
-                        {each}
+                    {itemsData[0]?.item.stock_type === "main" ? null : (
+                      <option onChange={handleChange} value={"main"}>
+                        main
                       </option>
-                    ))}
+                    )}
+                    {itemsData[0]?.item.stock_type === "shop" ? null : (
+                      <option onChange={handleChange} value={"shop"}>
+                        shop
+                      </option>
+                    )}
+
+                    {allRoot.map((each) =>
+                      itemsData[0]?.item.stock_type === each ? null : (
+                        <option onChange={handleChange} key={each} value={each}>
+                          {each}
+                        </option>
+                      )
+                    )}
                   </Select>
                 </FormControl>
               </Space>

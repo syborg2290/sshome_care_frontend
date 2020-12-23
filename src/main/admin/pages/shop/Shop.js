@@ -72,17 +72,12 @@ export default function Shop() {
         var raw = [];
 
         reShop.docs.forEach((each) => {
-          db.collection("employee")
-            .where("nic", "==", each.data().nic)
-            .get()
-            .then((reThe) => {
-              raw.push({
-                FirstName: reThe.docs[0].data().fname,
-                LastName: reThe.docs[0].data().lname,
-                NIC: reThe.docs[0].data().nic,
-                Mobile: reThe.docs[0].data().mobile1,
-              });
-            });
+          raw.push({
+            FirstName: each.data().FirstName,
+            LastName: each.data().LastName,
+            NIC: each.data().nic,
+            Mobile: each.data().Mobile,
+          });
         });
         setTableData(raw);
       });

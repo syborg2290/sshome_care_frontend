@@ -817,7 +817,7 @@ function Make_invoice() {
                                                 itemQty[itemUDoc.i] -
                                                 countOfExist;
 
-                                              if (spliceCount <= 0) {
+                                              if (spliceCount > 0) {
                                                 serialNoList.splice(
                                                   0,
                                                   spliceCount
@@ -1112,7 +1112,7 @@ function Make_invoice() {
                                                 itemQty[itemUDoc.i] -
                                                 countOfExist;
 
-                                              if (spliceCount <= 0) {
+                                              if (spliceCount > 0) {
                                                 serialNoList.splice(
                                                   0,
                                                   spliceCount
@@ -1253,7 +1253,7 @@ function Make_invoice() {
 
         let spliceCount = itemQty[itemUDoc.i] - countOfExist;
 
-        if (spliceCount <= 0) {
+        if (spliceCount > 0) {
           serialNoList.splice(0, spliceCount);
         }
 

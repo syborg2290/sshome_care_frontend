@@ -157,7 +157,7 @@ export default function Selling_History() {
           <div className="model_Main">
             <div className="model_Detail">
               {allTtemData[currentIndx]?.data.items.map((eachItem) => (
-                <div>
+                <div key={allTtemData[currentIndx]?.id}>
                   <Row>
                     <Col span={12}>Item name</Col>
                     <Col span={12}>

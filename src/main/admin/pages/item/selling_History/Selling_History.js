@@ -218,14 +218,16 @@ export default function Selling_History() {
                       <TableBody>
                         {eachItem.serialNo.length > 0
                           ? eachItem.serialNo.map((row) => (
-                              <TableRow key={0}>
+                              <TableRow key={row}>
                                 <TableCell component="th" scope="row">
                                   {<h5 key={row}>{row}</h5>}
                                 </TableCell>
                                 <TableCell component="th" scope="row">
-                                  {eachItem.modelNo.map((modelNoT) => (
-                                    <h5 key={Math.random()}>{modelNoT}</h5>
-                                  ))}
+                                  {
+                                    <h5 key={Math.random()}>
+                                      {eachItem.modelNo[0]}
+                                    </h5>
+                                  }
                                 </TableCell>
                               </TableRow>
                             ))

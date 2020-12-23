@@ -75,8 +75,6 @@ function Make_invoice() {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const [inputsSerialNo, setInputsSerialNo] = useState({});
-  // eslint-disable-next-line
-  const [isSerialLoadingSubmit, SetSerialLoadingSubmit] = useState(false);
 
   let history = useHistory();
   let history2 = useHistory();

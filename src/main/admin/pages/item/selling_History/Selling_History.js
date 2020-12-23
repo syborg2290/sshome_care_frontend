@@ -142,7 +142,7 @@ export default function Selling_History() {
         title={
           <span className="model_title">
             {allTtemData[currentIndx] && allTtemData[currentIndx].data
-              ? allTtemData[currentIndx].data.invoice_number
+              ? allTtemData[currentIndx]?.data.invoice_number
               : null}
           </span>
         }
@@ -224,7 +224,7 @@ export default function Selling_History() {
                                 </TableCell>
                                 <TableCell component="th" scope="row">
                                   {eachItem.modelNo.map((modelNoT) => (
-                                    <h5 key={modelNoT}>{modelNoT}</h5>
+                                    <h5 key={Math.random()}>{modelNoT}</h5>
                                   ))}
                                 </TableCell>
                               </TableRow>

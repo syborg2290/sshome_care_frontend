@@ -1351,23 +1351,6 @@ function Make_invoice() {
                         </div>
                       </Grid>
                     </Grid>
-
-                    {/* <p className="validate_updateRoot">{validation}</p> */}
-                    <Grid container spacing={2}>
-                      <Grid item xs={12} sm={12}>
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          className="btn_addSerial"
-                        >
-                          {isSerialLoadingSubmit ? (
-                            <Spin size="large" />
-                          ) : (
-                            "Done"
-                          )}
-                        </Button>
-                      </Grid>
-                    </Grid>
                   </form>
                 </div>
               </Container>

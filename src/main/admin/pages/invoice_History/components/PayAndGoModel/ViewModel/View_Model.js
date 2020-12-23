@@ -528,7 +528,7 @@ export default function View_Model({ items_list_props, data }) {
                                 <TableCell component="th" scope="row">
                                   {eachItem.listSe[0]?.modelNo?.map(
                                     (modelNoT) => (
-                                      <h5 key={modelNoT}>{modelNoT}</h5>
+                                      <h5 key={Math.random()}>{modelNoT}</h5>
                                     )
                                   )}
                                 </TableCell>

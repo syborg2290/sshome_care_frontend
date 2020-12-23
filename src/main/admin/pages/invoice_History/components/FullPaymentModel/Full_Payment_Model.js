@@ -37,7 +37,7 @@ export default function Full_Payment_Model({ items_list_props, data }) {
             ...old,
             {
               item_name: th.data().itemName,
-              stock_type:each.stock_type,
+              stock_type: each.stock_type,
               listSe: itemDataSeMo,
               discount: each.discount,
               qty: each.qty,
@@ -233,7 +233,7 @@ export default function Full_Payment_Model({ items_list_props, data }) {
                                 <TableCell component="th" scope="row">
                                   {eachItem.listSe[0]?.modelNo?.map(
                                     (modelNoT) => (
-                                      <h5 key={modelNoT}>{modelNoT}</h5>
+                                      <h5 key={Math.random()}>{modelNoT}</h5>
                                     )
                                   )}
                                 </TableCell>

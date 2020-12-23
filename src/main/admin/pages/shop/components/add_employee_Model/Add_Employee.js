@@ -52,13 +52,21 @@ export default function Add_Employee() {
         .get()
         .then((reEmp) => {
           if (reEmp.docs.length === 0) {
-            db.collection("shop")
-              .add({
-                nic: employee1,
-              })
-              .then((_) => {
-                setLoadingSubmit(false);
-                window.location.reload();
+            db.collection("employee")
+              .where("nic", "==", employee1)
+              .get()
+              .then((reThe) => {
+                db.collection("shop")
+                  .add({
+                    nic: employee1,
+                    FirstName: reThe.docs[0].data().fname,
+                    LastName: reThe.docs[0].data().lname,
+                    Mobile: reThe.docs[0].data().mobile1,
+                  })
+                  .then((_) => {
+                    setLoadingSubmit(false);
+                    window.location.reload();
+                  });
               });
           } else {
             setLoadingSubmit(false);

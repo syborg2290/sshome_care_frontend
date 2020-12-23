@@ -1320,34 +1320,40 @@ function Make_invoice() {
                             Add Numbers
                             <PlusOutlined className="reltion_addIcon" />
                           </Button>
-                          {Object.keys(inputsSerialNo).map((i) => (
-                            <div key={i + 1}>
-                              <TextField
-                                key={i + 2}
-                                id={i.toString()}
-                                className="txt_serials"
-                                autoComplete="serial"
-                                name="serial"
-                                variant="outlined"
-                                label="Serial Numbers"
-                                onChange={handleChangeAddSerialInputs}
-                                size="small"
-                              />
-
-                              {i >= Object.keys(inputsSerialNo).length - 1 ? (
-                                <MinusCircleOutlined
-                                  key={i + 3}
-                                  className="rmov_iconss"
-                                  onClick={() => {
-                                    delete inputsSerialNo[i];
-                                    setInputsSerialNo({ ...inputsSerialNo });
-                                  }}
+                          {Object.keys(inputsSerialNo[currentIndex]).map(
+                            (i) => (
+                              <div key={i + 1}>
+                                <TextField
+                                  key={i + 2}
+                                  id={i.toString()}
+                                  className="txt_serials"
+                                  autoComplete="serial"
+                                  name="serial"
+                                  variant="outlined"
+                                  label="Serial Numbers"
+                                  onChange={handleChangeAddSerialInputs}
+                                  size="small"
+                                  value={inputsSerialNo[currentIndex][i]}
                                 />
-                              ) : (
-                                ""
-                              )}
-                            </div>
-                          ))}
+
+                                {i >=
+                                Object.keys(inputsSerialNo[currentIndex])
+                                  .length -
+                                  1 ? (
+                                  <MinusCircleOutlined
+                                    key={i + 3}
+                                    className="rmov_iconss"
+                                    onClick={() => {
+                                      delete inputsSerialNo[currentIndex][i];
+                                      setInputsSerialNo({ ...inputsSerialNo });
+                                    }}
+                                  />
+                                ) : (
+                                  ""
+                                )}
+                              </div>
+                            )
+                          )}
                         </div>
                       </Grid>
                     </Grid>

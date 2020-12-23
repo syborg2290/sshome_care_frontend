@@ -101,8 +101,8 @@ export default function Selected_Item({ itemListProps, closeModel }) {
     setLoadingSubmit(true);
     getQtyStatus(qty).then(async (reStatus) => {
       if (reStatus) {
-        var allItems = await db.collection("item").get();
         itemsData.forEach(async (eachItem) => {
+          var allItems = await db.collection("item").get();
           if (qty[eachItem.i] > 0) {
             if (allItems) {
               if (

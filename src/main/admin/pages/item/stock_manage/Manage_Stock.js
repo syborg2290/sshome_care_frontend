@@ -279,7 +279,13 @@ export default function Manage_Stock() {
                 selectedItems = [];
                 allRowsSelected.forEach((single) => {
                   if (allTtemData[single.dataIndex].data.qty > 0) {
-                    selectedItems.push(allTtemData[single.dataIndex]);
+                    if (selectedItems.length === 0) {
+                      selectedItems.push(allTtemData[single.dataIndex]);
+                    } else {
+                      NotificationManager.warning(
+                        "Only one item can be selected!"
+                      );
+                    }
                   } else {
                     NotificationManager.warning("Out Of Stock");
                   }

@@ -44,7 +44,8 @@ export default function Add_Customer() {
   const [trustee1Addres2, setTrustee1Addres2] = useState("");
   const [trustee1Mobile1, setTrustee1Mobile1] = useState("");
   const [trustee1Mobile2, setTrustee1Mobile2] = useState("");
-    const [imageFileT1, setImageFileT1] = useState(null);
+  // eslint-disable-next-line
+  const [imageFileT1, setImageFileT1] = useState(null);
   const [imageUrlT1, setImageUrlT1] = useState(null);
   const [fromDbImageT1, setFromDbImageT1] = useState(null);
 
@@ -55,7 +56,8 @@ export default function Add_Customer() {
   const [trustee2Address2, setTrustee2Address2] = useState("");
   const [trustee2Mobile1, setTrustee2Mobile1] = useState("");
   const [trustee2Mobile2, setTrustee2Mobile2] = useState("");
-   const [imageFileT2, setImageFileT2] = useState(null);
+  // eslint-disable-next-line
+  const [imageFileT2, setImageFileT2] = useState(null);
   const [imageUrlT2, setImageUrlT2] = useState(null);
   const [fromDbImageT2, setFromDbImageT2] = useState(null);
 
@@ -101,7 +103,7 @@ export default function Add_Customer() {
     }
   };
 
-    const onImageChangeT1 = (event) => {
+  const onImageChangeT1 = (event) => {
     if (event.target.files && event.target.files[0]) {
       setImageFileT1(event.target.files[0]);
       let reader = new FileReader();
@@ -113,7 +115,7 @@ export default function Add_Customer() {
     }
   };
 
-      const onImageChangeT2 = (event) => {
+  const onImageChangeT2 = (event) => {
     if (event.target.files && event.target.files[0]) {
       setImageFileT2(event.target.files[0]);
       let reader = new FileReader();
@@ -1400,7 +1402,7 @@ export default function Add_Customer() {
                 />
               </Grid>
               <Grid item xs={12} sm={4}></Grid>
-               <Grid className="txt_LabelsImg" item xs={12} sm={2}>
+              <Grid className="txt_LabelsImg" item xs={12} sm={2}>
                 Image :
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -1586,7 +1588,7 @@ export default function Add_Customer() {
                 />
               </Grid>
               <Grid item xs={12} sm={4}></Grid>
-                <Grid className="txt_LabelsImg" item xs={12} sm={2}>
+              <Grid className="txt_LabelsImg" item xs={12} sm={2}>
                 Image :
               </Grid>
               <Grid item xs={12} sm={6}>

@@ -3538,7 +3538,7 @@ export default function Add_Paysheet_Model({ nic }) {
                       gutterBottom
                     >
                       EPF, Security Deposit , Attendance deductions, Salary
-                      Advance , Loan , Shortage
+                      Advance , Loan , Shortage ,purchased Good
                     </Typography>
                   </Grid>
                   <Grid item xs={12} sm={12}>

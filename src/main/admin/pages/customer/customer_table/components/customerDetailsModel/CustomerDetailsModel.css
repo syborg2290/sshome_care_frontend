@@ -30,7 +30,7 @@
   margin-top: -20px !important;
 }
 
-.imageFront {
+.imageFrontDetails {
   border-radius: 5px;
   width: 65% !important;
   height: 80% !important;
@@ -40,12 +40,32 @@
   margin-top: 30px;
 }
 
-.imageBack {
+.imageBackDetails {
   border-radius: 5px;
-  width: 50% !important;
+  width: 70% !important;
   margin: auto;
   text-align: center;
   justify-content: center;
   margin-top: 35px;
-  transform: rotate(270deg);
+  transform: rotate(270deg) !important;
+}
+
+.imageFrontDetailsload {
+  border-radius: 5px;
+  width: 65% !important;
+  height: 80% !important;
+  margin: auto;
+  text-align: center;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.imageBackDetailsload {
+  border-radius: 5px;
+  width: 70% !important;
+  margin: auto;
+  text-align: center;
+  justify-content: center;
+  margin-top: 35px;
+  transform: rotate(270deg) !important;
 }

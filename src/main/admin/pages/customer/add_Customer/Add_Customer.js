@@ -1240,6 +1240,8 @@ export default function Add_Customer() {
                   }
                   className="imageFront"
                 />
+                 <br  className="imagebr" />
+                <p  className="pTagImg">Image Front Side</p>
               </Grid>
 
               {/* image 2 */}
@@ -1270,6 +1272,8 @@ export default function Add_Customer() {
                   }
                   className="imageBack"
                 />
+                 <br  className="imagebr" />
+                <p  className="pTagImg">Image Back Side</p>
               </Grid>
               {/* <Grid item xs={12} sm={5}></Grid> */}
             </Grid>
@@ -1527,6 +1531,8 @@ export default function Add_Customer() {
                   }
                   className="imageFront"
                 />
+                 <br  className="imagebr" />
+                <p  className="pTagImg">Image Front Side</p>
               </Grid>
 
               {/* image 2 */}
@@ -1557,6 +1563,8 @@ export default function Add_Customer() {
                   }
                   className="imageBack"
                 />
+                 <br  className="imagebr" />
+                <p  className="pTagImg">Image Back Side</p>
               </Grid>
               <Grid item xs={12} sm={4}></Grid>
             </Grid>
@@ -1740,6 +1748,8 @@ export default function Add_Customer() {
                   }
                   className="imageFront"
                 />
+                <br />
+                <p  className="pTagImg">Image Front Side</p>
               </Grid>
 
               {/* image 2 */}
@@ -1770,6 +1780,8 @@ export default function Add_Customer() {
                   }
                   className="imageBack"
                 />
+                 <br  className="imagebr" />
+                <p  className="pTagImg" >Image Back Side</p>
               </Grid>
               <Grid item xs={12} sm={4}></Grid>
             </Grid>

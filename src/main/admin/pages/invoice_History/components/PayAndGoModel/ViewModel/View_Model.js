@@ -254,6 +254,7 @@ export default function View_Model({ items_list_props, data }) {
                   />
                 ) : (
                   <ModalImage
+                   className="imageFront"
                     small={customer.customerFrontURL}
                     large={customer.customerFrontURL}
                     alt="Empty data"
@@ -269,6 +270,7 @@ export default function View_Model({ items_list_props, data }) {
                   />
                 ) : (
                   <ModalImage
+                  className="imageBack"
                     small={customer.customerBackURL}
                     large={customer.customerBackURL}
                     alt="Empty data"
@@ -350,6 +352,7 @@ export default function View_Model({ items_list_props, data }) {
                       />
                     ) : (
                       <ModalImage
+                       className="imageFront"
                         small={si.trusteeFrontURL}
                         large={si.trusteeFrontURL}
                         alt="Empty data"
@@ -365,6 +368,7 @@ export default function View_Model({ items_list_props, data }) {
                       />
                     ) : (
                       <ModalImage
+                       className="imageBack"
                         small={si.trusteeBackURL}
                         large={si.trusteeBackURL}
                         alt="Empty data"

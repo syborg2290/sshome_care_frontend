@@ -3,6 +3,7 @@ import { Row, Col } from "antd";
 import Typography from "@material-ui/core/Typography";
 // style
 import "./view_customer_Model.css";
+import ModalImage from "react-modal-image";
 
 export default function view_customer_Model({
   photo,
@@ -26,15 +27,15 @@ export default function view_customer_Model({
       <Col className="space_col__sarani" span={12}></Col>
       <Col className="img_span__sarani" span={24}>
         {" "}
-        <img
-          alt="Empty data"
-          className="avatar_customer_sarani"
-          src={
-            photo !== null
-              ? photo
-              : require("../../../../../../assets/avatar.png")
-          }
-        />
+        {photo === null ? (
+          <img
+            alt="Empty data"
+            className="avatar_customer_sarani"
+            src={require("../../../../../../assets/avatar.png")}
+          />
+        ) : (
+          <ModalImage small={photo} large={photo} alt="Empty data" />
+        )}
       </Col>
 
       <Col className="space_col_sarani" span={24}></Col>
@@ -125,8 +126,6 @@ export default function view_customer_Model({
       <Col className="customer_sarani" span={14}>
         {root !== "" ? root : "-"}
       </Col>
-
-     
     </Row>
   );
 }

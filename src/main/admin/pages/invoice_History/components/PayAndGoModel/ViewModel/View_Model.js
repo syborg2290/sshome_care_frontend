@@ -11,6 +11,7 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
+import ModalImage from "react-modal-image";
 
 import db from "../../../../../../../config/firebase.js";
 
@@ -245,26 +246,34 @@ export default function View_Model({ items_list_props, data }) {
               </Grid>
               <Grid item xs={12} sm={6}></Grid>
               <Grid item xs={12} sm={6}>
-                <img
-                  alt="Empty data"
-                  className="imageFront"
-                  src={
-                    customer.customerFrontURL !== null
-                      ? customer.customerFrontURL
-                      : require("../../../../../../../assets/avatar1132.jpg")
-                  }
-                />
+                {customer.customerFrontURL === null ? (
+                  <img
+                    alt="Empty data"
+                    className="imageFront"
+                    src={require("../../../../../../../assets/avatar1132.jpg")}
+                  />
+                ) : (
+                  <ModalImage
+                    small={customer.customerFrontURL}
+                    large={customer.customerFrontURL}
+                    alt="Empty data"
+                  />
+                )}{" "}
               </Grid>
               <Grid item xs={12} sm={6}>
-                <img
-                  alt="Empty data"
-                  className="imageBack"
-                  src={
-                    customer.customerBackURL !== null
-                      ? customer.customerBackURL
-                      : require("../../../../../../../assets/avater232.jpg")
-                  }
-                />
+                {customer.customerBackURL === null ? (
+                  <img
+                    alt="Empty data"
+                    className="imageBack"
+                    src={require("../../../../../../../assets/avater232.jpg")}
+                  />
+                ) : (
+                  <ModalImage
+                    small={customer.customerBackURL}
+                    large={customer.customerBackURL}
+                    alt="Empty data"
+                  />
+                )}
               </Grid>
               <Grid className="lbl_topis" item xs={12} sm={3}>
                 Full Name
@@ -333,26 +342,34 @@ export default function View_Model({ items_list_props, data }) {
                   spacing={2}
                 >
                   <Grid item xs={12} sm={6}>
-                    <img
-                      alt="Empty data"
-                      className="imageFront"
-                      src={
-                        si.trusteeFrontURL !== null
-                          ? si.trusteeFrontURL
-                          : require("../../../../../../../assets/avatar1132.jpg")
-                      }
-                    />
+                    {si.trusteeFrontURL === null ? (
+                      <img
+                        alt="Empty data"
+                        className="imageFront"
+                        src={require("../../../../../../../assets/avatar1132.jpg")}
+                      />
+                    ) : (
+                      <ModalImage
+                        small={si.trusteeFrontURL}
+                        large={si.trusteeFrontURL}
+                        alt="Empty data"
+                      />
+                    )}
                   </Grid>
                   <Grid item xs={12} sm={6}>
-                    <img
-                      alt="Empty data"
-                      className="imageBack"
-                      src={
-                        si.trusteeBackURL !== null
-                          ? si.trusteeBackURL
-                          : require("../../../../../../../assets/avater232.jpg")
-                      }
-                    />
+                    {si.trusteeBackURL === null ? (
+                      <img
+                        alt="Empty data"
+                        className="imageBack"
+                        src={require("../../../../../../../assets/avater232.jpg")}
+                      />
+                    ) : (
+                      <ModalImage
+                        small={si.trusteeBackURL}
+                        large={si.trusteeBackURL}
+                        alt="Empty data"
+                      />
+                    )}
                   </Grid>
                   <Grid className="lbl_topis" item xs={12} sm={3}>
                     Full Name

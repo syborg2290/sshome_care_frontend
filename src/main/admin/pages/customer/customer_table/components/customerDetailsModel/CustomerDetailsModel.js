@@ -3,6 +3,7 @@ import React from "react";
 import { Row, Col } from "antd";
 import Typography from "@material-ui/core/Typography";
 import moment from "moment";
+import ModalImage from "react-modal-image";
 
 // styles
 import "./CustomerDetailsModel.css";
@@ -32,27 +33,27 @@ export default function customerDetailsModel({
       <Col className="space_col" span={12}></Col>
       <Col className="img_span" span={12}>
         {" "}
-        <img
-          alt="Empty data"
-          className="imageFront"
-          src={
-            front !== null
-              ? front
-              : require("../../../../../../../assets/avatar1132.jpg")
-          }
-        />
+        {front === null ? (
+          <img
+            alt="Empty data"
+            className="imageFront"
+            src={require("../../../../../../../assets/avatar1132.jpg")}
+          />
+        ) : (
+          <ModalImage small={front} large={front} alt="Empty data" />
+        )}
       </Col>
       <Col className="img_span" span={12}>
         {" "}
-        <img
-          alt="Empty data"
-          className="imageBack"
-          src={
-            back !== null
-              ? back
-              : require("../../../../../../../assets/avater232.jpg")
-          }
-        />
+        {back === null ? (
+          <img
+            alt="Empty data"
+            className="imageBack"
+            src={require("../../../../../../../assets/avater232.jpg")}
+          />
+        ) : (
+          <ModalImage small={back} large={back} alt="Empty data" />
+        )}
       </Col>
       <Col className="space_col" span={24}></Col>
 

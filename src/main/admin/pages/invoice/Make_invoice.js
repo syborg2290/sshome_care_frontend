@@ -465,102 +465,119 @@ function Make_invoice() {
       if (deadlineTimestamp !== null) {
         let randomNumber = Math.floor(Math.random() * 1000000000) + 1000;
         //customerImageUrlFront
-        if (tablerows[0].customer.customerImageFileFront !== null) {
+        if (tablerows[0]?.customer?.customerImageFileFront !== null) {
           await storage
             .ref(
-              `images/${tablerows[0].customer.customerImageFileFront.name}${randomNumber}`
+              `images/${tablerows[0]?.customer?.customerImageFileFront?.name}${randomNumber}`
             )
-            .put(tablerows[0].customer.customerImageFileFront);
+            .put(tablerows[0]?.customer?.customerImageFileFront);
         }
 
         //customerImageUrlBack
-        if (tablerows[0].customer.customerImageFile2Back !== null) {
+        if (tablerows[0]?.customer?.customerImageFile2Back !== null) {
           await storage
             .ref(
-              `images/${tablerows[0].customer.customerImageFile2Back.name}${randomNumber}`
+              `images/${tablerows[0]?.customer?.customerImageFile2Back?.name}${randomNumber}`
             )
-            .put(tablerows[0].customer.customerImageFile2Back);
+            .put(tablerows[0]?.customer?.customerImageFile2Back);
         }
 
         //trustee1ImageUrlFront
-        if (tablerows[0].customer.trustee1ImageFile1Front !== null) {
+        if (tablerows[0]?.customer?.trustee1ImageFile1Front !== null) {
           await storage
             .ref(
-              `images/${tablerows[0].customer.trustee1ImageFile1Front.name}${randomNumber}`
+              `images/${tablerows[0]?.customer?.trustee1ImageFile1Front?.name}${randomNumber}`
             )
-            .put(tablerows[0].customer.trustee1ImageFile1Front);
+            .put(tablerows[0]?.customer?.trustee1ImageFile1Front);
         }
 
         //trustee1ImageUrlBack
-        if (tablerows[0].customer.trustee1ImageFile2Back !== null) {
+        if (tablerows[0]?.customer?.trustee1ImageFile2Back !== null) {
           await storage
             .ref(
-              `images/${tablerows[0].customer.trustee1ImageFile2Back.name}${randomNumber}`
+              `images/${tablerows[0]?.customer?.trustee1ImageFile2Back?.name}${randomNumber}`
             )
-            .put(tablerows[0].customer.trustee1ImageFile2Back);
+            .put(tablerows[0]?.customer?.trustee1ImageFile2Back);
         }
 
         //trustee2ImageUrlFront
-        if (tablerows[0].customer.trustee2ImageFile1Front !== null) {
+        if (tablerows[0]?.customer?.trustee2ImageFile1Front !== null) {
           await storage
             .ref(
-              `images/${tablerows[0].customer.trustee2ImageFile1Front.name}${randomNumber}`
+              `images/${tablerows[0]?.customer?.trustee2ImageFile1Front?.name}${randomNumber}`
             )
-            .put(tablerows[0].customer.trustee2ImageFile1Front);
+            .put(tablerows[0]?.customer?.trustee2ImageFile1Front);
         }
 
         //trustee2ImageUrlBack
-        if (tablerows[0].customer.trustee2ImageFile1Front !== null) {
+        if (tablerows[0]?.customer?.trustee2ImageFile2Back !== null) {
           await storage
             .ref(
-              `images/${tablerows[0].customer.trustee2ImageFile2Back.name}${randomNumber}`
+              `images/${tablerows[0]?.customer?.trustee2ImageFile2Back?.name}${randomNumber}`
             )
-            .put(tablerows[0].customer.trustee2ImageFile2Back);
+            .put(tablerows[0]?.customer?.trustee2ImageFile2Back);
         }
 
         storage
           .ref("images")
           .child(
-            tablerows[0].customer.customerImageFileFront.name + randomNumber
+            tablerows[0]?.customer?.customerImageFileFront === null
+              ? "Avatar2.png"
+              : tablerows[0]?.customer?.customerImageFileFront?.name +
+                  randomNumber
           )
           .getDownloadURL()
-          .then(async (customerImageURLFront) => {
+          .then((customerImageURLFront) => {
             storage
               .ref("images")
               .child(
-                tablerows[0].customer.customerImageFile2Back.name + randomNumber
+                tablerows[0]?.customer?.customerImageFile2Back === null
+                  ? "avatar1132.jpg"
+                  : tablerows[0]?.customer?.customerImageFile2Back?.name +
+                      randomNumber
               )
               .getDownloadURL()
-              .then(async (customerImageURLBack) => {
+              .then((customerImageURLBack) => {
                 storage
                   .ref("images")
                   .child(
-                    tablerows[0].customer.trustee1ImageFile1Front.name +
-                      randomNumber
+                    tablerows[0]?.customer?.trustee1ImageFile1Front === null
+                      ? "Avatar2.png"
+                      : tablerows[0]?.customer?.trustee1ImageFile1Front?.name +
+                          randomNumber
                   )
                   .getDownloadURL()
-                  .then(async (trustee1ImageURLFront) => {
+                  .then((trustee1ImageURLFront) => {
                     storage
                       .ref("images")
                       .child(
-                        tablerows[0].customer.trustee1ImageFile2Back.name +
-                          randomNumber
+                        tablerows[0]?.customer?.trustee1ImageFile2Back === null
+                          ? "avatar1132.jpg"
+                          : tablerows[0]?.customer?.trustee1ImageFile2Back
+                              ?.name + randomNumber
                       )
                       .getDownloadURL()
-                      .then(async (trustee1ImageURLBack) => {
+                      .then((trustee1ImageURLBack) => {
                         storage
                           .ref("images")
                           .child(
-                            tablerows[0].customer.trustee2ImageFile1Front.name +
-                              randomNumber
+                            tablerows[0]?.customer?.trustee2ImageFile1Front ===
+                              null
+                              ? "Avatar2.png"
+                              : tablerows[0]?.customer?.trustee2ImageFile1Front
+                                  ?.name + randomNumber
                           )
                           .getDownloadURL()
-                          .then(async (trustee2ImageURLFront) => {
+                          .then((trustee2ImageURLFront) => {
                             storage
                               .ref("images")
                               .child(
-                                tablerows[0].customer.trustee2ImageFile2Back
-                                  .name + randomNumber
+                                tablerows[0]?.customer
+                                  ?.trustee2ImageFile2Back === null
+                                  ? "avatar1132.jpg"
+                                  : tablerows[0]?.customer
+                                      ?.trustee2ImageFile2Back?.name +
+                                      randomNumber
                               )
                               .getDownloadURL()
                               .then(async (trustee2ImageURLBack) => {

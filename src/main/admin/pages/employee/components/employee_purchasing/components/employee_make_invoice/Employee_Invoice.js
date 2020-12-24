@@ -186,10 +186,25 @@ function Employee_Invoice() {
         let listOfSerilNo = [];
         let listOfModelNo = [];
         let listOfChassisNo = [];
-        for (var n = 0; n < parseInt(itemQty[one.i]); n++) {
-          listOfSerilNo.push(one.serialNo[n]);
-          listOfModelNo.push(one.modelNo[n]);
+        if (invoiceStatus === "new") {
+          for (var n = 0; n < parseInt(itemQty[one.i]); n++) {
+            listOfSerilNo.push(one.serialNo[n]);
+            listOfModelNo.push(one.modelNo[n]);
+          }
+        } else {
+          for (
+            var l = 0;
+            l <
+            (inputsSerialNo[one.i] === undefined
+              ? 0
+              : Object.keys(inputsSerialNo[one.i]).length);
+            l++
+          ) {
+            listOfSerilNo.push(inputsSerialNo[one.i][n]);
+            listOfModelNo.push(one.modelNo[n]);
+          }
         }
+
         if (listOfSerilNo.length === parseInt(itemQty[one.i])) {
           let objItem = {
             item_id: one.id,

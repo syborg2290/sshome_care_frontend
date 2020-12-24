@@ -621,14 +621,33 @@ function Make_invoice() {
                                         let listOfSerilNo = [];
                                         let listOfModelNo = [];
                                         let listOfChassisNo = [];
-                                        for (
-                                          var n = 0;
-                                          n < parseInt(itemQty[one.i]);
-                                          n++
-                                        ) {
-                                          listOfSerilNo.push(one.serialNo[n]);
-                                          listOfModelNo.push(one.modelNo[n]);
+                                        if (invoiceStatus === "new") {
+                                          for (
+                                            var n = 0;
+                                            n < parseInt(itemQty[one.i]);
+                                            n++
+                                          ) {
+                                            listOfSerilNo.push(one.serialNo[n]);
+                                            listOfModelNo.push(one.modelNo[n]);
+                                          }
+                                        } else {
+                                          for (
+                                            var l = 0;
+                                            l <
+                                            (inputsSerialNo[one.i] === undefined
+                                              ? 0
+                                              : Object.keys(
+                                                  inputsSerialNo[one.i]
+                                                ).length);
+                                            l++
+                                          ) {
+                                            listOfSerilNo.push(
+                                              inputsSerialNo[one.i][n]
+                                            );
+                                            listOfModelNo.push(one.modelNo[n]);
+                                          }
                                         }
+
                                         if (
                                           listOfSerilNo.length ===
                                           parseInt(itemQty[one.i])
@@ -914,16 +933,31 @@ function Make_invoice() {
                                         let listOfSerilNo = [];
                                         let listOfModelNo = [];
                                         let listOfChassisNo = [];
-                                        for (
-                                          var n = 0;
-                                          n < parseInt(itemQty[one.i]);
-                                          n++
-                                        ) {
-                                          listOfSerilNo.push(one.serialNo[n]);
-                                          listOfModelNo.push(one.modelNo[n]);
-                                          // listOfChassisNo.push(
-                                          //   one.chassisNo[n]
-                                          // );
+                                        if (invoiceStatus === "new") {
+                                          for (
+                                            var n = 0;
+                                            n < parseInt(itemQty[one.i]);
+                                            n++
+                                          ) {
+                                            listOfSerilNo.push(one.serialNo[n]);
+                                            listOfModelNo.push(one.modelNo[n]);
+                                          }
+                                        } else {
+                                          for (
+                                            var l = 0;
+                                            l <
+                                            (inputsSerialNo[one.i] === undefined
+                                              ? 0
+                                              : Object.keys(
+                                                  inputsSerialNo[one.i]
+                                                ).length);
+                                            l++
+                                          ) {
+                                            listOfSerilNo.push(
+                                              inputsSerialNo[one.i][n]
+                                            );
+                                            listOfModelNo.push(one.modelNo[n]);
+                                          }
                                         }
                                         if (
                                           listOfSerilNo.length ===
@@ -1191,10 +1225,23 @@ function Make_invoice() {
         let listOfSerilNo = [];
         let listOfModelNo = [];
         let listOfChassisNo = [];
-        for (var n = 0; n < parseInt(itemQty[one.i]); n++) {
-          listOfSerilNo.push(one.serialNo[n]);
-          listOfModelNo.push(one.modelNo[n]);
-          // listOfChassisNo.push(one.chassisNo[n]);
+        if (invoiceStatus === "new") {
+          for (var n = 0; n < parseInt(itemQty[one.i]); n++) {
+            listOfSerilNo.push(one.serialNo[n]);
+            listOfModelNo.push(one.modelNo[n]);
+          }
+        } else {
+          for (
+            var l = 0;
+            l <
+            (inputsSerialNo[one.i] === undefined
+              ? 0
+              : Object.keys(inputsSerialNo[one.i]).length);
+            l++
+          ) {
+            listOfSerilNo.push(inputsSerialNo[one.i][n]);
+            listOfModelNo.push(one.modelNo[n]);
+          }
         }
         if (listOfSerilNo.length === parseInt(itemQty[one.i])) {
           let objItem = {

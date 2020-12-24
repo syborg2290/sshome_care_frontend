@@ -200,8 +200,8 @@ function Employee_Invoice() {
               : Object.keys(inputsSerialNo[one.i]).length);
             l++
           ) {
-            listOfSerilNo.push(inputsSerialNo[one.i][n]);
-            listOfModelNo.push(one.modelNo[n]);
+            listOfSerilNo.push(inputsSerialNo[one.i][l]);
+            listOfModelNo.push(one.modelNo[0]);
           }
         }
 

@@ -642,9 +642,9 @@ function Make_invoice() {
                                             l++
                                           ) {
                                             listOfSerilNo.push(
-                                              inputsSerialNo[one.i][n]
+                                              inputsSerialNo[one.i][l]
                                             );
-                                            listOfModelNo.push(one.modelNo[n]);
+                                            listOfModelNo.push(one.modelNo[0]);
                                           }
                                         }
 
@@ -954,9 +954,9 @@ function Make_invoice() {
                                             l++
                                           ) {
                                             listOfSerilNo.push(
-                                              inputsSerialNo[one.i][n]
+                                              inputsSerialNo[one.i][l]
                                             );
-                                            listOfModelNo.push(one.modelNo[n]);
+                                            listOfModelNo.push(one.modelNo[0]);
                                           }
                                         }
                                         if (
@@ -1239,8 +1239,8 @@ function Make_invoice() {
               : Object.keys(inputsSerialNo[one.i]).length);
             l++
           ) {
-            listOfSerilNo.push(inputsSerialNo[one.i][n]);
-            listOfModelNo.push(one.modelNo[n]);
+            listOfSerilNo.push(inputsSerialNo[one.i][l]);
+            listOfModelNo.push(one.modelNo[0]);
           }
         }
         if (listOfSerilNo.length === parseInt(itemQty[one.i])) {

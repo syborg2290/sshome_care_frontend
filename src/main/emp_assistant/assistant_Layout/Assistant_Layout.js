@@ -11,6 +11,9 @@ import Sidebar from "../assistant_Side_Bar/Assistant_Sidebar";
 import ItemTable from "../assistant_Pages/item/assistant_item_table/Item_table_assistant";
 import AddItem from "../assistant_Pages/item/add_Item/Add_Item";
 import StockHistory from "../assistant_Pages/item/stock_History/Stock_History";
+import ManageStock from "../assistant_Pages/item/stock_manage/Manage_Stock";
+import SellingHistory from "../assistant_Pages/item/selling_History/Selling_History";
+import ManagedHistory from "../assistant_Pages/item/stock_manage/components/managed_history/Managed_History";
 import AddCustomer from "../assistant_Pages/customer/add_Customer/Add_Customer";
 import MakeInvoice from "../assistant_Pages/invoice/Make_invoice";
 
@@ -27,6 +30,10 @@ import PayHistoryReports from "../assistant_Pages/salary/components/pay_history_
 
 import Record from "../assistant_Pages/records/Record";
 import Expences from "../assistant_Pages/expences/Expences";
+
+import EmployeePurchasing from "../assistant_Pages/employee/components/employee_purchasing/Employee_Purchasing";
+import EmployeeInvoice from "../assistant_Pages/employee/components/employee_purchasing/components/employee_make_invoice/Employee_Invoice";
+import PurchasedHistory from "../assistant_Pages/employee/components/purchased_history/Purchased_History";
 
 
 // pages
@@ -45,6 +52,7 @@ import Employee from "../assistant_Pages/employee/Employee";
 import Salary from "../assistant_Pages/salary/Salary";
 import Attendance from "../assistant_Pages/attendance/Attendance";
 import Root from "../assistant_Pages/root/Root";
+import Shop from "../assistant_Pages/shop/Shop";
 
 
 function LayoutAssistant(props) {
@@ -74,10 +82,13 @@ function LayoutAssistant(props) {
             <Route path="/assistant/ui/salary" component={Salary} />
             <Route path="/assistant/ui/attendance" component={Attendance} />
             <Route path="/assistant/ui/root" component={Root} />
+            <Route path="/assistant/ui/shop" component={Shop} />
             {/* components */}
             <Route path="/assistant/ui/ItemTable" component={ItemTable} />
             <Route path="/assistant/ui/AddItem" component={AddItem} />
             <Route path="/assistant/ui/StockHistory" component={StockHistory} />
+            <Route path="/assistant/ui/ManageStock" component={ManageStock} />
+            <Route path="/assistant/ui/SellingHistory" component={SellingHistory} />
             <Route path="/assistant/ui/addCustomer" component={AddCustomer} />
 
             <Route
@@ -134,11 +145,23 @@ function LayoutAssistant(props) {
               path="/assistant/pages/expences"
               component={Expences}
             />
-             {/* <Route
-              path="/assistant/pages/vehicalSevice"
-              component={VehicalService}
-            /> */}
-
+              <Route
+              path="/assistant/pages/managedHistory"
+              component={ManagedHistory}
+            />
+             <Route
+              path="/assistant/pages/employeePurchasing"
+              component={EmployeePurchasing}
+            />
+            <Route
+              path="/assistant/pages/employeeInvoice"
+              component={EmployeeInvoice}
+            />
+            <Route
+              path="/assistant/pages/purchasedHistory"
+              component={PurchasedHistory}
+            />
+           
           </Switch>
         </div>
       </>

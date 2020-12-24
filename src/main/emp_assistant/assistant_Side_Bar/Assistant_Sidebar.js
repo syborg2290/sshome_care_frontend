@@ -19,6 +19,7 @@ import {
   MonetizationOnOutlined as MonetizationOnOutlinedIcon,
   ReceiptOutlined as ReceiptOutlinedIcon,
   LocalAtm as LocalAtmIcon,
+  Store as StoreIcon,
 } from "@material-ui/icons";
 
 import { useTheme } from "@material-ui/styles";
@@ -63,6 +64,8 @@ const structure = [
       { label: "Item Table", link: "/assistant/ui/ItemTable" },
       { label: "Add Item", link: "/assistant/ui/AddItem" },
       { label: "Stock History", link: "/assistant/ui/StockHistory" },
+       { label: "Manage Stock", link: "/assistant/ui/ManageStock" },
+      { label: "Selling History", link: "/assistant/ui/SellingHistory" },
     ],
   },
 
@@ -126,7 +129,7 @@ const structure = [
     icon: <MonetizationOnOutlinedIcon className="icons" />,
   },
   {
-    id: 18,
+    id: 18, 
     label: "Attendance",
     link: "/assistant/ui/attendance",
     icon: <PlaylistAddCheckIcon className="icons" />,
@@ -136,6 +139,12 @@ const structure = [
     label: "Root",
     link: "/assistant/ui/root",
     icon: <CommuteIcon className="icons" />,
+  },
+     {
+    id: 23,
+    label: "Shop",
+    link: "/assistant/ui/shop",
+    icon: <StoreIcon className="icons" />,
   },
   { id: 2, type: "divider" },
   {

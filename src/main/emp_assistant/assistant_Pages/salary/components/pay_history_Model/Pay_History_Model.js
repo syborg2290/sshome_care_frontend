@@ -112,6 +112,19 @@ export default function Pay_History_Model() {
       },
     },
     {
+      name: "Purchased_Goods",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: {
+            fontSize: "15px",
+            color: "black",
+            fontWeight: "600",
+          },
+        }),
+      },
+    },
+    {
       name: "Salary_Advance",
       options: {
         filter: true,
@@ -191,6 +204,19 @@ export default function Pay_History_Model() {
     },
     {
       name: "Ex_Card",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: {
+            fontSize: "15px",
+            color: "black",
+            fontWeight: "600",
+          },
+        }),
+      },
+    },
+    {
+      name: "Arreas_Target",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -302,6 +328,15 @@ export default function Pay_History_Model() {
                   prefix={" "}
                 />
               ),
+              Purchased_Goods: (
+                <CurrencyFormat
+                  value={saDoc.data()?.goodsValue}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+
               Salary_Advance: (
                 <CurrencyFormat
                   value={saDoc.data()?.advance}
@@ -353,6 +388,14 @@ export default function Pay_History_Model() {
               Ex_Card: (
                 <CurrencyFormat
                   value={saDoc.data()?.exCard}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+              Arreas_Target: (
+                <CurrencyFormat
+                  value={saDoc.data()?.arresTarget}
                   displayType={"text"}
                   thousandSeparator={true}
                   prefix={" "}

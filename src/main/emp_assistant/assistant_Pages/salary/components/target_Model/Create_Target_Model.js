@@ -21,7 +21,7 @@ function daysCountOfMonth(month, year) {
 }
 
 export default function Create_Target_Model() {
-   const [allRoot, setAllRoot] = useState([]);
+  const [allRoot, setAllRoot] = useState([]);
   const [sale_taregt_amount, setSaleAmount] = useState(0);
   const [cash_taregt_amount, setCashAmount] = useState(0);
   const [startDate, setStartdate] = useState(null);
@@ -235,11 +235,10 @@ export default function Create_Target_Model() {
     // eslint-disable-next-line
     var dueCashTaregt = [];
 
-    // eslint-disable-next-line
-    var cashTaregtRpp = await db
-      .collection("targets")
-      .where("selectedType", "==", selectedType)
-      .get();
+    // var cashTaregtRpp = await db
+    //   .collection("targets")
+    //   .where("selectedType", "==", selectedType)
+    //   .get();
 
     // if (targetType === "sale_target") {
     //   dueCashTaregt = cashTaregtRpp.docs.filter(
@@ -257,21 +256,20 @@ export default function Create_Target_Model() {
 
     let totAmount =
       targetType === "sale_target" ? sale_taregt_amount : cash_taregt_amount;
-    
-      db.collection("targets")
-        .add({
-          target_type:
-            targetType === "sale_target" ? "Sale target" : "Cash target",
-          selectedType: selectedType,
-          start_date: startDate,
-          amount: totAmount,
-          status: "ongoing",
-        })
-        .then((_) => {
-          setLoading(false);
-          window.location.reload();
-        });
-    
+
+    db.collection("targets")
+      .add({
+        target_type:
+          targetType === "sale_target" ? "Sale target" : "Cash target",
+        selectedType: selectedType,
+        start_date: startDate,
+        amount: totAmount,
+        status: "ongoing",
+      })
+      .then((_) => {
+        setLoading(false);
+        window.location.reload();
+      });
   };
 
   return (
@@ -303,6 +301,9 @@ export default function Create_Target_Model() {
                   >
                     <option onChange={handleChange} value={""}>
                       Select a type
+                    </option>
+                    <option onChange={handleChange} value={"shop"}>
+                      shop
                     </option>
                     {allRoot.map((each) => (
                       <option onChange={handleChange} key={each} value={each}>

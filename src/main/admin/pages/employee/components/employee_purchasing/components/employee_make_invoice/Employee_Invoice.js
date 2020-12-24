@@ -66,15 +66,22 @@ function Employee_Invoice() {
   };
 
   const addInput = () => {
-    var combined = Object.assign(inputsSerialNo, {
-      [currentIndex]: {
-        ...inputsSerialNo[currentIndex],
-        [inputsSerialNo[currentIndex] === undefined
-          ? 0
-          : Object.keys(inputsSerialNo[currentIndex]).length]: "",
-      },
-    });
-    setInputsSerialNo({ ...combined });
+    if (
+      itemQty[currentIndex] >
+      (inputsSerialNo[currentIndex] === undefined
+        ? 0
+        : Object.keys(inputsSerialNo[currentIndex]).length)
+    ) {
+      var combined = Object.assign(inputsSerialNo, {
+        [currentIndex]: {
+          ...inputsSerialNo[currentIndex],
+          [inputsSerialNo[currentIndex] === undefined
+            ? 0
+            : Object.keys(inputsSerialNo[currentIndex]).length]: "",
+        },
+      });
+      setInputsSerialNo({ ...combined });
+    }
   };
   const handleChangeAddSerialInputs = (e) => {
     var combined2 = Object.assign(inputsSerialNo, {
@@ -216,65 +223,73 @@ function Employee_Invoice() {
           });
         });
 
-      tablerows.forEach(async (itemUDoc) => {
-        let newArray = await await db.collection("item").doc(itemUDoc.id).get();
-
-        let serialNoList = [];
-        let modelNoList = [];
-        let chassisiNoList = [];
-        serialNoList = newArray.data().serialNo;
-        modelNoList = newArray.data().modelNo;
-        chassisiNoList = newArray.data().chassisNo;
-
-        //++++++++++++++++++++++++++++++++++++++++++++
-        let countOfExist = 0;
-        if (inputsSerialNo[itemUDoc.i] !== undefined) {
-          for (
-            let q = 0;
-            q < Object.keys(inputsSerialNo[itemUDoc.i]).length;
-            q++
-          ) {
-            if (serialNoList.indexOf(inputsSerialNo[itemUDoc.i][q]) !== -1) {
-              countOfExist++;
-              let indexVal = serialNoList.indexOf(
-                inputsSerialNo[itemUDoc.i][q]
-              );
-              serialNoList.splice(indexVal, 1);
-            } else {
-              console.log("Value does not exists!");
-            }
-          }
-        }
-
-        let spliceCount = itemQty[itemUDoc.i] - countOfExist;
-
-        if (spliceCount > 0) {
-          serialNoList.splice(0, spliceCount);
-        }
-
-        modelNoList.splice(0, itemQty[itemUDoc.i]);
-
-        //++++++++++++++++++++++++++++++++++++++++++++
-
-        if (invoiceStatus === "new") {
-          await db
+      if (invoiceStatus === "new") {
+        tablerows.forEach(async (itemUDoc) => {
+          let newArray = await await db
             .collection("item")
             .doc(itemUDoc.id)
-            .update({
-              qty: Math.round(newArray.data().qty) - itemQty[itemUDoc.i],
-              serialNo: serialNoList,
-              modelNo: modelNoList,
-              chassisNo: chassisiNoList,
-            })
-            .then((_) => {
-              setLoadingSubmit(false);
-              history.push("/admin/ui/employee");
-            });
-        } else {
-          setLoadingSubmit(false);
-          history.push("/admin/ui/employee");
-        }
-      });
+            .get();
+
+          let serialNoList = [];
+          let modelNoList = [];
+          let chassisiNoList = [];
+          serialNoList = newArray.data().serialNo;
+          modelNoList = newArray.data().modelNo;
+          chassisiNoList = newArray.data().chassisNo;
+
+          //++++++++++++++++++++++++++++++++++++++++++++
+          let countOfExist = 0;
+          if (inputsSerialNo[itemUDoc.i] !== undefined) {
+            for (
+              let q = 0;
+              q < Object.keys(inputsSerialNo[itemUDoc.i]).length;
+              q++
+            ) {
+              if (serialNoList.indexOf(inputsSerialNo[itemUDoc.i][q]) !== -1) {
+                countOfExist++;
+                let indexVal = serialNoList.indexOf(
+                  inputsSerialNo[itemUDoc.i][q]
+                );
+                serialNoList.splice(indexVal, 1);
+              } else {
+                console.log("Value does not exists!");
+              }
+            }
+          }
+
+          let spliceCount = itemQty[itemUDoc.i] - countOfExist;
+
+          if (spliceCount > 0) {
+            serialNoList.splice(0, spliceCount);
+          }
+
+          modelNoList.splice(0, itemQty[itemUDoc.i]);
+
+          //++++++++++++++++++++++++++++++++++++++++++++
+
+          if (invoiceStatus === "new") {
+            await db
+              .collection("item")
+              .doc(itemUDoc.id)
+              .update({
+                qty: Math.round(newArray.data().qty) - itemQty[itemUDoc.i],
+                serialNo: serialNoList,
+                modelNo: modelNoList,
+                chassisNo: chassisiNoList,
+              })
+              .then((_) => {
+                setLoadingSubmit(false);
+                history.push("/admin/ui/employee");
+              });
+          } else {
+            setLoadingSubmit(false);
+            history.push("/admin/ui/employee");
+          }
+        });
+      } else {
+        setLoadingSubmit(false);
+        history.push("/admin/ui/employee");
+      }
     } else {
       NotificationManager.info("Please select the employee again(Go back)");
     }

@@ -89,15 +89,22 @@ function Make_invoice() {
   };
 
   const addInput = () => {
-    var combined = Object.assign(inputsSerialNo, {
-      [currentIndex]: {
-        ...inputsSerialNo[currentIndex],
-        [inputsSerialNo[currentIndex] === undefined
-          ? 0
-          : Object.keys(inputsSerialNo[currentIndex]).length]: "",
-      },
-    });
-    setInputsSerialNo({ ...combined });
+    if (
+      itemQty[currentIndex] >
+      (inputsSerialNo[currentIndex] === undefined
+        ? 0
+        : Object.keys(inputsSerialNo[currentIndex]).length)
+    ) {
+      var combined = Object.assign(inputsSerialNo, {
+        [currentIndex]: {
+          ...inputsSerialNo[currentIndex],
+          [inputsSerialNo[currentIndex] === undefined
+            ? 0
+            : Object.keys(inputsSerialNo[currentIndex]).length]: "",
+        },
+      });
+      setInputsSerialNo({ ...combined });
+    }
   };
   const handleChangeAddSerialInputs = (e) => {
     var combined2 = Object.assign(inputsSerialNo, {
@@ -759,96 +766,98 @@ function Make_invoice() {
                                             });
                                           }
 
-                                          tablerows.forEach(
-                                            async (itemUDoc) => {
-                                              let newArray = await await db
-                                                .collection("item")
-                                                .doc(itemUDoc.id)
-                                                .get();
-
-                                              let serialNoList = [];
-                                              let modelNoList = [];
-                                              let chassisiNoList = [];
-                                              serialNoList = newArray.data()
-                                                .serialNo;
-                                              modelNoList = newArray.data()
-                                                .modelNo;
-                                              chassisiNoList = newArray.data()
-                                                .chassisNo;
-
-                                              //++++++++++++++++++++++++++++++++++++++++++++
-                                              let countOfExist = 0;
-                                              if (
-                                                inputsSerialNo[itemUDoc.i] !==
-                                                undefined
-                                              ) {
-                                                for (
-                                                  let q = 0;
-                                                  q <
-                                                  Object.keys(
-                                                    inputsSerialNo[itemUDoc.i]
-                                                  ).length;
-                                                  q++
-                                                ) {
-                                                  if (
-                                                    serialNoList.indexOf(
-                                                      inputsSerialNo[
-                                                        itemUDoc.i
-                                                      ][q]
-                                                    ) !== -1
-                                                  ) {
-                                                    countOfExist++;
-                                                    let indexVal = serialNoList.indexOf(
-                                                      inputsSerialNo[
-                                                        itemUDoc.i
-                                                      ][q]
-                                                    );
-                                                    serialNoList.splice(
-                                                      indexVal,
-                                                      1
-                                                    );
-                                                  } else {
-                                                    console.log(
-                                                      "Value does not exists!"
-                                                    );
-                                                  }
-                                                }
-                                              }
-
-                                              let spliceCount =
-                                                itemQty[itemUDoc.i] -
-                                                countOfExist;
-
-                                              if (spliceCount > 0) {
-                                                serialNoList.splice(
-                                                  0,
-                                                  spliceCount
-                                                );
-                                              }
-
-                                              modelNoList.splice(
-                                                0,
-                                                itemQty[itemUDoc.i]
-                                              );
-
-                                              //++++++++++++++++++++++++++++++++++++++++++++
-
-                                              if (invoiceStatus === "new") {
-                                                await db
+                                          if (invoiceStatus === "new") {
+                                            tablerows.forEach(
+                                              async (itemUDoc) => {
+                                                let newArray = await await db
                                                   .collection("item")
                                                   .doc(itemUDoc.id)
-                                                  .update({
-                                                    qty:
-                                                      Math.round(
-                                                        newArray.data().qty
-                                                      ) - itemQty[itemUDoc.i],
-                                                    serialNo: serialNoList,
-                                                    modelNo: modelNoList,
-                                                    chassisNo: chassisiNoList,
-                                                  });
+                                                  .get();
+
+                                                let serialNoList = [];
+                                                let modelNoList = [];
+                                                let chassisiNoList = [];
+                                                serialNoList = newArray.data()
+                                                  .serialNo;
+                                                modelNoList = newArray.data()
+                                                  .modelNo;
+                                                chassisiNoList = newArray.data()
+                                                  .chassisNo;
+
+                                                //++++++++++++++++++++++++++++++++++++++++++++
+                                                let countOfExist = 0;
+                                                if (
+                                                  inputsSerialNo[itemUDoc.i] !==
+                                                  undefined
+                                                ) {
+                                                  for (
+                                                    let q = 0;
+                                                    q <
+                                                    Object.keys(
+                                                      inputsSerialNo[itemUDoc.i]
+                                                    ).length;
+                                                    q++
+                                                  ) {
+                                                    if (
+                                                      serialNoList.indexOf(
+                                                        inputsSerialNo[
+                                                          itemUDoc.i
+                                                        ][q]
+                                                      ) !== -1
+                                                    ) {
+                                                      countOfExist++;
+                                                      let indexVal = serialNoList.indexOf(
+                                                        inputsSerialNo[
+                                                          itemUDoc.i
+                                                        ][q]
+                                                      );
+                                                      serialNoList.splice(
+                                                        indexVal,
+                                                        1
+                                                      );
+                                                    } else {
+                                                      console.log(
+                                                        "Value does not exists!"
+                                                      );
+                                                    }
+                                                  }
+                                                }
+
+                                                let spliceCount =
+                                                  itemQty[itemUDoc.i] -
+                                                  countOfExist;
+
+                                                if (spliceCount > 0) {
+                                                  serialNoList.splice(
+                                                    0,
+                                                    spliceCount
+                                                  );
+                                                }
+
+                                                modelNoList.splice(
+                                                  0,
+                                                  itemQty[itemUDoc.i]
+                                                );
+
+                                                //++++++++++++++++++++++++++++++++++++++++++++
+
+                                                if (invoiceStatus === "new") {
+                                                  await db
+                                                    .collection("item")
+                                                    .doc(itemUDoc.id)
+                                                    .update({
+                                                      qty:
+                                                        Math.round(
+                                                          newArray.data().qty
+                                                        ) - itemQty[itemUDoc.i],
+                                                      serialNo: serialNoList,
+                                                      modelNo: modelNoList,
+                                                      chassisNo: chassisiNoList,
+                                                    });
+                                                }
                                               }
-                                            }
-                                          );
+                                            );
+                                          }
 
                                           setLoadingSubmit(false);
                                         });
@@ -1053,98 +1062,98 @@ function Make_invoice() {
                                               date: firebase.firestore.FieldValue.serverTimestamp(),
                                             });
                                           }
-
-                                          tablerows.forEach(
-                                            async (itemUDoc) => {
-                                              let newArray = await await db
-                                                .collection("item")
-                                                .doc(itemUDoc.id)
-                                                .get();
-
-                                              let serialNoList = [];
-                                              let modelNoList = [];
-                                              let chassisiNoList = [];
-                                              serialNoList = newArray.data()
-                                                .serialNo;
-                                              modelNoList = newArray.data()
-                                                .modelNo;
-                                              chassisiNoList = newArray.data()
-                                                .chassisNo;
-
-                                              //++++++++++++++++++++++++++++++++++++++++++++
-                                              let countOfExist = 0;
-                                              if (
-                                                inputsSerialNo[itemUDoc.i] !==
-                                                undefined
-                                              ) {
-                                                for (
-                                                  let q = 0;
-                                                  q <
-                                                  Object.keys(
-                                                    inputsSerialNo[itemUDoc.i]
-                                                  ).length;
-                                                  q++
-                                                ) {
-                                                  if (
-                                                    serialNoList.indexOf(
-                                                      inputsSerialNo[
-                                                        itemUDoc.i
-                                                      ][q]
-                                                    ) !== -1
-                                                  ) {
-                                                    countOfExist++;
-                                                    let indexVal = serialNoList.indexOf(
-                                                      inputsSerialNo[
-                                                        itemUDoc.i
-                                                      ][q]
-                                                    );
-                                                    serialNoList.splice(
-                                                      indexVal,
-                                                      1
-                                                    );
-                                                  } else {
-                                                    console.log(
-                                                      "Value does not exists!"
-                                                    );
-                                                  }
-                                                }
-                                              }
-
-                                              let spliceCount =
-                                                itemQty[itemUDoc.i] -
-                                                countOfExist;
-
-                                              if (spliceCount > 0) {
-                                                serialNoList.splice(
-                                                  0,
-                                                  spliceCount
-                                                );
-                                              }
-
-                                              modelNoList.splice(
-                                                0,
-                                                itemQty[itemUDoc.i]
-                                              );
-
-                                              //++++++++++++++++++++++++++++++++++++++++++++
-
-                                              if (invoiceStatus === "new") {
-                                                await db
+                                          if (invoiceStatus === "new") {
+                                            tablerows.forEach(
+                                              async (itemUDoc) => {
+                                                let newArray = await await db
                                                   .collection("item")
                                                   .doc(itemUDoc.id)
-                                                  .update({
-                                                    qty:
-                                                      Math.round(
-                                                        newArray.data().qty
-                                                      ) - itemQty[itemUDoc.i],
-                                                    serialNo: serialNoList,
-                                                    modelNo: modelNoList,
-                                                    chassisNo: chassisiNoList,
-                                                  });
-                                              }
-                                            }
-                                          );
+                                                  .get();
 
+                                                let serialNoList = [];
+                                                let modelNoList = [];
+                                                let chassisiNoList = [];
+                                                serialNoList = newArray.data()
+                                                  .serialNo;
+                                                modelNoList = newArray.data()
+                                                  .modelNo;
+                                                chassisiNoList = newArray.data()
+                                                  .chassisNo;
+
+                                                //++++++++++++++++++++++++++++++++++++++++++++
+                                                let countOfExist = 0;
+                                                if (
+                                                  inputsSerialNo[itemUDoc.i] !==
+                                                  undefined
+                                                ) {
+                                                  for (
+                                                    let q = 0;
+                                                    q <
+                                                    Object.keys(
+                                                      inputsSerialNo[itemUDoc.i]
+                                                    ).length;
+                                                    q++
+                                                  ) {
+                                                    if (
+                                                      serialNoList.indexOf(
+                                                        inputsSerialNo[
+                                                          itemUDoc.i
+                                                        ][q]
+                                                      ) !== -1
+                                                    ) {
+                                                      countOfExist++;
+                                                      let indexVal = serialNoList.indexOf(
+                                                        inputsSerialNo[
+                                                          itemUDoc.i
+                                                        ][q]
+                                                      );
+                                                      serialNoList.splice(
+                                                        indexVal,
+                                                        1
+                                                      );
+                                                    } else {
+                                                      console.log(
+                                                        "Value does not exists!"
+                                                      );
+                                                    }
+                                                  }
+                                                }
+
+                                                let spliceCount =
+                                                  itemQty[itemUDoc.i] -
+                                                  countOfExist;
+
+                                                if (spliceCount > 0) {
+                                                  serialNoList.splice(
+                                                    0,
+                                                    spliceCount
+                                                  );
+                                                }
+
+                                                modelNoList.splice(
+                                                  0,
+                                                  itemQty[itemUDoc.i]
+                                                );
+
+                                                //++++++++++++++++++++++++++++++++++++++++++++
+
+                                                if (invoiceStatus === "new") {
+                                                  await db
+                                                    .collection("item")
+                                                    .doc(itemUDoc.id)
+                                                    .update({
+                                                      qty:
+                                                        Math.round(
+                                                          newArray.data().qty
+                                                        ) - itemQty[itemUDoc.i],
+                                                      serialNo: serialNoList,
+                                                      modelNo: modelNoList,
+                                                      chassisNo: chassisiNoList,
+                                                    });
+                                                }
+                                              }
+                                            );
+                                          }
                                           setLoadingSubmit(false);
                                         });
                                     });
@@ -1223,58 +1232,63 @@ function Make_invoice() {
         nextDate: null,
       });
 
-      tablerows.forEach(async (itemUDoc) => {
-        let newArray = await await db.collection("item").doc(itemUDoc.id).get();
-
-        let serialNoList = [];
-        let modelNoList = [];
-        let chassisiNoList = [];
-        serialNoList = newArray.data().serialNo;
-        modelNoList = newArray.data().modelNo;
-        chassisiNoList = newArray.data().chassisNo;
-
-        //++++++++++++++++++++++++++++++++++++++++++++
-        let countOfExist = 0;
-        if (inputsSerialNo[itemUDoc.i] !== undefined) {
-          for (
-            let q = 0;
-            q < Object.keys(inputsSerialNo[itemUDoc.i]).length;
-            q++
-          ) {
-            if (serialNoList.indexOf(inputsSerialNo[itemUDoc.i][q]) !== -1) {
-              countOfExist++;
-              let indexVal = serialNoList.indexOf(
-                inputsSerialNo[itemUDoc.i][q]
-              );
-              serialNoList.splice(indexVal, 1);
-            } else {
-              console.log("Value does not exists!");
-            }
-          }
-        }
-
-        let spliceCount = itemQty[itemUDoc.i] - countOfExist;
-
-        if (spliceCount > 0) {
-          serialNoList.splice(0, spliceCount);
-        }
-
-        modelNoList.splice(0, itemQty[itemUDoc.i]);
-
-        //++++++++++++++++++++++++++++++++++++++++++++
-
-        if (invoiceStatus === "new") {
-          await db
+      if (invoiceStatus === "new") {
+        tablerows.forEach(async (itemUDoc) => {
+          let newArray = await await db
             .collection("item")
             .doc(itemUDoc.id)
-            .update({
-              qty: Math.round(newArray.data().qty) - itemQty[itemUDoc.i],
-              serialNo: serialNoList,
-              modelNo: modelNoList,
-              chassisNo: chassisiNoList,
-            });
-        }
-      });
+            .get();
+
+          let serialNoList = [];
+          let modelNoList = [];
+          let chassisiNoList = [];
+          serialNoList = newArray.data().serialNo;
+          modelNoList = newArray.data().modelNo;
+          chassisiNoList = newArray.data().chassisNo;
+
+          //++++++++++++++++++++++++++++++++++++++++++++
+          let countOfExist = 0;
+          if (inputsSerialNo[itemUDoc.i] !== undefined) {
+            for (
+              let q = 0;
+              q < Object.keys(inputsSerialNo[itemUDoc.i]).length;
+              q++
+            ) {
+              if (serialNoList.indexOf(inputsSerialNo[itemUDoc.i][q]) !== -1) {
+                countOfExist++;
+                let indexVal = serialNoList.indexOf(
+                  inputsSerialNo[itemUDoc.i][q]
+                );
+                serialNoList.splice(indexVal, 1);
+              } else {
+                console.log("Value does not exists!");
+              }
+            }
+          }
+
+          let spliceCount = itemQty[itemUDoc.i] - countOfExist;
+
+          if (spliceCount > 0) {
+            serialNoList.splice(0, spliceCount);
+          }
+
+          modelNoList.splice(0, itemQty[itemUDoc.i]);
+
+          //++++++++++++++++++++++++++++++++++++++++++++
+
+          if (invoiceStatus === "new") {
+            await db
+              .collection("item")
+              .doc(itemUDoc.id)
+              .update({
+                qty: Math.round(newArray.data().qty) - itemQty[itemUDoc.i],
+                serialNo: serialNoList,
+                modelNo: modelNoList,
+                chassisNo: chassisiNoList,
+              });
+          }
+        });
+      }
       setLoadingSubmit(false);
     }
   };
@@ -1473,7 +1487,6 @@ function Make_invoice() {
                               onClick={() => {
                                 setCurrentIndex(row.i);
                                 showModal();
-                                
                               }}
                             />
                           </TableCell>

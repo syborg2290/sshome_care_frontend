@@ -112,7 +112,7 @@ export default function Pay_History_Model() {
       },
     },
     {
-      name: "Purchasing_Goods",
+      name: "Purchased_Goods",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({

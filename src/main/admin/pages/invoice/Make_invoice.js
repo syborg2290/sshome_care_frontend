@@ -631,8 +631,7 @@ function Make_invoice() {
                                                 ? 0
                                                 : itemDiscount[one.i],
                                             item_name: one.title,
-                                            stock_type:
-                                              tablerows[0].item.stock_type,
+                                            stock_type: one.item.stock_type,
                                           };
                                           arrayItems.push(objItem);
                                         }
@@ -928,8 +927,7 @@ function Make_invoice() {
                                                 ? 0
                                                 : itemDiscount[one.i],
                                             item_name: one.title,
-                                            stock_type:
-                                              tablerows[0].item.stock_type,
+                                            stock_type: one.item.stock_type,
                                           };
                                           arrayItems.push(objItem);
                                         }
@@ -1191,7 +1189,7 @@ function Make_invoice() {
             qty: parseInt(itemQty[one.i]),
             discount: itemDiscount[one.i] === "" ? 0 : itemDiscount[one.i],
             item_name: one.title,
-            stock_type: tablerows[0].item.stock_type,
+            stock_type: one.item.stock_type,
           };
           arrayItems.push(objItem);
         }

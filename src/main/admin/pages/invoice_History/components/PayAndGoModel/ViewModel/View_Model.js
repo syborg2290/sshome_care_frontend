@@ -50,6 +50,8 @@ export default function View_Model({ items_list_props, data }) {
                 nic: reTr.data().nic,
                 address: reTr.data().address1,
                 mobile: reTr.data().mobile1,
+                trusteeFrontURL: reTr.data().trusteeFrontURL,
+                trusteeBackURL: reTr.data().trusteeBackURL,
               },
             ]);
           }

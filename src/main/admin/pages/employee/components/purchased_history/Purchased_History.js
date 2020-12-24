@@ -34,7 +34,7 @@ export default function Purchased_History() {
     });
 
     db.collection("emp_purchased")
-      .orderBy("timestamp", "desc")
+      .orderBy("date", "desc")
       .onSnapshot((snapshot) => {
         var newData = [];
         var itemData = [];
@@ -153,6 +153,7 @@ export default function Purchased_History() {
         onCancel={() => {
           setVisible(false);
         }}
+        footer={null}
       >
         <div>
           <ViewHistory

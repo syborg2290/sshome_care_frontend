@@ -998,40 +998,43 @@ export default function Add_Paysheet_Model({ nic }) {
       .where("nic", "==", nic)
       .get()
       .then((reEmpPurchased) => {
-        let purchesGoods = 0;
+        let count1 = 0;
         reEmpPurchased.docs.forEach((eachDataPu) => {
-          purchesGoods = purchesGoods + eachDataPu.data().total;
+          count1++;
+          purchesGoodsInitial = purchesGoodsInitial + eachDataPu.data().total;
         });
-        purchesGoodsInitial = purchesGoods;
+        if (count1 === reEmpPurchased.docs.length) {
+          db.collection("goods_paid")
+            .where("nic", "==", nic)
+            .get()
+            .then((reGoods) => {
+              let count2 = 0;
+              reGoods.docs.forEach((eachPaid) => {
+                count2++;
+                plusValuesGoodsInitial =
+                  plusValuesGoodsInitial + parseInt(eachPaid.data().paid_value);
+              });
+              if (count2 === reGoods.docs.length) {
+                setGoodsBalance(
+                  purchesGoodsInitial - plusValuesGoodsInitial <= 0
+                    ? 0
+                    : purchesGoodsInitial - plusValuesGoodsInitial
+                );
+                setGoodsBalanceInitial(
+                  purchesGoodsInitial - plusValuesGoodsInitial <= 0
+                    ? 0
+                    : purchesGoodsInitial - plusValuesGoodsInitial
+                );
+
+                setGoods(
+                  purchesGoodsInitial - plusValuesGoodsInitial <= 0
+                    ? 0
+                    : purchesGoodsInitial - plusValuesGoodsInitial
+                );
+              }
+            });
+        }
       });
-
-    db.collection("goods_paid")
-      .where("nic", "==", nic)
-      .get()
-      .then((reGoods) => {
-        let plusValues = 0;
-        reGoods.docs.forEach((eachPaid) => {
-          plusValues = plusValues + parseInt(eachPaid.data().paid_value);
-        });
-        plusValuesGoodsInitial = plusValues;
-      });
-
-    setGoodsBalance(
-      purchesGoodsInitial - plusValuesGoodsInitial <= 0
-        ? 0
-        : purchesGoodsInitial - plusValuesGoodsInitial
-    );
-    setGoodsBalanceInitial(
-      purchesGoodsInitial - plusValuesGoodsInitial <= 0
-        ? 0
-        : purchesGoodsInitial - plusValuesGoodsInitial
-    );
-
-    setGoods(
-      purchesGoodsInitial - plusValuesGoodsInitial <= 0
-        ? 0
-        : purchesGoodsInitial - plusValuesGoodsInitial
-    );
 
     db.collection("salary")
       .where("nic", "==", nic)

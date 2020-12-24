@@ -174,6 +174,8 @@ export default function CustomerTable() {
               <CustomerDetails
                 fname={customerAllData[currentIndx]?.data.fname}
                 lname={customerAllData[currentIndx]?.data.lname}
+                front={customerAllData[currentIndx]?.data.customerFrontURL}
+                back={customerAllData[currentIndx]?.data.customerBackURL}
                 photo={customerAllData[currentIndx]?.data.photo}
                 address1={customerAllData[currentIndx]?.data.address1}
                 address2={customerAllData[currentIndx]?.data.address2}

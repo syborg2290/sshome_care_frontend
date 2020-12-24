@@ -205,7 +205,11 @@ function Employee_Invoice() {
           }
         }
 
-        if (listOfSerilNo.length === parseInt(itemQty[one.i])) {
+        if (
+          invoiceStatus !== "new"
+            ? true
+            : listOfSerilNo.length === parseInt(itemQty[one.i])
+        ) {
           let objItem = {
             item_id: one.id,
             serialNo: listOfSerilNo,

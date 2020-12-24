@@ -649,8 +649,10 @@ function Make_invoice() {
                                         }
 
                                         if (
-                                          listOfSerilNo.length ===
-                                          parseInt(itemQty[one.i])
+                                          invoiceStatus !== "new"
+                                            ? true
+                                            : listOfSerilNo.length ===
+                                              parseInt(itemQty[one.i])
                                         ) {
                                           let objItem = {
                                             item_id: one.id,
@@ -960,8 +962,10 @@ function Make_invoice() {
                                           }
                                         }
                                         if (
-                                          listOfSerilNo.length ===
-                                          parseInt(itemQty[one.i])
+                                          invoiceStatus !== "new"
+                                            ? true
+                                            : listOfSerilNo.length ===
+                                              parseInt(itemQty[one.i])
                                         ) {
                                           let objItem = {
                                             item_id: one.id,
@@ -1243,7 +1247,11 @@ function Make_invoice() {
             listOfModelNo.push(one.modelNo[0]);
           }
         }
-        if (listOfSerilNo.length === parseInt(itemQty[one.i])) {
+        if (
+          invoiceStatus !== "new"
+            ? true
+            : listOfSerilNo.length === parseInt(itemQty[one.i])
+        ) {
           let objItem = {
             item_id: one.id,
             serialNo: listOfSerilNo,

@@ -415,7 +415,9 @@ async function getSaleTarget(root, currentDate) {
     : saleTargetValue === 0
     ? 0
     : saleTargetValue >= targetValue
-    ? 5000 / 2
+    ? root === "shop"
+      ? 5000
+      : 5000 / 2
     : 0;
 }
 
@@ -1092,756 +1094,764 @@ export default function Add_Paysheet_Model({ nic }) {
         }
       });
 
-    //++++++++++++++++++++++++++++++++
-    //Shop
     db.collection("shop")
+      .where("nic", "==", nic)
       .get()
-      .then((reRoot) => {
-        reRoot.docs.forEach((eachRoot) => {
-          let rootName = "shop";
+      .then((reEmpShop) => {
+        if (reEmpShop.docs.length > 0) {
+          //++++++++++++++++++++++++++++++++
+          //Shop
+          db.collection("shop")
+            .get()
+            .then((reRoot) => {
+              reRoot.docs.forEach((eachRoot) => {
+                let rootName = "shop";
 
-          if (eachRoot.data().nic === nic) {
-            getSaleTarget(
-              rootName,
-              firebase.firestore.Timestamp.fromDate(new Date())
-            ).then((reSaleTarget) => {
-              setSaleTarget(reSaleTarget);
-            });
-
-            db.collection("salary")
-              .where("nic", "==", nic)
-              .orderBy("date", "asc")
-              .get()
-              .then((reSalary) => {
-                if (reSalary.docs.length > 0) {
-                  getSaleTargetForTable(
+                if (eachRoot.data().nic === nic) {
+                  getSaleTarget(
                     rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
                     firebase.firestore.Timestamp.fromDate(new Date())
                   ).then((reSaleTarget) => {
-                    setSaleTargetList(reSaleTarget);
+                    setSaleTarget(reSaleTarget);
                   });
 
-                  cashTargetFunc(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reCashTaregt) => {
-                    setCashTarget(reCashTaregt);
-                  });
+                  db.collection("salary")
+                    .where("nic", "==", nic)
+                    .orderBy("date", "asc")
+                    .get()
+                    .then((reSalary) => {
+                      if (reSalary.docs.length > 0) {
+                        getSaleTargetForTable(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reSaleTarget) => {
+                          setSaleTargetList(reSaleTarget);
+                        });
 
-                  cashTargetFuncForTable(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reCashTaregt) => {
-                    setCashTargetList(reCashTaregt);
-                  });
+                        cashTargetFunc(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reCashTaregt) => {
+                          setCashTarget(reCashTaregt);
+                        });
 
-                  getCashSaleFunc(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reCashSale) => {
-                    setCashSale(reCashSale);
-                  });
+                        cashTargetFuncForTable(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reCashTaregt) => {
+                          setCashTargetList(reCashTaregt);
+                        });
 
-                  getCashSaleFuncForTable(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reCashSale) => {
-                    setCashSaleList(reCashSale);
-                  });
+                        getCashSaleFunc(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reCashSale) => {
+                          setCashSale(reCashSale);
+                        });
 
-                  getExcardFunc(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reEx) => {
-                    setExCard(reEx);
-                  });
+                        getCashSaleFuncForTable(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reCashSale) => {
+                          setCashSaleList(reCashSale);
+                        });
 
-                  getExcardFuncForTable(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reEx) => {
-                    setExcardslist(reEx);
-                  });
+                        getExcardFunc(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reEx) => {
+                          setExCard(reEx);
+                        });
 
-                  getShortage(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reShort) => {
-                    setShortage((sho) => sho + parseInt(reShort));
-                  });
-                  getInstallmentshort(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reShort) => {
-                    setShortage((sho) => sho + parseInt(reShort));
-                  });
-                  getGasshort(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reShort) => {
-                    setShortage((sho) => sho + parseInt(reShort));
-                  });
+                        getExcardFuncForTable(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reEx) => {
+                          setExcardslist(reEx);
+                        });
 
-                  //================
+                        getShortage(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          setShortage((sho) => sho + parseInt(reShort));
+                        });
+                        getInstallmentshort(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          setShortage((sho) => sho + parseInt(reShort));
+                        });
+                        getGasshort(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          setShortage((sho) => sho + parseInt(reShort));
+                        });
 
-                  getShortageForTable(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reShort) => {
-                    shortageList.push(reShort);
-                  });
-                  getInstallmentshortForTable(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reShort) => {
-                    shortageList.push(reShort);
-                  });
-                  getGasshortForTable(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reShort) => {
-                    shortageList.push(reShort);
-                  });
+                        //================
 
-                  //================
-                } else {
-                  getSaleTargetForTable(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reSaleTarget) => {
-                    setSaleTargetList(reSaleTarget);
-                  });
-                  cashTargetFunc(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reCashTaregt) => {
-                    setCashTarget(reCashTaregt);
-                  });
-                  cashTargetFuncForTable(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reCashTaregt) => {
-                    setCashTargetList(reCashTaregt);
-                  });
-                  getCashSaleFunc(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reCashSale) => {
-                    setCashSale(reCashSale);
-                  });
+                        getShortageForTable(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          shortageList.push(reShort);
+                        });
+                        getInstallmentshortForTable(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          shortageList.push(reShort);
+                        });
+                        getGasshortForTable(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          shortageList.push(reShort);
+                        });
 
-                  getCashSaleFuncForTable(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reCashSale) => {
-                    setCashSaleList(reCashSale);
-                  });
+                        //================
+                      } else {
+                        getSaleTargetForTable(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reSaleTarget) => {
+                          setSaleTargetList(reSaleTarget);
+                        });
+                        cashTargetFunc(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reCashTaregt) => {
+                          setCashTarget(reCashTaregt);
+                        });
+                        cashTargetFuncForTable(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reCashTaregt) => {
+                          setCashTargetList(reCashTaregt);
+                        });
+                        getCashSaleFunc(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reCashSale) => {
+                          setCashSale(reCashSale);
+                        });
 
-                  getExcardFunc(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reEx) => {
-                    setExCard(reEx);
-                  });
-                  getExcardFuncForTable(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reEx) => {
-                    setExcardslist(reEx);
-                  });
-                  getShortage(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reShort) => {
-                    setShortage((sho) => sho + parseInt(reShort));
-                  });
-                  getInstallmentshort(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reShort) => {
-                    setShortage((sho) => sho + parseInt(reShort));
-                  });
-                  getGasshort(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reShort) => {
-                    setShortage((sho) => sho + parseInt(reShort));
-                  });
+                        getCashSaleFuncForTable(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reCashSale) => {
+                          setCashSaleList(reCashSale);
+                        });
 
-                  //=====================
+                        getExcardFunc(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reEx) => {
+                          setExCard(reEx);
+                        });
+                        getExcardFuncForTable(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reEx) => {
+                          setExcardslist(reEx);
+                        });
+                        getShortage(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          setShortage((sho) => sho + parseInt(reShort));
+                        });
+                        getInstallmentshort(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          setShortage((sho) => sho + parseInt(reShort));
+                        });
+                        getGasshort(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          setShortage((sho) => sho + parseInt(reShort));
+                        });
 
-                  getShortageForTable(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reShort) => {
-                    shortageList.push(reShort);
-                  });
-                  getInstallmentshortForTable(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reShort) => {
-                    shortageList.push(reShort);
-                  });
-                  getGasshortForTable(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reShort) => {
-                    shortageList.push(reShort);
-                  });
+                        //=====================
 
-                  //===========
+                        getShortageForTable(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          shortageList.push(reShort);
+                        });
+                        getInstallmentshortForTable(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          shortageList.push(reShort);
+                        });
+                        getGasshortForTable(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          shortageList.push(reShort);
+                        });
+
+                        //===========
+                      }
+                    });
+                  setRoot("shop");
                 }
               });
-            setRoot("shop");
-          }
-        });
+            });
+        } else {
+          //+++++++++++++++++++++++++++++++++
+
+          db.collection("root")
+            .get()
+            .then((reRoot) => {
+              reRoot.docs.forEach((eachRoot) => {
+                let rootName = eachRoot.data().root;
+
+                if (eachRoot.data().employee1 === nic) {
+                  getSaleTarget(
+                    rootName,
+                    firebase.firestore.Timestamp.fromDate(new Date())
+                  ).then((reSaleTarget) => {
+                    setSaleTarget(reSaleTarget);
+                  });
+
+                  db.collection("salary")
+                    .where("nic", "==", nic)
+                    .orderBy("date", "asc")
+                    .get()
+                    .then((reSalary) => {
+                      if (reSalary.docs.length > 0) {
+                        getSaleTargetForTable(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reSaleTarget) => {
+                          setSaleTargetList(reSaleTarget);
+                        });
+
+                        cashTargetFunc(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reCashTaregt) => {
+                          setCashTarget(reCashTaregt);
+                        });
+
+                        cashTargetFuncForTable(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reCashTaregt) => {
+                          setCashTargetList(reCashTaregt);
+                        });
+
+                        getCashSaleFunc(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reCashSale) => {
+                          setCashSale(reCashSale);
+                        });
+
+                        getCashSaleFuncForTable(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reCashSale) => {
+                          setCashSaleList(reCashSale);
+                        });
+
+                        getExcardFunc(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reEx) => {
+                          setExCard(reEx);
+                        });
+
+                        getExcardFuncForTable(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reEx) => {
+                          setExcardslist(reEx);
+                        });
+
+                        getShortage(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          setShortage((sho) => sho + parseInt(reShort));
+                        });
+                        getInstallmentshort(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          setShortage((sho) => sho + parseInt(reShort));
+                        });
+                        getGasshort(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          setShortage((sho) => sho + parseInt(reShort));
+                        });
+
+                        //================
+
+                        getShortageForTable(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          shortageList.push(reShort);
+                        });
+                        getInstallmentshortForTable(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          shortageList.push(reShort);
+                        });
+                        getGasshortForTable(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          shortageList.push(reShort);
+                        });
+
+                        //================
+                      } else {
+                        getSaleTargetForTable(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reSaleTarget) => {
+                          setSaleTargetList(reSaleTarget);
+                        });
+                        cashTargetFunc(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reCashTaregt) => {
+                          setCashTarget(reCashTaregt);
+                        });
+                        cashTargetFuncForTable(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reCashTaregt) => {
+                          setCashTargetList(reCashTaregt);
+                        });
+                        getCashSaleFunc(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reCashSale) => {
+                          setCashSale(reCashSale);
+                        });
+
+                        getCashSaleFuncForTable(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reCashSale) => {
+                          setCashSaleList(reCashSale);
+                        });
+
+                        getExcardFunc(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reEx) => {
+                          setExCard(reEx);
+                        });
+                        getExcardFuncForTable(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reEx) => {
+                          setExcardslist(reEx);
+                        });
+                        getShortage(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          setShortage((sho) => sho + parseInt(reShort));
+                        });
+                        getInstallmentshort(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          setShortage((sho) => sho + parseInt(reShort));
+                        });
+                        getGasshort(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          setShortage((sho) => sho + parseInt(reShort));
+                        });
+
+                        //=====================
+
+                        getShortageForTable(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          shortageList.push(reShort);
+                        });
+                        getInstallmentshortForTable(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          shortageList.push(reShort);
+                        });
+                        getGasshortForTable(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          shortageList.push(reShort);
+                        });
+
+                        //===========
+                      }
+                    });
+                  setRoot(eachRoot?.data().root);
+                }
+
+                if (eachRoot.data().employee2 === nic) {
+                  getSaleTarget(
+                    rootName,
+                    firebase.firestore.Timestamp.fromDate(new Date())
+                  ).then((reSaleTarget) => {
+                    setSaleTarget(reSaleTarget);
+                  });
+
+                  db.collection("salary")
+                    .where("nic", "==", nic)
+                    .orderBy("date", "asc")
+                    .get()
+                    .then((reSalary) => {
+                      if (reSalary.docs.length > 0) {
+                        getSaleTargetForTable(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reSaleTarget) => {
+                          setSaleTargetList(reSaleTarget);
+                        });
+                        cashTargetFunc(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reCashTaregt) => {
+                          setCashTarget(reCashTaregt);
+                        });
+                        cashTargetFuncForTable(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reCashTaregt) => {
+                          setCashTargetList(reCashTaregt);
+                        });
+                        getCashSaleFunc(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reCashSale) => {
+                          setCashSale(reCashSale);
+                        });
+                        getCashSaleFuncForTable(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reCashSale) => {
+                          setCashSaleList(reCashSale);
+                        });
+                        getExcardFunc(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reEx) => {
+                          setExCard(reEx);
+                        });
+                        getExcardFuncForTable(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reEx) => {
+                          setExcardslist(reEx);
+                        });
+                        getShortage(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          setShortage((sho) => sho + parseInt(reShort));
+                        });
+                        getInstallmentshort(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          setShortage((sho) => sho + parseInt(reShort));
+                        });
+                        getGasshort(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          setShortage((sho) => sho + parseInt(reShort));
+                        });
+
+                        //===============
+                        getShortageForTable(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          shortageList.push(reShort);
+                        });
+                        getInstallmentshortForTable(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          shortageList.push(reShort);
+                        });
+                        getGasshortForTable(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          shortageList.push(reShort);
+                        });
+
+                        //==============
+                      } else {
+                        getSaleTargetForTable(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reSaleTarget) => {
+                          setSaleTargetList(reSaleTarget);
+                        });
+                        cashTargetFunc(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reCashTaregt) => {
+                          setCashTarget(reCashTaregt);
+                        });
+                        cashTargetFuncForTable(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reCashTaregt) => {
+                          setCashTargetList(reCashTaregt);
+                        });
+                        getCashSaleFunc(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reCashSale) => {
+                          setCashSale(reCashSale);
+                        });
+                        getCashSaleFuncForTable(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reCashSale) => {
+                          setCashSaleList(reCashSale);
+                        });
+                        getExcardFunc(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reEx) => {
+                          setExCard(reEx);
+                        });
+                        getExcardFuncForTable(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reEx) => {
+                          setExcardslist(reEx);
+                        });
+                        getShortage(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          setShortage((sho) => sho + parseInt(reShort));
+                        });
+                        getInstallmentshort(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          setShortage((sho) => sho + parseInt(reShort));
+                        });
+                        getGasshort(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          setShortage((sho) => sho + parseInt(reShort));
+                        });
+
+                        //================
+
+                        getShortageForTable(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          shortageList.push(reShort);
+                        });
+                        getInstallmentshortForTable(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          shortageList.push(reShort);
+                        });
+                        getGasshortForTable(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          shortageList.push(reShort);
+                        });
+
+                        //=============
+                      }
+                    });
+                  setRoot(eachRoot.data().root);
+                }
+              });
+            });
+        }
       });
 
-    //+++++++++++++++++++++++++++++++++
-
-    db.collection("root")
-      .get()
-      .then((reRoot) => {
-        reRoot.docs.forEach((eachRoot) => {
-          let rootName = eachRoot.data().root;
-
-          if (eachRoot.data().employee1 === nic) {
-            getSaleTarget(
-              rootName,
-              firebase.firestore.Timestamp.fromDate(new Date())
-            ).then((reSaleTarget) => {
-              setSaleTarget(reSaleTarget);
-            });
-
-            db.collection("salary")
-              .where("nic", "==", nic)
-              .orderBy("date", "asc")
-              .get()
-              .then((reSalary) => {
-                if (reSalary.docs.length > 0) {
-                  getSaleTargetForTable(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reSaleTarget) => {
-                    setSaleTargetList(reSaleTarget);
-                  });
-
-                  cashTargetFunc(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reCashTaregt) => {
-                    setCashTarget(reCashTaregt);
-                  });
-
-                  cashTargetFuncForTable(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reCashTaregt) => {
-                    setCashTargetList(reCashTaregt);
-                  });
-
-                  getCashSaleFunc(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reCashSale) => {
-                    setCashSale(reCashSale);
-                  });
-
-                  getCashSaleFuncForTable(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reCashSale) => {
-                    setCashSaleList(reCashSale);
-                  });
-
-                  getExcardFunc(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reEx) => {
-                    setExCard(reEx);
-                  });
-
-                  getExcardFuncForTable(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reEx) => {
-                    setExcardslist(reEx);
-                  });
-
-                  getShortage(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reShort) => {
-                    setShortage((sho) => sho + parseInt(reShort));
-                  });
-                  getInstallmentshort(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reShort) => {
-                    setShortage((sho) => sho + parseInt(reShort));
-                  });
-                  getGasshort(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reShort) => {
-                    setShortage((sho) => sho + parseInt(reShort));
-                  });
-
-                  //================
-
-                  getShortageForTable(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reShort) => {
-                    shortageList.push(reShort);
-                  });
-                  getInstallmentshortForTable(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reShort) => {
-                    shortageList.push(reShort);
-                  });
-                  getGasshortForTable(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reShort) => {
-                    shortageList.push(reShort);
-                  });
-
-                  //================
-                } else {
-                  getSaleTargetForTable(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reSaleTarget) => {
-                    setSaleTargetList(reSaleTarget);
-                  });
-                  cashTargetFunc(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reCashTaregt) => {
-                    setCashTarget(reCashTaregt);
-                  });
-                  cashTargetFuncForTable(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reCashTaregt) => {
-                    setCashTargetList(reCashTaregt);
-                  });
-                  getCashSaleFunc(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reCashSale) => {
-                    setCashSale(reCashSale);
-                  });
-
-                  getCashSaleFuncForTable(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reCashSale) => {
-                    setCashSaleList(reCashSale);
-                  });
-
-                  getExcardFunc(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reEx) => {
-                    setExCard(reEx);
-                  });
-                  getExcardFuncForTable(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reEx) => {
-                    setExcardslist(reEx);
-                  });
-                  getShortage(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reShort) => {
-                    setShortage((sho) => sho + parseInt(reShort));
-                  });
-                  getInstallmentshort(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reShort) => {
-                    setShortage((sho) => sho + parseInt(reShort));
-                  });
-                  getGasshort(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reShort) => {
-                    setShortage((sho) => sho + parseInt(reShort));
-                  });
-
-                  //=====================
-
-                  getShortageForTable(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reShort) => {
-                    shortageList.push(reShort);
-                  });
-                  getInstallmentshortForTable(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reShort) => {
-                    shortageList.push(reShort);
-                  });
-                  getGasshortForTable(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reShort) => {
-                    shortageList.push(reShort);
-                  });
-
-                  //===========
-                }
-              });
-            setRoot(eachRoot?.data().root);
-          }
-
-          if (eachRoot.data().employee2 === nic) {
-            getSaleTarget(
-              rootName,
-              firebase.firestore.Timestamp.fromDate(new Date())
-            ).then((reSaleTarget) => {
-              setSaleTarget(reSaleTarget);
-            });
-
-            db.collection("salary")
-              .where("nic", "==", nic)
-              .orderBy("date", "asc")
-              .get()
-              .then((reSalary) => {
-                if (reSalary.docs.length > 0) {
-                  getSaleTargetForTable(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reSaleTarget) => {
-                    setSaleTargetList(reSaleTarget);
-                  });
-                  cashTargetFunc(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reCashTaregt) => {
-                    setCashTarget(reCashTaregt);
-                  });
-                  cashTargetFuncForTable(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reCashTaregt) => {
-                    setCashTargetList(reCashTaregt);
-                  });
-                  getCashSaleFunc(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reCashSale) => {
-                    setCashSale(reCashSale);
-                  });
-                  getCashSaleFuncForTable(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reCashSale) => {
-                    setCashSaleList(reCashSale);
-                  });
-                  getExcardFunc(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reEx) => {
-                    setExCard(reEx);
-                  });
-                  getExcardFuncForTable(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reEx) => {
-                    setExcardslist(reEx);
-                  });
-                  getShortage(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reShort) => {
-                    setShortage((sho) => sho + parseInt(reShort));
-                  });
-                  getInstallmentshort(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reShort) => {
-                    setShortage((sho) => sho + parseInt(reShort));
-                  });
-                  getGasshort(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reShort) => {
-                    setShortage((sho) => sho + parseInt(reShort));
-                  });
-
-                  //===============
-                  getShortageForTable(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reShort) => {
-                    shortageList.push(reShort);
-                  });
-                  getInstallmentshortForTable(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reShort) => {
-                    shortageList.push(reShort);
-                  });
-                  getGasshortForTable(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reShort) => {
-                    shortageList.push(reShort);
-                  });
-
-                  //==============
-                } else {
-                  getSaleTargetForTable(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reSaleTarget) => {
-                    setSaleTargetList(reSaleTarget);
-                  });
-                  cashTargetFunc(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reCashTaregt) => {
-                    setCashTarget(reCashTaregt);
-                  });
-                  cashTargetFuncForTable(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reCashTaregt) => {
-                    setCashTargetList(reCashTaregt);
-                  });
-                  getCashSaleFunc(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reCashSale) => {
-                    setCashSale(reCashSale);
-                  });
-                  getCashSaleFuncForTable(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reCashSale) => {
-                    setCashSaleList(reCashSale);
-                  });
-                  getExcardFunc(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reEx) => {
-                    setExCard(reEx);
-                  });
-                  getExcardFuncForTable(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reEx) => {
-                    setExcardslist(reEx);
-                  });
-                  getShortage(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reShort) => {
-                    setShortage((sho) => sho + parseInt(reShort));
-                  });
-                  getInstallmentshort(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reShort) => {
-                    setShortage((sho) => sho + parseInt(reShort));
-                  });
-                  getGasshort(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reShort) => {
-                    setShortage((sho) => sho + parseInt(reShort));
-                  });
-
-                  //================
-
-                  getShortageForTable(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reShort) => {
-                    shortageList.push(reShort);
-                  });
-                  getInstallmentshortForTable(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reShort) => {
-                    shortageList.push(reShort);
-                  });
-                  getGasshortForTable(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    firebase.firestore.Timestamp.fromDate(new Date())
-                  ).then((reShort) => {
-                    shortageList.push(reShort);
-                  });
-
-                  //=============
-                }
-              });
-            setRoot(eachRoot.data().root);
-          }
-        });
-      });
     db.collection("employee")
       .where("nic", "==", nic)
       .get()
@@ -2076,742 +2086,756 @@ export default function Add_Paysheet_Model({ nic }) {
         }
       });
 
-    //++++++++++++++++++++++++++++++++
-    //Shop
     db.collection("shop")
+      .where("nic", "==", nic)
       .get()
-      .then((reRoot) => {
-        reRoot.docs.forEach((eachRoot) => {
-          let rootName = "shop";
+      .then((reEmpShop) => {
+        if (reEmpShop.docs.length > 0) {
+          //++++++++++++++++++++++++++++++++
+          //Shop
+          db.collection("shop")
+            .get()
+            .then((reRoot) => {
+              reRoot.docs.forEach((eachRoot) => {
+                let rootName = "shop";
 
-          if (eachRoot.data().nic === nic) {
-            getSaleTarget(rootName, currentdateRe).then((reSaleTarget) => {
-              setSaleTarget(reSaleTarget);
-            });
+                if (eachRoot.data().nic === nic) {
+                  getSaleTarget(rootName, currentdateRe).then(
+                    (reSaleTarget) => {
+                      setSaleTarget(reSaleTarget);
+                    }
+                  );
 
-            db.collection("salary")
-              .where("nic", "==", nic)
-              .orderBy("date", "asc")
-              .get()
-              .then((reSalary) => {
-                if (reSalary.docs.length > 0) {
-                  getSaleTargetForTable(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    currentdateRe
-                  ).then((reSaleTarget) => {
-                    setSaleTargetList(reSaleTarget);
-                  });
+                  db.collection("salary")
+                    .where("nic", "==", nic)
+                    .orderBy("date", "asc")
+                    .get()
+                    .then((reSalary) => {
+                      if (reSalary.docs.length > 0) {
+                        getSaleTargetForTable(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          currentdateRe
+                        ).then((reSaleTarget) => {
+                          setSaleTargetList(reSaleTarget);
+                        });
 
-                  cashTargetFunc(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    currentdateRe
-                  ).then((reCashTaregt) => {
-                    setCashTarget(reCashTaregt);
-                  });
+                        cashTargetFunc(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          currentdateRe
+                        ).then((reCashTaregt) => {
+                          setCashTarget(reCashTaregt);
+                        });
 
-                  cashTargetFuncForTable(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    currentdateRe
-                  ).then((reCashTaregt) => {
-                    setCashTargetList(reCashTaregt);
-                  });
+                        cashTargetFuncForTable(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          currentdateRe
+                        ).then((reCashTaregt) => {
+                          setCashTargetList(reCashTaregt);
+                        });
 
-                  getCashSaleFunc(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    currentdateRe
-                  ).then((reCashSale) => {
-                    setCashSale(reCashSale);
-                  });
+                        getCashSaleFunc(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          currentdateRe
+                        ).then((reCashSale) => {
+                          setCashSale(reCashSale);
+                        });
 
-                  getCashSaleFuncForTable(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    currentdateRe
-                  ).then((reCashSale) => {
-                    setCashSaleList(reCashSale);
-                  });
+                        getCashSaleFuncForTable(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          currentdateRe
+                        ).then((reCashSale) => {
+                          setCashSaleList(reCashSale);
+                        });
 
-                  getExcardFunc(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    currentdateRe
-                  ).then((reEx) => {
-                    setExCard(reEx);
-                  });
+                        getExcardFunc(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          currentdateRe
+                        ).then((reEx) => {
+                          setExCard(reEx);
+                        });
 
-                  getExcardFuncForTable(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    currentdateRe
-                  ).then((reEx) => {
-                    setExcardslist(reEx);
-                  });
+                        getExcardFuncForTable(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          currentdateRe
+                        ).then((reEx) => {
+                          setExcardslist(reEx);
+                        });
 
-                  getShortage(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    currentdateRe
-                  ).then((reShort) => {
-                    setShortage((sho) => sho + parseInt(reShort));
-                  });
-                  getInstallmentshort(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    currentdateRe
-                  ).then((reShort) => {
-                    setShortage((sho) => sho + parseInt(reShort));
-                  });
-                  getGasshort(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    currentdateRe
-                  ).then((reShort) => {
-                    setShortage((sho) => sho + parseInt(reShort));
-                  });
+                        getShortage(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          setShortage((sho) => sho + parseInt(reShort));
+                        });
+                        getInstallmentshort(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          setShortage((sho) => sho + parseInt(reShort));
+                        });
+                        getGasshort(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          setShortage((sho) => sho + parseInt(reShort));
+                        });
 
-                  //================
+                        //================
 
-                  getShortageForTable(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    currentdateRe
-                  ).then((reShort) => {
-                    shortageList.push(reShort);
-                  });
-                  getInstallmentshortForTable(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    currentdateRe
-                  ).then((reShort) => {
-                    shortageList.push(reShort);
-                  });
-                  getGasshortForTable(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    currentdateRe
-                  ).then((reShort) => {
-                    shortageList.push(reShort);
-                  });
+                        getShortageForTable(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          shortageList.push(reShort);
+                        });
+                        getInstallmentshortForTable(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          shortageList.push(reShort);
+                        });
+                        getGasshortForTable(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          shortageList.push(reShort);
+                        });
 
-                  //================
-                } else {
-                  getSaleTargetForTable(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    currentdateRe
-                  ).then((reSaleTarget) => {
-                    setSaleTargetList(reSaleTarget);
-                  });
-                  cashTargetFunc(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    currentdateRe
-                  ).then((reCashTaregt) => {
-                    setCashTarget(reCashTaregt);
-                  });
-                  cashTargetFuncForTable(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    currentdateRe
-                  ).then((reCashTaregt) => {
-                    setCashTargetList(reCashTaregt);
-                  });
-                  getCashSaleFunc(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    currentdateRe
-                  ).then((reCashSale) => {
-                    setCashSale(reCashSale);
-                  });
+                        //================
+                      } else {
+                        getSaleTargetForTable(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          currentdateRe
+                        ).then((reSaleTarget) => {
+                          setSaleTargetList(reSaleTarget);
+                        });
+                        cashTargetFunc(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          currentdateRe
+                        ).then((reCashTaregt) => {
+                          setCashTarget(reCashTaregt);
+                        });
+                        cashTargetFuncForTable(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          currentdateRe
+                        ).then((reCashTaregt) => {
+                          setCashTargetList(reCashTaregt);
+                        });
+                        getCashSaleFunc(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          currentdateRe
+                        ).then((reCashSale) => {
+                          setCashSale(reCashSale);
+                        });
 
-                  getCashSaleFuncForTable(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    currentdateRe
-                  ).then((reCashSale) => {
-                    setCashSaleList(reCashSale);
-                  });
+                        getCashSaleFuncForTable(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          currentdateRe
+                        ).then((reCashSale) => {
+                          setCashSaleList(reCashSale);
+                        });
 
-                  getExcardFunc(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    currentdateRe
-                  ).then((reEx) => {
-                    setExCard(reEx);
-                  });
-                  getExcardFuncForTable(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    currentdateRe
-                  ).then((reEx) => {
-                    setExcardslist(reEx);
-                  });
-                  getShortage(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    currentdateRe
-                  ).then((reShort) => {
-                    setShortage((sho) => sho + parseInt(reShort));
-                  });
-                  getInstallmentshort(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    currentdateRe
-                  ).then((reShort) => {
-                    setShortage((sho) => sho + parseInt(reShort));
-                  });
-                  getGasshort(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    currentdateRe
-                  ).then((reShort) => {
-                    setShortage((sho) => sho + parseInt(reShort));
-                  });
+                        getExcardFunc(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          currentdateRe
+                        ).then((reEx) => {
+                          setExCard(reEx);
+                        });
+                        getExcardFuncForTable(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          currentdateRe
+                        ).then((reEx) => {
+                          setExcardslist(reEx);
+                        });
+                        getShortage(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          setShortage((sho) => sho + parseInt(reShort));
+                        });
+                        getInstallmentshort(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          setShortage((sho) => sho + parseInt(reShort));
+                        });
+                        getGasshort(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          setShortage((sho) => sho + parseInt(reShort));
+                        });
 
-                  //=====================
+                        //=====================
 
-                  getShortageForTable(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    currentdateRe
-                  ).then((reShort) => {
-                    shortageList.push(reShort);
-                  });
-                  getInstallmentshortForTable(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    currentdateRe
-                  ).then((reShort) => {
-                    shortageList.push(reShort);
-                  });
-                  getGasshortForTable(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    currentdateRe
-                  ).then((reShort) => {
-                    shortageList.push(reShort);
-                  });
+                        getShortageForTable(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          shortageList.push(reShort);
+                        });
+                        getInstallmentshortForTable(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          shortageList.push(reShort);
+                        });
+                        getGasshortForTable(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          shortageList.push(reShort);
+                        });
 
-                  //===========
+                        //===========
+                      }
+                    });
                 }
               });
-          }
-        });
-      });
-
-    //+++++++++++++++++++++++++++++++++
-
-    db.collection("root")
-      .get()
-      .then((reRoot) => {
-        reRoot.docs.forEach((eachRoot) => {
-          let rootName = eachRoot.data().root;
-
-          if (eachRoot.data().employee1 === nic) {
-            getSaleTarget(rootName, currentdateRe).then((reSaleTarget) => {
-              setSaleTarget(reSaleTarget);
+              setLoading(false);
             });
 
-            db.collection("salary")
-              .where("nic", "==", nic)
-              .orderBy("date", "asc")
-              .get()
-              .then((reSalary) => {
-                if (reSalary.docs.length > 0) {
-                  getSaleTargetForTable(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    currentdateRe
-                  ).then((reSaleTarget) => {
-                    setSaleTargetList(reSaleTarget);
-                  });
+          //+++++++++++++++++++++++++++++++++
+        } else {
+          db.collection("root")
+            .get()
+            .then((reRoot) => {
+              reRoot.docs.forEach((eachRoot) => {
+                let rootName = eachRoot.data().root;
 
-                  cashTargetFunc(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    currentdateRe
-                  ).then((reCashTaregt) => {
-                    setCashTarget(reCashTaregt);
-                  });
+                if (eachRoot.data().employee1 === nic) {
+                  getSaleTarget(rootName, currentdateRe).then(
+                    (reSaleTarget) => {
+                      setSaleTarget(reSaleTarget);
+                    }
+                  );
 
-                  cashTargetFuncForTable(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    currentdateRe
-                  ).then((reCashTaregt) => {
-                    setCashTargetList(reCashTaregt);
-                  });
+                  db.collection("salary")
+                    .where("nic", "==", nic)
+                    .orderBy("date", "asc")
+                    .get()
+                    .then((reSalary) => {
+                      if (reSalary.docs.length > 0) {
+                        getSaleTargetForTable(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          currentdateRe
+                        ).then((reSaleTarget) => {
+                          setSaleTargetList(reSaleTarget);
+                        });
 
-                  getCashSaleFunc(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    currentdateRe
-                  ).then((reCashSale) => {
-                    setCashSale(reCashSale);
-                  });
+                        cashTargetFunc(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          currentdateRe
+                        ).then((reCashTaregt) => {
+                          setCashTarget(reCashTaregt);
+                        });
 
-                  getCashSaleFuncForTable(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    currentdateRe
-                  ).then((reCashSale) => {
-                    setCashSaleList(reCashSale);
-                  });
+                        cashTargetFuncForTable(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          currentdateRe
+                        ).then((reCashTaregt) => {
+                          setCashTargetList(reCashTaregt);
+                        });
 
-                  getExcardFunc(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    currentdateRe
-                  ).then((reEx) => {
-                    setExCard(reEx);
-                  });
+                        getCashSaleFunc(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          currentdateRe
+                        ).then((reCashSale) => {
+                          setCashSale(reCashSale);
+                        });
 
-                  getExcardFuncForTable(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    currentdateRe
-                  ).then((reEx) => {
-                    setExcardslist(reEx);
-                  });
+                        getCashSaleFuncForTable(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          currentdateRe
+                        ).then((reCashSale) => {
+                          setCashSaleList(reCashSale);
+                        });
 
-                  getShortage(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    currentdateRe
-                  ).then((reShort) => {
-                    setShortage((sho) => sho + parseInt(reShort));
-                  });
-                  getInstallmentshort(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    currentdateRe
-                  ).then((reShort) => {
-                    setShortage((sho) => sho + parseInt(reShort));
-                  });
-                  getGasshort(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    currentdateRe
-                  ).then((reShort) => {
-                    setShortage((sho) => sho + parseInt(reShort));
-                  });
+                        getExcardFunc(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          currentdateRe
+                        ).then((reEx) => {
+                          setExCard(reEx);
+                        });
 
-                  //================
+                        getExcardFuncForTable(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          currentdateRe
+                        ).then((reEx) => {
+                          setExcardslist(reEx);
+                        });
 
-                  getShortageForTable(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    currentdateRe
-                  ).then((reShort) => {
-                    shortageList.push(reShort);
-                  });
-                  getInstallmentshortForTable(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    currentdateRe
-                  ).then((reShort) => {
-                    shortageList.push(reShort);
-                  });
-                  getGasshortForTable(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    currentdateRe
-                  ).then((reShort) => {
-                    shortageList.push(reShort);
-                  });
+                        getShortage(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          setShortage((sho) => sho + parseInt(reShort));
+                        });
+                        getInstallmentshort(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          setShortage((sho) => sho + parseInt(reShort));
+                        });
+                        getGasshort(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          setShortage((sho) => sho + parseInt(reShort));
+                        });
 
-                  //================
-                } else {
-                  getSaleTargetForTable(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    currentdateRe
-                  ).then((reSaleTarget) => {
-                    setSaleTargetList(reSaleTarget);
-                  });
-                  cashTargetFunc(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    currentdateRe
-                  ).then((reCashTaregt) => {
-                    setCashTarget(reCashTaregt);
-                  });
-                  cashTargetFuncForTable(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    currentdateRe
-                  ).then((reCashTaregt) => {
-                    setCashTargetList(reCashTaregt);
-                  });
-                  getCashSaleFunc(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    currentdateRe
-                  ).then((reCashSale) => {
-                    setCashSale(reCashSale);
-                  });
+                        //================
 
-                  getCashSaleFuncForTable(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    currentdateRe
-                  ).then((reCashSale) => {
-                    setCashSaleList(reCashSale);
-                  });
+                        getShortageForTable(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          shortageList.push(reShort);
+                        });
+                        getInstallmentshortForTable(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          shortageList.push(reShort);
+                        });
+                        getGasshortForTable(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          shortageList.push(reShort);
+                        });
 
-                  getExcardFunc(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    currentdateRe
-                  ).then((reEx) => {
-                    setExCard(reEx);
-                  });
-                  getExcardFuncForTable(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    currentdateRe
-                  ).then((reEx) => {
-                    setExcardslist(reEx);
-                  });
-                  getShortage(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    currentdateRe
-                  ).then((reShort) => {
-                    setShortage((sho) => sho + parseInt(reShort));
-                  });
-                  getInstallmentshort(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    currentdateRe
-                  ).then((reShort) => {
-                    setShortage((sho) => sho + parseInt(reShort));
-                  });
-                  getGasshort(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    currentdateRe
-                  ).then((reShort) => {
-                    setShortage((sho) => sho + parseInt(reShort));
-                  });
+                        //================
+                      } else {
+                        getSaleTargetForTable(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          currentdateRe
+                        ).then((reSaleTarget) => {
+                          setSaleTargetList(reSaleTarget);
+                        });
+                        cashTargetFunc(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          currentdateRe
+                        ).then((reCashTaregt) => {
+                          setCashTarget(reCashTaregt);
+                        });
+                        cashTargetFuncForTable(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          currentdateRe
+                        ).then((reCashTaregt) => {
+                          setCashTargetList(reCashTaregt);
+                        });
+                        getCashSaleFunc(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          currentdateRe
+                        ).then((reCashSale) => {
+                          setCashSale(reCashSale);
+                        });
 
-                  //=====================
+                        getCashSaleFuncForTable(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          currentdateRe
+                        ).then((reCashSale) => {
+                          setCashSaleList(reCashSale);
+                        });
 
-                  getShortageForTable(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    currentdateRe
-                  ).then((reShort) => {
-                    shortageList.push(reShort);
-                  });
-                  getInstallmentshortForTable(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    currentdateRe
-                  ).then((reShort) => {
-                    shortageList.push(reShort);
-                  });
-                  getGasshortForTable(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    currentdateRe
-                  ).then((reShort) => {
-                    shortageList.push(reShort);
-                  });
+                        getExcardFunc(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          currentdateRe
+                        ).then((reEx) => {
+                          setExCard(reEx);
+                        });
+                        getExcardFuncForTable(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          currentdateRe
+                        ).then((reEx) => {
+                          setExcardslist(reEx);
+                        });
+                        getShortage(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          setShortage((sho) => sho + parseInt(reShort));
+                        });
+                        getInstallmentshort(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          setShortage((sho) => sho + parseInt(reShort));
+                        });
+                        getGasshort(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          setShortage((sho) => sho + parseInt(reShort));
+                        });
 
-                  //===========
+                        //=====================
+
+                        getShortageForTable(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          shortageList.push(reShort);
+                        });
+                        getInstallmentshortForTable(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          shortageList.push(reShort);
+                        });
+                        getGasshortForTable(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          shortageList.push(reShort);
+                        });
+
+                        //===========
+                      }
+                    });
+                }
+
+                if (eachRoot.data().employee2 === nic) {
+                  getSaleTarget(rootName, currentdateRe).then(
+                    (reSaleTarget) => {
+                      setSaleTarget(reSaleTarget);
+                    }
+                  );
+
+                  db.collection("salary")
+                    .where("nic", "==", nic)
+                    .orderBy("date", "asc")
+                    .get()
+                    .then((reSalary) => {
+                      if (reSalary.docs.length > 0) {
+                        getSaleTargetForTable(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          currentdateRe
+                        ).then((reSaleTarget) => {
+                          setSaleTargetList(reSaleTarget);
+                        });
+                        cashTargetFunc(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          currentdateRe
+                        ).then((reCashTaregt) => {
+                          setCashTarget(reCashTaregt);
+                        });
+                        cashTargetFuncForTable(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          currentdateRe
+                        ).then((reCashTaregt) => {
+                          setCashTargetList(reCashTaregt);
+                        });
+                        getCashSaleFunc(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          currentdateRe
+                        ).then((reCashSale) => {
+                          setCashSale(reCashSale);
+                        });
+                        getCashSaleFuncForTable(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          currentdateRe
+                        ).then((reCashSale) => {
+                          setCashSaleList(reCashSale);
+                        });
+                        getExcardFunc(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          currentdateRe
+                        ).then((reEx) => {
+                          setExCard(reEx);
+                        });
+                        getExcardFuncForTable(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          currentdateRe
+                        ).then((reEx) => {
+                          setExcardslist(reEx);
+                        });
+                        getShortage(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          setShortage((sho) => sho + parseInt(reShort));
+                        });
+                        getInstallmentshort(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          setShortage((sho) => sho + parseInt(reShort));
+                        });
+                        getGasshort(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          setShortage((sho) => sho + parseInt(reShort));
+                        });
+
+                        //===============
+                        getShortageForTable(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          shortageList.push(reShort);
+                        });
+                        getInstallmentshortForTable(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          shortageList.push(reShort);
+                        });
+                        getGasshortForTable(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          shortageList.push(reShort);
+                        });
+
+                        //==============
+                      } else {
+                        getSaleTargetForTable(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          currentdateRe
+                        ).then((reSaleTarget) => {
+                          setSaleTargetList(reSaleTarget);
+                        });
+                        cashTargetFunc(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          currentdateRe
+                        ).then((reCashTaregt) => {
+                          setCashTarget(reCashTaregt);
+                        });
+                        cashTargetFuncForTable(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          currentdateRe
+                        ).then((reCashTaregt) => {
+                          setCashTargetList(reCashTaregt);
+                        });
+                        getCashSaleFunc(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          currentdateRe
+                        ).then((reCashSale) => {
+                          setCashSale(reCashSale);
+                        });
+                        getCashSaleFuncForTable(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          currentdateRe
+                        ).then((reCashSale) => {
+                          setCashSaleList(reCashSale);
+                        });
+                        getExcardFunc(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          currentdateRe
+                        ).then((reEx) => {
+                          setExCard(reEx);
+                        });
+                        getExcardFuncForTable(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          currentdateRe
+                        ).then((reEx) => {
+                          setExcardslist(reEx);
+                        });
+                        getShortage(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          setShortage((sho) => sho + parseInt(reShort));
+                        });
+                        getInstallmentshort(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          setShortage((sho) => sho + parseInt(reShort));
+                        });
+                        getGasshort(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          setShortage((sho) => sho + parseInt(reShort));
+                        });
+
+                        //================
+
+                        getShortageForTable(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          shortageList.push(reShort);
+                        });
+                        getInstallmentshortForTable(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          shortageList.push(reShort);
+                        });
+                        getGasshortForTable(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          shortageList.push(reShort);
+                        });
+                      }
+                    });
                 }
               });
-          }
-
-          if (eachRoot.data().employee2 === nic) {
-            getSaleTarget(rootName, currentdateRe).then((reSaleTarget) => {
-              setSaleTarget(reSaleTarget);
+              setLoading(false);
             });
-
-            db.collection("salary")
-              .where("nic", "==", nic)
-              .orderBy("date", "asc")
-              .get()
-              .then((reSalary) => {
-                if (reSalary.docs.length > 0) {
-                  getSaleTargetForTable(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    currentdateRe
-                  ).then((reSaleTarget) => {
-                    setSaleTargetList(reSaleTarget);
-                  });
-                  cashTargetFunc(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    currentdateRe
-                  ).then((reCashTaregt) => {
-                    setCashTarget(reCashTaregt);
-                  });
-                  cashTargetFuncForTable(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    currentdateRe
-                  ).then((reCashTaregt) => {
-                    setCashTargetList(reCashTaregt);
-                  });
-                  getCashSaleFunc(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    currentdateRe
-                  ).then((reCashSale) => {
-                    setCashSale(reCashSale);
-                  });
-                  getCashSaleFuncForTable(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    currentdateRe
-                  ).then((reCashSale) => {
-                    setCashSaleList(reCashSale);
-                  });
-                  getExcardFunc(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    currentdateRe
-                  ).then((reEx) => {
-                    setExCard(reEx);
-                  });
-                  getExcardFuncForTable(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    currentdateRe
-                  ).then((reEx) => {
-                    setExcardslist(reEx);
-                  });
-                  getShortage(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    currentdateRe
-                  ).then((reShort) => {
-                    setShortage((sho) => sho + parseInt(reShort));
-                  });
-                  getInstallmentshort(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    currentdateRe
-                  ).then((reShort) => {
-                    setShortage((sho) => sho + parseInt(reShort));
-                  });
-                  getGasshort(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    currentdateRe
-                  ).then((reShort) => {
-                    setShortage((sho) => sho + parseInt(reShort));
-                  });
-
-                  //===============
-                  getShortageForTable(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    currentdateRe
-                  ).then((reShort) => {
-                    shortageList.push(reShort);
-                  });
-                  getInstallmentshortForTable(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    currentdateRe
-                  ).then((reShort) => {
-                    shortageList.push(reShort);
-                  });
-                  getGasshortForTable(
-                    rootName,
-                    false,
-                    reSalary.docs[reSalary.docs.length - 1]?.data().date,
-                    currentdateRe
-                  ).then((reShort) => {
-                    shortageList.push(reShort);
-                  });
-
-                  //==============
-                } else {
-                  getSaleTargetForTable(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    currentdateRe
-                  ).then((reSaleTarget) => {
-                    setSaleTargetList(reSaleTarget);
-                  });
-                  cashTargetFunc(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    currentdateRe
-                  ).then((reCashTaregt) => {
-                    setCashTarget(reCashTaregt);
-                  });
-                  cashTargetFuncForTable(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    currentdateRe
-                  ).then((reCashTaregt) => {
-                    setCashTargetList(reCashTaregt);
-                  });
-                  getCashSaleFunc(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    currentdateRe
-                  ).then((reCashSale) => {
-                    setCashSale(reCashSale);
-                  });
-                  getCashSaleFuncForTable(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    currentdateRe
-                  ).then((reCashSale) => {
-                    setCashSaleList(reCashSale);
-                  });
-                  getExcardFunc(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    currentdateRe
-                  ).then((reEx) => {
-                    setExCard(reEx);
-                  });
-                  getExcardFuncForTable(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    currentdateRe
-                  ).then((reEx) => {
-                    setExcardslist(reEx);
-                  });
-                  getShortage(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    currentdateRe
-                  ).then((reShort) => {
-                    setShortage((sho) => sho + parseInt(reShort));
-                  });
-                  getInstallmentshort(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    currentdateRe
-                  ).then((reShort) => {
-                    setShortage((sho) => sho + parseInt(reShort));
-                  });
-                  getGasshort(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    currentdateRe
-                  ).then((reShort) => {
-                    setShortage((sho) => sho + parseInt(reShort));
-                  });
-
-                  //================
-
-                  getShortageForTable(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    currentdateRe
-                  ).then((reShort) => {
-                    shortageList.push(reShort);
-                  });
-                  getInstallmentshortForTable(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    currentdateRe
-                  ).then((reShort) => {
-                    shortageList.push(reShort);
-                  });
-                  getGasshortForTable(
-                    rootName,
-                    true,
-                    reSalary.docs[0]?.data().date,
-                    currentdateRe
-                  ).then((reShort) => {
-                    shortageList.push(reShort);
-                  });
-                }
-              });
-          }
-        });
-        setLoading(false);
+        }
       });
   };
 

@@ -1026,11 +1026,7 @@ export default function Add_Paysheet_Model({ nic }) {
                     : purchesGoodsInitial - plusValuesGoodsInitial
                 );
 
-                setGoods(
-                  purchesGoodsInitial - plusValuesGoodsInitial <= 0
-                    ? 0
-                    : purchesGoodsInitial - plusValuesGoodsInitial
-                );
+                setGoods(0);
               }
             });
         }
@@ -1892,7 +1888,7 @@ export default function Add_Paysheet_Model({ nic }) {
   const makeSalary = async () => {
     setLoading(true);
     let deductions =
-      epf + securityDeposit + deduction + advance + loan + shortage;
+      epf + securityDeposit + deduction + advance + loan + shortage + goods;
     let earnings =
       insentive +
       phoneBill +
@@ -3563,7 +3559,8 @@ export default function Add_Paysheet_Model({ nic }) {
                               deduction +
                               advance +
                               loan +
-                              shortage) <=
+                              shortage +
+                              goods) <=
                           0
                             ? 0
                             : insentive +
@@ -3579,7 +3576,8 @@ export default function Add_Paysheet_Model({ nic }) {
                                 deduction +
                                 advance +
                                 loan +
-                                shortage)
+                                shortage +
+                                goods)
                         }
                         displayType={"text"}
                         thousandSeparator={true}

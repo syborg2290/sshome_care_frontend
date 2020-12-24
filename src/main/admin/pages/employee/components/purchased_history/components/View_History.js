@@ -118,15 +118,15 @@ export default function View_History({ itemsList }) {
                       <TableBody>
                         {eachItem.serialNo.length > 0
                           ? eachItem?.serialNo?.map((row) => (
-                              <TableRow key={0}>
+                              <TableRow key={Math.random()}>
                                 <TableCell component="th" scope="row">
                                   {eachItem?.serialNo?.map((serailNoT) => (
-                                    <h5 key={serailNoT}>{serailNoT}</h5>
+                                    <h5 key={Math.random()}>{serailNoT}</h5>
                                   ))}
                                 </TableCell>
                                 <TableCell component="th" scope="row">
                                   {eachItem?.modelNo?.map((modelNoT) => (
-                                    <h5 key={modelNoT}>{modelNoT}</h5>
+                                    <h5 key={Math.random()}>{modelNoT}</h5>
                                   ))}
                                 </TableCell>
                               </TableRow>

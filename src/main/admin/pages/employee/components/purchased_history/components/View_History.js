@@ -110,7 +110,7 @@ export default function View_History({ itemsList }) {
                       <TableHead className="No_Table_head">
                         <TableRow>
                           <TableCell className="tbl_cell">SerialNo</TableCell>
-                          <TableCell className="tbl_cell" align="right">
+                          <TableCell className="tbl_cell" align="left">
                             ModelNo
                           </TableCell>
                         </TableRow>

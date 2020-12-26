@@ -1238,7 +1238,7 @@ export default function Add_Customer() {
                         : require("../../../../../assets/avatar1132.jpg")
                       : imageUrl
                   }
-                  className="imageFront"
+                  className="imageFrontAdd"
                 />
                  <br  className="imagebr" />
                 <p  className="pTagImg">Image Front Side</p>
@@ -1253,7 +1253,7 @@ export default function Add_Customer() {
                   accept="image/*"
                   name=""
                   onChange={onImageChangeCust2}
-                  className="imageBack"
+                  className="imageBackAdd"
                   id="Cust2_image"
                   hidden
                 />
@@ -1270,7 +1270,7 @@ export default function Add_Customer() {
                         : require("../../../../../assets/avater232.jpg")
                       : imageUrlCust2
                   }
-                  className="imageBack"
+                  className="imageBackAdd"
                 />
                  <br  className="imagebr" />
                 <p  className="pTagImg">Image Back Side</p>
@@ -1529,7 +1529,7 @@ export default function Add_Customer() {
                         : require("../../../../../assets/avatar1132.jpg")
                       : imageUrlT1
                   }
-                  className="imageFront"
+                  className="imageFrontAdd"
                 />
                  <br  className="imagebr" />
                 <p  className="pTagImg">Image Front Side</p>
@@ -1561,7 +1561,7 @@ export default function Add_Customer() {
                         : require("../../../../../assets/avater232.jpg")
                       : imageUrlT12
                   }
-                  className="imageBack"
+                  className="imageBackAdd"
                 />
                  <br  className="imagebr" />
                 <p  className="pTagImg">Image Back Side</p>
@@ -1746,7 +1746,7 @@ export default function Add_Customer() {
                         : require("../../../../../assets/avatar1132.jpg")
                       : imageUrlT2
                   }
-                  className="imageFront"
+                  className="imageFrontAdd"
                 />
                 <br />
                 <p  className="pTagImg">Image Front Side</p>
@@ -1778,7 +1778,7 @@ export default function Add_Customer() {
                         : require("../../../../../assets/avater232.jpg")
                       : imageUrlT22
                   }
-                  className="imageBack"
+                  className="imageBackAdd"
                 />
                  <br  className="imagebr" />
                 <p  className="pTagImg" >Image Back Side</p>

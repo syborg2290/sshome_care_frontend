@@ -1078,6 +1078,9 @@ export default function Add_Item() {
                   required={true}
                   value={salePrice}
                   onChange={(e) => {
+                    setAmountPerInstallment(
+                      noOfInstallments * (e.target.value - downPayment)
+                    );
                     if (e.target.value.length === 0) {
                       setNoOfInstallments(0);
                     } else {
@@ -1120,6 +1123,9 @@ export default function Add_Item() {
                   required={true}
                   value={downPayment}
                   onChange={(e) => {
+                      setAmountPerInstallment(
+                        noOfInstallments * (salePrice - e.target.value)
+                      );
                     if (e.target.value.length === 0) {
                       setNoOfInstallments(0);
                     } else {
@@ -1164,6 +1170,9 @@ export default function Add_Item() {
                   onChange={(e) => {
                     if (e.target.value !== "") {
                       setNoOfInstallments(e.target.value);
+                       setAmountPerInstallment(
+                         e.target.value * (salePrice - downPayment)
+                       );
                     }
                   }}
                   label="Installments"

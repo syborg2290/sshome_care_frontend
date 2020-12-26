@@ -102,7 +102,7 @@ export default function Item_table_assistant() {
               thousandSeparator={true}
               prefix={" "}
             />,
-            element.data().type,
+           
             <div
               color="secondary"
               size="small"
@@ -225,15 +225,7 @@ export default function Item_table_assistant() {
         }),
       },
     },
-    {
-      name: "Type",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
+  
     {
       name: "Status",
       options: {

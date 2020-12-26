@@ -46,11 +46,11 @@ export default function View_Fuel({ obj }) {
     var raw = [];
 
     raw.push({
-      Discription: obj["F/B-DAA_9261"].description,
-      Vehical: "F/B-DAA_9261",
+      Discription: obj["F/D-DAA_9261"].description,
+      Vehical: "F/D-DAA_9261",
       Cost: (
         <CurrencyFormat
-          value={obj["F/B-DAA_9261"].cost}
+          value={obj["F/D-DAA_9261"].cost}
           displayType={"text"}
           thousandSeparator={true}
           prefix={" "}
@@ -58,11 +58,11 @@ export default function View_Fuel({ obj }) {
       ),
     });
     raw.push({
-      Discription: obj["F/D-LI_5471"].description,
-      Vehical: "F/D-LI_5471",
+      Discription: obj["F/B-LI_5471"].description,
+      Vehical: "F/B-LI_5471",
       Cost: (
         <CurrencyFormat
-          value={obj["F/D-LI_5471"].cost}
+          value={obj["F/B-LI_5471"].cost}
           displayType={"text"}
           thousandSeparator={true}
           prefix={" "}

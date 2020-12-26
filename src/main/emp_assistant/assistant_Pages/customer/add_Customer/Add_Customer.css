@@ -13,12 +13,34 @@
 .txt_nic {
   width: 29% !important;
 }
-.image {
-  border-radius: 60px !important;
-  margin: auto !important;
-  text-align: center !important;
-  justify-content: center !important;
-  margin-top: 20px !important;
+
+/* .imagebr {
+  margin-top: 50px !important;
+} */
+.pTagImg {
+  color: rgb(212, 51, 51) !important;
+  margin-top: 30px !important;
+  margin-left: 40px !important;
+}
+
+.imageFront {
+  border-radius: 5px;
+  width: 55% !important;
+  height: 65% !important;
+  margin: auto;
+  text-align: center;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.imageBack {
+  border-radius: 5px;
+  width: 40% !important;
+  margin: auto;
+  text-align: center;
+  justify-content: center;
+  margin-top: 35px;
+  transform: rotate(270deg) !important;
 }
 
 .main_container {
@@ -277,7 +299,7 @@
 }
 
 .note_title {
-  margin-top: 20px !important;
+  margin-top: 40px !important;
   font-size: small !important;
   font-weight: 700 !important;
 }

@@ -377,6 +377,13 @@ export default function Stock_History() {
                     ).format("dddd, MMMM Do YYYY, h:mm:ss a")}
                   </span>
                 </Col>
+                <Col span={12}>STOCK TYPE</Col>
+                <Col span={12}>
+                  <span className="load_Item">
+                    {" "}
+                    <span className="colan">:</span>Main
+                  </span>
+                </Col>
               </Row>
               <hr />
               <TableContainer component={Paper} className="main_containerNo">
@@ -388,12 +395,12 @@ export default function Stock_History() {
                   <TableHead className="No_Table_head">
                     <TableRow>
                       <TableCell className="tbl_cell">SerialNo</TableCell>
-                      <TableCell className="tbl_cell" align="right">
+                      <TableCell className="tbl_cell" align="left">
                         ModelNo
                       </TableCell>
-                      <TableCell className="tbl_cell" align="right">
+                      {/* <TableCell className="tbl_cell" align="right">
                         ChasisseNo
-                      </TableCell>
+                      </TableCell> */}
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -410,17 +417,23 @@ export default function Stock_History() {
                             <TableCell component="th" scope="row">
                               {itemListSeMo[currentIndx]?.modelNo.map(
                                 (modelNoT) => (
-                                  <h5 key={modelNoT}>{modelNoT}</h5>
+                                  <h5
+                                    key={
+                                      Math.random().toString()
+                                    }
+                                  >
+                                    {modelNoT}
+                                  </h5>
                                 )
                               )}
                             </TableCell>
-                            <TableCell component="th" scope="row">
+                            {/* <TableCell component="th" scope="row">
                               {itemListSeMo[currentIndx]?.chassisNo.map(
                                 (chassisNoT) => (
                                   <h5 key={chassisNoT}>{chassisNoT}</h5>
                                 )
                               )}
-                            </TableCell>
+                            </TableCell> */}
                           </TableRow>
                         ))
                       : ""}

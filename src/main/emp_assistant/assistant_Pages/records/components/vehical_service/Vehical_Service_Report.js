@@ -102,7 +102,7 @@ export default function Vehical_Service_Report() {
       },
     },
     {
-      name: "Diesel",
+      name: "Grease_Nipples",
       options: {
         filter: false,
         setCellHeaderProps: (value) => ({
@@ -170,7 +170,7 @@ export default function Vehical_Service_Report() {
             ServiceKm_Total: reEach.data().serviceKm,
             Service_Center: reEach.data().serviceCenter,
             Next_ServiceKm: reEach.data().nextService,
-            Diesel: (
+            Grease_Nipples: (
               <Checkbox
                 checked={reEach.data().diesel}
                 color="primary"

@@ -52,3 +52,11 @@
   padding-left: 10px !important;
   /* padding-right: 8px !important; */
 }
+
+.confo_model {
+  width: 30% !important;
+}
+
+.confo_Icon {
+  color: rgba(233, 181, 13, 0.849) !important;
+}

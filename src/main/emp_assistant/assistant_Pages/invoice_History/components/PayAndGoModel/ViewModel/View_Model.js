@@ -11,6 +11,7 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
+import ModalImage from "react-modal-image";
 
 import db from "../../../../../../../config/firebase.js";
 
@@ -50,6 +51,8 @@ export default function View_Model({ items_list_props, data }) {
                 nic: reTr.data().nic,
                 address: reTr.data().address1,
                 mobile: reTr.data().mobile1,
+                trusteeFrontURL: reTr.data().trusteeFrontURL,
+                trusteeBackURL: reTr.data().trusteeBackURL,
               },
             ]);
           }
@@ -78,6 +81,7 @@ export default function View_Model({ items_list_props, data }) {
             ...old,
             {
               item_name: th.data().itemName,
+              stock_type: each.stock_type,
               dp: each.downpayment,
               listSe: itemDataSeMo,
               discount: each.discount,
@@ -240,15 +244,39 @@ export default function View_Model({ items_list_props, data }) {
               <Grid item xs={12} sm={6}>
                 <hr className="hr_topiSub" />
               </Grid>
-                <Grid item xs={12} sm={6}></Grid>
-                 <Grid item xs={12} sm={6}>
-                <img
-                  alt="Empty data"
-                    className="avatar_customer"
-                  src={require("../../../../../../../assets/avatar.png")}
-                 />
-              </Grid>
               <Grid item xs={12} sm={6}></Grid>
+              <Grid item xs={12} sm={6}>
+                {customer.customerFrontURL === null ? (
+                  <img
+                    alt="Empty data"
+                    className="imageFront"
+                    src={require("../../../../../../../assets/avatar1132.jpg")}
+                  />
+                ) : (
+                  <ModalImage
+                   className="imageFront"
+                    small={customer.customerFrontURL}
+                    large={customer.customerFrontURL}
+                    alt="Empty data"
+                  />
+                )}{" "}
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                {customer.customerBackURL === null ? (
+                  <img
+                    alt="Empty data"
+                    className="imageBack"
+                    src={require("../../../../../../../assets/avater232.jpg")}
+                  />
+                ) : (
+                  <ModalImage
+                  className="imageBack"
+                    small={customer.customerBackURL}
+                    large={customer.customerBackURL}
+                    alt="Empty data"
+                  />
+                )}
+              </Grid>
               <Grid className="lbl_topis" item xs={12} sm={3}>
                 Full Name
               </Grid>
@@ -300,7 +328,7 @@ export default function View_Model({ items_list_props, data }) {
                 <p>{customer.mobile1}</p>
               </Grid>
               <Grid className="lbl_topiSub" item xs={12} sm={12}>
-                 Trustees Details
+                Trustees Details
               </Grid>
               <Grid item xs={12} sm={6}>
                 <hr className="hr_topiSub" />
@@ -315,14 +343,38 @@ export default function View_Model({ items_list_props, data }) {
                   container
                   spacing={2}
                 >
-                   <Grid item xs={12} sm={6}>
-                <img
-                  alt="Empty data"
-                    className="avatar_customer"
-                  src={require("../../../../../../../assets/avatar.png")}
-                 />
-              </Grid>
-              <Grid item xs={12} sm={6}></Grid>
+                  <Grid item xs={12} sm={6}>
+                    {si.trusteeFrontURL === null ? (
+                      <img
+                        alt="Empty data"
+                        className="imageFront"
+                        src={require("../../../../../../../assets/avatar1132.jpg")}
+                      />
+                    ) : (
+                      <ModalImage
+                       className="imageFront"
+                        small={si.trusteeFrontURL}
+                        large={si.trusteeFrontURL}
+                        alt="Empty data"
+                      />
+                    )}
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    {si.trusteeBackURL === null ? (
+                      <img
+                        alt="Empty data"
+                        className="imageBack"
+                        src={require("../../../../../../../assets/avater232.jpg")}
+                      />
+                    ) : (
+                      <ModalImage
+                       className="imageBack"
+                        small={si.trusteeBackURL}
+                        large={si.trusteeBackURL}
+                        alt="Empty data"
+                      />
+                    )}
+                  </Grid>
                   <Grid className="lbl_topis" item xs={12} sm={3}>
                     Full Name
                   </Grid>
@@ -388,6 +440,15 @@ export default function View_Model({ items_list_props, data }) {
               return (
                 <Grid key={eachItem.item_name} container spacing={2}>
                   {" "}
+                  <Grid className="lbl_topis" item xs={12} sm={4}>
+                    Stock type
+                  </Grid>
+                  <Grid item xs={12} sm={1}>
+                    :
+                  </Grid>
+                  <Grid item xs={12} sm={7}>
+                    <p>{eachItem.stock_type}</p>
+                  </Grid>
                   <Grid className="lbl_topis" item xs={12} sm={4}>
                     Item Name
                   </Grid>
@@ -490,7 +551,7 @@ export default function View_Model({ items_list_props, data }) {
                                 <TableCell component="th" scope="row">
                                   {eachItem.listSe[0]?.modelNo?.map(
                                     (modelNoT) => (
-                                      <h5 key={modelNoT}>{modelNoT}</h5>
+                                      <h5 key={Math.random()}>{modelNoT}</h5>
                                     )
                                   )}
                                 </TableCell>

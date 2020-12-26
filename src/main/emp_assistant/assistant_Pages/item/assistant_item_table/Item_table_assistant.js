@@ -24,7 +24,7 @@ import EditIcon from "@material-ui/icons/Edit";
 
 // styles
 import "./Item_table_assistant.css";
-
+ 
 import db from "../../../../../config/firebase.js";
 
 export default function Item_table_assistant() {
@@ -101,6 +101,7 @@ export default function Item_table_assistant() {
               thousandSeparator={true}
               prefix={" "}
             />,
+            element.data().stock_type,
             <div
               color="secondary"
               size="small"
@@ -125,9 +126,11 @@ export default function Item_table_assistant() {
             </div>,
             <div className="table_icon">
               <VisibilityIcon onClick={showModal} />
-              <span className="icon_Edit">
-                <EditIcon onClick={editModal} />
-              </span>
+              {element.data().stock_type === "main" ? (
+                <span className="icon_Edit">
+                  <EditIcon onClick={editModal} />
+                </span>
+              ) : null}
               {/* <span className="icon_delete">
                 <DeleteIcon onClick={showModalConfirmModal} />
               </span> */}
@@ -216,6 +219,15 @@ export default function Item_table_assistant() {
     },
     {
       name: "Sale price(LKR)",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "Stock_Type",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -482,6 +494,15 @@ export default function Item_table_assistant() {
                     ).format("dddd, MMMM Do YYYY, h:mm:ss a")}
                   </span>
                 </Col>
+                <Col span={12}>STOCK TYPE</Col>
+                <Col span={12}>
+                  <span className="load_Item">
+                    <span className="colan">:</span>
+                    {allTtemData[currentIndx] && allTtemData[currentIndx].data
+                      ? allTtemData[currentIndx].data.stock_type
+                      : " - "}{" "}
+                  </span>
+                </Col>
               </Row>
               <hr />
               <TableContainer component={Paper} className="main_containerNo">
@@ -496,9 +517,9 @@ export default function Item_table_assistant() {
                       <TableCell className="tbl_cell" align="left">
                         ModelNo
                       </TableCell>
-                      <TableCell className="tbl_cell" align="left">
+                      {/* <TableCell className="tbl_cell" align="left">
                         ChasisseNo
-                      </TableCell>
+                      </TableCell> */}
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -515,14 +536,9 @@ export default function Item_table_assistant() {
                             <TableCell component="th" scope="row">
                               {itemListSeMo[currentIndx]?.modelNo.map(
                                 (modelNoT) => (
-                                  <h5 key={modelNoT}>{modelNoT}</h5>
-                                )
-                              )}
-                            </TableCell>
-                            <TableCell component="th" scope="row">
-                              {itemListSeMo[currentIndx]?.chassisNo.map(
-                                (chassisNoT) => (
-                                  <h5 key={chassisNoT}>{chassisNoT}</h5>
+                                  <h5 key={Math.random().toString()}>
+                                    {modelNoT}
+                                  </h5>
                                 )
                               )}
                             </TableCell>

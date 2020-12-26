@@ -86,7 +86,7 @@ export default function Other_Expences() {
       },
     },
     {
-      name: "Salary_Installments",
+      name: "Salary_Deductibles",
       options: {
         filter: false,
         setCellHeaderProps: (value) => ({
@@ -260,7 +260,7 @@ export default function Other_Expences() {
                 prefix={" "}
               />
             ),
-            Salary_Installments: (
+            Salary_Deductibles: (
               <CurrencyFormat
                 value={each.data().salaryDeductables.cost}
                 displayType={"text"}

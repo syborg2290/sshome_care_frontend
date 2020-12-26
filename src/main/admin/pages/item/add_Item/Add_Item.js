@@ -1079,7 +1079,12 @@ export default function Add_Item() {
                   value={salePrice}
                   onChange={(e) => {
                     setAmountPerInstallment(
-                      noOfInstallments * (e.target.value - downPayment)
+                      e.target.value - downPayment > 0
+                        ? (
+                            (e.target.value - downPayment) /
+                            noOfInstallments
+                          ).toFixed(2)
+                        : 0
                     );
                     if (e.target.value.length === 0) {
                       setNoOfInstallments(0);
@@ -1123,9 +1128,14 @@ export default function Add_Item() {
                   required={true}
                   value={downPayment}
                   onChange={(e) => {
-                      setAmountPerInstallment(
-                        noOfInstallments * (salePrice - e.target.value)
-                      );
+                    setAmountPerInstallment(
+                      salePrice - e.target.value > 0
+                        ? (
+                            (salePrice - e.target.value) /
+                            noOfInstallments
+                          ).toFixed(2)
+                        : 0
+                    );
                     if (e.target.value.length === 0) {
                       setNoOfInstallments(0);
                     } else {
@@ -1170,9 +1180,14 @@ export default function Add_Item() {
                   onChange={(e) => {
                     if (e.target.value !== "") {
                       setNoOfInstallments(e.target.value);
-                       setAmountPerInstallment(
-                         e.target.value * (salePrice - downPayment)
-                       );
+                      setAmountPerInstallment(
+                        salePrice - downPayment > 0
+                          ? (
+                              (salePrice - downPayment) /
+                              e.target.value
+                            ).toFixed(2)
+                          : 0
+                      );
                     }
                   }}
                   label="Installments"

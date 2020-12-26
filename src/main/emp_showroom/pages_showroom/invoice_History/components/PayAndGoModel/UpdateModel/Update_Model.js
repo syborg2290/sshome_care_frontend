@@ -293,7 +293,7 @@ export default function Update_Model({
 
         setIsLoading(false);
       });
-    // eslint-disable-next-line
+     // eslint-disable-next-line
   }, [invoice_no, isEx, instAmountProp, instCount, customer_id]);
 
   const updateInstallment = async () => {
@@ -494,7 +494,8 @@ export default function Update_Model({
             };
 
             let moveWith = {
-              pathname: "/showroom/invoice/PrintReceipt",
+              pathname:
+                "/admin/invoice_history/payAndGo/updateModel/PrintReceipt",
               search: "?query=abc",
               state: { detail: passingWithCustomerObj },
             };

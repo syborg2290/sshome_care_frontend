@@ -133,7 +133,7 @@ export default function Add_Item() {
 
   //add InputModel No
   const addInputModelNo = () => {
-    if (Object.keys(inputsModelNo).length <= 1) {
+    if (Object.keys(inputsModelNo).length < 1) {
       setInputsModelNo({
         ...inputsModelNo,
         [Object.keys(inputsModelNo).length]: "",
@@ -184,14 +184,6 @@ export default function Add_Item() {
       let chassisNosList = [];
 
       for (var k = 0; k < Object.keys(inputsSerialNo).length; k++) {
-        // db.collection("item")
-        //   .where("modelNo", "==", inputsModelNo[k])
-        //   .get()
-        //   .then((reModel) => {
-        //     if (reModel.docs.length > 0) {
-        //       setIsInAlreadyModel(true);
-        //     }
-        //   });
         db.collection("item")
           .where("serialNo", "==", inputsSerialNo[k])
           .get()
@@ -383,7 +375,13 @@ export default function Add_Item() {
                                                                 .discount ===
                                                                 Math.round(
                                                                   discount
-                                                                )
+                                                                ) &&
+                                                              ob.data()
+                                                                .stock_type ===
+                                                                "main" &&
+                                                              ob.data()
+                                                                .modelNo ===
+                                                                modelNosList[0]
                                                           )
                                                         ) {
                                                           var newArray = allItems.docs.filter(
@@ -426,7 +424,13 @@ export default function Add_Item() {
                                                                 .discount ===
                                                                 Math.round(
                                                                   discount
-                                                                )
+                                                                ) &&
+                                                              ob.data()
+                                                                .stock_type ===
+                                                                "main" &&
+                                                              ob.data()
+                                                                .modelNo ===
+                                                                modelNosList[0]
                                                           );
                                                           if (newArray) {
                                                             let modelNoNewList = modelNosList.concat(
@@ -1074,6 +1078,14 @@ export default function Add_Item() {
                   required={true}
                   value={salePrice}
                   onChange={(e) => {
+                    setAmountPerInstallment(
+                      e.target.value - downPayment > 0
+                        ? (
+                            (e.target.value - downPayment) /
+                            noOfInstallments
+                          ).toFixed(2)
+                        : 0
+                    );
                     if (e.target.value.length === 0) {
                       setNoOfInstallments(0);
                     } else {
@@ -1116,6 +1128,14 @@ export default function Add_Item() {
                   required={true}
                   value={downPayment}
                   onChange={(e) => {
+                    setAmountPerInstallment(
+                      salePrice - e.target.value > 0
+                        ? (
+                            (salePrice - e.target.value) /
+                            noOfInstallments
+                          ).toFixed(2)
+                        : 0
+                    );
                     if (e.target.value.length === 0) {
                       setNoOfInstallments(0);
                     } else {
@@ -1160,6 +1180,14 @@ export default function Add_Item() {
                   onChange={(e) => {
                     if (e.target.value !== "") {
                       setNoOfInstallments(e.target.value);
+                      setAmountPerInstallment(
+                        salePrice - downPayment > 0
+                          ? (
+                              (salePrice - downPayment) /
+                              e.target.value
+                            ).toFixed(2)
+                          : 0
+                      );
                     }
                   }}
                   label="Installments"

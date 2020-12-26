@@ -11,7 +11,7 @@ import SalesReport from "./components/sales_Repots/Sales_Report";
 import GassReport from "./components/gass_Reports/Gass_Reports";
 import ExpencesReport from "./components/expences_Reports/Expences_Report";
 import VehicalServiceReport from "./components/vehical_service/Vehical_Service_Report";
-
+  
 export default function Record() {
   let history = useHistory();
   useEffect(() => {

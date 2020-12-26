@@ -257,9 +257,7 @@ export default function Black_List() {
                               ),
                               gamisarani_amount: 0,
                               shortage: 0,
-                              type:
-                                allDataBlacklist[currentIndx]?.data
-                                  .Type,
+                              type: allDataBlacklist[currentIndx]?.data.Type,
                               delayed: 0,
                               balance: 0,
                               date: firebase.firestore.FieldValue.serverTimestamp(),
@@ -359,7 +357,7 @@ export default function Black_List() {
               // selectableRows: false,
               selectableRows: "none",
               customToolbarSelect: () => {},
-              filterType: "textfield",
+              filterType: "textField",
               download: false,
               print: false,
               searchPlaceholder: "Search using any column names",

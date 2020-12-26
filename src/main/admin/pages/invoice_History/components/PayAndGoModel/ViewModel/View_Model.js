@@ -249,12 +249,12 @@ export default function View_Model({ items_list_props, data }) {
                 {customer.customerFrontURL === null ? (
                   <img
                     alt="Empty data"
-                    className="imageFront"
+                    className="imageFrontHis"
                     src={require("../../../../../../../assets/avatar1132.jpg")}
                   />
                 ) : (
                   <ModalImage
-                    className="imageFront"
+                    className="imageFrontMod"
                     small={customer.customerFrontURL}
                     large={customer.customerFrontURL}
                     alt="Empty data"
@@ -265,12 +265,12 @@ export default function View_Model({ items_list_props, data }) {
                 {customer.customerBackURL === null ? (
                   <img
                     alt="Empty data"
-                    className="imageBack"
+                    className="imageBackHis"
                     src={require("../../../../../../../assets/avater232.jpg")}
                   />
                 ) : (
                   <ModalImage
-                    className="imageBack"
+                    className="imageBackMod"
                     small={customer.customerBackURL}
                     large={customer.customerBackURL}
                     alt="Empty data"
@@ -347,12 +347,12 @@ export default function View_Model({ items_list_props, data }) {
                     {si.trusteeFrontURL === null ? (
                       <img
                         alt="Empty data"
-                        className="imageFront"
+                        className="imageFrontHis"
                         src={require("../../../../../../../assets/avatar1132.jpg")}
                       />
                     ) : (
                       <ModalImage
-                        className="imageFront"
+                        className="imageFrontMod"
                         small={si.trusteeFrontURL}
                         large={si.trusteeFrontURL}
                         alt="Empty data"
@@ -363,12 +363,12 @@ export default function View_Model({ items_list_props, data }) {
                     {si.trusteeBackURL === null ? (
                       <img
                         alt="Empty data"
-                        className="imageBack"
+                        className="imageBackHis"
                         src={require("../../../../../../../assets/avater232.jpg")}
                       />
                     ) : (
                       <ModalImage
-                        className="imageBack"
+                        className="imageBackMod"
                         small={si.trusteeBackURL}
                         large={si.trusteeBackURL}
                         alt="Empty data"

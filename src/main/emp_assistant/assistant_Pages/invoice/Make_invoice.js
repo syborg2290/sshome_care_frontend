@@ -124,7 +124,7 @@ function Make_invoice() {
       "popstate",
       (event) => {
         if (event.state) {
-          history.push("/admin/ui/MakeInvoiceTable");
+          history.push("/assistant/ui/MakeInvoiceTable");
         }
       },
       false
@@ -321,7 +321,7 @@ function Make_invoice() {
                       };
 
                       let moveWith = {
-                        pathname: "/admin/invoice/printInvoice",
+                        pathname: "/assistant/invoice/printInvoice",
                         search: "?query=abc",
                         state: { detail: passingWithCustomerObj },
                       };
@@ -347,7 +347,7 @@ function Make_invoice() {
                         backto: "item_list",
                       };
                       let moveWith = {
-                        pathname: "/admin/invoice/printInvoice",
+                        pathname: "/assistant/invoice/printInvoice",
                         search: "?query=abc",
                         state: { detail: passingWithoutCustomerObj },
                       };
@@ -358,7 +358,7 @@ function Make_invoice() {
                   },
                   async onCancel() {
                     await invoiceIntoDb().then((_) => {
-                      history.push("/admin/ui/MakeInvoiceTable");
+                      history.push("/assistant/ui/MakeInvoiceTable");
                     });
                   },
                 });
@@ -406,7 +406,7 @@ function Make_invoice() {
               };
 
               let moveWith = {
-                pathname: "/admin/invoice/printInvoice",
+                pathname: "/assistant/invoice/printInvoice",
                 search: "?query=abc",
                 state: { detail: passingWithCustomerObj },
               };
@@ -432,7 +432,7 @@ function Make_invoice() {
                 backto: "item_list",
               };
               let moveWith = {
-                pathname: "/admin/invoice/printInvoice",
+                pathname: "/assistant/invoice/printInvoice",
                 search: "?query=abc",
                 state: { detail: passingWithoutCustomerObj },
               };
@@ -443,7 +443,7 @@ function Make_invoice() {
           },
           async onCancel() {
             await invoiceIntoDb().then((_) => {
-              history.push("/admin/ui/MakeInvoiceTable");
+              history.push("/assistant/ui/MakeInvoiceTable");
             });
           },
         });
@@ -1643,7 +1643,7 @@ function Make_invoice() {
                                     tablerows.splice(index, 1);
                                     setTableRows([...tablerows]);
                                     if (tablerows.length === 0) {
-                                      history.push("/admin/ui/ItemTable");
+                                      history.push("/assistant/ui/ItemTable");
                                     }
                                     delete itemQty[row.i];
                                     delete itemDP[row.i];

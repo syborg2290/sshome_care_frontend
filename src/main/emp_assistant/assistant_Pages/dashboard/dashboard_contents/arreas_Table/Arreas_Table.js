@@ -216,7 +216,7 @@ export default function Arreas_Table() {
               // selectableRows: false,
               selectableRows: "none",
               customToolbarSelect: () => {},
-              filterType: "textfield",
+              filterType: "textField",
               download: false,
               print: false,
               searchPlaceholder: "Search using any column names",

@@ -590,7 +590,7 @@ export default function Areas() {
               // selectableRows: false,
               selectableRows: "none",
               customToolbarSelect: () => {},
-              filterType: "textfield",
+              filterType: "textField",
               download: false,
               rowHover: false,
               print: false,

@@ -13,7 +13,6 @@ import RepairModel from "./repairs_Model/Repair_model";
 import RepairUpdateModel from "./repair_Update_Model/Repair_Update";
 import RepairViewModel from "./repair_view_Model/Repair_View";
 
-
 // styles
 import "./Repairs.css";
 
@@ -35,7 +34,7 @@ export default function Repairs() {
   const [visibleConfirmPrint, setVisibleConfirmPrint] = useState(false);
   const [repairTableData, setRepairTableData] = useState([]);
   const [repairAllData, setRepairAllData] = useState([]);
-  
+
   let history = useHistory();
   let history2 = useHistory();
 
@@ -83,10 +82,6 @@ export default function Repairs() {
   const showModalViewRepair = () => {
     setRepairViewModel(true);
   };
-
-
-
-
 
   //START pay And Go Columns
   const repairTableColomns = [
@@ -341,20 +336,18 @@ export default function Repairs() {
 
       {/*END VIEW repairs Model */}
 
-
       <Grid container spacing={4}>
-     
-     <Grid item xs={12}>
-      <Button
-        variant="contained"
-        color="primary"
-        className="btn_AddnewRepair"
-        endIcon={<AddIcon />}
-        onClick={showModalRepair}
-      >
-        Add New
-      </Button>
-</Grid>
+        <Grid item xs={12}>
+          <Button
+            variant="contained"
+            color="primary"
+            className="btn_AddnewRepair"
+            endIcon={<AddIcon />}
+            onClick={showModalRepair}
+          >
+            Add New
+          </Button>
+        </Grid>
       </Grid>
 
       <Grid container spacing={4}>
@@ -368,7 +361,7 @@ export default function Repairs() {
               // selectableRows: false,
               selectableRows: "none",
               customToolbarSelect: () => {},
-              filterType: "textfield",
+              filterType: "textField",
               download: false,
               print: false,
               searchPlaceholder: "Search using any column names",

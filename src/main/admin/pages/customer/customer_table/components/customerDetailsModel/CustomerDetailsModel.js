@@ -36,11 +36,11 @@ export default function customerDetailsModel({
         {front === null ? (
           <img
             alt="Empty data"
-            className="imageFrontDetails"
+            className="imageFrontDetailsCust"
             src={require("../../../../../../../assets/avatar1132.jpg")}
           />
         ) : (
-          <ModalImage  className="imageFrontDetailsload"  small={front} large={front} alt="Empty data" />
+          <ModalImage  className="imageFrontDetailsloadMod"  small={front} large={front} alt="Empty data" />
         )}
       </Col>
       <Col className="img_span" span={12}>
@@ -48,11 +48,11 @@ export default function customerDetailsModel({
         {back === null ? (
           <img
             alt="Empty data"
-            className="imageBackDetails"
+            className="imageBackDetailsCust"
             src={require("../../../../../../../assets/avater232.jpg")}
           />
         ) : (
-          <ModalImage  className="imageBackDetailsload" small={back} large={back} alt="Empty data" />
+          <ModalImage  className="imageBackDetailsloadMod" small={back} large={back} alt="Empty data" />
         )}
       </Col>
       <Col className="space_col" span={24}></Col>

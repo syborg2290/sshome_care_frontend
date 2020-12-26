@@ -19,7 +19,7 @@ export default function Full_Payment_Model({ items_list_props, data }) {
       let itemDataSeMo = [];
       let listOfSerilNo = [];
       let listOfModelNo = [];
-      // let listOfChassisNo = [];
+      //let listOfChassisNo = [];
       listOfSerilNo = each.serialNo;
       listOfModelNo = each.modelNo;
       // listOfChassisNo = each.chassisNo;
@@ -37,6 +37,7 @@ export default function Full_Payment_Model({ items_list_props, data }) {
             ...old,
             {
               item_name: th.data().itemName,
+              stock_type: each.stock_type,
               listSe: itemDataSeMo,
               discount: each.discount,
               qty: each.qty,
@@ -115,6 +116,15 @@ export default function Full_Payment_Model({ items_list_props, data }) {
                   <Grid item xs={12} sm={6}></Grid>
                   <Grid container spacing={2}>
                     {" "}
+                    <Grid className="lbl_topis" item xs={12} sm={4}>
+                      Stock type
+                    </Grid>
+                    <Grid item xs={12} sm={1}>
+                      :
+                    </Grid>
+                    <Grid item xs={12} sm={7}>
+                      <p>{eachItem.stock_type}</p>
+                    </Grid>
                     <Grid className="lbl_topis" item xs={12} sm={4}>
                       Item Name
                     </Grid>
@@ -201,7 +211,7 @@ export default function Full_Payment_Model({ items_list_props, data }) {
                       <TableHead className="No_Table_head">
                         <TableRow>
                           <TableCell className="tbl_cell">SerialNo</TableCell>
-                          <TableCell className="tbl_cell" align="right">
+                          <TableCell className="tbl_cell" align="left">
                             ModelNo
                           </TableCell>
                           {/* <TableCell className="tbl_cell" align="right">
@@ -223,7 +233,7 @@ export default function Full_Payment_Model({ items_list_props, data }) {
                                 <TableCell component="th" scope="row">
                                   {eachItem.listSe[0]?.modelNo?.map(
                                     (modelNoT) => (
-                                      <h5 key={modelNoT}>{modelNoT}</h5>
+                                      <h5 key={Math.random()}>{modelNoT}</h5>
                                     )
                                   )}
                                 </TableCell>

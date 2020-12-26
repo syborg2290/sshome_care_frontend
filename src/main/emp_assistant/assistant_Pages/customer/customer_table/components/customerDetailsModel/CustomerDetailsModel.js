@@ -3,12 +3,14 @@ import React from "react";
 import { Row, Col } from "antd";
 import Typography from "@material-ui/core/Typography";
 import moment from "moment";
+import ModalImage from "react-modal-image";
 
 // styles
 import "./CustomerDetailsModel.css";
 
 export default function customerDetailsModel({
-  photo,
+  front,
+  back,
   fname,
   lname,
   mid,
@@ -21,8 +23,6 @@ export default function customerDetailsModel({
   status,
   createdAt,
 }) {
-
- 
   return (
     <Row>
       <Col className="space_col" span={12}>
@@ -31,19 +31,30 @@ export default function customerDetailsModel({
         </Typography>
       </Col>
       <Col className="space_col" span={12}></Col>
-      <Col className="img_span" span={24}>
+      <Col className="img_span" span={12}>
         {" "}
-        <img
-          alt="Empty data"
-          className="avatar_customer"
-          src={
-            photo !== null
-              ? photo
-              : require("../../../../../../../assets/avatar.png")
-          }
-        />
+        {front === null ? (
+          <img
+            alt="Empty data"
+            className="imageFrontDetails"
+            src={require("../../../../../../../assets/avatar1132.jpg")}
+          />
+        ) : (
+          <ModalImage  className="imageFrontDetailsload"  small={front} large={front} alt="Empty data" />
+        )}
       </Col>
-
+      <Col className="img_span" span={12}>
+        {" "}
+        {back === null ? (
+          <img
+            alt="Empty data"
+            className="imageBackDetails"
+            src={require("../../../../../../../assets/avater232.jpg")}
+          />
+        ) : (
+          <ModalImage  className="imageBackDetailsload" small={back} large={back} alt="Empty data" />
+        )}
+      </Col>
       <Col className="space_col" span={24}></Col>
 
       <Col className="customer_details" span={8}>

@@ -112,7 +112,7 @@ export default function Invoice_history() {
       };
 
       let moveWith = {
-        pathname: "/showroom/invoice/printInvoice",
+        pathname: "/admin/invoice/printInvoice",
         search: "?query=abc",
         state: { detail: passingWithCustomerObj },
       };
@@ -141,7 +141,7 @@ export default function Invoice_history() {
           };
 
           let moveWith = {
-            pathname: "/showroom/invoice/printInvoice",
+            pathname: "/admin/invoice/printInvoice",
             search: "?query=abc",
             state: { detail: passingWithCustomerObj },
           };

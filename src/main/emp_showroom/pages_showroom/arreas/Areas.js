@@ -61,6 +61,15 @@ export default function Areas() {
       },
     },
     {
+      name: "Village",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
       name: "MID",
       options: {
         filter: true,
@@ -156,6 +165,7 @@ export default function Areas() {
           rawData.push({
             InvoiceNo: eachRe.data().invoice_number,
             Type: eachRe.data().type,
+            Village: eachRe.data().villageRoot,
             MID: eachRe.data().mid,
             NIC: eachRe.data().nic,
             Delayed_Days: Math.round(eachRe.data().delayed_days),
@@ -247,6 +257,7 @@ export default function Areas() {
                 db.collection("arrears").add({
                   invoice_number: eachRe.data().invoice_number,
                   type: eachRe.data().selectedType,
+                  villageRoot: eachRe.data().root_village,
                   mid: eachRe.data().mid,
                   customer_id: eachRe.data().customer_id,
                   nic: eachRe.data().nic,
@@ -332,6 +343,7 @@ export default function Areas() {
                   invoice_number: eachRe.data().invoice_number,
                   customer_id: eachRe.data().customer_id,
                   type: eachRe.data().selectedType,
+                  villageRoot: eachRe.data().root_village,
                   mid: eachRe.data().mid,
                   nic: eachRe.data().nic,
                   balance: eachRe.data().balance,
@@ -431,6 +443,7 @@ export default function Areas() {
               invoice_number: eachRe.data().invoice_number,
               customer_id: eachRe.data().customer_id,
               type: eachRe.data().selectedType,
+              villageRoot: eachRe.data().root_village,
               mid: eachRe.data().mid,
               nic: eachRe.data().nic,
               balance: eachRe.data().balance,
@@ -501,6 +514,7 @@ export default function Areas() {
               invoice_number: eachRe.data().invoice_number,
               customer_id: eachRe.data().customer_id,
               type: eachRe.data().selectedType,
+              villageRoot: eachRe.data().root_village,
               mid: eachRe.data().mid,
               nic: eachRe.data().nic,
               balance: eachRe.data().balance,
@@ -578,7 +592,7 @@ export default function Areas() {
               customToolbarSelect: () => {},
               filterType: "textfield",
               download: false,
-              rowHover:false,
+              rowHover: false,
               print: false,
               searchPlaceholder: "Search using any column names",
               elevation: 4,

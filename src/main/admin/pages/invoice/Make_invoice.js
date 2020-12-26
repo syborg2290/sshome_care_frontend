@@ -65,6 +65,7 @@ function Make_invoice() {
   const [days, setDays] = useState(new Date().getDay());
   const [dates, setDates] = useState(new Date().getDate());
   const [selectedType, setSelectedType] = useState("shop");
+  const [rootVillage, setRootVillage] = useState("");
   const [gamisarani, setGamisarani] = useState(false);
   const [intialTimestamp, setInititialTimestamp] = useState(null);
   const [deadlineTimestamp, setDeadlineTimestamp] = useState(null);
@@ -717,6 +718,7 @@ function Make_invoice() {
                                           balance: balance,
                                           deadlineTimestamp: deadlineTimestamp,
                                           selectedType: selectedType,
+                                          root_village: rootVillage,
                                           discount:
                                             totalDiscount === ""
                                               ? 0
@@ -1030,6 +1032,7 @@ function Make_invoice() {
                                           balance: balance,
                                           deadlineTimestamp: deadlineTimestamp,
                                           selectedType: selectedType,
+                                          root_village: rootVillage,
                                           discount:
                                             totalDiscount === ""
                                               ? 0
@@ -1292,6 +1295,7 @@ function Make_invoice() {
         balance: balance,
         deadlineTimestamp: null,
         selectedType: selectedType,
+        root_village: rootVillage,
         discount: totalDiscount === "" ? 0 : totalDiscount,
         shortage: shortage === "" ? 0 : shortage,
         total: subTotalFunc() - (totalDiscount === "" ? 0 : totalDiscount),
@@ -2171,7 +2175,25 @@ function Make_invoice() {
                         </div>
                       </Space>
                     </Grid>
-                    <Grid className="xxx" item xs={12} sm={4}></Grid>
+                    <Grid item xs={12} sm={4}></Grid>
+                    <Grid className="xxx" item xs={12} sm={4}>
+                      Root Village
+                    </Grid>
+                    <Grid item xs={12} sm={4}>
+                      <TextField
+                        className="txt_Village"
+                        variant="outlined"
+                        size="small"
+                        label="Root Village"
+                        type="text"
+                        fullWidth
+                        value={rootVillage}
+                        onChange={(e) => {
+                          setRootVillage(e.target.value);
+                        }}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={4}></Grid>
                     <Grid item xs={12} sm={4}>
                       Select a type
                     </Grid>
@@ -2219,7 +2241,8 @@ function Make_invoice() {
                       loadingsubmit ||
                       itemDP.length === 0 ||
                       tablerows.length === 0 ||
-                      intialTimestamp === null
+                      intialTimestamp === null ||
+                      rootVillage.length === 0
                         ? true
                         : false
                     }

@@ -53,6 +53,15 @@ export default function Arreas_Table() {
       },
     },
     {
+      name: "Village",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
       name: "MID",
       options: {
         filter: true,
@@ -139,6 +148,7 @@ export default function Arreas_Table() {
           rawData.push({
             InvoiceNo: eachRe.data().invoice_number,
             Type: eachRe.data().type,
+            Village: eachRe.data().villageRoot,
             MID: eachRe.data().mid,
             NIC: eachRe.data().nic,
             Delayed_Days: Math.round(eachRe.data().delayed_days),

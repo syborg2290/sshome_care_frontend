@@ -196,6 +196,15 @@ export default function Invoice_history() {
       },
     },
     {
+      name: "Village",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
       name: "Date",
       options: {
         filter: true,
@@ -289,6 +298,15 @@ export default function Invoice_history() {
     },
     {
       name: "Type",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "Village",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -396,6 +414,7 @@ export default function Invoice_history() {
             InvoiceNo: siDoc.data().invoice_number,
             // SerialNo: siDoc.data().items[0].serialNo,
             Type: siDoc.data().selectedType,
+            Village: siDoc.data().root_village,
             Date: moment(siDoc.data()?.date?.toDate()).format(
               "dddd, MMMM Do YYYY"
             ),
@@ -520,6 +539,7 @@ export default function Invoice_history() {
           rawDataFull.push({
             InvoiceNo: siDoc.data().invoice_number,
             Type: siDoc.data().selectedType,
+            Village: siDoc.data().root_village,
             Date: moment(siDoc.data()?.date?.toDate()).format(
               "dddd, MMMM Do YYYY"
             ),

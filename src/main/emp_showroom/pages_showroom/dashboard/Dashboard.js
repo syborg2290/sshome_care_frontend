@@ -71,10 +71,32 @@ export default function Dashboard() {
         });
       });
 
+    db.collection("invoice")
+      .where("status_of_payandgo", "==", "expired")
+      .get()
+      .then((onSnap) => {
+        onSnap.docs.forEach(async (eachRe) => {
+          checkInstallmentsStatusExpired(eachRe);
+        });
+      });
+
     // eslint-disable-next-line
   }, []);
 
   const checkInstallmentsStatus = async (eachRe) => {
+    const installmentStatus = await db
+      .collection("installment")
+      .where("invoice_number", "==", eachRe.data().invoice_number)
+      .get();
+
+    if (installmentStatus.docs.length === 0) {
+      intialStateOfArreasCheck(eachRe);
+    } else {
+      afterStateOfArreasCheck(installmentStatus, eachRe);
+    }
+  };
+
+  const checkInstallmentsStatusExpired = async (eachRe) => {
     const installmentStatus = await db
       .collection("installment")
       .where("invoice_number", "==", eachRe.data().invoice_number)

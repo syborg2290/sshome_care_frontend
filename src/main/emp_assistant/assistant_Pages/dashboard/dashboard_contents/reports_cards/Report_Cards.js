@@ -17,6 +17,7 @@ import SalesModel from "./components/sales/Sales_Model";
 import { Typography } from "../../../../assistant_Wrappers/Wrappers";
 import ModelVehicalService from "../../components/Vehical_Service_Model";
 
+
 //icons
 import FolderOpenIcon from "@material-ui/icons/FolderOpen";
 import PostAddIcon from "@material-ui/icons/PostAdd";
@@ -590,6 +591,9 @@ export default function Report_Cards() {
   const [saleDate, setSaleDate] = useState(null);
   const [gasDate, setGasDate] = useState(null);
   const [expencesDate, setExpencesDate] = useState(null);
+
+
+
   let history = useHistory();
 
   var theme = useTheme();
@@ -600,6 +604,7 @@ export default function Report_Cards() {
     setVehicalServiceModel(true);
   };
 
+ 
   const RecordPnl = () => {
     setRecordPnl(true);
     history.push("/assistant/pages/records");
@@ -619,6 +624,9 @@ export default function Report_Cards() {
   const ViewSalesModel = () => {
     setSalesModel(true);
   };
+
+
+
 
   useEffect(() => {
     getAllSalesSaily(saleIsAll, saleYear, saleMonth).then((reAllSales) => {
@@ -915,6 +923,7 @@ export default function Report_Cards() {
 
   return (
     <>
+  
       {/*Start Vehical Service Model */}
 
       <Modal

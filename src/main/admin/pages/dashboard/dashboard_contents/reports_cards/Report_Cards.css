@@ -92,6 +92,11 @@
   background-color: #33a124 !important;
 }
 
+.btn_totStock {
+  color: whitesmoke !important;
+  background-color: #e97e03 !important;
+}
+
 .btn_moreCard {
   background-color: #1d6927a1 !important;
   color: whitesmoke !important;
@@ -521,4 +526,39 @@
     display: flex !important;
     flex-direction: row !important;
   }
+}
+
+
+.main_container_stock {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.16), 0 1px 2px rgba(0, 0, 0, 0.23);
+  background-color: white;
+  padding-bottom: 50px;
+  border-radius: 6px;
+  overflow: hidden !important;
+  margin-top: 30px !important;
+}
+
+.paper_stock {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  margin-top: 20px !important;
+}
+
+.form_stock {
+  width: 100% !important;
+  margin-top: 30px !important;
+}
+
+.txt_Labels_stock {
+  margin: auto !important;
+}
+
+.btn_addStock {
+  margin-top: 40px !important;
+  float: right !important;
+}
+
+.stock_TableModel {
+  width: 50% !important;
 }

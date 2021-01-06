@@ -24,7 +24,7 @@ import EditIcon from "@material-ui/icons/Edit";
 
 // styles
 import "./Item_table_assistant.css";
- 
+
 import db from "../../../../../config/firebase.js";
 
 export default function Item_table_assistant() {
@@ -665,6 +665,11 @@ export default function Item_table_assistant() {
                 docId={
                   allTtemData[currentIndx] && allTtemData[currentIndx].id
                     ? allTtemData[currentIndx].id
+                    : ""
+                }
+                purchasedPrice={
+                  allTtemData[currentIndx] && allTtemData[currentIndx].data
+                    ? allTtemData[currentIndx].purchasedPrice
                     : ""
                 }
               />

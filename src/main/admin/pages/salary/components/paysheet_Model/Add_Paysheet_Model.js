@@ -401,9 +401,8 @@ async function getSaleTarget(root, currentDate) {
           for (let n = 0; n < saleRe.docs[i].data().items.length; n++) {
             saleTargetValue =
               parseInt(saleTargetValue) +
-              parseInt(saleRe.docs[i].data().items[n].downpayment) *
-                parseInt(saleRe.docs[i].data().items[n].qty) -
-              parseInt(saleRe.docs[i].data().items[n].discount);
+              parseInt(saleRe.docs[i].data().items[n].purchasedPrice) *
+                parseInt(saleRe.docs[i].data().items[n].qty);
           }
         }
       }
@@ -443,9 +442,8 @@ async function getSaleTargetForTable(
           item_name: saleRe.docs[i].data().items[n].item_name,
           serail_number: saleRe.docs[i].data().items[n].serialNo,
           total:
-            parseInt(saleRe.docs[i].data().items[n].downpayment) *
-              parseInt(saleRe.docs[i].data().items[n].qty) -
-            parseInt(saleRe.docs[i].data().items[n].discount),
+            parseInt(saleRe.docs[i].data().items[n].purchasedPrice) *
+            parseInt(saleRe.docs[i].data().items[n].qty),
         });
       }
     } else {
@@ -463,9 +461,8 @@ async function getSaleTargetForTable(
             item_name: saleRe.docs[i].data().items[n].item_name,
             serail_number: saleRe.docs[i].data().items[n].serialNo,
             total:
-              parseInt(saleRe.docs[i].data().items[n].downpayment) *
-                parseInt(saleRe.docs[i].data().items[n].qty) -
-              parseInt(saleRe.docs[i].data().items[n].discount),
+              parseInt(saleRe.docs[i].data().items[n].purchasedPrice) *
+              parseInt(saleRe.docs[i].data().items[n].qty),
           });
         }
       }

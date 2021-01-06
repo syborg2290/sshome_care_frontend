@@ -152,7 +152,10 @@ function Make_invoice() {
       var keepDataDiscount = {};
       location.state.detail.forEach((obj) => {
         keepDataQTY[obj.i] = obj.qty;
-        keepDataDP[obj.i] = obj.item.salePrice;
+        keepDataDP[obj.i] =
+          obj.paymentWay === "PayandGo"
+            ? obj.item.salePrice
+            : obj.item.cashPrice;
         keepDataDiscount[obj.i] = obj.item.discount;
         tableData.push(obj);
         if (obj.paymentWay === "PayandGo") {
@@ -660,6 +663,8 @@ function Make_invoice() {
                                             serialNo: listOfSerilNo,
                                             modelNo: listOfModelNo,
                                             chassisNo: listOfChassisNo,
+                                            purchasedPrice:
+                                              one.item.purchasedPrice,
                                             downpayment:
                                               itemDP[one.i] === ""
                                                 ? 0
@@ -974,6 +979,8 @@ function Make_invoice() {
                                             serialNo: listOfSerilNo,
                                             modelNo: listOfModelNo,
                                             chassisNo: listOfChassisNo,
+                                            purchasedPrice:
+                                              one.item.purchasedPrice,
                                             downpayment:
                                               itemDP[one.i] === ""
                                                 ? 0
@@ -1260,6 +1267,7 @@ function Make_invoice() {
             serialNo: listOfSerilNo,
             modelNo: listOfModelNo,
             chassisNo: listOfChassisNo,
+            purchasedPrice: one.item.purchasedPrice,
             downpayment: itemDP[one.i] === "" ? 0 : parseInt(itemDP[one.i]),
             qty: parseInt(itemQty[one.i]),
             discount: itemDiscount[one.i] === "" ? 0 : itemDiscount[one.i],

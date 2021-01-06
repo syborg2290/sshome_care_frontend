@@ -667,6 +667,12 @@ export default function Item_table_assistant() {
                     ? allTtemData[currentIndx].id
                     : ""
                 }
+                purchasedPrice={
+                  allTtemData[currentIndx] &&
+                  allTtemData[currentIndx].data
+                    ? allTtemData[currentIndx].purchasedPrice
+                    : ""
+                }
               />
             </div>
           </div>

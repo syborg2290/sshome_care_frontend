@@ -38,6 +38,7 @@ export default function Edit_model({
   GCardNoProp,
   guaranteeProp,
   editModalClose,
+  purchasedPriceProp,
   docId,
 }) {
   const [loadingSubmit, setLoadingSubmit] = useState(false);
@@ -46,6 +47,7 @@ export default function Edit_model({
   const [color, setColor] = useState(colorProp);
   const [cashPrice, setCashPrice] = useState(cashpriceProp);
   const [salePrice, setSalePrice] = useState(salepriceProp);
+  const [purchasedPrice, setPurchasedPrice] = useState(purchasedPriceProp);
   const [noOfInstallments, setNoOfInstallments] = useState(
     noOfInstallmentsProp
   );
@@ -328,6 +330,8 @@ export default function Edit_model({
                                                           serialNo: serialNoNewList,
                                                           chassisNo: chassisNoNewList,
                                                           color: color,
+                                                          purchasedPrice: docRe.data()
+                                                            .purchasedPrice,
                                                           qty:
                                                             Math.round(
                                                               docRe.data().qty
@@ -377,6 +381,8 @@ export default function Edit_model({
                                                           modelNo: modelNoNewList,
                                                           serialNo: serialNosList,
                                                           chassisNo: chassisNosList,
+                                                          purchasedPrice: docRe.data()
+                                                            .purchasedPrice,
                                                           color: color,
                                                           qty:
                                                             serialNosList.length,
@@ -580,6 +586,20 @@ export default function Edit_model({
                 }}
               />
             </Form.Item>
+            <Form.Item label="* Purchased Price (LKR)">
+              <Input
+                type="number"
+                min={0}
+                allowClear
+                placeholder="17000.00"
+                value={purchasedPrice}
+                onChange={(e) => {
+                  if (e.target.value !== "") {
+                    setPurchasedPrice(e.target.value);
+                  }
+                }}
+              />
+            </Form.Item>
             <Form.Item label="* No Of Installments  ">
               <Input
                 type="number"
@@ -717,14 +737,22 @@ export default function Edit_model({
                       />
 
                       {i >= Object.keys(inputsSerialNo).length - 1 ? (
-                        <MinusCircleOutlined
-                          key={i + 3}
-                          className="rmov_icos"
-                          onClick={() => {
-                            delete inputsSerialNo[i];
-                            setInputsSerialNo({ ...inputsSerialNo });
-                          }}
-                        />
+                        <>
+                          <MinusCircleOutlined
+                            key={i + 3}
+                            className="rmov_icos"
+                            onClick={() => {
+                              delete inputsSerialNo[i];
+                              setInputsSerialNo({ ...inputsSerialNo });
+                            }}
+                          />
+                          {
+                            <h4>
+                              {"Serial numbers count :  " +
+                                Object.keys(inputsSerialNo).length}
+                            </h4>
+                          }
+                        </>
                       ) : (
                         ""
                       )}

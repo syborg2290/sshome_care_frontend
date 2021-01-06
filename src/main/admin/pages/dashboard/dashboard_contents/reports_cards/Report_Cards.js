@@ -9,10 +9,7 @@ import CurrencyFormat from "react-currency-format";
 import { DatePicker, Space, Spin } from "antd";
 import { makeStyles } from "@material-ui/core/styles";
 import { Modal } from "antd";
-import {
-  TextField,
-  Container,
-} from "@material-ui/core";
+import { TextField, Container } from "@material-ui/core";
 
 // components
 import ExpencesModel from "./components/expences/Expences_Model";
@@ -597,7 +594,7 @@ export default function Report_Cards() {
   const [expencesDate, setExpencesDate] = useState(null);
   let history = useHistory();
 
-   const [password, setPassword] = useState("");
+  const [password, setPassword] = useState("");
 
   const [stockModel, setStockModel] = useState(false); //  model
   const [stockTableModel, setStockTableModel] = useState(false); //  model
@@ -611,8 +608,6 @@ export default function Report_Cards() {
   const VehicalServiceModel = () => {
     setVehicalServiceModel(true);
   };
-
-  
 
   const RecordPnl = () => {
     setRecordPnl(true);
@@ -634,16 +629,21 @@ export default function Report_Cards() {
     setSalesModel(true);
   };
 
-
   const btnStockModel = () => {
     setStockModel(true);
   };
 
   const submit = () => {
-       setStockModel(false);
-        setStockTableModel(true);
-  };
+    setIsLoading(true);
 
+    if (password.trim() === "12345") {
+      setIsLoading(false);
+      setStockModel(false);
+      setStockTableModel(true);
+    } else {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
     getAllSalesSaily(saleIsAll, saleYear, saleMonth).then((reAllSales) => {
@@ -940,8 +940,7 @@ export default function Report_Cards() {
 
   return (
     <>
-
-       {/*Start  stock Model */}
+      {/*Start  stock Model */}
 
       <Modal
         visible={stockModel}
@@ -955,53 +954,50 @@ export default function Report_Cards() {
           <div>
             <div>
               <Container component="main" className="main_container_stock">
- 
-        <div className="paper_stock">
-  <form className="form_stock" noValidate>
-           <Grid container spacing={2}>
-             <Grid className="txt_Labels_stock" item xs={12} sm={4}>
-             Type Password :
-            </Grid>
-            <Grid item xs={12} sm={5}>
-              <TextField
-                className="txt_nic_stock"
-                autoComplete="name" 
-                name="name"
-                variant="outlined"
-                required
-                fullWidth
-                id="name"
-                label="Password"
-                autoFocus
-                size="small"
-                type="password"
-                value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value.trim());
-                }}
-              />
-            </Grid>
-            <Grid item xs={12} sm={3}></Grid>
-                         </Grid>
-                     </form>
-                 </div>
-                   <Grid container spacing={2}>
-        <Grid item xs={12} sm={9}></Grid>
-        <Grid item xs={12} sm={3}>
-          <Button
-            variant="contained"
-            color="primary"
-            className="btn_addStock"
-            onClick={submit}
-            disabled={
-              password.length === 0 
-            }
-          >
-            {isLoadingSubmit ? <Spin size="large" /> : "Check"}
-          </Button>
-        </Grid>
-      </Grid>
-            </Container>
+                <div className="paper_stock">
+                  <form className="form_stock" noValidate>
+                    <Grid container spacing={2}>
+                      <Grid className="txt_Labels_stock" item xs={12} sm={4}>
+                        Type Password :
+                      </Grid>
+                      <Grid item xs={12} sm={5}>
+                        <TextField
+                          className="txt_nic_stock"
+                          autoComplete="name"
+                          name="name"
+                          variant="outlined"
+                          required
+                          fullWidth
+                          id="name"
+                          label="Password"
+                          autoFocus
+                          size="small"
+                          type="password"
+                          value={password}
+                          onChange={(e) => {
+                            setPassword(e.target.value.trim());
+                          }}
+                        />
+                      </Grid>
+                      <Grid item xs={12} sm={3}></Grid>
+                    </Grid>
+                  </form>
+                </div>
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sm={9}></Grid>
+                  <Grid item xs={12} sm={3}>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      className="btn_addStock"
+                      onClick={submit}
+                      disabled={password.length === 0}
+                    >
+                      {isLoadingSubmit ? <Spin size="large" /> : "Check"}
+                    </Button>
+                  </Grid>
+                </Grid>
+              </Container>
             </div>
           </div>
         </div>
@@ -1009,8 +1005,7 @@ export default function Report_Cards() {
 
       {/* End stock Model  */}
 
-
- {/*Start Stock Table Model */}
+      {/*Start Stock Table Model */}
 
       <Modal
         visible={stockTableModel}
@@ -1051,8 +1046,6 @@ export default function Report_Cards() {
       </Modal>
 
       {/* End  Vehical Service Model  */}
-
-
 
       {/*Start expencesM  Model */}
 
@@ -1646,14 +1639,14 @@ export default function Report_Cards() {
                     Vehical Services
                   </Button>
                 </Grid>
-                 <Grid item xs={12} sm={12}>
+                <Grid item xs={12} sm={12}>
                   <Button
                     variant="contained"
                     className="btn_totStock"
                     // endIcon={<SettingsApplicationsIcon />}
                     onClick={btnStockModel}
                   >
-                   Total Stock
+                    Total Stock
                   </Button>
                 </Grid>
               </Grid>

@@ -331,8 +331,12 @@ export default function Add_Item() {
                                                         //Rest of code here
                                                         setLoadingSubmit(true);
                                                         var value =
-                                                          Math.round(salePrice) -
-                                                          Math.round(downPayment);
+                                                          Math.round(
+                                                            salePrice
+                                                          ) -
+                                                          Math.round(
+                                                            downPayment
+                                                          );
                                                         var inst = returnInstallmentCount(
                                                           value
                                                         );
@@ -345,98 +349,108 @@ export default function Add_Item() {
                                                               (ob) =>
                                                                 ob.data()
                                                                   .itemName ===
-                                                                itemName.trim() &&
+                                                                  itemName.trim() &&
                                                                 ob.data()
                                                                   .brand ===
-                                                                brand.trim() &&
+                                                                  brand.trim() &&
                                                                 ob.data()
                                                                   .color ===
-                                                                color.trim() &&
+                                                                  color.trim() &&
                                                                 ob.data()
                                                                   .cashPrice ===
-                                                                Math.round(
-                                                                  cashPrice
-                                                                ) &&
+                                                                  Math.round(
+                                                                    cashPrice
+                                                                  ) &&
                                                                 ob.data()
                                                                   .salePrice ===
-                                                                Math.round(
-                                                                  salePrice
-                                                                ) &&
+                                                                  Math.round(
+                                                                    salePrice
+                                                                  ) &&
+                                                                ob.data()
+                                                                  .purchasedPrice ===
+                                                                  Math.round(
+                                                                    purchasedPrice
+                                                                  ) &&
                                                                 ob.data()
                                                                   .noOfInstallments ===
-                                                                Math.round(
-                                                                  inst
-                                                                ) &&
+                                                                  Math.round(
+                                                                    inst
+                                                                  ) &&
                                                                 ob.data()
                                                                   .amountPerInstallment ===
-                                                                Math.round(
-                                                                  amountPerInstallment
-                                                                ) &&
+                                                                  Math.round(
+                                                                    amountPerInstallment
+                                                                  ) &&
                                                                 ob.data()
                                                                   .downPayment ===
-                                                                Math.round(
-                                                                  downPayment
-                                                                ) &&
+                                                                  Math.round(
+                                                                    downPayment
+                                                                  ) &&
                                                                 ob.data()
                                                                   .discount ===
-                                                                Math.round(
-                                                                  discount
-                                                                ) &&
+                                                                  Math.round(
+                                                                    discount
+                                                                  ) &&
                                                                 ob.data()
                                                                   .stock_type ===
-                                                                "main" &&
+                                                                  "main" &&
                                                                 ob.data()
                                                                   .modelNo ===
-                                                                modelNosList[0]
+                                                                  modelNosList[0]
                                                             )
                                                           ) {
                                                             var newArray = allItems.docs.filter(
                                                               (ob) =>
                                                                 ob.data()
                                                                   .itemName ===
-                                                                itemName.trim() &&
+                                                                  itemName.trim() &&
                                                                 ob.data()
                                                                   .brand ===
-                                                                brand.trim() &&
+                                                                  brand.trim() &&
                                                                 ob.data()
                                                                   .color ===
-                                                                color.trim() &&
+                                                                  color.trim() &&
                                                                 ob.data()
                                                                   .cashPrice ===
-                                                                Math.round(
-                                                                  cashPrice
-                                                                ) &&
+                                                                  Math.round(
+                                                                    cashPrice
+                                                                  ) &&
                                                                 ob.data()
                                                                   .salePrice ===
-                                                                Math.round(
-                                                                  salePrice
-                                                                ) &&
+                                                                  Math.round(
+                                                                    salePrice
+                                                                  ) &&
+                                                                ob.data()
+                                                                  .purchasedPrice ===
+                                                                  Math.round(
+                                                                    purchasedPrice
+                                                                  ) &&
                                                                 ob.data()
                                                                   .noOfInstallments ===
-                                                                Math.round(
-                                                                  inst
-                                                                ) &&
+                                                                  Math.round(
+                                                                    inst
+                                                                  ) &&
                                                                 ob.data()
                                                                   .amountPerInstallment ===
-                                                                Math.round(
-                                                                  amountPerInstallment
-                                                                ) &&
+                                                                  Math.round(
+                                                                    amountPerInstallment
+                                                                  ) &&
                                                                 ob.data()
                                                                   .downPayment ===
-                                                                Math.round(
-                                                                  downPayment
-                                                                ) &&
+                                                                  Math.round(
+                                                                    downPayment
+                                                                  ) &&
                                                                 ob.data()
                                                                   .discount ===
-                                                                Math.round(
-                                                                  discount
-                                                                ) &&
+                                                                  Math.round(
+                                                                    discount
+                                                                  ) &&
                                                                 ob.data()
                                                                   .stock_type ===
-                                                                "main" &&
+                                                                  "main" &&
                                                                 ob.data()
                                                                   .modelNo ===
-                                                                modelNosList[0]
+                                                                  modelNosList[0]
                                                             );
                                                             if (newArray) {
                                                               let modelNoNewList = modelNosList.concat(
@@ -460,53 +474,57 @@ export default function Add_Item() {
                                                                 color: color.trim(),
                                                                 stock_type:
                                                                   "main",
+                                                                purchasedPrice: purchasedPrice,
                                                                 qty:
                                                                   serialNoNewList.length,
                                                                 cashPrice:
-                                                                  cashPrice === ""
+                                                                  cashPrice ===
+                                                                  ""
                                                                     ? 0
                                                                     : Math.round(
-                                                                      cashPrice
-                                                                    ),
+                                                                        cashPrice
+                                                                      ),
                                                                 salePrice:
-                                                                  salePrice === ""
+                                                                  salePrice ===
+                                                                  ""
                                                                     ? 0
                                                                     : Math.round(
-                                                                      salePrice
-                                                                    ),
+                                                                        salePrice
+                                                                      ),
                                                                 noOfInstallments:
                                                                   inst === ""
                                                                     ? 0
                                                                     : Math.round(
-                                                                      inst
-                                                                    ),
+                                                                        inst
+                                                                      ),
                                                                 amountPerInstallment:
                                                                   amountPerInstallment ===
-                                                                    ""
+                                                                  ""
                                                                     ? 0
                                                                     : Math.round(
-                                                                      amountPerInstallment
-                                                                    ),
+                                                                        amountPerInstallment
+                                                                      ),
                                                                 downPayment:
                                                                   downPayment ===
-                                                                    ""
+                                                                  ""
                                                                     ? 0
                                                                     : Math.round(
-                                                                      downPayment
-                                                                    ),
+                                                                        downPayment
+                                                                      ),
                                                                 guaranteePeriod:
                                                                   guaranteePeriod ===
-                                                                    ""
+                                                                  ""
                                                                     ? 0
                                                                     : Math.round(
-                                                                      guaranteePeriod
-                                                                    ),
+                                                                        guaranteePeriod
+                                                                      ),
                                                                 discount:
-                                                                  discount === ""
+                                                                  discount ===
+                                                                  ""
                                                                     ? 0
                                                                     : Math.round(
-                                                                      discount
-                                                                    ),
+                                                                        discount
+                                                                      ),
                                                                 description: description,
                                                                 cInvoiceNo: cInvoiceNo,
                                                                 GCardNo: GCardNo,
@@ -523,7 +541,9 @@ export default function Add_Item() {
                                                               )
                                                                 .get()
                                                                 .then(
-                                                                  (reSerial) => {
+                                                                  (
+                                                                    reSerial
+                                                                  ) => {
                                                                     if (
                                                                       reSerial
                                                                         .docs
@@ -543,9 +563,11 @@ export default function Add_Item() {
                                                                             .docs[0]
                                                                             .id
                                                                         )
-                                                                        .update({
-                                                                          serail_no: reSerialChange,
-                                                                        });
+                                                                        .update(
+                                                                          {
+                                                                            serail_no: reSerialChange,
+                                                                          }
+                                                                        );
                                                                     } else {
                                                                       db.collection(
                                                                         "serail_no"
@@ -584,17 +606,19 @@ export default function Add_Item() {
                                                                     "Item creation successfully!"
                                                                   );
                                                                 })
-                                                                .catch(function (
-                                                                  error
-                                                                ) {
-                                                                  setLoadingSubmit(
-                                                                    false
-                                                                  );
-                                                                  NotificationManager.warning(
-                                                                    "Failed to make the item!",
-                                                                    "Please try again"
-                                                                  );
-                                                                });
+                                                                .catch(
+                                                                  function (
+                                                                    error
+                                                                  ) {
+                                                                    setLoadingSubmit(
+                                                                      false
+                                                                    );
+                                                                    NotificationManager.warning(
+                                                                      "Failed to make the item!",
+                                                                      "Please try again"
+                                                                    );
+                                                                  }
+                                                                );
                                                             }
                                                           } else {
                                                             if (inst) {
@@ -607,53 +631,57 @@ export default function Add_Item() {
                                                                 color: color.trim(),
                                                                 stock_type:
                                                                   "main",
+                                                                purchasedPrice: purchasedPrice,
                                                                 qty:
                                                                   serialNosList.length,
                                                                 cashPrice:
-                                                                  cashPrice === ""
+                                                                  cashPrice ===
+                                                                  ""
                                                                     ? 0
                                                                     : Math.round(
-                                                                      cashPrice
-                                                                    ),
+                                                                        cashPrice
+                                                                      ),
                                                                 salePrice:
-                                                                  salePrice === ""
+                                                                  salePrice ===
+                                                                  ""
                                                                     ? 0
                                                                     : Math.round(
-                                                                      salePrice
-                                                                    ),
+                                                                        salePrice
+                                                                      ),
                                                                 noOfInstallments:
                                                                   inst === ""
                                                                     ? 0
                                                                     : Math.round(
-                                                                      inst
-                                                                    ),
+                                                                        inst
+                                                                      ),
                                                                 amountPerInstallment:
                                                                   amountPerInstallment ===
-                                                                    ""
+                                                                  ""
                                                                     ? 0
                                                                     : Math.round(
-                                                                      amountPerInstallment
-                                                                    ),
+                                                                        amountPerInstallment
+                                                                      ),
                                                                 downPayment:
                                                                   downPayment ===
-                                                                    ""
+                                                                  ""
                                                                     ? 0
                                                                     : Math.round(
-                                                                      downPayment
-                                                                    ),
+                                                                        downPayment
+                                                                      ),
                                                                 guaranteePeriod:
                                                                   guaranteePeriod ===
-                                                                    ""
+                                                                  ""
                                                                     ? 0
                                                                     : Math.round(
-                                                                      guaranteePeriod
-                                                                    ),
+                                                                        guaranteePeriod
+                                                                      ),
                                                                 discount:
-                                                                  discount === ""
+                                                                  discount ===
+                                                                  ""
                                                                     ? 0
                                                                     : Math.round(
-                                                                      discount
-                                                                    ),
+                                                                        discount
+                                                                      ),
                                                                 description: description,
                                                                 cInvoiceNo: cInvoiceNo,
                                                                 GCardNo: GCardNo,
@@ -670,7 +698,9 @@ export default function Add_Item() {
                                                               )
                                                                 .get()
                                                                 .then(
-                                                                  (reSerial) => {
+                                                                  (
+                                                                    reSerial
+                                                                  ) => {
                                                                     if (
                                                                       reSerial
                                                                         .docs
@@ -690,9 +720,11 @@ export default function Add_Item() {
                                                                             .docs[0]
                                                                             .id
                                                                         )
-                                                                        .update({
-                                                                          serail_no: reSerialChange,
-                                                                        });
+                                                                        .update(
+                                                                          {
+                                                                            serail_no: reSerialChange,
+                                                                          }
+                                                                        );
                                                                     } else {
                                                                       db.collection(
                                                                         "serail_no"
@@ -718,17 +750,19 @@ export default function Add_Item() {
                                                                     "Item creation successfully!"
                                                                   );
                                                                 })
-                                                                .catch(function (
-                                                                  error
-                                                                ) {
-                                                                  setLoadingSubmit(
-                                                                    false
-                                                                  );
-                                                                  NotificationManager.warning(
-                                                                    "Failed to make the item!",
-                                                                    "Please try again"
-                                                                  );
-                                                                });
+                                                                .catch(
+                                                                  function (
+                                                                    error
+                                                                  ) {
+                                                                    setLoadingSubmit(
+                                                                      false
+                                                                    );
+                                                                    NotificationManager.warning(
+                                                                      "Failed to make the item!",
+                                                                      "Please try again"
+                                                                    );
+                                                                  }
+                                                                );
                                                             }
                                                           }
                                                         } else {
@@ -740,53 +774,56 @@ export default function Add_Item() {
                                                               serialNo: serialNosList,
                                                               chassisNo: chassisNosList,
                                                               color: color.trim(),
-                                                              stock_type: "main",
+                                                              stock_type:
+                                                                "main",
+                                                              purchasedPrice: purchasedPrice,
                                                               qty:
                                                                 serialNosList.length,
                                                               cashPrice:
                                                                 cashPrice === ""
                                                                   ? 0
                                                                   : Math.round(
-                                                                    cashPrice
-                                                                  ),
+                                                                      cashPrice
+                                                                    ),
                                                               salePrice:
                                                                 salePrice === ""
                                                                   ? 0
                                                                   : Math.round(
-                                                                    salePrice
-                                                                  ),
+                                                                      salePrice
+                                                                    ),
                                                               noOfInstallments:
                                                                 inst === ""
                                                                   ? 0
                                                                   : Math.round(
-                                                                    inst
-                                                                  ),
+                                                                      inst
+                                                                    ),
                                                               amountPerInstallment:
                                                                 amountPerInstallment ===
-                                                                  ""
+                                                                ""
                                                                   ? 0
                                                                   : Math.round(
-                                                                    amountPerInstallment
-                                                                  ),
+                                                                      amountPerInstallment
+                                                                    ),
                                                               downPayment:
-                                                                downPayment === ""
+                                                                downPayment ===
+                                                                ""
                                                                   ? 0
                                                                   : Math.round(
-                                                                    downPayment
-                                                                  ),
+                                                                      downPayment
+                                                                    ),
                                                               guaranteePeriod:
                                                                 guaranteePeriod ===
-                                                                  ""
+                                                                ""
                                                                   ? 0
                                                                   : Math.round(
-                                                                    guaranteePeriod
-                                                                  ),
+                                                                      guaranteePeriod
+                                                                    ),
                                                               discount:
                                                                 discount === ""
                                                                   ? 0
                                                                   : Math.round(
-                                                                    discount
-                                                                  ),
+                                                                      discount
+                                                                    ),
                                                               description: description,
                                                               cInvoiceNo: cInvoiceNo,
                                                               GCardNo: GCardNo,
@@ -805,8 +842,10 @@ export default function Add_Item() {
                                                               .then(
                                                                 (reSerial) => {
                                                                   if (
-                                                                    reSerial.docs
-                                                                      .length > 0
+                                                                    reSerial
+                                                                      .docs
+                                                                      .length >
+                                                                    0
                                                                   ) {
                                                                     let reSerialChange = reSerial.docs[0]
                                                                       .data()
@@ -834,7 +873,9 @@ export default function Add_Item() {
                                                                 }
                                                               );
                                                             await db
-                                                              .collection("item")
+                                                              .collection(
+                                                                "item"
+                                                              )
                                                               .add(variable)
                                                               .then(function (
                                                                 docRef
@@ -1118,7 +1159,7 @@ export default function Add_Item() {
                   size="small"
                 />
               </Grid>
-                <Grid className="txt_Labels" item xs={12} sm={2}>
+              <Grid className="txt_Labels" item xs={12} sm={2}>
                 * Purchased Price
               </Grid>
               <Grid item xs={12} sm={4}>
@@ -1400,14 +1441,22 @@ export default function Add_Item() {
                     />
 
                     {i >= Object.keys(inputsSerialNo).length - 1 ? (
-                      <MinusCircleOutlined
-                        key={i + 3}
-                        className="rmov_iconss"
-                        onClick={() => {
-                          delete inputsSerialNo[i];
-                          setInputsSerialNo({ ...inputsSerialNo });
-                        }}
-                      />
+                      <>
+                        <MinusCircleOutlined
+                          key={i + 3}
+                          className="rmov_iconss"
+                          onClick={() => {
+                            delete inputsSerialNo[i];
+                            setInputsSerialNo({ ...inputsSerialNo });
+                          }}
+                        />
+                        {
+                          <h4>
+                            {"Serial numbers count :  " +
+                              Object.keys(inputsSerialNo).length}
+                          </h4>
+                        }
+                      </>
                     ) : (
                       ""
                     )}

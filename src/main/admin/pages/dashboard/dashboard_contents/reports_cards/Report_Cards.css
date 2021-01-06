@@ -528,7 +528,6 @@
   }
 }
 
-
 .main_container_stock {
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.16), 0 1px 2px rgba(0, 0, 0, 0.23);
   background-color: white;
@@ -560,5 +559,5 @@
 }
 
 .stock_TableModel {
-  width: 50% !important;
+  width: 60% !important;
 }

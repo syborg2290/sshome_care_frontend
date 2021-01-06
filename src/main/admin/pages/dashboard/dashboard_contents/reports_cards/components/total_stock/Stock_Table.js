@@ -4,8 +4,8 @@ import MUIDataTable from "mui-datatables";
 import CurrencyFormat from "react-currency-format";
 import moment from "moment";
 import { useHistory } from "react-router-dom";
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
+import Card from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
 //styles
 import "./Stock_Table.css";
 
@@ -19,9 +19,9 @@ export default function Stock_Table() {
   // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
 
-  let history = useHistory();
+  const [stock_total, setStockTotal] = useState(0);
 
- 
+  let history = useHistory();
 
   useEffect(() => {
     window.addEventListener("offline", function (e) {
@@ -55,6 +55,10 @@ export default function Stock_Table() {
             chassisNo: element.data().chassisNo,
           });
 
+          let stockTotalCal = stock_total + element.data().purchasedPrice;
+
+          setStockTotal(stockTotalCal);
+
           newData.push({
             Item_name: element.data().itemName,
             Brand: element.data().brand,
@@ -69,7 +73,7 @@ export default function Stock_Table() {
             ),
             Purchased_Price: (
               <CurrencyFormat
-                value={1111122212}
+                value={element.data().purchasedPrice}
                 displayType={"text"}
                 thousandSeparator={true}
                 prefix={" "}
@@ -78,7 +82,6 @@ export default function Stock_Table() {
             Date: moment(element.data()?.timestamp?.toDate()).format(
               "dddd, MMMM Do YYYY"
             ),
-
           });
         });
         setItemTableData(newData);
@@ -125,7 +128,7 @@ export default function Stock_Table() {
       },
     },
 
-     {
+    {
       name: "Purchased_Price",
       options: {
         filter: true,
@@ -144,8 +147,6 @@ export default function Stock_Table() {
         }),
       },
     },
-
- 
   ];
 
   return (
@@ -156,20 +157,23 @@ export default function Stock_Table() {
           <Card className="cardStock" variant="outlined">
             <CardContent>
               <Grid container spacing={2}>
-                <Grid className="cardStocktot" item xs={12} sm={4}>Total :</Grid>
-                 <Grid className="cardStocktot" item xs={12} sm={8}><CurrencyFormat
-                  value={1111122212}
-                  displayType={"text"}
-                  thousandSeparator={true}
-                  prefix={" "}
-                />
+                <Grid className="cardStocktot" item xs={12} sm={4}>
+                  Total :
                 </Grid>
-               </Grid>
-           </CardContent>
+                <Grid className="cardStocktot" item xs={12} sm={8}>
+                  <CurrencyFormat
+                    value={stock_total}
+                    displayType={"text"}
+                    thousandSeparator={true}
+                    prefix={" "}
+                  />
+                </Grid>
+              </Grid>
+            </CardContent>
           </Card>
         </Grid>
-  </Grid>
-      
+      </Grid>
+
       <Grid className="tbl_Container" container spacing={4}>
         <Grid item xs={12}>
           <MUIDataTable

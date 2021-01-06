@@ -636,7 +636,7 @@ export default function Report_Cards() {
   const submit = () => {
     setIsLoading(true);
 
-    if (password.trim() === "12345") {
+    if (password.trim() === "0702581") {
       setIsLoading(false);
       setStockModel(false);
       setStockTableModel(true);

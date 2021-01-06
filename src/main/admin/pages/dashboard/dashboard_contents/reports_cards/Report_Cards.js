@@ -947,7 +947,7 @@ export default function Report_Cards() {
         footer={null}
         className="setStockModel"
         onCancel={() => {
-          setStockModel(false);
+          window.location.reload();
         }}
       >
         <div>
@@ -1012,7 +1012,7 @@ export default function Report_Cards() {
         footer={null}
         className="stock_TableModel"
         onCancel={() => {
-          setStockTableModel(false);
+          window.location.reload();
         }}
       >
         <div>

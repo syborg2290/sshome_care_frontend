@@ -24,7 +24,7 @@ import EditIcon from "@material-ui/icons/Edit";
 
 // styles
 import "./Item_table_assistant.css";
- 
+
 import db from "../../../../../config/firebase.js";
 
 export default function Item_table_assistant() {
@@ -97,6 +97,12 @@ export default function Item_table_assistant() {
                 element.data().guarantee.value.toLowerCase(),
             <CurrencyFormat
               value={element.data().salePrice}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={" "}
+            />,
+            <CurrencyFormat
+              value={element.data().cashPrice}
               displayType={"text"}
               thousandSeparator={true}
               prefix={" "}
@@ -219,6 +225,15 @@ export default function Item_table_assistant() {
     },
     {
       name: "Sale price(LKR)",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "Cash price(LKR)",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -668,8 +683,7 @@ export default function Item_table_assistant() {
                     : ""
                 }
                 purchasedPrice={
-                  allTtemData[currentIndx] &&
-                  allTtemData[currentIndx].data
+                  allTtemData[currentIndx] && allTtemData[currentIndx].data
                     ? allTtemData[currentIndx].purchasedPrice
                     : ""
                 }

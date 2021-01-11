@@ -101,6 +101,12 @@ export default function Item_table_assistant() {
               thousandSeparator={true}
               prefix={" "}
             />,
+            <CurrencyFormat
+              value={element.data().cashPrice}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={" "}
+            />,
             element.data().stock_type,
             <div
               color="secondary"
@@ -219,6 +225,15 @@ export default function Item_table_assistant() {
     },
     {
       name: "Sale price(LKR)",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "Cash price(LKR)",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({

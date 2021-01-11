@@ -176,8 +176,6 @@ export default function Add_Item() {
     });
   };
 
-  
-  
   const addItem = async (e) => {
     e.preventDefault();
 
@@ -521,7 +519,7 @@ export default function Add_Item() {
                                                               guarantee: guarantee,
                                                               timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                                                             };
-                                                          
+
                                                             await db
                                                               .collection(
                                                                 "item"
@@ -540,72 +538,79 @@ export default function Add_Item() {
                                                                 serialNo: serialNoNewList,
                                                                 chassisNo: chassisNoNewList,
                                                               })
-                                                              .then( (
-                                                                _
-                                                              ) => {
-                                                                
-                                                                  await db
-                                                              .collection(
-                                                                "item_history"
-                                                              )
-                                                              .add(variable2);
-                                                            db.collection(
-                                                              "serail_no"
-                                                            )
-                                                              .get()
                                                               .then(
-                                                                (reSerial) => {
-                                                                  if (
-                                                                    reSerial
-                                                                      .docs
-                                                                      .length >
-                                                                    0
-                                                                  ) {
-                                                                    let reSerialChange = reSerial.docs[0]
-                                                                      .data()
-                                                                      .serail_no.concat(
-                                                                        serialNosList
-                                                                      );
-                                                                    db.collection(
-                                                                      "serail_no"
+                                                                async (_) => {
+                                                                  await db
+                                                                    .collection(
+                                                                      "item_history"
                                                                     )
-                                                                      .doc(
+                                                                    .add(
+                                                                      variable2
+                                                                    );
+                                                                  db.collection(
+                                                                    "serail_no"
+                                                                  )
+                                                                    .get()
+                                                                    .then(
+                                                                      (
                                                                         reSerial
-                                                                          .docs[0]
-                                                                          .id
-                                                                      )
-                                                                      .update({
-                                                                        serail_no: reSerialChange,
-                                                                      });
-                                                                  } else {
-                                                                    db.collection(
-                                                                      "serail_no"
-                                                                    ).add({
-                                                                      serail_no: serialNosList,
-                                                                    });
-                                                                  }
+                                                                      ) => {
+                                                                        if (
+                                                                          reSerial
+                                                                            .docs
+                                                                            .length >
+                                                                          0
+                                                                        ) {
+                                                                          let reSerialChange = reSerial.docs[0]
+                                                                            .data()
+                                                                            .serail_no.concat(
+                                                                              serialNosList
+                                                                            );
+                                                                          db.collection(
+                                                                            "serail_no"
+                                                                          )
+                                                                            .doc(
+                                                                              reSerial
+                                                                                .docs[0]
+                                                                                .id
+                                                                            )
+                                                                            .update(
+                                                                              {
+                                                                                serail_no: reSerialChange,
+                                                                              }
+                                                                            );
+                                                                        } else {
+                                                                          db.collection(
+                                                                            "serail_no"
+                                                                          ).add(
+                                                                            {
+                                                                              serail_no: serialNosList,
+                                                                            }
+                                                                          );
+                                                                        }
+                                                                      }
+                                                                    );
+
+                                                                  setLoadingSubmit(
+                                                                    false
+                                                                  );
+                                                                  valuesInitialState();
+                                                                  NotificationManager.success(
+                                                                    "Item creation successfully!"
+                                                                  );
+                                                                }
+                                                              )
+                                                              .catch(
+                                                                (error) => {
+                                                                  setLoadingSubmit(
+                                                                    false
+                                                                  );
+                                                                  NotificationManager.warning(
+                                                                    "Failed to make the item!",
+                                                                    "Please try again"
+                                                                  );
                                                                 }
                                                               );
-                                                                
-                                                                setLoadingSubmit(
-                                                                  false
-                                                                );
-                                                                valuesInitialState();
-                                                                NotificationManager.success(
-                                                                  "Item creation successfully!"
-                                                                );
-                                                              })
-                                                              .catch( (
-                                                                error
-                                                              )=> {
-                                                                setLoadingSubmit(
-                                                                  false
-                                                                );
-                                                                NotificationManager.warning(
-                                                                  "Failed to make the item!",
-                                                                  "Please try again"
-                                                                );
-                                                              });
                                                           }
                                                         } else {
                                                           if (inst) {
@@ -672,78 +677,85 @@ export default function Add_Item() {
                                                               guarantee: guarantee,
                                                               timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                                                             };
-                                                           
+
                                                             await db
                                                               .collection(
                                                                 "item"
                                                               )
                                                               .add(variable)
-                                                              .then( (
-                                                                _
-                                                              ) => {
-                                                                
-                                                                 await db
-                                                              .collection(
-                                                                "item_history"
-                                                              )
-                                                              .add(variable);
-                                                            db.collection(
-                                                              "serail_no"
-                                                            )
-                                                              .get()
                                                               .then(
-                                                                (reSerial) => {
-                                                                  if (
-                                                                    reSerial
-                                                                      .docs
-                                                                      .length >
-                                                                    0
-                                                                  ) {
-                                                                    let reSerialChange = reSerial.docs[0]
-                                                                      .data()
-                                                                      .serail_no.concat(
-                                                                        serialNosList
-                                                                      );
-                                                                    db.collection(
-                                                                      "serail_no"
+                                                                async (_) => {
+                                                                  await db
+                                                                    .collection(
+                                                                      "item_history"
                                                                     )
-                                                                      .doc(
+                                                                    .add(
+                                                                      variable
+                                                                    );
+                                                                  db.collection(
+                                                                    "serail_no"
+                                                                  )
+                                                                    .get()
+                                                                    .then(
+                                                                      (
                                                                         reSerial
-                                                                          .docs[0]
-                                                                          .id
-                                                                      )
-                                                                      .update({
-                                                                        serail_no: reSerialChange,
-                                                                      });
-                                                                  } else {
-                                                                    db.collection(
-                                                                      "serail_no"
-                                                                    ).add({
-                                                                      serail_no: serialNosList,
-                                                                    });
-                                                                  }
+                                                                      ) => {
+                                                                        if (
+                                                                          reSerial
+                                                                            .docs
+                                                                            .length >
+                                                                          0
+                                                                        ) {
+                                                                          let reSerialChange = reSerial.docs[0]
+                                                                            .data()
+                                                                            .serail_no.concat(
+                                                                              serialNosList
+                                                                            );
+                                                                          db.collection(
+                                                                            "serail_no"
+                                                                          )
+                                                                            .doc(
+                                                                              reSerial
+                                                                                .docs[0]
+                                                                                .id
+                                                                            )
+                                                                            .update(
+                                                                              {
+                                                                                serail_no: reSerialChange,
+                                                                              }
+                                                                            );
+                                                                        } else {
+                                                                          db.collection(
+                                                                            "serail_no"
+                                                                          ).add(
+                                                                            {
+                                                                              serail_no: serialNosList,
+                                                                            }
+                                                                          );
+                                                                        }
+                                                                      }
+                                                                    );
+
+                                                                  setLoadingSubmit(
+                                                                    false
+                                                                  );
+                                                                  valuesInitialState();
+                                                                  NotificationManager.success(
+                                                                    "Item creation successfully!"
+                                                                  );
+                                                                }
+                                                              )
+                                                              .catch(
+                                                                (error) => {
+                                                                  setLoadingSubmit(
+                                                                    false
+                                                                  );
+                                                                  NotificationManager.warning(
+                                                                    "Failed to make the item!",
+                                                                    "Please try again"
+                                                                  );
                                                                 }
                                                               );
-                                                                
-                                                                setLoadingSubmit(
-                                                                  false
-                                                                );
-                                                                valuesInitialState();
-                                                                NotificationManager.success(
-                                                                  "Item creation successfully!"
-                                                                );
-                                                              })
-                                                              .catch( (
-                                                                error
-                                                              )=> {
-                                                                setLoadingSubmit(
-                                                                  false
-                                                                );
-                                                                NotificationManager.warning(
-                                                                  "Failed to make the item!",
-                                                                  "Please try again"
-                                                                );
-                                                              });
                                                           }
                                                         }
                                                       } else {
@@ -809,53 +821,57 @@ export default function Add_Item() {
                                                             guarantee: guarantee,
                                                             timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                                                           };
-                                                         
+
                                                           await db
                                                             .collection("item")
                                                             .add(variable)
-                                                            .then( (
-                                                              _
-                                                            ) => {
-                                                               await db
-                                                            .collection(
-                                                              "item_history"
-                                                            )
-                                                            .add(variable);
-                                                          db.collection(
-                                                            "serail_no"
-                                                          )
-                                                            .get()
-                                                            .then(
-                                                              (reSerial) => {
-                                                                if (
-                                                                  reSerial.docs
-                                                                    .length > 0
-                                                                ) {
-                                                                  let reSerialChange = reSerial.docs[0]
-                                                                    .data()
-                                                                    .serail_no.concat(
-                                                                      serialNosList
-                                                                    );
-                                                                  db.collection(
-                                                                    "serail_no"
-                                                                  )
-                                                                    .doc(
+                                                            .then(async (_) => {
+                                                              await db
+                                                                .collection(
+                                                                  "item_history"
+                                                                )
+                                                                .add(variable);
+                                                              db.collection(
+                                                                "serail_no"
+                                                              )
+                                                                .get()
+                                                                .then(
+                                                                  (
+                                                                    reSerial
+                                                                  ) => {
+                                                                    if (
                                                                       reSerial
-                                                                        .docs[0]
-                                                                        .id
-                                                                    )
-                                                                    .update({
-                                                                      serail_no: reSerialChange,
-                                                                    });
-                                                                } else {
-                                                                  db.collection(
-                                                                    "serail_no"
-                                                                  ).add({
-                                                                    serail_no: serialNosList,
-                                                                  });
-                                                                }
-                                                              }
-                                                            );
+                                                                        .docs
+                                                                        .length >
+                                                                      0
+                                                                    ) {
+                                                                      let reSerialChange = reSerial.docs[0]
+                                                                        .data()
+                                                                        .serail_no.concat(
+                                                                          serialNosList
+                                                                        );
+                                                                      db.collection(
+                                                                        "serail_no"
+                                                                      )
+                                                                        .doc(
+                                                                          reSerial
+                                                                            .docs[0]
+                                                                            .id
+                                                                        )
+                                                                        .update(
+                                                                          {
+                                                                            serail_no: reSerialChange,
+                                                                          }
+                                                                        );
+                                                                    } else {
+                                                                      db.collection(
+                                                                        "serail_no"
+                                                                      ).add({
+                                                                        serail_no: serialNosList,
+                                                                      });
+                                                                    }
+                                                                  }
+                                                                );
                                                               setLoadingSubmit(
                                                                 false
                                                               );
@@ -864,9 +880,7 @@ export default function Add_Item() {
                                                                 "Item creation successfully!"
                                                               );
                                                             })
-                                                            .catch( (
-                                                              error
-                                                            )=> {
+                                                            .catch((error) => {
                                                               setLoadingSubmit(
                                                                 false
                                                               );
@@ -911,7 +925,6 @@ export default function Add_Item() {
       }
     });
   };
-  
 
   const returnInstallmentCount = (value) => {
     if (value > 0 && value <= 5000) {

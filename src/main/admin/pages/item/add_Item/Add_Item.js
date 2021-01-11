@@ -519,7 +519,30 @@ export default function Add_Item() {
                                                               guarantee: guarantee,
                                                               timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                                                             };
+                                                          
                                                             await db
+                                                              .collection(
+                                                                "item"
+                                                              )
+                                                              .doc(
+                                                                newArray[0].id
+                                                              )
+                                                              .update({
+                                                                qty:
+                                                                  Math.round(
+                                                                    newArray[0].data()
+                                                                      .qty
+                                                                  ) +
+                                                                  serialNosList.length,
+                                                                modelNo: modelNoNewList,
+                                                                serialNo: serialNoNewList,
+                                                                chassisNo: chassisNoNewList,
+                                                              })
+                                                              .then( (
+                                                                _
+                                                              ) => {
+                                                                
+                                                                  await db
                                                               .collection(
                                                                 "item_history"
                                                               )
@@ -561,27 +584,7 @@ export default function Add_Item() {
                                                                   }
                                                                 }
                                                               );
-                                                            await db
-                                                              .collection(
-                                                                "item"
-                                                              )
-                                                              .doc(
-                                                                newArray[0].id
-                                                              )
-                                                              .update({
-                                                                qty:
-                                                                  Math.round(
-                                                                    newArray[0].data()
-                                                                      .qty
-                                                                  ) +
-                                                                  serialNosList.length,
-                                                                modelNo: modelNoNewList,
-                                                                serialNo: serialNoNewList,
-                                                                chassisNo: chassisNoNewList,
-                                                              })
-                                                              .then(function (
-                                                                docRef
-                                                              ) {
+                                                                
                                                                 setLoadingSubmit(
                                                                   false
                                                                 );
@@ -590,9 +593,9 @@ export default function Add_Item() {
                                                                   "Item creation successfully!"
                                                                 );
                                                               })
-                                                              .catch(function (
+                                                              .catch( (
                                                                 error
-                                                              ) {
+                                                              )=> {
                                                                 setLoadingSubmit(
                                                                   false
                                                                 );
@@ -667,7 +670,17 @@ export default function Add_Item() {
                                                               guarantee: guarantee,
                                                               timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                                                             };
+                                                           
                                                             await db
+                                                              .collection(
+                                                                "item"
+                                                              )
+                                                              .add(variable)
+                                                              .then( (
+                                                                _
+                                                              ) => {
+                                                                
+                                                                 await db
                                                               .collection(
                                                                 "item_history"
                                                               )
@@ -709,14 +722,7 @@ export default function Add_Item() {
                                                                   }
                                                                 }
                                                               );
-                                                            await db
-                                                              .collection(
-                                                                "item"
-                                                              )
-                                                              .add(variable)
-                                                              .then(function (
-                                                                docRef
-                                                              ) {
+                                                                
                                                                 setLoadingSubmit(
                                                                   false
                                                                 );
@@ -725,9 +731,9 @@ export default function Add_Item() {
                                                                   "Item creation successfully!"
                                                                 );
                                                               })
-                                                              .catch(function (
+                                                              .catch( (
                                                                 error
-                                                              ) {
+                                                              )=> {
                                                                 setLoadingSubmit(
                                                                   false
                                                                 );
@@ -801,7 +807,14 @@ export default function Add_Item() {
                                                             guarantee: guarantee,
                                                             timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                                                           };
+                                                         
                                                           await db
+                                                            .collection("item")
+                                                            .add(variable)
+                                                            .then( (
+                                                              _
+                                                            ) => {
+                                                               await db
                                                             .collection(
                                                               "item_history"
                                                             )
@@ -841,12 +854,6 @@ export default function Add_Item() {
                                                                 }
                                                               }
                                                             );
-                                                          await db
-                                                            .collection("item")
-                                                            .add(variable)
-                                                            .then(function (
-                                                              docRef
-                                                            ) {
                                                               setLoadingSubmit(
                                                                 false
                                                               );
@@ -855,9 +862,9 @@ export default function Add_Item() {
                                                                 "Item creation successfully!"
                                                               );
                                                             })
-                                                            .catch(function (
+                                                            .catch( (
                                                               error
-                                                            ) {
+                                                            )=> {
                                                               setLoadingSubmit(
                                                                 false
                                                               );
@@ -866,6 +873,14 @@ export default function Add_Item() {
                                                                 "Please try again"
                                                               );
                                                             });
+                                                        } else {
+                                                          setLoadingSubmit(
+                                                            false
+                                                          );
+                                                          NotificationManager.warning(
+                                                            "Failed to make the item!",
+                                                            "Please try again"
+                                                          );
                                                         }
                                                       }
                                                     }

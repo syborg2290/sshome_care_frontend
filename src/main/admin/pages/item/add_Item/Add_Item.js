@@ -1093,7 +1093,7 @@ export default function Add_Item() {
                   value={salePrice}
                   onChange={(e) => {
                     setDownPayment(
-                      ((parseInt(e.target.value) * 30) / 100).toFixed(2)
+                      ((parseInt(e.target.value) * 35) / 100).toFixed(2)
                     );
                     setAmountPerInstallment(
                       e.target.value - downPayment > 0

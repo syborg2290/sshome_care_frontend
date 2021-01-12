@@ -59,6 +59,7 @@ export default function Item_table_assistant() {
     });
 
     db.collection("item")
+      .where("stock_type","==","shop")
       .orderBy("timestamp", "desc")
       .onSnapshot((snapshot) => {
         var newData = [];

@@ -83,6 +83,7 @@ export default function Manage_Stock() {
           newData.push([
             element.data().itemName,
             element.data().brand,
+            element.data().modelNo,
             element.data().qty,
             element.data().color === "" ? " - " : element.data().color,
             element.data().guaranteePeriod === ""
@@ -92,6 +93,12 @@ export default function Manage_Stock() {
                 element.data().guarantee.value.toLowerCase(),
             <CurrencyFormat
               value={element.data().salePrice}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={" "}
+            />,
+             <CurrencyFormat
+              value={element.data().cashPrice}
               displayType={"text"}
               thousandSeparator={true}
               prefix={" "}
@@ -148,6 +155,15 @@ export default function Manage_Stock() {
       },
     },
     {
+      name: "Model No",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
       name: "Qty",
       options: {
         filter: false,
@@ -176,6 +192,15 @@ export default function Manage_Stock() {
     },
     {
       name: "Sale price(LKR)",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+     {
+      name: "Cash price(LKR)",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({

@@ -374,7 +374,7 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                         </Col>
                       </Row>
                     }
-                    description={<span>{item.modelNo[0]}</span>}
+                    description={<span>Model No : {item.modelNo[0]}</span>}
                   />
                 </List.Item>
                 <Divider />

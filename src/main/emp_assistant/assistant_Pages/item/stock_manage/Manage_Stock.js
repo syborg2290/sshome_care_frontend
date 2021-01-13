@@ -83,7 +83,7 @@ export default function Manage_Stock() {
           newData.push([
             element.data().itemName,
             element.data().brand,
-            element.data().modelNo,
+            element.data().modelNo[0],
             element.data().qty,
             element.data().color === "" ? " - " : element.data().color,
             element.data().guaranteePeriod === ""
@@ -97,7 +97,7 @@ export default function Manage_Stock() {
               thousandSeparator={true}
               prefix={" "}
             />,
-             <CurrencyFormat
+            <CurrencyFormat
               value={element.data().cashPrice}
               displayType={"text"}
               thousandSeparator={true}
@@ -199,7 +199,7 @@ export default function Manage_Stock() {
         }),
       },
     },
-     {
+    {
       name: "Cash price(LKR)",
       options: {
         filter: true,

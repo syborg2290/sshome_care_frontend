@@ -35,6 +35,7 @@ export default function Item_table_assistant() {
   const [visible, setVisible] = useState(false);
   // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
+  const [rowsCount, setRowsCount] = useState(0);
   const [editVisible, setEditVisible] = useState(false);
 
   // let socket = socketIOClient(RealtimeServerApi);
@@ -44,7 +45,6 @@ export default function Item_table_assistant() {
   const [itemListSeMoCon, setItemListSeMoCon] = useState([]);
 
   let history = useHistory();
-  let rowsCount = 0;
 
   const showModal = () => {
     setVisible(true);
@@ -59,7 +59,8 @@ export default function Item_table_assistant() {
       history.push("/connection_lost");
     });
 
-    rowsCount = rowsCount + 25;
+    let rowsCountUse = rowsCount + 25;
+    setRowsCount(rowsCountUse);
 
     db.collection("item")
       .orderBy("timestamp", "desc")
@@ -725,11 +726,13 @@ export default function Item_table_assistant() {
               },
               onChangePage: () => {
                 setIsLoading(true);
-                rowsCount = rowsCount + 25;
+
+                let rowsCountUseIn = rowsCount + 25;
+                setRowsCount(rowsCountUse);
 
                 db.collection("item")
                   .orderBy("timestamp", "desc")
-                  .limit(rowsCount)
+                  .limit(rowsCountUseIn)
                   .onSnapshot((snapshot) => {
                     var newData = [];
                     var itemData = [];

@@ -386,7 +386,7 @@ export default function Add_Item() {
                                                                 .stock_type ===
                                                                 "main" &&
                                                               ob.data()
-                                                                .modelNo ===
+                                                                .modelNoExtra ===
                                                                 modelNosList[0]
                                                           )
                                                         ) {
@@ -440,8 +440,9 @@ export default function Add_Item() {
                                                                 .stock_type ===
                                                                 "main" &&
                                                               ob.data()
-                                                                .modelNo ===
+                                                                .modelNoExtra ===
                                                                 modelNosList[0]
+                                                                
                                                           );
                                                           if (newArray) {
                                                             let modelNoNewList = modelNosList.concat(
@@ -460,6 +461,7 @@ export default function Add_Item() {
                                                               itemName: itemName.trim(),
                                                               brand: brand.trim(),
                                                               modelNo: modelNosList,
+                                                              modelNoExtra:modelNosList[0],
                                                               serialNo: serialNosList,
                                                               chassisNo: chassisNosList,
                                                               color: color.trim(),
@@ -537,6 +539,7 @@ export default function Add_Item() {
                                                                 modelNo: modelNoNewList,
                                                                 serialNo: serialNoNewList,
                                                                 chassisNo: chassisNoNewList,
+                                                                 modelNoExtra:modelNoNewList[0]
                                                               })
                                                               .then(
                                                                 async (_) => {
@@ -618,6 +621,7 @@ export default function Add_Item() {
                                                               itemName: itemName.trim(),
                                                               brand: brand.trim(),
                                                               modelNo: modelNosList,
+                                                               modelNoExtra:modelNosList[0],
                                                               serialNo: serialNosList,
                                                               chassisNo: chassisNosList,
                                                               color: color.trim(),
@@ -764,6 +768,7 @@ export default function Add_Item() {
                                                             itemName: itemName.trim(),
                                                             brand: brand.trim(),
                                                             modelNo: modelNosList,
+                                                             modelNoExtra:modelNosList[0],
                                                             serialNo: serialNosList,
                                                             chassisNo: chassisNosList,
                                                             color: color.trim(),
@@ -1134,6 +1139,7 @@ export default function Add_Item() {
                           ).toFixed(2)
                         : 0
                     );
+
                     if (e.target.value.length === 0) {
                       setNoOfInstallments(0);
                     } else {
@@ -1441,14 +1447,22 @@ export default function Add_Item() {
                     />
 
                     {i >= Object.keys(inputsSerialNo).length - 1 ? (
-                      <MinusCircleOutlined
-                        key={i + 3}
-                        className="rmov_iconss"
-                        onClick={() => {
-                          delete inputsSerialNo[i];
-                          setInputsSerialNo({ ...inputsSerialNo });
-                        }}
-                      />
+                      <>
+                        <MinusCircleOutlined
+                          key={i + 3}
+                          className="rmov_iconss"
+                          onClick={() => {
+                            delete inputsSerialNo[i];
+                            setInputsSerialNo({ ...inputsSerialNo });
+                          }}
+                        />
+                        {
+                          <h4>
+                            {"Serial numbers count :  " +
+                              Object.keys(inputsSerialNo).length}
+                          </h4>
+                        }
+                      </>
                     ) : (
                       ""
                     )}

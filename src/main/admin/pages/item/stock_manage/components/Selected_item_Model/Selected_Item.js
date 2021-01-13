@@ -182,6 +182,7 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                             chassisNo: newArrayChassis,
                             modelNo: tikModel,
                             serialNo: tikSerial,
+                             modelNoExtra:tikModel[0]
                           });
 
                         let eachModelNo = newArray[0].data().modelNo;
@@ -197,6 +198,7 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                             modelNo: prevUpdaModel,
                             serialNo: prevUpdaSerail,
                             chassisNo: newArrayChassis,
+                             modelNoExtra:prevUpdaModel[0]
                           })
                           .then((_) => {
                             setLoadingSubmit(false);
@@ -255,6 +257,7 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                           chassisNo: chassisNosList2,
                           modelNo: modelNoNewList2,
                           serialNo: serialNoNewList2,
+                           modelNoExtra:modelNoNewList2[0]
                         });
 
                       var prevUpdaModel2 = modelNosList2;
@@ -264,6 +267,7 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                         itemName: eachItem.item.itemName,
                         brand: eachItem.item.brand,
                         modelNo: prevUpdaModel2,
+                          modelNoExtra:prevUpdaModel2[0],
                         serialNo: prevUpdaSerail2,
                         chassisNo: chassisNoNewList2,
                         color: eachItem.item.color,

@@ -386,7 +386,7 @@ export default function Add_Item() {
                                                                 .stock_type ===
                                                                 "main" &&
                                                               ob.data()
-                                                                .modelNo ===
+                                                                .modelNoExtra ===
                                                                 modelNosList[0]
                                                           )
                                                         ) {
@@ -440,8 +440,9 @@ export default function Add_Item() {
                                                                 .stock_type ===
                                                                 "main" &&
                                                               ob.data()
-                                                                .modelNo ===
+                                                                .modelNoExtra ===
                                                                 modelNosList[0]
+                                                                
                                                           );
                                                           if (newArray) {
                                                             let modelNoNewList = modelNosList.concat(
@@ -460,6 +461,7 @@ export default function Add_Item() {
                                                               itemName: itemName.trim(),
                                                               brand: brand.trim(),
                                                               modelNo: modelNosList,
+                                                              modelNoExtra:modelNosList[0],
                                                               serialNo: serialNosList,
                                                               chassisNo: chassisNosList,
                                                               color: color.trim(),
@@ -537,6 +539,7 @@ export default function Add_Item() {
                                                                 modelNo: modelNoNewList,
                                                                 serialNo: serialNoNewList,
                                                                 chassisNo: chassisNoNewList,
+                                                                 modelNoExtra:modelNoNewList[0]
                                                               })
                                                               .then(
                                                                 async (_) => {
@@ -618,6 +621,7 @@ export default function Add_Item() {
                                                               itemName: itemName.trim(),
                                                               brand: brand.trim(),
                                                               modelNo: modelNosList,
+                                                               modelNoExtra:modelNosList[0],
                                                               serialNo: serialNosList,
                                                               chassisNo: chassisNosList,
                                                               color: color.trim(),
@@ -764,6 +768,7 @@ export default function Add_Item() {
                                                             itemName: itemName.trim(),
                                                             brand: brand.trim(),
                                                             modelNo: modelNosList,
+                                                             modelNoExtra:modelNosList[0],
                                                             serialNo: serialNosList,
                                                             chassisNo: chassisNosList,
                                                             color: color.trim(),

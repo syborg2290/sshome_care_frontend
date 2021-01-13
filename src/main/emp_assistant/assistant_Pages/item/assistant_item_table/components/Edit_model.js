@@ -41,7 +41,7 @@ export default function Edit_model({
   purchasedPriceProp,
   docId,
 }) {
-  const [loadingSubmit, setLoadingSubmit] = useState(false);
+   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const [itemName, setItemName] = useState(itemNameProp);
   const [brand, setBrand] = useState(brandProp);
   const [color, setColor] = useState(colorProp);
@@ -182,11 +182,10 @@ export default function Edit_model({
     checkSerialNumber().then((reCheckS) => {
       let serialNosList = [];
       let chassisNosList = [];
-      // let modelNosList = [];
+   
 
       for (var k = 0; k < Object.keys(inputsSerialNo).length; k++) {
         serialNosList.push(inputsSerialNo[k]);
-        // modelNosList.push(inputsModelNo[0]);
       }
 
       let duplicatesSerial = serialNosList.reduce(
@@ -296,7 +295,7 @@ export default function Edit_model({
                                                     .get()
                                                     .then((docRe) => {
                                                       let modelNoNewList = [];
-
+                                                       
                                                       for (
                                                         let k = 0;
                                                         k <
@@ -305,7 +304,7 @@ export default function Edit_model({
                                                       ) {
                                                         modelNoNewList.push(
                                                           docRe.data()
-                                                            .modelNo[0]
+                                                            .modelNoExtra
                                                         );
                                                       }
 
@@ -327,6 +326,7 @@ export default function Edit_model({
                                                           itemName: itemName,
                                                           brand: brand,
                                                           modelNo: newTTTTMo,
+                                                            modelNoExtra:newTTTTMo[0],
                                                           serialNo: serialNoNewList,
                                                           chassisNo: chassisNoNewList,
                                                           color: color,
@@ -379,6 +379,7 @@ export default function Edit_model({
                                                           itemName: itemName,
                                                           brand: brand,
                                                           modelNo: modelNoNewList,
+                                                            modelNoExtra:modelNoNewList[0],
                                                           serialNo: serialNosList,
                                                           chassisNo: chassisNosList,
                                                           purchasedPrice: docRe.data()
@@ -737,14 +738,22 @@ export default function Edit_model({
                       />
 
                       {i >= Object.keys(inputsSerialNo).length - 1 ? (
-                        <MinusCircleOutlined
-                          key={i + 3}
-                          className="rmov_icos"
-                          onClick={() => {
-                            delete inputsSerialNo[i];
-                            setInputsSerialNo({ ...inputsSerialNo });
-                          }}
-                        />
+                        <>
+                          <MinusCircleOutlined
+                            key={i + 3}
+                            className="rmov_icos"
+                            onClick={() => {
+                              delete inputsSerialNo[i];
+                              setInputsSerialNo({ ...inputsSerialNo });
+                            }}
+                          />
+                          {
+                            <h4>
+                              {"Serial numbers count :  " +
+                                Object.keys(inputsSerialNo).length}
+                            </h4>
+                          }
+                        </>
                       ) : (
                         ""
                       )}

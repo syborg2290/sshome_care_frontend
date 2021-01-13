@@ -728,7 +728,7 @@ export default function Item_table_assistant() {
                 setIsLoading(true);
 
                 let rowsCountUseIn = rowsCount + 25;
-                setRowsCount(rowsCountUse);
+                setRowsCount(rowsCountUseIn);
 
                 db.collection("item")
                   .orderBy("timestamp", "desc")

@@ -181,8 +181,7 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                                 : 0,
                             chassisNo: newArrayChassis,
                             modelNo: tikModel,
-                            serialNo: tikSerial,
-                             modelNoExtra:tikModel[0]
+                            serialNo: tikSerial
                           });
 
                         let eachModelNo = newArray[0].data().modelNo;
@@ -197,8 +196,7 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                             qty: newArray[0].data().qty + qty[eachItem.i],
                             modelNo: prevUpdaModel,
                             serialNo: prevUpdaSerail,
-                            chassisNo: newArrayChassis,
-                             modelNoExtra:prevUpdaModel[0]
+                            chassisNo: newArrayChassis
                           })
                           .then((_) => {
                             setLoadingSubmit(false);
@@ -218,10 +216,7 @@ export default function Selected_Item({ itemListProps, closeModel }) {
 
                 var modelNoNewList2 = eachItem.item.modelNo;
                 var serialNoNewList2 = eachItem.item.serialNo;
-                var chassisNoNewList2 = newArrayChassis2.splice(
-                  0,
-                  qty[eachItem.i]
-                );
+                var chassisNoNewList2 = newArrayChassis2;
 
                 for (let q = 0; q < qty[eachItem.i]; q++) {
                   serialNosList2.push(newArraySerial2[q]);
@@ -256,8 +251,7 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                               : 0,
                           chassisNo: chassisNosList2,
                           modelNo: modelNoNewList2,
-                          serialNo: serialNoNewList2,
-                           modelNoExtra:modelNoNewList2[0]
+                          serialNo: serialNoNewList2
                         });
 
                       var prevUpdaModel2 = modelNosList2;
@@ -267,7 +261,7 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                         itemName: eachItem.item.itemName,
                         brand: eachItem.item.brand,
                         modelNo: prevUpdaModel2,
-                          modelNoExtra:prevUpdaModel2[0],
+                        modelNoExtra: prevUpdaModel2[0],
                         serialNo: prevUpdaSerail2,
                         chassisNo: chassisNoNewList2,
                         color: eachItem.item.color,

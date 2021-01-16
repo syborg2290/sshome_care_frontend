@@ -16,20 +16,15 @@ import ExpencesModel from "./components/expences/Expences_Model";
 import GassModel from "./components/gass/Gass_Model";
 import SalesModel from "./components/sales/Sales_Model";
 import { Typography } from "../../../../Wrappers/Wrappers";
-import ModelVehicalService from "../../components/Vehical_Service_Model";
 import StockTableModel from "./components/total_stock/Stock_Table";
 
 //icons
-import FolderOpenIcon from "@material-ui/icons/FolderOpen";
-import PostAddIcon from "@material-ui/icons/PostAdd";
-import SettingsApplicationsIcon from "@material-ui/icons/SettingsApplications";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 
 import db from "../../../../../../config/firebase.js";
 
 // styles
 import "./Report_Cards.css";
-import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles({
   bullet: {
@@ -563,14 +558,9 @@ async function docsTotalBalance(allSalesTotals) {
 }
 
 export default function Report_Cards() {
-  const [vehicalServiceModel, setVehicalServiceModel] = useState(false); //  model service Vehical
   const [expencesModel, setExpencesModel] = useState(false); //  model
   const [gassModel, setGassModel] = useState(false); //  model
   const [salesModel, setSalesModel] = useState(false); //  model
-  // eslint-disable-next-line
-  const [recordPnl, setRecordPnl] = useState(false);
-  // eslint-disable-next-line
-  const [expencesPnl, setExpencesPnl] = useState(false);
   const [saleYear, setSaleYear] = useState(null);
   const [saleMonth, setSaleMonth] = useState(null);
   const [saleIsAll, setSaleIsAll] = useState(true);
@@ -592,7 +582,6 @@ export default function Report_Cards() {
   const [saleDate, setSaleDate] = useState(null);
   const [gasDate, setGasDate] = useState(null);
   const [expencesDate, setExpencesDate] = useState(null);
-  let history = useHistory();
 
   const [password, setPassword] = useState("");
 
@@ -604,20 +593,6 @@ export default function Report_Cards() {
   var theme = useTheme();
   const classes = useStyles();
   const bull = <span className={classes.bullet}>•</span>;
-
-  const VehicalServiceModel = () => {
-    setVehicalServiceModel(true);
-  };
-
-  const RecordPnl = () => {
-    setRecordPnl(true);
-    history.push("/admin/pages/records");
-  };
-
-  const ExpencesPnl = () => {
-    setExpencesPnl(true);
-    history.push("/admin/pages/expences");
-  };
 
   const ViewExpencesModel = () => {
     setExpencesModel(true);
@@ -1025,27 +1000,6 @@ export default function Report_Cards() {
       </Modal>
 
       {/* End  Stock Table Model  */}
-
-      {/*Start Vehical Service Model */}
-
-      <Modal
-        visible={vehicalServiceModel}
-        footer={null}
-        className="vehical_servicemdl"
-        onCancel={() => {
-          setVehicalServiceModel(false);
-        }}
-      >
-        <div>
-          <div>
-            <div>
-              <ModelVehicalService />
-            </div>
-          </div>
-        </div>
-      </Modal>
-
-      {/* End  Vehical Service Model  */}
 
       {/*Start expencesM  Model */}
 
@@ -1603,55 +1557,15 @@ export default function Report_Cards() {
             </CardContent>
           </Card>
         </Grid>
-
-        <Grid item xs={12} sm={6}>
-          <Card>
-            <CardContent>
-              <Grid container spacing={3}>
-                <Grid item xs={12} sm={12}>
-                  <Button
-                    variant="contained"
-                    className="btn_Dash"
-                    endIcon={<FolderOpenIcon />}
-                    onClick={RecordPnl}
-                  >
-                    Reports
-                  </Button>
-                </Grid>
-
-                <Grid item xs={12} sm={12}>
-                  <Button
-                    variant="contained"
-                    className="btn_Expences"
-                    endIcon={<PostAddIcon />}
-                    onClick={ExpencesPnl}
-                  >
-                    Add Expenses
-                  </Button>
-                </Grid>
-                <Grid item xs={12} sm={12}>
-                  <Button
-                    variant="contained"
-                    className="btn_VehicalService"
-                    endIcon={<SettingsApplicationsIcon />}
-                    onClick={VehicalServiceModel}
-                  >
-                    Vehical Services
-                  </Button>
-                </Grid>
-                <Grid item xs={12} sm={12}>
-                  <Button
-                    variant="contained"
-                    className="btn_totStock"
-                    // endIcon={<SettingsApplicationsIcon />}
-                    onClick={btnStockModel}
-                  >
-                    Total Stock
-                  </Button>
-                </Grid>
-              </Grid>
-            </CardContent>
-          </Card>
+        <Grid item xs={12} sm={12}>
+          <Button
+            variant="contained"
+            className="btn_totStock"
+            // endIcon={<SettingsApplicationsIcon />}
+            onClick={btnStockModel}
+          >
+            Total Stock
+          </Button>
         </Grid>
       </Grid>
     </>

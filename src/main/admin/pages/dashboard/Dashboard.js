@@ -1,16 +1,26 @@
 import React, { useState, useEffect } from "react";
 import Container from "@material-ui/core/Container";
+// eslint-disable-next-line
 import Typography from "@material-ui/core/Typography";
-import { Grid } from "@material-ui/core";
+import { Grid, Card, CardContent } from "@material-ui/core";
+import { Modal, Button } from "antd";
 
 //components
+import ModelVehicalService from "./components/Vehical_Service_Model";
+// eslint-disable-next-line
 import ArreasTable from "../dashboard/dashboard_contents/arreas_Table/Arreas_Table";
 import PendingList from "../dashboard/dashboard_contents/pending_Blacklist/Pending_List";
+// eslint-disable-next-line
 import InvoiceList from "../dashboard/dashboard_contents/invoice_List/Invoice_List";
 import ExpireInvoice from "../dashboard/dashboard_contents/expire_Table/Expire_Invoice";
+// eslint-disable-next-line
 import ReportCards from "./dashboard_contents/reports_cards/Report_Cards";
 import firebase from "firebase";
 import db from "../../../../config/firebase.js";
+
+import FolderOpenIcon from "@material-ui/icons/FolderOpen";
+import PostAddIcon from "@material-ui/icons/PostAdd";
+import SettingsApplicationsIcon from "@material-ui/icons/SettingsApplications";
 
 // styles
 import "./Dashboard.css";
@@ -32,7 +42,26 @@ function daysCountOfMonth(month, year) {
 export default function Dashboard() {
   const [pendingBlackList, setPendingBlackList] = useState([]);
   const [expiredList, setExpiredList] = useState([]);
+  // eslint-disable-next-line
+  const [recordPnl, setRecordPnl] = useState(false);
+  // eslint-disable-next-line
+  const [expencesPnl, setExpencesPnl] = useState(false);
+  const [vehicalServiceModel, setVehicalServiceModel] = useState(false); //  model service Vehical
   let history = useHistory();
+
+  const VehicalServiceModel = () => {
+    setVehicalServiceModel(true);
+  };
+
+  const RecordPnl = () => {
+    setRecordPnl(true);
+    history.push("/admin/pages/records");
+  };
+
+  const ExpencesPnl = () => {
+    setExpencesPnl(true);
+    history.push("/admin/pages/expences");
+  };
 
   useEffect(() => {
     window.addEventListener("offline", function (e) {
@@ -521,25 +550,85 @@ export default function Dashboard() {
 
   return (
     <>
+      {/*Start Vehical Service Model */}
+
+      <Modal
+        visible={vehicalServiceModel}
+        footer={null}
+        className="vehical_servicemdl"
+        onCancel={() => {
+          setVehicalServiceModel(false);
+        }}
+      >
+        <div>
+          <div>
+            <div>
+              <ModelVehicalService />
+            </div>
+          </div>
+        </div>
+      </Modal>
+
+      {/* End  Vehical Service Model  */}
+
       <Grid container spacing={4}>
         <Grid className="titl_Dash" item xs={12}></Grid>
       </Grid>
 
       {/*START Arreas Table */}
-      <Grid container spacing={4}>
-        <Grid item xs={12}>
+
+      {/* <Grid item xs={12}>
           <ReportCards />
-        </Grid>
+        </Grid> */}
+      <Grid item xs={12}>
+        <Card>
+          <CardContent>
+            <div className="dash_btn">
+              <Grid item xs={12} sm={12}>
+                <Button
+                  variant="contained"
+                  className="btn_Dash"
+                  endIcon={<FolderOpenIcon />}
+                  onClick={RecordPnl}
+                >
+                  Reports
+                </Button>
+              </Grid>
+
+              <Grid item xs={12} sm={12}>
+                <Button
+                  variant="contained"
+                  className="btn_Expences"
+                  endIcon={<PostAddIcon />}
+                  onClick={ExpencesPnl}
+                >
+                  Add Expenses
+                </Button>
+              </Grid>
+              <Grid item xs={12} sm={12}>
+                <Button
+                  variant="contained"
+                  className="btn_VehicalService"
+                  endIcon={<SettingsApplicationsIcon />}
+                  onClick={VehicalServiceModel}
+                >
+                  Vehical Services
+                </Button>
+              </Grid>
+            </div>
+          </CardContent>
+        </Card>
       </Grid>
+
       {/* END Arreas Table */}
 
       <Container component="main" className="main_containerDash">
         {/*START Cards */}
-        <Grid container spacing={4}>
+        {/* <Grid container spacing={4}>
           <Grid item xs={12}>
             <ArreasTable />
           </Grid>
-        </Grid>
+        </Grid> */}
         {/* END Cards  */}
 
         {/*START Expire Invoice Table */}
@@ -564,14 +653,14 @@ export default function Dashboard() {
 
         {/*START Invoices  Table */}
 
-        <Typography className="today_invoices" variant="h4" component="h6">
+        {/* <Typography className="today_invoices" variant="h4" component="h6">
           All invoices of issued in recently
         </Typography>
         <Grid container spacing={4}>
           <Grid item xs={12}>
             <InvoiceList />
           </Grid>
-        </Grid>
+        </Grid> */}
         {/*END Invoices  Table */}
       </Container>
     </>

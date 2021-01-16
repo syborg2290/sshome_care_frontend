@@ -77,21 +77,6 @@
   width: 60% !important;
 }
 
-.btn_Dash {
-  background-color: blueviolet !important;
-  color: whitesmoke !important;
-}
-
-.btn_Expences {
-  color: whitesmoke !important;
-  background-color: #160558e7 !important;
-}
-
-.btn_VehicalService {
-  color: whitesmoke !important;
-  background-color: #33a124 !important;
-}
-
 .btn_totStock {
   color: whitesmoke !important;
   background-color: #e97e03 !important;

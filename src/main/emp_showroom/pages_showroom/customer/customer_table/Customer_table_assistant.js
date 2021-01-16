@@ -107,14 +107,14 @@ export default function CustomerTable() {
   ];
 
   useEffect(() => {
-
     window.addEventListener("offline", function (e) {
       history2.push("/connection_lost");
     });
 
     db.collection("customer")
       .orderBy("date", "desc")
-      .onSnapshot((custDoc) => {
+      .get()
+      .then((custDoc) => {
         let rawData = [];
         let rawAllData = [];
         custDoc.docs.forEach((siDoc) => {
@@ -247,10 +247,10 @@ export default function CustomerTable() {
               },
               selectableRows: "none",
               draggableColumns: {
-               enabled: true
-             },
+                enabled: true,
+              },
               responsive: "standard",
-              customToolbarSelect: () => { },
+              customToolbarSelect: () => {},
               filterType: "textField",
               download: false,
               print: false,
@@ -265,8 +265,8 @@ export default function CustomerTable() {
                   noMatch: isLoading ? (
                     <Spin className="tblSpinner" size="large" spinning="true" />
                   ) : (
-                      ""
-                    ),
+                    ""
+                  ),
                 },
               },
             }}

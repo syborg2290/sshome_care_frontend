@@ -70,7 +70,8 @@ export default function Sold_Gass() {
   useEffect(() => {
     db.collection("gas_purchase_history")
       .orderBy("date", "desc")
-      .onSnapshot((snap) => {
+      .get()
+      .then((snap) => {
         var raw = [];
 
         snap.docs.forEach((each) => {

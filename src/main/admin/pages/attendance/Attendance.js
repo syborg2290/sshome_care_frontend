@@ -116,7 +116,7 @@ export default function Attendance() {
       history.push("/connection_lost");
     });
 
-    db.collection("attendance_history").onSnapshot((snap) => {
+    db.collection("attendance_history").get().then((snap) => {
       var rawData = [];
       var allRawData = [];
       snap.docs.forEach((reSnap) => {

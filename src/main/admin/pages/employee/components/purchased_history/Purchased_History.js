@@ -35,7 +35,8 @@ export default function Purchased_History() {
 
     db.collection("emp_purchased")
       .orderBy("date", "desc")
-      .onSnapshot((snapshot) => {
+      .get()
+      .then((snapshot) => {
         var newData = [];
         var itemData = [];
 

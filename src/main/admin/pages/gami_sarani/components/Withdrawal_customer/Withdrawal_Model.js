@@ -75,7 +75,8 @@ export default function Withdrawal_Model({ docId, nicProp, midProp }) {
   useEffect(() => {
     db.collection("gami_sarani_withdrawhistory")
       .where("docId", "==", docId)
-      .onSnapshot((re) => {
+      .get()
+      .then((re) => {
         var raw = [];
         re.docs.forEach((each) => {
           raw.push({
@@ -122,7 +123,7 @@ export default function Withdrawal_Model({ docId, nicProp, midProp }) {
           columns={columns}
           options={{
             // selectableRows: false,
-             selectableRows: "none",
+            selectableRows: "none",
             customToolbarSelect: () => {},
             filterType: "textField",
             download: false,

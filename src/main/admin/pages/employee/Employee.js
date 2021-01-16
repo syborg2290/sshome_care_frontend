@@ -122,39 +122,41 @@ export default function Employee() {
       history.push("/connection_lost");
     });
 
-    db.collection("employee").onSnapshot((snap) => {
-      var raw = [];
-      var rawAlldata = [];
-      snap.docs.forEach((each) => {
-        rawAlldata.push({
-          id: each.id,
-          data: each.data(),
-        });
-        raw.push({
-          FirstName: each.data().fname,
-          LastName: each.data().lname,
-          NIC: each.data().nic,
-          Mobile: each.data().mobile1,
+    db.collection("employee")
+      .get()
+      .then((snap) => {
+        var raw = [];
+        var rawAlldata = [];
+        snap.docs.forEach((each) => {
+          rawAlldata.push({
+            id: each.id,
+            data: each.data(),
+          });
+          raw.push({
+            FirstName: each.data().fname,
+            LastName: each.data().lname,
+            NIC: each.data().nic,
+            Mobile: each.data().mobile1,
 
-          Action: (
-            <div>
-              <VisibilityIcon className="btnView" onClick={EmployeeView} />
-              <span>
-                <EditIcon className="btnEdit" onClick={EmployeeUpdate} />
-              </span>
-              <span>
-                <AddShoppingCartRoundedIcon
-                  className="btnShopping"
-                  onClick={() => EmployeePurchasing(each.id)}
-                />
-              </span>
-            </div>
-          ),
+            Action: (
+              <div>
+                <VisibilityIcon className="btnView" onClick={EmployeeView} />
+                <span>
+                  <EditIcon className="btnEdit" onClick={EmployeeUpdate} />
+                </span>
+                <span>
+                  <AddShoppingCartRoundedIcon
+                    className="btnShopping"
+                    onClick={() => EmployeePurchasing(each.id)}
+                  />
+                </span>
+              </div>
+            ),
+          });
         });
+        setTableData(raw);
+        setallData(rawAlldata);
       });
-      setTableData(raw);
-      setallData(rawAlldata);
-    });
     // eslint-disable-next-line
   }, []);
 

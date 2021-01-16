@@ -153,7 +153,8 @@ export default function Areas() {
 
     db.collection("arrears")
       .orderBy("date", "desc")
-      .onSnapshot((onSnap) => {
+      .get()
+      .then((onSnap) => {
         var rawData = [];
         var rawAllData = [];
         onSnap.docs.forEach((eachRe) => {

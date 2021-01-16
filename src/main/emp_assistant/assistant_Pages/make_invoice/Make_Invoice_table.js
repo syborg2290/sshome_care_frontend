@@ -52,7 +52,8 @@ export default function Make_Invoice_table() {
 
     db.collection("item")
       .orderBy("timestamp", "desc")
-      .onSnapshot((snapshot) => {
+      .get()
+      .then((snapshot) => {
         var newData = [];
         var itemData = [];
         var itemDataSeMo = [];

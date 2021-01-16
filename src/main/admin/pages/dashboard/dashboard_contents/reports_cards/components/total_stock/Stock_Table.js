@@ -30,7 +30,8 @@ export default function Stock_Table() {
 
     db.collection("item_history")
       .orderBy("timestamp", "desc")
-      .onSnapshot((snapshot) => {
+      .get()
+      .then((snapshot) => {
         var newData = [];
         var itemData = [];
         var itemDataSeMo = [];

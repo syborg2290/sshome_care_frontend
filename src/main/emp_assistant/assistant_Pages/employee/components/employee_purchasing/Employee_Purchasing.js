@@ -49,7 +49,8 @@ export default function Employee_Purchasing() {
     }
     db.collection("item")
       .orderBy("timestamp", "desc")
-      .onSnapshot((snapshot) => {
+      .get()
+      .then((snapshot) => {
         var newData = [];
         var itemData = [];
         var itemDataSeMo = [];

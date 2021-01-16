@@ -346,7 +346,8 @@ export default function Invoice_List() {
   useEffect(() => {
     db.collection("invoice")
       .where("status_of_payandgo", "==", "onGoing")
-      .onSnapshot((custIn) => {
+      .get()
+      .then((custIn) => {
         custIn.docs.forEach((siDoc) => {
           let isBeforeDate = isDateBeforeToday(
             new Date(siDoc.data()?.deadlineTimestamp?.seconds * 1000)
@@ -360,7 +361,8 @@ export default function Invoice_List() {
       });
     db.collection("invoice")
       .where("customer_id", "!=", null)
-      .onSnapshot((cust) => {
+      .get()
+      .then((cust) => {
         var rawData = [];
         var rawAllData = [];
 
@@ -492,7 +494,8 @@ export default function Invoice_List() {
     //START Full Payment Rows
     db.collection("invoice")
       .where("customer_id", "==", null)
-      .onSnapshot((cust) => {
+      .get()
+      .then((cust) => {
         var rawDataFull = [];
         var rawAllDataFull = [];
         cust.docs.forEach((siDoc) => {

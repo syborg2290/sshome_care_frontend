@@ -162,47 +162,49 @@ export default function Black_List() {
       history.push("/connection_lost");
     });
 
-    db.collection("blacklist").onSnapshot((reBlack) => {
-      var allTableRaw = [];
-      var allData = [];
-      reBlack.docs.forEach((each) => {
-        allData.push({
-          id: each.id,
-          data: each.data(),
+    db.collection("blacklist")
+      .get()
+      .then((reBlack) => {
+        var allTableRaw = [];
+        var allData = [];
+        reBlack.docs.forEach((each) => {
+          allData.push({
+            id: each.id,
+            data: each.data(),
+          });
+          allTableRaw.push({
+            InvoiceNo: each.data().InvoiceNo,
+            // SerialNo: each.data().serialNo,
+            Type: each.data().Type,
+            FirstName: each.data().FirstName,
+            LastName: each.data().LastName,
+            MID: each.data().MID,
+            NIC: each.data().NIC,
+            Telephone: each.data().Telephone,
+            Balance: each.data().balance,
+            Action: (
+              <div>
+                <VisibilityIcon onClick={showModalCustomer} />
+                <span className="icon_Edit">
+                  <HistoryIcon onClick={showModalCustomerHistory} />
+                </span>
+                <span className="done_btn">
+                  <Button
+                    variant="contained"
+                    size="small"
+                    className="btnDone"
+                    onClick={showModalConfirmModal}
+                  >
+                    Done
+                  </Button>
+                </span>
+              </div>
+            ),
+          });
         });
-        allTableRaw.push({
-          InvoiceNo: each.data().InvoiceNo,
-          // SerialNo: each.data().serialNo,
-          Type: each.data().Type,
-          FirstName: each.data().FirstName,
-          LastName: each.data().LastName,
-          MID: each.data().MID,
-          NIC: each.data().NIC,
-          Telephone: each.data().Telephone,
-          Balance: each.data().balance,
-          Action: (
-            <div>
-              <VisibilityIcon onClick={showModalCustomer} />
-              <span className="icon_Edit">
-                <HistoryIcon onClick={showModalCustomerHistory} />
-              </span>
-              <span className="done_btn">
-                <Button
-                  variant="contained"
-                  size="small"
-                  className="btnDone"
-                  onClick={showModalConfirmModal}
-                >
-                  Done
-                </Button>
-              </span>
-            </div>
-          ),
-        });
+        setBlackListTableRow(allTableRaw);
+        setAllData(allData);
       });
-      setBlackListTableRow(allTableRaw);
-      setAllData(allData);
-    });
     // eslint-disable-next-line
   }, []);
 

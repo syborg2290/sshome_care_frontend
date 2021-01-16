@@ -60,7 +60,8 @@ export default function Item_table_assistant() {
 
     db.collection("item")
       .orderBy("timestamp", "desc")
-      .onSnapshot((snapshot) => {
+      .get()
+      .then((snapshot) => {
         var newData = [];
         var itemData = [];
         var itemDataSeMo = [];

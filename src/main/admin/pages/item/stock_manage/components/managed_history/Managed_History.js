@@ -3,10 +3,7 @@ import { Grid } from "@material-ui/core";
 import MUIDataTable from "mui-datatables";
 import { useHistory } from "react-router-dom";
 
-
 import db from "../../../../../../../config/firebase.js";
-
-
 
 export default function Managed_History() {
   // eslint-disable-next-line
@@ -15,11 +12,7 @@ export default function Managed_History() {
   const [allData, setAllData] = useState([]);
   const [tableData, setTableData] = useState([]);
 
-
-
   let history = useHistory();
-
-  
 
   const columns = [
     {
@@ -85,7 +78,8 @@ export default function Managed_History() {
 
     db.collection("managed_stock_history")
       .orderBy("date", "desc")
-      .onSnapshot((snapshot) => {
+      .get()
+      .then((snapshot) => {
         var itemDataTable = [];
         var itemDataAll = [];
 
@@ -104,7 +98,6 @@ export default function Managed_History() {
             element.data().qty,
             element.data().from,
             element.data().to,
-           
           ]);
         });
 
@@ -116,8 +109,6 @@ export default function Managed_History() {
 
   return (
     <>
-     
-
       <Grid container spacing={4}>
         <Grid item xs={12}>
           <MUIDataTable

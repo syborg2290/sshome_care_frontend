@@ -146,80 +146,82 @@ export default function Gami_Sarani() {
     window.addEventListener("offline", function (e) {
       history.push("/connection_lost");
     });
-    db.collection("gami_sarani").onSnapshot((re) => {
-      var rawAllData = [];
-      var rawData = [];
-      re.docs.forEach((each) => {
-        rawAllData.push({
-          id: each.id,
-          data: each.data(),
-        });
-        rawData.push({
-          IMG: (
-            <img
-              alt="Empty data"
-              className="avatar_data"
-              src={
-                each.data().photo !== null
-                  ? each.data().photo
-                  : require("../../../../assets/avatar.png")
-              }
-            />
-          ),
-          FirstName: each.data().fname,
-          LastName: each.data().lname,
-          NIC: each.data().nic,
-          MemberID: each.data().mid,
-          Current_Balance: (
-            <CurrencyFormat
-              value={each.data().currentDeposit}
-              displayType={"text"}
-              thousandSeparator={true}
-              prefix={" "}
-            />
-          ),
-          Action: (
-            <div>
-              <VisibilityIcon
-                className="btnView"
-                onClick={GamisaraniViewCustomer}
+    db.collection("gami_sarani")
+      .get()
+      .then((re) => {
+        var rawAllData = [];
+        var rawData = [];
+        re.docs.forEach((each) => {
+          rawAllData.push({
+            id: each.id,
+            data: each.data(),
+          });
+          rawData.push({
+            IMG: (
+              <img
+                alt="Empty data"
+                className="avatar_data"
+                src={
+                  each.data().photo !== null
+                    ? each.data().photo
+                    : require("../../../../assets/avatar.png")
+                }
               />
-              <span>
-                <EditIcon
-                  className="btnUpdate"
-                  onClick={GamisaraniUpdateCustomer}
+            ),
+            FirstName: each.data().fname,
+            LastName: each.data().lname,
+            NIC: each.data().nic,
+            MemberID: each.data().mid,
+            Current_Balance: (
+              <CurrencyFormat
+                value={each.data().currentDeposit}
+                displayType={"text"}
+                thousandSeparator={true}
+                prefix={" "}
+              />
+            ),
+            Action: (
+              <div>
+                <VisibilityIcon
+                  className="btnView"
+                  onClick={GamisaraniViewCustomer}
                 />
-              </span>
-              <span>
-                <AccountBalanceIcon
-                  className="btnHisty"
-                  onClick={GamisaraniHistoryCustomer}
-                />
-              </span>
+                <span>
+                  <EditIcon
+                    className="btnUpdate"
+                    onClick={GamisaraniUpdateCustomer}
+                  />
+                </span>
+                <span>
+                  <AccountBalanceIcon
+                    className="btnHisty"
+                    onClick={GamisaraniHistoryCustomer}
+                  />
+                </span>
 
-              <span className="deposit_btn">
-                <Button
-                  variant="contained"
-                  size="small"
-                  className="btnDipo"
-                  onClick={GamisaraniDepositCustomer}
-                >
-                  Deposit
-                </Button>
-              </span>
-              <span>
-                <HistoryIcon
-                  className="WitdrHisty"
-                  onClick={GamisaraniWithdrawalCustomer}
-                />
-              </span>
-            </div>
-          ),
+                <span className="deposit_btn">
+                  <Button
+                    variant="contained"
+                    size="small"
+                    className="btnDipo"
+                    onClick={GamisaraniDepositCustomer}
+                  >
+                    Deposit
+                  </Button>
+                </span>
+                <span>
+                  <HistoryIcon
+                    className="WitdrHisty"
+                    onClick={GamisaraniWithdrawalCustomer}
+                  />
+                </span>
+              </div>
+            ),
+          });
         });
+        setAllTableData(rawAllData);
+        setTableData(rawData);
       });
-      setAllTableData(rawAllData);
-      setTableData(rawData);
-    });
     // eslint-disable-next-line
   }, []);
 

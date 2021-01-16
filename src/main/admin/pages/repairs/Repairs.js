@@ -183,63 +183,67 @@ export default function Repairs() {
       history2.push("/connection_lost");
     });
 
-    db.collection("repair").onSnapshot((snap) => {
-      var rawData = [];
-      var allRawData = [];
-      snap.docs.forEach((re) => {
-        allRawData.push({
-          id: re.id,
-          data: re.data(),
-        });
-        rawData.push({
-          Serial_No: re.data().serail_no,
-          Type: re.data().type,
-          ModalNo: re.data().model_no,
-          Item_Name: re.data().item_name,
-          NIC: re.data().nic,
-          Status: (
-            <span className="statusRepir">
-              {re.data().status === "accepted"
-                ? "Accepted"
-                : re.data().status === "return_to_company"
-                ? "Returned"
-                : re.data().status === "return_from_company"
-                ? "Issued from company"
-                : "Delivered"}
-            </span>
-          ),
-          Date: moment(re.data()?.date?.toDate()).format("dddd, MMMM Do YYYY"),
-          Action: (
-            <div>
-              <Button
-                variant="contained"
-                color="primary"
-                size="small"
-                className="btnupdate"
-                onClick={showModalUpdateRepair}
-              >
-                Update
-              </Button>
-              <span>
-                <VisibilityIcon
-                  onClick={showModalViewRepair}
-                  className="icon_views"
-                />
+    db.collection("repair")
+      .get()
+      .then((snap) => { 
+        var rawData = [];
+        var allRawData = [];
+        snap.docs.forEach((re) => {
+          allRawData.push({
+            id: re.id,
+            data: re.data(),
+          });
+          rawData.push({
+            Serial_No: re.data().serail_no,
+            Type: re.data().type,
+            ModalNo: re.data().model_no,
+            Item_Name: re.data().item_name,
+            NIC: re.data().nic,
+            Status: (
+              <span className="statusRepir">
+                {re.data().status === "accepted"
+                  ? "Accepted"
+                  : re.data().status === "return_to_company"
+                  ? "Returned"
+                  : re.data().status === "return_from_company"
+                  ? "Issued from company"
+                  : "Delivered"}
               </span>
-              <span>
-                <PrintRoundedIcon
-                  className="icon_print"
-                  onClick={showVisibleConfirmPrintModal}
-                />
-              </span>
-            </div>
-          ),
+            ),
+            Date: moment(re.data()?.date?.toDate()).format(
+              "dddd, MMMM Do YYYY"
+            ),
+            Action: (
+              <div>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  size="small"
+                  className="btnupdate"
+                  onClick={showModalUpdateRepair}
+                >
+                  Update
+                </Button>
+                <span>
+                  <VisibilityIcon
+                    onClick={showModalViewRepair}
+                    className="icon_views"
+                  />
+                </span>
+                <span>
+                  <PrintRoundedIcon
+                    className="icon_print"
+                    onClick={showVisibleConfirmPrintModal}
+                  />
+                </span>
+              </div>
+            ),
+          });
         });
+        setRepairTableData(rawData);
+        setRepairAllData(allRawData);
+        setIsLoading(false);
       });
-      setRepairTableData(rawData);
-      setRepairAllData(allRawData);
-      setIsLoading(false);
-    });
     // eslint-disable-next-line
   }, []);
 

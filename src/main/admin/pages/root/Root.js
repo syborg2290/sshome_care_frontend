@@ -133,64 +133,66 @@ export default function Root() {
       history.push("/connection_lost");
     });
 
-    db.collection("root").onSnapshot((snap) => {
-      var raw = [];
-      var rawAll = [];
-      snap.docs.forEach((each) => {
-        rawAll.push({
-          id: each.id,
-          data: each.data(),
+    db.collection("root")
+      .get()
+      .then((snap) => {
+        var raw = [];
+        var rawAll = [];
+        snap.docs.forEach((each) => {
+          rawAll.push({
+            id: each.id,
+            data: each.data(),
+          });
+          raw.push({
+            Root: each.data().root,
+            Monday: each.data().days[0].monday ? (
+              <div className="yes">Out</div>
+            ) : (
+              <div className="no">In</div>
+            ),
+            Tuseday: each.data().days[0].tuesday ? (
+              <div className="yes">Out</div>
+            ) : (
+              <div className="no">In</div>
+            ),
+            Wednesday: each.data().days[0].wendsday ? (
+              <div className="yes">Out</div>
+            ) : (
+              <div className="no">In</div>
+            ),
+            Thursday: each.data().days[0].thursday ? (
+              <div className="yes">Out</div>
+            ) : (
+              <div className="no">In</div>
+            ),
+            Friday: each.data().days[0].friday ? (
+              <div className="yes">Out</div>
+            ) : (
+              <div className="no">In</div>
+            ),
+            Saturday: each.data().days[0].saturday ? (
+              <div className="yes">Out</div>
+            ) : (
+              <div className="no">In</div>
+            ),
+            Sunday: each.data().days[0].sunday ? (
+              <div className="yes">Out</div>
+            ) : (
+              <div className="no">In</div>
+            ),
+            Action: (
+              <div>
+                <VisibilityIcon className="btnView-root" onClick={RootView} />
+                <span>
+                  <EditIcon className="btnEdit-root" onClick={RootUpdate} />
+                </span>
+              </div>
+            ),
+          });
         });
-        raw.push({
-          Root: each.data().root,
-          Monday: each.data().days[0].monday ? (
-            <div className="yes">Out</div>
-          ) : (
-            <div className="no">In</div>
-          ),
-          Tuseday: each.data().days[0].tuesday ? (
-            <div className="yes">Out</div>
-          ) : (
-            <div className="no">In</div>
-          ),
-          Wednesday: each.data().days[0].wendsday ? (
-            <div className="yes">Out</div>
-          ) : (
-            <div className="no">In</div>
-          ),
-          Thursday: each.data().days[0].thursday ? (
-            <div className="yes">Out</div>
-          ) : (
-            <div className="no">In</div>
-          ),
-          Friday: each.data().days[0].friday ? (
-            <div className="yes">Out</div>
-          ) : (
-            <div className="no">In</div>
-          ),
-          Saturday: each.data().days[0].saturday ? (
-            <div className="yes">Out</div>
-          ) : (
-            <div className="no">In</div>
-          ),
-          Sunday: each.data().days[0].sunday ? (
-            <div className="yes">Out</div>
-          ) : (
-            <div className="no">In</div>
-          ),
-          Action: (
-            <div>
-              <VisibilityIcon className="btnView-root" onClick={RootView} />
-              <span>
-                <EditIcon className="btnEdit-root" onClick={RootUpdate} />
-              </span>
-            </div>
-          ),
-        });
+        setTableData(raw);
+        setAllTableData(rawAll);
       });
-      setTableData(raw);
-      setAllTableData(rawAll);
-    });
     // eslint-disable-next-line
   }, []);
 

@@ -116,52 +116,54 @@ export default function Attendance() {
       history.push("/connection_lost");
     });
 
-    db.collection("attendance_history").onSnapshot((snap) => {
-      var rawData = [];
-      var allRawData = [];
-      snap.docs.forEach((reSnap) => {
-        if (
-          new Date(reSnap.data().date?.seconds * 1000).getFullYear() ===
-          new Date().getFullYear()
-        ) {
+    db.collection("attendance_history")
+      .get()
+      .then((snap) => {
+        var rawData = [];
+        var allRawData = [];
+        snap.docs.forEach((reSnap) => {
           if (
-            new Date(reSnap.data().date?.seconds * 1000).getMonth() ===
-            new Date().getMonth()
+            new Date(reSnap.data().date?.seconds * 1000).getFullYear() ===
+            new Date().getFullYear()
           ) {
             if (
-              new Date(reSnap.data().date?.seconds * 1000).getDate() ===
-              new Date().getDate()
+              new Date(reSnap.data().date?.seconds * 1000).getMonth() ===
+              new Date().getMonth()
             ) {
-              allRawData.push({
-                id: reSnap.id,
-                data: reSnap.data(),
-              });
-              rawData.push({
-                FirstName: reSnap.data().fname,
-                LastName: reSnap.data().lname,
-                NIC: reSnap.data().nic,
-                Status:
-                  reSnap.data().status === "full" ? (
-                    <div className="workingStts">Fullday</div>
-                  ) : (
-                    <div className="workingSttsHald">Halfday</div>
+              if (
+                new Date(reSnap.data().date?.seconds * 1000).getDate() ===
+                new Date().getDate()
+              ) {
+                allRawData.push({
+                  id: reSnap.id,
+                  data: reSnap.data(),
+                });
+                rawData.push({
+                  FirstName: reSnap.data().fname,
+                  LastName: reSnap.data().lname,
+                  NIC: reSnap.data().nic,
+                  Status:
+                    reSnap.data().status === "full" ? (
+                      <div className="workingStts">Fullday</div>
+                    ) : (
+                      <div className="workingSttsHald">Halfday</div>
+                    ),
+                  Action: (
+                    <div>
+                      <VisibilityIcon onClick={showModalView} />
+                      <span className="icon_Edit">
+                        <AutorenewIcon onClick={showModalStatusUpdate} />
+                      </span>
+                    </div>
                   ),
-                Action: (
-                  <div>
-                    <VisibilityIcon onClick={showModalView} />
-                    <span className="icon_Edit">
-                      <AutorenewIcon onClick={showModalStatusUpdate} />
-                    </span>
-                  </div>
-                ),
-              });
+                });
+              }
             }
           }
-        }
+        });
+        setAllTableData(allRawData);
+        setAttendanceTableRow(rawData);
       });
-      setAllTableData(allRawData);
-      setAttendanceTableRow(rawData);
-    });
     // eslint-disable-next-line
   }, []);
 

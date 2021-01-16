@@ -113,7 +113,7 @@ export default function CustomerTable() {
 
     db.collection("customer")
       .orderBy("date", "desc")
-      .onSnapshot((custDoc) => {
+      .get().then((custDoc) => {
         let rawData = [];
         let rawAllData = [];
         custDoc.docs.forEach((siDoc) => {

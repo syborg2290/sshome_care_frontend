@@ -136,7 +136,7 @@ export default function Arreas_Table() {
 
     db.collection("arrears")
       .orderBy("date", "desc")
-      .onSnapshot((onSnap) => {
+      .get().then((onSnap) => {
         var rawData = [];
         var rawAllData = [];
         onSnap.docs.forEach((eachRe) => {

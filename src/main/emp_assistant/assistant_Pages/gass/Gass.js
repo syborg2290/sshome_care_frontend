@@ -68,31 +68,33 @@ export default function Gass() {
       history.push("/connection_lost");
     });
 
-    db.collection("gas").onSnapshot((snap) => {
-      var raw = [];
-      var rawAll = [];
-      snap.docs.forEach((each) => {
-        rawAll.push({
-          id: each.id,
-          data: each.data(),
-          weight: each.data().weight,
+    db.collection("gas")
+      .get()
+      .then((snap) => {
+        var raw = [];
+        var rawAll = [];
+        snap.docs.forEach((each) => {
+          rawAll.push({
+            id: each.id,
+            data: each.data(),
+            weight: each.data().weight,
+          });
+          raw.push(
+            createData(
+              each.data().weight + " Kg",
+              each.data().qty,
+              <CurrencyFormat
+                value={each.data().price}
+                displayType={"text"}
+                thousandSeparator={true}
+                prefix={" "}
+              />
+            )
+          );
         });
-        raw.push(
-          createData(
-            each.data().weight + " Kg",
-            each.data().qty,
-            <CurrencyFormat
-              value={each.data().price}
-              displayType={"text"}
-              thousandSeparator={true}
-              prefix={" "}
-            />
-          )
-        );
+        setAllTableData(rawAll);
+        setTableData(raw);
       });
-      setAllTableData(rawAll);
-      setTableData(raw);
-    });
     // eslint-disable-next-line
   }, []);
 

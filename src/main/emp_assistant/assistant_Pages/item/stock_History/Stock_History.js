@@ -42,7 +42,8 @@ export default function Stock_History() {
 
     db.collection("item_history")
       .orderBy("timestamp", "desc")
-      .onSnapshot((snapshot) => {
+      .get()
+      .then((snapshot) => {
         var newData = [];
         var itemData = [];
         var itemDataSeMo = [];
@@ -417,11 +418,7 @@ export default function Stock_History() {
                             <TableCell component="th" scope="row">
                               {itemListSeMo[currentIndx]?.modelNo.map(
                                 (modelNoT) => (
-                                  <h5
-                                    key={
-                                      Math.random().toString()
-                                    }
-                                  >
+                                  <h5 key={Math.random().toString()}>
                                     {modelNoT}
                                   </h5>
                                 )

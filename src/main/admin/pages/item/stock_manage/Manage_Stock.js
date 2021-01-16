@@ -70,7 +70,7 @@ export default function Manage_Stock() {
 
     db.collection("item")
       .orderBy("timestamp", "desc")
-      .onSnapshot((snapshot) => {
+      .get().then((snapshot) => {
         var newData = [];
         var itemData = [];
 

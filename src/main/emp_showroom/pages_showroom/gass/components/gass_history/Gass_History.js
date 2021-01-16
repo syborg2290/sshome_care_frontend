@@ -62,7 +62,7 @@ export default function Gass_History() {
   useEffect(() => {
     db.collection("gas_history")
       .orderBy("date", "desc")
-      .onSnapshot((snap) => {
+      .get().then((snap) => {
         var raw = [];
 
         snap.docs.forEach((each) => {

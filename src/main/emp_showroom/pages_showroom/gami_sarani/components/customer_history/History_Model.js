@@ -69,7 +69,8 @@ export default function History_Model({ mid }) {
     db.collection("gami_sarani_deposit")
       .where("mid", "==", mid)
       .orderBy("date", "desc")
-      .onSnapshot((re) => {
+      .get()
+      .then((re) => {
         var raw = [];
         re.docs.forEach((each) => {
           raw.push({

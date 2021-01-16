@@ -368,7 +368,8 @@ export default function Invoice_history() {
 
     db.collection("invoice")
       .where("status_of_payandgo", "==", "onGoing")
-      .onSnapshot((custIn) => {
+      .get()
+      .then((custIn) => {
         custIn.docs.forEach((siDoc) => {
           let isBeforeDate = isDateBeforeToday(
             new Date(siDoc.data()?.deadlineTimestamp?.seconds * 1000)
@@ -384,7 +385,8 @@ export default function Invoice_history() {
       // .orderBy("customer_id", "desc")
       .where("customer_id", "!=", null)
       // .orderBy("date", "desc")
-      .onSnapshot((cust) => {
+      .get()
+      .then((cust) => {
         var rawData = [];
         var rawAllData = [];
 
@@ -528,7 +530,8 @@ export default function Invoice_history() {
       // .orderBy("customer_id", "desc")
       .orderBy("date", "desc")
       .where("customer_id", "==", null)
-      .onSnapshot((cust) => {
+      .get()
+      .then((cust) => {
         var rawDataFull = [];
         var rawAllDataFull = [];
         cust.docs.forEach((siDoc) => {

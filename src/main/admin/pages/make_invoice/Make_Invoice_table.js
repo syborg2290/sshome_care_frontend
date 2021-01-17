@@ -37,6 +37,7 @@ export default function Make_Invoice_table() {
   var [selectedItems, setSelectedItems] = useState([]);
   // eslint-disable-next-line
   const [itemList, setItemList] = useState([]);
+  const [rowsCount, setRowsCount] = useState(0);
 
   let history = useHistory();
 
@@ -50,8 +51,12 @@ export default function Make_Invoice_table() {
       history.push("/connection_lost");
     });
 
+    let rowsCountUse = rowsCount + 25;
+    setRowsCount(rowsCountUse);
+
     db.collection("item")
       .orderBy("timestamp", "desc")
+      .limit(25)
       .get()
       .then((snapshot) => {
         var newData = [];
@@ -301,6 +306,180 @@ export default function Make_Invoice_table() {
               selectableRowsHeader: false,
               onRowClick: (rowData, rowMeta) => {
                 setCurrentIndx(rowMeta.dataIndex);
+              },
+              onChangeRowsPerPage: (rowsCountNumber) => {
+                setIsLoading(true);
+                let rowsCountUseIn = rowsCount + rowsCountNumber;
+                setRowsCount(rowsCountUseIn);
+                db.collection("item")
+                  .orderBy("timestamp", "desc")
+                  .limit(rowsCountUseIn)
+                  .get()
+                  .then((snapshot) => {
+                    var newData = [];
+                    var itemData = [];
+                    var itemDataSeMo = [];
+                    var itemDataSeMoCon = [];
+
+                    if (snapshot.docs.length > 0) {
+                      itemDataSeMoCon.push({
+                        serialNo: snapshot.docs[0].data().serialNo,
+                        modelNo: snapshot.docs[0].modelNo,
+                        chassisNo: snapshot.docs[0].chassisNo,
+                      });
+                    }
+                    snapshot.docs.forEach((element) => {
+                      itemData.push({
+                        id: element.id,
+                        data: element.data(),
+                      });
+
+                      itemDataSeMo.push({
+                        serialNo: element.data().serialNo,
+                        modelNo: element.data().modelNo,
+                        chassisNo: element.data().chassisNo,
+                      });
+
+                      newData.push([
+                        element.data().itemName,
+                        element.data().brand,
+                        element.data().qty,
+                        element.data().color === ""
+                          ? " - "
+                          : element.data().color,
+                        element.data().guaranteePeriod === ""
+                          ? " - "
+                          : element.data().guaranteePeriod +
+                            " " +
+                            element.data().guarantee.value.toLowerCase(),
+                        <CurrencyFormat
+                          value={element.data().salePrice}
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          prefix={" "}
+                        />,
+                        <CurrencyFormat
+                          value={element.data().cashPrice}
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          prefix={" "}
+                        />,
+                        element.data().stock_type,
+                        <div
+                          color="secondary"
+                          size="small"
+                          className={
+                            element.data().qty !== 0
+                              ? element.data().qty >= 3
+                                ? "px-2"
+                                : "px-3"
+                              : "px-4"
+                          }
+                          variant="contained"
+                        >
+                          {element.data().qty !== 0 ? (
+                            element.data().qty >= 3 ? (
+                              <p className="status">Available</p>
+                            ) : (
+                              <p className="status">Low Stock</p>
+                            )
+                          ) : (
+                            <p className="status">Out Of Stock</p>
+                          )}
+                        </div>,
+                      ]);
+                    });
+                    setItemTableData(newData);
+                    setAllItemData(itemData);
+                    setIsLoading(false);
+                  });
+              },
+              onChangePage: () => {
+                setIsLoading(true);
+                let rowsCountUseIn = rowsCount + 25;
+                setRowsCount(rowsCountUseIn);
+                db.collection("item")
+                  .orderBy("timestamp", "desc")
+                  .limit(rowsCountUseIn)
+                  .get()
+                  .then((snapshot) => {
+                    var newData = [];
+                    var itemData = [];
+                    var itemDataSeMo = [];
+                    var itemDataSeMoCon = [];
+
+                    if (snapshot.docs.length > 0) {
+                      itemDataSeMoCon.push({
+                        serialNo: snapshot.docs[0].data().serialNo,
+                        modelNo: snapshot.docs[0].modelNo,
+                        chassisNo: snapshot.docs[0].chassisNo,
+                      });
+                    }
+                    snapshot.docs.forEach((element) => {
+                      itemData.push({
+                        id: element.id,
+                        data: element.data(),
+                      });
+
+                      itemDataSeMo.push({
+                        serialNo: element.data().serialNo,
+                        modelNo: element.data().modelNo,
+                        chassisNo: element.data().chassisNo,
+                      });
+
+                      newData.push([
+                        element.data().itemName,
+                        element.data().brand,
+                        element.data().qty,
+                        element.data().color === ""
+                          ? " - "
+                          : element.data().color,
+                        element.data().guaranteePeriod === ""
+                          ? " - "
+                          : element.data().guaranteePeriod +
+                            " " +
+                            element.data().guarantee.value.toLowerCase(),
+                        <CurrencyFormat
+                          value={element.data().salePrice}
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          prefix={" "}
+                        />,
+                        <CurrencyFormat
+                          value={element.data().cashPrice}
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          prefix={" "}
+                        />,
+                        element.data().stock_type,
+                        <div
+                          color="secondary"
+                          size="small"
+                          className={
+                            element.data().qty !== 0
+                              ? element.data().qty >= 3
+                                ? "px-2"
+                                : "px-3"
+                              : "px-4"
+                          }
+                          variant="contained"
+                        >
+                          {element.data().qty !== 0 ? (
+                            element.data().qty >= 3 ? (
+                              <p className="status">Available</p>
+                            ) : (
+                              <p className="status">Low Stock</p>
+                            )
+                          ) : (
+                            <p className="status">Out Of Stock</p>
+                          )}
+                        </div>,
+                      ]);
+                    });
+                    setItemTableData(newData);
+                    setAllItemData(itemData);
+                    setIsLoading(false);
+                  });
               },
               textLabels: {
                 body: {

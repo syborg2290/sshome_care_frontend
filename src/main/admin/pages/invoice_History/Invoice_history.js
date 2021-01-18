@@ -88,6 +88,8 @@ export default function Invoice_history() {
   let history = useHistory();
   let history2 = useHistory();
 
+  const [rowsCount, setRowsCount] = useState(0);
+
   const showVisibleConfirmPrintModal = (type) => {
     setPrintType(type);
     setVisibleConfirmPrint(true);
@@ -368,7 +370,8 @@ export default function Invoice_history() {
 
     db.collection("invoice")
       .where("status_of_payandgo", "==", "onGoing")
-      .get().then((custIn) => {
+      .get()
+      .then((custIn) => {
         custIn.docs.forEach((siDoc) => {
           let isBeforeDate = isDateBeforeToday(
             new Date(siDoc.data()?.deadlineTimestamp?.seconds * 1000)
@@ -380,11 +383,17 @@ export default function Invoice_history() {
           }
         });
       });
+
+    let rowsCountUse = rowsCount + 25;
+    setRowsCount(rowsCountUse);
+
     db.collection("invoice")
       // .orderBy("customer_id", "desc")
       .where("customer_id", "!=", null)
       // .orderBy("date", "desc")
-      .get().then((cust) => {
+      .limit(25)
+      .get()
+      .then((cust) => {
         var rawData = [];
         var rawAllData = [];
 
@@ -528,7 +537,8 @@ export default function Invoice_history() {
       // .orderBy("customer_id", "desc")
       .orderBy("date", "desc")
       .where("customer_id", "==", null)
-      .get().then((cust) => {
+      .get()
+      .then((cust) => {
         var rawDataFull = [];
         var rawAllDataFull = [];
         cust.docs.forEach((siDoc) => {
@@ -736,6 +746,330 @@ export default function Invoice_history() {
                   sort: true,
                   onRowClick: (rowData, rowMeta) => {
                     setCurrentIndx2(rowMeta.dataIndex);
+                  },
+                  onChangeRowsPerPage: (rowsCountNumber) => {
+                    setIsLoading(true);
+                    let rowsCountUseIn = rowsCount + rowsCountNumber;
+                    setRowsCount(rowsCountUseIn);
+                    db.collection("invoice")
+                      // .orderBy("customer_id", "desc")
+                      .where("customer_id", "!=", null)
+                      // .orderBy("date", "desc")
+                      .limit(rowsCountUseIn)
+                      .get()
+                      .then((cust) => {
+                        var rawData = [];
+                        var rawAllData = [];
+
+                        var reArray = cust.docs;
+                        reArray.sort((a, b) => {
+                          if (
+                            new Date(
+                              a.data().date.seconds * 1000
+                            ).getFullYear() >=
+                              new Date(
+                                b.data().date.seconds * 1000
+                              ).getFullYear() &&
+                            new Date(a.data().date.seconds * 1000).getMonth() >=
+                              new Date(
+                                b.data().date.seconds * 1000
+                              ).getMonth() &&
+                            new Date(a.data().date.seconds * 1000).getDate() >=
+                              new Date(b.data().date.seconds * 1000).getDate()
+                          ) {
+                            return -1;
+                          } else {
+                            return 1;
+                          }
+                        });
+
+                        reArray.forEach((siDoc) => {
+                          rawAllData.push({
+                            id: siDoc.id,
+                            data: siDoc.data(),
+                          });
+
+                          rawData.push({
+                            InvoiceNo: siDoc.data().invoice_number,
+                            // SerialNo: siDoc.data().items[0].serialNo,
+                            Type: siDoc.data().selectedType,
+                            Village: siDoc.data().root_village,
+                            Date: moment(siDoc.data()?.date?.toDate()).format(
+                              "dddd, MMMM Do YYYY"
+                            ),
+                            MID: siDoc.data().mid,
+                            NIC: siDoc.data().nic,
+                            Total_Discount: (
+                              <CurrencyFormat
+                                value={siDoc.data().discount}
+                                displayType={"text"}
+                                thousandSeparator={true}
+                                prefix={" "}
+                              />
+                            ),
+
+                            Balance: (
+                              <CurrencyFormat
+                                value={siDoc.data().balance}
+                                displayType={"text"}
+                                thousandSeparator={true}
+                                prefix={" "}
+                              />
+                            ),
+                            Status:
+                              siDoc.data().status_of_payandgo === "onGoing" ? (
+                                <span
+                                  style={{
+                                    color: "black",
+                                    backgroundColor: "#e6e600",
+                                    padding: "6px",
+                                    borderRadius: "20px",
+                                    font: "10px",
+                                  }}
+                                >
+                                  Ongoing
+                                </span>
+                              ) : siDoc.data().status_of_payandgo === "Done" ? (
+                                <span
+                                  style={{
+                                    color: "white",
+                                    backgroundColor: "#009900",
+                                    padding: "6px",
+                                    borderRadius: "20px",
+                                    width: "100%",
+                                  }}
+                                >
+                                  Done
+                                </span>
+                              ) : siDoc.data().status_of_payandgo ===
+                                "expired" ? (
+                                <span
+                                  style={{
+                                    color: "white",
+                                    backgroundColor: "#ff8c00",
+                                    padding: "6px",
+                                    borderRadius: "20px",
+                                    width: "100%",
+                                  }}
+                                >
+                                  Expired
+                                </span>
+                              ) : (
+                                <span
+                                  style={{
+                                    color: "white",
+                                    backgroundColor: "red",
+                                    padding: "6px",
+                                    borderRadius: "20px",
+                                    width: "100%",
+                                  }}
+                                >
+                                  Blacklist
+                                </span>
+                              ),
+                            Action: (
+                              <div>
+                                {siDoc.data().status_of_payandgo ===
+                                  "onGoing" ||
+                                siDoc.data().status_of_payandgo ===
+                                  "expired" ? (
+                                  <Button
+                                    variant="contained"
+                                    color="primary"
+                                    size="small"
+                                    className="btn_pay"
+                                    onClick={showModalUpdate}
+                                  >
+                                    Update
+                                  </Button>
+                                ) : (
+                                  ""
+                                )}
+                                <span className="icon_visibl">
+                                  <HistoryIcon onClick={showModalHistory} />
+                                </span>
+                                <span className="icon_Edit">
+                                  <VisibilityIcon
+                                    onClick={showInstallmentView}
+                                  />
+                                </span>
+                                <span className="icon_print">
+                                  <PrintRoundedIcon
+                                    onClick={() =>
+                                      showVisibleConfirmPrintModal("payandgo")
+                                    }
+                                  />
+                                </span>
+                              </div>
+                            ),
+                          });
+                        });
+                        setpayangoAllData(rawAllData);
+                        setpayangoTableData(rawData);
+                        setIsLoading(false);
+                      });
+                  },
+                  onChangePage: () => {
+                    setIsLoading(true);
+                    let rowsCountUseIn = rowsCount + 25;
+                    setRowsCount(rowsCountUseIn);
+                    db.collection("invoice")
+                      // .orderBy("customer_id", "desc")
+                      .where("customer_id", "!=", null)
+                      // .orderBy("date", "desc")
+                      .limit(rowsCountUseIn)
+                      .get()
+                      .then((cust) => {
+                        var rawData = [];
+                        var rawAllData = [];
+
+                        var reArray = cust.docs;
+                        reArray.sort((a, b) => {
+                          if (
+                            new Date(
+                              a.data().date.seconds * 1000
+                            ).getFullYear() >=
+                              new Date(
+                                b.data().date.seconds * 1000
+                              ).getFullYear() &&
+                            new Date(a.data().date.seconds * 1000).getMonth() >=
+                              new Date(
+                                b.data().date.seconds * 1000
+                              ).getMonth() &&
+                            new Date(a.data().date.seconds * 1000).getDate() >=
+                              new Date(b.data().date.seconds * 1000).getDate()
+                          ) {
+                            return -1;
+                          } else {
+                            return 1;
+                          }
+                        });
+
+                        reArray.forEach((siDoc) => {
+                          rawAllData.push({
+                            id: siDoc.id,
+                            data: siDoc.data(),
+                          });
+
+                          rawData.push({
+                            InvoiceNo: siDoc.data().invoice_number,
+                            // SerialNo: siDoc.data().items[0].serialNo,
+                            Type: siDoc.data().selectedType,
+                            Village: siDoc.data().root_village,
+                            Date: moment(siDoc.data()?.date?.toDate()).format(
+                              "dddd, MMMM Do YYYY"
+                            ),
+                            MID: siDoc.data().mid,
+                            NIC: siDoc.data().nic,
+                            Total_Discount: (
+                              <CurrencyFormat
+                                value={siDoc.data().discount}
+                                displayType={"text"}
+                                thousandSeparator={true}
+                                prefix={" "}
+                              />
+                            ),
+
+                            Balance: (
+                              <CurrencyFormat
+                                value={siDoc.data().balance}
+                                displayType={"text"}
+                                thousandSeparator={true}
+                                prefix={" "}
+                              />
+                            ),
+                            Status:
+                              siDoc.data().status_of_payandgo === "onGoing" ? (
+                                <span
+                                  style={{
+                                    color: "black",
+                                    backgroundColor: "#e6e600",
+                                    padding: "6px",
+                                    borderRadius: "20px",
+                                    font: "10px",
+                                  }}
+                                >
+                                  Ongoing
+                                </span>
+                              ) : siDoc.data().status_of_payandgo === "Done" ? (
+                                <span
+                                  style={{
+                                    color: "white",
+                                    backgroundColor: "#009900",
+                                    padding: "6px",
+                                    borderRadius: "20px",
+                                    width: "100%",
+                                  }}
+                                >
+                                  Done
+                                </span>
+                              ) : siDoc.data().status_of_payandgo ===
+                                "expired" ? (
+                                <span
+                                  style={{
+                                    color: "white",
+                                    backgroundColor: "#ff8c00",
+                                    padding: "6px",
+                                    borderRadius: "20px",
+                                    width: "100%",
+                                  }}
+                                >
+                                  Expired
+                                </span>
+                              ) : (
+                                <span
+                                  style={{
+                                    color: "white",
+                                    backgroundColor: "red",
+                                    padding: "6px",
+                                    borderRadius: "20px",
+                                    width: "100%",
+                                  }}
+                                >
+                                  Blacklist
+                                </span>
+                              ),
+                            Action: (
+                              <div>
+                                {siDoc.data().status_of_payandgo ===
+                                  "onGoing" ||
+                                siDoc.data().status_of_payandgo ===
+                                  "expired" ? (
+                                  <Button
+                                    variant="contained"
+                                    color="primary"
+                                    size="small"
+                                    className="btn_pay"
+                                    onClick={showModalUpdate}
+                                  >
+                                    Update
+                                  </Button>
+                                ) : (
+                                  ""
+                                )}
+                                <span className="icon_visibl">
+                                  <HistoryIcon onClick={showModalHistory} />
+                                </span>
+                                <span className="icon_Edit">
+                                  <VisibilityIcon
+                                    onClick={showInstallmentView}
+                                  />
+                                </span>
+                                <span className="icon_print">
+                                  <PrintRoundedIcon
+                                    onClick={() =>
+                                      showVisibleConfirmPrintModal("payandgo")
+                                    }
+                                  />
+                                </span>
+                              </div>
+                            ),
+                          });
+                        });
+                        setpayangoAllData(rawAllData);
+                        setpayangoTableData(rawData);
+                        setIsLoading(false);
+                      });
                   },
                   textLabels: {
                     body: {

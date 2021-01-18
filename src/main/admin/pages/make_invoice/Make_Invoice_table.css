@@ -2,6 +2,15 @@
   margin-top: 70px !important;
 }
 
+.loadAll {
+  margin-top: 70px !important;
+  float: right !important;
+  margin-bottom: -30px !important;
+  background-color: darkblue !important;
+  color: white !important;
+  margin-right: 40px !important;
+}
+
 .btn_MakeInvoice_itm {
   margin-top: 70px !important;
   float: right !important;

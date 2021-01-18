@@ -10,6 +10,15 @@
   color: aliceblue !important;
 }
 
+.loadAll {
+  margin-top: 70px !important;
+  float: right !important;
+  margin-bottom: -30px !important;
+  background-color: darkblue !important;
+  color: white !important;
+  margin-right: 40px !important;
+}
+
 .selectedItems {
   width: 30% !important;
 }

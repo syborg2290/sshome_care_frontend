@@ -313,7 +313,7 @@ export default function Manage_Stock() {
                 setRowsCount(rowsCountUseIn);
                 db.collection("item")
                   .orderBy("timestamp", "desc")
-                  .limit(25)
+                  .limit(rowsCountUseIn)
                   .get()
                   .then((snapshot) => {
                     var newData = [];
@@ -386,7 +386,7 @@ export default function Manage_Stock() {
                 setRowsCount(rowsCountUseIn);
                 db.collection("item")
                   .orderBy("timestamp", "desc")
-                  .limit(25)
+                  .limit(rowsCountUseIn)
                   .get()
                   .then((snapshot) => {
                     var newData = [];

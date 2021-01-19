@@ -64,7 +64,7 @@ export default function Item_table_assistant() {
 
     db.collection("item")
       .orderBy("timestamp", "desc")
-      .limit(25)
+      // .limit(25)
       .get()
       .then((snapshot) => {
         var newData = [];
@@ -735,196 +735,196 @@ export default function Item_table_assistant() {
               onRowClick: (rowData, rowMeta) => {
                 setCurrentIndx(rowMeta.dataIndex);
               },
-              onChangeRowsPerPage: (rowsCountNumber) => {
-                setIsLoading(true);
-                let rowsCountUseIn = rowsCount + rowsCountNumber;
-                setRowsCount(rowsCountUseIn);
-                db.collection("item")
-                  .orderBy("timestamp", "desc")
-                  .limit(rowsCountUseIn)
-                  .get()
-                  .then((snapshot) => {
-                    var newData = [];
-                    var itemData = [];
-                    var itemDataSeMo = [];
-                    var itemDataSeMoCon = [];
-                    if (snapshot.docs.length > 0) {
-                      itemDataSeMoCon.push({
-                        serialNo: snapshot.docs[0].data().serialNo,
-                        modelNo: snapshot.docs[0].modelNo,
-                        chassisNo: snapshot.docs[0].chassisNo,
-                      });
-                    }
-                    snapshot.docs.forEach((element) => {
-                      itemData.push({
-                        id: element.id,
-                        data: element.data(),
-                      });
-                      itemDataSeMo.push({
-                        serialNo: element.data().serialNo,
-                        modelNo: element.data().modelNo,
-                        chassisNo: element.data().chassisNo,
-                      });
-                      newData.push([
-                        element.data().itemName,
-                        element.data().brand,
-                        element.data().modelNoExtra,
-                        element.data().qty,
-                        element.data().color === ""
-                          ? " - "
-                          : element.data().color,
-                        element.data().guaranteePeriod === ""
-                          ? " - "
-                          : element.data().guaranteePeriod +
-                            " " +
-                            element.data().guarantee.value.toLowerCase(),
-                        <CurrencyFormat
-                          value={element.data().salePrice}
-                          displayType={"text"}
-                          thousandSeparator={true}
-                          prefix={" "}
-                        />,
-                        <CurrencyFormat
-                          value={element.data().cashPrice}
-                          displayType={"text"}
-                          thousandSeparator={true}
-                          prefix={" "}
-                        />,
-                        element.data().stock_type,
-                        <div
-                          color="secondary"
-                          size="small"
-                          className={
-                            element.data().qty !== 0
-                              ? element.data().qty >= 3
-                                ? "px-2"
-                                : "px-3"
-                              : "px-4"
-                          }
-                          variant="contained"
-                        >
-                          {element.data().qty !== 0 ? (
-                            element.data().qty >= 3 ? (
-                              <p className="status">Available</p>
-                            ) : (
-                              <p className="status">Low Stock</p>
-                            )
-                          ) : (
-                            <p className="status">Out Of Stock</p>
-                          )}
-                        </div>,
-                        <div className="table_icon">
-                          <VisibilityIcon onClick={showModal} />
-                          {element.data().stock_type === "main" ? (
-                            <span className="icon_Edit">
-                              <EditIcon onClick={editModal} />
-                            </span>
-                          ) : null}
-                        </div>,
-                      ]);
-                    });
-                    setItemTableData(newData);
-                    setAllItemData(itemData);
-                    setItemListSeMo(itemDataSeMo);
-                    setItemListSeMoCon(itemDataSeMoCon);
-                    setIsLoading(false);
-                  });
-              },
-              onChangePage: () => {
-                setIsLoading(true);
-                let rowsCountUseIn = rowsCount + 25;
-                setRowsCount(rowsCountUseIn);
-                db.collection("item")
-                  .orderBy("timestamp", "desc")
-                  .limit(rowsCountUseIn)
-                  .get()
-                  .then((snapshot) => {
-                    var newData = [];
-                    var itemData = [];
-                    var itemDataSeMo = [];
-                    var itemDataSeMoCon = [];
-                    if (snapshot.docs.length > 0) {
-                      itemDataSeMoCon.push({
-                        serialNo: snapshot.docs[0].data().serialNo,
-                        modelNo: snapshot.docs[0].modelNo,
-                        chassisNo: snapshot.docs[0].chassisNo,
-                      });
-                    }
-                    snapshot.docs.forEach((element) => {
-                      itemData.push({
-                        id: element.id,
-                        data: element.data(),
-                      });
-                      itemDataSeMo.push({
-                        serialNo: element.data().serialNo,
-                        modelNo: element.data().modelNo,
-                        chassisNo: element.data().chassisNo,
-                      });
-                      newData.push([
-                        element.data().itemName,
-                        element.data().brand,
-                        element.data().modelNoExtra,
-                        element.data().qty,
-                        element.data().color === ""
-                          ? " - "
-                          : element.data().color,
-                        element.data().guaranteePeriod === ""
-                          ? " - "
-                          : element.data().guaranteePeriod +
-                            " " +
-                            element.data().guarantee.value.toLowerCase(),
-                        <CurrencyFormat
-                          value={element.data().salePrice}
-                          displayType={"text"}
-                          thousandSeparator={true}
-                          prefix={" "}
-                        />,
-                        <CurrencyFormat
-                          value={element.data().cashPrice}
-                          displayType={"text"}
-                          thousandSeparator={true}
-                          prefix={" "}
-                        />,
-                        element.data().stock_type,
-                        <div
-                          color="secondary"
-                          size="small"
-                          className={
-                            element.data().qty !== 0
-                              ? element.data().qty >= 3
-                                ? "px-2"
-                                : "px-3"
-                              : "px-4"
-                          }
-                          variant="contained"
-                        >
-                          {element.data().qty !== 0 ? (
-                            element.data().qty >= 3 ? (
-                              <p className="status">Available</p>
-                            ) : (
-                              <p className="status">Low Stock</p>
-                            )
-                          ) : (
-                            <p className="status">Out Of Stock</p>
-                          )}
-                        </div>,
-                        <div className="table_icon">
-                          <VisibilityIcon onClick={showModal} />
-                          {element.data().stock_type === "main" ? (
-                            <span className="icon_Edit">
-                              <EditIcon onClick={editModal} />
-                            </span>
-                          ) : null}
-                        </div>,
-                      ]);
-                    });
-                    setItemTableData(newData);
-                    setAllItemData(itemData);
-                    setItemListSeMo(itemDataSeMo);
-                    setItemListSeMoCon(itemDataSeMoCon);
-                    setIsLoading(false);
-                  });
-              },
+              // onChangeRowsPerPage: (rowsCountNumber) => {
+              //   setIsLoading(true);
+              //   let rowsCountUseIn = rowsCount + rowsCountNumber;
+              //   setRowsCount(rowsCountUseIn);
+              //   db.collection("item")
+              //     .orderBy("timestamp", "desc")
+              //     .limit(rowsCountUseIn)
+              //     .get()
+              //     .then((snapshot) => {
+              //       var newData = [];
+              //       var itemData = [];
+              //       var itemDataSeMo = [];
+              //       var itemDataSeMoCon = [];
+              //       if (snapshot.docs.length > 0) {
+              //         itemDataSeMoCon.push({
+              //           serialNo: snapshot.docs[0].data().serialNo,
+              //           modelNo: snapshot.docs[0].modelNo,
+              //           chassisNo: snapshot.docs[0].chassisNo,
+              //         });
+              //       }
+              //       snapshot.docs.forEach((element) => {
+              //         itemData.push({
+              //           id: element.id,
+              //           data: element.data(),
+              //         });
+              //         itemDataSeMo.push({
+              //           serialNo: element.data().serialNo,
+              //           modelNo: element.data().modelNo,
+              //           chassisNo: element.data().chassisNo,
+              //         });
+              //         newData.push([
+              //           element.data().itemName,
+              //           element.data().brand,
+              //           element.data().modelNoExtra,
+              //           element.data().qty,
+              //           element.data().color === ""
+              //             ? " - "
+              //             : element.data().color,
+              //           element.data().guaranteePeriod === ""
+              //             ? " - "
+              //             : element.data().guaranteePeriod +
+              //               " " +
+              //               element.data().guarantee.value.toLowerCase(),
+              //           <CurrencyFormat
+              //             value={element.data().salePrice}
+              //             displayType={"text"}
+              //             thousandSeparator={true}
+              //             prefix={" "}
+              //           />,
+              //           <CurrencyFormat
+              //             value={element.data().cashPrice}
+              //             displayType={"text"}
+              //             thousandSeparator={true}
+              //             prefix={" "}
+              //           />,
+              //           element.data().stock_type,
+              //           <div
+              //             color="secondary"
+              //             size="small"
+              //             className={
+              //               element.data().qty !== 0
+              //                 ? element.data().qty >= 3
+              //                   ? "px-2"
+              //                   : "px-3"
+              //                 : "px-4"
+              //             }
+              //             variant="contained"
+              //           >
+              //             {element.data().qty !== 0 ? (
+              //               element.data().qty >= 3 ? (
+              //                 <p className="status">Available</p>
+              //               ) : (
+              //                 <p className="status">Low Stock</p>
+              //               )
+              //             ) : (
+              //               <p className="status">Out Of Stock</p>
+              //             )}
+              //           </div>,
+              //           <div className="table_icon">
+              //             <VisibilityIcon onClick={showModal} />
+              //             {element.data().stock_type === "main" ? (
+              //               <span className="icon_Edit">
+              //                 <EditIcon onClick={editModal} />
+              //               </span>
+              //             ) : null}
+              //           </div>,
+              //         ]);
+              //       });
+              //       setItemTableData(newData);
+              //       setAllItemData(itemData);
+              //       setItemListSeMo(itemDataSeMo);
+              //       setItemListSeMoCon(itemDataSeMoCon);
+              //       setIsLoading(false);
+              //     });
+              // },
+              // onChangePage: () => {
+              //   setIsLoading(true);
+              //   let rowsCountUseIn = rowsCount + 25;
+              //   setRowsCount(rowsCountUseIn);
+              //   db.collection("item")
+              //     .orderBy("timestamp", "desc")
+              //     .limit(rowsCountUseIn)
+              //     .get()
+              //     .then((snapshot) => {
+              //       var newData = [];
+              //       var itemData = [];
+              //       var itemDataSeMo = [];
+              //       var itemDataSeMoCon = [];
+              //       if (snapshot.docs.length > 0) {
+              //         itemDataSeMoCon.push({
+              //           serialNo: snapshot.docs[0].data().serialNo,
+              //           modelNo: snapshot.docs[0].modelNo,
+              //           chassisNo: snapshot.docs[0].chassisNo,
+              //         });
+              //       }
+              //       snapshot.docs.forEach((element) => {
+              //         itemData.push({
+              //           id: element.id,
+              //           data: element.data(),
+              //         });
+              //         itemDataSeMo.push({
+              //           serialNo: element.data().serialNo,
+              //           modelNo: element.data().modelNo,
+              //           chassisNo: element.data().chassisNo,
+              //         });
+              //         newData.push([
+              //           element.data().itemName,
+              //           element.data().brand,
+              //           element.data().modelNoExtra,
+              //           element.data().qty,
+              //           element.data().color === ""
+              //             ? " - "
+              //             : element.data().color,
+              //           element.data().guaranteePeriod === ""
+              //             ? " - "
+              //             : element.data().guaranteePeriod +
+              //               " " +
+              //               element.data().guarantee.value.toLowerCase(),
+              //           <CurrencyFormat
+              //             value={element.data().salePrice}
+              //             displayType={"text"}
+              //             thousandSeparator={true}
+              //             prefix={" "}
+              //           />,
+              //           <CurrencyFormat
+              //             value={element.data().cashPrice}
+              //             displayType={"text"}
+              //             thousandSeparator={true}
+              //             prefix={" "}
+              //           />,
+              //           element.data().stock_type,
+              //           <div
+              //             color="secondary"
+              //             size="small"
+              //             className={
+              //               element.data().qty !== 0
+              //                 ? element.data().qty >= 3
+              //                   ? "px-2"
+              //                   : "px-3"
+              //                 : "px-4"
+              //             }
+              //             variant="contained"
+              //           >
+              //             {element.data().qty !== 0 ? (
+              //               element.data().qty >= 3 ? (
+              //                 <p className="status">Available</p>
+              //               ) : (
+              //                 <p className="status">Low Stock</p>
+              //               )
+              //             ) : (
+              //               <p className="status">Out Of Stock</p>
+              //             )}
+              //           </div>,
+              //           <div className="table_icon">
+              //             <VisibilityIcon onClick={showModal} />
+              //             {element.data().stock_type === "main" ? (
+              //               <span className="icon_Edit">
+              //                 <EditIcon onClick={editModal} />
+              //               </span>
+              //             ) : null}
+              //           </div>,
+              //         ]);
+              //       });
+              //       setItemTableData(newData);
+              //       setAllItemData(itemData);
+              //       setItemListSeMo(itemDataSeMo);
+              //       setItemListSeMoCon(itemDataSeMoCon);
+              //       setIsLoading(false);
+              //     });
+              // },
               textLabels: {
                 body: {
                   noMatch: isLoading ? (

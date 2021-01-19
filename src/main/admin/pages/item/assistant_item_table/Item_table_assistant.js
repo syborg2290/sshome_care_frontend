@@ -94,6 +94,7 @@ export default function Item_table_assistant() {
           newData.push([
             element.data().itemName,
             element.data().brand,
+            element.data().modelNoExtra,
             element.data().qty,
             element.data().color === "" ? " - " : element.data().color,
             element.data().guaranteePeriod === ""
@@ -195,6 +196,15 @@ export default function Item_table_assistant() {
     },
     {
       name: "Brand",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "Model No",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -758,6 +768,7 @@ export default function Item_table_assistant() {
                       newData.push([
                         element.data().itemName,
                         element.data().brand,
+                        element.data().modelNoExtra,
                         element.data().qty,
                         element.data().color === ""
                           ? " - "
@@ -852,6 +863,7 @@ export default function Item_table_assistant() {
                       newData.push([
                         element.data().itemName,
                         element.data().brand,
+                        element.data().modelNoExtra,
                         element.data().qty,
                         element.data().color === ""
                           ? " - "

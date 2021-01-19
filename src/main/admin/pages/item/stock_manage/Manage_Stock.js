@@ -90,7 +90,7 @@ export default function Manage_Stock() {
           newData.push([
             element.data().itemName,
             element.data().brand,
-            element.data().modelNo[0],
+            element.data().modelNoExtra,
             element.data().qty,
             element.data().color === "" ? " - " : element.data().color,
             element.data().guaranteePeriod === ""
@@ -304,7 +304,7 @@ export default function Manage_Stock() {
                 newData.push([
                   element.data().itemName,
                   element.data().brand,
-                  element.data().modelNo[0],
+                  element.data().modelNoExtra,
                   element.data().qty,
                   element.data().color === "" ? " - " : element.data().color,
                   element.data().guaranteePeriod === ""
@@ -403,7 +403,7 @@ export default function Manage_Stock() {
                       newData.push([
                         element.data().itemName,
                         element.data().brand,
-                        element.data().modelNo[0],
+                        element.data().modelNoExtra,
                         element.data().qty,
                         element.data().color === ""
                           ? " - "
@@ -476,7 +476,7 @@ export default function Manage_Stock() {
                       newData.push([
                         element.data().itemName,
                         element.data().brand,
-                        element.data().modelNo[0],
+                        element.data().modelNoExtra,
                         element.data().qty,
                         element.data().color === ""
                           ? " - "

@@ -86,6 +86,7 @@ export default function Make_Invoice_table() {
           newData.push([
             element.data().itemName,
             element.data().brand,
+            element.data().modelNoExtra,
             element.data().qty,
             element.data().color === "" ? " - " : element.data().color,
             element.data().guaranteePeriod === ""
@@ -168,6 +169,15 @@ export default function Make_Invoice_table() {
     },
     {
       name: "Brand",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "Model No",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -314,6 +324,7 @@ export default function Make_Invoice_table() {
                 newData.push([
                   element.data().itemName,
                   element.data().brand,
+                  element.data().modelNoExtra,
                   element.data().qty,
                   element.data().color === "" ? " - " : element.data().color,
                   element.data().guaranteePeriod === ""
@@ -433,6 +444,7 @@ export default function Make_Invoice_table() {
                       newData.push([
                         element.data().itemName,
                         element.data().brand,
+                        element.data().modelNoExtra,
                         element.data().qty,
                         element.data().color === ""
                           ? " - "
@@ -520,6 +532,7 @@ export default function Make_Invoice_table() {
                       newData.push([
                         element.data().itemName,
                         element.data().brand,
+                        element.data().modelNoExtra,
                         element.data().qty,
                         element.data().color === ""
                           ? " - "

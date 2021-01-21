@@ -58,7 +58,8 @@ export default function Stock_Table() {
 
           let stockTotalCal =
             stock_total + element.data().stock_type === "main"
-              ? element.data().purchasedPrice
+              ? (Math.round(element.data().purchasedPrice * 100) / 100) *
+                parseInt(element.data().qty)
               : 0;
 
           setStockTotal(stockTotalCal);

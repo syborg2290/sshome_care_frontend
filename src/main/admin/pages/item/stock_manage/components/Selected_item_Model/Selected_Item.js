@@ -181,7 +181,7 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                                 : 0,
                             chassisNo: newArrayChassis,
                             modelNo: tikModel,
-                            serialNo: tikSerial
+                            serialNo: tikSerial,
                           });
 
                         let eachModelNo = newArray[0].data().modelNo;
@@ -196,7 +196,7 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                             qty: newArray[0].data().qty + qty[eachItem.i],
                             modelNo: prevUpdaModel,
                             serialNo: prevUpdaSerail,
-                            chassisNo: newArrayChassis
+                            chassisNo: newArrayChassis,
                           })
                           .then((_) => {
                             setLoadingSubmit(false);
@@ -251,7 +251,7 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                               : 0,
                           chassisNo: chassisNosList2,
                           modelNo: modelNoNewList2,
-                          serialNo: serialNoNewList2
+                          serialNo: serialNoNewList2,
                         });
 
                       var prevUpdaModel2 = modelNosList2;
@@ -269,6 +269,7 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                         qty: prevUpdaSerail2.length,
                         cashPrice: eachItem.item.cashPrice,
                         salePrice: eachItem.item.salePrice,
+                        purchasedPrice: eachItem.item.purchasedPrice,
                         noOfInstallments: eachItem.item.noOfInstallments,
                         amountPerInstallment:
                           eachItem.item.amountPerInstallment,

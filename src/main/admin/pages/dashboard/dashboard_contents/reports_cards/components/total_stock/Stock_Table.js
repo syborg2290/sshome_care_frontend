@@ -56,7 +56,10 @@ export default function Stock_Table() {
             chassisNo: element.data().chassisNo,
           });
 
-          let stockTotalCal = stock_total + element.data().purchasedPrice;
+          let stockTotalCal =
+            stock_total + element.data().stock_type === "main"
+              ? element.data().purchasedPrice
+              : 0;
 
           setStockTotal(stockTotalCal);
 
@@ -67,6 +70,14 @@ export default function Stock_Table() {
             Cash_price: (
               <CurrencyFormat
                 value={element.data().cashPrice}
+                displayType={"text"}
+                thousandSeparator={true}
+                prefix={" "}
+              />
+            ),
+            Sale_price: (
+              <CurrencyFormat
+                value={element.data().salePrice}
                 displayType={"text"}
                 thousandSeparator={true}
                 prefix={" "}
@@ -121,6 +132,15 @@ export default function Stock_Table() {
     },
     {
       name: "Cash_price",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "Sale_price",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({

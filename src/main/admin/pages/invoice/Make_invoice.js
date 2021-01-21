@@ -603,6 +603,7 @@ function Make_invoice() {
                                         tablerows[0].customer.customerAddress1,
                                       address2:
                                         tablerows[0].customer.customerAddress2,
+                                      root_village: rootVillage,
                                       root:
                                         tablerows[0].customer
                                           .customerRootToHome,
@@ -920,6 +921,7 @@ function Make_invoice() {
                                       root:
                                         tablerows[0].customer
                                           .customerRootToHome,
+                                      root_village: rootVillage,
                                       nic: tablerows[0].customer.customerNic,
                                       mid: tablerows[0].customer.mid,
                                       relations_nics:

@@ -67,6 +67,16 @@ export default function CustomerTable() {
         }),
       },
     },
+
+    {
+      name: "Root_village",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
     {
       name: "MID",
       options: {
@@ -136,6 +146,7 @@ export default function CustomerTable() {
             // ),
             FirstName: siDoc.data().fname,
             LastName: siDoc.data().lname,
+            Root_village: siDoc.data().root_village,
             MID: siDoc.data().mid,
             NIC: siDoc.data().nic,
             Telephone: siDoc.data().mobile1,

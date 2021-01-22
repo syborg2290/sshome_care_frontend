@@ -17,6 +17,7 @@ export default function AddNew_Model({ close_model }) {
   const [weight, setWeight] = useState(0);
   const [qty, setQty] = useState(0);
   const [price, setPrice] = useState(0);
+  const [withoutCprice, setWithoutCPrice] = useState(0);
   const [purchesPrice, setPurchesPrice] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -44,6 +45,12 @@ export default function AddNew_Model({ close_model }) {
                 price === 0 || price === "" || price === null
                   ? re.docs[0].data().price
                   : parseInt(price.trim()),
+              withoutCprice:
+                withoutCprice === 0 ||
+                withoutCprice === "" ||
+                withoutCprice === null
+                  ? re.docs[0].data().withoutCprice
+                  : parseInt(withoutCprice.trim()),
             })
             .then((_) => {
               db.collection("gas_history").add({
@@ -67,6 +74,7 @@ export default function AddNew_Model({ close_model }) {
               weight: weight,
               qty: parseInt(qty.trim()),
               price: parseInt(price.trim()),
+              withoutCprice: parseInt(withoutCprice.trim()),
               date: firebase.firestore.FieldValue.serverTimestamp(),
             })
             .then((_) => {
@@ -146,7 +154,7 @@ export default function AddNew_Model({ close_model }) {
             </Grid>
             <Grid className="txt_Labels" item xs={12} sm={3}></Grid>
             <Grid className="txt_Labels" item xs={12} sm={4}>
-              Selling Price :
+              Selling Price(With Cylinder) :
             </Grid>
             <Grid item xs={12} sm={5}>
               <TextField
@@ -165,6 +173,31 @@ export default function AddNew_Model({ close_model }) {
                 onChange={(e) => {
                   if (e.target.value !== "") {
                     setPrice(e.target.value.trim());
+                  }
+                }}
+              />
+            </Grid>
+            <Grid className="txt_Labels" item xs={12} sm={3}></Grid>
+            <Grid className="txt_Labels" item xs={12} sm={4}>
+              Selling Price(Without Cylinder) :
+            </Grid>
+            <Grid item xs={12} sm={5}>
+              <TextField
+                className="txtt_nic"
+                autoComplete="weight"
+                name="Price"
+                variant="outlined"
+                required
+                fullWidth
+                id="Price"
+                label="Price"
+                size="small"
+                type="number"
+                value={withoutCprice}
+                InputProps={{ inputProps: { min: 0 } }}
+                onChange={(e) => {
+                  if (e.target.value !== "") {
+                    setWithoutCPrice(e.target.value.trim());
                   }
                 }}
               />

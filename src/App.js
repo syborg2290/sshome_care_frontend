@@ -4,7 +4,7 @@ import { HashRouter, Route, Switch, Redirect } from "react-router-dom";
 // components
 import Layout from "../src/main/admin/Layout/Layout";
 import Layoutshowroom from "../src/main/emp_showroom/Layout_showroom/Layout_showroom";
-import LayoutAssistant from "../src/main/emp_assistant/assistant_Layout/Assistant_Layout";
+//import LayoutAssistant from "../src/main/emp_assistant/assistant_Layout/Assistant_Layout";
 
 // pages
 import Error from "./main/error/Error";
@@ -34,8 +34,13 @@ export default function App() {
 
         <PrivateRoute
           path={roleMain === "assistant" ? "/assistant" : "/error"}
-          component={LayoutAssistant}
+          component={Layout}
         />
+
+        {/* <PrivateRoute
+          path={roleMain === "assistant" ? "/assistant" : "/error"}
+          component={LayoutAssistant}
+        /> */}
         <PublicRoute path="/login" component={Login} />
         <Route path="/connection_lost" component={ConnectionLost} />
         <Route component={Error} />
@@ -53,15 +58,15 @@ export default function App() {
           isAuthenticated ? (
             React.createElement(component, props)
           ) : (
-              <Redirect
-                to={{
-                  pathname: "/login",
-                  state: {
-                    from: props.location,
-                  },
-                }}
-              />
-            )
+            <Redirect
+              to={{
+                pathname: "/login",
+                state: {
+                  from: props.location,
+                },
+              }}
+            />
+          )
         }
       />
     );
@@ -80,13 +85,13 @@ export default function App() {
                   role === "admin"
                     ? "/admin/dashboard"
                     : role === "assistant"
-                      ? "/assistant/dashboard"
-                      : "/showroom/dashboard",
+                    ? "/admin/dashboard"
+                    : "/showroom/dashboard",
               }}
             />
           ) : (
-              React.createElement(component, props)
-            )
+            React.createElement(component, props)
+          )
         }
       />
     );

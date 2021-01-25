@@ -37,7 +37,7 @@ async function getQtyStatus(qty) {
 }
 
 export default function Selected_Item({ itemListProps, closeModel }) {
-  const [selectedType, setSelectedType] = useState("main");
+  const [selectedType, setSelectedType] = useState("");
   const [itemsData, setItemsData] = useState([]);
   // eslint-disable-next-line
   const [qty, setQty] = useState({});
@@ -403,6 +403,9 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                     onChange={handleChange}
                     value={selectedType}
                   >
+                    <option onChange={handleChange} value={""}>
+                      Select the type
+                    </option>
                     {itemsData[0]?.item.stock_type === "main" ? null : (
                       <option onChange={handleChange} value={"main"}>
                         main
@@ -449,7 +452,11 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                 color="primary"
                 className="btn_SelectdeDone"
                 onClick={exchangeItems}
-                disabled={date === null || isLoadingSubmit ? true : false}
+                disabled={
+                  date === null || isLoadingSubmit
+                    ? true
+                    : false || selectedType === ""
+                }
               >
                 {isLoadingSubmit ? <Spin size="large" /> : "Done"}
               </Button>

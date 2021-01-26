@@ -463,7 +463,7 @@ function Make_invoice() {
       new Date(intialTimestamp?.seconds * 1000).setMonth(
         new Date(intialTimestamp?.seconds * 1000).getMonth() + 1
       )
-    );
+    ).setDate(parseInt(dates));
 
     if (tablerows.some((ob) => ob.customer !== null)) {
       if (deadlineTimestamp !== null) {
@@ -1910,10 +1910,9 @@ function Make_invoice() {
                           variant="outlined"
                           size="small"
                           disabled={
-                            // tablerows.some((ob) => ob.paymentWay === "PayandGo")
-                            //   ? false
-                            //   : true
-                            true
+                            tablerows.some((ob) => ob.paymentWay === "PayandGo")
+                              ? false
+                              : true
                           }
                           placeholder="date"
                           type="number"
@@ -1943,12 +1942,11 @@ function Make_invoice() {
                           <Select
                             value={days}
                             disabled={
-                              // tablerows.some(
-                              //   (ob) => ob.paymentWay === "PayandGo"
-                              // )
-                              //   ? false
-                              //   : true
-                              true
+                              tablerows.some(
+                                (ob) => ob.paymentWay === "PayandGo"
+                              )
+                                ? false
+                                : true
                             }
                             onChange={(e) => {
                               setDays(e.target.value);
@@ -2139,24 +2137,25 @@ function Make_invoice() {
                                   e.toDate()
                                 )
                               );
-                              setDates(
-                                new Date(
-                                  firebase.firestore.Timestamp.fromDate(
-                                    e.toDate()
-                                  )?.seconds * 1000
-                                ).getDate()
-                              );
-                              setDays(
-                                new Date(
-                                  firebase.firestore.Timestamp.fromDate(
-                                    e.toDate()
-                                  )?.seconds * 1000
-                                ).getDay()
-                              );
+                              // setDates(
+                              //   new Date(
+                              //     firebase.firestore.Timestamp.fromDate(
+                              //       e.toDate()
+                              //     )?.seconds * 1000
+                              //   ).getDate()
+                              // );
+
+                              // setDays(
+                              //   new Date(
+                              //     firebase.firestore.Timestamp.fromDate(
+                              //       e.toDate()
+                              //     )?.seconds * 1000
+                              //   ).getDay()
+                              // );
                             } else {
                               setInititialTimestamp(null);
-                              setDates(new Date().getDate());
-                              setDays(new Date().getDay());
+                              // setDates(new Date().getDate());
+                              // setDays(new Date().getDay());
                             }
                           }}
                         />
@@ -2248,6 +2247,8 @@ function Make_invoice() {
                     color="primary"
                     className="btn_addCustomer"
                     disabled={
+                      dates === "" ||
+                      dates === 0 ||
                       loadingsubmit ||
                       itemDP.length === 0 ||
                       tablerows.length === 0 ||

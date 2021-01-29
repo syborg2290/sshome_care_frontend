@@ -115,7 +115,7 @@ export default function Dashboard() {
   const intialStateOfArreasCheck = async (eachRe) => {
     let daysCountNode1 =
       (new Date().getTime() -
-        new Date(eachRe.data()?.date?.seconds * 1000).getTime()) /
+        new Date(eachRe.data()?.nextDate?.seconds * 1000).getTime()) /
       (1000 * 3600 * 24);
     let daysCountInitial = daysCountNode1;
     if (eachRe.data().selectedType === "shop") {

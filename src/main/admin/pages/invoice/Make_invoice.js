@@ -740,7 +740,7 @@ function Make_invoice() {
                                           date: intialTimestamp,
                                           document_charges: documentCharges,
                                           nextDate: firebase.firestore.Timestamp.fromDate(
-                                            times
+                                            new Date(times)
                                           ),
                                         })
                                         .then((_) => {
@@ -1057,7 +1057,7 @@ function Make_invoice() {
                                           date: intialTimestamp,
                                           document_charges: documentCharges,
                                           nextDate: firebase.firestore.Timestamp.fromDate(
-                                            times
+                                            new Date(times)
                                           ),
                                         })
                                         .then((_) => {
@@ -1918,11 +1918,12 @@ function Make_invoice() {
                           type="number"
                           InputProps={{ inputProps: { min: 1, max: 31 } }}
                           fullWidth
-                          value={dates}
+                           value={dates}
                           onChange={(e) => {
                             if (e.target.value <= 31 || e.target.value < 0) {
                               setDates(e.target.value.trim());
                             }
+                           
                           }}
                         />
                       </Grid>

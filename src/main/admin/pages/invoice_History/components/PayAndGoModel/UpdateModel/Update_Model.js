@@ -116,12 +116,12 @@ export default function Update_Model({
               let daysCountNode1 =
                 (new Date().getTime() -
                   new Date(
-                    inReDoc.docs[0].data().date.seconds * 1000
+                    inReDoc.docs[0].data().nextDate.seconds * 1000
                   ).getTime()) /
                 (1000 * 3600 * 24);
               let daysCountInitial = daysCountNode1;
               let monthsCount = monthDiff(
-                new Date(inReDoc.docs[0].data().date.seconds * 1000),
+                new Date(inReDoc.docs[0].data().nextDate.seconds * 1000),
                 new Date()
               );
               setDelayedMonths(
@@ -293,7 +293,7 @@ export default function Update_Model({
 
         setIsLoading(false);
       });
-     // eslint-disable-next-line
+    // eslint-disable-next-line
   }, [invoice_no, isEx, instAmountProp, instCount, customer_id]);
 
   const updateInstallment = async () => {

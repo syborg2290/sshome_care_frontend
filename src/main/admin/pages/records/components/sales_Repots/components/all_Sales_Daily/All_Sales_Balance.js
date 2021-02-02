@@ -4,12 +4,14 @@ import CurrencyFormat from "react-currency-format";
 
 import { Grid } from "@material-ui/core";
 import MUIDataTable from "mui-datatables";
-import { Spin } from "antd";
+import { Spin, Modal } from "antd";
+import VisibilityIcon from "@material-ui/icons/Visibility";
 
 // styles
 import "./All_Sales_Balance.css";
 
 import db from "../../../../../../../../config/firebase.js";
+import EachReportsView from "./component/EachReportsView";
 
 async function getAllSalesSaily() {
   var sales = [];
@@ -450,6 +452,18 @@ export default function All_Sales_Balance() {
   // eslint-disable-next-line
   const [tableData, setTableData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [viewModal, setViewModal] = useState(false);
+  const [saleData, setAllSaleData] = useState([]);
+  const [cashSaleData, setAllCashSaleData] = useState([]);
+  const [recivedCardSale, setAllRecivedCardSale] = useState([]);
+  const [creditRecived, setCreditRecivedData] = useState([]);
+  const [docCharges, setDocCharges] = useState([]);
+  const [allExtraDate, setAllExtraDate] = useState([]);
+  const [currentIndx, setCurrentIndx] = useState(0);
+
+  const openViewModal = () => {
+    setViewModal(true);
+  };
 
   const columns = [
     {
@@ -533,19 +547,34 @@ export default function All_Sales_Balance() {
         }),
       },
     },
+    {
+      name: "Action",
+      options: {
+        filter: false,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
   ];
 
   useEffect(() => {
+    let extraDate = [];
     getAllSalesSaily().then((reAllSales) => {
+      setAllSaleData(reAllSales);
       sumSameDaySales(reAllSales).then((reSumWith) => {
         getAllCashSaleSaily().then((reCash) => {
+          setAllCashSaleData(reCash);
           sumSameDayCashSale(reCash).then((reCashAllSum) => {
             getAllRecievedCardSaleSaily().then((reCardSale) => {
+              setAllRecivedCardSale(reCardSale);
               sumSameDayCardSale(reCardSale).then((reCardSaleSum) => {
                 getAllInstallments().then((reInstallments) => {
+                  setCreditRecivedData(reInstallments);
                   sumSameDayIntallmentSale(reInstallments).then(
                     (reInstallmentsSum) => {
                       getAllDocumentChargesDaily().then((reDocsCharges) => {
+                        setDocCharges(reDocsCharges);
                         sumSameDayDocumentCharges(reDocsCharges).then(
                           (reDocsSum) => {
                             getAllSalesReports(
@@ -592,6 +621,9 @@ export default function All_Sales_Balance() {
                                                     previousDocs =
                                                       previousDocs -
                                                       parseInt(each.docs);
+                                                    extraDate.push(
+                                                      new Date(each.date)
+                                                    );
                                                     eachRE.push({
                                                       Date: new Date(
                                                         each.date
@@ -688,6 +720,16 @@ export default function All_Sales_Balance() {
                                                           prefix={" "}
                                                         />
                                                       ),
+                                                      Action: (
+                                                        <div>
+                                                          <VisibilityIcon
+                                                            className="btnView"
+                                                            onClick={
+                                                              openViewModal
+                                                            }
+                                                          />
+                                                        </div>
+                                                      ),
                                                     });
                                                   });
                                                   setTableData(eachRE);
@@ -715,39 +757,62 @@ export default function All_Sales_Balance() {
         });
       });
     });
+    setAllExtraDate(extraDate);
   }, []);
 
   return (
-    <Grid container spacing={4}>
-      <Grid item xs={12}>
-        <MUIDataTable
-          title={<span className="title_Span">Complete view</span>}
-          className="salary_table"
-          sty
-          data={tableData}
-          columns={columns}
-          options={{
-            selectableRows: "none",
-            customToolbarSelect: () => {},
-
-            filterType: "textField",
-            download: false,
-            print: false,
-            searchPlaceholder: "Search using any column names",
-            elevation: 4,
-            sort: true,
-            textLabels: {
-              body: {
-                noMatch: isLoading ? (
-                  <Spin className="tblSpinner" size="large" spinning="true" />
-                ) : (
-                  ""
-                ),
-              },
-            },
-          }}
+    <>
+      <Modal
+        visible={viewModal}
+        footer={null}
+        onCancel={() => {
+          setViewModal(false);
+        }}
+        width={900}
+      >
+        <EachReportsView
+          key={allExtraDate[currentIndx]}
+          cardsSale={recivedCardSale}
+          cashSaleData={cashSaleData}
+          credit_reviceved={creditRecived}
+          date={allExtraDate[currentIndx]}
+          docCharges={docCharges}
+          saleData={saleData}
         />
+      </Modal>
+      <Grid container spacing={4}>
+        <Grid item xs={12}>
+          <MUIDataTable
+            title={<span className="title_Span">Complete view</span>}
+            className="salary_table"
+            sty
+            data={tableData}
+            columns={columns}
+            options={{
+              selectableRows: "none",
+              customToolbarSelect: () => {},
+              onRowClick: (rowData, rowMeta) => {
+                setCurrentIndx(rowMeta.dataIndex);
+              },
+              filterType: "textField",
+              download: false,
+              print: false,
+              searchPlaceholder: "Search using any column names",
+              elevation: 4,
+              sort: true,
+              textLabels: {
+                body: {
+                  noMatch: isLoading ? (
+                    <Spin className="tblSpinner" size="large" spinning="true" />
+                  ) : (
+                    ""
+                  ),
+                },
+              },
+            }}
+          />
+        </Grid>
       </Grid>
-    </Grid>
+    </>
   );
 }

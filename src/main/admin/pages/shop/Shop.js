@@ -10,6 +10,7 @@ import "./Shop.css";
 import AddEmployee from "./components/add_employee_Model/Add_Employee";
 
 import db from "../../../../config/firebase.js";
+import { Delete } from "@material-ui/icons";
 
 export default function Shop() {
   const [employeeAddModel, setEmployeeAddModel] = useState(false); // Employee Add model
@@ -59,6 +60,15 @@ export default function Shop() {
         }),
       },
     },
+    {
+      name: "Action",
+      options: {
+        filter: false,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
   ];
 
   useEffect(() => {
@@ -77,6 +87,16 @@ export default function Shop() {
             LastName: each.data().LastName,
             NIC: each.data().nic,
             Mobile: each.data().Mobile,
+            Action: (
+              <span className="icon_visibl">
+                <Delete
+                  onClick={async () => {
+                    await db.collection("shop").doc(each.id).delete();
+                    window.location.reload();
+                  }}
+                />
+              </span>
+            ),
           });
         });
         setTableData(raw);

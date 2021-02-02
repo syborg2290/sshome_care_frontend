@@ -62,10 +62,13 @@ async function getGasshort(root, isFirstSalary, lastSalaryDate, currentDate) {
       }
     }
   }
+
+  let countShop = await (await db.collection("shop").get()).docs.length;
+
   return gasShort === 0
     ? 0
     : root === "shop"
-    ? Math.round(gasShort * 10) / 10
+    ? Math.round((gasShort / parseInt(countShop)) * 10) / 10
     : rootStatus.docs[0].data().employee2 === ""
     ? Math.round(gasShort * 10) / 10
     : Math.round((gasShort / 2) * 10) / 10;
@@ -159,10 +162,12 @@ async function getInstallmentshort(
     }
   }
 
+  let countShop = await (await db.collection("shop").get()).docs.length;
+
   return installShortage === 0
     ? 0
     : root === "shop"
-    ? Math.round(installShortage * 10) / 10
+    ? Math.round((installShortage / parseInt(countShop)) * 10) / 10
     : rootStatus.docs[0].data().employee2 === ""
     ? Math.round(installShortage * 10) / 10
     : Math.round((installShortage / 2) * 10) / 10;
@@ -245,10 +250,12 @@ async function getShortage(root, isFirstSalary, lastSalaryDate, currentDate) {
     }
   }
 
+  let countShop = await (await db.collection("shop").get()).docs.length;
+
   return shortage === 0
     ? 0
     : root === "shop"
-    ? Math.round(shortage * 10) / 10
+    ? Math.round((shortage / parseInt(countShop)) * 10) / 10
     : rootStatus.docs[0].data().employee2 === ""
     ? Math.round(shortage * 10) / 10
     : Math.round((shortage / 2) * 10) / 10;
@@ -409,13 +416,15 @@ async function getSaleTarget(root, currentDate) {
     }
   }
 
+  let countShop = await (await db.collection("shop").get()).docs.length;
+
   return targetValue === 0
     ? 0
     : saleTargetValue === 0
     ? 0
     : saleTargetValue >= targetValue
     ? root === "shop"
-      ? 5000
+      ? 5000 / parseInt(countShop)
       : 5000 / 2
     : 0;
 }
@@ -610,10 +619,12 @@ async function cashTargetFunc(
     rootStatus = await db.collection("root").where("root", "==", root).get();
   }
 
+  let countShop = await (await db.collection("shop").get()).docs.length;
+
   return returnValue === 0
     ? 0
     : root === "shop"
-    ? Math.round(returnValue * 10) / 10
+    ? Math.round((returnValue / parseInt(countShop)) * 10) / 10
     : rootStatus.docs[0].data().employee2 === ""
     ? Math.round(returnValue * 10) / 10
     : Math.round((returnValue / 2) * 10) / 10;
@@ -754,10 +765,12 @@ async function getCashSaleFunc(
     rootStatus = await db.collection("root").where("root", "==", root).get();
   }
 
+  let countShop = await (await db.collection("shop").get()).docs.length;
+
   return cashSale === 0
     ? 0
     : root === "shop"
-    ? Math.round(cashSale * 10) / 10
+    ? Math.round((cashSale / parseInt(countShop)) * 10) / 10
     : rootStatus.docs[0].data().employee2 === ""
     ? Math.round(cashSale * 10) / 10
     : Math.round((cashSale / 2) * 10) / 10;
@@ -861,10 +874,12 @@ async function getExcardFunc(root, isFirstSalary, lastSalaryDate, currentDate) {
     rootStatus = await db.collection("root").where("root", "==", root).get();
   }
 
+  let countShop = await (await db.collection("shop").get()).docs.length;
+
   return excardAmount === 0
     ? 0
     : root === "shop"
-    ? Math.round(excardAmount * 10) / 10
+    ? Math.round((excardAmount / parseInt(countShop)) * 10) / 10
     : rootStatus.docs[0].data().employee2 === ""
     ? Math.round(excardAmount * 10) / 10
     : Math.round((excardAmount / 2) * 10) / 10;

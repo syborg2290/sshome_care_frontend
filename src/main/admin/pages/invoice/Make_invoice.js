@@ -74,7 +74,8 @@ function Make_invoice() {
   const [visibleSerial, setVisibleSerial] = useState(false);
   const [invoiceStatus, setInvoiceStatus] = useState("new");
   const [currentIndex, setCurrentIndex] = useState(0);
-
+  const [fullname, setFullname] = useState("");
+  const [nic, setNic] = useState("");
   const [inputsSerialNo, setInputsSerialNo] = useState({});
 
   let history = useHistory();
@@ -739,6 +740,7 @@ function Make_invoice() {
                                           status_of_payandgo: "onGoing",
                                           date: intialTimestamp,
                                           document_charges: documentCharges,
+
                                           nextDate: firebase.firestore.Timestamp.fromDate(
                                             new Date(times)
                                           ),
@@ -1056,6 +1058,7 @@ function Make_invoice() {
                                           status_of_payandgo: "onGoing",
                                           date: intialTimestamp,
                                           document_charges: documentCharges,
+
                                           nextDate: firebase.firestore.Timestamp.fromDate(
                                             new Date(times)
                                           ),
@@ -1313,6 +1316,8 @@ function Make_invoice() {
         // description: discription,
         date: intialTimestamp,
         document_charges: documentCharges,
+        fullname: fullname,
+        nic: nic,
         nextDate: null,
       });
 
@@ -1857,7 +1862,7 @@ function Make_invoice() {
                       <Grid className="lbl_MI" item xs={12} sm={4}>
                         <TextField
                           className="txt_dpayment"
-                          disabled={true}
+                          disabled={false}
                           variant="outlined"
                           size="small"
                           label="Shortage"
@@ -1918,12 +1923,11 @@ function Make_invoice() {
                           type="number"
                           InputProps={{ inputProps: { min: 1, max: 31 } }}
                           fullWidth
-                           value={dates}
+                          value={dates}
                           onChange={(e) => {
                             if (e.target.value <= 31 || e.target.value < 0) {
                               setDates(e.target.value.trim());
                             }
-                           
                           }}
                         />
                       </Grid>
@@ -2203,6 +2207,49 @@ function Make_invoice() {
                         }}
                       />
                     </Grid>
+                    {tablerows.some(
+                      (ob) => ob.paymentWay === "PayandGo"
+                    ) ? null : (
+                      <>
+                        <Grid item xs={12} sm={4}></Grid>
+                        <Grid className="xxx" item xs={12} sm={4}>
+                          Full name
+                        </Grid>
+                        <Grid item xs={12} sm={4}>
+                          <TextField
+                            className="txt_fullname"
+                            variant="outlined"
+                            size="small"
+                            label="Full name"
+                            type="text"
+                            fullWidth
+                            value={fullname}
+                            onChange={(e) => {
+                              setFullname(e.target.value);
+                            }}
+                          />
+                        </Grid>
+                        <Grid item xs={12} sm={4}></Grid>
+                        <Grid className="xxx" item xs={12} sm={4}>
+                          NIC
+                        </Grid>
+                        <Grid item xs={12} sm={4}>
+                          <TextField
+                            className="txt_fullname"
+                            variant="outlined"
+                            size="small"
+                            label="NIC"
+                            type="text"
+                            fullWidth
+                            value={nic}
+                            onChange={(e) => {
+                              setNic(e.target.value);
+                            }}
+                          />
+                        </Grid>
+                      </>
+                    )}
+
                     <Grid item xs={12} sm={4}></Grid>
                     <Grid item xs={12} sm={4}>
                       Select a type

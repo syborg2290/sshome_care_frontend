@@ -86,6 +86,24 @@ export default function Full_Payment_Model({ items_list_props, data }) {
                 prefix={" "}
               />
             </Grid>
+            <Grid className="lbl_topis" item xs={12} sm={5}>
+              Full name
+            </Grid>
+            <Grid item xs={12} sm={1}>
+              :
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              {data?.fullname}
+            </Grid>
+            <Grid className="lbl_topis" item xs={12} sm={5}>
+              NIC
+            </Grid>
+            <Grid item xs={12} sm={1}>
+              :
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              {data?.nic}
+            </Grid>
             <Grid className="lbl_topis" item xs={12} sm={12}>
               <hr />
             </Grid>

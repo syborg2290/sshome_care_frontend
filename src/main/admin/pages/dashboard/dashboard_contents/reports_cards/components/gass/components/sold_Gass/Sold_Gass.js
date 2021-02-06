@@ -39,19 +39,7 @@ export default function Sold_Gass({ year, month }) {
         }),
       },
     },
-    {
-      name: "Unit_Price",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: {
-            fontSize: "15px",
-            color: "black",
-            fontWeight: "600",
-          },
-        }),
-      },
-    },
+
     {
       name: "Total",
       options: {
@@ -68,7 +56,7 @@ export default function Sold_Gass({ year, month }) {
   ];
 
   useEffect(() => {
-    db.collection("gas_purchase_history")
+    db.collection("gas_invoice")
       .orderBy("date", "desc")
       .get()
       .then((snap) => {
@@ -80,24 +68,15 @@ export default function Sold_Gass({ year, month }) {
             new Date(each.data().date.seconds * 1000).getMonth() === month
           ) {
             raw.push({
-              Weight: each.data().weight + " Kg",
+              Weight: each.data().items[0].weight + " Kg",
               Date: moment(each.data()?.date?.toDate()).format(
                 "dddd, MMMM Do YYYY"
               ),
-              Qty: each.data().qty,
-              Unit_Price: (
-                <CurrencyFormat
-                  value={each.data().price}
-                  displayType={"text"}
-                  thousandSeparator={true}
-                  prefix={" "}
-                />
-              ),
+              Qty: each.data().items[0].qty,
+
               Total: (
                 <CurrencyFormat
-                  value={
-                    parseInt(each.data().price) * parseInt(each.data().qty)
-                  }
+                  value={parseInt(each.data().total)}
                   displayType={"text"}
                   thousandSeparator={true}
                   prefix={" "}

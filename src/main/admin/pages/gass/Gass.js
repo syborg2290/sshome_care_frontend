@@ -6,12 +6,17 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
-import { Button, Grid } from "@material-ui/core";
+import { Button, Grid, Checkbox } from "@material-ui/core";
 import { Modal } from "antd";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import CurrencyFormat from "react-currency-format";
 import { useHistory } from "react-router-dom";
+import {
+  NotificationContainer,
+  NotificationManager,
+} from "react-notifications";
+import "react-notifications/lib/notifications.css";
 
 // styles
 import "./Gass.css";
@@ -23,21 +28,43 @@ import ShoppingBasketIcon from "@material-ui/icons/ShoppingBasket";
 import HistoryIcon from "@material-ui/icons/History";
 
 // components
-import GassModel from "./components/Gass_Model";
+import SelectGassModel from "./components/selected_gas/selected_gas_modal";
 import AddNewModel from "./components/add_new_Gass/AddNew_Model";
 import SellingHistory from "./components/selling_history/Selling_History";
 import GassHistoryModel from "./components/gass_history/Gass_History";
 
 import db from "../../../../config/firebase.js";
 
-function createData(Weight, Qty, Price, Action) {
-  return { Weight, Qty, Price, Action };
+function createData(
+  Weight,
+  Qty,
+  empty_tanks,
+  cash_price,
+  cashp_without_tank,
+  sale_price,
+  salep_without_tank,
+  downpayment,
+  Action
+) {
+  return {
+    Weight,
+    Qty,
+    empty_tanks,
+    cash_price,
+    cashp_without_tank,
+    sale_price,
+    salep_without_tank,
+    downpayment,
+    Action,
+  };
 }
 
 export default function Gass() {
   // eslint-disable-next-line
   const [allTableData, setAllTableData] = useState([]);
   const [tableData, setTableData] = useState([]);
+  // eslint-disable-next-line
+  const [selectedGas, setSelectedGas] = useState([]);
   const [gassModal, setGassModal] = useState(false); //models
   const [addNewGassModal, setAddNewGassModal] = useState(false); // Table models
   const [purchaseHistory, setPurchaseHistory] = useState(false); // Table models
@@ -45,7 +72,11 @@ export default function Gass() {
   let history = useHistory();
 
   const showModalGass = () => {
-    setGassModal(true);
+    if (selectedGas.length <= 0) {
+      NotificationManager.warning("Please select the gas");
+    } else {
+      setGassModal(true);
+    }
   };
 
   const showModalAddGass = () => {
@@ -71,18 +102,45 @@ export default function Gass() {
     db.collection("gas").onSnapshot((snap) => {
       var raw = [];
       var rawAll = [];
+
       snap.docs.forEach((each) => {
         rawAll.push({
           id: each.id,
           data: each.data(),
           weight: each.data().weight,
         });
+
         raw.push(
           createData(
             each.data().weight + " Kg",
             each.data().qty,
+            each.data().empty_tanks,
             <CurrencyFormat
               value={each.data().price}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={" "}
+            />,
+            <CurrencyFormat
+              value={each.data().withoutCprice}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={" "}
+            />,
+            <CurrencyFormat
+              value={each.data().saleprice}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={" "}
+            />,
+            <CurrencyFormat
+              value={each.data().withoutSaleprice}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={" "}
+            />,
+            <CurrencyFormat
+              value={each.data().downpayment}
               displayType={"text"}
               thousandSeparator={true}
               prefix={" "}
@@ -107,7 +165,7 @@ export default function Gass() {
         }}
       >
         <div className="confoModel_body">
-          <GassModel />
+          <SelectGassModel gasListProps={selectedGas} />
         </div>
       </Modal>
 
@@ -196,6 +254,27 @@ export default function Gass() {
           <Grid item xs={12} sm={3}>
             <Button
               variant="contained"
+              onClick={() => {
+                let moveWith = {
+                  pathname: "/admin/ui/gas_invoice_history",
+                  search: "?query=abc",
+                  state: {},
+                };
+
+                history.push(moveWith);
+              }}
+              endIcon={<ShoppingBasketIcon />}
+              color="primary"
+              className="btn_pHistry"
+            >
+              Invoice History
+            </Button>
+          </Grid>
+          <Grid item xs={12} sm={3}></Grid>
+          <Grid item xs={12} sm={3}></Grid>
+          <Grid item xs={12} sm={3}>
+            <Button
+              variant="contained"
               onClick={GassHistory}
               endIcon={<HistoryIcon />}
               color="primary"
@@ -216,12 +295,30 @@ export default function Gass() {
           </Grid>
         </Grid>
         <TableContainer component={Paper} className="main_containerGass">
-          <Table className="gass_Table" size="small" aria-label="a dense table">
+          <Table
+            className="gass_Table"
+            size="medium"
+            aria-label="a dense table"
+          >
             <TableHead className="gass_Table_head">
               <TableRow>
                 <TableCell>Weight(kg)</TableCell>
                 <TableCell align="right">Qty</TableCell>
-                <TableCell align="right">Price&nbsp;(LKR)</TableCell>
+                <TableCell align="right">Empty stock</TableCell>
+                <TableCell align="right">
+                  Cash Price(With tank)&nbsp;(LKR)
+                </TableCell>
+                <TableCell align="right">
+                  Cash Price(Without tank)&nbsp;(LKR)
+                </TableCell>
+                <TableCell align="right">
+                  Sale Price(With tank)&nbsp;(LKR)
+                </TableCell>
+                <TableCell align="right">
+                  Sale Price(Without tank)&nbsp;(LKR)
+                </TableCell>
+                <TableCell align="right">Downpayment&nbsp;(LKR)</TableCell>
+                <TableCell align="right">Select</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -231,12 +328,46 @@ export default function Gass() {
                     {row.Weight}
                   </TableCell>
                   <TableCell align="right">{row.Qty}</TableCell>
-                  <TableCell align="right">{row.Price}</TableCell>
+                  <TableCell align="right">{row.empty_tanks}</TableCell>
+                  <TableCell align="right">{row.cash_price}</TableCell>
+                  <TableCell align="right">{row.cashp_without_tank}</TableCell>
+                  <TableCell align="right">{row.sale_price}</TableCell>
+                  <TableCell align="right">{row.salep_without_tank}</TableCell>
+                  <TableCell align="right">{row.downpayment}</TableCell>
+                  <TableCell align="right">
+                    {" "}
+                    <Checkbox
+                      size="small"
+                      className="checkboxAtt"
+                      value={selectedGas.includes(row.Weight)}
+                      onChange={(e) => {
+                        if (selectedGas.includes(row.Weight)) {
+                          selectedGas.splice(selectedGas.indexOf(row.Weight));
+                        } else {
+                          let textWeight = row.Weight.substr(
+                            0,
+                            row.Weight.indexOf(" ")
+                          );
+                          db.collection("gas")
+                            .where("weight", "==", textWeight)
+                            .get()
+                            .then((reG) => {
+                              if (reG.docs[0].data().qty === 0) {
+                                NotificationManager.warning("Out of stock");
+                              } else {
+                                selectedGas.push(row.Weight);
+                              }
+                            });
+                        }
+                      }}
+                    />
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
         </TableContainer>
+        <NotificationContainer />
       </Container>
     </>
   );

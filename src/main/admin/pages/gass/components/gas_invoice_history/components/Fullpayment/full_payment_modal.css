@@ -1,0 +1,53 @@
+.paper {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  margin-top: 20px !important;
+}
+
+.form1 {
+  width: 100% !important;
+  margin-top: 30px !important;
+  margin-bottom: -100px !important;
+}
+
+.form {
+  width: 100% !important;
+  margin-top: 10px !important;
+  margin-bottom: -100px !important;
+}
+
+.lbl_topis {
+  font-weight: 600 !important;
+  color: #222a44 !important;
+}
+
+.lbl_topiSub {
+  font-weight: 700 !important;
+  color: #222a44 !important;
+  font-size: 22px !important;
+}
+
+.hr_topiSub {
+  margin-top: -10px !important;
+  background-color: blue !important;
+  color: blue !important;
+  height: 3px !important;
+}
+
+.contine {
+  margin-bottom: 10px !important;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.16), 0 1px 5px rgba(0, 0, 0, 0.23) !important;
+}
+
+.lbl_topisGami {
+  margin-top: 40px !important;
+  font-weight: 600 !important;
+  color: #222a44 !important;
+}
+
+.lblw_is {
+  margin-bottom: 40px !important;
+  font-weight: 700 !important;
+  color: #222a44 !important;
+}

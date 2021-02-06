@@ -56,7 +56,7 @@ export default function Gass_Model({ year, month }) {
 
   return (
     <>
-      <p className="titleGass">Gass Reports</p>
+      <p className="titleGass">Gas Reports</p>
       <div className="maindiv_gsaa">
         <AppBar position="static">
           <Tabs
@@ -64,8 +64,8 @@ export default function Gass_Model({ year, month }) {
             onChange={handleChange}
             aria-label="simple tabs example"
           >
-            <Tab label="Sold Gass" {...a11yProps(0)} />
-            <Tab label="Purchased Gass" {...a11yProps(1)} />
+            <Tab label="Sold Gas" {...a11yProps(0)} />
+            <Tab label="Purchased Gas" {...a11yProps(1)} />
             <Tab label="The rest of the hand" {...a11yProps(2)} />
           </Tabs>
         </AppBar>

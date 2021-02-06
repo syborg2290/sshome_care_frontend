@@ -576,6 +576,9 @@ export default function Report_Cards() {
   const [downPayment, setDownpayment] = useState(0);
   const [docsTotal, setDocsTotal] = useState(0);
   const [soldGas, setSoldGas] = useState(0);
+  const [soldGasCash, setSoldGasCash] = useState(0);
+  const [soldGasSale, setSoldGasSale] = useState(0);
+  const [gasCreditRecieved, setGasCreditRecieved] = useState(0);
   const [purchasedGas, setPurchasedGas] = useState(0);
   const [allExpencesBalance, setAllExpencesBalance] = useState(0);
   const [isLoding, setIsLoading] = useState(true);
@@ -713,16 +716,37 @@ export default function Report_Cards() {
         setPurchasedGas(purchasedTotal);
       });
 
-    db.collection("gas_purchase_history")
+    db.collection("gas_invoice")
       .orderBy("date", "desc")
       .onSnapshot((snap) => {
         var soldTotal = 0;
+        var soldCashTotal = 0;
+        var soldSaleTotal = 0;
 
         snap.docs.forEach((each) => {
-          let totalRe = parseInt(each.data().price) * parseInt(each.data().qty);
+          let totalRe = parseInt(each.data().total);
           soldTotal = soldTotal + totalRe;
+          if (each.data().paymentWay === "FullPayment") {
+            soldCashTotal = soldCashTotal + totalRe;
+          } else {
+            soldSaleTotal = soldSaleTotal + totalRe;
+          }
         });
         setSoldGas(soldTotal);
+        setSoldGasCash(soldCashTotal);
+        setSoldGasSale(soldSaleTotal);
+      });
+
+    db.collection("gas_installment")
+      .orderBy("date", "desc")
+      .onSnapshot((snap) => {
+        var totalCredit = 0;
+
+        snap.docs.forEach((each) => {
+          let totalRe = parseInt(each.data().amount);
+          totalCredit = totalCredit + totalRe;
+        });
+        setGasCreditRecieved(totalCredit);
       });
 
     db.collection("expences")
@@ -1328,6 +1352,7 @@ export default function Report_Cards() {
                     />
                   </Space>
                 </Grid>
+
                 <Grid className="date_allGrid" item xs={12} sm={1}>
                   <p
                     className="date_all"
@@ -1365,6 +1390,24 @@ export default function Report_Cards() {
                     />
                   </Typography>
                 </Grid>
+                <Grid className="Soldgrid" item xs={12} sm={5}>
+                  <Typography
+                    color="text"
+                    className="Cash_txt_cx"
+                    colorBrightness="secondary"
+                  >
+                    {bull}Gas Credit Received
+                  </Typography>
+                  <Typography size="md" className="Credit_lbl_cx">
+                    {" "}
+                    <CurrencyFormat
+                      value={gasCreditRecieved}
+                      displayType={"text"}
+                      thousandSeparator={true}
+                      prefix={""}
+                    />
+                  </Typography>
+                </Grid>
                 <Grid item xs={12} sm={7}>
                   <LineChart
                     className="line_chart_cx"
@@ -1382,6 +1425,7 @@ export default function Report_Cards() {
                   </LineChart>
                 </Grid>
               </div>
+
               <Grid
                 item
                 xs={12}
@@ -1399,7 +1443,7 @@ export default function Report_Cards() {
                     color="text"
                     colorBrightness="secondary"
                   >
-                    {bull}Sold Amount
+                    {bull}Sold Amount(Cash + Sale)
                   </Typography>
                   <Typography size="md" className="Credit_lbl_cx">
                     {" "}
@@ -1409,6 +1453,21 @@ export default function Report_Cards() {
                       thousandSeparator={true}
                       prefix={""}
                     />
+                    ({" "}
+                    <CurrencyFormat
+                      value={soldGasCash}
+                      displayType={"text"}
+                      thousandSeparator={true}
+                      prefix={""}
+                    />
+                    +
+                    <CurrencyFormat
+                      value={soldGasSale}
+                      displayType={"text"}
+                      thousandSeparator={true}
+                      prefix={""}
+                    />
+                    )
                   </Typography>
                 </Grid>
                 <Grid className="Soldgrid" item xs={12} sm={5}>

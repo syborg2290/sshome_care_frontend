@@ -43,11 +43,23 @@ export default function AddNew_Model({ close_model }) {
       .get()
       .then((re) => {
         if (re.docs.length > 0) {
+          let fillEmptyTanks = 0;
+          if (parseInt(re.docs[0].data().empty_tanks > 0)) {
+            fillEmptyTanks = parseInt(re.docs[0].data().empty_tanks);
+            if (fillEmptyTanks > parseInt(qty.trim())) {
+              fillEmptyTanks = fillEmptyTanks - parseInt(qty.trim());
+            }
+
+            if (fillEmptyTanks <= parseInt(qty.trim())) {
+              fillEmptyTanks = 0;
+            }
+          }
           db.collection("gas")
             .doc(re.docs[0].id)
             .update({
               weight: weight,
               qty: parseInt(qty.trim()) + parseInt(re.docs[0].data().qty),
+              empty_tanks: fillEmptyTanks,
               price:
                 price === 0 || price === "" || price === null
                   ? re.docs[0].data().price
@@ -106,6 +118,7 @@ export default function AddNew_Model({ close_model }) {
               withoutSaleprice: parseInt(withoutSaleprice.trim()),
               downpayment: parseInt(downpayment.trim()),
               noOfInstallments: parseInt(noOfInstallments.trim()),
+              empty_tanks: 0,
               date: firebase.firestore.FieldValue.serverTimestamp(),
             })
             .then((_) => {

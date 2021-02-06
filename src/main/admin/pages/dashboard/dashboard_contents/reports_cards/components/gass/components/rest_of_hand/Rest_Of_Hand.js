@@ -9,7 +9,7 @@ import { Spin } from "antd";
 async function getAllSold(year, month) {
   var rawSold = [];
   await db
-    .collection("gas_purchase_history")
+    .collection("gas_invoice")
     .orderBy("date", "desc")
     .get()
     .then((snap1) => {
@@ -22,9 +22,7 @@ async function getAllSold(year, month) {
         ) {
           rawSold.push({
             date: new Date(snap1.docs[i].data().date.seconds * 1000),
-            sold_total:
-              parseInt(snap1.docs[i].data().price) *
-              parseInt(snap1.docs[i].data().qty),
+            sold_total: parseInt(snap1.docs[i].data().total),
           });
         }
       }

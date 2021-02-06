@@ -6,93 +6,83 @@ import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import { useHistory } from "react-router-dom";
 import Typography from "@material-ui/core/Typography";
 
-// styles
-import "./SelectedItem_model.css";
+import db from "../../../../../../config/firebase.js";
 
-export default function SelectedItem_Model({ itemListProps, closeModel }) {
+export default function SelectedGas_Model({ gasListProps }) {
   const [isLoading, setLoading] = useState(false);
-  const [itemsData, setItemsData] = useState([]);
+  const [gasData, setGasData] = useState([]);
   const [paymentWay, setpaymentWay] = useState("PayandGo");
   let history = useHistory();
 
   useEffect(() => {
-     window.addEventListener("offline", function (e) {
+    window.addEventListener("offline", function (e) {
       history.push("/connection_lost");
     });
-    var keepData = [];
-    var i = 0;
-    itemListProps.forEach((ele) => {
-      keepData.push({
-        i: i,
-        id: ele.item.id,
-        serialNo: ele.item.data.serialNo,
-        modelNo: ele.item.data.modelNo,
-        chassisNo: ele.item.data.chassisNo,
-        title: ele.item.data.itemName,
-        unitprice: ele.item.data.salePrice,
-        qty: ele.qty,
-        item: ele.item.data,
-      });
-      i = i + 1;
-    });
 
-    setItemsData(keepData);
+    let gasListFromProp = gasListProps;
+
+    setGasData(gasListFromProp);
     // eslint-disable-next-line
-  }, [itemListProps]);
-
-  const removeItems = (i, itemId) => {
-    var itemsDataLength = itemsData.length;
-    let index = itemsData.indexOf((re) => re.id === itemId);
-    itemsData.splice(index, 1);
-    setItemsData([...itemsData]);
-    itemsDataLength = itemsDataLength - 1;
-    if (itemsDataLength === 0) {
-      closeModel();
-    }
-  };
+  }, [gasListProps]);
 
   const nextclick = () => {
     setLoading(true);
-    var nextData = [];
 
-    for (var i = 0; i < itemsData.length; i++) {
-      let obj = {
-        i: i,
-        id: itemsData[i].id,
-        serialNo: itemsData[i].serialNo,
-        modelNo: itemsData[i].modelNo,
-        chassisNo: itemsData[i].chassisNo,
-        title: itemsData[i].title,
-        unitprice: itemsData[i].unitprice,
-        qty: itemsData[i].qty,
-        paymentWay: paymentWay,
-        item: itemsData[i].item,
-        customer: null,
-      };
-      nextData.push(obj);
-    }
-    if (nextData.length === itemsData.length) {
-      if (paymentWay === "PayandGo") {
-        setLoading(false);
-        //sent to add customer
-        let moveWith = {
-          pathname: "/admin/ui/addCustomer",
-          search: "?query=abc",
-          state: { detail: nextData },
-        };
+    db.collection("gas")
+      .get()
+      .then((eachGasDoc) => {
+        let allGas = eachGasDoc.docs;
+        let nextGas = [];
 
-        history.push(moveWith);
-      } else {
-        setLoading(false);
-        //sent to direct invoice
-        let moveWith = {
-          pathname: "/admin/ui/makeInvoice",
-          search: "?query=abc",
-          state: { detail: nextData },
-        };
+        for (var i = 0; i < gasData.length; i++) {
+          let textWeight = gasData[i].substr(0, gasData[i].indexOf(" "));
 
-        history.push(moveWith);
-      }
+          let filGas = allGas.filter((ob) => ob.data().weight === textWeight);
+
+          nextGas.push({
+            id: filGas[0]?.id,
+            data: filGas[0]?.data(),
+            qty: 1,
+            paymentWay: paymentWay,
+            customer: null,
+            withCylinder: true,
+          });
+        }
+
+        if (nextGas.length === gasData.length) {
+          if (paymentWay === "PayandGo") {
+            setLoading(false);
+            //sent to add customer
+            let moveWith = {
+              pathname: "/admin/ui/Gass_customer",
+              search: "?query=abc",
+              state: { detail: nextGas },
+            };
+
+            history.push(moveWith);
+          } else {
+            setLoading(false);
+            //sent to direct invoice
+            let moveWith = {
+              pathname: "/admin/ui/Gass_invoice",
+              search: "?query=abc",
+              state: { detail: nextGas },
+            };
+
+            history.push(moveWith);
+          }
+        }
+      });
+  };
+
+  const removeGas = (gas_weight) => {
+    var gasDataLength = gasData.length;
+    let index = gasData.indexOf(gas_weight);
+    gasData.splice(index, 1);
+    setGasData([...gasData]);
+    gasDataLength = gasDataLength - 1;
+    if (gasDataLength === 0) {
+      window.location.reload();
     }
   };
 
@@ -100,10 +90,10 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
     <>
       <Grid container spacing={2}>
         <Grid className="radioGrid_main" item xs={12} sm={12}>
-        <Typography className="method_title" variant="h5" gutterBottom>
+          <Typography className="method_title" variant="h5" gutterBottom>
             Select A Payment Method :
-        </Typography>
-          </Grid>
+          </Typography>
+        </Grid>
         <Grid className="hr_rGrid_main" item xs={12} sm={4}>
           <hr />
         </Grid>
@@ -119,7 +109,7 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
             }}
           >
             <Radio.Button className="btn_radio" value="PayandGo">
-              Pay and Go
+              Easy Payment
             </Radio.Button>
             <Radio.Button className="btn_radio" value="FullPayment">
               Full Payment
@@ -150,8 +140,8 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
           </Button>
         }
         itemLayout="horizontal"
-        dataSource={itemsData}
-        renderItem={(item) => (
+        dataSource={gasData}
+        renderItem={(gas) => (
           <div className="selcted_model">
             <List.Item>
               <span className="icons_List">
@@ -160,19 +150,16 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
               <List.Item.Meta
                 title={
                   <Row>
-                    <Col span={5}> {item.title}</Col>
+                    <Col span={5}> {gas}</Col>
                     <Col span={2}></Col>
                     <Col span={12}></Col>
                     <Col span={5}>
                       <span className="icons_Close">
-                        <CloseOutlined
-                          onClick={() => removeItems(item.i, item.id)}
-                        />
+                        <CloseOutlined onClick={() => removeGas(gas)} />
                       </span>
                     </Col>
                   </Row>
                 }
-                description={<span>LKR {item.unitprice}</span>}
               />
             </List.Item>
             <Divider />

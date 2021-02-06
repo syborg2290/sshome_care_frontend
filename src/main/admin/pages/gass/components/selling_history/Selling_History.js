@@ -12,7 +12,16 @@ export default function Selling_History() {
   const [allTableData, setTableData] = useState([]);
   const columns = [
     {
-      name: "Weight",
+      name: "Invoice_no",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+     {
+      name: "Date",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -29,17 +38,9 @@ export default function Selling_History() {
         }),
       },
     },
+   
     {
-      name: "Date",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
-    {
-      name: "Qty",
+      name: "Payment_type",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -67,7 +68,7 @@ export default function Selling_History() {
   ];
 
   useEffect(() => {
-    db.collection("gas_purchase_history")
+    db.collection("gas_selling_history")
       .orderBy("date", "desc")
       .get()
       .then((snap) => {
@@ -75,15 +76,16 @@ export default function Selling_History() {
 
         snap.docs.forEach((each) => {
           raw.push({
-            Weight: each.data().weight + " Kg",
-            Type: each.data().type,
-            Date: moment(each.data()?.date?.toDate()).format(
+            Invoice_no: each.data().invoice_number,
+             Date: moment(each.data()?.date?.toDate()).format(
               "dddd, MMMM Do YYYY"
             ),
-            Qty: each.data().qty,
+            Type: each.data().selectedType,
+           
+            Payment_type: each.data().paymentWay,
             Total: (
               <CurrencyFormat
-                value={each.data().price}
+                value={each.data().total}
                 displayType={"text"}
                 thousandSeparator={true}
                 prefix={" "}

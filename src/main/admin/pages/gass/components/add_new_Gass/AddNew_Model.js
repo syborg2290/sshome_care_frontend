@@ -19,6 +19,7 @@ export default function AddNew_Model({ close_model }) {
 
   const [downpayment, setDownpayment] = useState(0);
   const [noOfInstallments, setNoOfInstallments] = useState(0);
+  const [amountPerIns, setAmountPerIns] = useState(0);
   //Cash price
   const [price, setPrice] = useState(0);
   const [withoutCprice, setWithoutCPrice] = useState(0);
@@ -90,6 +91,12 @@ export default function AddNew_Model({ close_model }) {
                 noOfInstallments === null
                   ? re.docs[0].data().noOfInstallments
                   : parseInt(noOfInstallments.trim()),
+              amountPerIns:
+                amountPerIns === 0 ||
+                amountPerIns === "" ||
+                amountPerIns === null
+                  ? re.docs[0].data().amountPerIns
+                  : parseInt(amountPerIns.trim()),
             })
             .then((_) => {
               db.collection("gas_history").add({
@@ -118,6 +125,7 @@ export default function AddNew_Model({ close_model }) {
               withoutSaleprice: parseInt(withoutSaleprice.trim()),
               downpayment: parseInt(downpayment.trim()),
               noOfInstallments: parseInt(noOfInstallments.trim()),
+              amountPerIns: parseInt(amountPerIns.trim()),
               empty_tanks: 0,
               date: firebase.firestore.FieldValue.serverTimestamp(),
             })
@@ -402,6 +410,32 @@ export default function AddNew_Model({ close_model }) {
                 onChange={(e) => {
                   if (e.target.value !== "") {
                     setNoOfInstallments(e.target.value.trim());
+                  }
+                }}
+              />
+            </Grid>
+            <Grid className="txt_Labels" item xs={12} sm={3}></Grid>
+            <Grid item xs={12} sm={12}></Grid>
+            <Grid className="txt_Labels" item xs={12} sm={4}>
+              Amount Per Installment(LKR) :
+            </Grid>
+            <Grid item xs={12} sm={5}>
+              <TextField
+                className="txtt_nic"
+                autoComplete="weight"
+                name="amountperinstallment"
+                variant="outlined"
+                required
+                fullWidth
+                id="amountperinstallment"
+                label="AmountPerInstallment"
+                size="small"
+                type="number"
+                value={amountPerIns}
+                InputProps={{ inputProps: { min: 0 } }}
+                onChange={(e) => {
+                  if (e.target.value !== "") {
+                    setAmountPerIns(e.target.value.trim());
                   }
                 }}
               />

@@ -114,6 +114,14 @@ function Make_invoice() {
       var keepDataDP = {};
       var keepDataDiscount = {};
       location.state.detail.forEach((obj) => {
+        db.collection("gas")
+          .where("weight", "==", obj.data?.weight)
+          .get()
+          .then((reGasDow) => {
+            setDpayment(reGasDow.docs[0].data().downpayment);
+            setItemNOI(reGasDow.docs[0].data().noOfInstallments);
+            setItemAPI(reGasDow.docs[0].data().amountPerIns);
+          });
         keepDataQTY[obj.data?.weight] = obj.qty;
         keepDataDP[obj.data?.weight] =
           obj.paymentWay === "PayandGo" ? obj.data?.saleprice : obj.data?.price;

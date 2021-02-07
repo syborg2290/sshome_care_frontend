@@ -344,20 +344,26 @@ export default function Gass() {
                         if (selectedGas.includes(row.Weight)) {
                           selectedGas.splice(selectedGas.indexOf(row.Weight));
                         } else {
-                          let textWeight = row.Weight.substr(
-                            0,
-                            row.Weight.indexOf(" ")
-                          );
-                          db.collection("gas")
-                            .where("weight", "==", textWeight)
-                            .get()
-                            .then((reG) => {
-                              if (reG.docs[0].data().qty === 0) {
-                                NotificationManager.warning("Out of stock");
-                              } else {
-                                selectedGas.push(row.Weight);
-                              }
-                            });
+                          if (selectedGas.length === 0) {
+                            let textWeight = row.Weight.substr(
+                              0,
+                              row.Weight.indexOf(" ")
+                            );
+                            db.collection("gas")
+                              .where("weight", "==", textWeight)
+                              .get()
+                              .then((reG) => {
+                                if (reG.docs[0].data().qty === 0) {
+                                  NotificationManager.warning("Out of stock");
+                                } else {
+                                  selectedGas.push(row.Weight);
+                                }
+                              });
+                          } else {
+                            NotificationManager.warning(
+                              "One weight for one time"
+                            );
+                          }
                         }
                       }}
                     />

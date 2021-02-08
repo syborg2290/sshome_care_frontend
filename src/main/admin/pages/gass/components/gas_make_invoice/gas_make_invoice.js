@@ -1,4 +1,4 @@
-import { PrinterFilled } from "@ant-design/icons";
+import { PrinterFilled } from '@ant-design/icons'
 import {
   Box,
   Button,
@@ -16,366 +16,362 @@ import {
   TableHead,
   TableRow,
   TextField,
-  Typography,
-} from "@material-ui/core";
+  Typography
+} from '@material-ui/core'
 // icon
-import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
-import CloseOutlinedIcon from "@material-ui/icons/CloseOutlined";
-import { Checkbox, DatePicker, Modal, Radio, Space, Spin } from "antd";
-import firebase from "firebase";
-import React, { useEffect, useState } from "react";
-import CurrencyFormat from "react-currency-format";
-import {
-  NotificationContainer,
-  NotificationManager,
-} from "react-notifications";
-import "react-notifications/lib/notifications.css";
-import { useHistory, useLocation } from "react-router-dom";
-import db, { storage } from "../../../../../../config/firebase.js";
-import "./gas_invoice.css";
+import ArrowForwardIcon from '@material-ui/icons/ArrowForward'
+import CloseOutlinedIcon from '@material-ui/icons/CloseOutlined'
+import { Checkbox, DatePicker, Modal, Radio, Space, Spin } from 'antd'
+import firebase from 'firebase'
+import React, { useEffect, useState } from 'react'
+import CurrencyFormat from 'react-currency-format'
+import { NotificationContainer, NotificationManager } from 'react-notifications'
+import 'react-notifications/lib/notifications.css'
+import { useHistory, useLocation } from 'react-router-dom'
+import db, { storage } from '../../../../../../config/firebase.js'
+import './gas_invoice.css'
 
 // components
 // import AddSerialNumber from "./components/Add_Serial_Number";
 
-function Make_invoice() {
-  const location = useLocation();
-  const [allRoot, setAllRoot] = useState([]);
-  const [loadingsubmit, setLoadingSubmit] = useState(false);
-  const [loadingNicsubmit, setLoadingNicSubmit] = useState(false);
-  const [invoiceNumber, setInvoiceNumber] = useState("");
-  const [tablerows, setTableRows] = useState([]);
-  const [itemQty, setItemQty] = useState({});
-  const [itemDP, setItemDP] = useState({});
-  const [itemNOI, setItemNOI] = useState(0);
-  const [itemAPI, setItemAPI] = useState(0);
-  const [balance, setBalance] = useState(0);
-  const [shortage, setShortage] = useState(0);
-  const [dpayment, setDpayment] = useState(0);
-  const [itemDiscount, setItemDiscount] = useState({});
-  const [totalDiscount, setTotalDiscount] = useState(0);
-  const [gamisaraniInitialAmount, setGamisaraniInitialAmount] = useState(0);
-  const [gamisaraniamount, setGamisaraniamount] = useState(0);
-  const [gamisaraniId, setGamisaraniId] = useState("");
-  const [gamisaraniNic, setGamisaraniNic] = useState("");
-  const [days, setDays] = useState(new Date().getDay());
-  const [dates, setDates] = useState(new Date().getDate());
-  const [selectedType, setSelectedType] = useState("shop");
-  const [rootVillage, setRootVillage] = useState("");
-  const [gamisarani, setGamisarani] = useState(false);
-  const [intialTimestamp, setInititialTimestamp] = useState(null);
-  const [deadlineTimestamp, setDeadlineTimestamp] = useState(null);
-  const [isFullPayment, setIsFullPayment] = useState(false);
-  const [documentCharges, setDocumentCharges] = useState(0);
-  const [invoiceStatus, setInvoiceStatus] = useState("new");
+function Make_invoice () {
+  const location = useLocation()
+  const [allRoot, setAllRoot] = useState([])
+  const [loadingsubmit, setLoadingSubmit] = useState(false)
+  const [loadingNicsubmit, setLoadingNicSubmit] = useState(false)
+  const [invoiceNumber, setInvoiceNumber] = useState('')
+  const [tablerows, setTableRows] = useState([])
+  const [itemQty, setItemQty] = useState({})
+  const [itemDP, setItemDP] = useState({})
+  const [itemNOI, setItemNOI] = useState(0)
+  const [itemAPI, setItemAPI] = useState(0)
+  const [balance, setBalance] = useState(0)
+  const [shortage, setShortage] = useState(0)
+  const [dpayment, setDpayment] = useState(0)
+  const [itemDiscount, setItemDiscount] = useState({})
+  const [totalDiscount, setTotalDiscount] = useState(0)
+  const [gamisaraniInitialAmount, setGamisaraniInitialAmount] = useState(0)
+  const [gamisaraniamount, setGamisaraniamount] = useState(0)
+  const [gamisaraniId, setGamisaraniId] = useState('')
+  const [gamisaraniNic, setGamisaraniNic] = useState('')
+  const [days, setDays] = useState(new Date().getDay())
+  const [dates, setDates] = useState(new Date().getDate())
+  const [selectedType, setSelectedType] = useState('shop')
+  const [rootVillage, setRootVillage] = useState('')
+  const [gamisarani, setGamisarani] = useState(false)
+  const [intialTimestamp, setInititialTimestamp] = useState(null)
+  const [deadlineTimestamp, setDeadlineTimestamp] = useState(null)
+  const [isFullPayment, setIsFullPayment] = useState(false)
+  const [documentCharges, setDocumentCharges] = useState(0)
+  const [invoiceStatus, setInvoiceStatus] = useState('new')
   // eslint-disable-next-line
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [fullname, setFullname] = useState("");
-  const [nic, setNic] = useState("");
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const [fullname, setFullname] = useState('')
+  const [nic, setNic] = useState('')
 
-  let history = useHistory();
-  let history2 = useHistory();
-  const { confirm } = Modal;
+  let history = useHistory()
+  let history2 = useHistory()
+  const { confirm } = Modal
 
-  const handleChange = (event) => {
-    setSelectedType(event.target.value);
-  };
+  const handleChange = event => {
+    setSelectedType(event.target.value)
+  }
 
   useEffect(() => {
-    window.addEventListener("offline", function (e) {
-      history2.push("/connection_lost");
-    });
+    window.addEventListener('offline', function (e) {
+      history2.push('/connection_lost')
+    })
 
     window.addEventListener(
-      "popstate",
-      (event) => {
+      'popstate',
+      event => {
         if (event.state) {
-          history.push("/admin/ui/gass");
+          history.push('/admin/ui/gass')
         }
       },
       false
-    );
+    )
 
     window.history.pushState(
-      { name: "browserBack" },
-      "on browser back click",
+      { name: 'browserBack' },
+      'on browser back click',
       window.location.href
-    );
+    )
     window.history.pushState(
-      { name: "browserBack" },
-      "on browser back click",
+      { name: 'browserBack' },
+      'on browser back click',
       window.location.href
-    );
+    )
 
-    setInvoiceNumber("IN-" + Math.floor(Math.random() * 1000000000 + 1));
+    setInvoiceNumber('IN-' + Math.floor(Math.random() * 1000000000 + 1))
 
     if (location.state != null) {
-      var tableData = [];
-      var keepDataQTY = {};
-      var keepDataDP = {};
-      var keepDataDiscount = {};
-      location.state.detail.forEach((obj) => {
-        db.collection("gas")
-          .where("weight", "==", obj.data?.weight)
+      var tableData = []
+      var keepDataQTY = {}
+      var keepDataDP = {}
+      var keepDataDiscount = {}
+      location.state.detail.forEach(obj => {
+        db.collection('gas')
+          .where('weight', '==', obj.data?.weight)
           .get()
-          .then((reGasDow) => {
-            setDpayment(reGasDow.docs[0].data().downpayment);
-            setItemNOI(reGasDow.docs[0].data().noOfInstallments);
-            setItemAPI(reGasDow.docs[0].data().amountPerIns);
-          });
-        keepDataQTY[obj.data?.weight] = obj.qty;
+          .then(reGasDow => {
+            setDpayment(reGasDow.docs[0].data().downpayment)
+            setItemNOI(reGasDow.docs[0].data().noOfInstallments)
+            setItemAPI(reGasDow.docs[0].data().amountPerIns)
+          })
+        keepDataQTY[obj.data?.weight] = obj.qty
         keepDataDP[obj.data?.weight] =
-          obj.paymentWay === "PayandGo" ? obj.data?.saleprice : obj.data?.price;
-        keepDataDiscount[obj.data?.weight] = 0;
-        tableData.push(obj);
-        if (obj.paymentWay === "PayandGo") {
-          setIsFullPayment(false);
+          obj.paymentWay === 'PayandGo' ? obj.data?.saleprice : obj.data?.price
+        keepDataDiscount[obj.data?.weight] = 0
+        tableData.push(obj)
+        if (obj.paymentWay === 'PayandGo') {
+          setIsFullPayment(false)
         } else {
-          setIsFullPayment(true);
+          setIsFullPayment(true)
         }
-      });
-      setItemDiscount(keepDataDiscount);
-      setItemQty(keepDataQTY);
-      setItemDP(keepDataDP);
-      setTableRows(tableData);
+      })
+      setItemDiscount(keepDataDiscount)
+      setItemQty(keepDataQTY)
+      setItemDP(keepDataDP)
+      setTableRows(tableData)
     }
 
-    db.collection("root")
+    db.collection('root')
       .get()
-      .then((re) => {
-        var rawRoot = [];
-        re.docs.forEach((each) => {
-          rawRoot.push(each.data().root);
-        });
-        setAllRoot(rawRoot);
-      });
+      .then(re => {
+        var rawRoot = []
+        re.docs.forEach(each => {
+          rawRoot.push(each.data().root)
+        })
+        setAllRoot(rawRoot)
+      })
 
     // eslint-disable-next-line
-  }, []);
+  }, [])
 
   const subTotalFunc = () => {
-    var subTotalValue = 0;
+    var subTotalValue = 0
     for (var a = 0; a < tablerows.length; a++) {
       subTotalValue =
         subTotalValue +
         (itemDP[tablerows[a].data?.weight] -
           itemDiscount[tablerows[a].data?.weight]) *
-          itemQty[tablerows[a].data?.weight];
+          itemQty[tablerows[a].data?.weight]
     }
-    let gamiam = gamisaraniamount === "" ? 0 : parseInt(gamisaraniamount);
-    let fTotoS = subTotalValue - gamiam <= 0 ? 0 : subTotalValue - gamiam;
-    return fTotoS;
-  };
+    let gamiam = gamisaraniamount === '' ? 0 : parseInt(gamisaraniamount)
+    let fTotoS = subTotalValue - gamiam <= 0 ? 0 : subTotalValue - gamiam
+    return fTotoS
+  }
 
   const handleQTYChange = (e, weight, row) => {
     try {
-      const { value } = e.target;
-      db.collection("gas")
-        .where("weight", "==", weight)
+      const { value } = e.target
+      db.collection('gas')
+        .where('weight', '==', weight)
         .get()
-        .then((doc) => {
+        .then(doc => {
           if (
-            Math.round(doc.docs[0]?.data()?.qty) >= (value === "" ? 1 : value)
+            Math.round(doc.docs[0]?.data()?.qty) >= (value === '' ? 1 : value)
           ) {
             setItemQty({
               ...itemQty,
-              [row.data.weight]: value,
-            });
+              [row.data.weight]: value
+            })
           } else {
-            NotificationManager.warning("Out Of Stock");
+            NotificationManager.warning('Out Of Stock')
           }
-        });
+        })
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
-  };
+  }
 
   const showConfirm = () => {
     if (!isFullPayment) {
       if (deadlineTimestamp !== null) {
         if (balance === 0) {
-          NotificationManager.warning("Balance amount is required ! )");
+          NotificationManager.warning('Balance amount is required ! )')
         } else {
           if (itemAPI === 0) {
             NotificationManager.warning(
-              "Amount per installment amount is required ! )"
-            );
+              'Amount per installment amount is required ! )'
+            )
           } else {
             if (itemNOI === 0) {
-              NotificationManager.warning("No of installment is required ! )");
+              NotificationManager.warning('No of installment is required ! )')
             } else {
               if (dpayment === 0) {
                 NotificationManager.warning(
-                  "Downpayment amount is required ! )"
-                );
+                  'Downpayment amount is required ! )'
+                )
               } else {
-                seFunc();
+                seFunc()
               }
             }
           }
         }
       } else {
-        NotificationManager.warning("Deadline date is not selected ! )");
+        NotificationManager.warning('Deadline date is not selected ! )')
       }
     } else {
-      seFunc();
+      seFunc()
     }
-  };
+  }
 
   const seFunc = () => {
     if (subTotalFunc() - totalDiscount < 0) {
       NotificationManager.warning(
-        "Issue with your calculations Pleace check again (May be Included minus values ! )"
-      );
+        'Issue with your calculations Pleace check again (May be Included minus values ! )'
+      )
     } else {
       if (
         gamisarani &&
-        (parseInt(gamisaraniamount) === "" ? 0 : parseInt(gamisaraniamount)) > 0
+        (parseInt(gamisaraniamount) === '' ? 0 : parseInt(gamisaraniamount)) > 0
       ) {
-        db.collection("gami_sarani")
+        db.collection('gami_sarani')
           .doc(gamisaraniId)
           .get()
-          .then((getRe) => {
-            let toto1 =
-              gamisaraniamount === "" ? 0 : parseInt(gamisaraniamount);
-            let totoF = getRe.data().currentDeposit - toto1;
-            db.collection("gami_sarani")
+          .then(getRe => {
+            let toto1 = gamisaraniamount === '' ? 0 : parseInt(gamisaraniamount)
+            let totoF = getRe.data().currentDeposit - toto1
+            db.collection('gami_sarani')
               .doc(gamisaraniId)
               .update({
-                currentDeposit: totoF <= 0 ? 0 : totoF,
+                currentDeposit: totoF <= 0 ? 0 : totoF
               })
-              .then((re) => {
+              .then(re => {
                 let toto =
-                  gamisaraniamount === "" ? 0 : parseInt(gamisaraniamount);
-                db.collection("gami_sarani_withdrawhistory").add({
+                  gamisaraniamount === '' ? 0 : parseInt(gamisaraniamount)
+                db.collection('gami_sarani_withdrawhistory').add({
                   gami_nic: gamisaraniNic,
                   docId: gamisaraniId,
                   withdraw: toto,
                   balance: getRe.data().currentDeposit - toto,
-                  date: intialTimestamp,
-                });
+                  date: intialTimestamp
+                })
 
                 confirm({
                   title: (
-                    <h5 className="confo_title">
+                    <h5 className='confo_title'>
                       Do you Want to Print an Invoice ?
                     </h5>
                   ),
-                  icon: <PrinterFilled className="confo_icon" />,
-                  okText: "Yes",
-                  cancelText: "No",
-                  async onOk() {
-                    var arrayPassingItems = [];
+                  icon: <PrinterFilled className='confo_icon' />,
+                  okText: 'Yes',
+                  cancelText: 'No',
+                  async onOk () {
+                    var arrayPassingItems = []
 
-                    tablerows.forEach((one) => {
+                    tablerows.forEach(one => {
                       let objItem = {
                         weight: one.data.weight,
                         qty: itemQty[one.data.weight],
                         unit:
-                          one.paymentWay === "PayandGo"
+                          one.paymentWay === 'PayandGo'
                             ? one.withCylinder
                               ? one.data.saleprice
                               : one.data.withoutSaleprice
                             : one.withCylinder
                             ? one.data.price
                             : one.data.withoutCprice,
-                        price: subTotalFunc() - totalDiscount,
-                      };
-                      arrayPassingItems.push(objItem);
-                    });
+                        price: subTotalFunc() - totalDiscount
+                      }
+                      arrayPassingItems.push(objItem)
+                    })
 
                     let moveWith = {
                       pathname:
-                        "/admin/gass/gass_Model/make_recipt/Gass_recipt",
-                      search: "?query=abc",
+                        '/admin/gass/gass_Model/make_recipt/Gass_recipt',
+                      search: '?query=abc',
                       state: {
                         detail: {
                           total: subTotalFunc() - totalDiscount,
-                          list: arrayPassingItems,
-                        },
-                      },
-                    };
+                          list: arrayPassingItems
+                        }
+                      }
+                    }
                     await invoiceIntoDb().then(() => {
-                      history.push(moveWith);
-                    });
+                      history.push(moveWith)
+                    })
                   },
-                  async onCancel() {
+                  async onCancel () {
                     await invoiceIntoDb().then(() => {
-                      history.push("/admin/ui/gass");
-                    });
-                  },
-                });
-              });
-          });
+                      history.push('/admin/ui/gass')
+                    })
+                  }
+                })
+              })
+          })
       } else {
         confirm({
           title: (
-            <h5 className="confo_title">Do you Want to Print an Invoice?</h5>
+            <h5 className='confo_title'>Do you Want to Print an Invoice?</h5>
           ),
-          icon: <PrinterFilled className="confo_icon" />,
-          okText: "Yes",
-          cancelText: "No",
-          async onOk() {
-            var arrayPassingItems = [];
+          icon: <PrinterFilled className='confo_icon' />,
+          okText: 'Yes',
+          cancelText: 'No',
+          async onOk () {
+            var arrayPassingItems = []
 
-            tablerows.forEach((one) => {
+            tablerows.forEach(one => {
               let objItem = {
                 weight: one.data.weight,
                 qty: itemQty[one.data.weight],
                 unit:
-                  one.paymentWay === "PayandGo"
+                  one.paymentWay === 'PayandGo'
                     ? one.withCylinder
                       ? one.data.saleprice
                       : one.data.withoutSaleprice
                     : one.withCylinder
                     ? one.data.price
                     : one.data.withoutCprice,
-                price: subTotalFunc() - totalDiscount,
-              };
-              arrayPassingItems.push(objItem);
-            });
+                price: subTotalFunc() - totalDiscount
+              }
+              arrayPassingItems.push(objItem)
+            })
 
             let moveWith = {
-              pathname: "/admin/gass/gass_Model/make_recipt/Gass_recipt",
-              search: "?query=abc",
+              pathname: '/admin/gass/gass_Model/make_recipt/Gass_recipt',
+              search: '?query=abc',
               state: {
                 detail: {
                   total: subTotalFunc() - totalDiscount,
-                  list: arrayPassingItems,
-                },
-              },
-            };
+                  list: arrayPassingItems
+                }
+              }
+            }
             await invoiceIntoDb().then(() => {
-              history.push(moveWith);
-            });
+              history.push(moveWith)
+            })
           },
-          async onCancel() {
+          async onCancel () {
             await invoiceIntoDb().then(() => {
-              history.push("/admin/ui/gass");
-            });
-          },
-        });
+              history.push('/admin/ui/gass')
+            })
+          }
+        })
       }
     }
-  };
+  }
 
   // eslint-disable-next-line
   const invoiceIntoDb = async () => {
-    setLoadingSubmit(true);
+    setLoadingSubmit(true)
     var times = new Date(
       new Date(intialTimestamp?.seconds * 1000).setMonth(
         new Date(intialTimestamp?.seconds * 1000).getMonth() + 1
       )
-    ).setDate(parseInt(dates));
-    if (tablerows.some((ob) => ob.customer !== null)) {
+    ).setDate(parseInt(dates))
+    if (tablerows.some(ob => ob.customer !== null)) {
       if (deadlineTimestamp !== null) {
-        let randomNumber = Math.floor(Math.random() * 1000000000) + 1000;
+        let randomNumber = Math.floor(Math.random() * 1000000000) + 1000
         //customerImageUrlFront
         if (tablerows[0]?.customer?.customerImageFileFront !== null) {
           await storage
             .ref(
               `images/${tablerows[0]?.customer?.customerImageFileFront?.name}${randomNumber}`
             )
-            .put(tablerows[0]?.customer?.customerImageFileFront);
+            .put(tablerows[0]?.customer?.customerImageFileFront)
         }
         //customerImageUrlBack
         if (tablerows[0]?.customer?.customerImageFile2Back !== null) {
@@ -383,7 +379,7 @@ function Make_invoice() {
             .ref(
               `images/${tablerows[0]?.customer?.customerImageFile2Back?.name}${randomNumber}`
             )
-            .put(tablerows[0]?.customer?.customerImageFile2Back);
+            .put(tablerows[0]?.customer?.customerImageFile2Back)
         }
         //trustee1ImageUrlFront
         if (tablerows[0]?.customer?.trustee1ImageFile1Front !== null) {
@@ -391,7 +387,7 @@ function Make_invoice() {
             .ref(
               `images/${tablerows[0]?.customer?.trustee1ImageFile1Front?.name}${randomNumber}`
             )
-            .put(tablerows[0]?.customer?.trustee1ImageFile1Front);
+            .put(tablerows[0]?.customer?.trustee1ImageFile1Front)
         }
         //trustee1ImageUrlBack
         if (tablerows[0]?.customer?.trustee1ImageFile2Back !== null) {
@@ -399,7 +395,7 @@ function Make_invoice() {
             .ref(
               `images/${tablerows[0]?.customer?.trustee1ImageFile2Back?.name}${randomNumber}`
             )
-            .put(tablerows[0]?.customer?.trustee1ImageFile2Back);
+            .put(tablerows[0]?.customer?.trustee1ImageFile2Back)
         }
         //trustee2ImageUrlFront
         if (tablerows[0]?.customer?.trustee2ImageFile1Front !== null) {
@@ -407,7 +403,7 @@ function Make_invoice() {
             .ref(
               `images/${tablerows[0]?.customer?.trustee2ImageFile1Front?.name}${randomNumber}`
             )
-            .put(tablerows[0]?.customer?.trustee2ImageFile1Front);
+            .put(tablerows[0]?.customer?.trustee2ImageFile1Front)
         }
         //trustee2ImageUrlBack
         if (tablerows[0]?.customer?.trustee2ImageFile2Back !== null) {
@@ -415,78 +411,78 @@ function Make_invoice() {
             .ref(
               `images/${tablerows[0]?.customer?.trustee2ImageFile2Back?.name}${randomNumber}`
             )
-            .put(tablerows[0]?.customer?.trustee2ImageFile2Back);
+            .put(tablerows[0]?.customer?.trustee2ImageFile2Back)
         }
         storage
-          .ref("images")
+          .ref('images')
           .child(
             tablerows[0]?.customer?.customerImageFileFront === null
-              ? "Avatar2.png"
+              ? 'Avatar2.png'
               : tablerows[0]?.customer?.customerImageFileFront?.name +
                   randomNumber
           )
           .getDownloadURL()
-          .then((customerImageURLFront) => {
+          .then(customerImageURLFront => {
             storage
-              .ref("images")
+              .ref('images')
               .child(
                 tablerows[0]?.customer?.customerImageFile2Back === null
-                  ? "avatar1132.jpg"
+                  ? 'avatar1132.jpg'
                   : tablerows[0]?.customer?.customerImageFile2Back?.name +
                       randomNumber
               )
               .getDownloadURL()
-              .then((customerImageURLBack) => {
+              .then(customerImageURLBack => {
                 storage
-                  .ref("images")
+                  .ref('images')
                   .child(
                     tablerows[0]?.customer?.trustee1ImageFile1Front === null
-                      ? "Avatar2.png"
+                      ? 'Avatar2.png'
                       : tablerows[0]?.customer?.trustee1ImageFile1Front?.name +
                           randomNumber
                   )
                   .getDownloadURL()
-                  .then((trustee1ImageURLFront) => {
+                  .then(trustee1ImageURLFront => {
                     storage
-                      .ref("images")
+                      .ref('images')
                       .child(
                         tablerows[0]?.customer?.trustee1ImageFile2Back === null
-                          ? "avatar1132.jpg"
+                          ? 'avatar1132.jpg'
                           : tablerows[0]?.customer?.trustee1ImageFile2Back
                               ?.name + randomNumber
                       )
                       .getDownloadURL()
-                      .then((trustee1ImageURLBack) => {
+                      .then(trustee1ImageURLBack => {
                         storage
-                          .ref("images")
+                          .ref('images')
                           .child(
                             tablerows[0]?.customer?.trustee2ImageFile1Front ===
                               null
-                              ? "Avatar2.png"
+                              ? 'Avatar2.png'
                               : tablerows[0]?.customer?.trustee2ImageFile1Front
                                   ?.name + randomNumber
                           )
                           .getDownloadURL()
-                          .then((trustee2ImageURLFront) => {
+                          .then(trustee2ImageURLFront => {
                             storage
-                              .ref("images")
+                              .ref('images')
                               .child(
                                 tablerows[0]?.customer
                                   ?.trustee2ImageFile2Back === null
-                                  ? "avatar1132.jpg"
+                                  ? 'avatar1132.jpg'
                                   : tablerows[0]?.customer
                                       ?.trustee2ImageFile2Back?.name +
                                       randomNumber
                               )
                               .getDownloadURL()
-                              .then(async (trustee2ImageURLBack) => {
+                              .then(async trustee2ImageURLBack => {
                                 //+++++++++++++++++++++++++++++++++++
                                 if (tablerows[0].customer.customerId !== null) {
                                   let prevCust = await db
-                                    .collection("customer")
+                                    .collection('customer')
                                     .doc(tablerows[0].customer.customerId)
-                                    .get();
-                                  db.collection("customer")
+                                    .get()
+                                  db.collection('customer')
                                     .doc(tablerows[0].customer.customerId)
                                     .update({
                                       fname:
@@ -511,43 +507,43 @@ function Make_invoice() {
                                       mobile2:
                                         tablerows[0].customer.customerMobile2,
                                       customerFrontURL: customerImageURLFront,
-                                      customerBackURL: customerImageURLBack,
+                                      customerBackURL: customerImageURLBack
                                     })
-                                    .then((_) => {
-                                      let arrayItems = [];
-                                      tablerows.forEach((one) => {
+                                    .then(_ => {
+                                      let arrayItems = []
+                                      tablerows.forEach(one => {
                                         let objItem = {
                                           item_id: one.id,
                                           withCylinder: one.withCylinder,
                                           price:
-                                            itemDP[one.weight] === ""
+                                            itemDP[one.weight] === ''
                                               ? 0
                                               : parseInt(itemDP[one.weight]),
                                           qty: parseInt(itemQty[one.weight]),
                                           discount:
-                                            itemDiscount[one.weight] === ""
+                                            itemDiscount[one.weight] === ''
                                               ? 0
                                               : itemDiscount[one.weight],
                                           weight: one.weight,
-                                          data: one.data,
-                                        };
-                                        arrayItems.push(objItem);
-                                      });
-                                      db.collection("gas_selling_history").add({
+                                          data: one.data
+                                        }
+                                        arrayItems.push(objItem)
+                                      })
+                                      db.collection('gas_selling_history').add({
                                         invoice_number: invoiceNumber,
                                         gas: arrayItems,
                                         paymentWay: isFullPayment
-                                          ? "FullPayment"
-                                          : "PayandGo",
+                                          ? 'FullPayment'
+                                          : 'PayandGo',
                                         selectedType: selectedType,
                                         total:
                                           subTotalFunc() -
-                                          (totalDiscount === ""
+                                          (totalDiscount === ''
                                             ? 0
                                             : totalDiscount),
-                                        date: intialTimestamp,
-                                      });
-                                      db.collection("gas_invoice")
+                                        date: intialTimestamp
+                                      })
+                                      db.collection('gas_invoice')
                                         .add({
                                           invoice_number: invoiceNumber,
                                           items: arrayItems,
@@ -558,15 +554,15 @@ function Make_invoice() {
                                           mid: tablerows[0].customer.mid,
                                           installemtnDay: days,
                                           installemtnDate:
-                                            dates === "" ? 1 : dates,
+                                            dates === '' ? 1 : dates,
                                           gamisarani: gamisarani,
                                           gamisarani_amount:
-                                            gamisaraniamount === ""
+                                            gamisaraniamount === ''
                                               ? 0
                                               : parseInt(gamisaraniamount),
                                           paymentWay: isFullPayment
-                                            ? "FullPayment"
-                                            : "PayandGo",
+                                            ? 'FullPayment'
+                                            : 'PayandGo',
                                           downpayment: dpayment,
                                           noOfInstallment: itemNOI,
                                           amountPerInstallment: itemAPI,
@@ -575,25 +571,25 @@ function Make_invoice() {
                                           selectedType: selectedType,
                                           root_village: rootVillage,
                                           discount:
-                                            totalDiscount === ""
+                                            totalDiscount === ''
                                               ? 0
                                               : totalDiscount,
                                           shortage:
-                                            shortage === "" ? 0 : shortage,
+                                            shortage === '' ? 0 : shortage,
                                           total:
                                             subTotalFunc() -
-                                            (totalDiscount === ""
+                                            (totalDiscount === ''
                                               ? 0
                                               : totalDiscount),
-                                          status_of_payandgo: "onGoing",
+                                          status_of_payandgo: 'onGoing',
                                           date: intialTimestamp,
                                           document_charges: documentCharges,
                                           nextDate: firebase.firestore.Timestamp.fromDate(
                                             new Date(times)
-                                          ),
+                                          )
                                         })
-                                        .then((_) => {
-                                          db.collection("trustee").add({
+                                        .then(_ => {
+                                          db.collection('trustee').add({
                                             fname:
                                               tablerows[0].customer
                                                 .trustee1Fname,
@@ -617,8 +613,8 @@ function Make_invoice() {
                                             invoice_number: invoiceNumber,
                                             trusteeFrontURL: trustee1ImageURLFront,
                                             trusteeBackURL: trustee1ImageURLBack,
-                                            date: firebase.firestore.FieldValue.serverTimestamp(),
-                                          });
+                                            date: firebase.firestore.FieldValue.serverTimestamp()
+                                          })
                                           if (
                                             tablerows[0].customer.trustee2Nic &&
                                             tablerows[0].customer
@@ -630,7 +626,7 @@ function Make_invoice() {
                                             tablerows[0].customer
                                               .trustee2Mobile1
                                           ) {
-                                            db.collection("trustee").add({
+                                            db.collection('trustee').add({
                                               fname:
                                                 tablerows[0].customer
                                                   .trustee2Fname,
@@ -655,21 +651,21 @@ function Make_invoice() {
                                               invoice_number: invoiceNumber,
                                               trusteeFrontURL: trustee2ImageURLFront,
                                               trusteeBackURL: trustee2ImageURLBack,
-                                              date: firebase.firestore.FieldValue.serverTimestamp(),
-                                            });
+                                              date: firebase.firestore.FieldValue.serverTimestamp()
+                                            })
                                           }
-                                          if (invoiceStatus === "new") {
+                                          if (invoiceStatus === 'new') {
                                             tablerows.forEach(
-                                              async (itemUDoc) => {
+                                              async itemUDoc => {
                                                 let newArray = await await db
-                                                  .collection("gas")
+                                                  .collection('gas')
                                                   .doc(itemUDoc.id)
-                                                  .get();
+                                                  .get()
 
                                                 //++++++++++++++++++++++++++++++++++++++++++++
-                                                if (invoiceStatus === "new") {
+                                                if (invoiceStatus === 'new') {
                                                   await db
-                                                    .collection("gas")
+                                                    .collection('gas')
                                                     .doc(itemUDoc.id)
                                                     .update({
                                                       qty:
@@ -679,32 +675,29 @@ function Make_invoice() {
                                                         itemQty[
                                                           itemUDoc.data.weight
                                                         ],
-                                                      empty_tanks:!itemUDoc.withCylinder?
+                                                      empty_tanks:
                                                         Math.round(
                                                           newArray.data()
                                                             .empty_tanks
                                                         ) +
                                                         parseInt(
-                                                          itemUDoc.withCylinder
+                                                          !itemUDoc.withCylinder
                                                             ? itemQty[
                                                                 itemUDoc.data
                                                                   .weight
                                                               ]
                                                             : 0
-                                                        ): Math.round(
-                                                          newArray.data()
-                                                            .empty_tanks
-                                                        ) ,
-                                                    });
+                                                        )
+                                                    })
                                                 }
                                               }
-                                            );
+                                            )
                                           }
-                                          setLoadingSubmit(false);
-                                        });
-                                    });
+                                          setLoadingSubmit(false)
+                                        })
+                                    })
                                 } else {
-                                  db.collection("customer")
+                                  db.collection('customer')
                                     .add({
                                       fname:
                                         tablerows[0].customer.customerFname,
@@ -729,17 +722,17 @@ function Make_invoice() {
                                         tablerows[0].customer.customerMobile2,
                                       customerFrontURL: customerImageURLFront,
                                       customerBackURL: customerImageURLBack,
-                                      status: "normal",
-                                      date: firebase.firestore.FieldValue.serverTimestamp(),
+                                      status: 'normal',
+                                      date: firebase.firestore.FieldValue.serverTimestamp()
                                     })
-                                    .then((cust) => {
-                                      let arrayItems = [];
-                                      tablerows.forEach((one) => {
+                                    .then(cust => {
+                                      let arrayItems = []
+                                      tablerows.forEach(one => {
                                         let objItem = {
                                           item_id: one.id,
                                           withCylinder: one.withCylinder,
                                           price:
-                                            itemDP[one.data.weight] === ""
+                                            itemDP[one.data.weight] === ''
                                               ? 0
                                               : parseInt(
                                                   itemDP[one.data.weight]
@@ -748,29 +741,29 @@ function Make_invoice() {
                                             itemQty[one.data.weight]
                                           ),
                                           discount:
-                                            itemDiscount[one.data.weight] === ""
+                                            itemDiscount[one.data.weight] === ''
                                               ? 0
                                               : itemDiscount[one.data.weight],
                                           weight: one.data.weight,
-                                          data: one.data,
-                                        };
-                                        arrayItems.push(objItem);
-                                      });
-                                      db.collection("gas_selling_history").add({
+                                          data: one.data
+                                        }
+                                        arrayItems.push(objItem)
+                                      })
+                                      db.collection('gas_selling_history').add({
                                         invoice_number: invoiceNumber,
                                         gas: arrayItems,
                                         paymentWay: isFullPayment
-                                          ? "FullPayment"
-                                          : "PayandGo",
+                                          ? 'FullPayment'
+                                          : 'PayandGo',
                                         selectedType: selectedType,
                                         total:
                                           subTotalFunc() -
-                                          (totalDiscount === ""
+                                          (totalDiscount === ''
                                             ? 0
                                             : totalDiscount),
-                                        date: intialTimestamp,
-                                      });
-                                      db.collection("gas_invoice")
+                                        date: intialTimestamp
+                                      })
+                                      db.collection('gas_invoice')
                                         .add({
                                           invoice_number: invoiceNumber,
                                           items: arrayItems,
@@ -780,15 +773,15 @@ function Make_invoice() {
                                           mid: tablerows[0].customer.mid,
                                           installemtnDay: days,
                                           installemtnDate:
-                                            dates === "" ? 1 : dates,
+                                            dates === '' ? 1 : dates,
                                           gamisarani: gamisarani,
                                           gamisarani_amount:
-                                            gamisaraniamount === ""
+                                            gamisaraniamount === ''
                                               ? 0
                                               : parseInt(gamisaraniamount),
                                           paymentWay: isFullPayment
-                                            ? "FullPayment"
-                                            : "PayandGo",
+                                            ? 'FullPayment'
+                                            : 'PayandGo',
                                           downpayment: dpayment,
                                           noOfInstallment: itemNOI,
                                           amountPerInstallment: itemAPI,
@@ -797,25 +790,25 @@ function Make_invoice() {
                                           selectedType: selectedType,
                                           root_village: rootVillage,
                                           discount:
-                                            totalDiscount === ""
+                                            totalDiscount === ''
                                               ? 0
                                               : totalDiscount,
                                           shortage:
-                                            shortage === "" ? 0 : shortage,
+                                            shortage === '' ? 0 : shortage,
                                           total:
                                             subTotalFunc() -
-                                            (totalDiscount === ""
+                                            (totalDiscount === ''
                                               ? 0
                                               : totalDiscount),
-                                          status_of_payandgo: "onGoing",
+                                          status_of_payandgo: 'onGoing',
                                           date: intialTimestamp,
                                           document_charges: documentCharges,
                                           nextDate: firebase.firestore.Timestamp.fromDate(
                                             new Date(times)
-                                          ),
+                                          )
                                         })
-                                        .then((_) => {
-                                          db.collection("trustee").add({
+                                        .then(_ => {
+                                          db.collection('trustee').add({
                                             fname:
                                               tablerows[0].customer
                                                 .trustee1Fname,
@@ -839,8 +832,8 @@ function Make_invoice() {
                                             invoice_number: invoiceNumber,
                                             trusteeFrontURL: trustee1ImageURLFront,
                                             trusteeBackURL: trustee1ImageURLBack,
-                                            date: firebase.firestore.FieldValue.serverTimestamp(),
-                                          });
+                                            date: firebase.firestore.FieldValue.serverTimestamp()
+                                          })
                                           if (
                                             tablerows[0].customer.trustee2Nic &&
                                             tablerows[0].customer
@@ -852,7 +845,7 @@ function Make_invoice() {
                                             tablerows[0].customer
                                               .trustee2Mobile1
                                           ) {
-                                            db.collection("trustee").add({
+                                            db.collection('trustee').add({
                                               fname:
                                                 tablerows[0].customer
                                                   .trustee2Fname,
@@ -877,21 +870,21 @@ function Make_invoice() {
                                               invoice_number: invoiceNumber,
                                               trusteeFrontURL: trustee2ImageURLFront,
                                               trusteeBackURL: trustee2ImageURLBack,
-                                              date: firebase.firestore.FieldValue.serverTimestamp(),
-                                            });
+                                              date: firebase.firestore.FieldValue.serverTimestamp()
+                                            })
                                           }
-                                          if (invoiceStatus === "new") {
+                                          if (invoiceStatus === 'new') {
                                             tablerows.forEach(
-                                              async (itemUDoc) => {
+                                              async itemUDoc => {
                                                 let newArray = await await db
-                                                  .collection("gas")
+                                                  .collection('gas')
                                                   .doc(itemUDoc.id)
-                                                  .get();
+                                                  .get()
 
                                                 //++++++++++++++++++++++++++++++++++++++++++++
-                                                if (invoiceStatus === "new") {
+                                                if (invoiceStatus === 'new') {
                                                   await db
-                                                    .collection("gas")
+                                                    .collection('gas')
                                                     .doc(itemUDoc.id)
                                                     .update({
                                                       qty:
@@ -901,71 +894,68 @@ function Make_invoice() {
                                                         itemQty[
                                                           itemUDoc.data.weight
                                                         ],
-                                                      empty_tanks:!itemUDoc.withCylinder?
+                                                      empty_tanks:
                                                         Math.round(
                                                           newArray.data()
                                                             .empty_tanks
                                                         ) +
                                                         parseInt(
-                                                          itemUDoc.withCylinder
+                                                          !itemUDoc.withCylinder
                                                             ? itemQty[
                                                                 itemUDoc.data
                                                                   .weight
                                                               ]
                                                             : 0
-                                                        ):Math.round(
-                                                          newArray.data()
-                                                            .empty_tanks
-                                                        ),
-                                                    });
+                                                        )
+                                                    })
                                                 }
                                               }
-                                            );
+                                            )
                                           }
-                                          setLoadingSubmit(false);
-                                        });
-                                    });
+                                          setLoadingSubmit(false)
+                                        })
+                                    })
                                 }
                                 //+++++++++++++++++++++++++++++++++++
-                              });
-                          });
-                      });
-                  });
-              });
-          });
+                              })
+                          })
+                      })
+                  })
+              })
+          })
       } else {
-        NotificationManager.warning("Deadline date is not selected ! )");
+        NotificationManager.warning('Deadline date is not selected ! )')
       }
     } else {
-      let arrayItems = [];
-      tablerows.forEach((one) => {
+      let arrayItems = []
+      tablerows.forEach(one => {
         let objItem = {
           item_id: one.id,
           withCylinder: one.withCylinder,
           price:
-            itemDP[one.data.weight] === ""
+            itemDP[one.data.weight] === ''
               ? 0
               : parseInt(itemDP[one.data.weight]),
           qty: parseInt(itemQty[one.data.weight]),
           discount:
-            itemDiscount[one.data.weight] === ""
+            itemDiscount[one.data.weight] === ''
               ? 0
               : itemDiscount[one.data.weight],
           weight: one.data.weight,
-          data: one.data,
-        };
-        arrayItems.push(objItem);
-      });
-      db.collection("gas_selling_history").add({
+          data: one.data
+        }
+        arrayItems.push(objItem)
+      })
+      db.collection('gas_selling_history').add({
         invoice_number: invoiceNumber,
         gas: arrayItems,
-        paymentWay: isFullPayment ? "FullPayment" : "PayandGo",
+        paymentWay: isFullPayment ? 'FullPayment' : 'PayandGo',
         selectedType: selectedType,
-        total: subTotalFunc() - (totalDiscount === "" ? 0 : totalDiscount),
-        date: intialTimestamp,
-      });
+        total: subTotalFunc() - (totalDiscount === '' ? 0 : totalDiscount),
+        date: intialTimestamp
+      })
 
-      db.collection("gas_invoice").add({
+      db.collection('gas_invoice').add({
         invoice_number: invoiceNumber,
         items: arrayItems,
         customer_id: null,
@@ -974,8 +964,8 @@ function Make_invoice() {
         installemtnDate: null,
         gamisarani: gamisarani,
         gamisarani_amount:
-          gamisaraniamount === "" ? 0 : parseInt(gamisaraniamount),
-        paymentWay: isFullPayment ? "FullPayment" : "PayandGo",
+          gamisaraniamount === '' ? 0 : parseInt(gamisaraniamount),
+        paymentWay: isFullPayment ? 'FullPayment' : 'PayandGo',
         downpayment: dpayment,
         noOfInstallment: itemNOI,
         amountPerInstallment: itemAPI,
@@ -983,57 +973,57 @@ function Make_invoice() {
         deadlineTimestamp: null,
         selectedType: selectedType,
         root_village: rootVillage,
-        discount: totalDiscount === "" ? 0 : totalDiscount,
-        shortage: shortage === "" ? 0 : shortage,
-        total: subTotalFunc() - (totalDiscount === "" ? 0 : totalDiscount),
-        status_of_payandgo: "Done",
+        discount: totalDiscount === '' ? 0 : totalDiscount,
+        shortage: shortage === '' ? 0 : shortage,
+        total: subTotalFunc() - (totalDiscount === '' ? 0 : totalDiscount),
+        status_of_payandgo: 'Done',
         date: intialTimestamp,
         document_charges: documentCharges,
         fullname: fullname,
         nic: nic,
-        nextDate: null,
-      });
+        nextDate: null
+      })
 
-      if (invoiceStatus === "new") {
-        tablerows.forEach(async (itemUDoc) => {
+      if (invoiceStatus === 'new') {
+        tablerows.forEach(async itemUDoc => {
           let newArray = await await db
-            .collection("gas")
+            .collection('gas')
             .doc(itemUDoc.id)
-            .get();
+            .get()
 
           //++++++++++++++++++++++++++++++++++++++++++++
-          if (invoiceStatus === "new") {
+          if (invoiceStatus === 'new') {
             await db
-              .collection("gas")
+              .collection('gas')
               .doc(itemUDoc.id)
               .update({
                 qty:
                   Math.round(newArray.data().qty) -
                   itemQty[itemUDoc.data.weight],
                 empty_tanks:
-                 !itemUDoc.withCylinder? Math.round(newArray.data().empty_tanks) +
+                  Math.round(newArray.data().empty_tanks) +
                   parseInt(
-                    itemUDoc.withCylinder ? itemQty[itemUDoc.data.weight] : 0
-                  ):Math.round(newArray.data().empty_tanks),
-              });
+                    !itemUDoc.withCylinder ? itemQty[itemUDoc.data.weight] : 0
+                  )
+              })
           }
-        });
+        })
       }
-      setLoadingSubmit(false);
+      setLoadingSubmit(false)
     }
-  };
+  }
 
   const getCurrentBalanceFromGami = () => {
-    setLoadingNicSubmit(true);
-    db.collection("gami_sarani")
-      .where("nic", "==", gamisaraniNic)
+    setLoadingNicSubmit(true)
+    db.collection('gami_sarani')
+      .where('nic', '==', gamisaraniNic)
       .get()
-      .then((reGami) => {
+      .then(reGami => {
         if (reGami.docs.length > 0) {
-          setGamisaraniId(reGami.docs[0].id);
-          setGamisaraniInitialAmount(reGami.docs[0].data().currentDeposit);
-          setGamisaraniamount(reGami.docs[0].data().currentDeposit);
-          setLoadingNicSubmit(false);
+          setGamisaraniId(reGami.docs[0].id)
+          setGamisaraniInitialAmount(reGami.docs[0].data().currentDeposit)
+          setGamisaraniamount(reGami.docs[0].data().currentDeposit)
+          setLoadingNicSubmit(false)
           if (
             reGami.docs[0].data().currentDeposit -
               (subTotalFunc() - totalDiscount) <
@@ -1041,16 +1031,16 @@ function Make_invoice() {
           ) {
             NotificationManager.warning(
               `Info gamisarani ${gamisaraniNic}, not enough balance for pay the total !`
-            );
+            )
           }
         } else {
-          setLoadingNicSubmit(false);
+          setLoadingNicSubmit(false)
           NotificationManager.warning(
-            "Any gamisarani customer not found from this NIC!"
-          );
+            'Any gamisarani customer not found from this NIC!'
+          )
         }
-      });
-  };
+      })
+  }
 
   return (
     <>
@@ -1058,182 +1048,182 @@ function Make_invoice() {
 
       {/* End Serial Number Model  */}
 
-      <div className="main_In">
-        <Container className="container_In" component="main" maxWidth="xl">
-          <div className="paper_in">
-            <form className="form_in" noValidate>
-              <Typography component="h1" variant="h5">
+      <div className='main_In'>
+        <Container className='container_In' component='main' maxWidth='xl'>
+          <div className='paper_in'>
+            <form className='form_in' noValidate>
+              <Typography component='h1' variant='h5'>
                 Invoice
               </Typography>
-              <hr className="hr_invoice" />
+              <hr className='hr_invoice' />
               <Grid container spacing={2}>
                 <Grid item xs={2}>
-                  <div className="lbl_invoice">Invoice#</div>
+                  <div className='lbl_invoice'>Invoice#</div>
                 </Grid>
                 <Grid item xs={5}>
                   <h3>{invoiceNumber}</h3>
                 </Grid>
                 <Grid item xs={5}></Grid>
 
-                <TableContainer className="tbl_Container" component={Paper}>
-                  <Table className="table" aria-label="spanning table">
+                <TableContainer className='tbl_Container' component={Paper}>
+                  <Table className='table' aria-label='spanning table'>
                     <TableHead>
                       <TableRow>
-                        <TableCell className="tbl_Cell">Weight</TableCell>
+                        <TableCell className='tbl_Cell'>Weight</TableCell>
                         <TableCell
-                          className="tbl_Cell"
-                          align="right"
+                          className='tbl_Cell'
+                          align='right'
                           colSpan={1}
                         >
                           Qty
                         </TableCell>
 
                         <TableCell
-                          className="tbl_Cell"
-                          align="right"
+                          className='tbl_Cell'
+                          align='right'
                           colSpan={1}
                         >
                           Price(LKR)
                         </TableCell>
                         <TableCell
-                          className="tbl_Cell"
-                          align="right"
+                          className='tbl_Cell'
+                          align='right'
                           colSpan={1}
                         >
                           With cylinder
                         </TableCell>
-                        <TableCell className="tbl_Cell" align="right">
+                        <TableCell className='tbl_Cell' align='right'>
                           Discount(LKR)
                         </TableCell>
-                        <TableCell className="tbl_Cell" align="right">
+                        <TableCell className='tbl_Cell' align='right'>
                           Sum(LKR)
                         </TableCell>
-                        <TableCell className="tbl_Cell_Ac" align="right">
+                        <TableCell className='tbl_Cell_Ac' align='right'>
                           Action
                         </TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {tablerows.map((row) => (
+                      {tablerows.map(row => (
                         <TableRow key={row.data.weight}>
                           <TableCell>{row.data.weight}</TableCell>
-                          <TableCell align="right">
+                          <TableCell align='right'>
                             <TextField
                               key={row.data.weight}
                               id={row.data.weight.toString()}
-                              className="txt_qty"
-                              variant="outlined"
-                              size="small"
+                              className='txt_qty'
+                              variant='outlined'
+                              size='small'
                               InputProps={{ inputProps: { min: 1 } }}
-                              type="number"
+                              type='number'
                               fullWidth
                               value={itemQty[row.data.weight]}
-                              onChange={(e) => {
-                                if (e.target.value !== "") {
-                                  handleQTYChange(e, row.data.weight, row);
+                              onChange={e => {
+                                if (e.target.value !== '') {
+                                  handleQTYChange(e, row.data.weight, row)
                                 }
                               }}
                             />
                           </TableCell>
 
-                          <TableCell align="right">
-                            {" "}
+                          <TableCell align='right'>
+                            {' '}
                             <TextField
-                              className="txt_dpayment"
-                              variant="outlined"
-                              size="small"
+                              className='txt_dpayment'
+                              variant='outlined'
+                              size='small'
                               InputProps={{ inputProps: { min: 0 } }}
-                              type="number"
+                              type='number'
                               fullWidth
                               key={row.data.weight}
                               id={row.data.weight.toString()}
                               value={itemDP[row.data.weight]}
-                              onChange={(e) => {
-                                if (e.target.value !== "") {
+                              onChange={e => {
+                                if (e.target.value !== '') {
                                   setItemDP({
                                     ...itemDP,
-                                    [row.data.weight]: e.target.value,
-                                  });
+                                    [row.data.weight]: e.target.value
+                                  })
                                 }
                               }}
                             />
                           </TableCell>
-                          <TableCell align="right">
+                          <TableCell align='right'>
                             <Checkbox
                               defaultChecked={true}
-                              onChange={(e) => {
+                              onChange={e => {
                                 if (row.withCylinder) {
                                   let index = tablerows.indexOf(
-                                    (ob) => ob.id === row.id
-                                  );
+                                    ob => ob.id === row.id
+                                  )
                                   let currentTableObj = tablerows.filter(
-                                    (ob) => ob.id === row.id
-                                  )[0];
-                                  let currentTableRowsAr = tablerows;
-                                  let currentDpObj = itemDP;
+                                    ob => ob.id === row.id
+                                  )[0]
+                                  let currentTableRowsAr = tablerows
+                                  let currentDpObj = itemDP
                                   currentDpObj[row.data.weight] =
-                                    row.paymentWay === "PayandGo"
+                                    row.paymentWay === 'PayandGo'
                                       ? row.data?.withoutSaleprice
-                                      : row.data?.withoutCprice;
-                                  currentTableObj.withCylinder = false;
-                                  currentTableRowsAr[index] = currentTableObj;
-                                  setItemDP(currentDpObj);
-                                  setTableRows([...currentTableRowsAr]);
+                                      : row.data?.withoutCprice
+                                  currentTableObj.withCylinder = false
+                                  currentTableRowsAr[index] = currentTableObj
+                                  setItemDP(currentDpObj)
+                                  setTableRows([...currentTableRowsAr])
                                 } else {
                                   let index = tablerows.indexOf(
-                                    (ob) => ob.id === row.id
-                                  );
+                                    ob => ob.id === row.id
+                                  )
                                   let currentTableObj = tablerows.filter(
-                                    (ob) => ob.id === row.id
-                                  )[0];
-                                  let currentTableRowsAr = tablerows;
-                                  let currentDpObj = itemDP;
+                                    ob => ob.id === row.id
+                                  )[0]
+                                  let currentTableRowsAr = tablerows
+                                  let currentDpObj = itemDP
                                   currentDpObj[row.data.weight] =
-                                    row.paymentWay === "PayandGo"
+                                    row.paymentWay === 'PayandGo'
                                       ? row.data?.saleprice
-                                      : row.data?.price;
+                                      : row.data?.price
 
-                                  currentTableObj.withCylinder = true;
-                                  currentTableRowsAr[index] = currentTableObj;
-                                  setItemDP(currentDpObj);
-                                  setTableRows([...currentTableRowsAr]);
+                                  currentTableObj.withCylinder = true
+                                  currentTableRowsAr[index] = currentTableObj
+                                  setItemDP(currentDpObj)
+                                  setTableRows([...currentTableRowsAr])
                                 }
                               }}
                             />
                           </TableCell>
 
-                          <TableCell align="right">
-                            {" "}
+                          <TableCell align='right'>
+                            {' '}
                             <TextField
-                              className="txt_dpayment"
-                              variant="outlined"
-                              size="small"
+                              className='txt_dpayment'
+                              variant='outlined'
+                              size='small'
                               InputProps={{ inputProps: { min: 0 } }}
-                              type="number"
+                              type='number'
                               fullWidth
                               key={row.data.weight}
                               id={row.data.weight.toString()}
                               value={itemDiscount[row.data.weight]}
-                              onChange={(e) => {
-                                if (e.target.value !== "") {
+                              onChange={e => {
+                                if (e.target.value !== '') {
                                   if (
                                     e.target.value < itemDP[row.data.weight]
                                   ) {
                                     setItemDiscount({
                                       ...itemDiscount,
-                                      [row.data.weight]: e.target.value,
-                                    });
+                                      [row.data.weight]: e.target.value
+                                    })
                                   }
                                 }
                               }}
                             />
                           </TableCell>
                           <TableCell
-                            align="right"
+                            align='right'
                             key={row.data.weight}
                             id={row.data.weight.toString()}
                           >
-                            {" "}
+                            {' '}
                             <CurrencyFormat
                               value={
                                 parseInt(
@@ -1241,40 +1231,40 @@ function Make_invoice() {
                                     itemDiscount[row.data.weight]
                                 ) * itemQty[row.data.weight]
                               }
-                              displayType={"text"}
+                              displayType={'text'}
                               thousandSeparator={true}
-                              prefix={" Rs. "}
+                              prefix={' Rs. '}
                             />
                           </TableCell>
-                          <TableCell align="right">
+                          <TableCell align='right'>
                             <CloseOutlinedIcon
-                              className="iconcls_invTbl"
-                              onClick={(e) => {
-                                tablerows.forEach((itemRe) => {
+                              className='iconcls_invTbl'
+                              onClick={e => {
+                                tablerows.forEach(itemRe => {
                                   if (itemRe.data.weight === row.data.weight) {
                                     let index = tablerows.findIndex(
                                       // eslint-disable-next-line
-                                      (element) => {
+                                      element => {
                                         if (
                                           element.data.weight ===
                                           row.data.weight
                                         ) {
-                                          return true;
+                                          return true
                                         }
                                       }
-                                    );
-                                    tablerows.splice(index, 1);
-                                    setTableRows([...tablerows]);
+                                    )
+                                    tablerows.splice(index, 1)
+                                    setTableRows([...tablerows])
                                     if (tablerows.length === 0) {
-                                      history.push("/admin/ui/gass");
+                                      history.push('/admin/ui/gass')
                                     }
-                                    delete itemQty[row.data.weight];
-                                    delete itemDP[row.data.weight];
-                                    delete itemNOI[row.data.weight];
-                                    delete itemAPI[row.data.weight];
-                                    delete itemDiscount[row.data.weight];
+                                    delete itemQty[row.data.weight]
+                                    delete itemDP[row.data.weight]
+                                    delete itemNOI[row.data.weight]
+                                    delete itemAPI[row.data.weight]
+                                    delete itemDiscount[row.data.weight]
                                   }
-                                });
+                                })
                               }}
                             />
                           </TableCell>
@@ -1283,36 +1273,36 @@ function Make_invoice() {
 
                       <TableRow>
                         <TableCell rowSpan={4} />
-                        <TableCell align="right" colSpan={4}>
+                        <TableCell align='right' colSpan={4}>
                           Subtotal(LKR)
                         </TableCell>
-                        <TableCell align="right" colSpan={1}>
+                        <TableCell align='right' colSpan={1}>
                           <CurrencyFormat
                             value={subTotalFunc()}
-                            displayType={"text"}
+                            displayType={'text'}
                             thousandSeparator={true}
-                            prefix={" Rs. "}
+                            prefix={' Rs. '}
                           />
                         </TableCell>
                       </TableRow>
                       <TableRow>
-                        <TableCell align="right" colSpan={4}>
+                        <TableCell align='right' colSpan={4}>
                           Discount(LKR)
                         </TableCell>
-                        <TableCell className="cel" align="right" colSpan={1}>
+                        <TableCell className='cel' align='right' colSpan={1}>
                           <TextField
-                            className="txt_distg"
-                            variant="outlined"
-                            size="small"
-                            type="number"
+                            className='txt_distg'
+                            variant='outlined'
+                            size='small'
+                            type='number'
                             InputProps={{ inputProps: { min: 0 } }}
                             fullWidth
                             disabled={true}
                             value={totalDiscount}
-                            onChange={(e) => {
-                              if (e.target.value !== "") {
+                            onChange={e => {
+                              if (e.target.value !== '') {
                                 if (e.target.value < subTotalFunc()) {
-                                  setTotalDiscount(e.target.value);
+                                  setTotalDiscount(e.target.value)
                                 }
                               }
                             }}
@@ -1321,15 +1311,15 @@ function Make_invoice() {
                       </TableRow>
 
                       <TableRow>
-                        <TableCell align="right" colSpan={4}>
+                        <TableCell align='right' colSpan={4}>
                           Total(LKR)
                         </TableCell>
-                        <TableCell align="right" colSpan={1}>
+                        <TableCell align='right' colSpan={1}>
                           <CurrencyFormat
                             value={subTotalFunc() - totalDiscount}
-                            displayType={"text"}
+                            displayType={'text'}
                             thousandSeparator={true}
-                            prefix={" Rs. "}
+                            prefix={' Rs. '}
                           />
                         </TableCell>
                       </TableRow>
@@ -1342,232 +1332,230 @@ function Make_invoice() {
 
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
-                  <Card className="gami_card">
-                    <Grid className="gami_card-grid" container spacing={2}>
+                  <Card className='gami_card'>
+                    <Grid className='gami_card-grid' container spacing={2}>
                       <Grid item xs={12} sm={8}>
-                        <p className="gami_cust">
+                        <p className='gami_cust'>
                           Choose Installment Repayment Plan:
                         </p>
                       </Grid>
                       <Grid item xs={12} sm={4}></Grid>
-                      <Grid className="lbl_MI" item xs={12} sm={6}>
+                      <Grid className='lbl_MI' item xs={12} sm={6}>
                         NO. of Installments:
                       </Grid>
-                      <Grid className="noi" item xs={12} sm={4}>
+                      <Grid className='noi' item xs={12} sm={4}>
                         <TextField
-                          className="txt_dpayment"
-                          variant="outlined"
-                          size="small"
+                          className='txt_dpayment'
+                          variant='outlined'
+                          size='small'
                           InputProps={{ inputProps: { min: 0 } }}
-                          type="number"
+                          type='number'
                           fullWidth
-                          label="NOI"
+                          label='NOI'
                           disabled={
-                            tablerows.some((ob) => ob.paymentWay === "PayandGo")
+                            tablerows.some(ob => ob.paymentWay === 'PayandGo')
                               ? false
                               : true
                           }
                           value={itemNOI}
-                          onChange={(e) => {
-                            if (e.target.value !== "") {
-                              setItemNOI(parseInt(e.target.value.trim()));
+                          onChange={e => {
+                            if (e.target.value !== '') {
+                              setItemNOI(parseInt(e.target.value.trim()))
                               setBalance(
                                 parseInt(e.target.value.trim()) * itemAPI
-                              );
+                              )
                             }
                           }}
                         />
                       </Grid>
-                      <Grid className="noi" item xs={12} sm={2}></Grid>
-                      <Grid className="lbl_MI" item xs={12} sm={6}>
+                      <Grid className='noi' item xs={12} sm={2}></Grid>
+                      <Grid className='lbl_MI' item xs={12} sm={6}>
                         Amount per Installments(LKR):
                       </Grid>
-                      <Grid className="lbl_MI" item xs={12} sm={4}>
+                      <Grid className='lbl_MI' item xs={12} sm={4}>
                         <TextField
-                          className="txt_dpayment"
-                          variant="outlined"
-                          size="small"
+                          className='txt_dpayment'
+                          variant='outlined'
+                          size='small'
                           InputProps={{ inputProps: { min: 0 } }}
-                          type="number"
-                          label=" API"
+                          type='number'
+                          label=' API'
                           fullWidth
                           disabled={
-                            tablerows.some((ob) => ob.paymentWay === "PayandGo")
+                            tablerows.some(ob => ob.paymentWay === 'PayandGo')
                               ? false
                               : true
                           }
                           value={itemAPI}
-                          onChange={(e) => {
-                            if (e.target.value !== "") {
-                              setItemAPI(parseInt(e.target.value.trim()));
+                          onChange={e => {
+                            if (e.target.value !== '') {
+                              setItemAPI(parseInt(e.target.value.trim()))
                               setBalance(
                                 parseInt(e.target.value.trim()) * itemNOI
-                              );
+                              )
                             }
                           }}
                         />
                       </Grid>
-                      <Grid className="noi" item xs={12} sm={2}></Grid>
+                      <Grid className='noi' item xs={12} sm={2}></Grid>
 
-                      <Grid className="lbl_MI" item xs={12} sm={6}>
+                      <Grid className='lbl_MI' item xs={12} sm={6}>
                         Down Payment(LKR):
                       </Grid>
-                      <Grid className="lbl_MI" item xs={12} sm={4}>
+                      <Grid className='lbl_MI' item xs={12} sm={4}>
                         <TextField
-                          className="txt_dpayment"
-                          variant="outlined"
-                          size="small"
-                          label="Down Payment"
+                          className='txt_dpayment'
+                          variant='outlined'
+                          size='small'
+                          label='Down Payment'
                           InputProps={{ inputProps: { min: 0 } }}
-                          type="number"
+                          type='number'
                           fullWidth
                           value={dpayment}
                           disabled={
-                            tablerows.some((ob) => ob.paymentWay === "PayandGo")
+                            tablerows.some(ob => ob.paymentWay === 'PayandGo')
                               ? false
                               : true
                           }
-                          onChange={(e) => {
-                            if (e.target.value !== "") {
-                              setDpayment(parseInt(e.target.value.trim()));
+                          onChange={e => {
+                            if (e.target.value !== '') {
+                              setDpayment(parseInt(e.target.value.trim()))
                             }
                           }}
                         />
                       </Grid>
-                      <Grid className="noi" item xs={12} sm={2}></Grid>
+                      <Grid className='noi' item xs={12} sm={2}></Grid>
 
-                      <Grid className="lbl_MI" item xs={12} sm={6}>
+                      <Grid className='lbl_MI' item xs={12} sm={6}>
                         Balance(LKR):
                       </Grid>
-                      <Grid className="lbl_MI" item xs={12} sm={4}>
+                      <Grid className='lbl_MI' item xs={12} sm={4}>
                         <TextField
-                          className="txt_dpayment"
-                          variant="outlined"
-                          size="small"
-                          label="Balance"
+                          className='txt_dpayment'
+                          variant='outlined'
+                          size='small'
+                          label='Balance'
                           InputProps={{ inputProps: { min: 0 } }}
-                          type="number"
+                          type='number'
                           fullWidth
                           disabled={
-                            tablerows.some((ob) => ob.paymentWay === "PayandGo")
+                            tablerows.some(ob => ob.paymentWay === 'PayandGo')
                               ? false
                               : true
                           }
                           value={balance}
-                          onChange={(e) => {
-                            if (e.target.value !== "") {
-                              setBalance(parseInt(e.target.value.trim()));
+                          onChange={e => {
+                            if (e.target.value !== '') {
+                              setBalance(parseInt(e.target.value.trim()))
                             }
                           }}
                         />
                       </Grid>
-                      <Grid className="noi" item xs={12} sm={2}></Grid>
-                      <Grid className="lbl_MI" item xs={12} sm={6}>
+                      <Grid className='noi' item xs={12} sm={2}></Grid>
+                      <Grid className='lbl_MI' item xs={12} sm={6}>
                         Shortage(LKR):
                       </Grid>
-                      <Grid className="lbl_MI" item xs={12} sm={4}>
+                      <Grid className='lbl_MI' item xs={12} sm={4}>
                         <TextField
-                          className="txt_dpayment"
+                          className='txt_dpayment'
                           disabled={false}
-                          variant="outlined"
-                          size="small"
-                          label="Shortage"
+                          variant='outlined'
+                          size='small'
+                          label='Shortage'
                           InputProps={{ inputProps: { min: 0 } }}
-                          type="number"
+                          type='number'
                           fullWidth
                           value={shortage}
-                          onChange={(e) => {
-                            if (e.target.value !== "") {
-                              setShortage(parseInt(e.target.value.trim()));
+                          onChange={e => {
+                            if (e.target.value !== '') {
+                              setShortage(parseInt(e.target.value.trim()))
                             }
                           }}
                         />
                       </Grid>
-                      <Grid className="noi" item xs={12} sm={2}></Grid>
-                      <Grid className="lbl_MI" item xs={12} sm={6}>
+                      <Grid className='noi' item xs={12} sm={2}></Grid>
+                      <Grid className='lbl_MI' item xs={12} sm={6}>
                         Document Charges(LKR):
                       </Grid>
-                      <Grid className="lbl_MI" item xs={12} sm={4}>
+                      <Grid className='lbl_MI' item xs={12} sm={4}>
                         <TextField
-                          type="number"
-                          autoComplete="delayed"
-                          variant="outlined"
+                          type='number'
+                          autoComplete='delayed'
+                          variant='outlined'
                           required
                           fullWidth
-                          label=" Document Charges"
-                          size="small"
+                          label=' Document Charges'
+                          size='small'
                           value={documentCharges}
                           InputProps={{ inputProps: { min: 0 } }}
-                          onChange={(e) => {
-                            if (e.target.value !== "") {
+                          onChange={e => {
+                            if (e.target.value !== '') {
                               setDocumentCharges(
                                 parseInt(e.target.value.trim())
-                              );
+                              )
                             }
                           }}
                         />
                       </Grid>
-                      <Grid className="noi" item xs={12} sm={2}></Grid>
-                      <Grid className="noi" item xs={12} sm={12}>
+                      <Grid className='noi' item xs={12} sm={2}></Grid>
+                      <Grid className='noi' item xs={12} sm={12}>
                         <hr />
                       </Grid>
 
-                      <Grid className="lbl_MI" item xs={12} sm={3}>
+                      <Grid className='lbl_MI' item xs={12} sm={3}>
                         Date :
                       </Grid>
                       <Grid item xs={12} sm={4}>
                         <TextField
-                          className="txt_dpayment"
-                          variant="outlined"
-                          size="small"
+                          className='txt_dpayment'
+                          variant='outlined'
+                          size='small'
                           disabled={
-                            tablerows.some((ob) => ob.paymentWay === "PayandGo")
+                            tablerows.some(ob => ob.paymentWay === 'PayandGo')
                               ? false
                               : true
                           }
-                          placeholder="date"
-                          type="number"
+                          placeholder='date'
+                          type='number'
                           InputProps={{ inputProps: { min: 1, max: 31 } }}
                           fullWidth
                           value={dates}
-                          onChange={(e) => {
+                          onChange={e => {
                             if (e.target.value <= 31 || e.target.value < 0) {
-                              setDates(e.target.value.trim());
+                              setDates(e.target.value.trim())
                             }
                           }}
                         />
                       </Grid>
                       <Grid item xs={12} sm={5}></Grid>
 
-                      <Grid className="lbl_MI" item xs={12} sm={3}>
+                      <Grid className='lbl_MI' item xs={12} sm={3}>
                         Day
                       </Grid>
-                      <Grid className="radio_dayDate" item xs={12} sm={4}>
-                        <FormControl size="small" className="select">
+                      <Grid className='radio_dayDate' item xs={12} sm={4}>
+                        <FormControl size='small' className='select'>
                           <InputLabel
-                            className="select_label"
-                            id="demo-controlled-open-select-label"
+                            className='select_label'
+                            id='demo-controlled-open-select-label'
                           >
                             Days
                           </InputLabel>
                           <Select
                             value={days}
                             disabled={
-                              tablerows.some(
-                                (ob) => ob.paymentWay === "PayandGo"
-                              )
+                              tablerows.some(ob => ob.paymentWay === 'PayandGo')
                                 ? false
                                 : true
                             }
-                            onChange={(e) => {
-                              setDays(e.target.value);
+                            onChange={e => {
+                              setDays(e.target.value)
                             }}
                             native
-                            variant="outlined"
-                            label="day"
+                            variant='outlined'
+                            label='day'
                             inputProps={{
-                              name: "day",
-                              id: "outlined-day-native-simple",
+                              name: 'day',
+                              id: 'outlined-day-native-simple'
                             }}
                           >
                             <option value={1}>Monday</option>
@@ -1586,10 +1574,10 @@ function Make_invoice() {
                 </Grid>
 
                 <Grid item xs={12} sm={6}>
-                  <Card className="gami_card">
-                    <Grid className="gami_card-grid" container spacing={2}>
+                  <Card className='gami_card'>
+                    <Grid className='gami_card-grid' container spacing={2}>
                       <Grid item xs={12} sm={6}>
-                        <p className="gami_cust">Gamisarani Customers :</p>
+                        <p className='gami_cust'>Gamisarani Customers :</p>
                       </Grid>
                       <Grid item xs={12} sm={6}></Grid>
                       <Grid item xs={12} sm={4}>
@@ -1598,37 +1586,37 @@ function Make_invoice() {
                       <Grid item xs={12} sm={4}>
                         <Checkbox
                           checked={gamisarani}
-                          onChange={(e) => {
+                          onChange={e => {
                             if (gamisarani) {
-                              setGamisarani(false);
-                              setGamisaraniId("");
-                              setGamisaraniInitialAmount(0);
-                              setGamisaraniamount(0);
-                              setGamisaraniNic("");
+                              setGamisarani(false)
+                              setGamisaraniId('')
+                              setGamisaraniInitialAmount(0)
+                              setGamisaraniamount(0)
+                              setGamisaraniNic('')
                             } else {
-                              setGamisarani(true);
+                              setGamisarani(true)
                             }
                           }}
                         />
                       </Grid>
                       <Grid item xs={12} sm={4}></Grid>
-                      <Grid className="lbl_MI" item xs={12} sm={4}>
+                      <Grid className='lbl_MI' item xs={12} sm={4}>
                         NIC
                       </Grid>
-                      <Grid className="nIc" item xs={12} sm={4}>
+                      <Grid className='nIc' item xs={12} sm={4}>
                         <TextField
-                          className="nic_"
-                          variant="outlined"
+                          className='nic_'
+                          variant='outlined'
                           required
                           fullWidth
-                          label="NIC"
-                          name="nic"
-                          autoComplete="nic"
-                          size="small"
+                          label='NIC'
+                          name='nic'
+                          autoComplete='nic'
+                          size='small'
                           disabled={!gamisarani ? true : false}
                           value={gamisaraniNic}
-                          onChange={(e) => {
-                            setGamisaraniNic(e.target.value.trim());
+                          onChange={e => {
+                            setGamisaraniNic(e.target.value.trim())
                           }}
                         />
                       </Grid>
@@ -1636,8 +1624,8 @@ function Make_invoice() {
                       <Grid item xs={12} sm={1}>
                         <Button
                           fullWidth
-                          variant="contained"
-                          color="primary"
+                          variant='contained'
+                          color='primary'
                           disabled={
                             !gamisarani ||
                             loadingNicsubmit ||
@@ -1647,24 +1635,24 @@ function Make_invoice() {
                           }
                           onClick={getCurrentBalanceFromGami}
                         >
-                          {loadingNicsubmit ? <Spin size="large" /> : "Fetch"}
+                          {loadingNicsubmit ? <Spin size='large' /> : 'Fetch'}
                         </Button>
                       </Grid>
                       <Grid item xs={12} sm={3}></Grid>
-                      <Grid className="lbl_MI" item xs={12} sm={4}>
+                      <Grid className='lbl_MI' item xs={12} sm={4}>
                         Amount
                       </Grid>
-                      <Grid className="amouNt" item xs={12} sm={4}>
+                      <Grid className='amouNt' item xs={12} sm={4}>
                         <TextField
-                          className="amouNT"
-                          variant="outlined"
+                          className='amouNT'
+                          variant='outlined'
                           required
                           fullWidth
-                          label="Amount"
-                          name="amount"
-                          autoComplete="amount"
-                          size="small"
-                          type="number"
+                          label='Amount'
+                          name='amount'
+                          autoComplete='amount'
+                          size='small'
+                          type='number'
                           disabled={
                             !gamisarani || gamisaraniInitialAmount === 0
                               ? true
@@ -1672,14 +1660,14 @@ function Make_invoice() {
                           }
                           InputProps={{ inputProps: { min: 0 } }}
                           value={gamisaraniamount}
-                          onChange={(e) => {
+                          onChange={e => {
                             if (
                               gamisaraniInitialAmount >=
                               parseInt(e.target.value.trim())
                             ) {
                               setGamisaraniamount(
                                 parseInt(e.target.value.trim())
-                              );
+                              )
                             }
                           }}
                         />
@@ -1691,63 +1679,63 @@ function Make_invoice() {
                   <br />
 
                   <Grid container spacing={2}>
-                    <Grid className="txt_ip_setting" item xs={12} sm={7}>
+                    <Grid className='txt_ip_setting' item xs={12} sm={7}>
                       Invoice Status :
                     </Grid>
-                    <Grid className="txt_ip_setting" item xs={12} sm={5}></Grid>
-                    <Grid className="lbl_MI" item xs={12} sm={4}>
+                    <Grid className='txt_ip_setting' item xs={12} sm={5}></Grid>
+                    <Grid className='lbl_MI' item xs={12} sm={4}>
                       Invoice Status
                     </Grid>
                     <Grid item xs={12} sm={8}>
                       <Radio.Group
-                        defaultValue="new"
-                        buttonStyle="solid"
-                        onChange={(e) => {
-                          setInvoiceStatus(e.target.value);
+                        defaultValue='new'
+                        buttonStyle='solid'
+                        onChange={e => {
+                          setInvoiceStatus(e.target.value)
                         }}
                       >
-                        <Radio.Button value="new">New record</Radio.Button>
-                        <Radio.Button value="old">Old record</Radio.Button>
+                        <Radio.Button value='new'>New record</Radio.Button>
+                        <Radio.Button value='old'>Old record</Radio.Button>
                       </Radio.Group>
                     </Grid>
                     <Grid item xs={12} sm={12}>
                       <br />
                     </Grid>
-                    <Grid className="lbl_MI" item xs={12} sm={4}></Grid>
+                    <Grid className='lbl_MI' item xs={12} sm={4}></Grid>
                     <Grid item xs={12} sm={6}></Grid>
                     <Grid item xs={12} sm={2}></Grid>
-                    <Grid className="txt_ip_setting" item xs={12} sm={12}>
+                    <Grid className='txt_ip_setting' item xs={12} sm={12}>
                       <hr />
                     </Grid>
-                    <Grid className="txt_ip_setting" item xs={12} sm={7}>
+                    <Grid className='txt_ip_setting' item xs={12} sm={7}>
                       Invoice Dates :
                     </Grid>
-                    <Grid className="txt_ip_setting" item xs={12} sm={5}></Grid>
+                    <Grid className='txt_ip_setting' item xs={12} sm={5}></Grid>
 
-                    <Grid className="txt_description" item xs={12} sm={4}>
+                    <Grid className='txt_description' item xs={12} sm={4}>
                       Initial date
                       <br />
                       <div
                         hidden={
-                          tablerows.some((ob) => ob.paymentWay === "PayandGo")
+                          tablerows.some(ob => ob.paymentWay === 'PayandGo')
                             ? false
                             : true
                         }
-                        className="deadline"
+                        className='deadline'
                       >
                         Installment deadline
                       </div>
                     </Grid>
                     <Grid item xs={12} sm={4}>
-                      <Space direction="vertical">
+                      <Space direction='vertical'>
                         <DatePicker
-                          onChange={(e) => {
+                          onChange={e => {
                             if (e !== null) {
                               setInititialTimestamp(
                                 firebase.firestore.Timestamp.fromDate(
                                   e.toDate()
                                 )
-                              );
+                              )
                               // setDates(
                               //   new Date(
                               //     firebase.firestore.Timestamp.fromDate(
@@ -1764,7 +1752,7 @@ function Make_invoice() {
                               //   ).getDay()
                               // );
                             } else {
-                              setInititialTimestamp(null);
+                              setInititialTimestamp(null)
                               // setDates(new Date().getDate());
                               // setDays(new Date().getDay());
                             }
@@ -1774,21 +1762,21 @@ function Make_invoice() {
                         <br />
                         <div
                           hidden={
-                            tablerows.some((ob) => ob.paymentWay === "PayandGo")
+                            tablerows.some(ob => ob.paymentWay === 'PayandGo')
                               ? false
                               : true
                           }
                         >
                           <DatePicker
-                            onChange={(e) => {
+                            onChange={e => {
                               if (e !== null) {
                                 setDeadlineTimestamp(
                                   firebase.firestore.Timestamp.fromDate(
                                     e.toDate()
                                   )
-                                );
+                                )
                               } else {
-                                setDeadlineTimestamp(null);
+                                setDeadlineTimestamp(null)
                               }
                             }}
                           />
@@ -1796,60 +1784,60 @@ function Make_invoice() {
                       </Space>
                     </Grid>
                     <Grid item xs={12} sm={4}></Grid>
-                    <Grid className="xxx" item xs={12} sm={4}>
+                    <Grid className='xxx' item xs={12} sm={4}>
                       Root Village
                     </Grid>
                     <Grid item xs={12} sm={4}>
                       <TextField
-                        className="txt_Village"
-                        variant="outlined"
-                        size="small"
-                        label="Root Village"
-                        type="text"
+                        className='txt_Village'
+                        variant='outlined'
+                        size='small'
+                        label='Root Village'
+                        type='text'
                         fullWidth
                         value={rootVillage}
-                        onChange={(e) => {
-                          setRootVillage(e.target.value);
+                        onChange={e => {
+                          setRootVillage(e.target.value)
                         }}
                       />
                     </Grid>
                     {tablerows.some(
-                      (ob) => ob.paymentWay === "PayandGo"
+                      ob => ob.paymentWay === 'PayandGo'
                     ) ? null : (
                       <>
                         <Grid item xs={12} sm={4}></Grid>
-                        <Grid className="xxx" item xs={12} sm={4}>
+                        <Grid className='xxx' item xs={12} sm={4}>
                           Full name
                         </Grid>
                         <Grid item xs={12} sm={4}>
                           <TextField
-                            className="txt_fullname"
-                            variant="outlined"
-                            size="small"
-                            label="Full name"
-                            type="text"
+                            className='txt_fullname'
+                            variant='outlined'
+                            size='small'
+                            label='Full name'
+                            type='text'
                             fullWidth
                             value={fullname}
-                            onChange={(e) => {
-                              setFullname(e.target.value);
+                            onChange={e => {
+                              setFullname(e.target.value)
                             }}
                           />
                         </Grid>
                         <Grid item xs={12} sm={4}></Grid>
-                        <Grid className="xxx" item xs={12} sm={4}>
+                        <Grid className='xxx' item xs={12} sm={4}>
                           NIC
                         </Grid>
                         <Grid item xs={12} sm={4}>
                           <TextField
-                            className="txt_fullname"
-                            variant="outlined"
-                            size="small"
-                            label="NIC"
-                            type="text"
+                            className='txt_fullname'
+                            variant='outlined'
+                            size='small'
+                            label='NIC'
+                            type='text'
                             fullWidth
                             value={nic}
-                            onChange={(e) => {
-                              setNic(e.target.value);
+                            onChange={e => {
+                              setNic(e.target.value)
                             }}
                           />
                         </Grid>
@@ -1861,19 +1849,19 @@ function Make_invoice() {
                       Select a type
                     </Grid>
                     <Grid item xs={12} sm={4}>
-                      <Space direction="vertical">
-                        <FormControl variant="outlined" className="fcontrol">
+                      <Space direction='vertical'>
+                        <FormControl variant='outlined' className='fcontrol'>
                           <Select
-                            className="roll_selector"
-                            size="small"
+                            className='roll_selector'
+                            size='small'
                             native
                             onChange={handleChange}
                             value={selectedType}
                           >
-                            <option onChange={handleChange} value={"shop"}>
+                            <option onChange={handleChange} value={'shop'}>
                               shop
                             </option>
-                            {allRoot.map((each) => (
+                            {allRoot.map(each => (
                               <option
                                 onChange={handleChange}
                                 key={each}
@@ -1897,11 +1885,11 @@ function Make_invoice() {
                 <Grid item xs={12} sm={6}>
                   <Button
                     fullWidth
-                    variant="contained"
-                    color="primary"
-                    className="btn_addCustomer"
+                    variant='contained'
+                    color='primary'
+                    className='btn_addCustomer'
                     disabled={
-                      dates === "" ||
+                      dates === '' ||
                       dates === 0 ||
                       loadingsubmit ||
                       itemDP.length === 0 ||
@@ -1914,7 +1902,7 @@ function Make_invoice() {
                     onClick={showConfirm}
                     endIcon={<ArrowForwardIcon />}
                   >
-                    {loadingsubmit ? <Spin size="large" /> : "Next"}
+                    {loadingsubmit ? <Spin size='large' /> : 'Next'}
                   </Button>
                 </Grid>
               </Grid>
@@ -1925,7 +1913,7 @@ function Make_invoice() {
         </Container>
       </div>
     </>
-  );
+  )
 }
 
-export default Make_invoice;
+export default Make_invoice

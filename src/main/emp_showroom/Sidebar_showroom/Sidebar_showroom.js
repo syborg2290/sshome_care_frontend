@@ -90,7 +90,7 @@ const structure = [
   },
   {
     id: 12,
-    label: "Gass",
+    label: "Gas",
     link: "/showroom/ui/gass",
     icon: <BatteryStdIcon className="icons" />,
   },

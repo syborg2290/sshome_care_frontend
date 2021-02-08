@@ -72,6 +72,15 @@ export default function Expire_invoice({ expire_list }) {
         }),
       },
     },
+     {
+      name: "Root_village",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
     {
       name: "Balance",
       options: {
@@ -144,6 +153,7 @@ export default function Expire_invoice({ expire_list }) {
         InvoiceNo: each.data.invoice_number,
         Type: each.data.selectedType,
         Date: moment(each.data.date?.toDate()).format("dddd, MMMM Do YYYY"),
+        Root_village:each.data.root_village,
         Balance: (
           <CurrencyFormat
             value={each.data.balance}

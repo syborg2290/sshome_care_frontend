@@ -1,6 +1,6 @@
 .main_containerGass {
   margin-top: 70px !important;
-  width: 80% !important;
+  width: 100% !important;
   margin: auto;
 }
 
@@ -71,5 +71,17 @@
 }
 
 .gassSell_model {
-  width: 40% !important;
+  width: 60% !important;
+}
+
+.checkboxAtt {
+  /* padding-top: 2px;
+  padding-right: 2px;
+   padding-bottom: 0 !important;
+  padding-left: 2px; */
+  margin: auto !important;
+  color: aliceblue !important;
+  text-transform: none !important;
+  background-color: rgba(21, 21, 105, 0.897) !important;
+  border-radius: 5px !important;
 }

@@ -16,7 +16,16 @@ import { Spin } from "antd";
 export default function AddNew_Model({ close_model }) {
   const [weight, setWeight] = useState(0);
   const [qty, setQty] = useState(0);
+
+  const [downpayment, setDownpayment] = useState(0);
+  const [noOfInstallments, setNoOfInstallments] = useState(0);
+  const [amountPerIns, setAmountPerIns] = useState(0);
+  //Cash price
   const [price, setPrice] = useState(0);
+  const [withoutCprice, setWithoutCPrice] = useState(0);
+  //Sale price
+  const [saleprice, setSalePrice] = useState(0);
+  const [withoutSaleprice, setWithoutSalePrice] = useState(0);
   const [purchesPrice, setPurchesPrice] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -35,15 +44,59 @@ export default function AddNew_Model({ close_model }) {
       .get()
       .then((re) => {
         if (re.docs.length > 0) {
+          let fillEmptyTanks = 0;
+          if (parseInt(re.docs[0].data().empty_tanks > 0)) {
+            fillEmptyTanks = parseInt(re.docs[0].data().empty_tanks);
+            if (fillEmptyTanks > parseInt(qty.trim())) {
+              fillEmptyTanks = fillEmptyTanks - parseInt(qty.trim());
+            }
+
+            if (fillEmptyTanks <= parseInt(qty.trim())) {
+              fillEmptyTanks = 0;
+            }
+          }
           db.collection("gas")
             .doc(re.docs[0].id)
             .update({
               weight: weight,
               qty: parseInt(qty.trim()) + parseInt(re.docs[0].data().qty),
+              empty_tanks: fillEmptyTanks,
               price:
                 price === 0 || price === "" || price === null
                   ? re.docs[0].data().price
                   : parseInt(price.trim()),
+              withoutCprice:
+                withoutCprice === 0 ||
+                withoutCprice === "" ||
+                withoutCprice === null
+                  ? re.docs[0].data().withoutCprice
+                  : parseInt(withoutCprice.trim()),
+              saleprice:
+                saleprice === 0 || saleprice === "" || saleprice === null
+                  ? re.docs[0].data().saleprice
+                  : parseInt(saleprice.trim()),
+              withoutSaleprice:
+                withoutSaleprice === 0 ||
+                withoutSaleprice === "" ||
+                withoutSaleprice === null
+                  ? re.docs[0].data().withoutSaleprice
+                  : parseInt(withoutSaleprice.trim()),
+              downpayment:
+                downpayment === 0 || downpayment === "" || downpayment === null
+                  ? re.docs[0].data().downpayment
+                  : parseInt(downpayment.trim()),
+              noOfInstallments:
+                noOfInstallments === 0 ||
+                noOfInstallments === "" ||
+                noOfInstallments === null
+                  ? re.docs[0].data().noOfInstallments
+                  : parseInt(noOfInstallments.trim()),
+              amountPerIns:
+                amountPerIns === 0 ||
+                amountPerIns === "" ||
+                amountPerIns === null
+                  ? re.docs[0].data().amountPerIns
+                  : parseInt(amountPerIns.trim()),
             })
             .then((_) => {
               db.collection("gas_history").add({
@@ -67,6 +120,13 @@ export default function AddNew_Model({ close_model }) {
               weight: weight,
               qty: parseInt(qty.trim()),
               price: parseInt(price.trim()),
+              withoutCprice: parseInt(withoutCprice.trim()),
+              saleprice: parseInt(saleprice.trim()),
+              withoutSaleprice: parseInt(withoutSaleprice.trim()),
+              downpayment: parseInt(downpayment.trim()),
+              noOfInstallments: parseInt(noOfInstallments.trim()),
+              amountPerIns: parseInt(amountPerIns.trim()),
+              empty_tanks: 0,
               date: firebase.firestore.FieldValue.serverTimestamp(),
             })
             .then((_) => {
@@ -145,8 +205,23 @@ export default function AddNew_Model({ close_model }) {
               />
             </Grid>
             <Grid className="txt_Labels" item xs={12} sm={3}></Grid>
+            <Grid item xs={12} sm={12}>
+              <hr />
+              <h3
+                style={{
+                  textAlign: "center",
+                  fontSize: "20px",
+                  color: "grey",
+                  marginTop: "20px",
+                  fontWeight: "bold",
+                }}
+              >
+                Cash prices
+              </h3>
+            </Grid>
+
             <Grid className="txt_Labels" item xs={12} sm={4}>
-              Selling Price :
+              Cash Price(With Cylinder) :
             </Grid>
             <Grid item xs={12} sm={5}>
               <TextField
@@ -171,6 +246,99 @@ export default function AddNew_Model({ close_model }) {
             </Grid>
             <Grid className="txt_Labels" item xs={12} sm={3}></Grid>
             <Grid className="txt_Labels" item xs={12} sm={4}>
+              Cash Price(Without Cylinder) :
+            </Grid>
+            <Grid item xs={12} sm={5}>
+              <TextField
+                className="txtt_nic"
+                autoComplete="weight"
+                name="Price"
+                variant="outlined"
+                required
+                fullWidth
+                id="Price"
+                label="Price"
+                size="small"
+                type="number"
+                value={withoutCprice}
+                InputProps={{ inputProps: { min: 0 } }}
+                onChange={(e) => {
+                  if (e.target.value !== "") {
+                    setWithoutCPrice(e.target.value.trim());
+                  }
+                }}
+              />
+            </Grid>
+            <Grid className="txt_Labels" item xs={12} sm={3}></Grid>
+            <Grid item xs={12} sm={12}>
+              <hr />
+              <h3
+                style={{
+                  textAlign: "center",
+                  fontSize: "20px",
+                  color: "grey",
+                  marginTop: "20px",
+                  fontWeight: "bold",
+                }}
+              >
+                Sale prices
+              </h3>
+            </Grid>
+
+            <Grid className="txt_Labels" item xs={12} sm={4}>
+              Sale Price(With Cylinder) :
+            </Grid>
+            <Grid item xs={12} sm={5}>
+              <TextField
+                className="txtt_nic"
+                autoComplete="weight"
+                name="Price"
+                variant="outlined"
+                required
+                fullWidth
+                id="Price"
+                label="Price"
+                size="small"
+                type="number"
+                value={saleprice}
+                InputProps={{ inputProps: { min: 0 } }}
+                onChange={(e) => {
+                  if (e.target.value !== "") {
+                    setSalePrice(e.target.value.trim());
+                  }
+                }}
+              />
+            </Grid>
+            <Grid className="txt_Labels" item xs={12} sm={3}></Grid>
+            <Grid className="txt_Labels" item xs={12} sm={4}>
+              Sale Price(Without Cylinder) :
+            </Grid>
+            <Grid item xs={12} sm={5}>
+              <TextField
+                className="txtt_nic"
+                autoComplete="weight"
+                name="Price"
+                variant="outlined"
+                required
+                fullWidth
+                id="Price"
+                label="Price"
+                size="small"
+                type="number"
+                value={withoutSaleprice}
+                InputProps={{ inputProps: { min: 0 } }}
+                onChange={(e) => {
+                  if (e.target.value !== "") {
+                    setWithoutSalePrice(e.target.value.trim());
+                  }
+                }}
+              />
+            </Grid>
+            <Grid className="txt_Labels" item xs={12} sm={3}></Grid>
+            <Grid item xs={12} sm={12}>
+              <hr />
+            </Grid>
+            <Grid className="txt_Labels" item xs={12} sm={4}>
               Unit Purchased Price :
             </Grid>
             <Grid item xs={12} sm={5}>
@@ -182,7 +350,7 @@ export default function AddNew_Model({ close_model }) {
                 required
                 fullWidth
                 id="PurchesPrice"
-                label="Purches Price"
+                label="Purchased Price"
                 size="small"
                 type="number"
                 value={purchesPrice}
@@ -190,6 +358,84 @@ export default function AddNew_Model({ close_model }) {
                 onChange={(e) => {
                   if (e.target.value !== "") {
                     setPurchesPrice(e.target.value.trim());
+                  }
+                }}
+              />
+            </Grid>
+            <Grid className="txt_Labels" item xs={12} sm={3}></Grid>
+            <Grid item xs={12} sm={12}></Grid>
+            <Grid className="txt_Labels" item xs={12} sm={4}>
+              Downpayment(LKR) :
+            </Grid>
+            <Grid item xs={12} sm={5}>
+              <TextField
+                className="txtt_nic"
+                autoComplete="weight"
+                name="Downpayment"
+                variant="outlined"
+                required
+                fullWidth
+                id="downpayment"
+                label="Downpayment"
+                size="small"
+                type="number"
+                value={downpayment}
+                InputProps={{ inputProps: { min: 0 } }}
+                onChange={(e) => {
+                  if (e.target.value !== "") {
+                    setDownpayment(e.target.value.trim());
+                  }
+                }}
+              />
+            </Grid>
+            <Grid className="txt_Labels" item xs={12} sm={3}></Grid>
+            <Grid item xs={12} sm={12}></Grid>
+            <Grid className="txt_Labels" item xs={12} sm={4}>
+              No Of Installments(LKR) :
+            </Grid>
+            <Grid item xs={12} sm={5}>
+              <TextField
+                className="txtt_nic"
+                autoComplete="weight"
+                name="NoOfInstallments"
+                variant="outlined"
+                required
+                fullWidth
+                id="noOfInstallments"
+                label="NoOfInstallments"
+                size="small"
+                type="number"
+                value={noOfInstallments}
+                InputProps={{ inputProps: { min: 0 } }}
+                onChange={(e) => {
+                  if (e.target.value !== "") {
+                    setNoOfInstallments(e.target.value.trim());
+                  }
+                }}
+              />
+            </Grid>
+            <Grid className="txt_Labels" item xs={12} sm={3}></Grid>
+            <Grid item xs={12} sm={12}></Grid>
+            <Grid className="txt_Labels" item xs={12} sm={4}>
+              Amount Per Installment(LKR) :
+            </Grid>
+            <Grid item xs={12} sm={5}>
+              <TextField
+                className="txtt_nic"
+                autoComplete="weight"
+                name="amountperinstallment"
+                variant="outlined"
+                required
+                fullWidth
+                id="amountperinstallment"
+                label="AmountPerInstallment"
+                size="small"
+                type="number"
+                value={amountPerIns}
+                InputProps={{ inputProps: { min: 0 } }}
+                onChange={(e) => {
+                  if (e.target.value !== "") {
+                    setAmountPerIns(e.target.value.trim());
                   }
                 }}
               />
@@ -207,11 +453,8 @@ export default function AddNew_Model({ close_model }) {
                 disabled={
                   isLoading ||
                   weight.length === 0 ||
-                  price.length === 0 ||
-                  purchesPrice.length === 0 ||
                   qty.length === 0 ||
                   weight === 0 ||
-                  price === 0 ||
                   qty === 0
                 }
               >

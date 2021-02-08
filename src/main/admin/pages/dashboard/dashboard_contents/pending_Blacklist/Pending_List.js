@@ -124,6 +124,15 @@ export default function View_Model({ pendingBlackList }) {
         }),
       },
     },
+     {
+      name: "Root_village",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
     {
       name: "FirstName",
       options: {
@@ -235,6 +244,7 @@ export default function View_Model({ pendingBlackList }) {
                 ...old,
                 {
                   InvoiceNo: each.invoice_number,
+                  Root_village:reInv.docs[0].data().root_village,
                   FirstName: reThen.docs[0].data().fname,
                   LastName: reThen.docs[0].data().lname,
                   NIC: each.nic,

@@ -146,7 +146,7 @@ export default function Gass_Model() {
                     .then((_) => {
                       let moveWith = {
                         pathname:
-                          "/admin/gass/gass_Model/make_recipt/Gass_recipt",
+                          "/showroom/gass/gass_Model/make_recipt/Gass_recipt",
                         search: "?query=abc",
                         state: {
                           detail: {

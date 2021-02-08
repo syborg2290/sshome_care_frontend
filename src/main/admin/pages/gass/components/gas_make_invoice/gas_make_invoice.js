@@ -679,7 +679,7 @@ function Make_invoice() {
                                                         itemQty[
                                                           itemUDoc.data.weight
                                                         ],
-                                                      empty_tanks:
+                                                      empty_tanks:!itemUDoc.withCylinder?
                                                         Math.round(
                                                           newArray.data()
                                                             .empty_tanks
@@ -691,7 +691,10 @@ function Make_invoice() {
                                                                   .weight
                                                               ]
                                                             : 0
-                                                        ),
+                                                        ): Math.round(
+                                                          newArray.data()
+                                                            .empty_tanks
+                                                        ) ,
                                                     });
                                                 }
                                               }
@@ -898,7 +901,7 @@ function Make_invoice() {
                                                         itemQty[
                                                           itemUDoc.data.weight
                                                         ],
-                                                      empty_tanks:
+                                                      empty_tanks:!itemUDoc.withCylinder?
                                                         Math.round(
                                                           newArray.data()
                                                             .empty_tanks
@@ -910,6 +913,9 @@ function Make_invoice() {
                                                                   .weight
                                                               ]
                                                             : 0
+                                                        ):Math.round(
+                                                          newArray.data()
+                                                            .empty_tanks
                                                         ),
                                                     });
                                                 }
@@ -1005,10 +1011,10 @@ function Make_invoice() {
                   Math.round(newArray.data().qty) -
                   itemQty[itemUDoc.data.weight],
                 empty_tanks:
-                  Math.round(newArray.data().empty_tanks) +
+                 !itemUDoc.withCylinder? Math.round(newArray.data().empty_tanks) +
                   parseInt(
                     itemUDoc.withCylinder ? itemQty[itemUDoc.data.weight] : 0
-                  ),
+                  ):Math.round(newArray.data().empty_tanks),
               });
           }
         });

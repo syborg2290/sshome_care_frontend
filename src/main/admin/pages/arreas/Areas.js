@@ -1,25 +1,25 @@
-import React, { useState, useEffect } from "react";
-import MUIDataTable from "mui-datatables";
-import { Grid } from "@material-ui/core";
-import { Spin, Modal } from "antd";
+import React, {useState, useEffect} from 'react';
+import MUIDataTable from 'mui-datatables';
+import {Grid} from '@material-ui/core';
+import {Spin, Modal} from 'antd';
 // eslint-disable-next-line
-import CurrencyFormat from "react-currency-format";
-import moment from "moment";
+import CurrencyFormat from 'react-currency-format';
+import moment from 'moment';
 
-import db from "../../../../config/firebase.js";
-import firebase from "firebase";
+import db from '../../../../config/firebase.js';
+import firebase from 'firebase';
 
 // components
 
-import ArreasHistory from "../arreas/arreas_history_Model/Arreas_History";
+import ArreasHistory from '../arreas/arreas_history_Model/Arreas_History';
 
 //styles
-import "./Arreas.css";
+import './Arreas.css';
 
 // icons
-import HistoryIcon from "@material-ui/icons/History";
+import HistoryIcon from '@material-ui/icons/History';
 
-import { useHistory } from "react-router-dom";
+import {useHistory} from 'react-router-dom';
 
 function daysCountOfMonth(month, year) {
   return parseInt(new Date(year, month, 0).getDate());
@@ -43,94 +43,94 @@ export default function Areas() {
   //START pay And Go Columns
   const arreasTableColomns = [
     {
-      name: "InvoiceNo",
+      name: 'InvoiceNo',
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+          style: {fontSize: '15px', color: 'black', fontWeight: '600'},
         }),
       },
     },
     {
-      name: "Type",
+      name: 'Type',
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+          style: {fontSize: '15px', color: 'black', fontWeight: '600'},
         }),
       },
     },
     {
-      name: "Village",
+      name: 'Village',
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+          style: {fontSize: '15px', color: 'black', fontWeight: '600'},
         }),
       },
     },
     {
-      name: "MID",
+      name: 'MID',
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+          style: {fontSize: '15px', color: 'black', fontWeight: '600'},
         }),
       },
     },
     {
-      name: "NIC",
+      name: 'NIC',
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+          style: {fontSize: '15px', color: 'black', fontWeight: '600'},
         }),
       },
     },
     {
-      name: "Delayed_Days",
+      name: 'Delayed_Days',
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+          style: {fontSize: '15px', color: 'black', fontWeight: '600'},
         }),
       },
     },
     {
-      name: "Delayed_Charges",
+      name: 'Delayed_Charges',
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+          style: {fontSize: '15px', color: 'black', fontWeight: '600'},
         }),
       },
     },
     {
-      name: "Date",
+      name: 'Date',
       options: {
         filter: false,
         setCellHeaderProps: (value) => ({
           style: {
-            fontSize: "15px",
-            color: "black",
-            fontWeight: "600",
+            fontSize: '15px',
+            color: 'black',
+            fontWeight: '600',
           },
         }),
       },
     },
 
     {
-      name: "Action",
+      name: 'Action',
 
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
           style: {
-            width: "150px",
-            margin: "auto",
-            fontSize: "15px",
-            color: "black",
-            fontWeight: "600",
+            width: '150px',
+            margin: 'auto',
+            fontSize: '15px',
+            color: 'black',
+            fontWeight: '600',
           },
         }),
       },
@@ -138,12 +138,20 @@ export default function Areas() {
   ];
 
   useEffect(() => {
-    window.addEventListener("offline", function (e) {
-      history.push("/connection_lost");
+    window.addEventListener('offline', function (e) {
+      history.push('/connection_lost');
     });
 
-    db.collection("invoice")
-      .where("status_of_payandgo", "==", "onGoing")
+    db.collection('arrears')
+      .get()
+      .then((arrDocDel) => {
+        arrDocDel.docs.forEach((arrEach) => {
+          db.collection('arrears').doc(arrEach.id).delete();
+        });
+      });
+
+    db.collection('invoice')
+      .where('status_of_payandgo', '==', 'onGoing')
       .get()
       .then((onSnap) => {
         onSnap.docs.forEach(async (eachRe) => {
@@ -151,8 +159,8 @@ export default function Areas() {
         });
       });
 
-    db.collection("arrears")
-      .orderBy("date", "desc")
+    db.collection('arrears')
+      .orderBy('date', 'desc')
       .get()
       .then((onSnap) => {
         var rawData = [];
@@ -173,13 +181,13 @@ export default function Areas() {
             Delayed_Charges: (
               <CurrencyFormat
                 value={Math.round(eachRe.data().delayed_charges)}
-                displayType={"text"}
+                displayType={'text'}
                 thousandSeparator={true}
-                prefix={" "}
+                prefix={' '}
               />
             ),
             Date: moment(eachRe.data()?.date?.toDate()).format(
-              "dddd, MMMM Do YYYY"
+              'dddd, MMMM Do YYYY'
             ),
             Action: <HistoryIcon onClick={showModalArresHistory} />,
           });
@@ -194,8 +202,8 @@ export default function Areas() {
 
   const checkInstallmentsStatus = async (eachRe) => {
     const installmentStatus = await db
-      .collection("installment")
-      .where("invoice_number", "==", eachRe.data().invoice_number)
+      .collection('installment')
+      .where('invoice_number', '==', eachRe.data().invoice_number)
       .get();
 
     if (installmentStatus.docs.length === 0) {
@@ -211,19 +219,19 @@ export default function Areas() {
         new Date(eachRe.data()?.nextDate?.seconds * 1000).getTime()) /
       (1000 * 3600 * 24);
     let daysCountInitial = daysCountNode1;
-    if (eachRe.data().selectedType === "shop") {
+    if (eachRe.data().selectedType === 'shop') {
       if (7 - daysCountInitial >= 0) {
       } else {
         if (daysCountInitial - 7 > 7) {
           if (Math.round(daysCountInitial) - 7 >= 49) {
           }
 
-          db.collection("arrears")
-            .where("invoice_number", "==", eachRe.data().invoice_number)
+          db.collection('arrears')
+            .where('invoice_number', '==', eachRe.data().invoice_number)
             .get()
             .then((reArreas) => {
               if (reArreas.docs.length > 0) {
-                db.collection("arrears")
+                db.collection('arrears')
                   .doc(reArreas.docs[0].id)
                   .update({
                     delayed_days: Math.round(daysCountInitial) - 7,
@@ -255,7 +263,7 @@ export default function Areas() {
                         : 693,
                   });
               } else {
-                db.collection("arrears").add({
+                db.collection('arrears').add({
                   invoice_number: eachRe.data().invoice_number,
                   type: eachRe.data().selectedType,
                   villageRoot: eachRe.data().root_village,
@@ -303,12 +311,12 @@ export default function Areas() {
         if (daysCountInitial - 14 > 7) {
           if (Math.round(daysCountInitial) - 14 >= 49) {
           }
-          db.collection("arrears")
-            .where("invoice_number", "==", eachRe.data().invoice_number)
+          db.collection('arrears')
+            .where('invoice_number', '==', eachRe.data().invoice_number)
             .get()
             .then((reArreas) => {
               if (reArreas.docs.length > 0) {
-                db.collection("arrears")
+                db.collection('arrears')
                   .doc(reArreas.docs[0].id)
                   .update({
                     delayed_days: Math.round(daysCountInitial) - 14,
@@ -340,7 +348,7 @@ export default function Areas() {
                         : 693,
                   });
               } else {
-                db.collection("arrears").add({
+                db.collection('arrears').add({
                   invoice_number: eachRe.data().invoice_number,
                   customer_id: eachRe.data().customer_id,
                   type: eachRe.data().selectedType,
@@ -404,17 +412,17 @@ export default function Areas() {
       }
     });
 
-    if (eachRe.data().selectedType === "shop") {
+    if (eachRe.data().selectedType === 'shop') {
       if (7 - daysCount >= 0) {
       } else {
         if (daysCount - 7 > 7) {
           let statusMonth = await db
-            .collection("arrears")
-            .where("invoice_number", "==", eachRe.data().invoice_number)
+            .collection('arrears')
+            .where('invoice_number', '==', eachRe.data().invoice_number)
             .get();
 
           if (statusMonth.docs.length > 0) {
-            db.collection("arrears")
+            db.collection('arrears')
               .doc(statusMonth.docs[0].id)
               .update({
                 delayed_days: daysCount - 7,
@@ -440,7 +448,7 @@ export default function Areas() {
                     : 99 * Math.round((daysCount - 7) / 7),
               });
           } else {
-            db.collection("arrears").add({
+            db.collection('arrears').add({
               invoice_number: eachRe.data().invoice_number,
               customer_id: eachRe.data().customer_id,
               type: eachRe.data().selectedType,
@@ -480,12 +488,12 @@ export default function Areas() {
       } else {
         if (daysCount - 14 > 7) {
           let statusWeek = await db
-            .collection("arrears")
-            .where("invoice_number", "==", eachRe.data().invoice_number)
+            .collection('arrears')
+            .where('invoice_number', '==', eachRe.data().invoice_number)
             .get();
 
           if (statusWeek.docs.length > 0) {
-            db.collection("arrears")
+            db.collection('arrears')
               .doc(statusWeek.docs[0].id)
               .update({
                 delayed_days: Math.round(daysCount) - 14,
@@ -511,7 +519,7 @@ export default function Areas() {
                     : 99 * Math.round((daysCount - 14) / 7),
               });
           } else {
-            db.collection("arrears").add({
+            db.collection('arrears').add({
               invoice_number: eachRe.data().invoice_number,
               customer_id: eachRe.data().customer_id,
               type: eachRe.data().selectedType,
@@ -585,17 +593,17 @@ export default function Areas() {
             options={{
               setRowProps: (row, rowIndex) => {
                 return {
-                  style: { backgroundColor: "#F5F6CE" },
+                  style: {backgroundColor: '#F5F6CE'},
                 };
               },
               // selectableRows: false,
-              selectableRows: "none",
+              selectableRows: 'none',
               customToolbarSelect: () => {},
-              filterType: "textField",
+              filterType: 'textField',
               download: false,
               rowHover: false,
               print: false,
-              searchPlaceholder: "Search using any column names",
+              searchPlaceholder: 'Search using any column names',
               elevation: 4,
               sort: true,
               onRowClick: (rowData, rowMeta) => {
@@ -606,7 +614,7 @@ export default function Areas() {
                   noMatch: isLoading ? (
                     <Spin className="tblSpinner" size="large" spinning="true" />
                   ) : (
-                    ""
+                    ''
                   ),
                 },
               },

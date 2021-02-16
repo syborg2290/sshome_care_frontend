@@ -1,24 +1,24 @@
-import React, { useState, useEffect } from "react";
-import { Grid } from "@material-ui/core";
-import { Modal } from "antd";
-import MUIDataTable from "mui-datatables";
-import { useHistory } from "react-router-dom";
-import CurrencyFormat from "react-currency-format";
-import { Row, Col } from "antd";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import Paper from "@material-ui/core/Paper";
+import React, {useState, useEffect} from 'react';
+import {Grid} from '@material-ui/core';
+import {Modal} from 'antd';
+import MUIDataTable from 'mui-datatables';
+import {useHistory} from 'react-router-dom';
+import CurrencyFormat from 'react-currency-format';
+import {Row, Col} from 'antd';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
 
 // styles
-import "./Selling_History.css";
+import './Selling_History.css';
 
-import db from "../../../../../config/firebase.js";
+import db from '../../../../../config/firebase.js';
 // icons
-import VisibilityIcon from "@material-ui/icons/Visibility";
+import VisibilityIcon from '@material-ui/icons/Visibility';
 
 export default function Selling_History() {
   const [currentIndx, setCurrentIndx] = useState(0);
@@ -33,13 +33,14 @@ export default function Selling_History() {
   };
 
   useEffect(() => {
-    window.addEventListener("offline", function (e) {
-      history.push("/connection_lost");
+    window.addEventListener('offline', function (e) {
+      history.push('/connection_lost');
     });
 
-    db.collection("selling_history")
-      .orderBy("date", "desc")
-      .get().then((snapshot) => {
+    db.collection('selling_history')
+      .orderBy('date', 'desc')
+      .get()
+      .then((snapshot) => {
         var allItemData = [];
         var tableData = [];
 
@@ -52,13 +53,15 @@ export default function Selling_History() {
           tableData.push({
             Date: new Date(element.data().date.seconds * 1000).toDateString(),
             Invoice_number: element.data().invoice_number,
+            Model_no: element.data().items[0].modelNo[0],
+            Item_name: element.data().items[0].item_name,
             Type: element.data().selectedType,
             Total: (
               <CurrencyFormat
                 value={element.data().total}
-                displayType={"text"}
+                displayType={'text'}
                 thousandSeparator={true}
-                prefix={" "}
+                prefix={' '}
               />
             ),
             Payment_type: element.data().paymentWay,
@@ -74,61 +77,79 @@ export default function Selling_History() {
 
   const columns = [
     {
-      name: "Date",
+      name: 'Date',
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+          style: {fontSize: '15px', color: 'black', fontWeight: '600'},
         }),
       },
     },
 
     {
-      name: "Invoice_number",
+      name: 'Invoice_number',
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+          style: {fontSize: '15px', color: 'black', fontWeight: '600'},
+        }),
+      },
+    },
+    {
+      name: 'Model_no',
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: {fontSize: '15px', color: 'black', fontWeight: '600'},
+        }),
+      },
+    },
+    {
+      name: 'Item_name',
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: {fontSize: '15px', color: 'black', fontWeight: '600'},
         }),
       },
     },
 
     {
-      name: "Type",
+      name: 'Type',
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+          style: {fontSize: '15px', color: 'black', fontWeight: '600'},
         }),
       },
     },
 
     {
-      name: "Total",
+      name: 'Total',
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+          style: {fontSize: '15px', color: 'black', fontWeight: '600'},
         }),
       },
     },
 
     {
-      name: "Payment_type",
+      name: 'Payment_type',
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+          style: {fontSize: '15px', color: 'black', fontWeight: '600'},
         }),
       },
     },
 
     {
-      name: "Action",
+      name: 'Action',
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+          style: {fontSize: '15px', color: 'black', fontWeight: '600'},
         }),
       },
     },
@@ -162,7 +183,7 @@ export default function Selling_History() {
                     <Col span={12}>Item name</Col>
                     <Col span={12}>
                       <span className="load_Item">
-                        {" "}
+                        {' '}
                         <span className="colan">:</span> {eachItem.item_name}
                       </span>
                     </Col>
@@ -170,7 +191,7 @@ export default function Selling_History() {
                     <Col span={12}>QTY</Col>
                     <Col span={12}>
                       <span className="load_Item">
-                        {" "}
+                        {' '}
                         <span className="colan">:</span> {eachItem.qty}
                       </span>
                     </Col>
@@ -178,13 +199,13 @@ export default function Selling_History() {
                     <Col span={12}>SALE PRICE(LKR)</Col>
                     <Col span={12}>
                       <span className="load_Item">
-                        {" "}
-                        <span className="colan">:</span>{" "}
+                        {' '}
+                        <span className="colan">:</span>{' '}
                         <CurrencyFormat
                           value={eachItem.downpayment}
-                          displayType={"text"}
+                          displayType={'text'}
                           thousandSeparator={true}
-                          prefix={"  "}
+                          prefix={'  '}
                         />
                       </span>
                     </Col>
@@ -192,7 +213,7 @@ export default function Selling_History() {
                     <Col span={12}>STOCK TYPE</Col>
                     <Col span={12}>
                       <span className="load_Item">
-                        {" "}
+                        {' '}
                         <span className="colan">:</span> {eachItem.stock_type}
                       </span>
                     </Col>
@@ -231,7 +252,7 @@ export default function Selling_History() {
                                 </TableCell>
                               </TableRow>
                             ))
-                          : ""}
+                          : ''}
                       </TableBody>
                     </Table>
                   </TableContainer>
@@ -251,15 +272,15 @@ export default function Selling_History() {
             data={itemTableData}
             columns={columns}
             options={{
-              selectableRows: "none",
+              selectableRows: 'none',
               customToolbarSelect: () => {},
               onRowClick: (rowData, rowMeta) => {
                 setCurrentIndx(rowMeta.dataIndex);
               },
-              filterType: "textField",
+              filterType: 'textField',
               download: false,
               print: false,
-              searchPlaceholder: "Search using any column names",
+              searchPlaceholder: 'Search using any column names',
               elevation: 4,
               sort: true,
             }}

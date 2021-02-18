@@ -1,32 +1,29 @@
-import React, { useState, useEffect } from "react";
-import { Radio, Button, Spin } from "antd";
-import { TextField } from "@material-ui/core";
-import Typography from "@material-ui/core/Typography";
-import Grid from "@material-ui/core/Grid";
-import Container from "@material-ui/core/Container";
-import firebase from "firebase";
-import "antd/dist/antd.css";
-import { useHistory } from "react-router-dom";
+import React, {useState, useEffect} from 'react';
+import {Radio, Button, Spin} from 'antd';
+import {TextField} from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
+import Grid from '@material-ui/core/Grid';
+import Container from '@material-ui/core/Container';
+import firebase from 'firebase';
+import 'antd/dist/antd.css';
+import {useHistory} from 'react-router-dom';
 
-import {
-  NotificationContainer,
-  NotificationManager,
-} from "react-notifications";
-import "react-notifications/lib/notifications.css";
+import {NotificationContainer, NotificationManager} from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
 
 //icon
-import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
+import {MinusCircleOutlined, PlusOutlined} from '@ant-design/icons';
 
 // styles
-import "./Add_Item.css";
+import './Add_Item.css';
 
-import db from "../../../../../config/firebase.js";
+import db from '../../../../../config/firebase.js';
 
 export default function Add_Item() {
   const [loadingSubmit, setLoadingSubmit] = useState(false);
-  const [itemName, setItemName] = useState("");
-  const [brand, setBrand] = useState("");
-  const [color, setColor] = useState("");
+  const [itemName, setItemName] = useState('');
+  const [brand, setBrand] = useState('');
+  const [color, setColor] = useState('');
   const [cashPrice, setCashPrice] = useState(0);
   const [salePrice, setSalePrice] = useState(0);
   const [purchasedPrice, setPurchasedPrice] = useState(0);
@@ -35,9 +32,9 @@ export default function Add_Item() {
   const [downPayment, setDownPayment] = useState(0);
   const [guaranteePeriod, setGuaranteePeriod] = useState(0);
   const [discount, setDiscount] = useState(0);
-  const [description, setDescription] = useState("");
-  const [cInvoiceNo, setCInvoiceNo] = useState("");
-  const [GCardNo, setGCardNo] = useState("");
+  const [description, setDescription] = useState('');
+  const [cInvoiceNo, setCInvoiceNo] = useState('');
+  const [GCardNo, setGCardNo] = useState('');
 
   const [inputsSerialNo, setInputsSerialNo] = useState({});
   const [inputsModelNo, setInputsModelNo] = useState({});
@@ -48,8 +45,8 @@ export default function Add_Item() {
   let history = useHistory();
 
   useEffect(() => {
-    window.addEventListener("offline", function (e) {
-      history.push("/connection_lost");
+    window.addEventListener('offline', function (e) {
+      history.push('/connection_lost');
     });
   });
 
@@ -57,7 +54,7 @@ export default function Add_Item() {
   const addInputSerialNo = () => {
     if (Object.keys(inputsSerialNo).length > 0) {
       // let previous = Object.keys(inputsSerialNo).length - 1;
-      db.collection("serail_no")
+      db.collection('serail_no')
         .get()
         .then((re) => {
           if (re.docs.length > 0) {
@@ -74,7 +71,7 @@ export default function Add_Item() {
               setInputsSerialNo({
                 ...inputsSerialNo,
               });
-              NotificationManager.info("Item serial number must be unique !");
+              NotificationManager.info('Item serial number must be unique !');
             } else {
               let randomNumber = Math.floor(Math.random() * 1000000000) + 1000;
 
@@ -104,7 +101,7 @@ export default function Add_Item() {
 
   const checkSerialNumber = async () => {
     await db
-      .collection("serail_no")
+      .collection('serail_no')
       .get()
       .then((re) => {
         if (re.docs.length > 0) {
@@ -120,16 +117,16 @@ export default function Add_Item() {
             setInputsSerialNo({
               ...inputsSerialNo,
             });
-            NotificationManager.info("Item serial number must be unique !");
+            NotificationManager.info('Item serial number must be unique !');
           }
         }
       });
   };
 
   const handleChangeAddSerialNoInputs = (e, i) => {
-    const { value } = e.target;
+    const {value} = e.target;
 
-    setInputsSerialNo({ ...inputsSerialNo, [i]: value });
+    setInputsSerialNo({...inputsSerialNo, [i]: value});
   };
 
   //add InputModel No
@@ -137,22 +134,22 @@ export default function Add_Item() {
     if (Object.keys(inputsModelNo).length < 1) {
       setInputsModelNo({
         ...inputsModelNo,
-        [Object.keys(inputsModelNo).length]: "",
+        [Object.keys(inputsModelNo).length]: '',
       });
     }
   };
   const handleChangeAddModelNoInputs = (e, i) => {
-    setInputsModelNo({ ...inputsModelNo, [i]: e.target.value });
+    setInputsModelNo({...inputsModelNo, [i]: e.target.value});
   };
 
   const [guarantee, setGuarantee] = useState({
-    value: "Years",
+    value: 'Years',
   });
 
   const valuesInitialState = () => {
-    setItemName("");
-    setBrand("");
-    setColor("");
+    setItemName('');
+    setBrand('');
+    setColor('');
     setCashPrice(0);
     setSalePrice(0);
     setNoOfInstallments(0);
@@ -160,13 +157,13 @@ export default function Add_Item() {
     setDownPayment(0);
     setGuaranteePeriod(0);
     setDiscount(0);
-    setDescription("");
-    setCInvoiceNo("");
-    setGCardNo("");
+    setDescription('');
+    setCInvoiceNo('');
+    setGCardNo('');
     setInputsSerialNo({});
     setInputsModelNo({});
     setGuarantee({
-      value: "Years",
+      value: 'Years',
     });
   };
 
@@ -185,8 +182,8 @@ export default function Add_Item() {
       let chassisNosList = [];
 
       for (var k = 0; k < Object.keys(inputsSerialNo).length; k++) {
-        db.collection("item")
-          .where("serialNo", "==", inputsSerialNo[k])
+        db.collection('item')
+          .where('serialNo', '==', inputsSerialNo[k])
           .get()
           .then((reSeril) => {
             if (reSeril.docs.length > 0) {
@@ -209,130 +206,145 @@ export default function Add_Item() {
         []
       );
 
-      let emptySerial = serialNosList.includes("");
+      let emptySerial = serialNosList.includes('');
 
-      let emptyModels = modelNosList.includes("");
+      let emptyModels = modelNosList.includes('');
 
       if (duplicatesSerial.length > 0) {
-        NotificationManager.info("Serail number must be unique !");
+        NotificationManager.info('Serail number must be unique !');
       } else {
         if (emptySerial) {
-          NotificationManager.info("Serail number can not be empty !");
+          NotificationManager.info('Serail number can not be empty !');
         } else {
           if (emptyModels) {
-            NotificationManager.info("Model number can not be empty !");
+            NotificationManager.info('Model number can not be empty !');
           } else {
             if (serialNosList.length >= Object.keys(inputsSerialNo).length) {
               if (isInAlreadySerial && isInAlreadyModel) {
                 NotificationManager.info(
-                  "Item serial no & model no must be unique !"
+                  'Item serial no & model no must be unique !'
                 );
               } else {
-                if (itemName === "") {
-                  NotificationManager.info("Item name is required!");
+                if (itemName === '') {
+                  NotificationManager.info('Item name is required!');
                 } else {
-                  if (brand === "") {
-                    NotificationManager.info("Item brand is required!");
+                  if (brand === '') {
+                    NotificationManager.info('Item brand is required!');
                   } else {
                     if (
                       Object.keys(inputsModelNo).length === 0 ||
-                      modelNosList.includes("")
+                      modelNosList.includes('')
                     ) {
                       NotificationManager.info(
-                        "Item model number & serial number is required!"
+                        'Item model number & serial number is required!'
                       );
                     } else {
                       if (
                         Object.keys(inputsSerialNo).length === 0 ||
-                        serialNosList.includes("")
+                        serialNosList.includes('')
                       ) {
                         NotificationManager.info(
-                          "Item model number & serial number is required!"
+                          'Item model number & serial number is required!'
                         );
                       } else {
-                        if (color === "") {
-                          NotificationManager.info("Item color is required!");
+                        if (color === '') {
+                          NotificationManager.info('Item color is required!');
                         } else {
-                          if (cashPrice === "") {
+                          if (cashPrice === '') {
                             NotificationManager.info(
-                              "Item cash price is required!"
+                              'Item cash price is required!'
                             );
                           } else {
-                            if (purchasedPrice === "") {
+                            if (purchasedPrice === '') {
                               NotificationManager.info(
-                                "Purchased Price is required!"
+                                'Purchased Price is required!'
                               );
                             } else {
-                              if (noOfInstallments === "") {
+                              if (noOfInstallments === '') {
                                 NotificationManager.info(
-                                  "Number of installment is required!"
+                                  'Number of installment is required!'
                                 );
                               } else {
-                                if (amountPerInstallment === "") {
+                                if (amountPerInstallment === '') {
                                   NotificationManager.info(
-                                    "Amount per installment is required!"
+                                    'Amount per installment is required!'
                                   );
                                 } else {
-                                  if (guaranteePeriod === "") {
+                                  if (guaranteePeriod === '') {
                                     NotificationManager.info(
-                                      "Item guarantee period is required!"
+                                      'Item guarantee period is required!'
                                     );
                                   } else {
-                                    if (downPayment === "") {
+                                    if (downPayment === '') {
                                       NotificationManager.info(
-                                        "Item down payment is required!"
+                                        'Item down payment is required!'
                                       );
                                     } else {
-                                      if (discount === "") {
+                                      if (discount === '') {
                                         NotificationManager.info(
-                                          "Item discount is required!"
+                                          'Item discount is required!'
                                         );
                                       } else {
                                         if (cashPrice < 0) {
                                           NotificationManager.info(
-                                            "Check again the amount of cash price"
+                                            'Check again the amount of cash price'
                                           );
                                         } else {
                                           if (salePrice < 0) {
                                             NotificationManager.info(
-                                              "Check again the amount of sale price"
+                                              'Check again the amount of sale price'
                                             );
                                           } else {
                                             if (noOfInstallments < 0) {
                                               NotificationManager.info(
-                                                "Check again the value of installments value"
+                                                'Check again the value of installments value'
                                               );
                                             } else {
                                               if (amountPerInstallment < 0) {
                                                 NotificationManager.info(
-                                                  "Check again the amount per installment"
+                                                  'Check again the amount per installment'
                                                 );
                                               } else {
                                                 if (downPayment < 0) {
                                                   NotificationManager.info(
-                                                    "Check again the amount of down payment"
+                                                    'Check again the amount of down payment'
                                                   );
                                                 } else {
                                                   if (guaranteePeriod < 0) {
                                                     NotificationManager.info(
-                                                      "Check again the value of gurantee period"
+                                                      'Check again the value of gurantee period'
                                                     );
                                                   } else {
                                                     if (discount < 0) {
                                                       NotificationManager.info(
-                                                        "Check again the amount of discount"
+                                                        'Check again the amount of discount'
                                                       );
                                                     } else {
                                                       //Rest of code here
                                                       setLoadingSubmit(true);
-                                                      var value =
-                                                        Math.round(salePrice) -
-                                                        Math.round(downPayment);
-                                                      var inst = returnInstallmentCount(
-                                                        value
+                                                      // var value =
+                                                      //   Math.round(salePrice) -
+                                                      //   Math.round(downPayment);
+
+                                                      var inst = parseInt(
+                                                        noOfInstallments
                                                       );
+
+                                                      // console.log(value);
+                                                      // console.log(inst);
+                                                      // console.log(cashPrice);
+                                                      // console.log(salePrice);
+                                                      // console.log(
+                                                      //   purchasedPrice
+                                                      // );
+                                                      // console.log(
+                                                      //   amountPerInstallment
+                                                      // );
+                                                      // console.log(downPayment);
+                                                      // console.log(discount);
+
                                                       var allItems = await db
-                                                        .collection("item")
+                                                        .collection('item')
                                                         .get();
                                                       if (allItems) {
                                                         if (
@@ -384,7 +396,7 @@ export default function Add_Item() {
                                                                 ) &&
                                                               ob.data()
                                                                 .stock_type ===
-                                                                "main" &&
+                                                                'main' &&
                                                               ob.data()
                                                                 .modelNoExtra ===
                                                                 modelNosList[0]
@@ -438,7 +450,7 @@ export default function Add_Item() {
                                                                 ) &&
                                                               ob.data()
                                                                 .stock_type ===
-                                                                "main" &&
+                                                                'main' &&
                                                               ob.data()
                                                                 .modelNoExtra ===
                                                                 modelNosList[0]
@@ -466,51 +478,51 @@ export default function Add_Item() {
                                                               chassisNo: chassisNosList,
                                                               color: color.trim(),
                                                               stock_type:
-                                                                "main",
+                                                                'main',
                                                               purchasedPrice: purchasedPrice,
                                                               qty:
                                                                 serialNoNewList.length,
                                                               cashPrice:
-                                                                cashPrice === ""
+                                                                cashPrice === ''
                                                                   ? 0
                                                                   : Math.round(
                                                                       cashPrice
                                                                     ),
                                                               salePrice:
-                                                                salePrice === ""
+                                                                salePrice === ''
                                                                   ? 0
                                                                   : Math.round(
                                                                       salePrice
                                                                     ),
                                                               noOfInstallments:
-                                                                inst === ""
+                                                                inst === ''
                                                                   ? 0
                                                                   : Math.round(
                                                                       inst
                                                                     ),
                                                               amountPerInstallment:
                                                                 amountPerInstallment ===
-                                                                ""
+                                                                ''
                                                                   ? 0
                                                                   : Math.round(
                                                                       amountPerInstallment
                                                                     ),
                                                               downPayment:
                                                                 downPayment ===
-                                                                ""
+                                                                ''
                                                                   ? 0
                                                                   : Math.round(
                                                                       downPayment
                                                                     ),
                                                               guaranteePeriod:
                                                                 guaranteePeriod ===
-                                                                ""
+                                                                ''
                                                                   ? 0
                                                                   : Math.round(
                                                                       guaranteePeriod
                                                                     ),
                                                               discount:
-                                                                discount === ""
+                                                                discount === ''
                                                                   ? 0
                                                                   : Math.round(
                                                                       discount
@@ -524,7 +536,7 @@ export default function Add_Item() {
 
                                                             await db
                                                               .collection(
-                                                                "item"
+                                                                'item'
                                                               )
                                                               .doc(
                                                                 newArray[0].id
@@ -546,13 +558,13 @@ export default function Add_Item() {
                                                                 async (_) => {
                                                                   await db
                                                                     .collection(
-                                                                      "item_history"
+                                                                      'item_history'
                                                                     )
                                                                     .add(
                                                                       variable2
                                                                     );
                                                                   db.collection(
-                                                                    "serail_no"
+                                                                    'serail_no'
                                                                   )
                                                                     .get()
                                                                     .then(
@@ -571,7 +583,7 @@ export default function Add_Item() {
                                                                               serialNosList
                                                                             );
                                                                           db.collection(
-                                                                            "serail_no"
+                                                                            'serail_no'
                                                                           )
                                                                             .doc(
                                                                               reSerial
@@ -585,7 +597,7 @@ export default function Add_Item() {
                                                                             );
                                                                         } else {
                                                                           db.collection(
-                                                                            "serail_no"
+                                                                            'serail_no'
                                                                           ).add(
                                                                             {
                                                                               serail_no: serialNosList,
@@ -600,7 +612,7 @@ export default function Add_Item() {
                                                                   );
                                                                   valuesInitialState();
                                                                   NotificationManager.success(
-                                                                    "Item creation successfully!"
+                                                                    'Item creation successfully!'
                                                                   );
                                                                 }
                                                               )
@@ -610,8 +622,8 @@ export default function Add_Item() {
                                                                     false
                                                                   );
                                                                   NotificationManager.warning(
-                                                                    "Failed to make the item!",
-                                                                    "Please try again"
+                                                                    'Failed to make the item!',
+                                                                    'Please try again'
                                                                   );
                                                                 }
                                                               );
@@ -628,51 +640,51 @@ export default function Add_Item() {
                                                               chassisNo: chassisNosList,
                                                               color: color.trim(),
                                                               stock_type:
-                                                                "main",
+                                                                'main',
                                                               purchasedPrice: purchasedPrice,
                                                               qty:
                                                                 serialNosList.length,
                                                               cashPrice:
-                                                                cashPrice === ""
+                                                                cashPrice === ''
                                                                   ? 0
                                                                   : Math.round(
                                                                       cashPrice
                                                                     ),
                                                               salePrice:
-                                                                salePrice === ""
+                                                                salePrice === ''
                                                                   ? 0
                                                                   : Math.round(
                                                                       salePrice
                                                                     ),
                                                               noOfInstallments:
-                                                                inst === ""
+                                                                inst === ''
                                                                   ? 0
                                                                   : Math.round(
                                                                       inst
                                                                     ),
                                                               amountPerInstallment:
                                                                 amountPerInstallment ===
-                                                                ""
+                                                                ''
                                                                   ? 0
                                                                   : Math.round(
                                                                       amountPerInstallment
                                                                     ),
                                                               downPayment:
                                                                 downPayment ===
-                                                                ""
+                                                                ''
                                                                   ? 0
                                                                   : Math.round(
                                                                       downPayment
                                                                     ),
                                                               guaranteePeriod:
                                                                 guaranteePeriod ===
-                                                                ""
+                                                                ''
                                                                   ? 0
                                                                   : Math.round(
                                                                       guaranteePeriod
                                                                     ),
                                                               discount:
-                                                                discount === ""
+                                                                discount === ''
                                                                   ? 0
                                                                   : Math.round(
                                                                       discount
@@ -686,20 +698,20 @@ export default function Add_Item() {
 
                                                             await db
                                                               .collection(
-                                                                "item"
+                                                                'item'
                                                               )
                                                               .add(variable)
                                                               .then(
                                                                 async (_) => {
                                                                   await db
                                                                     .collection(
-                                                                      "item_history"
+                                                                      'item_history'
                                                                     )
                                                                     .add(
                                                                       variable
                                                                     );
                                                                   db.collection(
-                                                                    "serail_no"
+                                                                    'serail_no'
                                                                   )
                                                                     .get()
                                                                     .then(
@@ -718,7 +730,7 @@ export default function Add_Item() {
                                                                               serialNosList
                                                                             );
                                                                           db.collection(
-                                                                            "serail_no"
+                                                                            'serail_no'
                                                                           )
                                                                             .doc(
                                                                               reSerial
@@ -732,7 +744,7 @@ export default function Add_Item() {
                                                                             );
                                                                         } else {
                                                                           db.collection(
-                                                                            "serail_no"
+                                                                            'serail_no'
                                                                           ).add(
                                                                             {
                                                                               serail_no: serialNosList,
@@ -747,7 +759,7 @@ export default function Add_Item() {
                                                                   );
                                                                   valuesInitialState();
                                                                   NotificationManager.success(
-                                                                    "Item creation successfully!"
+                                                                    'Item creation successfully!'
                                                                   );
                                                                 }
                                                               )
@@ -757,8 +769,8 @@ export default function Add_Item() {
                                                                     false
                                                                   );
                                                                   NotificationManager.warning(
-                                                                    "Failed to make the item!",
-                                                                    "Please try again"
+                                                                    'Failed to make the item!',
+                                                                    'Please try again'
                                                                   );
                                                                 }
                                                               );
@@ -775,50 +787,50 @@ export default function Add_Item() {
                                                             serialNo: serialNosList,
                                                             chassisNo: chassisNosList,
                                                             color: color.trim(),
-                                                            stock_type: "main",
+                                                            stock_type: 'main',
                                                             purchasedPrice: purchasedPrice,
                                                             qty:
                                                               serialNosList.length,
                                                             cashPrice:
-                                                              cashPrice === ""
+                                                              cashPrice === ''
                                                                 ? 0
                                                                 : Math.round(
                                                                     cashPrice
                                                                   ),
                                                             salePrice:
-                                                              salePrice === ""
+                                                              salePrice === ''
                                                                 ? 0
                                                                 : Math.round(
                                                                     salePrice
                                                                   ),
                                                             noOfInstallments:
-                                                              inst === ""
+                                                              inst === ''
                                                                 ? 0
                                                                 : Math.round(
                                                                     inst
                                                                   ),
                                                             amountPerInstallment:
                                                               amountPerInstallment ===
-                                                              ""
+                                                              ''
                                                                 ? 0
                                                                 : Math.round(
                                                                     amountPerInstallment
                                                                   ),
                                                             downPayment:
-                                                              downPayment === ""
+                                                              downPayment === ''
                                                                 ? 0
                                                                 : Math.round(
                                                                     downPayment
                                                                   ),
                                                             guaranteePeriod:
                                                               guaranteePeriod ===
-                                                              ""
+                                                              ''
                                                                 ? 0
                                                                 : Math.round(
                                                                     guaranteePeriod
                                                                   ),
                                                             discount:
-                                                              discount === ""
+                                                              discount === ''
                                                                 ? 0
                                                                 : Math.round(
                                                                     discount
@@ -831,16 +843,16 @@ export default function Add_Item() {
                                                           };
 
                                                           await db
-                                                            .collection("item")
+                                                            .collection('item')
                                                             .add(variable)
                                                             .then(async (_) => {
                                                               await db
                                                                 .collection(
-                                                                  "item_history"
+                                                                  'item_history'
                                                                 )
                                                                 .add(variable);
                                                               db.collection(
-                                                                "serail_no"
+                                                                'serail_no'
                                                               )
                                                                 .get()
                                                                 .then(
@@ -859,7 +871,7 @@ export default function Add_Item() {
                                                                           serialNosList
                                                                         );
                                                                       db.collection(
-                                                                        "serail_no"
+                                                                        'serail_no'
                                                                       )
                                                                         .doc(
                                                                           reSerial
@@ -873,7 +885,7 @@ export default function Add_Item() {
                                                                         );
                                                                     } else {
                                                                       db.collection(
-                                                                        "serail_no"
+                                                                        'serail_no'
                                                                       ).add({
                                                                         serail_no: serialNosList,
                                                                       });
@@ -885,7 +897,7 @@ export default function Add_Item() {
                                                               );
                                                               valuesInitialState();
                                                               NotificationManager.success(
-                                                                "Item creation successfully!"
+                                                                'Item creation successfully!'
                                                               );
                                                             })
                                                             .catch((error) => {
@@ -893,8 +905,8 @@ export default function Add_Item() {
                                                                 false
                                                               );
                                                               NotificationManager.warning(
-                                                                "Failed to make the item!",
-                                                                "Please try again"
+                                                                'Failed to make the item!',
+                                                                'Please try again'
                                                               );
                                                             });
                                                         } else {
@@ -902,8 +914,8 @@ export default function Add_Item() {
                                                             false
                                                           );
                                                           NotificationManager.warning(
-                                                            "Failed to make the item!",
-                                                            "Please try again"
+                                                            'Failed to make the item!',
+                                                            'Please try again'
                                                           );
                                                         }
                                                       }
@@ -934,46 +946,46 @@ export default function Add_Item() {
     });
   };
 
-  const returnInstallmentCount = (value) => {
-    if (value > 0 && value <= 5000) {
-      return 3;
-    }
+  // const returnInstallmentCount = (value) => {
+  //   if (value > 0 && value <= 5000) {
+  //     return 3;
+  //   }
 
-    if (value > 5001 && value <= 8000) {
-      return 4;
-    }
+  //   if (value > 5001 && value <= 8000) {
+  //     return 4;
+  //   }
 
-    if (value > 8001 && value <= 11000) {
-      return 5;
-    }
+  //   if (value > 8001 && value <= 11000) {
+  //     return 5;
+  //   }
 
-    if (value > 11001 && value <= 14000) {
-      return 6;
-    }
+  //   if (value > 11001 && value <= 14000) {
+  //     return 6;
+  //   }
 
-    if (value > 14001 && value <= 17000) {
-      return 7;
-    }
-    if (value > 17001 && value <= 20000) {
-      return 8;
-    }
+  //   if (value > 14001 && value <= 17000) {
+  //     return 7;
+  //   }
+  //   if (value > 17001 && value <= 20000) {
+  //     return 8;
+  //   }
 
-    if (value > 20001 && value <= 23000) {
-      return 9;
-    }
+  //   if (value > 20001 && value <= 23000) {
+  //     return 9;
+  //   }
 
-    if (value > 23001 && value <= 26000) {
-      return 10;
-    }
+  //   if (value > 23001 && value <= 26000) {
+  //     return 10;
+  //   }
 
-    if (value > 26001 && value <= 29000) {
-      return 11;
-    }
+  //   if (value > 26001 && value <= 29000) {
+  //     return 11;
+  //   }
 
-    if (value > 29001 && value >= 32000) {
-      return 12;
-    }
-  };
+  //   if (value > 29001 && value >= 32000) {
+  //     return 12;
+  //   }
+  // };
 
   const setInstallmentCount = (value) => {
     if (value > 0 && value <= 5000) {
@@ -1099,7 +1111,7 @@ export default function Add_Item() {
                   className="txtt_nic"
                   autoComplete="cPrice"
                   name="cPrice"
-                  InputProps={{ inputProps: { min: 1 } }}
+                  InputProps={{inputProps: {min: 1}}}
                   type="number"
                   variant="outlined"
                   fullWidth
@@ -1107,7 +1119,7 @@ export default function Add_Item() {
                   required={true}
                   value={cashPrice}
                   onChange={(e) => {
-                    if (e.target.value !== "") {
+                    if (e.target.value !== '') {
                       setCashPrice(e.target.value);
                     }
                   }}
@@ -1124,7 +1136,7 @@ export default function Add_Item() {
                   autoComplete="sPrice"
                   name="sPrice"
                   type="number"
-                  InputProps={{ inputProps: { min: 0 } }}
+                  InputProps={{inputProps: {min: 0}}}
                   variant="outlined"
                   fullWidth
                   id="sPrice"
@@ -1136,10 +1148,12 @@ export default function Add_Item() {
                     );
                     setAmountPerInstallment(
                       e.target.value - downPayment > 0
-                        ? (
-                            (e.target.value - downPayment) /
-                            noOfInstallments
-                          ).toFixed(2)
+                        ? noOfInstallments === 0
+                          ? e.target.value - downPayment
+                          : (
+                              (e.target.value - downPayment) /
+                              noOfInstallments
+                            ).toFixed(2)
                         : 0
                     );
 
@@ -1160,7 +1174,7 @@ export default function Add_Item() {
                         }
                       }
                     }
-                    if (e.target.value !== "") {
+                    if (e.target.value !== '') {
                       setSalePrice(e.target.value);
                     }
                   }}
@@ -1178,13 +1192,13 @@ export default function Add_Item() {
                   name="pPrice"
                   type="number"
                   variant="outlined"
-                  InputProps={{ inputProps: { min: 0 } }}
+                  InputProps={{inputProps: {min: 0}}}
                   fullWidth
                   id="pPrice"
                   required={true}
                   value={purchasedPrice}
                   onChange={(e) => {
-                    if (e.target.value !== "") {
+                    if (e.target.value !== '') {
                       setPurchasedPrice(e.target.value);
                     }
                   }}
@@ -1201,7 +1215,7 @@ export default function Add_Item() {
                   disabled={salePrice > 0 ? false : true}
                   autoComplete="dPayment"
                   name="dPayment"
-                  InputProps={{ inputProps: { min: 0 } }}
+                  InputProps={{inputProps: {min: 0}}}
                   type="number"
                   variant="outlined"
                   fullWidth
@@ -1234,7 +1248,7 @@ export default function Add_Item() {
                         }
                       }
                     }
-                    if (e.target.value !== "") {
+                    if (e.target.value !== '') {
                       setDownPayment(e.target.value);
                     }
                   }}
@@ -1253,13 +1267,13 @@ export default function Add_Item() {
                   name="nInstallments"
                   type="number"
                   variant="outlined"
-                  InputProps={{ inputProps: { min: 0 } }}
+                  InputProps={{inputProps: {min: 0}}}
                   fullWidth
                   id="nInstallments"
                   required={true}
                   value={noOfInstallments}
                   onChange={(e) => {
-                    if (e.target.value !== "") {
+                    if (e.target.value !== '') {
                       setNoOfInstallments(e.target.value);
                       setAmountPerInstallment(
                         salePrice - downPayment > 0
@@ -1286,13 +1300,13 @@ export default function Add_Item() {
                   name="aPerInstallments"
                   type="number"
                   variant="outlined"
-                  InputProps={{ inputProps: { min: 0 } }}
+                  InputProps={{inputProps: {min: 0}}}
                   fullWidth
                   id="aPerInstallments"
                   required={true}
                   value={amountPerInstallment}
                   onChange={(e) => {
-                    if (e.target.value !== "") {
+                    if (e.target.value !== '') {
                       setAmountPerInstallment(e.target.value);
                     }
                   }}
@@ -1305,8 +1319,8 @@ export default function Add_Item() {
               </Grid>
               <Grid item xs={12} sm={4}>
                 <Radio.Group onChange={radioOnChange} value={guarantee.value}>
-                  <Radio value={"Years"}>Years</Radio>
-                  <Radio value={"Months"}>Months</Radio>
+                  <Radio value={'Years'}>Years</Radio>
+                  <Radio value={'Months'}>Months</Radio>
                 </Radio.Group>
               </Grid>
               <Grid className="txt_Labels" item xs={12} sm={2}>
@@ -1319,13 +1333,13 @@ export default function Add_Item() {
                   name="gPeriod"
                   type="number"
                   variant="outlined"
-                  InputProps={{ inputProps: { min: 0 } }}
+                  InputProps={{inputProps: {min: 0}}}
                   fullWidth
                   id="gPeriod"
                   required={true}
                   value={guaranteePeriod}
                   onChange={(e) => {
-                    if (e.target.value !== "") {
+                    if (e.target.value !== '') {
                       setGuaranteePeriod(e.target.value);
                     }
                   }}
@@ -1342,12 +1356,12 @@ export default function Add_Item() {
                   className="txtt_nic"
                   disabled={salePrice > 0 ? false : true}
                   type="number"
-                  InputProps={{ inputProps: { min: 0 } }}
+                  InputProps={{inputProps: {min: 0}}}
                   variant="outlined"
                   fullWidth
                   value={discount}
                   onChange={(e) => {
-                    if (e.target.value !== "") {
+                    if (e.target.value !== '') {
                       setDiscount(e.target.value);
                     }
                   }}
@@ -1456,18 +1470,18 @@ export default function Add_Item() {
                           className="rmov_iconss"
                           onClick={() => {
                             delete inputsSerialNo[i];
-                            setInputsSerialNo({ ...inputsSerialNo });
+                            setInputsSerialNo({...inputsSerialNo});
                           }}
                         />
                         {
                           <h4>
-                            {"Serial numbers count :  " +
+                            {'Serial numbers count :  ' +
                               Object.keys(inputsSerialNo).length}
                           </h4>
                         }
                       </>
                     ) : (
-                      ""
+                      ''
                     )}
                   </div>
                 ))}
@@ -1502,11 +1516,11 @@ export default function Add_Item() {
                         className="rmov_iconss"
                         onClick={() => {
                           delete inputsModelNo[i];
-                          setInputsModelNo({ ...inputsModelNo });
+                          setInputsModelNo({...inputsModelNo});
                         }}
                       />
                     ) : (
-                      ""
+                      ''
                     )}
                   </div>
                 ))}
@@ -1529,7 +1543,7 @@ export default function Add_Item() {
                   {loadingSubmit ? (
                     <Spin spinning={loadingSubmit} size="default" />
                   ) : (
-                    "Submit"
+                    'Submit'
                   )}
                 </Button>
               </Grid>

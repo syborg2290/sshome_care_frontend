@@ -1,23 +1,23 @@
-import React, { useState, useEffect } from "react";
-import { Spin, Checkbox, DatePicker } from "antd";
+import React, {useState, useEffect} from 'react';
+import {Spin, Checkbox, DatePicker} from 'antd';
 import {
   TextField,
   Grid,
   Container,
   Typography,
   Button,
-} from "@material-ui/core";
-import CurrencyFormat from "react-currency-format";
-import firebase from "firebase";
+} from '@material-ui/core';
+import CurrencyFormat from 'react-currency-format';
+import firebase from 'firebase';
 
-import db from "../../../../../../../config/firebase.js";
-import { ExclamationCircleOutlined } from "@ant-design/icons";
-import { useHistory } from "react-router-dom";
-import { Modal } from "antd";
-import moment from "moment";
+import db from '../../../../../../../config/firebase.js';
+import {ExclamationCircleOutlined} from '@ant-design/icons';
+import {useHistory} from 'react-router-dom';
+import {Modal} from 'antd';
+import moment from 'moment';
 
 // styles
-import "./Update_Model.css";
+import './Update_Model.css';
 
 function isDateBeforeNextDate(date1, date2, nextD) {
   let seeBool =
@@ -63,42 +63,42 @@ export default function Update_Model({
   const [gamisaraniInitialAmount, setGamisaraniInitialAmount] = useState(0);
   const [gamisaraniamount, setGamisaraniamount] = useState(0);
   // eslint-disable-next-line
-  const [gamisaraniId, setGamisaraniId] = useState("");
-  const [gamisaraniNic, setGamisaraniNic] = useState("");
+  const [gamisaraniId, setGamisaraniId] = useState('');
+  const [gamisaraniNic, setGamisaraniNic] = useState('');
 
   const [loadingNicsubmit, setLoadingNicSubmit] = useState(false);
   const [updateTimestamp, setTimestamp] = useState(null);
 
-  const [validation, setValidation] = useState("");
-  const [validationDate, setValidationDate] = useState("");
+  const [validation, setValidation] = useState('');
+  const [validationDate, setValidationDate] = useState('');
 
   const [shortage, setShortage] = useState(0);
 
-  const { confirm } = Modal;
+  const {confirm} = Modal;
 
   let history = useHistory();
   let history1 = useHistory();
 
   useEffect(() => {
-    window.addEventListener("offline", function (e) {
-      history1.push("/connection_lost");
+    window.addEventListener('offline', function (e) {
+      history1.push('/connection_lost');
     });
-    db.collection("customer")
+    db.collection('customer')
       .doc(customer_id)
       .get()
       .then((custDocRe) => {
         setCustomer(custDocRe.data());
       });
 
-    db.collection("installment")
-      .where("invoice_number", "==", invoice_no)
+    db.collection('installment')
+      .where('invoice_number', '==', invoice_no)
       .get()
       .then((instReDoc) => {
         setInstallments(instReDoc.docs.length);
       });
 
-    db.collection("invoice")
-      .where("invoice_number", "==", invoice_no)
+    db.collection('invoice')
+      .where('invoice_number', '==', invoice_no)
       .get()
       .then((inReDoc) => {
         setBalance(
@@ -108,10 +108,12 @@ export default function Update_Model({
         );
         setInitialBalance(inReDoc.docs[0].data().balance);
         setNextDate(inReDoc.docs[0].data().nextDate);
-        db.collection("installment")
-          .where("invoice_number", "==", invoice_no)
+        db.collection('installment')
+          .where('invoice_number', '==', invoice_no)
           .get()
           .then((instReDoc) => {
+            const delayedChargesIn =
+              (parseInt(inReDoc.docs[0].data().amountPerInstallment) * 5) / 100;
             if (instReDoc.docs.length === 0) {
               let daysCountNode1 =
                 (new Date().getTime() -
@@ -134,7 +136,7 @@ export default function Update_Model({
                 newInstamount + monthsRE > 1 ? instAmountProp : 0
               );
 
-              if (inReDoc.docs[0].data().selectedType === "shop") {
+              if (inReDoc.docs[0].data().selectedType === 'shop') {
                 if (7 - daysCountInitial >= 0) {
                   setDelayedDays(0);
                 } else {
@@ -147,26 +149,26 @@ export default function Update_Model({
                     daysCountInitial - 7 <= 7
                       ? 0
                       : (daysCountInitial - 7) / 7 < 2
-                      ? 99
+                      ? delayedChargesIn
                       : (daysCountInitial - 7) / 7 > 2 &&
                         (daysCountInitial - 7) / 7 < 3
-                      ? 198
+                      ? delayedChargesIn * 2
                       : (daysCountInitial - 7) / 7 > 3 &&
                         (daysCountInitial - 7) / 7 < 4
-                      ? 297
+                      ? delayedChargesIn * 3
                       : (daysCountInitial - 7) / 7 > 4 &&
                         (daysCountInitial - 7) / 7 < 5
-                      ? 396
+                      ? delayedChargesIn * 4
                       : (daysCountInitial - 7) / 7 > 5 &&
                         (daysCountInitial - 7) / 7 < 6
-                      ? 495
+                      ? delayedChargesIn * 5
                       : (daysCountInitial - 7) / 7 > 6 &&
                         (daysCountInitial - 7) / 7 < 7
-                      ? 594
+                      ? delayedChargesIn * 6
                       : (daysCountInitial - 7) / 7 > 7 &&
                         (daysCountInitial - 7) / 7 < 8
-                      ? 693
-                      : 693
+                      ? delayedChargesIn * 7
+                      : (delayedChargesIn * (daysCountInitial - 7)) / 7
                   );
                 }
               } else {
@@ -181,26 +183,26 @@ export default function Update_Model({
                     daysCountInitial - 14 <= 7
                       ? 0
                       : (daysCountInitial - 14) / 7 < 2
-                      ? 99
+                      ? delayedChargesIn
                       : (daysCountInitial - 14) / 7 > 2 &&
                         (daysCountInitial - 14) / 7 < 3
-                      ? 198
+                      ? delayedChargesIn * 2
                       : (daysCountInitial - 14) / 7 > 3 &&
                         (daysCountInitial - 14) / 7 < 4
-                      ? 297
+                      ? delayedChargesIn * 3
                       : (daysCountInitial - 14) / 7 > 4 &&
                         (daysCountInitial - 14) / 7 < 5
-                      ? 396
+                      ? delayedChargesIn * 4
                       : (daysCountInitial - 14) / 7 > 5 &&
                         (daysCountInitial - 14) / 7 < 6
-                      ? 495
+                      ? delayedChargesIn * 5
                       : (daysCountInitial - 14) / 7 > 6 &&
                         (daysCountInitial - 14) / 7 < 7
-                      ? 594
+                      ? delayedChargesIn * 6
                       : (daysCountInitial - 14) / 7 > 7 &&
                         (daysCountInitial - 14) / 7 < 8
-                      ? 693
-                      : 693
+                      ? delayedChargesIn * 7
+                      : (delayedChargesIn * (daysCountInitial - 14)) / 7
                   );
                 }
               }
@@ -231,7 +233,7 @@ export default function Update_Model({
                 newInstamount + monthsRE > 1 ? instAmountProp : 0
               );
 
-              if (inReDoc.docs[0].data().selectedType === "shop") {
+              if (inReDoc.docs[0].data().selectedType === 'shop') {
                 if (7 - daysCount >= 0) {
                   setDelayedDays(0);
                 } else {
@@ -243,20 +245,20 @@ export default function Update_Model({
                     daysCount - 7 <= 7
                       ? 0
                       : (daysCount - 7) / 7 < 2
-                      ? 99
+                      ? delayedChargesIn
                       : (daysCount - 7) / 7 > 2 && (daysCount - 7) / 7 < 3
-                      ? 198
+                      ? delayedChargesIn * 2
                       : (daysCount - 7) / 7 > 3 && (daysCount - 7) / 7 < 4
-                      ? 297
+                      ? delayedChargesIn * 3
                       : (daysCount - 7) / 7 > 4 && (daysCount - 7) / 7 < 5
-                      ? 396
+                      ? delayedChargesIn * 4
                       : (daysCount - 7) / 7 > 5 && (daysCount - 7) / 7 < 6
-                      ? 495
+                      ? delayedChargesIn * 5
                       : (daysCount - 7) / 7 > 6 && (daysCount - 7) / 7 < 7
-                      ? 594
+                      ? delayedChargesIn * 6
                       : (daysCount - 7) / 7 > 7 && (daysCount - 7) / 7 < 8
-                      ? 693
-                      : 693
+                      ? delayedChargesIn * 7
+                      : (delayedChargesIn * (daysCount - 7)) / 7
                   );
                 }
               } else {
@@ -271,20 +273,20 @@ export default function Update_Model({
                     daysCount - 14 <= 7
                       ? 0
                       : (daysCount - 14) / 7 < 2
-                      ? 99
+                      ? delayedChargesIn
                       : (daysCount - 14) / 7 > 2 && (daysCount - 14) / 7 < 3
-                      ? 198
+                      ? delayedChargesIn * 2
                       : (daysCount - 14) / 7 > 3 && (daysCount - 14) / 7 < 4
-                      ? 297
+                      ? delayedChargesIn * 3
                       : (daysCount - 14) / 7 > 4 && (daysCount - 14) / 7 < 5
-                      ? 396
+                      ? delayedChargesIn * 4
                       : (daysCount - 14) / 7 > 5 && (daysCount - 14) / 7 < 6
-                      ? 495
+                      ? delayedChargesIn * 5
                       : (daysCount - 14) / 7 > 6 && (daysCount - 14) / 7 < 7
-                      ? 594
+                      ? delayedChargesIn * 6
                       : (daysCount - 14) / 7 > 7 && (daysCount - 14) / 7 < 8
-                      ? 693
-                      : 693
+                      ? delayedChargesIn * 7
+                      : (delayedChargesIn * (daysCount - 14)) / 7
                   );
                 }
               }
@@ -293,12 +295,12 @@ export default function Update_Model({
 
         setIsLoading(false);
       });
-     // eslint-disable-next-line
+    // eslint-disable-next-line
   }, [invoice_no, isEx, instAmountProp, instCount, customer_id]);
 
   const updateInstallment = async () => {
-    db.collection("invoice")
-      .where("invoice_number", "==", invoice_no)
+    db.collection('invoice')
+      .where('invoice_number', '==', invoice_no)
       .get()
       .then((reInvoice) => {
         var reTotCal = parseInt(installmentAmount) + parseInt(gamisaraniamount);
@@ -307,7 +309,7 @@ export default function Update_Model({
           reTotCal / parseInt(reInvoice.docs[0].data()?.amountPerInstallment);
 
         if (reCalMult >= 1) {
-          db.collection("invoice")
+          db.collection('invoice')
             .doc(reInvoice.docs[0].id)
             .update({
               nextDate: firebase.firestore.Timestamp.fromDate(
@@ -324,8 +326,8 @@ export default function Update_Model({
             })
             .then((_) => {});
         } else {
-          db.collection("installment")
-            .where("invoice_number", "==", invoice_no)
+          db.collection('installment')
+            .where('invoice_number', '==', invoice_no)
             .get()
             .then((reInst) => {
               var totalPlusInsAmount = 0;
@@ -359,7 +361,7 @@ export default function Update_Model({
                 parseInt(seeToot) >=
                 parseInt(reInvoice.docs[0].data()?.amountPerInstallment)
               ) {
-                db.collection("invoice")
+                db.collection('invoice')
                   .doc(reInvoice.docs[0].id)
                   .update({
                     nextDate: firebase.firestore.Timestamp.fromDate(
@@ -381,32 +383,32 @@ export default function Update_Model({
       });
 
     await db
-      .collection("installment")
-      .where("invoice_number", "==", invoice_no)
+      .collection('installment')
+      .where('invoice_number', '==', invoice_no)
       .get()
       .then(async (reInst) => {
         // let tot = parseInt(installmentAmount) + parseInt(gamisaraniamount);
-        await db.collection("installment").add({
+        await db.collection('installment').add({
           invoice_number: invoice_no,
           amount: parseInt(installmentAmount) + parseInt(gamisaraniamount),
-          delayed: delayedCharges === "" ? 0 : parseInt(delayedCharges),
+          delayed: delayedCharges === '' ? 0 : parseInt(delayedCharges),
           isExpired: isEx,
           balance: balance <= 0 ? 0 : balance,
           gamisarani_amount: parseInt(gamisaraniamount),
-          shortage: shortage === "" ? 0 : shortage,
+          shortage: shortage === '' ? 0 : shortage,
           type: type,
           date: updateTimestamp,
         });
       });
 
     await db
-      .collection("invoice")
-      .where("invoice_number", "==", invoice_no)
+      .collection('invoice')
+      .where('invoice_number', '==', invoice_no)
       .get()
       .then(async (reBalance) => {
         // let totot = parseInt(installmentAmount) + parseInt(gamisaraniamount);
         await db
-          .collection("invoice")
+          .collection('invoice')
           .doc(reBalance.docs[0].id)
           .update({
             balance: balance <= 0 ? 0 : balance,
@@ -414,11 +416,11 @@ export default function Update_Model({
       });
 
     if (gamisarani && parseInt(gamisaraniamount) > 0) {
-      db.collection("gami_sarani")
+      db.collection('gami_sarani')
         .doc(gamisaraniId)
         .get()
         .then((getRe) => {
-          db.collection("gami_sarani")
+          db.collection('gami_sarani')
             .doc(gamisaraniId)
             .update({
               currentDeposit:
@@ -430,7 +432,7 @@ export default function Update_Model({
                     parseInt(gamisaraniamount),
             })
             .then((re) => {
-              db.collection("gami_sarani_withdrawhistory").add({
+              db.collection('gami_sarani_withdrawhistory').add({
                 gami_nic: gamisaraniNic,
                 docId: gamisaraniId,
                 withdraw: parseInt(gamisaraniamount),
@@ -449,24 +451,24 @@ export default function Update_Model({
       0
     ) {
       await db
-        .collection("arrears")
-        .where("invoice_number", "==", invoice_no)
+        .collection('arrears')
+        .where('invoice_number', '==', invoice_no)
         .get()
         .then(async (arrRe) => {
           if (arrRe.docs.length > 0) {
-            await db.collection("arrears").doc(arrRe.docs[0].id).delete();
+            await db.collection('arrears').doc(arrRe.docs[0].id).delete();
           }
         });
     }
 
     if (parseInt(balance) <= 0) {
       await db
-        .collection("invoice")
-        .where("invoice_number", "==", invoice_no)
+        .collection('invoice')
+        .where('invoice_number', '==', invoice_no)
         .get()
         .then((reIn) => {
-          db.collection("invoice").doc(reIn.docs[0].id).update({
-            status_of_payandgo: "Done",
+          db.collection('invoice').doc(reIn.docs[0].id).update({
+            status_of_payandgo: 'Done',
           });
         });
     }
@@ -474,10 +476,10 @@ export default function Update_Model({
 
   const showConfirm = async () => {
     if (updateTimestamp === null) {
-      setValidationDate("Please select the date of installment!");
+      setValidationDate('Please select the date of installment!');
     } else {
       confirm({
-        title: "Do you Want to Print a Recipt?",
+        title: 'Do you Want to Print a Recipt?',
         icon: <ExclamationCircleOutlined />,
 
         async onOk() {
@@ -495,9 +497,9 @@ export default function Update_Model({
 
             let moveWith = {
               pathname:
-                "/admin/invoice_history/payAndGo/updateModel/PrintReceipt",
-              search: "?query=abc",
-              state: { detail: passingWithCustomerObj },
+                '/admin/invoice_history/payAndGo/updateModel/PrintReceipt',
+              search: '?query=abc',
+              state: {detail: passingWithCustomerObj},
             };
             history.push(moveWith);
           });
@@ -527,8 +529,8 @@ export default function Update_Model({
 
   const getCurrentBalanceFromGami = () => {
     setLoadingNicSubmit(true);
-    db.collection("gami_sarani")
-      .where("nic", "==", gamisaraniNic)
+    db.collection('gami_sarani')
+      .where('nic', '==', gamisaraniNic)
       .get()
       .then((reGami) => {
         if (reGami.docs.length > 0) {
@@ -538,7 +540,7 @@ export default function Update_Model({
           setLoadingNicSubmit(false);
         } else {
           setLoadingNicSubmit(false);
-          setValidation("Any gamisarani customer not found from this NIC!");
+          setValidation('Any gamisarani customer not found from this NIC!');
         }
       });
   };
@@ -575,10 +577,10 @@ export default function Update_Model({
                   onChange={(e) => {
                     if (gamisarani) {
                       setGamisarani(false);
-                      setGamisaraniId("");
+                      setGamisaraniId('');
                       setGamisaraniInitialAmount(0);
                       setGamisaraniamount(0);
-                      setGamisaraniNic("");
+                      setGamisaraniNic('');
                     } else {
                       setGamisarani(true);
                     }
@@ -623,7 +625,7 @@ export default function Update_Model({
                   }
                   onClick={getCurrentBalanceFromGami}
                 >
-                  {loadingNicsubmit ? <Spin size="large" /> : "Fetch"}
+                  {loadingNicsubmit ? <Spin size="large" /> : 'Fetch'}
                 </Button>
               </Grid>
               <Grid className="lbl_topi" item xs={12} sm={4}>
@@ -646,12 +648,12 @@ export default function Update_Model({
                   disabled={
                     !gamisarani || gamisaraniInitialAmount === 0 ? true : false
                   }
-                  InputProps={{ inputProps: { min: 0 } }}
+                  InputProps={{inputProps: {min: 0}}}
                   value={gamisaraniamount}
                   onChange={(e) => {
                     if (
                       Math.round(e.target.value) >= 0 &&
-                      e.target.value !== "" &&
+                      e.target.value !== '' &&
                       intialBalance >=
                         parseInt(e.target.value.trim()) + gamisaraniamount
                     ) {
@@ -688,11 +690,11 @@ export default function Update_Model({
                   label="Installment Amount"
                   size="small"
                   value={installmentAmount}
-                  InputProps={{ inputProps: { min: 0 } }}
+                  InputProps={{inputProps: {min: 0}}}
                   onChange={(e) => {
                     if (
                       Math.round(e.target.value) >= 0 &&
-                      e.target.value !== "" &&
+                      e.target.value !== '' &&
                       intialBalance >=
                         parseInt(e.target.value.trim()) + gamisaraniamount
                     ) {
@@ -719,7 +721,7 @@ export default function Update_Model({
                   </Grid>
                   <Grid item xs={12} sm={4}>
                     <p className="lbl_arr">
-                      {instAmountProp * delayedMonths} ({instAmountProp} X{" "}
+                      {instAmountProp * delayedMonths} ({instAmountProp} X{' '}
                       {delayedMonths})
                     </p>
                   </Grid>
@@ -728,7 +730,7 @@ export default function Update_Model({
                 <br />
               </>
             ) : (
-              ""
+              ''
             )}
 
             <Grid container spacing={2}>
@@ -761,7 +763,7 @@ export default function Update_Model({
                   onChange={(e) => {
                     if (
                       Math.round(e.target.value) >= 0 &&
-                      e.target.value !== ""
+                      e.target.value !== ''
                     ) {
                       if (installmentAmount + gamisaraniamount > 0) {
                         setBalance(parseInt(e.target.value.trim()));
@@ -825,8 +827,8 @@ export default function Update_Model({
                 {delayedDays > 7 ? (
                   <p
                     style={{
-                      color: "red",
-                      fontWeight: "bold",
+                      color: 'red',
+                      fontWeight: 'bold',
                     }}
                   >
                     {Math.round(delayedDays)} days delayed !
@@ -852,9 +854,9 @@ export default function Update_Model({
                   label="Shortage"
                   size="small"
                   value={shortage}
-                  InputProps={{ inputProps: { min: 0 } }}
+                  InputProps={{inputProps: {min: 0}}}
                   onChange={(e) => {
-                    if (e.target.value !== "") {
+                    if (e.target.value !== '') {
                       setShortage(parseInt(e.target.value.trim()));
                     }
                   }}
@@ -874,10 +876,10 @@ export default function Update_Model({
               </Grid>
               <Grid item xs={12} sm={6}>
                 <p className="next_date">
-                  {" "}
+                  {' '}
                   {nextDate === null
-                    ? ""
-                    : moment(nextDate?.toDate()).format("dddd, MMMM Do YYYY")}
+                    ? ''
+                    : moment(nextDate?.toDate()).format('dddd, MMMM Do YYYY')}
                 </p>
               </Grid>
 
@@ -893,33 +895,33 @@ export default function Update_Model({
               <Grid item xs={12} sm={6}>
                 <div
                   style={{
-                    fontWeight: "bold",
-                    fontSize: "20px",
+                    fontWeight: 'bold',
+                    fontSize: '20px',
                   }}
                 >
                   <CurrencyFormat
                     value={totalPlusRed()}
-                    displayType={"text"}
+                    displayType={'text'}
                     thousandSeparator={true}
-                    prefix={" Rs. "}
+                    prefix={' Rs. '}
                   />
                   /=
                 </div>
                 <div
                   style={{
-                    fontWeight: "bold",
-                    fontSize: "15px",
-                    color: "grey",
+                    fontWeight: 'bold',
+                    fontSize: '15px',
+                    color: 'grey',
                   }}
                 >
                   (
-                  {"  " +
+                  {'  ' +
                     parseInt(installmentAmount) +
-                    " + " +
+                    ' + ' +
                     gamisaraniamount +
-                    " + " +
+                    ' + ' +
                     Math.round(delayedCharges) +
-                    " "}
+                    ' '}
                   )
                 </div>
               </Grid>

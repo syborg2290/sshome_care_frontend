@@ -159,6 +159,15 @@ export default function Areas() {
         });
       });
 
+    db.collection('invoice')
+      .where('status_of_payandgo', '==', 'expired')
+      .get()
+      .then((onSnap) => {
+        onSnap.docs.forEach(async (eachRe) => {
+          checkInstallmentsStatusExpired(eachRe);
+        });
+      });
+
     db.collection('arrears')
       .orderBy('date', 'desc')
       .get()
@@ -213,7 +222,22 @@ export default function Areas() {
     }
   };
 
+  const checkInstallmentsStatusExpired = async (eachRe) => {
+    const installmentStatus = await db
+      .collection('installment')
+      .where('invoice_number', '==', eachRe.data().invoice_number)
+      .get();
+
+    if (installmentStatus.docs.length === 0) {
+      intialStateOfArreasCheck(eachRe);
+    } else {
+      afterStateOfArreasCheck(installmentStatus, eachRe);
+    }
+  };
+
   const intialStateOfArreasCheck = async (eachRe) => {
+    const delayedChargesIn =
+      (parseInt(eachRe.data().amountPerInstallment) * 5) / 100;
     let daysCountNode1 =
       (new Date().getTime() -
         new Date(eachRe.data()?.nextDate?.seconds * 1000).getTime()) /
@@ -241,26 +265,26 @@ export default function Areas() {
                       daysCountInitial - 7 <= 7
                         ? 0
                         : (daysCountInitial - 7) / 7 < 2
-                        ? 99
+                        ? delayedChargesIn
                         : (daysCountInitial - 7) / 7 > 2 &&
                           (daysCountInitial - 7) / 7 < 3
-                        ? 198
+                        ? delayedChargesIn * 2
                         : (daysCountInitial - 7) / 7 > 3 &&
                           (daysCountInitial - 7) / 7 < 4
-                        ? 297
+                        ? delayedChargesIn * 3
                         : (daysCountInitial - 7) / 7 > 4 &&
                           (daysCountInitial - 7) / 7 < 5
-                        ? 396
+                        ? delayedChargesIn * 4
                         : (daysCountInitial - 7) / 7 > 5 &&
                           (daysCountInitial - 7) / 7 < 6
-                        ? 495
+                        ? delayedChargesIn * 5
                         : (daysCountInitial - 7) / 7 > 6 &&
                           (daysCountInitial - 7) / 7 < 7
-                        ? 594
+                        ? delayedChargesIn * 6
                         : (daysCountInitial - 7) / 7 > 7 &&
                           (daysCountInitial - 7) / 7 < 8
-                        ? 693
-                        : 693,
+                        ? delayedChargesIn * 7
+                        : (delayedChargesIn * (daysCountInitial - 7)) / 7,
                   });
               } else {
                 db.collection('arrears').add({
@@ -279,26 +303,26 @@ export default function Areas() {
                     daysCountInitial - 7 <= 7
                       ? 0
                       : (daysCountInitial - 7) / 7 < 2
-                      ? 99
+                      ? delayedChargesIn
                       : (daysCountInitial - 7) / 7 > 2 &&
                         (daysCountInitial - 7) / 7 < 3
-                      ? 198
+                      ? delayedChargesIn * 2
                       : (daysCountInitial - 7) / 7 > 3 &&
                         (daysCountInitial - 7) / 7 < 4
-                      ? 297
+                      ? delayedChargesIn * 3
                       : (daysCountInitial - 7) / 7 > 4 &&
                         (daysCountInitial - 7) / 7 < 5
-                      ? 396
+                      ? delayedChargesIn * 4
                       : (daysCountInitial - 7) / 7 > 5 &&
                         (daysCountInitial - 7) / 7 < 6
-                      ? 495
+                      ? delayedChargesIn * 5
                       : (daysCountInitial - 7) / 7 > 6 &&
                         (daysCountInitial - 7) / 7 < 7
-                      ? 594
+                      ? delayedChargesIn * 6
                       : (daysCountInitial - 7) / 7 > 7 &&
                         (daysCountInitial - 7) / 7 < 8
-                      ? 693
-                      : 693,
+                      ? delayedChargesIn * 7
+                      : (delayedChargesIn * (daysCountInitial - 7)) / 7,
                   date: firebase.firestore.FieldValue.serverTimestamp(),
                 });
               }
@@ -326,26 +350,26 @@ export default function Areas() {
                       daysCountInitial - 14 <= 7
                         ? 0
                         : (daysCountInitial - 14) / 7 < 2
-                        ? 99
+                        ? delayedChargesIn
                         : (daysCountInitial - 14) / 7 > 2 &&
                           (daysCountInitial - 14) / 7 < 3
-                        ? 198
+                        ? delayedChargesIn * 2
                         : (daysCountInitial - 14) / 7 > 3 &&
                           (daysCountInitial - 14) / 7 < 4
-                        ? 297
+                        ? delayedChargesIn * 3
                         : (daysCountInitial - 14) / 7 > 4 &&
                           (daysCountInitial - 14) / 7 < 5
-                        ? 396
+                        ? delayedChargesIn * 4
                         : (daysCountInitial - 14) / 7 > 5 &&
                           (daysCountInitial - 14) / 7 < 6
-                        ? 495
+                        ? delayedChargesIn * 5
                         : (daysCountInitial - 14) / 7 > 6 &&
                           (daysCountInitial - 14) / 7 < 7
-                        ? 594
+                        ? delayedChargesIn * 6
                         : (daysCountInitial - 14) / 7 > 7 &&
                           (daysCountInitial - 14) / 7 < 8
-                        ? 693
-                        : 693,
+                        ? delayedChargesIn * 7
+                        : (delayedChargesIn * (daysCountInitial - 14)) / 7,
                   });
               } else {
                 db.collection('arrears').add({
@@ -364,26 +388,26 @@ export default function Areas() {
                     daysCountInitial - 14 <= 7
                       ? 0
                       : (daysCountInitial - 14) / 7 < 2
-                      ? 99
+                      ? delayedChargesIn
                       : (daysCountInitial - 14) / 7 > 2 &&
                         (daysCountInitial - 14) / 7 < 3
-                      ? 198
+                      ? delayedChargesIn * 2
                       : (daysCountInitial - 14) / 7 > 3 &&
                         (daysCountInitial - 14) / 7 < 4
-                      ? 297
+                      ? delayedChargesIn * 3
                       : (daysCountInitial - 14) / 7 > 4 &&
                         (daysCountInitial - 14) / 7 < 5
-                      ? 396
+                      ? delayedChargesIn * 4
                       : (daysCountInitial - 14) / 7 > 5 &&
                         (daysCountInitial - 14) / 7 < 6
-                      ? 495
+                      ? delayedChargesIn * 5
                       : (daysCountInitial - 14) / 7 > 6 &&
                         (daysCountInitial - 14) / 7 < 7
-                      ? 594
+                      ? delayedChargesIn * 6
                       : (daysCountInitial - 14) / 7 > 7 &&
                         (daysCountInitial - 14) / 7 < 8
-                      ? 693
-                      : 693,
+                      ? delayedChargesIn * 7
+                      : (delayedChargesIn * (daysCountInitial - 14)) / 7,
                   date: firebase.firestore.FieldValue.serverTimestamp(),
                 });
               }
@@ -394,11 +418,11 @@ export default function Areas() {
   };
 
   const afterStateOfArreasCheck = async (instReDoc, eachRe) => {
+    const delayedChargesIn =
+      (parseInt(eachRe.data().amountPerInstallment) * 5) / 100;
     let daysCountNode2 =
       (new Date().getTime() -
-        new Date(
-          instReDoc.docs[0].data()?.nextDate?.seconds * 1000
-        ).getTime()) /
+        new Date(eachRe.data()?.nextDate?.seconds * 1000).getTime()) /
       (1000 * 3600 * 24);
     let daysCount =
       daysCountNode2 +
@@ -432,20 +456,20 @@ export default function Areas() {
                   daysCount - 7 <= 7
                     ? 0
                     : (daysCount - 7) / 7 < 2
-                    ? 99
+                    ? delayedChargesIn
                     : (daysCount - 7) / 7 > 2 && (daysCount - 7) / 7 < 3
-                    ? 198
+                    ? delayedChargesIn * 2
                     : (daysCount - 7) / 7 > 3 && (daysCount - 7) / 7 < 4
-                    ? 297
+                    ? delayedChargesIn * 3
                     : (daysCount - 7) / 7 > 4 && (daysCount - 7) / 7 < 5
-                    ? 396
+                    ? delayedChargesIn * 4
                     : (daysCount - 7) / 7 > 5 && (daysCount - 7) / 7 < 6
-                    ? 495
+                    ? delayedChargesIn * 5
                     : (daysCount - 7) / 7 > 6 && (daysCount - 7) / 7 < 7
-                    ? 594
+                    ? delayedChargesIn * 6
                     : (daysCount - 7) / 7 > 7 && (daysCount - 7) / 7 < 8
-                    ? 693
-                    : 99 * Math.round((daysCount - 7) / 7),
+                    ? delayedChargesIn * 7
+                    : (delayedChargesIn * (daysCount - 7)) / 7,
               });
           } else {
             db.collection('arrears').add({
@@ -464,20 +488,20 @@ export default function Areas() {
                 daysCount - 7 <= 7
                   ? 0
                   : (daysCount - 7) / 7 < 2
-                  ? 99
+                  ? delayedChargesIn
                   : (daysCount - 7) / 7 > 2 && (daysCount - 7) / 7 < 3
-                  ? 198
+                  ? delayedChargesIn * 2
                   : (daysCount - 7) / 7 > 3 && (daysCount - 7) / 7 < 4
-                  ? 297
+                  ? delayedChargesIn * 3
                   : (daysCount - 7) / 7 > 4 && (daysCount - 7) / 7 < 5
-                  ? 396
+                  ? delayedChargesIn * 4
                   : (daysCount - 7) / 7 > 5 && (daysCount - 7) / 7 < 6
-                  ? 495
+                  ? delayedChargesIn * 5
                   : (daysCount - 7) / 7 > 6 && (daysCount - 7) / 7 < 7
-                  ? 594
+                  ? delayedChargesIn * 6
                   : (daysCount - 7) / 7 > 7 && (daysCount - 7) / 7 < 8
-                  ? 693
-                  : 99 * Math.round((daysCount - 7) / 7),
+                  ? delayedChargesIn * 7
+                  : (delayedChargesIn * (daysCount - 7)) / 7,
               date: firebase.firestore.FieldValue.serverTimestamp(),
             });
           }
@@ -503,20 +527,20 @@ export default function Areas() {
                   daysCount - 14 <= 7
                     ? 0
                     : (daysCount - 14) / 7 < 2
-                    ? 99
+                    ? delayedChargesIn
                     : (daysCount - 14) / 7 > 2 && (daysCount - 14) / 7 < 3
-                    ? 198
+                    ? delayedChargesIn * 2
                     : (daysCount - 14) / 7 > 3 && (daysCount - 14) / 7 < 4
-                    ? 297
+                    ? delayedChargesIn * 3
                     : (daysCount - 14) / 7 > 4 && (daysCount - 14) / 7 < 5
-                    ? 396
+                    ? delayedChargesIn * 4
                     : (daysCount - 14) / 7 > 5 && (daysCount - 14) / 7 < 6
-                    ? 495
+                    ? delayedChargesIn * 5
                     : (daysCount - 14) / 7 > 6 && (daysCount - 14) / 7 < 7
-                    ? 594
+                    ? delayedChargesIn * 6
                     : (daysCount - 14) / 7 > 7 && (daysCount - 14) / 7 < 8
-                    ? 693
-                    : 99 * Math.round((daysCount - 14) / 7),
+                    ? delayedChargesIn * 7
+                    : (delayedChargesIn * (daysCount - 14)) / 7,
               });
           } else {
             db.collection('arrears').add({
@@ -535,20 +559,20 @@ export default function Areas() {
                 daysCount - 14 <= 7
                   ? 0
                   : (daysCount - 14) / 7 < 2
-                  ? 99
+                  ? delayedChargesIn
                   : (daysCount - 14) / 7 > 2 && (daysCount - 14) / 7 < 3
-                  ? 198
+                  ? delayedChargesIn * 2
                   : (daysCount - 14) / 7 > 3 && (daysCount - 14) / 7 < 4
-                  ? 297
+                  ? delayedChargesIn * 3
                   : (daysCount - 14) / 7 > 4 && (daysCount - 14) / 7 < 5
-                  ? 396
+                  ? delayedChargesIn * 4
                   : (daysCount - 14) / 7 > 5 && (daysCount - 14) / 7 < 6
-                  ? 495
+                  ? delayedChargesIn * 5
                   : (daysCount - 14) / 7 > 6 && (daysCount - 14) / 7 < 7
-                  ? 594
+                  ? delayedChargesIn * 6
                   : (daysCount - 14) / 7 > 7 && (daysCount - 14) / 7 < 8
-                  ? 693
-                  : 99 * Math.round((daysCount - 14) / 7),
+                  ? delayedChargesIn * 7
+                  : (delayedChargesIn * (daysCount - 14)) / 7,
               date: firebase.firestore.FieldValue.serverTimestamp(),
             });
           }

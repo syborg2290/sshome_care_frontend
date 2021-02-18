@@ -1,23 +1,23 @@
-import React, { useState, useEffect } from "react";
-import Container from "@material-ui/core/Container";
+import React, {useState, useEffect} from 'react';
+import Container from '@material-ui/core/Container';
 // eslint-disable-next-line
-import Typography from "@material-ui/core/Typography";
-import { Grid } from "@material-ui/core";
+import Typography from '@material-ui/core/Typography';
+import {Grid} from '@material-ui/core';
 
 //components
 // eslint-disable-next-line
-import ArreasTable from "../dashboard/dashboard_contents/arreas_Table/Arreas_Table";
-import PendingList from "../dashboard/dashboard_contents/pending_Blacklist/Pending_List";
+import ArreasTable from '../dashboard/dashboard_contents/arreas_Table/Arreas_Table';
+import PendingList from '../dashboard/dashboard_contents/pending_Blacklist/Pending_List';
 // eslint-disable-next-line
-import InvoiceList from "../dashboard/dashboard_contents/invoice_List/Invoice_List";
-import ExpireInvoice from "../dashboard/dashboard_contents/expire_Table/Expire_Invoice";
-import firebase from "firebase";
-import db from "../../../../config/firebase.js";
+import InvoiceList from '../dashboard/dashboard_contents/invoice_List/Invoice_List';
+import ExpireInvoice from '../dashboard/dashboard_contents/expire_Table/Expire_Invoice';
+import firebase from 'firebase';
+import db from '../../../../config/firebase.js';
 
 // styles
-import "./Dashboard.css";
+import './Dashboard.css';
 
-import { useHistory } from "react-router-dom";
+import {useHistory} from 'react-router-dom';
 
 function isDateBeforeToday(date) {
   return new Date(date.toDateString()) < new Date(new Date().toDateString());
@@ -37,12 +37,12 @@ export default function Dashboard() {
   let history = useHistory();
 
   useEffect(() => {
-    window.addEventListener("offline", function (e) {
-      history.push("/connection_lost");
+    window.addEventListener('offline', function (e) {
+      history.push('/connection_lost');
     });
 
-    db.collection("invoice")
-      .where("status_of_payandgo", "==", "expired")
+    db.collection('invoice')
+      .where('status_of_payandgo', '==', 'expired')
       .get()
       .then((onSnap) => {
         var expiredRawData = [];
@@ -57,8 +57,8 @@ export default function Dashboard() {
         setExpiredList(expiredRawData);
       });
 
-    db.collection("invoice")
-      .where("status_of_payandgo", "==", "onGoing")
+    db.collection('invoice')
+      .where('status_of_payandgo', '==', 'onGoing')
       .get()
       .then((onSnap) => {
         onSnap.docs.forEach(async (eachRe) => {
@@ -66,16 +66,16 @@ export default function Dashboard() {
             new Date(eachRe.data()?.deadlineTimestamp?.seconds * 1000)
           );
           if (isBeforeDate) {
-            db.collection("invoice").doc(eachRe.id).update({
-              status_of_payandgo: "expired",
+            db.collection('invoice').doc(eachRe.id).update({
+              status_of_payandgo: 'expired',
             });
           }
           checkInstallmentsStatus(eachRe);
         });
       });
 
-    db.collection("invoice")
-      .where("status_of_payandgo", "==", "expired")
+    db.collection('invoice')
+      .where('status_of_payandgo', '==', 'expired')
       .get()
       .then((onSnap) => {
         onSnap.docs.forEach(async (eachRe) => {
@@ -88,8 +88,8 @@ export default function Dashboard() {
 
   const checkInstallmentsStatus = async (eachRe) => {
     const installmentStatus = await db
-      .collection("installment")
-      .where("invoice_number", "==", eachRe.data().invoice_number)
+      .collection('installment')
+      .where('invoice_number', '==', eachRe.data().invoice_number)
       .get();
 
     if (installmentStatus.docs.length === 0) {
@@ -101,8 +101,8 @@ export default function Dashboard() {
 
   const checkInstallmentsStatusExpired = async (eachRe) => {
     const installmentStatus = await db
-      .collection("installment")
-      .where("invoice_number", "==", eachRe.data().invoice_number)
+      .collection('installment')
+      .where('invoice_number', '==', eachRe.data().invoice_number)
       .get();
 
     if (installmentStatus.docs.length === 0) {
@@ -113,12 +113,14 @@ export default function Dashboard() {
   };
 
   const intialStateOfArreasCheck = async (eachRe) => {
+    const delayedChargesIn =
+      (parseInt(eachRe.data().amountPerInstallment) * 5) / 100;
     let daysCountNode1 =
       (new Date().getTime() -
         new Date(eachRe.data()?.nextDate?.seconds * 1000).getTime()) /
       (1000 * 3600 * 24);
     let daysCountInitial = daysCountNode1;
-    if (eachRe.data().selectedType === "shop") {
+    if (eachRe.data().selectedType === 'shop') {
       if (7 - daysCountInitial >= 0) {
       } else {
         if (daysCountInitial - 7 > 7) {
@@ -132,12 +134,12 @@ export default function Dashboard() {
             ]);
           }
 
-          db.collection("arrears")
-            .where("invoice_number", "==", eachRe.data().invoice_number)
+          db.collection('arrears')
+            .where('invoice_number', '==', eachRe.data().invoice_number)
             .get()
             .then((reArreas) => {
               if (reArreas.docs.length > 0) {
-                db.collection("arrears")
+                db.collection('arrears')
                   .doc(reArreas.docs[0].id)
                   .update({
                     delayed_days: Math.round(daysCountInitial) - 7,
@@ -147,29 +149,29 @@ export default function Dashboard() {
                       daysCountInitial - 7 <= 7
                         ? 0
                         : (daysCountInitial - 7) / 7 < 2
-                        ? 99
+                        ? delayedChargesIn
                         : (daysCountInitial - 7) / 7 > 2 &&
                           (daysCountInitial - 7) / 7 < 3
-                        ? 198
+                        ? delayedChargesIn * 2
                         : (daysCountInitial - 7) / 7 > 3 &&
                           (daysCountInitial - 7) / 7 < 4
-                        ? 297
+                        ? delayedChargesIn * 3
                         : (daysCountInitial - 7) / 7 > 4 &&
                           (daysCountInitial - 7) / 7 < 5
-                        ? 396
+                        ? delayedChargesIn * 4
                         : (daysCountInitial - 7) / 7 > 5 &&
                           (daysCountInitial - 7) / 7 < 6
-                        ? 495
+                        ? delayedChargesIn * 5
                         : (daysCountInitial - 7) / 7 > 6 &&
                           (daysCountInitial - 7) / 7 < 7
-                        ? 594
+                        ? delayedChargesIn * 6
                         : (daysCountInitial - 7) / 7 > 7 &&
                           (daysCountInitial - 7) / 7 < 8
-                        ? 693
-                        : 693,
+                        ? delayedChargesIn * 7
+                        : (delayedChargesIn * (daysCountInitial - 7)) / 7,
                   });
               } else {
-                db.collection("arrears").add({
+                db.collection('arrears').add({
                   invoice_number: eachRe.data().invoice_number,
                   type: eachRe.data().selectedType,
                   villageRoot: eachRe.data().root_village,
@@ -185,26 +187,26 @@ export default function Dashboard() {
                     daysCountInitial - 7 <= 7
                       ? 0
                       : (daysCountInitial - 7) / 7 < 2
-                      ? 99
+                      ? delayedChargesIn
                       : (daysCountInitial - 7) / 7 > 2 &&
                         (daysCountInitial - 7) / 7 < 3
-                      ? 198
+                      ? delayedChargesIn * 2
                       : (daysCountInitial - 7) / 7 > 3 &&
                         (daysCountInitial - 7) / 7 < 4
-                      ? 297
+                      ? delayedChargesIn * 3
                       : (daysCountInitial - 7) / 7 > 4 &&
                         (daysCountInitial - 7) / 7 < 5
-                      ? 396
+                      ? delayedChargesIn * 4
                       : (daysCountInitial - 7) / 7 > 5 &&
                         (daysCountInitial - 7) / 7 < 6
-                      ? 495
+                      ? delayedChargesIn * 5
                       : (daysCountInitial - 7) / 7 > 6 &&
                         (daysCountInitial - 7) / 7 < 7
-                      ? 594
+                      ? delayedChargesIn * 6
                       : (daysCountInitial - 7) / 7 > 7 &&
                         (daysCountInitial - 7) / 7 < 8
-                      ? 693
-                      : 693,
+                      ? delayedChargesIn * 7
+                      : (delayedChargesIn * (daysCountInitial - 7)) / 7,
                   date: firebase.firestore.FieldValue.serverTimestamp(),
                 });
               }
@@ -224,12 +226,12 @@ export default function Dashboard() {
               },
             ]);
           }
-          db.collection("arrears")
-            .where("invoice_number", "==", eachRe.data().invoice_number)
+          db.collection('arrears')
+            .where('invoice_number', '==', eachRe.data().invoice_number)
             .get()
             .then((reArreas) => {
               if (reArreas.docs.length > 0) {
-                db.collection("arrears")
+                db.collection('arrears')
                   .doc(reArreas.docs[0].id)
                   .update({
                     delayed_days: Math.round(daysCountInitial) - 14,
@@ -239,29 +241,29 @@ export default function Dashboard() {
                       daysCountInitial - 14 <= 7
                         ? 0
                         : (daysCountInitial - 14) / 7 < 2
-                        ? 99
+                        ? delayedChargesIn
                         : (daysCountInitial - 14) / 7 > 2 &&
                           (daysCountInitial - 14) / 7 < 3
-                        ? 198
+                        ? delayedChargesIn * 2
                         : (daysCountInitial - 14) / 7 > 3 &&
                           (daysCountInitial - 14) / 7 < 4
-                        ? 297
+                        ? delayedChargesIn * 3
                         : (daysCountInitial - 14) / 7 > 4 &&
                           (daysCountInitial - 14) / 7 < 5
-                        ? 396
+                        ? delayedChargesIn * 4
                         : (daysCountInitial - 14) / 7 > 5 &&
                           (daysCountInitial - 14) / 7 < 6
-                        ? 495
+                        ? delayedChargesIn * 5
                         : (daysCountInitial - 14) / 7 > 6 &&
                           (daysCountInitial - 14) / 7 < 7
-                        ? 594
+                        ? delayedChargesIn * 6
                         : (daysCountInitial - 14) / 7 > 7 &&
                           (daysCountInitial - 14) / 7 < 8
-                        ? 693
-                        : 693,
+                        ? delayedChargesIn * 7
+                        : (delayedChargesIn * (daysCountInitial - 14)) / 7,
                   });
               } else {
-                db.collection("arrears").add({
+                db.collection('arrears').add({
                   invoice_number: eachRe.data().invoice_number,
                   customer_id: eachRe.data().customer_id,
                   type: eachRe.data().selectedType,
@@ -272,31 +274,31 @@ export default function Dashboard() {
                   amountPerInstallment: eachRe.data().amountPerInstallment,
                   noOfInstallment: eachRe.data().noOfInstallment,
                   status_of_payandgo: eachRe.data().status_of_payandgo,
-                  delayed_days: Math.round(daysCountInitial) - 7,
+                  delayed_days: Math.round(daysCountInitial) - 14,
                   delayed_charges:
                     daysCountInitial - 14 <= 7
                       ? 0
                       : (daysCountInitial - 14) / 7 < 2
-                      ? 99
+                      ? delayedChargesIn
                       : (daysCountInitial - 14) / 7 > 2 &&
                         (daysCountInitial - 14) / 7 < 3
-                      ? 198
+                      ? delayedChargesIn * 2
                       : (daysCountInitial - 14) / 7 > 3 &&
                         (daysCountInitial - 14) / 7 < 4
-                      ? 297
+                      ? delayedChargesIn * 3
                       : (daysCountInitial - 14) / 7 > 4 &&
                         (daysCountInitial - 14) / 7 < 5
-                      ? 396
+                      ? delayedChargesIn * 4
                       : (daysCountInitial - 14) / 7 > 5 &&
                         (daysCountInitial - 14) / 7 < 6
-                      ? 495
+                      ? delayedChargesIn * 5
                       : (daysCountInitial - 14) / 7 > 6 &&
                         (daysCountInitial - 14) / 7 < 7
-                      ? 594
+                      ? delayedChargesIn * 6
                       : (daysCountInitial - 14) / 7 > 7 &&
                         (daysCountInitial - 14) / 7 < 8
-                      ? 693
-                      : 693,
+                      ? delayedChargesIn * 7
+                      : (delayedChargesIn * (daysCountInitial - 14)) / 7,
                   date: firebase.firestore.FieldValue.serverTimestamp(),
                 });
               }
@@ -307,11 +309,11 @@ export default function Dashboard() {
   };
 
   const afterStateOfArreasCheck = async (instReDoc, eachRe) => {
+    const delayedChargesIn =
+      (parseInt(eachRe.data().amountPerInstallment) * 5) / 100;
     let daysCountNode2 =
       (new Date().getTime() -
-        new Date(
-          instReDoc.docs[0].data()?.nextDate?.seconds * 1000
-        ).getTime()) /
+        new Date(eachRe.data()?.nextDate?.seconds * 1000).getTime()) /
       (1000 * 3600 * 24);
     let daysCount =
       daysCountNode2 +
@@ -335,7 +337,7 @@ export default function Dashboard() {
       ]);
     }
 
-    if (eachRe.data().selectedType === "shop") {
+    if (eachRe.data().selectedType === 'shop') {
       if (7 - daysCount >= 0) {
       } else {
         if (daysCount - 7 > 7) {
@@ -350,12 +352,12 @@ export default function Dashboard() {
           }
 
           let statusMonth = await db
-            .collection("arrears")
-            .where("invoice_number", "==", eachRe.data().invoice_number)
+            .collection('arrears')
+            .where('invoice_number', '==', eachRe.data().invoice_number)
             .get();
 
           if (statusMonth.docs.length > 0) {
-            db.collection("arrears")
+            db.collection('arrears')
               .doc(statusMonth.docs[0].id)
               .update({
                 delayed_days: daysCount - 7,
@@ -365,23 +367,23 @@ export default function Dashboard() {
                   daysCount - 7 <= 7
                     ? 0
                     : (daysCount - 7) / 7 < 2
-                    ? 99
+                    ? delayedChargesIn
                     : (daysCount - 7) / 7 > 2 && (daysCount - 7) / 7 < 3
-                    ? 198
+                    ? delayedChargesIn * 2
                     : (daysCount - 7) / 7 > 3 && (daysCount - 7) / 7 < 4
-                    ? 297
+                    ? delayedChargesIn * 3
                     : (daysCount - 7) / 7 > 4 && (daysCount - 7) / 7 < 5
-                    ? 396
+                    ? delayedChargesIn * 4
                     : (daysCount - 7) / 7 > 5 && (daysCount - 7) / 7 < 6
-                    ? 495
+                    ? delayedChargesIn * 5
                     : (daysCount - 7) / 7 > 6 && (daysCount - 7) / 7 < 7
-                    ? 594
+                    ? delayedChargesIn * 6
                     : (daysCount - 7) / 7 > 7 && (daysCount - 7) / 7 < 8
-                    ? 693
-                    : 99 * Math.round((daysCount - 7) / 7),
+                    ? delayedChargesIn * 7
+                    : (delayedChargesIn * (daysCount - 7)) / 7,
               });
           } else {
-            db.collection("arrears").add({
+            db.collection('arrears').add({
               invoice_number: eachRe.data().invoice_number,
               customer_id: eachRe.data().customer_id,
               type: eachRe.data().selectedType,
@@ -397,20 +399,20 @@ export default function Dashboard() {
                 daysCount - 7 <= 7
                   ? 0
                   : (daysCount - 7) / 7 < 2
-                  ? 99
+                  ? delayedChargesIn
                   : (daysCount - 7) / 7 > 2 && (daysCount - 7) / 7 < 3
-                  ? 198
+                  ? delayedChargesIn * 2
                   : (daysCount - 7) / 7 > 3 && (daysCount - 7) / 7 < 4
-                  ? 297
+                  ? delayedChargesIn * 3
                   : (daysCount - 7) / 7 > 4 && (daysCount - 7) / 7 < 5
-                  ? 396
+                  ? delayedChargesIn * 4
                   : (daysCount - 7) / 7 > 5 && (daysCount - 7) / 7 < 6
-                  ? 495
+                  ? delayedChargesIn * 5
                   : (daysCount - 7) / 7 > 6 && (daysCount - 7) / 7 < 7
-                  ? 594
+                  ? delayedChargesIn * 6
                   : (daysCount - 7) / 7 > 7 && (daysCount - 7) / 7 < 8
-                  ? 693
-                  : 99 * Math.round((daysCount - 7) / 7),
+                  ? delayedChargesIn * 7
+                  : (delayedChargesIn * (daysCount - 7)) / 7,
               date: firebase.firestore.FieldValue.serverTimestamp(),
             });
           }
@@ -431,12 +433,12 @@ export default function Dashboard() {
           }
 
           let statusWeek = await db
-            .collection("arrears")
-            .where("invoice_number", "==", eachRe.data().invoice_number)
+            .collection('arrears')
+            .where('invoice_number', '==', eachRe.data().invoice_number)
             .get();
 
           if (statusWeek.docs.length > 0) {
-            db.collection("arrears")
+            db.collection('arrears')
               .doc(statusWeek.docs[0].id)
               .update({
                 delayed_days: Math.round(daysCount) - 14,
@@ -446,23 +448,23 @@ export default function Dashboard() {
                   daysCount - 14 <= 7
                     ? 0
                     : (daysCount - 14) / 7 < 2
-                    ? 99
+                    ? delayedChargesIn
                     : (daysCount - 14) / 7 > 2 && (daysCount - 14) / 7 < 3
-                    ? 198
+                    ? delayedChargesIn * 2
                     : (daysCount - 14) / 7 > 3 && (daysCount - 14) / 7 < 4
-                    ? 297
+                    ? delayedChargesIn * 3
                     : (daysCount - 14) / 7 > 4 && (daysCount - 14) / 7 < 5
-                    ? 396
+                    ? delayedChargesIn * 4
                     : (daysCount - 14) / 7 > 5 && (daysCount - 14) / 7 < 6
-                    ? 495
+                    ? delayedChargesIn * 5
                     : (daysCount - 14) / 7 > 6 && (daysCount - 14) / 7 < 7
-                    ? 594
+                    ? delayedChargesIn * 6
                     : (daysCount - 14) / 7 > 7 && (daysCount - 14) / 7 < 8
-                    ? 693
-                    : 99 * Math.round((daysCount - 14) / 7),
+                    ? delayedChargesIn * 7
+                    : (delayedChargesIn * (daysCount - 14)) / 7,
               });
           } else {
-            db.collection("arrears").add({
+            db.collection('arrears').add({
               invoice_number: eachRe.data().invoice_number,
               customer_id: eachRe.data().customer_id,
               type: eachRe.data().selectedType,
@@ -478,20 +480,20 @@ export default function Dashboard() {
                 daysCount - 14 <= 7
                   ? 0
                   : (daysCount - 14) / 7 < 2
-                  ? 99
+                  ? delayedChargesIn
                   : (daysCount - 14) / 7 > 2 && (daysCount - 14) / 7 < 3
-                  ? 198
+                  ? delayedChargesIn * 2
                   : (daysCount - 14) / 7 > 3 && (daysCount - 14) / 7 < 4
-                  ? 297
+                  ? delayedChargesIn * 3
                   : (daysCount - 14) / 7 > 4 && (daysCount - 14) / 7 < 5
-                  ? 396
+                  ? delayedChargesIn * 4
                   : (daysCount - 14) / 7 > 5 && (daysCount - 14) / 7 < 6
-                  ? 495
+                  ? delayedChargesIn * 5
                   : (daysCount - 14) / 7 > 6 && (daysCount - 14) / 7 < 7
-                  ? 594
+                  ? delayedChargesIn * 6
                   : (daysCount - 14) / 7 > 7 && (daysCount - 14) / 7 < 8
-                  ? 693
-                  : 99 * Math.round((daysCount - 14) / 7),
+                  ? delayedChargesIn * 7
+                  : (delayedChargesIn * (daysCount - 14)) / 7,
               date: firebase.firestore.FieldValue.serverTimestamp(),
             });
           }

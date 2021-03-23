@@ -474,8 +474,9 @@ function Make_invoice() {
     //           : new Date(intialTimestamp?.seconds * 1000).getFullYear()
     //       )
     //     : new Date(timesBeforeYear);
-
-    if (tablerows.some((ob) => ob.customer !== null)) {
+    
+    if(times){
+      if (tablerows.some((ob) => ob.customer !== null)) {
       if (deadlineTimestamp !== null) {
         let randomNumber = Math.floor(Math.random() * 1000000000) + 1000;
         //customerImageUrlFront
@@ -1389,6 +1390,9 @@ function Make_invoice() {
       }
       setLoadingSubmit(false);
     }
+    }
+
+    
   };
 
   const getCurrentBalanceFromGami = () => {

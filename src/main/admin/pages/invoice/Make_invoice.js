@@ -258,12 +258,18 @@ function Make_invoice() {
       new Date(intialTimestamp?.seconds * 1000).setMonth(
         new Date(intialTimestamp?.seconds * 1000).getMonth() + 1
       )
-    ).setDate(parseInt(dates));
+      ).setDate(parseInt(dates));
+      
+      const yearNumber = parseInt(new Date(intialTimestamp?.seconds * 1000).getFullYear());
+      const nextYearNumber = yearNumber+1;
+      const timesYear = parseInt(new Date(times).getFullYear());
     
-     if(new Date(times).getFullYear() !==  new Date(intialTimestamp?.seconds * 1000).getFullYear() || new Date(times).getFullYear() !==  new Date(intialTimestamp?.seconds * 1000).getFullYear()+1){
+     if(timesYear !== yearNumber && timesYear !== nextYearNumber){
       NotificationManager.warning("Next date's year is wrong! press the button again");
       
-    }else{
+     } else {
+       
+       
       if (
         gamisarani &&
         (parseInt(gamisaraniamount) === '' ? 0 : parseInt(gamisaraniamount)) > 0
@@ -462,37 +468,19 @@ function Make_invoice() {
           },
         });
       }
-    }
+     }
       
       
     }
   };
+  
+  
 
   // eslint-disable-next-line
   const invoiceIntoDb = async (times) => {
-    setLoadingSubmit(true);
-    
-
-    // var times =
-    //   new Date(timesBeforeYear).getFullYear() !==
-    //     new Date(intialTimestamp?.seconds * 1000).getFullYear() ||
-    //   new Date(timesBeforeYear).getFullYear() !==
-    //     new Date(intialTimestamp?.seconds * 1000).getFullYear() + 1
-    //     ? new Date(timesBeforeYear).setFullYear(
-    //         new Date(intialTimestamp).getMonth() === 11
-    //           ? new Date(intialTimestamp?.seconds * 1000).getFullYear() + 1
-    //           : new Date(intialTimestamp?.seconds * 1000).getFullYear()
-    //       )
-    //     : new Date(timesBeforeYear);
-    
-    
-      
-      if (tablerows.some((ob) => ob.customer !== null)) {
-        if(new Date(times).getFullYear() !==  new Date(intialTimestamp?.seconds * 1000).getFullYear() || new Date(times).getFullYear() !==  new Date(intialTimestamp?.seconds * 1000).getFullYear()+1){
-      NotificationManager.warning("Next date's year is wrong! press the button again");
-      
-    }else{
-      
+    setLoadingSubmit(true); 
+      if(times){
+        if (tablerows.some((ob) => ob.customer !== null)) {
       if (deadlineTimestamp !== null) {
         let randomNumber = Math.floor(Math.random() * 1000000000) + 1000;
         //customerImageUrlFront
@@ -1264,7 +1252,7 @@ function Make_invoice() {
         NotificationManager.warning('Deadline date is not selected ! )');
       }
       
-    }
+    
       
     } else {
       let arrayItems = [];
@@ -1410,7 +1398,7 @@ function Make_invoice() {
       setLoadingSubmit(false);
     }
     
-      
+  }
     
       
 

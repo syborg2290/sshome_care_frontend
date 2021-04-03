@@ -253,6 +253,17 @@ function Make_invoice() {
         'Issue with your calculations Pleace check again (May be Included minus values ! )'
       );
     } else {
+      
+      var times = new Date(
+      new Date(intialTimestamp?.seconds * 1000).setMonth(
+        new Date(intialTimestamp?.seconds * 1000).getMonth() + 1
+      )
+    ).setDate(parseInt(dates));
+    
+     if(new Date(times).getFullYear() !==  new Date(intialTimestamp?.seconds * 1000).getFullYear() || new Date(times).getFullYear() !==  new Date(intialTimestamp?.seconds * 1000).getFullYear()+1){
+      NotificationManager.warning("Next date's year is wrong! press the button again");
+      
+    }else{
       if (
         gamisarani &&
         (parseInt(gamisaraniamount) === '' ? 0 : parseInt(gamisaraniamount)) > 0
@@ -328,7 +339,7 @@ function Make_invoice() {
                         search: '?query=abc',
                         state: {detail: passingWithCustomerObj},
                       };
-                      await invoiceIntoDb().then((_) => {
+                      await invoiceIntoDb(times).then((_) => {
                         history.push(moveWith);
                       });
                     } else {
@@ -354,13 +365,13 @@ function Make_invoice() {
                         search: '?query=abc',
                         state: {detail: passingWithoutCustomerObj},
                       };
-                      await invoiceIntoDb().then((_) => {
+                      await invoiceIntoDb(times).then((_) => {
                         history.push(moveWith);
                       });
                     }
                   },
                   async onCancel() {
-                    await invoiceIntoDb().then((_) => {
+                    await invoiceIntoDb(times).then((_) => {
                       history.push('/admin/ui/MakeInvoiceTable');
                     });
                   },
@@ -413,7 +424,7 @@ function Make_invoice() {
                 search: '?query=abc',
                 state: {detail: passingWithCustomerObj},
               };
-              await invoiceIntoDb().then((_) => {
+              await invoiceIntoDb(times).then((_) => {
                 history.push(moveWith);
               });
             } else {
@@ -439,29 +450,28 @@ function Make_invoice() {
                 search: '?query=abc',
                 state: {detail: passingWithoutCustomerObj},
               };
-              await invoiceIntoDb().then((_) => {
+              await invoiceIntoDb(times).then((_) => {
                 history.push(moveWith);
               });
             }
           },
           async onCancel() {
-            await invoiceIntoDb().then((_) => {
+            await invoiceIntoDb(times).then((_) => {
               history.push('/admin/ui/MakeInvoiceTable');
             });
           },
         });
       }
     }
+      
+      
+    }
   };
 
   // eslint-disable-next-line
-  const invoiceIntoDb = async () => {
+  const invoiceIntoDb = async (times) => {
     setLoadingSubmit(true);
-    var times = new Date(
-      new Date(intialTimestamp?.seconds * 1000).setMonth(
-        new Date(intialTimestamp?.seconds * 1000).getMonth() + 1
-      )
-    ).setDate(parseInt(dates));
+    
 
     // var times =
     //   new Date(timesBeforeYear).getFullYear() !==
@@ -475,8 +485,14 @@ function Make_invoice() {
     //       )
     //     : new Date(timesBeforeYear);
     
-    if(times){
+    
+      
       if (tablerows.some((ob) => ob.customer !== null)) {
+        if(new Date(times).getFullYear() !==  new Date(intialTimestamp?.seconds * 1000).getFullYear() || new Date(times).getFullYear() !==  new Date(intialTimestamp?.seconds * 1000).getFullYear()+1){
+      NotificationManager.warning("Next date's year is wrong! press the button again");
+      
+    }else{
+      
       if (deadlineTimestamp !== null) {
         let randomNumber = Math.floor(Math.random() * 1000000000) + 1000;
         //customerImageUrlFront
@@ -1247,6 +1263,9 @@ function Make_invoice() {
       } else {
         NotificationManager.warning('Deadline date is not selected ! )');
       }
+      
+    }
+      
     } else {
       let arrayItems = [];
 
@@ -1390,7 +1409,10 @@ function Make_invoice() {
       }
       setLoadingSubmit(false);
     }
-    }
+    
+      
+    
+      
 
     
   };

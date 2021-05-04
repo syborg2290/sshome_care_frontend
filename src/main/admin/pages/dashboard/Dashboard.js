@@ -35,9 +35,12 @@ function isDateBeforeToday(date) {
 //   return new Date(date.toDateString()) > new Date(new Date().toDateString());
 // }
 
+// eslint-disable-next-line
 function daysCountOfMonth(month, year) {
   return parseInt(new Date(year, month, 0).getDate());
 }
+
+
 
 export default function Dashboard() {
   const [pendingBlackList, setPendingBlackList] = useState([]);
@@ -167,7 +170,15 @@ export default function Dashboard() {
       (new Date().getTime() -
         new Date(eachRe.data()?.nextDate?.seconds * 1000).getTime()) /
       (1000 * 3600 * 24);
-    let daysCountInitial = daysCountNode1;
+      let daysCountInitial=0;
+              if(!isDateBeforeToday(new Date(
+                    eachRe.data()?.nextDate?.seconds * 1000
+              ))) {
+                 daysCountInitial = 0;
+              } else {
+                 daysCountInitial = daysCountNode1;
+                  }
+   
     if (eachRe.data().selectedType === 'shop') {
       if (7 - daysCountInitial >= 0) {
       } else {
@@ -364,9 +375,22 @@ export default function Dashboard() {
       (new Date().getTime() -
         new Date(eachRe.data()?.nextDate?.seconds * 1000).getTime()) /
       (1000 * 3600 * 24);
-    let daysCount =
-      daysCountNode2 +
-      daysCountOfMonth(new Date().getMonth(), new Date().getFullYear());
+     let daysCount = 0;
+               if(!isDateBeforeToday(new Date(
+                    eachRe.data()?.nextDate?.seconds * 1000
+              ))) {
+                 daysCount = 0;
+                
+               } else {
+                 daysCount =
+                   daysCountNode2;
+                //     daysCount =
+                // daysCountNode2 +
+                // daysCountOfMonth(
+                //   new Date().getMonth(),
+                //   new Date().getFullYear()
+                // );
+                  }
 
     let instRECheckCount = 0;
 

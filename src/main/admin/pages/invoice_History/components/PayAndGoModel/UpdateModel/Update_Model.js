@@ -108,7 +108,7 @@ export default function Update_Model ({
       .where('invoice_number', '==', invoice_no)
       .get()
       .then(inReDoc => {
-        setArreasAndInsAmount(inReDoc.docs[0].data().date, invoice_no)
+        setArreasAndInsAmount(inReDoc.docs[0].data().date, invoice_no,inReDoc.docs[0].data().noOfInstallment)
         setBalance(
           inReDoc.docs[0].data().balance - instAmountProp <= 0
             ? 0
@@ -329,7 +329,7 @@ export default function Update_Model ({
     // eslint-disable-next-line
   }, [invoice_no, isEx, instAmountProp, instCount, customer_id])
 
-  const setArreasAndInsAmount = async (nextDateRe, invoiceNo) => {
+  const setArreasAndInsAmount = async (nextDateRe, invoiceNo,installmentCount) => {
     db.collection('installment')
       .where('invoice_number', '==', invoiceNo)
       .get()
@@ -345,7 +345,7 @@ export default function Update_Model ({
           (new Date().getMonth() -
             new Date(nextDateRe.seconds * 1000).getMonth())
 
-        let dueAmount = parseInt(totalMonthsOfInst - 1) * instAmountProp
+        let dueAmount = parseInt(totalMonthsOfInst - 1 > installmentCount ? installmentCount : totalMonthsOfInst - 1) * instAmountProp;
         let dueAmountOfArreas =
           parseInt(dueAmount - paidAmount) < 0
             ? 0

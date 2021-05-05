@@ -19,14 +19,14 @@ import moment from 'moment'
 // styles
 import './Update_Model.css'
 
-function isDateBeforeNextDate (date1, date2, nextD) {
+function isDateBeforeNextDate(date1, date2, nextD) {
   let seeBool =
     new Date(date2) >= new Date(date1) && new Date(date2) <= new Date(nextD)
 
   return seeBool
 }
 
-function monthDiff (d1, d2) {
+function monthDiff(d1, d2) {
   var months
   months = (d2.getFullYear() - d1.getFullYear()) * 12
   months -= d1.getMonth()
@@ -35,15 +35,15 @@ function monthDiff (d1, d2) {
 }
 
 // eslint-disable-next-line
-function daysCountOfMonth (month, year) {
+function daysCountOfMonth(month, year) {
   return parseInt(new Date(year, month, 0).getDate())
 }
 
-function isDateBeforeToday (date) {
+function isDateBeforeToday(date) {
   return new Date(date.toDateString()) < new Date(new Date().toDateString())
 }
 
-export default function Update_Model ({
+export default function Update_Model({
   invoice_no,
   instAmountProp,
   instCount,
@@ -108,12 +108,8 @@ export default function Update_Model ({
       .where('invoice_number', '==', invoice_no)
       .get()
       .then(inReDoc => {
-        setArreasAndInsAmount(inReDoc.docs[0].data().date, invoice_no,inReDoc.docs[0].data().noOfInstallment)
-        setBalance(
-          inReDoc.docs[0].data().balance - instAmountProp <= 0
-            ? 0
-            : inReDoc.docs[0].data().balance - instAmountProp
-        )
+        setArreasAndInsAmount(inReDoc.docs[0].data().date, invoice_no, inReDoc.docs[0].data().noOfInstallment, inReDoc.docs[0].data().balance)
+
         setInitialBalance(inReDoc.docs[0].data().balance)
         setNextDate(inReDoc.docs[0].data().nextDate)
         db.collection('installment')
@@ -167,26 +163,26 @@ export default function Update_Model ({
                     daysCountInitial - 7 <= 7
                       ? 0
                       : (daysCountInitial - 7) / 7 < 2
-                      ? delayedChargesIn
-                      : (daysCountInitial - 7) / 7 > 2 &&
-                        (daysCountInitial - 7) / 7 < 3
-                      ? delayedChargesIn * 2
-                      : (daysCountInitial - 7) / 7 > 3 &&
-                        (daysCountInitial - 7) / 7 < 4
-                      ? delayedChargesIn * 3
-                      : (daysCountInitial - 7) / 7 > 4 &&
-                        (daysCountInitial - 7) / 7 < 5
-                      ? delayedChargesIn * 4
-                      : (daysCountInitial - 7) / 7 > 5 &&
-                        (daysCountInitial - 7) / 7 < 6
-                      ? delayedChargesIn * 5
-                      : (daysCountInitial - 7) / 7 > 6 &&
-                        (daysCountInitial - 7) / 7 < 7
-                      ? delayedChargesIn * 6
-                      : (daysCountInitial - 7) / 7 > 7 &&
-                        (daysCountInitial - 7) / 7 < 8
-                      ? delayedChargesIn * 7
-                      : (delayedChargesIn * (daysCountInitial - 7)) / 7
+                        ? delayedChargesIn
+                        : (daysCountInitial - 7) / 7 > 2 &&
+                          (daysCountInitial - 7) / 7 < 3
+                          ? delayedChargesIn * 2
+                          : (daysCountInitial - 7) / 7 > 3 &&
+                            (daysCountInitial - 7) / 7 < 4
+                            ? delayedChargesIn * 3
+                            : (daysCountInitial - 7) / 7 > 4 &&
+                              (daysCountInitial - 7) / 7 < 5
+                              ? delayedChargesIn * 4
+                              : (daysCountInitial - 7) / 7 > 5 &&
+                                (daysCountInitial - 7) / 7 < 6
+                                ? delayedChargesIn * 5
+                                : (daysCountInitial - 7) / 7 > 6 &&
+                                  (daysCountInitial - 7) / 7 < 7
+                                  ? delayedChargesIn * 6
+                                  : (daysCountInitial - 7) / 7 > 7 &&
+                                    (daysCountInitial - 7) / 7 < 8
+                                    ? delayedChargesIn * 7
+                                    : (delayedChargesIn * (daysCountInitial - 7)) / 7
                   )
                 }
               } else {
@@ -201,26 +197,26 @@ export default function Update_Model ({
                     daysCountInitial - 14 <= 7
                       ? 0
                       : (daysCountInitial - 14) / 7 < 2
-                      ? delayedChargesIn
-                      : (daysCountInitial - 14) / 7 > 2 &&
-                        (daysCountInitial - 14) / 7 < 3
-                      ? delayedChargesIn * 2
-                      : (daysCountInitial - 14) / 7 > 3 &&
-                        (daysCountInitial - 14) / 7 < 4
-                      ? delayedChargesIn * 3
-                      : (daysCountInitial - 14) / 7 > 4 &&
-                        (daysCountInitial - 14) / 7 < 5
-                      ? delayedChargesIn * 4
-                      : (daysCountInitial - 14) / 7 > 5 &&
-                        (daysCountInitial - 14) / 7 < 6
-                      ? delayedChargesIn * 5
-                      : (daysCountInitial - 14) / 7 > 6 &&
-                        (daysCountInitial - 14) / 7 < 7
-                      ? delayedChargesIn * 6
-                      : (daysCountInitial - 14) / 7 > 7 &&
-                        (daysCountInitial - 14) / 7 < 8
-                      ? delayedChargesIn * 7
-                      : (delayedChargesIn * (daysCountInitial - 14)) / 7
+                        ? delayedChargesIn
+                        : (daysCountInitial - 14) / 7 > 2 &&
+                          (daysCountInitial - 14) / 7 < 3
+                          ? delayedChargesIn * 2
+                          : (daysCountInitial - 14) / 7 > 3 &&
+                            (daysCountInitial - 14) / 7 < 4
+                            ? delayedChargesIn * 3
+                            : (daysCountInitial - 14) / 7 > 4 &&
+                              (daysCountInitial - 14) / 7 < 5
+                              ? delayedChargesIn * 4
+                              : (daysCountInitial - 14) / 7 > 5 &&
+                                (daysCountInitial - 14) / 7 < 6
+                                ? delayedChargesIn * 5
+                                : (daysCountInitial - 14) / 7 > 6 &&
+                                  (daysCountInitial - 14) / 7 < 7
+                                  ? delayedChargesIn * 6
+                                  : (daysCountInitial - 14) / 7 > 7 &&
+                                    (daysCountInitial - 14) / 7 < 8
+                                    ? delayedChargesIn * 7
+                                    : (delayedChargesIn * (daysCountInitial - 14)) / 7
                   )
                 }
               }
@@ -275,20 +271,20 @@ export default function Update_Model ({
                     daysCount - 7 <= 7
                       ? 0
                       : (daysCount - 7) / 7 < 2
-                      ? delayedChargesIn
-                      : (daysCount - 7) / 7 > 2 && (daysCount - 7) / 7 < 3
-                      ? delayedChargesIn * 2
-                      : (daysCount - 7) / 7 > 3 && (daysCount - 7) / 7 < 4
-                      ? delayedChargesIn * 3
-                      : (daysCount - 7) / 7 > 4 && (daysCount - 7) / 7 < 5
-                      ? delayedChargesIn * 4
-                      : (daysCount - 7) / 7 > 5 && (daysCount - 7) / 7 < 6
-                      ? delayedChargesIn * 5
-                      : (daysCount - 7) / 7 > 6 && (daysCount - 7) / 7 < 7
-                      ? delayedChargesIn * 6
-                      : (daysCount - 7) / 7 > 7 && (daysCount - 7) / 7 < 8
-                      ? delayedChargesIn * 7
-                      : (delayedChargesIn * (daysCount - 7)) / 7
+                        ? delayedChargesIn
+                        : (daysCount - 7) / 7 > 2 && (daysCount - 7) / 7 < 3
+                          ? delayedChargesIn * 2
+                          : (daysCount - 7) / 7 > 3 && (daysCount - 7) / 7 < 4
+                            ? delayedChargesIn * 3
+                            : (daysCount - 7) / 7 > 4 && (daysCount - 7) / 7 < 5
+                              ? delayedChargesIn * 4
+                              : (daysCount - 7) / 7 > 5 && (daysCount - 7) / 7 < 6
+                                ? delayedChargesIn * 5
+                                : (daysCount - 7) / 7 > 6 && (daysCount - 7) / 7 < 7
+                                  ? delayedChargesIn * 6
+                                  : (daysCount - 7) / 7 > 7 && (daysCount - 7) / 7 < 8
+                                    ? delayedChargesIn * 7
+                                    : (delayedChargesIn * (daysCount - 7)) / 7
                   )
                 }
               } else {
@@ -303,20 +299,20 @@ export default function Update_Model ({
                     daysCount - 14 <= 7
                       ? 0
                       : (daysCount - 14) / 7 < 2
-                      ? delayedChargesIn
-                      : (daysCount - 14) / 7 > 2 && (daysCount - 14) / 7 < 3
-                      ? delayedChargesIn * 2
-                      : (daysCount - 14) / 7 > 3 && (daysCount - 14) / 7 < 4
-                      ? delayedChargesIn * 3
-                      : (daysCount - 14) / 7 > 4 && (daysCount - 14) / 7 < 5
-                      ? delayedChargesIn * 4
-                      : (daysCount - 14) / 7 > 5 && (daysCount - 14) / 7 < 6
-                      ? delayedChargesIn * 5
-                      : (daysCount - 14) / 7 > 6 && (daysCount - 14) / 7 < 7
-                      ? delayedChargesIn * 6
-                      : (daysCount - 14) / 7 > 7 && (daysCount - 14) / 7 < 8
-                      ? delayedChargesIn * 7
-                      : (delayedChargesIn * (daysCount - 14)) / 7
+                        ? delayedChargesIn
+                        : (daysCount - 14) / 7 > 2 && (daysCount - 14) / 7 < 3
+                          ? delayedChargesIn * 2
+                          : (daysCount - 14) / 7 > 3 && (daysCount - 14) / 7 < 4
+                            ? delayedChargesIn * 3
+                            : (daysCount - 14) / 7 > 4 && (daysCount - 14) / 7 < 5
+                              ? delayedChargesIn * 4
+                              : (daysCount - 14) / 7 > 5 && (daysCount - 14) / 7 < 6
+                                ? delayedChargesIn * 5
+                                : (daysCount - 14) / 7 > 6 && (daysCount - 14) / 7 < 7
+                                  ? delayedChargesIn * 6
+                                  : (daysCount - 14) / 7 > 7 && (daysCount - 14) / 7 < 8
+                                    ? delayedChargesIn * 7
+                                    : (delayedChargesIn * (daysCount - 14)) / 7
                   )
                 }
               }
@@ -329,7 +325,7 @@ export default function Update_Model ({
     // eslint-disable-next-line
   }, [invoice_no, isEx, instAmountProp, instCount, customer_id])
 
-  const setArreasAndInsAmount = async (nextDateRe, invoiceNo,installmentCount) => {
+  const setArreasAndInsAmount = async (nextDateRe, invoiceNo, installmentCount, balance) => {
     db.collection('installment')
       .where('invoice_number', '==', invoiceNo)
       .get()
@@ -341,7 +337,7 @@ export default function Update_Model ({
         let totalMonthsOfInst =
           (new Date().getFullYear() -
             new Date(nextDateRe.seconds * 1000).getFullYear()) *
-            12 +
+          12 +
           (new Date().getMonth() -
             new Date(nextDateRe.seconds * 1000).getMonth())
 
@@ -352,7 +348,28 @@ export default function Update_Model ({
             : parseInt(dueAmount - paidAmount)
 
         setArreasAmount(dueAmountOfArreas)
-        setInstallmentAmount(dueAmountOfArreas + parseInt(instAmountProp))
+        if (parseInt(installmentCount) <= parseInt(totalMonthsOfInst - 1)) {
+
+          setInstallmentAmount(dueAmountOfArreas)
+          setBalance(
+            balance - dueAmountOfArreas <= 0
+              ? 0
+              : balance - dueAmountOfArreas
+          )
+
+        } else {
+
+
+
+          setInstallmentAmount(dueAmountOfArreas + parseInt(instAmountProp))
+          setBalance(
+            balance - (dueAmountOfArreas + parseInt(instAmountProp)) <= 0
+              ? 0
+              : balance - (dueAmountOfArreas + parseInt(instAmountProp))
+          )
+
+        }
+
       })
   }
 
@@ -379,7 +396,7 @@ export default function Update_Model ({
                 )
               )
             })
-            .then(_ => {})
+            .then(_ => { })
         } else {
           db.collection('installment')
             .where('invoice_number', '==', invoice_no)
@@ -423,13 +440,13 @@ export default function Update_Model ({
                       new Date(
                         new Date(updateTimestamp.seconds * 1000).setMonth(
                           new Date(updateTimestamp.seconds * 1000).getMonth() +
-                            1,
+                          1,
                           reInvoice.docs[0].data().installemtnDate
                         )
                       )
                     )
                   })
-                  .then(_ => {})
+                  .then(_ => { })
               }
             })
         }
@@ -479,10 +496,10 @@ export default function Update_Model ({
               currentDeposit:
                 parseInt(getRe.data().currentDeposit) -
                   parseInt(gamisaraniamount) <
-                0
+                  0
                   ? 0
                   : parseInt(getRe.data().currentDeposit) -
-                    parseInt(gamisaraniamount)
+                  parseInt(gamisaraniamount)
             })
             .then(re => {
               db.collection('gami_sarani_withdrawhistory').add({
@@ -500,7 +517,7 @@ export default function Update_Model ({
 
     if (
       parseInt(balance) -
-        (parseInt(installmentAmount) + parseInt(gamisaraniamount)) <=
+      (parseInt(installmentAmount) + parseInt(gamisaraniamount)) <=
       0
     ) {
       await db
@@ -540,7 +557,7 @@ export default function Update_Model ({
         title: 'Do you Want to Print a Recipt?',
         icon: <ExclamationCircleOutlined />,
 
-        async onOk () {
+        async onOk() {
           await updateInstallment().then(_ => {
             let toto = parseInt(installmentAmount) + parseInt(gamisaraniamount)
             let passingWithCustomerObj = {
@@ -562,7 +579,7 @@ export default function Update_Model ({
             history.push(moveWith)
           })
         },
-        async onCancel () {
+        async onCancel() {
           await updateInstallment().then(_ => {
             window.location.reload()
           })
@@ -676,8 +693,8 @@ export default function Update_Model ({
                   color='primary'
                   disabled={
                     !gamisarani ||
-                    loadingNicsubmit ||
-                    gamisaraniNic.length === 0
+                      loadingNicsubmit ||
+                      gamisaraniNic.length === 0
                       ? true
                       : false
                   }
@@ -713,7 +730,7 @@ export default function Update_Model ({
                       Math.round(e.target.value) >= 0 &&
                       e.target.value !== '' &&
                       intialBalance >=
-                        parseInt(e.target.value.trim()) + gamisaraniamount
+                      parseInt(e.target.value.trim()) + gamisaraniamount
                     ) {
                       setGamisaraniamount(parseInt(e.target.value.trim()))
                       if (parseInt(e.target.value) === 0) {
@@ -761,7 +778,7 @@ export default function Update_Model ({
                       Math.round(e.target.value) >= 0 &&
                       e.target.value !== '' &&
                       intialBalance >=
-                        parseInt(e.target.value.trim()) + gamisaraniamount
+                      parseInt(e.target.value.trim()) + gamisaraniamount
                     ) {
                       setInstallmentAmount(parseInt(e.target.value))
                       if (parseInt(e.target.value) === 0) {
@@ -782,7 +799,7 @@ export default function Update_Model ({
 
                 <Grid container spacing={2} className='arriGrid'>
                   <Grid className='lbl_topi-txt' item xs={12} sm={8}>
-                    Amount of Installment Arrears(LKR):
+                    Due installments amount(LKR):
                   </Grid>
                   <Grid item xs={12} sm={4}>
                     <p className='lbl_arr'>

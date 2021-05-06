@@ -14,6 +14,7 @@ import db from "../../../../config/firebase.js";
 import UpdateInstallment from "../invoice_History/components/PayAndGoModel/UpdateModel/Update_Model";
 import InstallmentHistory from "../invoice_History/components/PayAndGoModel/HistoryModel/History_Model";
 import InstallmentView from "../invoice_History/components/PayAndGoModel/ViewModel/View_Model";
+import Wrongnext from "./components/PayAndGoModel/wrongNextDate/wrongNext_model";
 import InstallmentFullPayment from "../invoice_History/components/FullPaymentModel/Full_Payment_Model";
 
 // styles
@@ -70,6 +71,7 @@ function isDateBeforeToday(date) {
 export default function Invoice_history() {
   const [isLoading, setIsLoading] = useState(true);
   const [currentIndx, setCurrentIndx] = useState(0);
+  const [wrongNextCount, setWrongNextCount] = useState(0);
   const [currentIndx2, setCurrentIndx2] = useState(0);
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
@@ -83,6 +85,7 @@ export default function Invoice_history() {
   const [installmentHistory, setInstallmentHistory] = useState(false); //  table models
   const [installmentFullPayment, setInstallmentFullPayment] = useState(false); //  table models
   const [visibleConfirmPrint, setVisibleConfirmPrint] = useState(false);
+  const [wrongNextModal, setWrongNextModal] = useState(false);
   const [printType, setPrintType] = useState("fullpayment");
 
   let history = useHistory();
@@ -412,8 +415,19 @@ export default function Invoice_history() {
             return 1;
           }
         });
-
+        
+        let wrongNextCountEx = 0;
+        
         reArray.forEach((siDoc) => {
+          
+          if (
+            new Date(siDoc.data().nextDate.seconds * 1000).getFullYear() >
+            new Date().getFullYear() + 1
+          ) {
+             wrongNextCountEx = wrongNextCountEx + 1;
+            
+           }
+          
           rawAllData.push({
             id: siDoc.id,
             data: siDoc.data(),
@@ -527,6 +541,7 @@ export default function Invoice_history() {
             ),
           });
         });
+        setWrongNextCount(wrongNextCountEx);
         setpayangoAllData(rawAllData);
         setpayangoTableData(rawData);
       });
@@ -715,6 +730,25 @@ export default function Invoice_history() {
         </div>
       </Modal>
       {/*End Installment Model Full Payment */}
+      
+      <Modal
+        visible={wrongNextModal}
+        className="history_Installment_Model"
+        footer={null}
+        onCancel={() => {
+          setWrongNextModal(false);
+        }}
+      >
+        <div className="Installment_Model">
+          <div className="Installment_Model_Main">
+            <div className="Installment_Model_Detail">
+              <Wrongnext/>
+            </div>
+          </div>
+        </div>
+      </Modal>
+      
+      
       <div component="main" className="main_container">
         <AppBar className="appBar" position="static">
           <Tabs
@@ -727,6 +761,14 @@ export default function Invoice_history() {
           </Tabs>
         </AppBar>
         <TabPanel value={value} index={0}>
+          
+        <Button
+            variant="contained"
+            className="loadAll"
+            onClick={() => {
+              setWrongNextModal(true);
+             }}
+          >Wrong next dates = {wrongNextCount}</Button>
           <Button
             variant="contained"
             className="loadAll"

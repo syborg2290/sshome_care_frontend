@@ -21,8 +21,13 @@ import HistoryIcon from '@material-ui/icons/History';
 
 import {useHistory} from 'react-router-dom';
 
+// eslint-disable-next-line
 function daysCountOfMonth(month, year) {
   return parseInt(new Date(year, month, 0).getDate());
+}
+
+function isDateBeforeToday(date) {
+    return new Date(date.toDateString()) < new Date(new Date().toDateString());
 }
 
 export default function Areas() {
@@ -51,6 +56,15 @@ export default function Areas() {
         }),
       },
     },
+     {
+      name: 'Arreas_amount',
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: {fontSize: '15px', color: 'black', fontWeight: '600'},
+        }),
+      },
+    },
     {
       name: 'Type',
       options: {
@@ -60,6 +74,7 @@ export default function Areas() {
         }),
       },
     },
+    
     {
       name: 'Village',
       options: {
@@ -182,6 +197,7 @@ export default function Areas() {
 
           rawData.push({
             InvoiceNo: eachRe.data().invoice_number,
+            Arreas_amount:eachRe.data().arreas_amount,
             Type: eachRe.data().type,
             Village: eachRe.data().villageRoot,
             MID: eachRe.data().mid,
@@ -242,7 +258,14 @@ export default function Areas() {
       (new Date().getTime() -
         new Date(eachRe.data()?.nextDate?.seconds * 1000).getTime()) /
       (1000 * 3600 * 24);
-    let daysCountInitial = daysCountNode1;
+    let daysCountInitial=0;
+              if(!isDateBeforeToday(new Date(
+                    eachRe.data()?.nextDate?.seconds * 1000
+              ))) {
+                 daysCountInitial = 0;
+              } else {
+                 daysCountInitial = daysCountNode1;
+                  }
     if (eachRe.data().selectedType === 'shop') {
       if (7 - daysCountInitial >= 0) {
       } else {
@@ -258,6 +281,7 @@ export default function Areas() {
                 db.collection('arrears')
                   .doc(reArreas.docs[0].id)
                   .update({
+                    arreas_amount:eachRe.data().amountPerInstallment,
                     delayed_days: Math.round(daysCountInitial) - 7,
                     status_of_payandgo: eachRe.data().status_of_payandgo,
                     balance: eachRe.data().balance,
@@ -289,6 +313,7 @@ export default function Areas() {
               } else {
                 db.collection('arrears').add({
                   invoice_number: eachRe.data().invoice_number,
+                  arreas_amount:eachRe.data().amountPerInstallment,
                   type: eachRe.data().selectedType,
                   villageRoot: eachRe.data().root_village,
                   mid: eachRe.data().mid,
@@ -343,6 +368,7 @@ export default function Areas() {
                 db.collection('arrears')
                   .doc(reArreas.docs[0].id)
                   .update({
+                    arreas_amount:eachRe.data().amountPerInstallment,
                     delayed_days: Math.round(daysCountInitial) - 14,
                     status_of_payandgo: eachRe.data().status_of_payandgo,
                     balance: eachRe.data().balance,
@@ -374,6 +400,7 @@ export default function Areas() {
               } else {
                 db.collection('arrears').add({
                   invoice_number: eachRe.data().invoice_number,
+                  arreas_amount:eachRe.data().amountPerInstallment,
                   customer_id: eachRe.data().customer_id,
                   type: eachRe.data().selectedType,
                   villageRoot: eachRe.data().root_village,
@@ -418,15 +445,47 @@ export default function Areas() {
   };
 
   const afterStateOfArreasCheck = async (instReDoc, eachRe) => {
+    
+     let paidAmount = 0
+        instReDoc.forEach(siDoc => {
+          paidAmount = parseInt(paidAmount) + parseInt(siDoc.data()?.amount)
+        })
+        let totalMonthsOfInst =
+          (new Date().getFullYear() -
+            new Date(eachRe.data().date.seconds * 1000).getFullYear()) *
+            12 +
+          (new Date().getMonth() -
+            new Date(eachRe.data().date.seconds * 1000).getMonth())
+        
+         let dueAmount = parseInt(totalMonthsOfInst - 1 > eachRe.data().noOfInstallment ? eachRe.data().noOfInstallment : totalMonthsOfInst - 1) * parseInt(eachRe.data().amountPerInstallment);
+        let dueAmountOfArreas =
+          parseInt(dueAmount - paidAmount) < 0
+            ? 0
+            : parseInt(dueAmount - paidAmount)
+
+    
     const delayedChargesIn =
       (parseInt(eachRe.data().amountPerInstallment) * 5) / 100;
     let daysCountNode2 =
       (new Date().getTime() -
         new Date(eachRe.data()?.nextDate?.seconds * 1000).getTime()) /
       (1000 * 3600 * 24);
-    let daysCount =
-      daysCountNode2 +
-      daysCountOfMonth(new Date().getMonth(), new Date().getFullYear());
+     let daysCount = 0;
+               if(!isDateBeforeToday(new Date(
+                    eachRe.data()?.nextDate?.seconds * 1000
+              ))) {
+                 daysCount = 0;
+                
+               } else {
+                 daysCount =
+                   daysCountNode2;
+                //     daysCount =
+                // daysCountNode2 +
+                // daysCountOfMonth(
+                //   new Date().getMonth(),
+                //   new Date().getFullYear()
+                // );
+                  }
 
     let instRECheckCount = 0;
 
@@ -449,6 +508,7 @@ export default function Areas() {
             db.collection('arrears')
               .doc(statusMonth.docs[0].id)
               .update({
+                arreas_amount:dueAmountOfArreas,
                 delayed_days: daysCount - 7,
                 status_of_payandgo: eachRe.data().status_of_payandgo,
                 balance: eachRe.data().balance,
@@ -473,6 +533,7 @@ export default function Areas() {
               });
           } else {
             db.collection('arrears').add({
+               arreas_amount:dueAmountOfArreas,
               invoice_number: eachRe.data().invoice_number,
               customer_id: eachRe.data().customer_id,
               type: eachRe.data().selectedType,
@@ -520,6 +581,7 @@ export default function Areas() {
             db.collection('arrears')
               .doc(statusWeek.docs[0].id)
               .update({
+                 arreas_amount:dueAmountOfArreas,
                 delayed_days: Math.round(daysCount) - 14,
                 status_of_payandgo: eachRe.data().status_of_payandgo,
                 balance: eachRe.data().balance,
@@ -545,6 +607,7 @@ export default function Areas() {
           } else {
             db.collection('arrears').add({
               invoice_number: eachRe.data().invoice_number,
+               arreas_amount:dueAmountOfArreas,
               customer_id: eachRe.data().customer_id,
               type: eachRe.data().selectedType,
               villageRoot: eachRe.data().root_village,

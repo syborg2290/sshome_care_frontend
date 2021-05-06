@@ -2,17 +2,25 @@ import React, {useState, useEffect} from 'react';
 import Container from '@material-ui/core/Container';
 // eslint-disable-next-line
 import Typography from '@material-ui/core/Typography';
-import {Grid} from '@material-ui/core';
+import {Grid, Card, CardContent} from '@material-ui/core';
+import {Modal, Button} from 'antd';
 
 //components
+import ModelVehicalService from './components/Vehical_Service_Model';
 // eslint-disable-next-line
 import ArreasTable from '../dashboard/dashboard_contents/arreas_Table/Arreas_Table';
 import PendingList from '../dashboard/dashboard_contents/pending_Blacklist/Pending_List';
 // eslint-disable-next-line
 import InvoiceList from '../dashboard/dashboard_contents/invoice_List/Invoice_List';
 import ExpireInvoice from '../dashboard/dashboard_contents/expire_Table/Expire_Invoice';
+// eslint-disable-next-line
+// import ReportCards from './dashboard_contents/reports_cards/Report_Cards';
 import firebase from 'firebase';
 import db from '../../../../config/firebase.js';
+
+import FolderOpenIcon from '@material-ui/icons/FolderOpen';
+import PostAddIcon from '@material-ui/icons/PostAdd';
+import SettingsApplicationsIcon from '@material-ui/icons/SettingsApplications';
 
 // styles
 import './Dashboard.css';
@@ -27,19 +35,61 @@ function isDateBeforeToday(date) {
 //   return new Date(date.toDateString()) > new Date(new Date().toDateString());
 // }
 
+// eslint-disable-next-line
 function daysCountOfMonth(month, year) {
   return parseInt(new Date(year, month, 0).getDate());
 }
 
+
+
 export default function Dashboard() {
   const [pendingBlackList, setPendingBlackList] = useState([]);
   const [expiredList, setExpiredList] = useState([]);
+  // eslint-disable-next-line
+  const [recordPnl, setRecordPnl] = useState(false);
+  // eslint-disable-next-line
+  const [expencesPnl, setExpencesPnl] = useState(false);
+  const [vehicalServiceModel, setVehicalServiceModel] = useState(false); //  model service Vehical
   let history = useHistory();
+
+  const VehicalServiceModel = () => {
+    setVehicalServiceModel(true);
+  };
+
+  const RecordPnl = () => {
+    setRecordPnl(true);
+    history.push('/admin/pages/records');
+  };
+
+  const ExpencesPnl = () => {
+    setExpencesPnl(true);
+    history.push('/admin/pages/expences');
+  };
 
   useEffect(() => {
     window.addEventListener('offline', function (e) {
       history.push('/connection_lost');
     });
+
+    db.collection('targets')
+      .where('status', '==', 'ongoing')
+      .get()
+      .then((reAllTargets) => {
+        reAllTargets.docs.forEach((eachTarget) => {
+          let daysCountTarget =
+            (new Date().getTime() -
+              new Date(
+                eachTarget.data().start_date?.seconds * 1000
+              ).getTime()) /
+            (1000 * 3600 * 24);
+
+          if (daysCountTarget >= 30) {
+            db.collection('targets').doc(eachTarget.id).update({
+              status: 'Expired',
+            });
+          }
+        });
+      });
 
     db.collection('invoice')
       .where('status_of_payandgo', '==', 'expired')
@@ -70,6 +120,7 @@ export default function Dashboard() {
               status_of_payandgo: 'expired',
             });
           }
+
           checkInstallmentsStatus(eachRe);
         });
       });
@@ -119,7 +170,15 @@ export default function Dashboard() {
       (new Date().getTime() -
         new Date(eachRe.data()?.nextDate?.seconds * 1000).getTime()) /
       (1000 * 3600 * 24);
-    let daysCountInitial = daysCountNode1;
+      let daysCountInitial=0;
+              if(!isDateBeforeToday(new Date(
+                    eachRe.data()?.nextDate?.seconds * 1000
+              ))) {
+                 daysCountInitial = 0;
+              } else {
+                 daysCountInitial = daysCountNode1;
+                  }
+   
     if (eachRe.data().selectedType === 'shop') {
       if (7 - daysCountInitial >= 0) {
       } else {
@@ -142,6 +201,7 @@ export default function Dashboard() {
                 db.collection('arrears')
                   .doc(reArreas.docs[0].id)
                   .update({
+                    arreas_amount:eachRe.data().amountPerInstallment,
                     delayed_days: Math.round(daysCountInitial) - 7,
                     status_of_payandgo: eachRe.data().status_of_payandgo,
                     balance: eachRe.data().balance,
@@ -173,6 +233,7 @@ export default function Dashboard() {
               } else {
                 db.collection('arrears').add({
                   invoice_number: eachRe.data().invoice_number,
+                  arreas_amount:eachRe.data().amountPerInstallment,
                   type: eachRe.data().selectedType,
                   villageRoot: eachRe.data().root_village,
                   mid: eachRe.data().mid,
@@ -234,6 +295,7 @@ export default function Dashboard() {
                 db.collection('arrears')
                   .doc(reArreas.docs[0].id)
                   .update({
+                    arreas_amount:eachRe.data().amountPerInstallment,
                     delayed_days: Math.round(daysCountInitial) - 14,
                     status_of_payandgo: eachRe.data().status_of_payandgo,
                     balance: eachRe.data().balance,
@@ -265,6 +327,7 @@ export default function Dashboard() {
               } else {
                 db.collection('arrears').add({
                   invoice_number: eachRe.data().invoice_number,
+                  arreas_amount:eachRe.data().amountPerInstallment,
                   customer_id: eachRe.data().customer_id,
                   type: eachRe.data().selectedType,
                   villageRoot: eachRe.data().root_village,
@@ -309,15 +372,49 @@ export default function Dashboard() {
   };
 
   const afterStateOfArreasCheck = async (instReDoc, eachRe) => {
+    
+    
+    let paidAmount = 0
+        instReDoc.forEach(siDoc => {
+          paidAmount = parseInt(paidAmount) + parseInt(siDoc.data()?.amount)
+        })
+        let totalMonthsOfInst =
+          (new Date().getFullYear() -
+            new Date(eachRe.data().date.seconds * 1000).getFullYear()) *
+            12 +
+          (new Date().getMonth() -
+            new Date(eachRe.data().date.seconds * 1000).getMonth())
+
+        let dueAmount = parseInt(totalMonthsOfInst - 1 > eachRe.data().noOfInstallment ? eachRe.data().noOfInstallment : totalMonthsOfInst - 1) * parseInt(eachRe.data().amountPerInstallment);
+        let dueAmountOfArreas =
+          parseInt(dueAmount - paidAmount) < 0
+            ? 0
+            : parseInt(dueAmount - paidAmount)
+
+    
     const delayedChargesIn =
       (parseInt(eachRe.data().amountPerInstallment) * 5) / 100;
+
     let daysCountNode2 =
       (new Date().getTime() -
         new Date(eachRe.data()?.nextDate?.seconds * 1000).getTime()) /
       (1000 * 3600 * 24);
-    let daysCount =
-      daysCountNode2 +
-      daysCountOfMonth(new Date().getMonth(), new Date().getFullYear());
+     let daysCount = 0;
+               if(!isDateBeforeToday(new Date(
+                    eachRe.data()?.nextDate?.seconds * 1000
+              ))) {
+                 daysCount = 0;
+                
+               } else {
+                 daysCount =
+                   daysCountNode2;
+                //     daysCount =
+                // daysCountNode2 +
+                // daysCountOfMonth(
+                //   new Date().getMonth(),
+                //   new Date().getFullYear()
+                // );
+                  }
 
     let instRECheckCount = 0;
 
@@ -360,6 +457,7 @@ export default function Dashboard() {
             db.collection('arrears')
               .doc(statusMonth.docs[0].id)
               .update({
+                arreas_amount:dueAmountOfArreas,
                 delayed_days: daysCount - 7,
                 status_of_payandgo: eachRe.data().status_of_payandgo,
                 balance: eachRe.data().balance,
@@ -385,6 +483,7 @@ export default function Dashboard() {
           } else {
             db.collection('arrears').add({
               invoice_number: eachRe.data().invoice_number,
+              arreas_amount:dueAmountOfArreas,
               customer_id: eachRe.data().customer_id,
               type: eachRe.data().selectedType,
               villageRoot: eachRe.data().root_village,
@@ -441,6 +540,7 @@ export default function Dashboard() {
             db.collection('arrears')
               .doc(statusWeek.docs[0].id)
               .update({
+                arreas_amount:dueAmountOfArreas,
                 delayed_days: Math.round(daysCount) - 14,
                 status_of_payandgo: eachRe.data().status_of_payandgo,
                 balance: eachRe.data().balance,
@@ -466,6 +566,7 @@ export default function Dashboard() {
           } else {
             db.collection('arrears').add({
               invoice_number: eachRe.data().invoice_number,
+              arreas_amount:dueAmountOfArreas,
               customer_id: eachRe.data().customer_id,
               type: eachRe.data().selectedType,
               villageRoot: eachRe.data().root_village,
@@ -504,11 +605,75 @@ export default function Dashboard() {
 
   return (
     <>
+      {/*Start Vehical Service Model */}
+
+      <Modal
+        visible={vehicalServiceModel}
+        footer={null}
+        className="vehical_servicemdl"
+        onCancel={() => {
+          setVehicalServiceModel(false);
+        }}
+      >
+        <div>
+          <div>
+            <div>
+              <ModelVehicalService />
+            </div>
+          </div>
+        </div>
+      </Modal>
+
+      {/* End  Vehical Service Model  */}
+
       <Grid container spacing={4}>
         <Grid className="titl_Dash" item xs={12}></Grid>
       </Grid>
 
       {/*START Arreas Table */}
+
+      {/* <Grid item xs={12}>
+          <ReportCards />
+        </Grid> */}
+      <Grid item xs={12}>
+        <Card>
+          <CardContent>
+            <div className="dash_btn">
+              <Grid item xs={12} sm={12}>
+                <Button
+                  variant="contained"
+                  className="btn_Dash"
+                  endIcon={<FolderOpenIcon />}
+                  onClick={RecordPnl}
+                >
+                  Reports
+                </Button>
+              </Grid>
+
+              <Grid item xs={12} sm={12}>
+                <Button
+                  variant="contained"
+                  className="btn_Expences"
+                  endIcon={<PostAddIcon />}
+                  onClick={ExpencesPnl}
+                >
+                  Add Expenses
+                </Button>
+              </Grid>
+              <Grid item xs={12} sm={12}>
+                <Button
+                  variant="contained"
+                  className="btn_VehicalService"
+                  endIcon={<SettingsApplicationsIcon />}
+                  onClick={VehicalServiceModel}
+                >
+                  Vehical Services
+                </Button>
+              </Grid>
+            </div>
+          </CardContent>
+        </Card>
+      </Grid>
 
       {/* END Arreas Table */}
 

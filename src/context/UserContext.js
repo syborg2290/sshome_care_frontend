@@ -79,7 +79,8 @@ function loginUser(
       }
 
       if (role === "Showroom") {
-        history.push("/showroom/dashboard");
+        // history.push("/showroom/dashboard");
+        history.push("/admin/dashboard");
       }
     }, 2000);
   } else {

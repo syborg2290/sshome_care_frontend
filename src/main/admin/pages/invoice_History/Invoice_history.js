@@ -736,7 +736,8 @@ export default function Invoice_history() {
         className="history_Installment_Model"
         footer={null}
         onCancel={() => {
-          setWrongNextModal(false);
+          // setWrongNextModal(false);
+          window.location.reload();
         }}
       >
         <div className="Installment_Model">

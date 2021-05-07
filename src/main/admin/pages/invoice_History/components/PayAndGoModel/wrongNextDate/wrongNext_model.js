@@ -47,6 +47,24 @@ export default function Wrong_next () {
       }
     },
     {
+      name: 'Village',
+      options: {
+        filter: true,
+        setCellHeaderProps: value => ({
+          style: { fontSize: '15px', color: 'black', fontWeight: '600' }
+        })
+      }
+    },
+    {
+      name: 'Type',
+      options: {
+        filter: true,
+        setCellHeaderProps: value => ({
+          style: { fontSize: '15px', color: 'black', fontWeight: '600' }
+        })
+      }
+    },
+    {
       name: 'Date',
       options: {
         filter: true,
@@ -95,6 +113,8 @@ export default function Wrong_next () {
               InvoiceNo: siDoc.data().invoice_number,
               Mid: siDoc.data().mid,
               NIC: siDoc.data().nic,
+              Village:siDoc.data().root_village,
+              Type:siDoc.data().selectedType,
               Date: moment(siDoc.data()?.date?.toDate()).format(
                 'dddd, MMMM Do YYYY'
               ),
@@ -112,7 +132,9 @@ export default function Wrong_next () {
                           Next_date: firebase.firestore.Timestamp.fromDate(
                             e.toDate()
                           )
-                        })
+                        }).then((res)=>{
+                           window.location.reload();
+                        });
                     } else {
                     }
                   }}
@@ -128,6 +150,8 @@ export default function Wrong_next () {
     setIsLoading(false)
     // eslint-disable-next-line
   }, [])
+  
+  
 
   return (
     <div>

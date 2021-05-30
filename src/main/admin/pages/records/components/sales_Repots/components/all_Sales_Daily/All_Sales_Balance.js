@@ -378,7 +378,7 @@ async function getAllSalesReports(sales, cash, cards, installment, docs) {
         cash: 0,
         cards: 0,
         installment: installment[n].total,
-        docs: docs[n] === 0 ? 0 : docs[n].total,
+        docs: docs[n] === 0 ? 0 : isNaN(docs[n]?.total) ? 0 :docs[n]?.total,
       });
     }
   }

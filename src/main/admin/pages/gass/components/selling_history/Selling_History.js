@@ -30,7 +30,7 @@ export default function Selling_History() {
       },
     },
     {
-      name: "Type",
+      name: "Stock_type",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -38,7 +38,15 @@ export default function Selling_History() {
         }),
       },
     },
-   
+    {
+      name: "Full_Empty",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
     {
       name: "Payment_type",
       options: {
@@ -80,8 +88,8 @@ export default function Selling_History() {
              Date: moment(each.data()?.date?.toDate()).format(
               "dddd, MMMM Do YYYY"
             ),
-            Type: each.data().selectedType,
-           
+            Stock_type: each.data().selectedType,
+            Full_Empty:each.data().gasType === "fullgas"?"Full":"Empty",
             Payment_type: each.data().paymentWay,
             Total: (
               <CurrencyFormat

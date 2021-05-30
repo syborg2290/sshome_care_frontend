@@ -62,6 +62,7 @@ function Make_invoice () {
   const [intialTimestamp, setInititialTimestamp] = useState(null)
   const [deadlineTimestamp, setDeadlineTimestamp] = useState(null)
   const [isFullPayment, setIsFullPayment] = useState(false)
+  const [gasType, setGasType] = useState('fullgas')
   const [documentCharges, setDocumentCharges] = useState(0)
   const [invoiceStatus, setInvoiceStatus] = useState('new')
   // eslint-disable-next-line
@@ -115,19 +116,44 @@ function Make_invoice () {
           .where('weight', '==', obj.data?.weight)
           .get()
           .then(reGasDow => {
-            setDpayment(reGasDow.docs[0].data().downpayment)
-            setItemNOI(reGasDow.docs[0].data().noOfInstallments)
-            setItemAPI(reGasDow.docs[0].data().amountPerIns)
+            setDpayment(
+              obj.gasType === 'fullgas'
+                ? reGasDow.docs[0].data().downpayment
+                : reGasDow.docs[0].data().emptydownpayment
+            )
+            setItemNOI(
+              obj.gasType === 'fullgas'
+                ? reGasDow.docs[0].data().noOfInstallments
+                : reGasDow.docs[0].data().emptynoOfInstallments
+            )
+            setItemAPI(
+              obj.gasType === 'fullgas'
+                ? reGasDow.docs[0].data().amountPerIns
+                : reGasDow.docs[0].data().emptyamountPerIns
+            )
           })
         keepDataQTY[obj.data?.weight] = obj.qty
         keepDataDP[obj.data?.weight] =
-          obj.paymentWay === 'PayandGo' ? obj.data?.saleprice : obj.data?.price
+          obj.paymentWay === 'PayandGo'
+            ? obj.gasType === 'fullgas'
+              ? obj.data?.saleprice
+              : obj.data?.emptysaleprice
+            : obj.gasType === 'fullgas'
+            ? obj.data?.price
+            : obj.data?.emptycashprice
         keepDataDiscount[obj.data?.weight] = 0
+        obj.empty_weight = obj.data?.weight
         tableData.push(obj)
+        setSelectedType(obj?.data.stock_type)
         if (obj.paymentWay === 'PayandGo') {
           setIsFullPayment(false)
         } else {
           setIsFullPayment(true)
+        }
+        if (obj.gasType === 'fullgas') {
+          setGasType('fullgas')
+        } else {
+          setGasType('emptygas')
         }
       })
       setItemDiscount(keepDataDiscount)
@@ -167,18 +193,32 @@ function Make_invoice () {
     try {
       const { value } = e.target
       db.collection('gas')
-        .where('weight', '==', weight)
+        .doc(row?.id)
         .get()
         .then(doc => {
-          if (
-            Math.round(doc.docs[0]?.data()?.qty) >= (value === '' ? 1 : value)
-          ) {
-            setItemQty({
-              ...itemQty,
-              [row.data.weight]: value
-            })
+          if (gasType === 'fullgas') {
+            if (
+              Math.round(doc.docs[0]?.data()?.qty) >= (value === '' ? 1 : value)
+            ) {
+              setItemQty({
+                ...itemQty,
+                [row.data.weight]: value
+              })
+            } else {
+              NotificationManager.warning('Out Of Stock')
+            }
           } else {
-            NotificationManager.warning('Out Of Stock')
+            if (
+              Math.round(doc.docs[0]?.data()?.empty_tanks) >=
+              (value === '' ? 1 : value)
+            ) {
+              setItemQty({
+                ...itemQty,
+                [row.data.weight]: value
+              })
+            } else {
+              NotificationManager.warning('Out Of Stock')
+            }
           }
         })
     } catch (error) {
@@ -266,6 +306,7 @@ function Make_invoice () {
                       let objItem = {
                         weight: one.data.weight,
                         qty: itemQty[one.data.weight],
+                        gasType: gasType,
                         unit:
                           one.paymentWay === 'PayandGo'
                             ? one.withCylinder
@@ -317,6 +358,7 @@ function Make_invoice () {
               let objItem = {
                 weight: one.data.weight,
                 qty: itemQty[one.data.weight],
+                gasType: gasType,
                 unit:
                   one.paymentWay === 'PayandGo'
                     ? one.withCylinder
@@ -532,6 +574,7 @@ function Make_invoice () {
                                       db.collection('gas_selling_history').add({
                                         invoice_number: invoiceNumber,
                                         gas: arrayItems,
+                                        gasType: gasType,
                                         paymentWay: isFullPayment
                                           ? 'FullPayment'
                                           : 'PayandGo',
@@ -547,6 +590,7 @@ function Make_invoice () {
                                         .add({
                                           invoice_number: invoiceNumber,
                                           items: arrayItems,
+                                          gasType: gasType,
                                           customer_id:
                                             tablerows[0].customer.customerId,
                                           nic:
@@ -657,38 +701,121 @@ function Make_invoice () {
                                           if (invoiceStatus === 'new') {
                                             tablerows.forEach(
                                               async itemUDoc => {
-                                                let newArray = await await db
+                                                let newArray = await db
                                                   .collection('gas')
                                                   .doc(itemUDoc.id)
                                                   .get()
 
                                                 //++++++++++++++++++++++++++++++++++++++++++++
                                                 if (invoiceStatus === 'new') {
-                                                  await db
-                                                    .collection('gas')
-                                                    .doc(itemUDoc.id)
-                                                    .update({
-                                                      qty:
-                                                        Math.round(
-                                                          newArray.data().qty
-                                                        ) -
-                                                        itemQty[
-                                                          itemUDoc.data.weight
-                                                        ],
-                                                      empty_tanks:
-                                                        Math.round(
-                                                          newArray.data()
-                                                            .empty_tanks
-                                                        ) +
-                                                        parseInt(
-                                                          !itemUDoc.withCylinder
-                                                            ? itemQty[
+                                                  if (
+                                                    newArray.data().weight !==
+                                                    itemUDoc.empty_weight
+                                                  ) {
+                                                    await db
+                                                      .collection('gas')
+                                                      .doc(itemUDoc.id)
+                                                      .update({
+                                                        qty:
+                                                          gasType === 'fullgas'
+                                                            ? Math.round(
+                                                                newArray.data()
+                                                                  .qty
+                                                              ) -
+                                                              itemQty[
                                                                 itemUDoc.data
                                                                   .weight
                                                               ]
-                                                            : 0
+                                                            : Math.round(
+                                                                newArray.data()
+                                                                  .qty
+                                                              )
+                                                      })
+                                                    db.collection('gas')
+                                                      .where(
+                                                        'stock_type',
+                                                        '==',
+                                                        itemUDoc.data.stock_type
+                                                      )
+                                                      .get()
+                                                      .then(eachGaIn => {
+                                                        eachGaIn.docs.forEach(
+                                                          async eachFor => {
+                                                            if (
+                                                              eachFor.data
+                                                                .weight ===
+                                                              itemUDoc.empty_weight
+                                                            ) {
+                                                              await db
+                                                                .collection(
+                                                                  'gas'
+                                                                )
+                                                                .doc(eachFor.id)
+                                                                .update({
+                                                                  empty_tanks:
+                                                                    Math.round(
+                                                                      eachFor
+                                                                        .data
+                                                                        .empty_tanks
+                                                                    ) +
+                                                                    parseInt(
+                                                                      !itemUDoc.withCylinder
+                                                                        ? itemQty[
+                                                                            itemUDoc
+                                                                              .data
+                                                                              .weight
+                                                                          ]
+                                                                        : 0
+                                                                    )
+                                                                })
+                                                            }
+                                                          }
                                                         )
-                                                    })
+                                                      })
+                                                  } else {
+                                                    await db
+                                                      .collection('gas')
+                                                      .doc(itemUDoc.id)
+                                                      .update({
+                                                        qty:
+                                                          gasType === 'fullgas'
+                                                            ? Math.round(
+                                                                newArray.data()
+                                                                  .qty
+                                                              ) -
+                                                              itemQty[
+                                                                itemUDoc.data
+                                                                  .weight
+                                                              ]
+                                                            : Math.round(
+                                                                newArray.data()
+                                                                  .qty
+                                                              ),
+                                                        empty_tanks:
+                                                          gasType === 'fullgas'
+                                                            ? Math.round(
+                                                                newArray.data()
+                                                                  .empty_tanks
+                                                              ) +
+                                                              parseInt(
+                                                                !itemUDoc.withCylinder
+                                                                  ? itemQty[
+                                                                      itemUDoc
+                                                                        .data
+                                                                        .weight
+                                                                    ]
+                                                                  : 0
+                                                              )
+                                                            : Math.round(
+                                                                newArray.data()
+                                                                  .empty_tanks
+                                                              ) -
+                                                              itemQty[
+                                                                itemUDoc.data
+                                                                  .weight
+                                                              ]
+                                                      })
+                                                  }
                                                 }
                                               }
                                             )
@@ -752,6 +879,7 @@ function Make_invoice () {
                                       db.collection('gas_selling_history').add({
                                         invoice_number: invoiceNumber,
                                         gas: arrayItems,
+                                        gasType: gasType,
                                         paymentWay: isFullPayment
                                           ? 'FullPayment'
                                           : 'PayandGo',
@@ -767,6 +895,7 @@ function Make_invoice () {
                                         .add({
                                           invoice_number: invoiceNumber,
                                           items: arrayItems,
+                                          gasType: gasType,
                                           customer_id: cust.id,
                                           nic:
                                             tablerows[0].customer.customerNic,
@@ -876,38 +1005,121 @@ function Make_invoice () {
                                           if (invoiceStatus === 'new') {
                                             tablerows.forEach(
                                               async itemUDoc => {
-                                                let newArray = await await db
+                                                let newArray = await db
                                                   .collection('gas')
                                                   .doc(itemUDoc.id)
                                                   .get()
 
                                                 //++++++++++++++++++++++++++++++++++++++++++++
                                                 if (invoiceStatus === 'new') {
-                                                  await db
-                                                    .collection('gas')
-                                                    .doc(itemUDoc.id)
-                                                    .update({
-                                                      qty:
-                                                        Math.round(
-                                                          newArray.data().qty
-                                                        ) -
-                                                        itemQty[
-                                                          itemUDoc.data.weight
-                                                        ],
-                                                      empty_tanks:
-                                                        Math.round(
-                                                          newArray.data()
-                                                            .empty_tanks
-                                                        ) +
-                                                        parseInt(
-                                                          !itemUDoc.withCylinder
-                                                            ? itemQty[
+                                                  if (
+                                                    newArray.data().weight !==
+                                                    itemUDoc.empty_weight
+                                                  ) {
+                                                    await db
+                                                      .collection('gas')
+                                                      .doc(itemUDoc.id)
+                                                      .update({
+                                                        qty:
+                                                          gasType === 'fullgas'
+                                                            ? Math.round(
+                                                                newArray.data()
+                                                                  .qty
+                                                              ) -
+                                                              itemQty[
                                                                 itemUDoc.data
                                                                   .weight
                                                               ]
-                                                            : 0
+                                                            : Math.round(
+                                                                newArray.data()
+                                                                  .qty
+                                                              )
+                                                      })
+                                                    db.collection('gas')
+                                                      .where(
+                                                        'stock_type',
+                                                        '==',
+                                                        itemUDoc.data.stock_type
+                                                      )
+                                                      .get()
+                                                      .then(eachGaIn => {
+                                                        eachGaIn.docs.forEach(
+                                                          async eachFor => {
+                                                            if (
+                                                              eachFor.data
+                                                                .weight ===
+                                                              itemUDoc.empty_weight
+                                                            ) {
+                                                              await db
+                                                                .collection(
+                                                                  'gas'
+                                                                )
+                                                                .doc(eachFor.id)
+                                                                .update({
+                                                                  empty_tanks:
+                                                                    Math.round(
+                                                                      eachFor
+                                                                        .data
+                                                                        .empty_tanks
+                                                                    ) +
+                                                                    parseInt(
+                                                                      !itemUDoc.withCylinder
+                                                                        ? itemQty[
+                                                                            itemUDoc
+                                                                              .data
+                                                                              .weight
+                                                                          ]
+                                                                        : 0
+                                                                    )
+                                                                })
+                                                            }
+                                                          }
                                                         )
-                                                    })
+                                                      })
+                                                  } else {
+                                                    await db
+                                                      .collection('gas')
+                                                      .doc(itemUDoc.id)
+                                                      .update({
+                                                        qty:
+                                                          gasType === 'fullgas'
+                                                            ? Math.round(
+                                                                newArray.data()
+                                                                  .qty
+                                                              ) -
+                                                              itemQty[
+                                                                itemUDoc.data
+                                                                  .weight
+                                                              ]
+                                                            : Math.round(
+                                                                newArray.data()
+                                                                  .qty
+                                                              ),
+                                                        empty_tanks:
+                                                          gasType === 'fullgas'
+                                                            ? Math.round(
+                                                                newArray.data()
+                                                                  .empty_tanks
+                                                              ) +
+                                                              parseInt(
+                                                                !itemUDoc.withCylinder
+                                                                  ? itemQty[
+                                                                      itemUDoc
+                                                                        .data
+                                                                        .weight
+                                                                    ]
+                                                                  : 0
+                                                              )
+                                                            : Math.round(
+                                                                newArray.data()
+                                                                  .empty_tanks
+                                                              ) -
+                                                              itemQty[
+                                                                itemUDoc.data
+                                                                  .weight
+                                                              ]
+                                                      })
+                                                  }
                                                 }
                                               }
                                             )
@@ -949,6 +1161,7 @@ function Make_invoice () {
       db.collection('gas_selling_history').add({
         invoice_number: invoiceNumber,
         gas: arrayItems,
+        gasType: gasType,
         paymentWay: isFullPayment ? 'FullPayment' : 'PayandGo',
         selectedType: selectedType,
         total: subTotalFunc() - (totalDiscount === '' ? 0 : totalDiscount),
@@ -958,6 +1171,7 @@ function Make_invoice () {
       db.collection('gas_invoice').add({
         invoice_number: invoiceNumber,
         items: arrayItems,
+        gasType: gasType,
         customer_id: null,
         mid: null,
         installemtnDay: null,
@@ -986,26 +1200,67 @@ function Make_invoice () {
 
       if (invoiceStatus === 'new') {
         tablerows.forEach(async itemUDoc => {
-          let newArray = await await db
+          let newArray = await db
             .collection('gas')
             .doc(itemUDoc.id)
             .get()
 
           //++++++++++++++++++++++++++++++++++++++++++++
           if (invoiceStatus === 'new') {
-            await db
-              .collection('gas')
-              .doc(itemUDoc.id)
-              .update({
-                qty:
-                  Math.round(newArray.data().qty) -
-                  itemQty[itemUDoc.data.weight],
-                empty_tanks:
-                  Math.round(newArray.data().empty_tanks) +
-                  parseInt(
-                    !itemUDoc.withCylinder ? itemQty[itemUDoc.data.weight] : 0
-                  )
-              })
+            if (newArray.data().weight !== itemUDoc.empty_weight) {
+              await db
+                .collection('gas')
+                .doc(itemUDoc.id)
+                .update({
+                  qty:
+                    gasType === 'fullgas'
+                      ? Math.round(newArray.data().qty) -
+                        itemQty[itemUDoc.data.weight]
+                      : Math.round(newArray.data().qty)
+                })
+              db.collection('gas')
+                .where('stock_type', '==', itemUDoc.data.stock_type)
+                .get()
+                .then(eachGaIn => {
+                  eachGaIn.docs.forEach(async eachFor => {
+                    if (eachFor.data.weight === itemUDoc.empty_weight) {
+                      await db
+                        .collection('gas')
+                        .doc(eachFor.id)
+                        .update({
+                          empty_tanks:
+                            Math.round(eachFor.data.empty_tanks) +
+                            parseInt(
+                              !itemUDoc.withCylinder
+                                ? itemQty[itemUDoc.data.weight]
+                                : 0
+                            )
+                        })
+                    }
+                  })
+                })
+            } else {
+              await db
+                .collection('gas')
+                .doc(itemUDoc.id)
+                .update({
+                  qty:
+                    gasType === 'fullgas'
+                      ? Math.round(newArray.data().qty) -
+                        itemQty[itemUDoc.data.weight]
+                      : Math.round(newArray.data().qty),
+                  empty_tanks:
+                    gasType === 'fullgas'
+                      ? Math.round(newArray.data().empty_tanks) +
+                        parseInt(
+                          !itemUDoc.withCylinder
+                            ? itemQty[itemUDoc.data.weight]
+                            : 0
+                        )
+                      : Math.round(newArray.data().empty_tanks) -
+                        itemQty[itemUDoc.data.weight]
+                })
+            }
           }
         })
       }
@@ -1042,6 +1297,31 @@ function Make_invoice () {
       })
   }
 
+  const handleEmptyWeight = (empty_weight, weight, row) => {
+    db.collection('gas')
+      .where('weight', '==', empty_weight)
+      .get()
+      .then(doc => {
+        doc.docs.forEach(eachOne => {
+          if (eachOne.data().stock_type === row.data.stock_type) {
+            if (doc.docs.length > 0) {
+              let index = tablerows.findIndex(
+                // eslint-disable-next-line
+                element => {
+                  if (element?.id === row?.id) {
+                    return true
+                  }
+                }
+              )
+              tablerows[index].empty_weight = empty_weight
+            } else {
+              NotificationManager.warning('Unavailable weight!')
+            }
+          }
+        })
+      })
+  }
+
   return (
     <>
       {/*Start Serial Number Model */}
@@ -1070,6 +1350,7 @@ function Make_invoice () {
                     <TableHead>
                       <TableRow>
                         <TableCell className='tbl_Cell'>Weight</TableCell>
+                        <TableCell className='tbl_Cell'>Empty Weight</TableCell>
                         <TableCell
                           className='tbl_Cell'
                           align='right'
@@ -1107,6 +1388,28 @@ function Make_invoice () {
                       {tablerows.map(row => (
                         <TableRow key={row.data.weight}>
                           <TableCell>{row.data.weight}</TableCell>
+                          <TableCell align='right'>
+                           {gasType === 'fullgas' && row.withCylinder !== true
+                                 ?  <TextField
+                              key={row.empty_weight}
+                              id={row.empty_weight.toString()}
+                              className='txt_qty'
+                              variant='outlined'
+                              size='small'
+                              InputProps={{ inputProps: { min: 1 } }}
+                              type='number'
+                              fullWidth
+                              value={row.empty_weight}
+                              onChange={e => {
+                                if (e.target.value !== '') {
+                                  
+                                  handleEmptyWeight(e, row.data.weight, row)
+                                }
+                              }}
+                            />:"None"
+                      }
+                          </TableCell>
+
                           <TableCell align='right'>
                             <TextField
                               key={row.data.weight}
@@ -1149,47 +1452,49 @@ function Make_invoice () {
                             />
                           </TableCell>
                           <TableCell align='right'>
-                            <Checkbox
-                              defaultChecked={true}
-                              onChange={e => {
-                                if (row.withCylinder) {
-                                  let index = tablerows.indexOf(
-                                    ob => ob.id === row.id
-                                  )
-                                  let currentTableObj = tablerows.filter(
-                                    ob => ob.id === row.id
-                                  )[0]
-                                  let currentTableRowsAr = tablerows
-                                  let currentDpObj = itemDP
-                                  currentDpObj[row.data.weight] =
-                                    row.paymentWay === 'PayandGo'
-                                      ? row.data?.withoutSaleprice
-                                      : row.data?.withoutCprice
-                                  currentTableObj.withCylinder = false
-                                  currentTableRowsAr[index] = currentTableObj
-                                  setItemDP(currentDpObj)
-                                  setTableRows([...currentTableRowsAr])
-                                } else {
-                                  let index = tablerows.indexOf(
-                                    ob => ob.id === row.id
-                                  )
-                                  let currentTableObj = tablerows.filter(
-                                    ob => ob.id === row.id
-                                  )[0]
-                                  let currentTableRowsAr = tablerows
-                                  let currentDpObj = itemDP
-                                  currentDpObj[row.data.weight] =
-                                    row.paymentWay === 'PayandGo'
-                                      ? row.data?.saleprice
-                                      : row.data?.price
+                            {gasType === 'fullgas'
+                              ? <Checkbox
+                                defaultChecked={true}
+                                onChange={e => {
+                                  if (row.withCylinder) {
+                                    let index = tablerows.indexOf(
+                                      ob => ob.id === row.id
+                                    )
+                                    let currentTableObj = tablerows.filter(
+                                      ob => ob.id === row.id
+                                    )[0]
+                                    let currentTableRowsAr = tablerows
+                                    let currentDpObj = itemDP
+                                    currentDpObj[row.data.weight] =
+                                      row.paymentWay === 'PayandGo'
+                                        ? row.data?.withoutSaleprice
+                                        : row.data?.withoutCprice
+                                    currentTableObj.withCylinder = false
+                                    currentTableRowsAr[index] = currentTableObj
+                                    setItemDP(currentDpObj)
+                                    setTableRows([...currentTableRowsAr])
+                                  } else {
+                                    let index = tablerows.indexOf(
+                                      ob => ob.id === row.id
+                                    )
+                                    let currentTableObj = tablerows.filter(
+                                      ob => ob.id === row.id
+                                    )[0]
+                                    let currentTableRowsAr = tablerows
+                                    let currentDpObj = itemDP
+                                    currentDpObj[row.data.weight] =
+                                      row.paymentWay === 'PayandGo'
+                                        ? row.data?.saleprice
+                                        : row.data?.price
 
-                                  currentTableObj.withCylinder = true
-                                  currentTableRowsAr[index] = currentTableObj
-                                  setItemDP(currentDpObj)
-                                  setTableRows([...currentTableRowsAr])
-                                }
-                              }}
-                            />
+                                    currentTableObj.withCylinder = true
+                                    currentTableRowsAr[index] = currentTableObj
+                                    setItemDP(currentDpObj)
+                                    setTableRows([...currentTableRowsAr])
+                                  }
+                                }}
+                              />:"None"
+                            }
                           </TableCell>
 
                           <TableCell align='right'>
@@ -1858,6 +2163,9 @@ function Make_invoice () {
                             onChange={handleChange}
                             value={selectedType}
                           >
+                             <option onChange={handleChange} value={'main'}>
+                              main
+                            </option>
                             <option onChange={handleChange} value={'shop'}>
                               shop
                             </option>

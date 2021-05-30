@@ -12,6 +12,7 @@ export default function SelectedGas_Model({ gasListProps }) {
   const [isLoading, setLoading] = useState(false);
   const [gasData, setGasData] = useState([]);
   const [paymentWay, setpaymentWay] = useState("PayandGo");
+   const [gasType, setGasType] = useState("fullgas");
   let history = useHistory();
 
   useEffect(() => {
@@ -44,6 +45,8 @@ export default function SelectedGas_Model({ gasListProps }) {
             data: filGas[0]?.data(),
             qty: 1,
             paymentWay: paymentWay,
+            gasType:gasType,
+            empty_weight:null,
             customer: null,
             withCylinder: true,
           });
@@ -113,6 +116,36 @@ export default function SelectedGas_Model({ gasListProps }) {
             </Radio.Button>
             <Radio.Button className="btn_radio" value="FullPayment">
               Full Payment
+            </Radio.Button>
+          </Radio.Group>
+        </Grid>
+        <Grid item xs={12} sm={12}>
+          <hr />
+        </Grid>
+         <Grid className="radioGrid_main" item xs={12} sm={12}>
+          <Typography className="method_title" variant="h5" gutterBottom>
+            Select Gas(Full/Empty) :
+          </Typography>
+        </Grid>
+        <Grid className="hr_rGrid_main" item xs={12} sm={4}>
+          <hr />
+        </Grid>
+        <Grid className="radioGrid_main" item xs={12} sm={8}></Grid>
+        <Grid className="radioGrid_main" item xs={12} sm={12}>
+          <Radio.Group
+            className="radio_btn"
+            defaultValue="fullgas"
+            buttonStyle="solid"
+            size="large"
+            onChange={(e) => {
+              setGasType(e.target.value);
+            }}
+          >
+            <Radio.Button className="btn_radio" value="fullgas">
+              Full Gas
+            </Radio.Button>
+            <Radio.Button className="btn_radio" value="emptygas">
+              Empty Gas
             </Radio.Button>
           </Radio.Group>
         </Grid>

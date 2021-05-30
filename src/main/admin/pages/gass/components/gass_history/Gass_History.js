@@ -31,8 +31,30 @@ export default function Gass_History() {
         }),
       },
     },
+     {
+      name: "Stock_type",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
     {
-      name: "Qty",
+      name: "Full_Qty",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: {
+            fontSize: "15px",
+            color: "black",
+            fontWeight: "600",
+          },
+        }),
+      },
+    },
+    {
+      name: "Empty_Qty",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -72,7 +94,9 @@ export default function Gass_History() {
             Date: moment(each.data()?.date?.toDate()).format(
               "dddd, MMMM Do YYYY"
             ),
-            Qty: each.data().qty,
+            Stock_type:each.data().stock_type,
+            Full_Qty: each.data().qty,
+            Empty_Qty: each.data().empty,
             Purchased_Price: (
               <CurrencyFormat
                 value={each.data().price}

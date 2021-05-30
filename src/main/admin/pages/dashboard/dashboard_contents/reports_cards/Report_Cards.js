@@ -487,7 +487,7 @@ async function getAllSalesReports(sales, cash, cards, installment, docs) {
         cash: 0,
         cards: 0,
         installment: installment[n].total,
-        docs: docs[n] === 0 ? 0 : docs[n].total,
+        docs: docs[n] === 0 ? 0 : docs[n]?.total,
       });
     }
   }
@@ -553,8 +553,8 @@ async function docsTotalBalance(allSalesTotals) {
   for (let i = 0; i < allSalesTotals.length; i++) {
     reduceDup = reduceDup + allSalesTotals[i].docs;
   }
-
-  return reduceDup;
+  
+  return isNaN(reduceDup) ? 0 :reduceDup;
 }
 
 export default function Report_Cards() {

@@ -531,6 +531,7 @@ export default function Add_Item() {
                                                               cInvoiceNo: cInvoiceNo,
                                                               GCardNo: GCardNo,
                                                               guarantee: guarantee,
+                                                              seized:false,
                                                               timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                                                             };
 
@@ -693,6 +694,7 @@ export default function Add_Item() {
                                                               cInvoiceNo: cInvoiceNo,
                                                               GCardNo: GCardNo,
                                                               guarantee: guarantee,
+                                                               seized:false,
                                                               timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                                                             };
 
@@ -839,6 +841,7 @@ export default function Add_Item() {
                                                             cInvoiceNo: cInvoiceNo,
                                                             GCardNo: GCardNo,
                                                             guarantee: guarantee,
+                                                             seized:false,
                                                             timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                                                           };
 

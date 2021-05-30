@@ -11,6 +11,7 @@ import AddIcon from "@material-ui/icons/Add";
 
 // components
 import SeizedAddModel from "../seized_items/seized_Model/addNew_Model/Add_Model";
+import SellModel from "../seized_items/seized_Model/sellModel/SellModel";
 
 // styles
 import "./Seized_item.css";
@@ -110,11 +111,25 @@ export default function Seized_item() {
         }),
       },
     },
+    {
+      name: "To_Sell",
+      options: {
+        filter: false,
+        setCellHeaderProps: (value) => ({
+          style: {
+            fontSize: "15px",
+            color: "black",
+            fontWeight: "600",
+          },
+        }),
+      },
+    },
   ];
 
   const [seizedTableData, setSeizedTableData] = useState([]);
   // eslint-disable-next-line
   const [seizedAllData, setSeizedAllData] = useState([]);
+  const [openAddToSell,setOpenAddToSell] =useState(false);
 
   useEffect(() => {
     window.addEventListener("offline", function (e) {
@@ -141,6 +156,11 @@ export default function Seized_item() {
             MID: RESnap.data()?.mid,
             NIC: RESnap.data()?.nic,
             Sized_date: RESnap.data()?.date,
+            To_Sell:<div>
+                <span className="icon_visibl">
+                  <AddIcon onClick={toSell} />
+                </span>
+              </div>
           });
         });
         setSeizedTableData(rowData);
@@ -149,6 +169,10 @@ export default function Seized_item() {
       });
     // eslint-disable-next-line
   }, []);
+  
+  const toSell = () => {
+    setOpenAddToSell(true);
+  }
 
   return (
     <>
@@ -169,6 +193,36 @@ export default function Seized_item() {
           <div className="seized_Add_Model_Main">
             <div className="seized_Add_Model_Detail">
               <SeizedAddModel closeModel={cancelModalAdd} />
+            </div>
+          </div>
+        </div>
+      </Modal>
+
+      {/*END Add repairs Model */}
+      
+      
+      {/*Start Seized Details models */}
+
+      {/*END customer Details models */}
+
+      {/*Start Add Seized Model  */}
+      <Modal
+        visible={openAddToSell}
+        className="seized_Add_Model"
+        footer={null}
+        onCancel={() => {
+          setOpenAddToSell(false);
+        }}
+      >
+        <div className="seized_Model">
+          <div className="seized_Add_Model_Main">
+            <div className="seized_Add_Model_Detail">
+              <SellModel
+                key={seizedAllData[currentIndx]?.id}
+                invoice_no={seizedAllData[currentIndx]?.data.invoice_number}
+                model_no={seizedAllData[currentIndx]?.data.model_no}
+                serialNo={seizedAllData[currentIndx]?.data.serialNo}
+              />
             </div>
           </div>
         </div>

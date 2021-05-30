@@ -70,6 +70,7 @@ export default function Stock_History() {
 
           newData.push({
             Item_name: element.data().itemName,
+            Model_no: element.data().modelNo,
             Brand: element.data().brand,
             Qty: element.data().qty,
             Cash_price: (
@@ -101,6 +102,15 @@ export default function Stock_History() {
   const columns = [
     {
       name: "Item_name",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+     {
+      name: "Model_no",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({

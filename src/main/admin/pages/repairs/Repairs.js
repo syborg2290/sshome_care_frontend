@@ -202,12 +202,12 @@ export default function Repairs() {
             Status: (
               <span className="statusRepir">
                 {re.data().status === "accepted"
-                  ? "Accepted"
+                  ? "Ongoing"
                   : re.data().status === "return_to_company"
-                  ? "Returned"
+                  ? "Returned to company"
                   : re.data().status === "return_from_company"
-                  ? "Issued from company"
-                  : "Delivered"}
+                  ? "Returned back from company"
+                  : "Job Done"}
               </span>
             ),
             Date: moment(re.data()?.date?.toDate()).format(

@@ -25,6 +25,15 @@ export default function Managed_History() {
       },
     },
     {
+      name: "Model_no",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
       name: "Item_Name",
       options: {
         filter: true,
@@ -93,6 +102,7 @@ export default function Managed_History() {
 
           itemDataTable.push([
             new Date(element.data().date.seconds * 1000).toDateString(),
+            element.data().modelNo,
             element.data().item.itemName,
             element.data().item.brand,
             element.data().qty,

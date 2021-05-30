@@ -203,14 +203,7 @@ export default function Areas() {
             MID: eachRe.data().mid,
             NIC: eachRe.data().nic,
             Delayed_Days: Math.round(eachRe.data().delayed_days),
-            Delayed_Charges: (
-              <CurrencyFormat
-                value={Math.round(eachRe.data().delayed_charges)}
-                displayType={'text'}
-                thousandSeparator={true}
-                prefix={' '}
-              />
-            ),
+            Delayed_Charges:Math.round(eachRe.data().delayed_charges),
             Date: moment(eachRe.data()?.date?.toDate()).format(
               'dddd, MMMM Do YYYY'
             ),
@@ -687,9 +680,12 @@ export default function Areas() {
               selectableRows: 'none',
               customToolbarSelect: () => {},
               filterType: 'textField',
-              download: false,
               rowHover: false,
-              print: false,
+              print: true,
+              download: true,
+              downloadOptions: {
+                filename: `Arreas - ${new Date().toDateString()} - ${new Date().toLocaleTimeString('en-US')}.csv`,
+              },
               searchPlaceholder: 'Search using any column names',
               elevation: 4,
               sort: true,
@@ -704,6 +700,15 @@ export default function Areas() {
                     ''
                   ),
                 },
+                
+                 toolbar: {
+                  search: "Search",
+                  downloadCsv: "Download CSV",
+                  print: "Print",
+                  viewColumns: "View Columns",
+                   filterTable: "Filter Table",
+                  
+                  },
               },
             }}
           />
@@ -712,3 +717,5 @@ export default function Areas() {
     </div>
   );
 }
+
+//^3.4.1

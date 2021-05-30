@@ -58,6 +58,14 @@ export default function Item_table_assistant() {
     window.addEventListener("offline", function (e) {
       history.push("/connection_lost");
     });
+    
+    // db.collection("item").get().then((reV) => {
+    //   reV.docs.forEach((eachIt) => {
+    //     db.collection("item").doc(eachIt.id).update({
+    //        seized: false,
+    //     });
+    //    });
+    // });
 
     let rowsCountUse = rowsCount + 25;
     setRowsCount(rowsCountUse);
@@ -115,6 +123,7 @@ export default function Item_table_assistant() {
               prefix={" "}
             />,
             element.data().stock_type,
+            element.data()?.seized === true ? "Yes" : "No",
             <div
               color="secondary"
               size="small"
@@ -259,6 +268,15 @@ export default function Item_table_assistant() {
     },
     {
       name: "Stock_Type",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+     {
+      name: "Seized",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({

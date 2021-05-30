@@ -443,23 +443,9 @@ export default function Invoice_history() {
             ),
             MID: siDoc.data().mid,
             NIC: siDoc.data().nic,
-            Total_Discount: (
-              <CurrencyFormat
-                value={siDoc.data().discount}
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={" "}
-              />
-            ),
+            Total_Discount:siDoc.data().discount,
 
-            Balance: (
-              <CurrencyFormat
-                value={siDoc.data().balance}
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={" "}
-              />
-            ),
+            Balance:siDoc.data().balance,
             Status:
               siDoc.data().status_of_payandgo === "onGoing" ? (
                 <span
@@ -568,22 +554,8 @@ export default function Invoice_history() {
             Date: moment(siDoc.data()?.date?.toDate()).format(
               "dddd, MMMM Do YYYY"
             ),
-            Total_Discount: (
-              <CurrencyFormat
-                value={siDoc.data().discount}
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={" "}
-              />
-            ),
-            Full_Payment: (
-              <CurrencyFormat
-                value={siDoc.data().total}
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={" "}
-              />
-            ),
+            Total_Discount:siDoc.data().discount ,
+            Full_Payment:siDoc.data().total,
             Action: (
               <div>
                 <span className="icon_visibl">
@@ -940,8 +912,11 @@ export default function Invoice_history() {
                   selectableRows: "none",
                   customToolbarSelect: () => {},
                   filterType: "textField",
-                  download: false,
-                  print: false,
+                  print: true,
+                  download: true,
+                  downloadOptions: {
+                  filename: `Invoice(Easy) - ${new Date().toDateString()} - ${new Date().toLocaleTimeString('en-US')}.csv`,
+                  },
                   searchPlaceholder: "Search using any column names",
                   elevation: 4,
                   sort: true,
@@ -1303,8 +1278,11 @@ export default function Invoice_history() {
                   selectableRows: "none",
                   customToolbarSelect: () => {},
                   filterType: "textField",
-                  download: false,
-                  print: false,
+                  print: true,
+                  download: true,
+                  downloadOptions: {
+                  filename: `Invoice(Full) - ${new Date().toDateString()} - ${new Date().toLocaleTimeString('en-US')}.csv`,
+                  },
                   searchPlaceholder: "Search using any column names",
                   elevation: 4,
                   sort: true,

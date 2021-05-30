@@ -107,6 +107,7 @@ export default function Make_Invoice_table() {
               prefix={" "}
             />,
             element.data().stock_type,
+            element.data()?.seized === true ? "Yes" : "No",
             <div
               color="secondary"
               size="small"
@@ -232,6 +233,15 @@ export default function Make_Invoice_table() {
     },
     {
       name: "Stock type",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+     {
+      name: "Seized",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({

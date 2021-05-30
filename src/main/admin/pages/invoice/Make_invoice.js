@@ -156,6 +156,7 @@ function Make_invoice() {
             : obj.item.cashPrice;
         keepDataDiscount[obj.i] = obj.item.discount;
         tableData.push(obj);
+        setSelectedType(obj.item.stock_type)
         if (obj.paymentWay === 'PayandGo') {
           setIsFullPayment(false);
         } else {
@@ -830,7 +831,7 @@ function Make_invoice() {
                                           if (invoiceStatus === 'new') {
                                             tablerows.forEach(
                                               async (itemUDoc) => {
-                                                let newArray = await await db
+                                                let newArray =  await db
                                                   .collection('item')
                                                   .doc(itemUDoc.id)
                                                   .get();
@@ -1147,7 +1148,7 @@ function Make_invoice() {
                                           if (invoiceStatus === 'new') {
                                             tablerows.forEach(
                                               async (itemUDoc) => {
-                                                let newArray = await await db
+                                                let newArray =  await db
                                                   .collection('item')
                                                   .doc(itemUDoc.id)
                                                   .get();
@@ -1340,7 +1341,7 @@ function Make_invoice() {
 
       if (invoiceStatus === 'new') {
         tablerows.forEach(async (itemUDoc) => {
-          let newArray = await await db
+          let newArray =  await db
             .collection('item')
             .doc(itemUDoc.id)
             .get();
@@ -2287,6 +2288,9 @@ function Make_invoice() {
                             onChange={handleChange}
                             value={selectedType}
                           >
+                             <option onChange={handleChange} value={'main'}>
+                              main
+                            </option>
                             <option onChange={handleChange} value={'shop'}>
                               shop
                             </option>

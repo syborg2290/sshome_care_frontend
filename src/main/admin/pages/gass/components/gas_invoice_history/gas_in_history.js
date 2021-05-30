@@ -127,6 +127,15 @@ export default function Gas_Invoice_history() {
         }),
       },
     },
+     {
+      name: "Full_Empty",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
     {
       name: "Village",
       options: {
@@ -239,6 +248,15 @@ export default function Gas_Invoice_history() {
     },
     {
       name: "Type",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "Full_Empty",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -362,6 +380,7 @@ export default function Gas_Invoice_history() {
             InvoiceNo: siDoc.data().invoice_number,
             // SerialNo: siDoc.data().items[0].serialNo,
             Type: siDoc.data().selectedType,
+            Full_Empty:siDoc.data().gasType === "fullgas"?"Full":"Empty",
             Village: siDoc.data().root_village,
             Date: moment(siDoc.data()?.date?.toDate()).format(
               "dddd, MMMM Do YYYY"
@@ -484,6 +503,7 @@ export default function Gas_Invoice_history() {
           rawDataFull.push({
             InvoiceNo: siDoc.data().invoice_number,
             Type: siDoc.data().selectedType,
+             Full_Empty:siDoc.data().gasType === "fullgas"?"Full":"Empty",
             Village: siDoc.data().root_village,
             Date: moment(siDoc.data()?.date?.toDate()).format(
               "dddd, MMMM Do YYYY"

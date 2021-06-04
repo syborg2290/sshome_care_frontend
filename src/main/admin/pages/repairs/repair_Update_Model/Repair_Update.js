@@ -11,7 +11,7 @@ import db from '../../../../../config/firebase.js';
 import './Repair_Update.css';
 
 export default function Repair_Update({
-  invoice_number,
+  serial_no,
   statusProp,
   docId,
   closeModel,
@@ -37,10 +37,10 @@ export default function Repair_Update({
       .then(_ => {
         if (status === 'back_to_customer') {
           db.collection('repair').doc(docId).delete().then(() => {
-            closeModel();
+            window.location.reload();
           });
         } else {
-          closeModel();
+          window.location.reload();
         }
       });
   };
@@ -57,14 +57,14 @@ export default function Repair_Update({
         <form className="form" noValidate>
           <Grid container spacing={2}>
             <Grid className="lbl_topi" item xs={12} sm={4}>
-              Invoice No
+              Serial No
             </Grid>
             <Grid item xs={12} sm={2}>
               :
             </Grid>
             <Grid item xs={12} sm={6}>
               <p>
-                {invoice_number}
+                {serial_no}
               </p>
             </Grid>
 

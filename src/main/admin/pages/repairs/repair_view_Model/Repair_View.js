@@ -1,17 +1,17 @@
-import React from "react";
-import { Grid, Container, Typography } from "@material-ui/core";
-import firebase from "firebase";
-import moment from "moment";
+import React from 'react';
+import {Grid, Container, Typography} from '@material-ui/core';
+import firebase from 'firebase';
+import moment from 'moment';
 
 // styles
-import "./Repair_View.css";
+import './Repair_View.css';
 
 export default function Repair_View({
-  invoice_number,
   description,
   cust_Name,
   mobile_1,
   mobile_2,
+  serial_no,
 }) {
   return (
     <Container component="main" className="conctainefr_main">
@@ -25,13 +25,15 @@ export default function Repair_View({
         <form className="form" noValidate>
           <Grid container spacing={2}>
             <Grid className="lbl_topi" item xs={12} sm={4}>
-              Invoice No
+              Serial No
             </Grid>
             <Grid item xs={12} sm={2}>
               :
             </Grid>
             <Grid item xs={12} sm={6}>
-              <p>{invoice_number}</p>
+              <p>
+                {serial_no}
+              </p>
             </Grid>
             <Grid className="lbl_topi" item xs={12} sm={4}>
               Customer Name
@@ -40,7 +42,9 @@ export default function Repair_View({
               :
             </Grid>
             <Grid item xs={12} sm={6}>
-              <p>{cust_Name}</p>
+              <p>
+                {cust_Name}
+              </p>
             </Grid>
             <Grid className="lbl_topi" item xs={12} sm={4}>
               Tele
@@ -49,11 +53,15 @@ export default function Repair_View({
               :
             </Grid>
             <Grid item xs={12} sm={6}>
-              <p>{mobile_1}</p>
+              <p>
+                {mobile_1}
+              </p>
             </Grid>
-            <Grid className="lbl_topi" item xs={12} sm={6}></Grid>
+            <Grid className="lbl_topi" item xs={12} sm={6} />
             <Grid item xs={12} sm={6}>
-              <p>{mobile_2 === "" ? " - " : mobile_2}</p>
+              <p>
+                {mobile_2 === '' ? ' - ' : mobile_2}
+              </p>
             </Grid>
 
             <Grid className="lbl_topi" item xs={12} sm={4}>
@@ -64,10 +72,9 @@ export default function Repair_View({
             </Grid>
             <Grid item xs={12} sm={6}>
               <p>
-                {" "}
-                {moment(firebase.firestore.FieldValue.serverTimestamp()).format(
-                  "dddd, MMMM Do YYYY"
-                )}
+                {' '}{moment(
+                  firebase.firestore.FieldValue.serverTimestamp()
+                ).format('dddd, MMMM Do YYYY')}
               </p>
             </Grid>
             <Grid className="lbl_topi" item xs={12} sm={4}>
@@ -77,7 +84,9 @@ export default function Repair_View({
               :
             </Grid>
             <Grid item xs={12} sm={6}>
-              <p>{description}</p>
+              <p>
+                {description}
+              </p>
             </Grid>
           </Grid>
         </form>

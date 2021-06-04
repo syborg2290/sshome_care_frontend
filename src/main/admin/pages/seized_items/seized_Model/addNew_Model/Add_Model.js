@@ -1,188 +1,175 @@
-import React, { useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
+import React, { useState, useEffect } from 'react'
+import { useHistory } from 'react-router-dom'
 import {
   Grid,
   Container,
   Typography,
-  TextField,
-  Button,
-} from "@material-ui/core";
-import { DatePicker, Space, Spin } from "antd";
-import firebase from "firebase";
+  Button
+} from '@material-ui/core'
+import { Spin,Input,Layout,Form } from 'antd'
+import firebase from 'firebase'
 
-import db from "../../../../../../config/firebase.js";
+import db from '../../../../../../config/firebase.js'
 
 // styles
-import "./Add_Model.css";
+import './Add_Model.css'
 
-export default function Add_Model({ closeModel }) {
-  // eslint-disable-next-line
-  // const [invoice, setInvoice] = useState("");
-  const [serial, setSerial] = useState("");
-  const [date, setDate] = useState("");
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+const {Content} = Layout;
+const {TextArea} = Input;
 
-  const onChange = (date, dateString) => {
-    setDate(dateString);
-  };
+export default function Add_Model ({ closeModel }) {
+  const [itemName, setItemName] = useState('')
+  const [brand, setBrand] = useState('')
+  const [color, setColor] = useState('')
+  const [cashPrice, setCashPrice] = useState(0)
+  const [description, setDescription] = useState('')
+  const [serialNo, setSerailNo] = useState('')
+  const [modelNo, setModelNo] = useState('')
+  const [loadingSubmit, setLoading] = useState(false)
 
-  let history = useHistory();
+  let history = useHistory()
 
   useEffect(() => {
-    window.addEventListener("offline", function (e) {
-      history.push("/connection_lost");
-    });
-  });
+    window.addEventListener('offline', function (e) {
+      history.push('/connection_lost')
+    })
+  })
 
   const addSeized = async () => {
-    setLoading(true);
-    await db
-      .collection("invoice")
-      .get()
-      .then((re) => {
-        var count = 0;
-        re.docs.forEach((eachReturn) => {
-          if (eachReturn.data().paymentWay === "PayandGo") {
-            eachReturn.data().items.forEach(async (reItem) => {
-              if (reItem.serialNo[0] === serial.trim()) {
-                let invoice = eachReturn.data().invoice_number;
-
-                let reSeizedCheck = await db
-                  .collection("seized")
-                  .where("invoice_number", "==", invoice)
-                  .get();
-
-                if (reSeizedCheck.docs.length === 0) {
-                  db.collection("invoice")
-                    .where("invoice_number", "==", invoice)
-                    .get()
-                    .then((reThen) => {
-                      if (reThen.docs.length > 0) {
-                        setError(" ");
-                        reThen.docs[0].data().items.forEach((reI) => {
-                          db.collection("item")
-                            .doc(reI.item_id)
-                            .get()
-                            .then((itRe) => {
-                              db.collection("seized")
-                                .add({
-                                  invoice_number: invoice,
-                                  serialNo: serial.trim(),
-                                  type: eachReturn.data().selectedType,
-                                  mid: eachReturn.data().mid,
-                                  model_no: reItem.modelNo[0],
-                                  item_name: itRe.data().itemName,
-                                  nic: reThen.docs[0].data().nic,
-                                  date: date,
-                                  addedDate: firebase.firestore.FieldValue.serverTimestamp(),
-                                })
-                                .then((_) => {
-                                  setLoading(false);
-                                  closeModel();
-                                  window.location.reload();
-                                });
-                            });
-                        });
-                      }
-                    });
-                } else {
-                  setLoading(false);
-                  setError(
-                    "Serial number you entered already in the seized list!"
-                  );
-                }
-              } else {
-                setLoading(false);
-                setError("Serial number you entered is not found!");
-              }
-              count = count + 1;
-            });
-          } else {
-            setLoading(false);
-            setError("Serial number you entered is not found!");
-          }
-        });
-        if (re.docs.length < count) {
-          setLoading(false);
-          if (error === " ") {
-            setError("");
-          } else {
-            setError("Serial number that you entered is not found!");
-          }
-        }
-      });
-  };
+    setLoading(true)
+    db.collection('seized')
+      .add({
+        status: '',
+        itemName: itemName,
+        brand: brand,
+        color: color,
+        price: cashPrice,
+        description: description,
+        serialNo: serialNo,
+        modelNo: modelNo,
+        addedDate: firebase.firestore.FieldValue.serverTimestamp()
+      })
+      .then(_ => {
+        setLoading(false)
+        closeModel()
+        window.location.reload()
+      })
+  }
 
   return (
-    <Container component="main" className="conctainefr_main">
-      <Typography className="titleffs" variant="h5" gutterBottom>
+    <Container component='main' className='conctainefr_main'>
+      <Typography className='titleffs' variant='h5' gutterBottom>
         Add Seized Item
       </Typography>
       <Grid item xs={12} sm={12}>
-        <hr className="titl_hr" />
+        <hr className='titl_hr' />
       </Grid>
-      <div className="paper">
-        <form className="form" noValidate>
-          <Grid container spacing={2}>
-            <Grid className="lbl_topi" item xs={12} sm={4}>
-              Serial No
-            </Grid>
-            <Grid item xs={12} sm={2}>
-              :
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                autoComplete="sio"
-                variant="outlined"
-                required
-                fullWidth
-                label="Serial No"
-                size="small"
-                value={serial}
-                onChange={(e) => {
-                  setSerial(e.target.value.trim());
-                }}
-              />
-            </Grid>
+      <>
+        <div>
+          <Content>
+            <Form className='form'>
+              <Form.Item label='* Item Name'>
+                <Input
+                  allowClear
+                  placeholder='xx Device'
+                  value={itemName}
+                  onChange={e => {
+                    setItemName(e.target.value)
+                  }}
+                />
+              </Form.Item>
+              <Form.Item label='Brand '>
+                <Input
+                  allowClear
+                  placeholder='xx Brand '
+                  value={brand}
+                  onChange={e => {
+                    setBrand(e.target.value)
+                  }}
+                />
+              </Form.Item>
 
-            <Grid className="lbl_topi" item xs={12} sm={4}>
-              Seized Date
-            </Grid>
-            <Grid item xs={12} sm={2}>
-              :
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <Space direction="vertical">
-                <DatePicker onChange={onChange} />
-              </Space>
-            </Grid>
-          </Grid>
-          <p className="name_Msg">{error.length > 0 ? error : ""}</p>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={9}></Grid>
-            <Grid item xs={12} sm={3}>
+              <Form.Item label='Color '>
+                <Input
+                  allowClear
+                  placeholder='xx pink'
+                  value={color}
+                  onChange={e => {
+                    setColor(e.target.value)
+                  }}
+                />
+              </Form.Item>
+
+              <Form.Item label='* price (LKR)'>
+                <Input
+                  type='number'
+                  min={0}
+                  allowClear
+                  placeholder=' 15000.00'
+                  value={cashPrice}
+                  onChange={e => {
+                    if (e.target.value !== '') {
+                      setCashPrice(e.target.value)
+                    }
+                  }}
+                />
+              </Form.Item>
+
+              <Form.Item label='Description '>
+                <TextArea
+                  placeholder='About Item'
+                  autoSize={{ minRows: 3, maxRows: 5 }}
+                  value={description}
+                  onChange={e => {
+                    setDescription(e.target.value)
+                  }}
+                />
+              </Form.Item>
+
+              <Form.Item label='Model no '>
+                <Input
+                  allowClear
+                  placeholder='Model No'
+                  value={modelNo}
+                  onChange={e => {
+                    setModelNo(e.target.value)
+                  }}
+                />
+              </Form.Item>
+
+              <Form.Item label='Serial no '>
+                <Input
+                  allowClear
+                  placeholder='Serial No'
+                  value={serialNo}
+                  onChange={e => {
+                    setSerailNo(e.target.value)
+                  }}
+                />
+              </Form.Item>
+
+              <Grid container spacing={2}>
+                <Grid item xs={12} sm={12}>
+                  <hr />
+                </Grid>
+              </Grid>
+              <Grid container spacing={2}></Grid>
+
               <Button
-                size="small"
-                variant="contained"
-                color="primary"
-                className="btn_add"
+                className='btn'
+                type='primary'
                 onClick={addSeized}
-                disabled={
-                  loading ||
-                  serial.length === 0 ||
-                  date.length === 0 ||
-                  date === null
-                    ? true
-                    : false
-                }
               >
-                {loading ? <Spin /> : "Done"}
+                {loadingSubmit ? (
+                  <Spin spinning={loadingSubmit} size='default' />
+                ) : (
+                  'Add'
+                )}
               </Button>
-            </Grid>
-          </Grid>
-        </form>
-      </div>
+            </Form>
+          </Content>
+        </div>
+      </>
     </Container>
-  );
+  )
 }

@@ -9,3 +9,45 @@
   font-weight: 600 !important;
   margin-top: 20px !important;
 }
+
+
+.form {
+  margin-top: -5px !important;
+}
+
+.validate_Edit {
+  color: red;
+  text-align: center !important;
+  font-weight: 600 !important;
+  font-size: 15px !important;
+}
+
+.inputess {
+  background-color: rgba(1, 1, 78, 0.842) !important;
+  color: aliceblue !important;
+  border-radius: 6px !important;
+  width: 98% !important;
+  font-size: small !important;
+}
+
+.rmov_icos {
+  margin-right: -25px !important;
+  margin-top: 10px !important;
+  float: right !important;
+}
+
+.inpu_addIcon {
+  color: aliceblue !important;
+  /* padding-left: 1px !important; */
+  font-size: small !important;
+  font-weight: 90px !important;
+  margin-left: 2px !important;
+}
+
+.chassisNo_add {
+  background-color: rgba(1, 1, 78, 0.842) !important;
+  color: aliceblue !important;
+  border-radius: 6px !important;
+  width: 98% !important;
+  font-size: small !important;
+}

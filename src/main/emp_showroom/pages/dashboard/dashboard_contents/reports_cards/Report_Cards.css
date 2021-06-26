@@ -1,0 +1,548 @@
+.card_cx {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+}
+.card_Bttm {
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.visitsNumberContainer_cx {
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+  padding-bottom: 20px;
+}
+
+.cost_cx {
+  margin-bottom: 15px !important;
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+}
+
+.tipics_cards_cx {
+  color: rgba(24, 24, 24, 0.521) !important;
+}
+
+.mostSales_tbl_cx {
+  margin-top: 50px !important;
+}
+
+.Botm_crd_grid {
+  margin-top: 30px !important;
+}
+
+.date_pikr {
+  margin-top: 10px !important;
+}
+
+.credit_recvd {
+  margin-top: 15px !important;
+}
+
+.vlo {
+  margin-top: 10px;
+  border-left: 2px solid rgb(58, 211, 135);
+  height: 70px;
+  margin-left: 15px;
+}
+
+.vloGss {
+  margin-top: 10px;
+  border-left: 2px solid rgb(223, 170, 56);
+  height: 70px;
+  margin-left: 15px;
+}
+
+.vloEx {
+  margin-top: 10px;
+  border-left: 2px solid rgb(54, 0, 202);
+  height: 70px;
+  margin-left: 15px;
+}
+
+.excx_servicemdl {
+  width: 60% !important;
+}
+
+.gasscxModel {
+  width: 60% !important;
+}
+
+.salescxModel {
+  width: 60% !important;
+}
+
+.btn_totStock {
+  color: whitesmoke !important;
+  background-color: #e97e03 !important;
+}
+
+.btn_moreCard {
+  background-color: #1d6927a1 !important;
+  color: whitesmoke !important;
+  text-transform: none !important;
+  margin-top: 12px !important;
+  margin-right: 10px !important;
+}
+
+.date_all {
+  background-color: #0d88b9b7 !important;
+  color: whitesmoke !important;
+  border-radius: 8px !important;
+  width: 30px !important;
+  height: 20px !important;
+  margin: auto !important;
+  text-align: center !important;
+  float: right !important;
+  margin-top: -30px !important;
+  margin-right: 10px !important;
+}
+
+.date_allExpences {
+  background-color: #0d88b9b7 !important;
+  color: whitesmoke !important;
+  border-radius: 8px !important;
+  width: 30px !important;
+  height: 20px !important;
+  margin: auto !important;
+  text-align: center !important;
+  float: right !important;
+  margin-top: -35px !important;
+}
+
+.date_allGrid {
+  margin: auto !important;
+}
+
+@media screen and (min-width: 200px) and (max-width: 359px) {
+  .vlo {
+    height: 60px;
+    margin-top: -30px;
+  }
+}
+@media screen and (min-width: 280px) and (max-width: 359px) {
+  .vloGss {
+    height: 60px;
+    margin-top: -30px;
+  }
+}
+@media screen and (min-width: 280px) and (max-width: 359px) {
+  .vloEx {
+    height: 60px;
+    margin-top: -30px;
+  }
+}
+
+@media screen and (min-width: 280px) and (max-width: 359px) {
+  .select_txt_cx {
+    margin-top: -80px !important;
+    margin-left: 20px !important;
+  }
+}
+
+@media screen and (min-width: 280px) and (max-width: 359px) {
+  .date_pikr {
+    margin-top: 1px !important;
+    margin-left: 14px !important;
+  }
+}
+
+@media screen and (min-width: 280px) and (max-width: 359px) {
+  .mainTotal_txt_cx {
+    margin-left: -30px !important;
+  }
+}
+@media screen and (min-width: 280px) and (max-width: 359px) {
+  .total_cx {
+    margin-left: -30px !important;
+  }
+}
+
+@media screen and (min-width: 280px) and (max-width: 359px) {
+  .line_chart_cx {
+    display: none;
+  }
+}
+@media screen and (min-width: 280px) and (max-width: 359px) {
+  .visitsNumberContainer_cx {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+}
+
+@media screen and (min-width: 280px) and (max-width: 359px) {
+  .credit_recvd_txt_cx {
+    margin-left: -30px !important;
+  }
+}
+
+@media screen and (min-width: 280px) and (max-width: 359px) {
+  .cost {
+    display: flex !important;
+    flex-direction: column !important;
+    margin-top: -20px !important;
+  }
+}
+@media screen and (min-width: 280px) and (max-width: 359px) {
+  .Cash_txt_cx {
+    margin-left: -30px !important;
+  }
+}
+
+@media screen and (min-width: 280px) and (max-width: 359px) {
+  .Soldgrid {
+    margin-top: 10px !important;
+  }
+}
+
+/* 360 start */
+
+@media screen and (min-width: 360px) and (max-width: 400px) {
+  .vlo {
+    height: 60px;
+    margin-top: -30px;
+    margin-left: 35px;
+  }
+}
+@media screen and (min-width: 360px) and (max-width: 400px) {
+  .vloGss {
+    height: 60px;
+    margin-top: -30px;
+    margin-left: 35px;
+  }
+}
+
+@media screen and (min-width: 360px) and (max-width: 400px) {
+  .vloEx {
+    height: 60px;
+    margin-top: -30px;
+    margin-left: 35px;
+  }
+}
+
+@media screen and (min-width: 360px) and (max-width: 400px) {
+  .select_txt_cx {
+    margin-top: -80px !important;
+    margin-left: 35px !important;
+  }
+}
+
+@media screen and (min-width: 360px) and (max-width: 400px) {
+  .date_pikr {
+    margin-top: 1px !important;
+    margin-left: 30px !important;
+  }
+}
+
+@media screen and (min-width: 360px) and (max-width: 400px) {
+  .mainTotal_txt_cx {
+    margin-left: -30px !important;
+    font-size: 15px;
+  }
+}
+@media screen and (min-width: 360px) and (max-width: 400px) {
+  .total_cx {
+    margin-left: -30px !important;
+  }
+}
+
+@media screen and (min-width: 360px) and (max-width: 400px) {
+  .line_chart_cx {
+    display: none;
+  }
+}
+@media screen and (min-width: 360px) and (max-width: 400px) {
+  .visitsNumberContainer_cx {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+}
+
+@media screen and (min-width: 360px) and (max-width: 400px) {
+  .credit_recvd_txt_cx {
+    margin-left: -30px !important;
+  }
+}
+
+@media screen and (min-width: 360px) and (max-width: 400px) {
+  .cost {
+    display: flex !important;
+    flex-direction: column !important;
+    margin-top: -20px !important;
+  }
+}
+@media screen and (min-width: 360px) and (max-width: 400px) {
+  .Cash_txt_cx {
+    margin-left: -30px !important;
+  }
+}
+
+@media screen and (min-width: 360px) and (max-width: 400px) {
+  .Soldgrid {
+    margin-top: 10px !important;
+  }
+}
+
+/* 401 start */
+
+@media screen and (min-width: 401px) and (max-width: 479px) {
+  .vlo {
+    margin-top: -15px;
+    border-left: 2px solid rgb(58, 211, 135);
+    height: 70px;
+    margin-left: 35px;
+  }
+}
+@media screen and (min-width: 401px) and (max-width: 479px) {
+  .vloGss {
+    margin-top: -15px;
+    border-left: 2px solid rgb(223, 170, 56);
+    height: 70px;
+    margin-left: 35px;
+  }
+}
+@media screen and (min-width: 401px) and (max-width: 479px) {
+  .vloEx {
+    margin-top: -15px;
+    border-left: 2px solid rgb(54, 0, 202);
+    height: 70px;
+    margin-left: 35px;
+  }
+}
+@media screen and (min-width: 401px) and (max-width: 479px) {
+  .select_txt_cx {
+    margin-top: -100px !important;
+    margin-left: 45px !important;
+    display: flex !important;
+  }
+}
+
+@media screen and (min-width: 401px) and (max-width: 479px) {
+  .date_pikr {
+    margin-top: 10px !important;
+    margin-left: 35px !important;
+  }
+}
+
+@media screen and (min-width: 401px) and (max-width: 479px) {
+  .mainTotal_txt_cx {
+    margin-left: -65px !important;
+  }
+}
+@media screen and (min-width: 401px) and (max-width: 479px) {
+  .total_cx {
+    margin-left: -60px !important;
+  }
+}
+
+@media screen and (min-width: 401px) and (max-width: 479px) {
+  .line_chart_cx {
+    display: none;
+  }
+}
+@media screen and (min-width: 401px) and (max-width: 479px) {
+  .visitsNumberContainer_cx {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+}
+
+@media screen and (min-width: 401px) and (max-width: 479px) {
+  .credit_recvd {
+    display: flex !important;
+    flex-direction: row !important;
+    margin-left: -110px !important;
+  }
+}
+
+@media screen and (min-width: 401px) and (max-width: 479px) {
+  .payGoing_cx {
+    display: flex !important;
+    flex-direction: row !important;
+  }
+}
+@media screen and (min-width: 401px) and (max-width: 479px) {
+  .payGoing_cx > .top {
+    margin-top: -60px !important;
+  }
+}
+
+@media screen and (min-width: 401px) and (max-width: 479px) {
+  .Credit_lbl_cx {
+    margin-left: 50px !important;
+    font-size: 16px !important;
+  }
+}
+
+@media screen and (min-width: 401px) and (max-width: 479px) {
+  .Soldgrid {
+    display: flex !important;
+    flex-direction: row !important;
+  }
+}
+
+/* 280 start */
+
+@media screen and (min-width: 280px) and (max-width: 653px) {
+  .btn_moreCard {
+    margin-top: -70px !important;
+    float: right !important;
+  }
+}
+
+@media screen and (min-width: 280px) and (max-width: 653px) {
+  .date_all {
+    margin-left: 20px !important;
+    float: left !important;
+  }
+}
+
+@media screen and (min-width: 280px) and (max-width: 653px) {
+  .date_allExpences {
+    margin-left: 20px !important;
+    float: left !important;
+  }
+}
+
+/* 570 start */
+
+@media screen and (min-width: 540px) and (max-width: 720px) {
+  .date_allExpences {
+    margin-left: 20px !important;
+    float: left !important;
+  }
+}
+@media screen and (min-width: 540px) and (max-width: 720px) {
+  .vlo {
+    margin-top: -15px;
+    border-left: 2px solid rgb(58, 211, 135);
+    height: 70px;
+    margin-left: 35px;
+  }
+}
+@media screen and (min-width: 540px) and (max-width: 720px) {
+  .vloGss {
+    margin-top: -15px;
+    border-left: 2px solid rgb(223, 170, 56);
+    height: 70px;
+    margin-left: 35px;
+  }
+}
+@media screen and (min-width: 540px) and (max-width: 720px) {
+  .vloEx {
+    margin-top: -15px;
+    border-left: 2px solid rgb(54, 0, 202);
+    height: 70px;
+    margin-left: 35px;
+  }
+}
+@media screen and (min-width: 540px) and (max-width: 720px) {
+  .select_txt_cx {
+    margin-top: -100px !important;
+    margin-left: 45px !important;
+    display: flex !important;
+  }
+}
+
+@media screen and (min-width: 540px) and (max-width: 720px) {
+  .date_pikr {
+    margin-top: 10px !important;
+    margin-left: 35px !important;
+  }
+}
+
+@media screen and (min-width: 540px) and (max-width: 720px) {
+  .mainTotal_txt_cx {
+    margin-left: -65px !important;
+  }
+}
+@media screen and (min-width: 540px) and (max-width: 720px) {
+  .total_cx {
+    margin-left: -60px !important;
+  }
+}
+
+@media screen and (min-width: 540px) and (max-width: 720px) {
+  .line_chart_cx {
+    display: none;
+  }
+}
+@media screen and (min-width: 540px) and (max-width: 720px) {
+  .visitsNumberContainer_cx {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+}
+
+@media screen and (min-width: 540px) and (max-width: 720px) {
+  .credit_recvd {
+    display: flex !important;
+    flex-direction: row !important;
+    margin-left: -110px !important;
+  }
+}
+
+@media screen and (min-width: 540px) and (max-width: 720px) {
+  .payGoing_cx {
+    display: flex !important;
+    flex-direction: row !important;
+  }
+}
+@media screen and (min-width: 540px) and (max-width: 720px) {
+  .payGoing_cx > .top {
+    margin-top: -60px !important;
+  }
+}
+
+@media screen and (min-width: 540px) and (max-width: 720px) {
+  .Credit_lbl_cx {
+    margin-left: 50px !important;
+    font-size: 16px !important;
+  }
+}
+
+@media screen and (min-width: 540px) and (max-width: 720px) {
+  .Soldgrid {
+    display: flex !important;
+    flex-direction: row !important;
+  }
+}
+
+.main_container_stock {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.16), 0 1px 2px rgba(0, 0, 0, 0.23);
+  background-color: white;
+  padding-bottom: 50px;
+  border-radius: 6px;
+  overflow: hidden !important;
+  margin-top: 30px !important;
+}
+
+.paper_stock {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  margin-top: 20px !important;
+}
+
+.form_stock {
+  width: 100% !important;
+  margin-top: 30px !important;
+}
+
+.txt_Labels_stock {
+  margin: auto !important;
+}
+
+.btn_addStock {
+  margin-top: 40px !important;
+  float: right !important;
+}
+
+.stock_TableModel {
+  width: 60% !important;
+}

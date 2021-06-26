@@ -4,8 +4,7 @@ import {HashRouter, Route, Switch, Redirect} from 'react-router-dom';
 // components
 import Layout from '../src/main/admin/Layout/Layout';
 // eslint-disable-next-line
-import Layoutshowroom from '../src/main/emp_showroom/Layout_showroom/Layout_showroom';
-//import LayoutAssistant from "../src/main/emp_assistant/assistant_Layout/Assistant_Layout";
+import Layoutshowroom from '../src/main/emp_showroom/Layout/Layout';
 
 // pages
 import Error from './main/error/Error';
@@ -30,9 +29,9 @@ export default function App() {
         />
         <PrivateRoute
           path={
-            roleMain === 'Showroom' ? '/admin' : '/error' // path={roleMain === 'Showroom' ? '/showroom' : '/error'} // component={Layoutshowroom}
+            roleMain === 'Showroom' ? '/showroom' : '/error' // path={roleMain === 'Showroom' ? '/showroom' : '/error'} // component={Layoutshowroom}
           }
-          component={Layout}
+          component={Layoutshowroom}
         />
 
         <PrivateRoute
@@ -86,8 +85,8 @@ export default function App() {
                       ? '/admin/dashboard'
                       : role === 'assistant'
                         ? '/admin/dashboard'
-                        : '/admin/dashboard',
-                } // : '/showroom/dashboard',
+                        : '/showroom/dashboard',
+                } 
                 }
               />
             : React.createElement(component, props)}

@@ -53,9 +53,17 @@ export default function AddNew_Model() {
                 .collection('gas')
                 .doc(eachGet.id)
                 .update({
-                  qty: parseInt(qty) + parseInt(eachGet.data().qty),
+                  qty:
+                    parseInt(qty) + parseInt(eachGet.data().qty),
                   empty_tanks:
-                    parseInt(emptyqty) + parseInt(eachGet.data().empty_tanks),
+                    parseInt(emptyqty) +
+                      parseInt(eachGet.data().empty_tanks) -
+                      parseInt(qty) <
+                    0
+                      ? 0
+                      : parseInt(emptyqty) +
+                        parseInt(eachGet.data().empty_tanks) -
+                        parseInt(qty),
                 })
                 .then(_ => {
                   window.location.reload();

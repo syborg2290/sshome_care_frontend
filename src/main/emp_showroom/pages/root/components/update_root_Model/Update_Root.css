@@ -1,0 +1,67 @@
+.main_container_rootUpdate {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.16), 0 1px 2px rgba(0, 0, 0, 0.23);
+  background-color: white;
+  padding-bottom: 50px;
+  border-radius: 6px;
+  overflow: hidden !important;
+  margin-top: 30px !important;
+}
+
+.title_rootUpdate {
+  padding-top: 30px !important;
+}
+
+.trustee_title_rootUpdate {
+  padding-top: 30px !important;
+}
+
+.titles_hr_rootUpdate {
+  background-color: #222a44 !important;
+  height: 1px !important;
+}
+
+.txt_Labels_rootUpdate {
+  margin: auto !important;
+}
+
+.paper_rootUpdate {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  margin-top: 20px !important;
+}
+
+.form_rootUpdate {
+  width: 100% !important;
+  margin-top: 30px !important;
+}
+
+.btn_addCust__rootUpdate {
+  margin-top: 40px !important;
+  float: right !important;
+}
+
+.txt_dayTopic_rootUpdate {
+  font-weight: 600 !important;
+  margin-top: 30px !important;
+}
+
+.txt_days_rootUpdate {
+  line-height: 31px !important;
+}
+
+.txt_days_rootUpdate_Checkbox {
+  line-height: 30px !important;
+}
+
+.btn_updateRoot {
+  margin-top: 40px !important;
+  float: right !important;
+}
+
+.validate_updateRoot {
+  color: red;
+  text-align: center !important;
+  font-weight: 600 !important;
+  margin-top: 20px;
+}

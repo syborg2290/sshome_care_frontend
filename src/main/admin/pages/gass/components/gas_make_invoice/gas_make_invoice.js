@@ -190,15 +190,13 @@ function Make_invoice () {
   }
 
   const handleQTYChange = (e, weight, row) => {
+    
     try {
       const { value } = e.target
-      db.collection('gas')
-        .doc(row?.id)
-        .get()
-        .then(doc => {
           if (gasType === 'fullgas') {
+            
             if (
-              Math.round(doc.docs[0]?.data()?.qty) >= (value === '' ? 1 : value)
+              Math.round(row.data.qty) >= (value === '' ? 1 : value)
             ) {
               setItemQty({
                 ...itemQty,
@@ -209,7 +207,7 @@ function Make_invoice () {
             }
           } else {
             if (
-              Math.round(doc.docs[0]?.data()?.empty_tanks) >=
+              Math.round(row.data.empty_tanks) >=
               (value === '' ? 1 : value)
             ) {
               setItemQty({
@@ -220,7 +218,7 @@ function Make_invoice () {
               NotificationManager.warning('Out Of Stock')
             }
           }
-        })
+        
     } catch (error) {
       console.error(error)
     }

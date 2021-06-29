@@ -82,6 +82,7 @@ export default function Add_Customer() {
   const [trustee1Id, setTrustee1Id] = useState(null);
   // eslint-disable-next-line
   const [trustee2Id, setTrustee2Id] = useState(null);
+   // eslint-disable-next-line
   const [isItNull, setIsItNull] = useState(null);
 
   let history = useHistory();
@@ -1797,13 +1798,7 @@ export default function Add_Customer() {
                   className="btn_MakeCustomer"
                   endIcon={<DoneIcon />}
                   onClick={submit}
-                  disabled={
-                    isItNull === undefined ||
-                    mid.length === 0 ||
-                    nic.length === 0
-                      ? true
-                      : false
-                  }
+                  
                 >
                   Submit
                 </Button>

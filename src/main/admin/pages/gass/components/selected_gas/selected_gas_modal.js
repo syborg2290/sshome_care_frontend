@@ -8,11 +8,12 @@ import Typography from "@material-ui/core/Typography";
 
 import db from "../../../../../../config/firebase.js";
 
-export default function SelectedGas_Model({ gasListProps }) {
+export default function SelectedGas_Model({ gasListProps, selectedGasType }) {
   const [isLoading, setLoading] = useState(false);
   const [gasData, setGasData] = useState([]);
   const [paymentWay, setpaymentWay] = useState("PayandGo");
-   const [gasType, setGasType] = useState("fullgas");
+  // eslint-disable-next-line
+  const [gasType, setGasType] = useState({});
   let history = useHistory();
 
   useEffect(() => {
@@ -21,6 +22,10 @@ export default function SelectedGas_Model({ gasListProps }) {
     });
 
     let gasListFromProp = gasListProps;
+    for (var i = 0; i < gasListFromProp.length; i++) {
+      let textWeight = gasListFromProp[i].substr(0, gasListFromProp[i].indexOf(" "));
+      gasType[textWeight] = 'fullgas'
+    }
 
     setGasData(gasListFromProp);
     // eslint-disable-next-line
@@ -34,25 +39,51 @@ export default function SelectedGas_Model({ gasListProps }) {
       .then((eachGasDoc) => {
         let allGas = eachGasDoc.docs;
         let nextGas = [];
+       
 
         for (var i = 0; i < gasData.length; i++) {
           let textWeight = gasData[i].substr(0, gasData[i].indexOf(" "));
 
-          let filGas = allGas.filter((ob) => ob.data().weight === textWeight);
+          let filGas1 = allGas.filter((ob) => ob.data().weight === textWeight);
+          let filGas = filGas1.filter((ob) => ob.data().stock_type === selectedGasType);
 
-          nextGas.push({
-            id: filGas[0]?.id,
-            data: filGas[0]?.data(),
-            qty: 1,
-            paymentWay: paymentWay,
-            gasType:gasType,
-            empty_weight:null,
-            customer: null,
-            withCylinder: true,
-          });
+          if (gasType[textWeight] === 'fullgas') {
+
+            if (parseInt(filGas[0].data()?.qty) > 0) {
+              
+              nextGas.push({
+                id: filGas[0]?.id,
+                data: filGas[0]?.data(),
+                qty: 1,
+                paymentWay: paymentWay,
+                gasType: gasType,
+                empty_weight: null,
+                customer: null,
+                withCylinder: true,
+              });
+              
+
+            }
+
+          } else {
+            if (parseInt(filGas[0].data().empty_tanks) > 0) {
+              nextGas.push({
+                id: filGas[0]?.id,
+                data: filGas[0]?.data(),
+                qty: 1,
+                paymentWay: paymentWay,
+                gasType: gasType,
+                empty_weight: null,
+                customer: null,
+                withCylinder: true,
+              });
+              
+              
+            }
+          }
         }
 
-        if (nextGas.length === gasData.length) {
+       
           if (paymentWay === "PayandGo") {
             setLoading(false);
             //sent to add customer
@@ -74,7 +105,7 @@ export default function SelectedGas_Model({ gasListProps }) {
 
             history.push(moveWith);
           }
-        }
+        
       });
   };
 
@@ -122,33 +153,7 @@ export default function SelectedGas_Model({ gasListProps }) {
         <Grid item xs={12} sm={12}>
           <hr />
         </Grid>
-         <Grid className="radioGrid_main" item xs={12} sm={12}>
-          <Typography className="method_title" variant="h5" gutterBottom>
-            Select Gas(Full/Empty) :
-          </Typography>
-        </Grid>
-        <Grid className="hr_rGrid_main" item xs={12} sm={4}>
-          <hr />
-        </Grid>
-        <Grid className="radioGrid_main" item xs={12} sm={8}></Grid>
-        <Grid className="radioGrid_main" item xs={12} sm={12}>
-          <Radio.Group
-            className="radio_btn"
-            defaultValue="fullgas"
-            buttonStyle="solid"
-            size="large"
-            onChange={(e) => {
-              setGasType(e.target.value);
-            }}
-          >
-            <Radio.Button className="btn_radio" value="fullgas">
-              Full Gas
-            </Radio.Button>
-            <Radio.Button className="btn_radio" value="emptygas">
-              Empty Gas
-            </Radio.Button>
-          </Radio.Group>
-        </Grid>
+
         <Grid item xs={12} sm={12}>
           <hr />
         </Grid>
@@ -185,7 +190,34 @@ export default function SelectedGas_Model({ gasListProps }) {
                   <Row>
                     <Col span={5}> {gas}</Col>
                     <Col span={2}></Col>
-                    <Col span={12}></Col>
+                    <Col span={12}>
+                      <Grid className="radioGrid_main" item xs={12} sm={12}>
+                        <Radio.Group
+                          className="radio_btn"
+                          defaultValue="fullgas"
+                          buttonStyle="solid"
+                          size="large"
+                          onChange={(e) => {
+                            if (Object.keys(gasType).includes(gas)) {
+                              let textWeight = gas.substr(0, gas.indexOf(" "));
+                              gasType[textWeight] = e.target.value
+                            } else {
+                              let textWeight = gas.substr(0, gas.indexOf(" "));
+                              gasType[textWeight] = e.target.value;
+                            }
+
+                            console.log(gasType)
+                          }}
+                        >
+                          <Radio.Button className="btn_radio" value="fullgas">
+                            Full Gas
+                          </Radio.Button>
+                          <Radio.Button className="btn_radio" value="emptygas">
+                            Empty Gas
+                          </Radio.Button>
+                        </Radio.Group>
+                      </Grid>
+                    </Col>
                     <Col span={5}>
                       <span className="icons_Close">
                         <CloseOutlined onClick={() => removeGas(gas)} />

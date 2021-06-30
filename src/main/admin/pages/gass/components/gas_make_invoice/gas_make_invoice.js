@@ -34,7 +34,7 @@ import './gas_invoice.css'
 // components
 // import AddSerialNumber from "./components/Add_Serial_Number";
 
-function Make_invoice () {
+function Make_invoice() {
   const location = useLocation()
   const [allRoot, setAllRoot] = useState([])
   const [loadingsubmit, setLoadingSubmit] = useState(false)
@@ -62,7 +62,6 @@ function Make_invoice () {
   const [intialTimestamp, setInititialTimestamp] = useState(null)
   const [deadlineTimestamp, setDeadlineTimestamp] = useState(null)
   const [isFullPayment, setIsFullPayment] = useState(false)
-  const [gasType, setGasType] = useState('fullgas')
   const [documentCharges, setDocumentCharges] = useState(0)
   const [invoiceStatus, setInvoiceStatus] = useState('new')
   // eslint-disable-next-line
@@ -117,17 +116,17 @@ function Make_invoice () {
           .get()
           .then(reGasDow => {
             setDpayment(
-              obj.gasType === 'fullgas'
+              obj.gasType[obj.data?.weight] === 'fullgas'
                 ? reGasDow.docs[0].data().downpayment
                 : reGasDow.docs[0].data().emptydownpayment
             )
             setItemNOI(
-              obj.gasType === 'fullgas'
+              obj.gasType[obj.data?.weight] === 'fullgas'
                 ? reGasDow.docs[0].data().noOfInstallments
                 : reGasDow.docs[0].data().emptynoOfInstallments
             )
             setItemAPI(
-              obj.gasType === 'fullgas'
+              obj.gasType[obj.data?.weight] === 'fullgas'
                 ? reGasDow.docs[0].data().amountPerIns
                 : reGasDow.docs[0].data().emptyamountPerIns
             )
@@ -135,12 +134,12 @@ function Make_invoice () {
         keepDataQTY[obj.data?.weight] = obj.qty
         keepDataDP[obj.data?.weight] =
           obj.paymentWay === 'PayandGo'
-            ? obj.gasType === 'fullgas'
+            ? obj.gasType[obj.data?.weight] === 'fullgas'
               ? obj.data?.saleprice
               : obj.data?.emptysaleprice
-            : obj.gasType === 'fullgas'
-            ? obj.data?.price
-            : obj.data?.emptycashprice
+            : obj.gasType[obj.data?.weight] === 'fullgas'
+              ? obj.data?.price
+              : obj.data?.emptycashprice
         keepDataDiscount[obj.data?.weight] = 0
         obj.empty_weight = obj.data?.weight
         tableData.push(obj)
@@ -150,11 +149,7 @@ function Make_invoice () {
         } else {
           setIsFullPayment(true)
         }
-        if (obj.gasType === 'fullgas') {
-          setGasType('fullgas')
-        } else {
-          setGasType('emptygas')
-        }
+
       })
       setItemDiscount(keepDataDiscount)
       setItemQty(keepDataQTY)
@@ -182,7 +177,7 @@ function Make_invoice () {
         subTotalValue +
         (itemDP[tablerows[a].data?.weight] -
           itemDiscount[tablerows[a].data?.weight]) *
-          itemQty[tablerows[a].data?.weight]
+        itemQty[tablerows[a].data?.weight]
     }
     let gamiam = gamisaraniamount === '' ? 0 : parseInt(gamisaraniamount)
     let fTotoS = subTotalValue - gamiam <= 0 ? 0 : subTotalValue - gamiam
@@ -190,35 +185,35 @@ function Make_invoice () {
   }
 
   const handleQTYChange = (e, weight, row) => {
-    
+
     try {
       const { value } = e.target
-          if (gasType === 'fullgas') {
-            
-            if (
-              Math.round(row.data.qty) >= (value === '' ? 1 : value)
-            ) {
-              setItemQty({
-                ...itemQty,
-                [row.data.weight]: value
-              })
-            } else {
-              NotificationManager.warning('Out Of Stock')
-            }
-          } else {
-            if (
-              Math.round(row.data.empty_tanks) >=
-              (value === '' ? 1 : value)
-            ) {
-              setItemQty({
-                ...itemQty,
-                [row.data.weight]: value
-              })
-            } else {
-              NotificationManager.warning('Out Of Stock')
-            }
-          }
-        
+      if (row.gasType[row.data?.weight] === 'fullgas') {
+
+        if (
+          Math.round(row.data.qty) >= (value === '' ? 1 : value)
+        ) {
+          setItemQty({
+            ...itemQty,
+            [row.data.weight]: value
+          })
+        } else {
+          NotificationManager.warning('Out Of Stock')
+        }
+      } else {
+        if (
+          Math.round(row.data.empty_tanks) >=
+          (value === '' ? 1 : value)
+        ) {
+          setItemQty({
+            ...itemQty,
+            [row.data.weight]: value
+          })
+        } else {
+          NotificationManager.warning('Out Of Stock')
+        }
+      }
+
     } catch (error) {
       console.error(error)
     }
@@ -297,22 +292,22 @@ function Make_invoice () {
                   icon: <PrinterFilled className='confo_icon' />,
                   okText: 'Yes',
                   cancelText: 'No',
-                  async onOk () {
+                  async onOk() {
                     var arrayPassingItems = []
 
                     tablerows.forEach(one => {
                       let objItem = {
                         weight: one.data.weight,
                         qty: itemQty[one.data.weight],
-                        gasType: gasType,
+                        gasType: one.gasType[one.data?.weight],
                         unit:
                           one.paymentWay === 'PayandGo'
                             ? one.withCylinder
                               ? one.data.saleprice
                               : one.data.withoutSaleprice
                             : one.withCylinder
-                            ? one.data.price
-                            : one.data.withoutCprice,
+                              ? one.data.price
+                              : one.data.withoutCprice,
                         price: subTotalFunc() - totalDiscount
                       }
                       arrayPassingItems.push(objItem)
@@ -333,7 +328,7 @@ function Make_invoice () {
                       history.push(moveWith)
                     })
                   },
-                  async onCancel () {
+                  async onCancel() {
                     await invoiceIntoDb().then(() => {
                       history.push('/admin/ui/gass')
                     })
@@ -349,22 +344,22 @@ function Make_invoice () {
           icon: <PrinterFilled className='confo_icon' />,
           okText: 'Yes',
           cancelText: 'No',
-          async onOk () {
+          async onOk() {
             var arrayPassingItems = []
 
             tablerows.forEach(one => {
               let objItem = {
                 weight: one.data.weight,
                 qty: itemQty[one.data.weight],
-                gasType: gasType,
+                gasType: one.gasType[one.data?.weight],
                 unit:
                   one.paymentWay === 'PayandGo'
                     ? one.withCylinder
                       ? one.data.saleprice
                       : one.data.withoutSaleprice
                     : one.withCylinder
-                    ? one.data.price
-                    : one.data.withoutCprice,
+                      ? one.data.price
+                      : one.data.withoutCprice,
                 price: subTotalFunc() - totalDiscount
               }
               arrayPassingItems.push(objItem)
@@ -384,7 +379,7 @@ function Make_invoice () {
               history.push(moveWith)
             })
           },
-          async onCancel () {
+          async onCancel() {
             await invoiceIntoDb().then(() => {
               history.push('/admin/ui/gass')
             })
@@ -459,7 +454,7 @@ function Make_invoice () {
             tablerows[0]?.customer?.customerImageFileFront === null
               ? 'Avatar2.png'
               : tablerows[0]?.customer?.customerImageFileFront?.name +
-                  randomNumber
+              randomNumber
           )
           .getDownloadURL()
           .then(customerImageURLFront => {
@@ -469,7 +464,7 @@ function Make_invoice () {
                 tablerows[0]?.customer?.customerImageFile2Back === null
                   ? 'avatar1132.jpg'
                   : tablerows[0]?.customer?.customerImageFile2Back?.name +
-                      randomNumber
+                  randomNumber
               )
               .getDownloadURL()
               .then(customerImageURLBack => {
@@ -479,7 +474,7 @@ function Make_invoice () {
                     tablerows[0]?.customer?.trustee1ImageFile1Front === null
                       ? 'Avatar2.png'
                       : tablerows[0]?.customer?.trustee1ImageFile1Front?.name +
-                          randomNumber
+                      randomNumber
                   )
                   .getDownloadURL()
                   .then(trustee1ImageURLFront => {
@@ -489,7 +484,7 @@ function Make_invoice () {
                         tablerows[0]?.customer?.trustee1ImageFile2Back === null
                           ? 'avatar1132.jpg'
                           : tablerows[0]?.customer?.trustee1ImageFile2Back
-                              ?.name + randomNumber
+                            ?.name + randomNumber
                       )
                       .getDownloadURL()
                       .then(trustee1ImageURLBack => {
@@ -500,7 +495,7 @@ function Make_invoice () {
                               null
                               ? 'Avatar2.png'
                               : tablerows[0]?.customer?.trustee2ImageFile1Front
-                                  ?.name + randomNumber
+                                ?.name + randomNumber
                           )
                           .getDownloadURL()
                           .then(trustee2ImageURLFront => {
@@ -511,8 +506,8 @@ function Make_invoice () {
                                   ?.trustee2ImageFile2Back === null
                                   ? 'avatar1132.jpg'
                                   : tablerows[0]?.customer
-                                      ?.trustee2ImageFile2Back?.name +
-                                      randomNumber
+                                    ?.trustee2ImageFile2Back?.name +
+                                  randomNumber
                               )
                               .getDownloadURL()
                               .then(async trustee2ImageURLBack => {
@@ -565,14 +560,15 @@ function Make_invoice () {
                                               ? 0
                                               : itemDiscount[one.weight],
                                           weight: one.weight,
-                                          data: one.data
+                                          data: one.data,
+                                          gasType: one.gasType[one.weight]
                                         }
                                         arrayItems.push(objItem)
                                       })
                                       db.collection('gas_selling_history').add({
                                         invoice_number: invoiceNumber,
                                         gas: arrayItems,
-                                        gasType: gasType,
+                                        gasType: '',
                                         paymentWay: isFullPayment
                                           ? 'FullPayment'
                                           : 'PayandGo',
@@ -588,7 +584,7 @@ function Make_invoice () {
                                         .add({
                                           invoice_number: invoiceNumber,
                                           items: arrayItems,
-                                          gasType: gasType,
+                                          gasType: '',
                                           customer_id:
                                             tablerows[0].customer.customerId,
                                           nic:
@@ -715,19 +711,20 @@ function Make_invoice () {
                                                       .doc(itemUDoc.id)
                                                       .update({
                                                         qty:
-                                                          gasType === 'fullgas'
+                                                          itemUDoc.gasType[itemUDoc.data
+                                                            .weight] === 'fullgas'
                                                             ? Math.round(
-                                                                newArray.data()
-                                                                  .qty
-                                                              ) -
-                                                              itemQty[
-                                                                itemUDoc.data
-                                                                  .weight
-                                                              ]
+                                                              newArray.data()
+                                                                .qty
+                                                            ) -
+                                                            itemQty[
+                                                            itemUDoc.data
+                                                              .weight
+                                                            ]
                                                             : Math.round(
-                                                                newArray.data()
-                                                                  .qty
-                                                              )
+                                                              newArray.data()
+                                                                .qty
+                                                            )
                                                       })
                                                     db.collection('gas')
                                                       .where(
@@ -759,10 +756,10 @@ function Make_invoice () {
                                                                     parseInt(
                                                                       !itemUDoc.withCylinder
                                                                         ? itemQty[
-                                                                            itemUDoc
-                                                                              .data
-                                                                              .weight
-                                                                          ]
+                                                                        itemUDoc
+                                                                          .data
+                                                                          .weight
+                                                                        ]
                                                                         : 0
                                                                     )
                                                                 })
@@ -776,42 +773,44 @@ function Make_invoice () {
                                                       .doc(itemUDoc.id)
                                                       .update({
                                                         qty:
-                                                          gasType === 'fullgas'
+                                                          itemUDoc.gasType[itemUDoc.data
+                                                            .weight] === 'fullgas'
                                                             ? Math.round(
-                                                                newArray.data()
-                                                                  .qty
-                                                              ) -
-                                                              itemQty[
-                                                                itemUDoc.data
-                                                                  .weight
-                                                              ]
+                                                              newArray.data()
+                                                                .qty
+                                                            ) -
+                                                            itemQty[
+                                                            itemUDoc.data
+                                                              .weight
+                                                            ]
                                                             : Math.round(
-                                                                newArray.data()
-                                                                  .qty
-                                                              ),
+                                                              newArray.data()
+                                                                .qty
+                                                            ),
                                                         empty_tanks:
-                                                          gasType === 'fullgas'
+                                                          itemUDoc.gasType[itemUDoc.data
+                                                            .weight] === 'fullgas'
                                                             ? Math.round(
-                                                                newArray.data()
-                                                                  .empty_tanks
-                                                              ) +
-                                                              parseInt(
-                                                                !itemUDoc.withCylinder
-                                                                  ? itemQty[
-                                                                      itemUDoc
-                                                                        .data
-                                                                        .weight
-                                                                    ]
-                                                                  : 0
-                                                              )
-                                                            : Math.round(
-                                                                newArray.data()
-                                                                  .empty_tanks
-                                                              ) -
-                                                              itemQty[
-                                                                itemUDoc.data
+                                                              newArray.data()
+                                                                .empty_tanks
+                                                            ) +
+                                                            parseInt(
+                                                              !itemUDoc.withCylinder
+                                                                ? itemQty[
+                                                                itemUDoc
+                                                                  .data
                                                                   .weight
-                                                              ]
+                                                                ]
+                                                                : 0
+                                                            )
+                                                            : Math.round(
+                                                              newArray.data()
+                                                                .empty_tanks
+                                                            ) -
+                                                            itemQty[
+                                                            itemUDoc.data
+                                                              .weight
+                                                            ]
                                                       })
                                                   }
                                                 }
@@ -860,8 +859,8 @@ function Make_invoice () {
                                             itemDP[one.data.weight] === ''
                                               ? 0
                                               : parseInt(
-                                                  itemDP[one.data.weight]
-                                                ),
+                                                itemDP[one.data.weight]
+                                              ),
                                           qty: parseInt(
                                             itemQty[one.data.weight]
                                           ),
@@ -870,14 +869,15 @@ function Make_invoice () {
                                               ? 0
                                               : itemDiscount[one.data.weight],
                                           weight: one.data.weight,
-                                          data: one.data
+                                          data: one.data,
+                                          gasType: one.gasType[one.weight]
                                         }
                                         arrayItems.push(objItem)
                                       })
                                       db.collection('gas_selling_history').add({
                                         invoice_number: invoiceNumber,
                                         gas: arrayItems,
-                                        gasType: gasType,
+                                        gasType: '',
                                         paymentWay: isFullPayment
                                           ? 'FullPayment'
                                           : 'PayandGo',
@@ -893,7 +893,7 @@ function Make_invoice () {
                                         .add({
                                           invoice_number: invoiceNumber,
                                           items: arrayItems,
-                                          gasType: gasType,
+                                          gasType: '',
                                           customer_id: cust.id,
                                           nic:
                                             tablerows[0].customer.customerNic,
@@ -1019,19 +1019,20 @@ function Make_invoice () {
                                                       .doc(itemUDoc.id)
                                                       .update({
                                                         qty:
-                                                          gasType === 'fullgas'
+                                                          itemUDoc.gasType[itemUDoc.data
+                                                            .weight] === 'fullgas'
                                                             ? Math.round(
-                                                                newArray.data()
-                                                                  .qty
-                                                              ) -
-                                                              itemQty[
-                                                                itemUDoc.data
-                                                                  .weight
-                                                              ]
+                                                              newArray.data()
+                                                                .qty
+                                                            ) -
+                                                            itemQty[
+                                                            itemUDoc.data
+                                                              .weight
+                                                            ]
                                                             : Math.round(
-                                                                newArray.data()
-                                                                  .qty
-                                                              )
+                                                              newArray.data()
+                                                                .qty
+                                                            )
                                                       })
                                                     db.collection('gas')
                                                       .where(
@@ -1063,10 +1064,10 @@ function Make_invoice () {
                                                                     parseInt(
                                                                       !itemUDoc.withCylinder
                                                                         ? itemQty[
-                                                                            itemUDoc
-                                                                              .data
-                                                                              .weight
-                                                                          ]
+                                                                        itemUDoc
+                                                                          .data
+                                                                          .weight
+                                                                        ]
                                                                         : 0
                                                                     )
                                                                 })
@@ -1080,42 +1081,44 @@ function Make_invoice () {
                                                       .doc(itemUDoc.id)
                                                       .update({
                                                         qty:
-                                                          gasType === 'fullgas'
+                                                          itemUDoc.gasType[itemUDoc.data
+                                                            .weight] === 'fullgas'
                                                             ? Math.round(
-                                                                newArray.data()
-                                                                  .qty
-                                                              ) -
-                                                              itemQty[
-                                                                itemUDoc.data
-                                                                  .weight
-                                                              ]
+                                                              newArray.data()
+                                                                .qty
+                                                            ) -
+                                                            itemQty[
+                                                            itemUDoc.data
+                                                              .weight
+                                                            ]
                                                             : Math.round(
-                                                                newArray.data()
-                                                                  .qty
-                                                              ),
+                                                              newArray.data()
+                                                                .qty
+                                                            ),
                                                         empty_tanks:
-                                                          gasType === 'fullgas'
+                                                          itemUDoc.gasType[itemUDoc.data
+                                                            .weight] === 'fullgas'
                                                             ? Math.round(
-                                                                newArray.data()
-                                                                  .empty_tanks
-                                                              ) +
-                                                              parseInt(
-                                                                !itemUDoc.withCylinder
-                                                                  ? itemQty[
-                                                                      itemUDoc
-                                                                        .data
-                                                                        .weight
-                                                                    ]
-                                                                  : 0
-                                                              )
-                                                            : Math.round(
-                                                                newArray.data()
-                                                                  .empty_tanks
-                                                              ) -
-                                                              itemQty[
-                                                                itemUDoc.data
+                                                              newArray.data()
+                                                                .empty_tanks
+                                                            ) +
+                                                            parseInt(
+                                                              !itemUDoc.withCylinder
+                                                                ? itemQty[
+                                                                itemUDoc
+                                                                  .data
                                                                   .weight
-                                                              ]
+                                                                ]
+                                                                : 0
+                                                            )
+                                                            : Math.round(
+                                                              newArray.data()
+                                                                .empty_tanks
+                                                            ) -
+                                                            itemQty[
+                                                            itemUDoc.data
+                                                              .weight
+                                                            ]
                                                       })
                                                   }
                                                 }
@@ -1152,14 +1155,15 @@ function Make_invoice () {
               ? 0
               : itemDiscount[one.data.weight],
           weight: one.data.weight,
-          data: one.data
+          data: one.data,
+          gasType: one.gasType[one.weight]
         }
         arrayItems.push(objItem)
       })
       db.collection('gas_selling_history').add({
         invoice_number: invoiceNumber,
         gas: arrayItems,
-        gasType: gasType,
+        gasType: '',
         paymentWay: isFullPayment ? 'FullPayment' : 'PayandGo',
         selectedType: selectedType,
         total: subTotalFunc() - (totalDiscount === '' ? 0 : totalDiscount),
@@ -1169,7 +1173,7 @@ function Make_invoice () {
       db.collection('gas_invoice').add({
         invoice_number: invoiceNumber,
         items: arrayItems,
-        gasType: gasType,
+        gasType: '',
         customer_id: null,
         mid: null,
         installemtnDay: null,
@@ -1211,9 +1215,10 @@ function Make_invoice () {
                 .doc(itemUDoc.id)
                 .update({
                   qty:
-                    gasType === 'fullgas'
+                    itemUDoc.gasType[itemUDoc.data
+                      .weight] === 'fullgas'
                       ? Math.round(newArray.data().qty) -
-                        itemQty[itemUDoc.data.weight]
+                      itemQty[itemUDoc.data.weight]
                       : Math.round(newArray.data().qty)
                 })
               db.collection('gas')
@@ -1243,20 +1248,22 @@ function Make_invoice () {
                 .doc(itemUDoc.id)
                 .update({
                   qty:
-                    gasType === 'fullgas'
+                    itemUDoc.gasType[itemUDoc.data
+                      .weight] === 'fullgas'
                       ? Math.round(newArray.data().qty) -
-                        itemQty[itemUDoc.data.weight]
+                      itemQty[itemUDoc.data.weight]
                       : Math.round(newArray.data().qty),
                   empty_tanks:
-                    gasType === 'fullgas'
+                    itemUDoc.gasType[itemUDoc.data
+                      .weight] === 'fullgas'
                       ? Math.round(newArray.data().empty_tanks) +
-                        parseInt(
-                          !itemUDoc.withCylinder
-                            ? itemQty[itemUDoc.data.weight]
-                            : 0
-                        )
+                      parseInt(
+                        !itemUDoc.withCylinder
+                          ? itemQty[itemUDoc.data.weight]
+                          : 0
+                      )
                       : Math.round(newArray.data().empty_tanks) -
-                        itemQty[itemUDoc.data.weight]
+                      itemQty[itemUDoc.data.weight]
                 })
             }
           }
@@ -1279,7 +1286,7 @@ function Make_invoice () {
           setLoadingNicSubmit(false)
           if (
             reGami.docs[0].data().currentDeposit -
-              (subTotalFunc() - totalDiscount) <
+            (subTotalFunc() - totalDiscount) <
             0
           ) {
             NotificationManager.warning(
@@ -1387,25 +1394,25 @@ function Make_invoice () {
                         <TableRow key={row.data.weight}>
                           <TableCell>{row.data.weight}</TableCell>
                           <TableCell align='right'>
-                           {gasType === 'fullgas' && row.withCylinder !== true
-                                 ?  <TextField
-                              key={row.empty_weight}
-                              id={row.empty_weight.toString()}
-                              className='txt_qty'
-                              variant='outlined'
-                              size='small'
-                              InputProps={{ inputProps: { min: 1 } }}
-                              type='number'
-                              fullWidth
-                              value={row.empty_weight}
-                              onChange={e => {
-                                if (e.target.value !== '') {
-                                  
-                                  handleEmptyWeight(e, row.data.weight, row)
-                                }
-                              }}
-                            />:"None"
-                      }
+                            {row.gasType[row.data.weight] === 'fullgas' && row.withCylinder !== true
+                              ? <TextField
+                                key={row.empty_weight}
+                                id={row.empty_weight.toString()}
+                                className='txt_qty'
+                                variant='outlined'
+                                size='small'
+                                InputProps={{ inputProps: { min: 1 } }}
+                                type='number'
+                                fullWidth
+                                value={row.empty_weight}
+                                onChange={e => {
+                                  if (e.target.value !== '') {
+
+                                    handleEmptyWeight(e, row.data.weight, row)
+                                  }
+                                }}
+                              /> : "None"
+                            }
                           </TableCell>
 
                           <TableCell align='right'>
@@ -1450,7 +1457,7 @@ function Make_invoice () {
                             />
                           </TableCell>
                           <TableCell align='right'>
-                            {gasType === 'fullgas'
+                            {row.gasType[row.data.weight] === 'fullgas'
                               ? <Checkbox
                                 defaultChecked={true}
                                 onChange={e => {
@@ -1491,7 +1498,7 @@ function Make_invoice () {
                                     setTableRows([...currentTableRowsAr])
                                   }
                                 }}
-                              />:"None"
+                              /> : "None"
                             }
                           </TableCell>
 
@@ -1531,7 +1538,7 @@ function Make_invoice () {
                               value={
                                 parseInt(
                                   itemDP[row.data.weight] -
-                                    itemDiscount[row.data.weight]
+                                  itemDiscount[row.data.weight]
                                 ) * itemQty[row.data.weight]
                               }
                               displayType={'text'}
@@ -1931,8 +1938,8 @@ function Make_invoice () {
                           color='primary'
                           disabled={
                             !gamisarani ||
-                            loadingNicsubmit ||
-                            gamisaraniNic.length === 0
+                              loadingNicsubmit ||
+                              gamisaraniNic.length === 0
                               ? true
                               : false
                           }
@@ -2161,7 +2168,7 @@ function Make_invoice () {
                             onChange={handleChange}
                             value={selectedType}
                           >
-                             <option onChange={handleChange} value={'main'}>
+                            <option onChange={handleChange} value={'main'}>
                               main
                             </option>
                             <option onChange={handleChange} value={'shop'}>
@@ -2196,12 +2203,12 @@ function Make_invoice () {
                     className='btn_addCustomer'
                     disabled={
                       dates === '' ||
-                      dates === 0 ||
-                      loadingsubmit ||
-                      itemDP.length === 0 ||
-                      tablerows.length === 0 ||
-                      intialTimestamp === null ||
-                      rootVillage.length === 0
+                        dates === 0 ||
+                        loadingsubmit ||
+                        itemDP.length === 0 ||
+                        tablerows.length === 0 ||
+                        intialTimestamp === null ||
+                        rootVillage.length === 0
                         ? true
                         : false
                     }

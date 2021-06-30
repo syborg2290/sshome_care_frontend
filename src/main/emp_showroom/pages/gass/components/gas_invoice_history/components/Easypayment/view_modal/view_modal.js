@@ -472,6 +472,15 @@ export default function View_Model({ items_list_props, data }) {
                   <Grid item xs={12} sm={7}>
                     <p>{eachItem.qty}</p>
                   </Grid>
+                  <Grid className="lbl_topis" item xs={12} sm={4}>
+                    Full or Empty
+                  </Grid>
+                  <Grid item xs={12} sm={1}>
+                    :
+                  </Grid>
+                  <Grid item xs={12} sm={7}>
+                    <p>{eachItem?.gasType === undefined ? '':eachItem?.gasType}</p>
+                  </Grid>
                   <Grid item xs={12} sm={12}>
                     <hr />
                   </Grid>

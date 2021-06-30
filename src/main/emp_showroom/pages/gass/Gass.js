@@ -33,7 +33,7 @@ import GasStockUpdate from './components/update_stocks/Update_gas_stocks'
 
 import db from '../../../../config/firebase.js'
 
-function createData (
+function createData(
   Weight,
   Qty,
   empty_tanks,
@@ -59,7 +59,7 @@ function createData (
   }
 }
 
-export default function Gass () {
+export default function Gass() {
   // eslint-disable-next-line
   const [allTableData, setAllTableData] = useState([])
   const [tableData, setTableData] = useState([])
@@ -168,7 +168,7 @@ export default function Gass () {
         }}
       >
         <div className='confoModel_body'>
-          <SelectGassModel gasListProps={selectedGas} />
+          <SelectGassModel gasListProps={selectedGas} selectedGasType={selectedGasType} />
         </div>
       </Modal>
 
@@ -273,7 +273,7 @@ export default function Gass () {
               variant='contained'
               onClick={() => {
                 let moveWith = {
-                  pathname: '/showroom/ui/gas_invoice_history',
+                  pathname: '/showrrom/ui/gas_invoice_history',
                   search: '?query=abc',
                   state: {}
                 }
@@ -311,10 +311,10 @@ export default function Gass () {
               Add/Update Gas
             </Button>
           </Grid>
-           <Grid item xs={12} sm={3}>
+          <Grid item xs={12} sm={3}>
             <Button
               variant='contained'
-              onClick={()=>{
+              onClick={() => {
                 setGasStock(true)
               }}
               endIcon={<AddIcon />}
@@ -354,7 +354,7 @@ export default function Gass () {
             </TableHead>
             <TableBody>
               {tableData.map(row => (
-                <TableRow key={row.Weight}>
+                <TableRow key={row.Weight + row.type}>
                   <TableCell component='th' scope='row'>
                     {row.Weight}
                   </TableCell>
@@ -378,8 +378,11 @@ export default function Gass () {
                           selectedGasType === row.type
                         ) {
                           selectedGas.splice(selectedGas.indexOf(row.Weight))
-                        } else {
                           if (selectedGas.length === 0) {
+                            setSelectedGasType(null)
+                          }
+                        } else {
+                          if (selectedGas.length === 0 || selectedGasType === null || (row.type === selectedGasType)) {
                             let textWeight = row.Weight.substr(
                               0,
                               row.Weight.indexOf(' ')
@@ -397,14 +400,14 @@ export default function Gass () {
                               })
                           } else {
                             NotificationManager.warning(
-                              'One weight for the one time'
+                              'Must be same stock type'
                             )
                           }
                         }
                       }}
                     />
                   </TableCell>
-                 
+
                 </TableRow>
               ))}
             </TableBody>

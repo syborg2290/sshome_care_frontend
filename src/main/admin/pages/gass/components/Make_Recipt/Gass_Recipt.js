@@ -19,7 +19,7 @@ import moment from "moment";
 import "./Gass_Recipt.css";
 
 function createData(item, qty,fullEmpty ,unit, price) {
-  return { item, qty, unit, price };
+  return { item, qty,fullEmpty ,unit, price };
 }
 
 class GassRecipt extends React.Component {
@@ -33,6 +33,7 @@ class GassRecipt extends React.Component {
     this.state.total = this.props.prop?.total;
     if (this.props.prop?.list !== undefined) {
       this.props.prop.list.forEach((ele) => {
+       
         this.state.rows.push(
           createData(ele?.weight + " Kg", ele?.qty,ele?.gasType,ele?.unit, ele?.price)
         );
@@ -102,6 +103,7 @@ class GassRecipt extends React.Component {
                       </TableHead>
                       <TableBody>
                         {this.state.rows.map((row) => (
+                          
                           <TableRow key={row.item}>
                             <TableCell component="th" scope="row">
                               {row.item}

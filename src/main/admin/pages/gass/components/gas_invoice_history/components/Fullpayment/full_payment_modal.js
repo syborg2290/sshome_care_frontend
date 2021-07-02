@@ -16,6 +16,7 @@ export default function Full_Payment_Model({ items_list_props, data }) {
           discount: each.discount,
           qty: each.qty,
           withCylinder: each.withCylinder ? "Yes" : "No",
+          gasType:each.gasType
         },
       ]);
     });
@@ -81,6 +82,7 @@ export default function Full_Payment_Model({ items_list_props, data }) {
         </form>
 
         {itemsList.map((eachItem) => {
+          
           return (
             <Grid key={eachItem.weight} container spacing={2}>
               {" "}
@@ -155,7 +157,7 @@ export default function Full_Payment_Model({ items_list_props, data }) {
                     :
                   </Grid>
                   <Grid item xs={12} sm={7}>
-                     <p>{eachItem?.gasType === undefined ? '':eachItem?.gasType}</p>
+                      <p>{eachItem?.gasType === undefined ? '':eachItem?.gasType}</p>
                   </Grid>
               <Grid item xs={12} sm={12}>
                 <hr />

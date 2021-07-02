@@ -79,6 +79,7 @@ export default function Update_Model({
 
   const [shortage, setShortage] = useState(0)
   const [arreasAmount, setArreasAmount] = useState(0)
+  const [isArreas, setIsArreas] = useState(false);
 
   const { confirm } = Modal
 
@@ -346,6 +347,10 @@ export default function Update_Model({
           parseInt(dueAmount - paidAmount) < 0
             ? 0
             : parseInt(dueAmount - paidAmount)
+       
+        if (parseInt(dueAmount - paidAmount) > 0) {
+          setIsArreas(true);
+        }
 
         setArreasAmount(dueAmountOfArreas)
         if (parseInt(installmentCount) <= parseInt(totalMonthsOfInst - 1)) {
@@ -358,8 +363,6 @@ export default function Update_Model({
           )
 
         } else {
-
-
 
           setInstallmentAmount(dueAmountOfArreas + parseInt(instAmountProp))
           setBalance(
@@ -467,6 +470,7 @@ export default function Update_Model({
           gamisarani_amount: parseInt(gamisaraniamount),
           shortage: shortage === '' ? 0 : shortage,
           type: type,
+          isArreas: isArreas,
           date: updateTimestamp
         })
       })

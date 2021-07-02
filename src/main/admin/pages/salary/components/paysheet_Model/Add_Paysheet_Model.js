@@ -51,9 +51,9 @@ async function getGasshort(root, isFirstSalary, lastSalaryDate, currentDate) {
       } else {
         let seeBool3 =
           new Date(reGas.docs[i].data()?.date.seconds * 1000) >
-            new Date(lastSalaryDate.seconds * 1000) &&
+          new Date(lastSalaryDate.seconds * 1000) &&
           new Date(reGas.docs[i].data()?.date.seconds * 1000) <=
-            new Date(currentDate.seconds * 1000);
+          new Date(currentDate.seconds * 1000);
 
         if (seeBool3) {
           gasShort =
@@ -68,10 +68,10 @@ async function getGasshort(root, isFirstSalary, lastSalaryDate, currentDate) {
   return gasShort === 0
     ? 0
     : root === "shop"
-    ? Math.round((gasShort / parseInt(countShop)) * 10) / 10
-    : rootStatus.docs[0].data().employee2 === ""
-    ? Math.round(gasShort * 10) / 10
-    : Math.round((gasShort / 2) * 10) / 10;
+      ? Math.round((gasShort / parseInt(countShop)) * 10) / 10
+      : rootStatus.docs[0].data().employee2 === ""
+        ? Math.round(gasShort * 10) / 10
+        : Math.round((gasShort / 2) * 10) / 10;
 }
 
 async function getGasshortForTable(
@@ -101,9 +101,9 @@ async function getGasshortForTable(
       } else {
         let seeBool3 =
           new Date(reGas.docs[i].data()?.date.seconds * 1000) >
-            new Date(lastSalaryDate.seconds * 1000) &&
+          new Date(lastSalaryDate.seconds * 1000) &&
           new Date(reGas.docs[i].data()?.date.seconds * 1000) <=
-            new Date(currentDate.seconds * 1000);
+          new Date(currentDate.seconds * 1000);
 
         if (seeBool3) {
           if (reGas.docs[i].data().shortage > 0) {
@@ -148,9 +148,9 @@ async function getGasInstallmentshort(
       } else {
         let seeBool3 =
           new Date(reGas.docs[i].data()?.date.seconds * 1000) >
-            new Date(lastSalaryDate.seconds * 1000) &&
+          new Date(lastSalaryDate.seconds * 1000) &&
           new Date(reGas.docs[i].data()?.date.seconds * 1000) <=
-            new Date(currentDate.seconds * 1000);
+          new Date(currentDate.seconds * 1000);
 
         if (seeBool3) {
           gasShort =
@@ -165,10 +165,10 @@ async function getGasInstallmentshort(
   return gasShort === 0
     ? 0
     : root === "shop"
-    ? Math.round((gasShort / parseInt(countShop)) * 10) / 10
-    : rootStatus.docs[0].data().employee2 === ""
-    ? Math.round(gasShort * 10) / 10
-    : Math.round((gasShort / 2) * 10) / 10;
+      ? Math.round((gasShort / parseInt(countShop)) * 10) / 10
+      : rootStatus.docs[0].data().employee2 === ""
+        ? Math.round(gasShort * 10) / 10
+        : Math.round((gasShort / 2) * 10) / 10;
 }
 
 async function getGasInstallmenthortForTable(
@@ -198,9 +198,9 @@ async function getGasInstallmenthortForTable(
       } else {
         let seeBool3 =
           new Date(reGas.docs[i].data()?.date.seconds * 1000) >
-            new Date(lastSalaryDate.seconds * 1000) &&
+          new Date(lastSalaryDate.seconds * 1000) &&
           new Date(reGas.docs[i].data()?.date.seconds * 1000) <=
-            new Date(currentDate.seconds * 1000);
+          new Date(currentDate.seconds * 1000);
 
         if (seeBool3) {
           if (reGas.docs[i].data().shortage > 0) {
@@ -246,9 +246,9 @@ async function getInstallmentshort(
       } else {
         let seeBool2 =
           new Date(reInstallment.docs[i].data()?.date.seconds * 1000) >
-            new Date(lastSalaryDate.seconds * 1000) &&
+          new Date(lastSalaryDate.seconds * 1000) &&
           new Date(reInstallment.docs[i].data()?.date.seconds * 1000) <=
-            new Date(currentDate.seconds * 1000);
+          new Date(currentDate.seconds * 1000);
 
         if (seeBool2) {
           installShortage =
@@ -264,10 +264,10 @@ async function getInstallmentshort(
   return installShortage === 0
     ? 0
     : root === "shop"
-    ? Math.round((installShortage / parseInt(countShop)) * 10) / 10
-    : rootStatus.docs[0].data().employee2 === ""
-    ? Math.round(installShortage * 10) / 10
-    : Math.round((installShortage / 2) * 10) / 10;
+      ? Math.round((installShortage / parseInt(countShop)) * 10) / 10
+      : rootStatus.docs[0].data().employee2 === ""
+        ? Math.round(installShortage * 10) / 10
+        : Math.round((installShortage / 2) * 10) / 10;
 }
 
 async function getInstallmentshortForTable(
@@ -295,9 +295,9 @@ async function getInstallmentshortForTable(
     } else {
       let seeBool2 =
         new Date(reInstallment.docs[i].data()?.date.seconds * 1000) >
-          new Date(lastSalaryDate.seconds * 1000) &&
+        new Date(lastSalaryDate.seconds * 1000) &&
         new Date(reInstallment.docs[i].data()?.date.seconds * 1000) <=
-          new Date(currentDate.seconds * 1000);
+        new Date(currentDate.seconds * 1000);
 
       if (seeBool2) {
         if (reInstallment.docs[i].data().shortage > 0) {
@@ -335,9 +335,9 @@ async function getShortage(root, isFirstSalary, lastSalaryDate, currentDate) {
       } else {
         let seeBool1 =
           new Date(reInvoice.docs[i].data()?.date.seconds * 1000) >
-            new Date(lastSalaryDate.seconds * 1000) &&
+          new Date(lastSalaryDate.seconds * 1000) &&
           new Date(reInvoice.docs[i].data()?.date.seconds * 1000) <=
-            new Date(currentDate.seconds * 1000);
+          new Date(currentDate.seconds * 1000);
 
         if (seeBool1) {
           shortage =
@@ -352,10 +352,10 @@ async function getShortage(root, isFirstSalary, lastSalaryDate, currentDate) {
   return shortage === 0
     ? 0
     : root === "shop"
-    ? Math.round((shortage / parseInt(countShop)) * 10) / 10
-    : rootStatus.docs[0].data().employee2 === ""
-    ? Math.round(shortage * 10) / 10
-    : Math.round((shortage / 2) * 10) / 10;
+      ? Math.round((shortage / parseInt(countShop)) * 10) / 10
+      : rootStatus.docs[0].data().employee2 === ""
+        ? Math.round(shortage * 10) / 10
+        : Math.round((shortage / 2) * 10) / 10;
 }
 
 async function getShortageForTable(
@@ -383,9 +383,9 @@ async function getShortageForTable(
     } else {
       let seeBool1 =
         new Date(reInvoice.docs[i].data()?.date.seconds * 1000) >
-          new Date(lastSalaryDate.seconds * 1000) &&
+        new Date(lastSalaryDate.seconds * 1000) &&
         new Date(reInvoice.docs[i].data()?.date.seconds * 1000) <=
-          new Date(currentDate.seconds * 1000);
+        new Date(currentDate.seconds * 1000);
 
       if (seeBool1) {
         if (reInvoice.docs[i].data().shortage > 0) {
@@ -421,9 +421,9 @@ async function getAllAttendance(
     for (var i = 0; i < reAt.docs.length; i++) {
       let seeBool1 =
         new Date(reAt.docs[i].data()?.date.seconds * 1000) >
-          new Date(lastSalaryDate.seconds * 1000) &&
+        new Date(lastSalaryDate.seconds * 1000) &&
         new Date(reAt.docs[i].data()?.date.seconds * 1000) <=
-          new Date(currentDate.seconds * 1000);
+        new Date(currentDate.seconds * 1000);
 
       if (seeBool1) {
         attendance = parseInt(attendance) + 1;
@@ -457,9 +457,9 @@ async function getAllAttendanceForTable(
     for (let i = 0; i < reAt.docs.length; i++) {
       let seeBool1 =
         new Date(reAt.docs[i].data()?.date.seconds * 1000) >
-          new Date(lastSalaryDate.seconds * 1000) &&
+        new Date(lastSalaryDate.seconds * 1000) &&
         new Date(reAt.docs[i].data()?.date.seconds * 1000) <=
-          new Date(currentDate.seconds * 1000);
+        new Date(currentDate.seconds * 1000);
 
       if (seeBool1) {
         allAttendance2.push(reAt.docs[i].data());
@@ -497,16 +497,16 @@ async function getSaleTarget(root, currentDate) {
       for (var i = 0; i < saleRe.docs.length; i++) {
         let seeBool1 =
           new Date(saleRe.docs[i].data()?.date.seconds * 1000) >
-            new Date(salesTaregt.docs[k].data()?.start_date.seconds * 1000) &&
+          new Date(salesTaregt.docs[k].data()?.start_date.seconds * 1000) &&
           new Date(saleRe.docs[i].data()?.date.seconds * 1000) <=
-            new Date(currentDate.seconds * 1000);
+          new Date(currentDate.seconds * 1000);
 
         if (seeBool1) {
           for (let n = 0; n < saleRe.docs[i].data().items.length; n++) {
             saleTargetValue =
               parseInt(saleTargetValue) +
               parseInt(saleRe.docs[i].data().items[n].purchasedPrice) *
-                parseInt(saleRe.docs[i].data().items[n].qty);
+              parseInt(saleRe.docs[i].data().items[n].qty);
           }
         }
       }
@@ -518,12 +518,12 @@ async function getSaleTarget(root, currentDate) {
   return targetValue === 0
     ? 0
     : saleTargetValue === 0
-    ? 0
-    : saleTargetValue >= targetValue
-    ? root === "shop"
-      ? 5000 / parseInt(countShop)
-      : 5000 / 2
-    : 0;
+      ? 0
+      : saleTargetValue >= targetValue
+        ? root === "shop"
+          ? 5000 / parseInt(countShop)
+          : 5000 / 2
+        : 0;
 }
 
 async function getSaleTargetForTable(
@@ -555,9 +555,9 @@ async function getSaleTargetForTable(
     } else {
       let seeBool1 =
         new Date(saleRe.docs[i].data()?.date.seconds * 1000) >
-          new Date(lastSalaryDate.seconds * 1000) &&
+        new Date(lastSalaryDate.seconds * 1000) &&
         new Date(saleRe.docs[i].data()?.date.seconds * 1000) <=
-          new Date(currentDate.seconds * 1000);
+        new Date(currentDate.seconds * 1000);
 
       if (seeBool1) {
         for (let n = 0; n < saleRe.docs[i].data().items.length; n++) {
@@ -604,9 +604,9 @@ async function cashTargetFunc(
     (ob) =>
       ob.data().target_type === "Cash target" &&
       new Date(ob.data().start_date?.seconds * 1000).getFullYear() ===
-        new Date().getFullYear() &&
+      new Date().getFullYear() &&
       new Date(ob.data().start_date?.seconds * 1000).getMonth() ===
-        new Date().getMonth()
+      new Date().getMonth()
   );
 
   if (dueCashTaregt.length > 0) {
@@ -616,9 +616,9 @@ async function cashTargetFunc(
       if (saleRe.docs[i].data().paymentWay === "PayandGo") {
         let seeBool1 =
           new Date(saleRe.docs[i].data()?.date.seconds * 1000) >
-            new Date(dueCashTaregt[0].data()?.start_date.seconds * 1000) &&
+          new Date(dueCashTaregt[0].data()?.start_date.seconds * 1000) &&
           new Date(saleRe.docs[i].data()?.date.seconds * 1000) <=
-            new Date(currentDate.seconds * 1000);
+          new Date(currentDate.seconds * 1000);
 
         if (seeBool1) {
           threePresentage =
@@ -637,13 +637,14 @@ async function cashTargetFunc(
     for (let i = 0; i < installmentsRe.docs.length; i++) {
       let seeBool1 =
         new Date(installmentsRe.docs[i].data()?.date.seconds * 1000) >
-          new Date(dueCashTaregt[0].data()?.start_date.seconds * 1000) &&
+        new Date(dueCashTaregt[0].data()?.start_date.seconds * 1000) &&
         new Date(installmentsRe.docs[i].data()?.date.seconds * 1000) <=
-          new Date(currentDate.seconds * 1000);
+        new Date(currentDate.seconds * 1000);
 
       if (seeBool1) {
         if (installmentsRe.docs[i].data().isExpired === false) {
-          threePresentage =
+          threePresentage = installmentsRe.docs[i].data()?.isArreas ? parseInt(threePresentage) +
+            (parseInt(installmentsRe.docs[i].data().amount) * 2.5) / 100 :
             parseInt(threePresentage) +
             (parseInt(installmentsRe.docs[i].data().amount) * 3) / 100;
           fourPresentage =
@@ -670,9 +671,9 @@ async function cashTargetFunc(
         } else {
           let seeBool1 =
             new Date(saleRe.docs[i].data()?.date.seconds * 1000) >
-              new Date(lastSalaryDate.seconds * 1000) &&
+            new Date(lastSalaryDate.seconds * 1000) &&
             new Date(saleRe.docs[i].data()?.date.seconds * 1000) <=
-              new Date(currentDate.seconds * 1000);
+            new Date(currentDate.seconds * 1000);
 
           if (seeBool1) {
             threePresentage =
@@ -686,20 +687,22 @@ async function cashTargetFunc(
     for (let i = 0; i < installmentsRe.docs.length; i++) {
       if (isFirstSalary) {
         if (installmentsRe.docs[i].data().isExpired === false) {
-          threePresentage =
+          threePresentage = installmentsRe.docs[i].data()?.isArreas ? parseInt(threePresentage) +
+            (parseInt(installmentsRe.docs[i].data().amount) * 2.5) / 100 :
             parseInt(threePresentage) +
             (parseInt(installmentsRe.docs[i].data().amount) * 3) / 100;
         }
       } else {
         let seeBool1 =
           new Date(installmentsRe.docs[i].data()?.date.seconds * 1000) >
-            new Date(lastSalaryDate.seconds * 1000) &&
+          new Date(lastSalaryDate.seconds * 1000) &&
           new Date(installmentsRe.docs[i].data()?.date.seconds * 1000) <=
-            new Date(currentDate.seconds * 1000);
+          new Date(currentDate.seconds * 1000);
 
         if (seeBool1) {
           if (installmentsRe.docs[i].data().isExpired === false) {
-            threePresentage =
+            threePresentage = installmentsRe.docs[i].data()?.isArreas ? parseInt(threePresentage) +
+              (parseInt(installmentsRe.docs[i].data().amount) * 2.5) / 100 :
               parseInt(threePresentage) +
               (parseInt(installmentsRe.docs[i].data().amount) * 3) / 100;
           }
@@ -721,10 +724,10 @@ async function cashTargetFunc(
   return returnValue === 0
     ? 0
     : root === "shop"
-    ? Math.round((returnValue / parseInt(countShop)) * 10) / 10
-    : rootStatus.docs[0].data().employee2 === ""
-    ? Math.round(returnValue * 10) / 10
-    : Math.round((returnValue / 2) * 10) / 10;
+      ? Math.round((returnValue / parseInt(countShop)) * 10) / 10
+      : rootStatus.docs[0].data().employee2 === ""
+        ? Math.round(returnValue * 10) / 10
+        : Math.round((returnValue / 2) * 10) / 10;
 }
 
 async function cashTargetFuncForTable(
@@ -756,9 +759,9 @@ async function cashTargetFuncForTable(
       } else {
         let seeBool1 =
           new Date(saleRe.docs[i].data()?.date.seconds * 1000) >
-            new Date(lastSalaryDate.seconds * 1000) &&
+          new Date(lastSalaryDate.seconds * 1000) &&
           new Date(saleRe.docs[i].data()?.date.seconds * 1000) <=
-            new Date(currentDate.seconds * 1000);
+          new Date(currentDate.seconds * 1000);
 
         if (seeBool1) {
           returnValue.push({
@@ -785,9 +788,9 @@ async function cashTargetFuncForTable(
     } else {
       let seeBool1 =
         new Date(installmentsRe.docs[i].data()?.date.seconds * 1000) >
-          new Date(lastSalaryDate.seconds * 1000) &&
+        new Date(lastSalaryDate.seconds * 1000) &&
         new Date(installmentsRe.docs[i].data()?.date.seconds * 1000) <=
-          new Date(currentDate.seconds * 1000);
+        new Date(currentDate.seconds * 1000);
 
       if (seeBool1) {
         if (installmentsRe.docs[i].data().isExpired === false) {
@@ -826,18 +829,18 @@ async function getCashSaleFunc(
             parseInt(cashSale) +
             (parseInt(
               saleRe.docs[i].data().items[n].downpayment *
-                saleRe.docs[i].data().items[n].qty -
-                saleRe.docs[i].data().items[n].discount
+              saleRe.docs[i].data().items[n].qty -
+              saleRe.docs[i].data().items[n].discount
             ) *
               2.5) /
-              100;
+            100;
         }
       } else {
         let seeBool1 =
           new Date(saleRe.docs[i].data()?.date.seconds * 1000) >
-            new Date(lastSalaryDate.seconds * 1000) &&
+          new Date(lastSalaryDate.seconds * 1000) &&
           new Date(saleRe.docs[i].data()?.date.seconds * 1000) <=
-            new Date(currentDate.seconds * 1000);
+          new Date(currentDate.seconds * 1000);
 
         if (seeBool1) {
           for (let n = 0; n < saleRe.docs[i].data().items.length; n++) {
@@ -845,11 +848,11 @@ async function getCashSaleFunc(
               parseInt(cashSale) +
               (parseInt(
                 saleRe.docs[i].data().items[n].downpayment *
-                  saleRe.docs[i].data().items[n].qty -
-                  saleRe.docs[i].data().items[n].discount
+                saleRe.docs[i].data().items[n].qty -
+                saleRe.docs[i].data().items[n].discount
               ) *
                 2.5) /
-                100;
+              100;
           }
         }
       }
@@ -867,10 +870,10 @@ async function getCashSaleFunc(
   return cashSale === 0
     ? 0
     : root === "shop"
-    ? Math.round((cashSale / parseInt(countShop)) * 10) / 10
-    : rootStatus.docs[0].data().employee2 === ""
-    ? Math.round(cashSale * 10) / 10
-    : Math.round((cashSale / 2) * 10) / 10;
+      ? Math.round((cashSale / parseInt(countShop)) * 10) / 10
+      : rootStatus.docs[0].data().employee2 === ""
+        ? Math.round(cashSale * 10) / 10
+        : Math.round((cashSale / 2) * 10) / 10;
 }
 
 async function getCashSaleFuncForTable(
@@ -895,8 +898,8 @@ async function getCashSaleFuncForTable(
             invoice_no: saleRe.docs[i].data().invoice_number,
             total: parseInt(
               saleRe.docs[i].data().items[n].downpayment *
-                saleRe.docs[i].data().items[n].qty -
-                saleRe.docs[i].data().items[n].discount
+              saleRe.docs[i].data().items[n].qty -
+              saleRe.docs[i].data().items[n].discount
             ),
             qty: saleRe.docs[i].data().items[n].qty,
             item_name: saleRe.docs[i].data().items[n].item_name,
@@ -906,9 +909,9 @@ async function getCashSaleFuncForTable(
       } else {
         let seeBool1 =
           new Date(saleRe.docs[i].data()?.date.seconds * 1000) >
-            new Date(lastSalaryDate.seconds * 1000) &&
+          new Date(lastSalaryDate.seconds * 1000) &&
           new Date(saleRe.docs[i].data()?.date.seconds * 1000) <=
-            new Date(currentDate.seconds * 1000);
+          new Date(currentDate.seconds * 1000);
 
         if (seeBool1) {
           for (let n = 0; n < saleRe.docs[i].data().items.length; n++) {
@@ -917,8 +920,8 @@ async function getCashSaleFuncForTable(
               invoice_no: saleRe.docs[i].data().invoice_number,
               total: parseInt(
                 saleRe.docs[i].data().items[n].downpayment *
-                  saleRe.docs[i].data().items[n].qty -
-                  saleRe.docs[i].data().items[n].discount
+                saleRe.docs[i].data().items[n].qty -
+                saleRe.docs[i].data().items[n].discount
               ),
               qty: saleRe.docs[i].data().items[n].qty,
               item_name: saleRe.docs[i].data().items[n].item_name,
@@ -954,9 +957,9 @@ async function withCylinderGas(
     } else {
       let seeBool1 =
         new Date(gasCyli.docs[i].data()?.date.seconds * 1000) >
-          new Date(lastSalaryDate.seconds * 1000) &&
+        new Date(lastSalaryDate.seconds * 1000) &&
         new Date(gasCyli.docs[i].data()?.date.seconds * 1000) <=
-          new Date(currentDate.seconds * 1000);
+        new Date(currentDate.seconds * 1000);
 
       if (seeBool1) {
         if (gasCyli.docs[i].data().items[0].withCylinder) {
@@ -977,10 +980,10 @@ async function withCylinderGas(
   return gasCylP === 0
     ? 0
     : root === "shop"
-    ? Math.round((gasCylP / parseInt(countShop)) * 10) / 10
-    : rootStatus.docs[0].data().employee2 === ""
-    ? Math.round(gasCylP * 10) / 10
-    : Math.round((gasCylP / 2) * 10) / 10;
+      ? Math.round((gasCylP / parseInt(countShop)) * 10) / 10
+      : rootStatus.docs[0].data().employee2 === ""
+        ? Math.round(gasCylP * 10) / 10
+        : Math.round((gasCylP / 2) * 10) / 10;
 }
 
 async function gasDownpayment(
@@ -1005,9 +1008,9 @@ async function gasDownpayment(
       } else {
         let seeBool1 =
           new Date(gasCyli.docs[i].data()?.date.seconds * 1000) >
-            new Date(lastSalaryDate.seconds * 1000) &&
+          new Date(lastSalaryDate.seconds * 1000) &&
           new Date(gasCyli.docs[i].data()?.date.seconds * 1000) <=
-            new Date(currentDate.seconds * 1000);
+          new Date(currentDate.seconds * 1000);
 
         if (seeBool1) {
           gasCylP =
@@ -1029,10 +1032,10 @@ async function gasDownpayment(
   return gasCylP === 0
     ? 0
     : root === "shop"
-    ? Math.round((gasCylP / parseInt(countShop)) * 10) / 10
-    : rootStatus.docs[0].data().employee2 === ""
-    ? Math.round(gasCylP * 10) / 10
-    : Math.round((gasCylP / 2) * 10) / 10;
+      ? Math.round((gasCylP / parseInt(countShop)) * 10) / 10
+      : rootStatus.docs[0].data().employee2 === ""
+        ? Math.round(gasCylP * 10) / 10
+        : Math.round((gasCylP / 2) * 10) / 10;
 }
 
 async function gasInstallment(
@@ -1055,9 +1058,9 @@ async function gasInstallment(
     } else {
       let seeBool1 =
         new Date(gasCyli.docs[i].data()?.date.seconds * 1000) >
-          new Date(lastSalaryDate.seconds * 1000) &&
+        new Date(lastSalaryDate.seconds * 1000) &&
         new Date(gasCyli.docs[i].data()?.date.seconds * 1000) <=
-          new Date(currentDate.seconds * 1000);
+        new Date(currentDate.seconds * 1000);
 
       if (seeBool1) {
         gasCylP =
@@ -1078,10 +1081,10 @@ async function gasInstallment(
   return gasCylP === 0
     ? 0
     : root === "shop"
-    ? Math.round((gasCylP / parseInt(countShop)) * 10) / 10
-    : rootStatus.docs[0].data().employee2 === ""
-    ? Math.round(gasCylP * 10) / 10
-    : Math.round((gasCylP / 2) * 10) / 10;
+      ? Math.round((gasCylP / parseInt(countShop)) * 10) / 10
+      : rootStatus.docs[0].data().employee2 === ""
+        ? Math.round(gasCylP * 10) / 10
+        : Math.round((gasCylP / 2) * 10) / 10;
 }
 
 async function getExcardFunc(root, isFirstSalary, lastSalaryDate, currentDate) {
@@ -1102,9 +1105,9 @@ async function getExcardFunc(root, isFirstSalary, lastSalaryDate, currentDate) {
     } else {
       let seeBool1 =
         new Date(installmentsRe.docs[i].data()?.date.seconds * 1000) >
-          new Date(lastSalaryDate.seconds * 1000) &&
+        new Date(lastSalaryDate.seconds * 1000) &&
         new Date(installmentsRe.docs[i].data()?.date.seconds * 1000) <=
-          new Date(currentDate.seconds * 1000);
+        new Date(currentDate.seconds * 1000);
 
       if (seeBool1) {
         if (installmentsRe.docs[i].data().isExpired) {
@@ -1127,10 +1130,10 @@ async function getExcardFunc(root, isFirstSalary, lastSalaryDate, currentDate) {
   return excardAmount === 0
     ? 0
     : root === "shop"
-    ? Math.round((excardAmount / parseInt(countShop)) * 10) / 10
-    : rootStatus.docs[0].data().employee2 === ""
-    ? Math.round(excardAmount * 10) / 10
-    : Math.round((excardAmount / 2) * 10) / 10;
+      ? Math.round((excardAmount / parseInt(countShop)) * 10) / 10
+      : rootStatus.docs[0].data().employee2 === ""
+        ? Math.round(excardAmount * 10) / 10
+        : Math.round((excardAmount / 2) * 10) / 10;
 }
 
 async function getExcardFuncForTable(
@@ -1158,9 +1161,9 @@ async function getExcardFuncForTable(
     } else {
       let seeBool1 =
         new Date(installmentsRe.docs[i].data()?.date.seconds * 1000) >
-          new Date(lastSalaryDate.seconds * 1000) &&
+        new Date(lastSalaryDate.seconds * 1000) &&
         new Date(installmentsRe.docs[i].data()?.date.seconds * 1000) <=
-          new Date(currentDate.seconds * 1000);
+        new Date(currentDate.seconds * 1000);
 
       if (seeBool1) {
         if (installmentsRe.docs[i].data().isExpired) {
@@ -1304,9 +1307,9 @@ export default function Add_Paysheet_Model({ nic }) {
         let currentSalaryStatus = reCheckStatus.docs.some(
           (ob) =>
             new Date(ob.data().date.seconds * 1000).getFullYear() ===
-              new Date().getFullYear() &&
+            new Date().getFullYear() &&
             new Date(ob.data().date.seconds * 1000).getMonth() ===
-              new Date().getMonth()
+            new Date().getMonth()
         );
 
         if (currentSalaryStatus) {
@@ -2498,9 +2501,9 @@ export default function Add_Paysheet_Model({ nic }) {
         let currentSalaryStatus = reCheckStatus.docs.some(
           (ob) =>
             new Date(ob.data().date.seconds * 1000).getFullYear() ===
-              new Date(date.seconds * 1000).getFullYear() &&
+            new Date(date.seconds * 1000).getFullYear() &&
             new Date(ob.data().date.seconds * 1000).getMonth() ===
-              new Date(date.seconds * 1000).getMonth()
+            new Date(date.seconds * 1000).getMonth()
         );
 
         if (currentSalaryStatus) {
@@ -3987,7 +3990,7 @@ export default function Add_Paysheet_Model({ nic }) {
                           0
                           ? 0
                           : goodsBalanceInitial -
-                              parseInt(e.target.value.trim())
+                          parseInt(e.target.value.trim())
                       );
                     }
                   }}
@@ -4354,7 +4357,7 @@ export default function Add_Paysheet_Model({ nic }) {
                                 new Date(
                                   ob.data().date.seconds * 1000
                                 ).getFullYear() ===
-                                  new Date(e.toDate()).getFullYear() &&
+                                new Date(e.toDate()).getFullYear() &&
                                 new Date(
                                   ob.data().date.seconds * 1000
                                 ).getMonth() === new Date(e.toDate()).getMonth()
@@ -4481,26 +4484,26 @@ export default function Add_Paysheet_Model({ nic }) {
                               loan +
                               shortage +
                               goods) <=
-                          0
+                            0
                             ? 0
                             : insentive +
-                              phoneBill +
-                              saleTarget +
-                              cashTarget +
-                              exCard +
-                              arresTarget +
-                              cashSale +
-                              withCylinerGasV +
-                              gasDownpaymentV +
-                              gasInstallmentV +
-                              basicSalary -
-                              (epf +
-                                securityDeposit +
-                                deduction +
-                                advance +
-                                loan +
-                                shortage +
-                                goods)
+                            phoneBill +
+                            saleTarget +
+                            cashTarget +
+                            exCard +
+                            arresTarget +
+                            cashSale +
+                            withCylinerGasV +
+                            gasDownpaymentV +
+                            gasInstallmentV +
+                            basicSalary -
+                            (epf +
+                              securityDeposit +
+                              deduction +
+                              advance +
+                              loan +
+                              shortage +
+                              goods)
                         }
                         displayType={"text"}
                         thousandSeparator={true}
@@ -4525,24 +4528,24 @@ export default function Add_Paysheet_Model({ nic }) {
                   onClick={makeSalary}
                   disabled={
                     alreadyPaid ||
-                    loading ||
-                    basicSalary.length === 0 ||
-                    insentive.length === 0 ||
-                    phoneBill.length === 0 ||
-                    epf.length === 0 ||
-                    securityDeposit.length === 0 ||
-                    deduction.length === 0 ||
-                    advance.length === 0 ||
-                    loan.length === 0 ||
-                    shortage.length === 0 ||
-                    saleTarget.length === 0 ||
-                    cashTarget.length === 0 ||
-                    exCard.length === 0 ||
-                    cashSale.length === 0 ||
-                    withCylinerGasV.length === 0 ||
-                    gasDownpaymentV.length === 0 ||
-                    gasInstallmentV.length === 0 ||
-                    date === null
+                      loading ||
+                      basicSalary.length === 0 ||
+                      insentive.length === 0 ||
+                      phoneBill.length === 0 ||
+                      epf.length === 0 ||
+                      securityDeposit.length === 0 ||
+                      deduction.length === 0 ||
+                      advance.length === 0 ||
+                      loan.length === 0 ||
+                      shortage.length === 0 ||
+                      saleTarget.length === 0 ||
+                      cashTarget.length === 0 ||
+                      exCard.length === 0 ||
+                      cashSale.length === 0 ||
+                      withCylinerGasV.length === 0 ||
+                      gasDownpaymentV.length === 0 ||
+                      gasInstallmentV.length === 0 ||
+                      date === null
                       ? true
                       : false
                   }

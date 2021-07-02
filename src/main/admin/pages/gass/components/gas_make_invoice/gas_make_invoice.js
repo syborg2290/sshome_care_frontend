@@ -561,7 +561,7 @@ function Make_invoice() {
                                               : itemDiscount[one.weight],
                                           weight: one.weight,
                                           data: one.data,
-                                          gasType: one.gasType[one.weight]
+                                          gasType: one.gasType[one.data.weight]
                                         }
                                         arrayItems.push(objItem)
                                       })
@@ -870,7 +870,7 @@ function Make_invoice() {
                                               : itemDiscount[one.data.weight],
                                           weight: one.data.weight,
                                           data: one.data,
-                                          gasType: one.gasType[one.weight]
+                                          gasType: one.gasType[one.data.weight]
                                         }
                                         arrayItems.push(objItem)
                                       })
@@ -1156,10 +1156,12 @@ function Make_invoice() {
               : itemDiscount[one.data.weight],
           weight: one.data.weight,
           data: one.data,
-          gasType: one.gasType[one.weight]
+          gasType: one.gasType[one.data.weight]
         }
         arrayItems.push(objItem)
+        console.log(one)
       })
+     
       db.collection('gas_selling_history').add({
         invoice_number: invoiceNumber,
         gas: arrayItems,

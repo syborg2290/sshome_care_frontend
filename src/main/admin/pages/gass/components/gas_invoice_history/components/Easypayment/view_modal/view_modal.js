@@ -59,6 +59,7 @@ export default function View_Model({ items_list_props, data }) {
           discount: each.discount,
           qty: each.qty,
           withCylinder: each.withCylinder ? "Yes" : "No",
+          gasType:each.gasType,
         },
       ]);
     });

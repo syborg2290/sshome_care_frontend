@@ -109,7 +109,7 @@ export default function Update_Model({
       .where('invoice_number', '==', invoice_no)
       .get()
       .then(inReDoc => {
-        setArreasAndInsAmount(inReDoc.docs[0].data().date, invoice_no, inReDoc.docs[0].data().noOfInstallment, inReDoc.docs[0].data().balance)
+        setArreasAndInsAmount(inReDoc.docs[0].data().date, invoice_no, inReDoc.docs[0].data().noOfInstallment, inReDoc.docs[0].data().balance, inReDoc)
 
         setInitialBalance(inReDoc.docs[0].data().balance)
         setNextDate(inReDoc.docs[0].data().nextDate)
@@ -326,7 +326,15 @@ export default function Update_Model({
     // eslint-disable-next-line
   }, [invoice_no, isEx, instAmountProp, instCount, customer_id])
 
-  const setArreasAndInsAmount = async (nextDateRe, invoiceNo, installmentCount, balance) => {
+  const setArreasAndInsAmount = async (nextDateRe, invoiceNo, installmentCount, balance, inReDoc) => {
+
+    let daysCountNode2 =
+      (new Date().getTime() -
+        new Date(
+          inReDoc.docs[0].data()?.nextDate?.seconds * 1000
+        ).getTime()) /
+      (1000 * 3600 * 24)
+
     db.collection('installment')
       .where('invoice_number', '==', invoiceNo)
       .get()
@@ -347,9 +355,26 @@ export default function Update_Model({
           parseInt(dueAmount - paidAmount) < 0
             ? 0
             : parseInt(dueAmount - paidAmount)
-       
+
         if (parseInt(dueAmount - paidAmount) > 0) {
-          setIsArreas(true);
+          if (inReDoc.docs[0].data().selectedType === 'shop') {
+
+            if (7 - daysCountNode2 >= 0) {
+              setIsArreas(false);
+            } else {
+              setIsArreas(true);
+            }
+
+          } else {
+
+            if (14 - daysCountNode2 >= 0) {
+              setIsArreas(false);
+            } else {
+              setIsArreas(true);
+            }
+
+          }
+
         }
 
         setArreasAmount(dueAmountOfArreas)

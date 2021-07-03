@@ -496,6 +496,7 @@ export default function Update_Model({
           shortage: shortage === '' ? 0 : shortage,
           type: type,
           isArreas: isArreas,
+          arreasAmount:arreasAmount,
           date: updateTimestamp
         })
       })

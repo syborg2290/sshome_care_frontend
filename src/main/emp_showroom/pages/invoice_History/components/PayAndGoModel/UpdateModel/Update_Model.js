@@ -114,7 +114,8 @@ export default function Update_Model({
           invoice_no,
           inReDoc.docs[0].data().noOfInstallment,
           inReDoc.docs[0].data().balance,
-          inReDoc
+          inReDoc,
+          new Date()
         );
 
         setInitialBalance(inReDoc.docs[0].data().balance);
@@ -337,10 +338,11 @@ export default function Update_Model({
     invoiceNo,
     installmentCount,
     balance,
-    inReDoc
+    inReDoc,
+    date
   ) => {
     let daysCountNode2 =
-      (new Date().getTime() -
+      (new Date(date).getTime() -
         new Date(inReDoc.docs[0].data()?.nextDate?.seconds * 1000).getTime()) /
       (1000 * 3600 * 24);
 
@@ -353,10 +355,10 @@ export default function Update_Model({
           paidAmount = parseInt(paidAmount) + parseInt(siDoc.data()?.amount);
         });
         let totalMonthsOfInst =
-          (new Date().getFullYear() -
+          (new Date(new Date(date)).getFullYear() -
             new Date(nextDateRe.seconds * 1000).getFullYear()) *
             12 +
-          (new Date().getMonth() -
+          (new Date(new Date(date)).getMonth() -
             new Date(nextDateRe.seconds * 1000).getMonth());
 
         let dueAmount =
@@ -372,13 +374,23 @@ export default function Update_Model({
 
         if (parseInt(dueAmount - paidAmount) > 0) {
           if (inReDoc.docs[0].data().selectedType === 'shop') {
-            if (7 - daysCountNode2 >= 0) {
+            if (
+              7 - daysCountNode2 >= 0 ||
+              new Date(
+                inReDoc.docs[0].data()?.nextDate?.seconds * 1000
+              ).getDate() > new Date(new Date(date)).getDate()
+            ) {
               setIsArreas(false);
             } else {
               setIsArreas(true);
             }
           } else {
-            if (14 - daysCountNode2 >= 0) {
+            if (
+              14 - daysCountNode2 >= 0 ||
+              new Date(
+                inReDoc.docs[0].data()?.nextDate?.seconds * 1000
+              ).getDate() > new Date(new Date(date)).getDate()
+            ) {
               setIsArreas(false);
             } else {
               setIsArreas(true);
@@ -499,7 +511,7 @@ export default function Update_Model({
           type: type,
           isArreas: isArreas,
           arreasAmount: arreasAmount,
-          dueInstallmentAmount:parseInt(instAmountProp),
+          dueInstallmentAmount: parseInt(instAmountProp),
           date: updateTimestamp,
         });
       });
@@ -662,6 +674,43 @@ export default function Update_Model({
         <div className="paper">
           <form className="form" noValidate>
             <Grid container spacing={2}>
+              <br />
+              <Grid className="lbl_topi" item xs={12} sm={4}>
+                Date
+              </Grid>
+              <Grid item xs={12} sm={2}>
+                :
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <DatePicker
+                  onChange={(e) => {
+                    if (e !== null) {
+                      db.collection('invoice')
+                        .where('invoice_number', '==', invoice_no)
+                        .get()
+                        .then((inReDoc) => {
+                          setArreasAndInsAmount(
+                            inReDoc.docs[0].data().date,
+                            invoice_no,
+                            inReDoc.docs[0].data().noOfInstallment,
+                            inReDoc.docs[0].data().balance,
+                            inReDoc,
+                            new Date(
+                              firebase.firestore.Timestamp.fromDate(e.toDate())
+                                .seconds * 1000
+                            )
+                          );
+                          setTimestamp(
+                            firebase.firestore.Timestamp.fromDate(e.toDate())
+                          );
+                        });
+                    } else {
+                      setTimestamp(null);
+                    }
+                  }}
+                />
+              </Grid>
+              <br />
               <Grid className="lbl_topi-gami" item xs={12} sm={12}>
                 -Gamisarani Customers-
                 <br />
@@ -878,26 +927,6 @@ export default function Update_Model({
                       if (installmentAmount + gamisaraniamount > 0) {
                         setBalance(parseInt(e.target.value.trim()));
                       }
-                    }
-                  }}
-                />
-              </Grid>
-
-              <Grid className="lbl_topi" item xs={12} sm={4}>
-                Date
-              </Grid>
-              <Grid item xs={12} sm={2}>
-                :
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <DatePicker
-                  onChange={(e) => {
-                    if (e !== null) {
-                      setTimestamp(
-                        firebase.firestore.Timestamp.fromDate(e.toDate())
-                      );
-                    } else {
-                      setTimestamp(null);
                     }
                   }}
                 />

@@ -645,48 +645,56 @@ async function cashTargetFunc(
         if (installmentsRe.docs[i].data().isExpired === false) {
           if (installmentsRe.docs[i].data()?.isArreas) {
             if (
-              installmentsRe.docs[i].data()?.arreasAmount <
-              installmentsRe.docs[i].data().amount
+              parseInt(installmentsRe.docs[i].data()?.dueInstallmentAmount) >
+              parseInt(installmentsRe.docs[i].data()?.amount)
             ) {
-              let valueArrCom =
-                parseInt(installmentsRe.docs[i].data().amount) -
-                parseInt(installmentsRe.docs[i].data()?.arreasAmount);
-
               threePresentage =
-                parseInt(threePresentage) + (parseInt(valueArrCom) * 3) / 100;
-
-              threePresentage =
-                parseInt(threePresentage) +
-                (parseInt(installmentsRe.docs[i].data()?.arreasAmount) * 2.5) /
-                  100;
-            } else {
-              
-              if (parseInt(installmentsRe.docs[i].data()?.dueInstallmentAmount) > parseInt(installmentsRe.docs[i].data()?.amount)) {
-                
-                threePresentage =
                 parseInt(threePresentage) +
                 (parseInt(installmentsRe.docs[i].data()?.amount) * 2.5) / 100;
-                
-              } else {
-                
-                let arreasAmountToMonth = parseInt(installmentsRe.docs[i].data()?.amount) - parseInt(installmentsRe.docs[i].data()?.dueInstallmentAmount)
-                
-                threePresentage =
+            } else {
+              let arreasAmountToMonth =
+                parseInt(installmentsRe.docs[i].data()?.amount) -
+                parseInt(installmentsRe.docs[i].data()?.dueInstallmentAmount);
+
+              threePresentage =
+                parseInt(threePresentage) + (arreasAmountToMonth * 3) / 100;
+
+              threePresentage =
                 parseInt(threePresentage) +
-                (arreasAmountToMonth * 2.5) / 100;
-                
-                threePresentage =
-                parseInt(threePresentage) +
-                (parseInt(installmentsRe.docs[i].data().dueInstallmentAmount) * 3) / 100;
-                
-              }
-               
-              
+                (parseInt(installmentsRe.docs[i].data().dueInstallmentAmount) *
+                  2.5) /
+                  100;
             }
           } else {
-            threePresentage =
-              parseInt(threePresentage) +
-              (parseInt(installmentsRe.docs[i].data().amount) * 3) / 100;
+            if (parseInt(installmentsRe.docs[i].data()?.arreasAmount) > 0) {
+              if (
+                parseInt(installmentsRe.docs[i].data()?.dueInstallmentAmount) >
+                parseInt(installmentsRe.docs[i].data()?.amount)
+              ) {
+                threePresentage =
+                  parseInt(threePresentage) +
+                  (parseInt(installmentsRe.docs[i].data()?.amount) * 2.5) / 100;
+              } else {
+                let arreasAmountToMonth =
+                  parseInt(installmentsRe.docs[i].data()?.amount) -
+                  parseInt(installmentsRe.docs[i].data()?.dueInstallmentAmount);
+
+                threePresentage =
+                  parseInt(threePresentage) + (arreasAmountToMonth * 3) / 100;
+
+                threePresentage =
+                  parseInt(threePresentage) +
+                  (parseInt(
+                    installmentsRe.docs[i].data().dueInstallmentAmount
+                  ) *
+                    2.5) /
+                    100;
+              }
+            } else {
+              threePresentage =
+                parseInt(threePresentage) +
+                (parseInt(installmentsRe.docs[i].data().amount) * 3) / 100;
+            }
           }
 
           fourPresentage =
@@ -747,48 +755,62 @@ async function cashTargetFunc(
           if (installmentsRe.docs[i].data().isExpired === false) {
             if (installmentsRe.docs[i].data()?.isArreas) {
               if (
-                installmentsRe.docs[i].data()?.arreasAmount <
-                installmentsRe.docs[i].data().amount
+                parseInt(installmentsRe.docs[i].data()?.dueInstallmentAmount) >
+                parseInt(installmentsRe.docs[i].data()?.amount)
               ) {
-                let valueArrCom =
-                  parseInt(installmentsRe.docs[i].data().amount) -
-                  parseInt(installmentsRe.docs[i].data()?.arreasAmount);
+                threePresentage =
+                  parseInt(threePresentage) +
+                  (parseInt(installmentsRe.docs[i].data()?.amount) * 2.5) / 100;
+              } else {
+                let arreasAmountToMonth =
+                  parseInt(installmentsRe.docs[i].data()?.amount) -
+                  parseInt(installmentsRe.docs[i].data()?.dueInstallmentAmount);
 
                 threePresentage =
-                  parseInt(threePresentage) + (parseInt(valueArrCom) * 3) / 100;
+                  parseInt(threePresentage) + (arreasAmountToMonth * 3) / 100;
 
                 threePresentage =
                   parseInt(threePresentage) +
-                  (parseInt(installmentsRe.docs[i].data()?.arreasAmount) *
+                  (parseInt(
+                    installmentsRe.docs[i].data().dueInstallmentAmount
+                  ) *
                     2.5) /
                     100;
-              } else {
-               
-                if (parseInt(installmentsRe.docs[i].data()?.dueInstallmentAmount) > parseInt(installmentsRe.docs[i].data()?.amount)) {
-                
-                threePresentage =
-                parseInt(threePresentage) +
-                (parseInt(installmentsRe.docs[i].data()?.amount) * 2.5) / 100;
-                
-              } else {
-                
-                let arreasAmountToMonth = parseInt(installmentsRe.docs[i].data()?.amount) - parseInt(installmentsRe.docs[i].data()?.dueInstallmentAmount)
-                
-                threePresentage =
-                parseInt(threePresentage) +
-                (arreasAmountToMonth * 2.5) / 100;
-                
-                threePresentage =
-                parseInt(threePresentage) +
-                (parseInt(installmentsRe.docs[i].data().dueInstallmentAmount) * 3) / 100;
-                
-              }
-                
               }
             } else {
-              threePresentage =
-                parseInt(threePresentage) +
-                (parseInt(installmentsRe.docs[i].data().amount) * 3) / 100;
+              if (parseInt(installmentsRe.docs[i].data()?.arreasAmount) > 0) {
+                if (
+                  parseInt(
+                    installmentsRe.docs[i].data()?.dueInstallmentAmount
+                  ) > parseInt(installmentsRe.docs[i].data()?.amount)
+                ) {
+                  threePresentage =
+                    parseInt(threePresentage) +
+                    (parseInt(installmentsRe.docs[i].data()?.amount) * 2.5) /
+                      100;
+                } else {
+                  let arreasAmountToMonth =
+                    parseInt(installmentsRe.docs[i].data()?.amount) -
+                    parseInt(
+                      installmentsRe.docs[i].data()?.dueInstallmentAmount
+                    );
+
+                  threePresentage =
+                    parseInt(threePresentage) + (arreasAmountToMonth * 3) / 100;
+
+                  threePresentage =
+                    parseInt(threePresentage) +
+                    (parseInt(
+                      installmentsRe.docs[i].data().dueInstallmentAmount
+                    ) *
+                      2.5) /
+                      100;
+                }
+              } else {
+                threePresentage =
+                  parseInt(threePresentage) +
+                  (parseInt(installmentsRe.docs[i].data().amount) * 3) / 100;
+              }
             }
           }
         }

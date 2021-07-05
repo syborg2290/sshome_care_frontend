@@ -499,6 +499,7 @@ export default function Update_Model({
           type: type,
           isArreas: isArreas,
           arreasAmount: arreasAmount,
+          dueInstallmentAmount:parseInt(instAmountProp),
           date: updateTimestamp,
         });
       });

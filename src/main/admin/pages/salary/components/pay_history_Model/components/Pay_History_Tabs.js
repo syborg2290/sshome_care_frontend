@@ -80,7 +80,7 @@ export default function Pay_History_Tabs() {
       "popstate",
       (event) => {
         if (event.state) {
-          history.push("/assistant/ui/salary");
+          history.push("/admin/ui/salary");
         }
       },
       false

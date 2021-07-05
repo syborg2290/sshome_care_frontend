@@ -660,9 +660,28 @@ async function cashTargetFunc(
                 (parseInt(installmentsRe.docs[i].data()?.arreasAmount) * 2.5) /
                   100;
             } else {
-              threePresentage =
+              
+              if (parseInt(installmentsRe.docs[i].data()?.dueInstallmentAmount) > parseInt(installmentsRe.docs[i].data()?.amount)) {
+                
+                threePresentage =
                 parseInt(threePresentage) +
                 (parseInt(installmentsRe.docs[i].data()?.amount) * 2.5) / 100;
+                
+              } else {
+                
+                let arreasAmountToMonth = parseInt(installmentsRe.docs[i].data()?.amount) - parseInt(installmentsRe.docs[i].data()?.dueInstallmentAmount)
+                
+                threePresentage =
+                parseInt(threePresentage) +
+                (arreasAmountToMonth * 2.5) / 100;
+                
+                threePresentage =
+                parseInt(threePresentage) +
+                (parseInt(installmentsRe.docs[i].data().dueInstallmentAmount) * 3) / 100;
+                
+              }
+               
+              
             }
           } else {
             threePresentage =
@@ -744,9 +763,27 @@ async function cashTargetFunc(
                     2.5) /
                     100;
               } else {
+               
+                if (parseInt(installmentsRe.docs[i].data()?.dueInstallmentAmount) > parseInt(installmentsRe.docs[i].data()?.amount)) {
+                
                 threePresentage =
-                  parseInt(threePresentage) +
-                  (parseInt(installmentsRe.docs[i].data()?.amount) * 2.5) / 100;
+                parseInt(threePresentage) +
+                (parseInt(installmentsRe.docs[i].data()?.amount) * 2.5) / 100;
+                
+              } else {
+                
+                let arreasAmountToMonth = parseInt(installmentsRe.docs[i].data()?.amount) - parseInt(installmentsRe.docs[i].data()?.dueInstallmentAmount)
+                
+                threePresentage =
+                parseInt(threePresentage) +
+                (arreasAmountToMonth * 2.5) / 100;
+                
+                threePresentage =
+                parseInt(threePresentage) +
+                (parseInt(installmentsRe.docs[i].data().dueInstallmentAmount) * 3) / 100;
+                
+              }
+                
               }
             } else {
               threePresentage =

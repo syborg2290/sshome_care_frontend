@@ -194,37 +194,37 @@ export default function Update_Model({
                   );
                 }
               } else {
-                if (14 - daysCountInitial >= 0) {
+                if (7 - daysCountInitial >= 0) {
                   setDelayedDays(0);
                 } else {
-                  setDelayedDays(daysCountInitial - 14);
+                  setDelayedDays(daysCountInitial - 7);
                   if (daysCountInitial / 7 > 0) {
-                    setAllInstallment(Math.round((daysCountInitial - 14) / 7));
+                    setAllInstallment(Math.round((daysCountInitial - 7) / 7));
                   }
                   setDelayedCharges(
-                    daysCountInitial - 14 <= 7
+                    daysCountInitial - 7 <= 7
                       ? 0
-                      : (daysCountInitial - 14) / 7 < 2
+                      : (daysCountInitial - 7) / 7 < 2
                       ? delayedChargesIn
-                      : (daysCountInitial - 14) / 7 > 2 &&
-                        (daysCountInitial - 14) / 7 < 3
+                      : (daysCountInitial - 7) / 7 > 2 &&
+                        (daysCountInitial - 7) / 7 < 3
                       ? delayedChargesIn * 2
-                      : (daysCountInitial - 14) / 7 > 3 &&
-                        (daysCountInitial - 14) / 7 < 4
+                      : (daysCountInitial - 7) / 7 > 3 &&
+                        (daysCountInitial - 7) / 7 < 4
                       ? delayedChargesIn * 3
-                      : (daysCountInitial - 14) / 7 > 4 &&
-                        (daysCountInitial - 14) / 7 < 5
+                      : (daysCountInitial - 7) / 7 > 4 &&
+                        (daysCountInitial - 7) / 7 < 5
                       ? delayedChargesIn * 4
-                      : (daysCountInitial - 14) / 7 > 5 &&
-                        (daysCountInitial - 14) / 7 < 6
+                      : (daysCountInitial - 7) / 7 > 5 &&
+                        (daysCountInitial - 7) / 7 < 6
                       ? delayedChargesIn * 5
-                      : (daysCountInitial - 14) / 7 > 6 &&
-                        (daysCountInitial - 14) / 7 < 7
+                      : (daysCountInitial - 7) / 7 > 6 &&
+                        (daysCountInitial - 7) / 7 < 7
                       ? delayedChargesIn * 6
-                      : (daysCountInitial - 14) / 7 > 7 &&
-                        (daysCountInitial - 14) / 7 < 8
+                      : (daysCountInitial - 7) / 7 > 7 &&
+                        (daysCountInitial - 7) / 7 < 8
                       ? delayedChargesIn * 7
-                      : (delayedChargesIn * (daysCountInitial - 14)) / 7
+                      : (delayedChargesIn * (daysCountInitial - 7)) / 7
                   );
                 }
               }
@@ -296,31 +296,31 @@ export default function Update_Model({
                   );
                 }
               } else {
-                if (14 - daysCount >= 0) {
+                if (7 - daysCount >= 0) {
                   setDelayedDays(0);
                 } else {
-                  setDelayedDays(daysCount - 14);
+                  setDelayedDays(daysCount - 7);
                   if (daysCount / 7 > 0) {
-                    setAllInstallment(Math.round((daysCount - 14) / 7));
+                    setAllInstallment(Math.round((daysCount - 7) / 7));
                   }
                   setDelayedCharges(
-                    daysCount - 14 <= 7
+                    daysCount - 7 <= 7
                       ? 0
-                      : (daysCount - 14) / 7 < 2
+                      : (daysCount - 7) / 7 < 2
                       ? delayedChargesIn
-                      : (daysCount - 14) / 7 > 2 && (daysCount - 14) / 7 < 3
+                      : (daysCount - 7) / 7 > 2 && (daysCount - 7) / 7 < 3
                       ? delayedChargesIn * 2
-                      : (daysCount - 14) / 7 > 3 && (daysCount - 14) / 7 < 4
+                      : (daysCount - 7) / 7 > 3 && (daysCount - 7) / 7 < 4
                       ? delayedChargesIn * 3
-                      : (daysCount - 14) / 7 > 4 && (daysCount - 14) / 7 < 5
+                      : (daysCount - 7) / 7 > 4 && (daysCount - 7) / 7 < 5
                       ? delayedChargesIn * 4
-                      : (daysCount - 14) / 7 > 5 && (daysCount - 14) / 7 < 6
+                      : (daysCount - 7) / 7 > 5 && (daysCount - 7) / 7 < 6
                       ? delayedChargesIn * 5
-                      : (daysCount - 14) / 7 > 6 && (daysCount - 14) / 7 < 7
+                      : (daysCount - 7) / 7 > 6 && (daysCount - 7) / 7 < 7
                       ? delayedChargesIn * 6
-                      : (daysCount - 14) / 7 > 7 && (daysCount - 14) / 7 < 8
+                      : (daysCount - 7) / 7 > 7 && (daysCount - 7) / 7 < 8
                       ? delayedChargesIn * 7
-                      : (delayedChargesIn * (daysCount - 14)) / 7
+                      : (delayedChargesIn * (daysCount - 7)) / 7
                   );
                 }
               }
@@ -375,10 +375,7 @@ export default function Update_Model({
         if (parseInt(dueAmount - paidAmount) > 0) {
           if (inReDoc.docs[0].data().selectedType === 'shop') {
             if (
-              7 - daysCountNode2 >= 0 ||
-              new Date(
-                inReDoc.docs[0].data()?.nextDate?.seconds * 1000
-              ).getDate() > new Date(new Date(date)).getDate()
+              7 - daysCountNode2 >= 0
             ) {
               setIsArreas(false);
             } else {
@@ -386,10 +383,7 @@ export default function Update_Model({
             }
           } else {
             if (
-              14 - daysCountNode2 >= 0 ||
-              new Date(
-                inReDoc.docs[0].data()?.nextDate?.seconds * 1000
-              ).getDate() > new Date(new Date(date)).getDate()
+              7 - daysCountNode2 >= 0
             ) {
               setIsArreas(false);
             } else {

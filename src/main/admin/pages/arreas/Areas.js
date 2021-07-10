@@ -348,10 +348,10 @@ export default function Areas() {
         }
       }
     } else {
-      if (14 - daysCountInitial >= 0) {
+      if (7 - daysCountInitial >= 0) {
       } else {
-        if (daysCountInitial - 14 > 7) {
-          if (Math.round(daysCountInitial) - 14 >= 49) {
+        if (daysCountInitial - 7 > 7) {
+          if (Math.round(daysCountInitial) - 7 >= 49) {
           }
           db.collection('arrears')
             .where('invoice_number', '==', eachRe.data().invoice_number)
@@ -362,33 +362,33 @@ export default function Areas() {
                   .doc(reArreas.docs[0].id)
                   .update({
                     arreas_amount: eachRe.data().amountPerInstallment,
-                    delayed_days: Math.round(daysCountInitial) - 14,
+                    delayed_days: Math.round(daysCountInitial) - 7,
                     status_of_payandgo: eachRe.data().status_of_payandgo,
                     balance: eachRe.data().balance,
                     delayed_charges:
-                      daysCountInitial - 14 <= 7
+                      daysCountInitial - 7 <= 7
                         ? 0
-                        : (daysCountInitial - 14) / 7 < 2
+                        : (daysCountInitial - 7) / 7 < 2
                           ? delayedChargesIn
-                          : (daysCountInitial - 14) / 7 > 2 &&
-                            (daysCountInitial - 14) / 7 < 3
+                          : (daysCountInitial - 7) / 7 > 2 &&
+                            (daysCountInitial - 7) / 7 < 3
                             ? delayedChargesIn * 2
-                            : (daysCountInitial - 14) / 7 > 3 &&
-                              (daysCountInitial - 14) / 7 < 4
+                            : (daysCountInitial - 7) / 7 > 3 &&
+                              (daysCountInitial - 7) / 7 < 4
                               ? delayedChargesIn * 3
-                              : (daysCountInitial - 14) / 7 > 4 &&
-                                (daysCountInitial - 14) / 7 < 5
+                              : (daysCountInitial - 7) / 7 > 4 &&
+                                (daysCountInitial - 7) / 7 < 5
                                 ? delayedChargesIn * 4
-                                : (daysCountInitial - 14) / 7 > 5 &&
-                                  (daysCountInitial - 14) / 7 < 6
+                                : (daysCountInitial - 7) / 7 > 5 &&
+                                  (daysCountInitial - 7) / 7 < 6
                                   ? delayedChargesIn * 5
-                                  : (daysCountInitial - 14) / 7 > 6 &&
-                                    (daysCountInitial - 14) / 7 < 7
+                                  : (daysCountInitial - 7) / 7 > 6 &&
+                                    (daysCountInitial - 7) / 7 < 7
                                     ? delayedChargesIn * 6
-                                    : (daysCountInitial - 14) / 7 > 7 &&
-                                      (daysCountInitial - 14) / 7 < 8
+                                    : (daysCountInitial - 7) / 7 > 7 &&
+                                      (daysCountInitial - 7) / 7 < 8
                                       ? delayedChargesIn * 7
-                                      : (delayedChargesIn * (daysCountInitial - 14)) / 7,
+                                      : (delayedChargesIn * (daysCountInitial - 7)) / 7,
                   });
               } else {
                 db.collection('arrears').add({
@@ -405,29 +405,29 @@ export default function Areas() {
                   status_of_payandgo: eachRe.data().status_of_payandgo,
                   delayed_days: Math.round(daysCountInitial) - 7,
                   delayed_charges:
-                    daysCountInitial - 14 <= 7
+                    daysCountInitial - 7 <= 7
                       ? 0
-                      : (daysCountInitial - 14) / 7 < 2
+                      : (daysCountInitial - 7) / 7 < 2
                         ? delayedChargesIn
-                        : (daysCountInitial - 14) / 7 > 2 &&
-                          (daysCountInitial - 14) / 7 < 3
+                        : (daysCountInitial - 7) / 7 > 2 &&
+                          (daysCountInitial - 7) / 7 < 3
                           ? delayedChargesIn * 2
-                          : (daysCountInitial - 14) / 7 > 3 &&
-                            (daysCountInitial - 14) / 7 < 4
+                          : (daysCountInitial - 7) / 7 > 3 &&
+                            (daysCountInitial - 7) / 7 < 4
                             ? delayedChargesIn * 3
-                            : (daysCountInitial - 14) / 7 > 4 &&
-                              (daysCountInitial - 14) / 7 < 5
+                            : (daysCountInitial - 7) / 7 > 4 &&
+                              (daysCountInitial - 7) / 7 < 5
                               ? delayedChargesIn * 4
-                              : (daysCountInitial - 14) / 7 > 5 &&
-                                (daysCountInitial - 14) / 7 < 6
+                              : (daysCountInitial - 7) / 7 > 5 &&
+                                (daysCountInitial - 7) / 7 < 6
                                 ? delayedChargesIn * 5
-                                : (daysCountInitial - 14) / 7 > 6 &&
-                                  (daysCountInitial - 14) / 7 < 7
+                                : (daysCountInitial - 7) / 7 > 6 &&
+                                  (daysCountInitial - 7) / 7 < 7
                                   ? delayedChargesIn * 6
-                                  : (daysCountInitial - 14) / 7 > 7 &&
-                                    (daysCountInitial - 14) / 7 < 8
+                                  : (daysCountInitial - 7) / 7 > 7 &&
+                                    (daysCountInitial - 7) / 7 < 8
                                     ? delayedChargesIn * 7
-                                    : (delayedChargesIn * (daysCountInitial - 14)) / 7,
+                                    : (delayedChargesIn * (daysCountInitial - 7)) / 7,
                   date: firebase.firestore.FieldValue.serverTimestamp(),
                 });
               }
@@ -571,27 +571,27 @@ export default function Areas() {
             .doc(statusWeek.docs[0].id)
             .update({
               arreas_amount: dueAmountOfArreas,
-              delayed_days: Math.round(daysCount) - 14 < 0 ? 0 : Math.round(daysCount) - 14,
+              delayed_days: Math.round(daysCount) - 7 < 0 ? 0 : Math.round(daysCount) - 7,
               status_of_payandgo: eachRe.data().status_of_payandgo,
               balance: eachRe.data().balance,
               delayed_charges:
-                daysCount - 14 <= 7
+                daysCount - 7 <= 7
                   ? 0
-                  : (daysCount - 14) / 7 < 2
+                  : (daysCount - 7) / 7 < 2
                     ? delayedChargesIn
-                    : (daysCount - 14) / 7 > 2 && (daysCount - 14) / 7 < 3
+                    : (daysCount - 7) / 7 > 2 && (daysCount - 7) / 7 < 3
                       ? delayedChargesIn * 2
-                      : (daysCount - 14) / 7 > 3 && (daysCount - 14) / 7 < 4
+                      : (daysCount - 7) / 7 > 3 && (daysCount - 7) / 7 < 4
                         ? delayedChargesIn * 3
-                        : (daysCount - 14) / 7 > 4 && (daysCount - 14) / 7 < 5
+                        : (daysCount - 7) / 7 > 4 && (daysCount - 7) / 7 < 5
                           ? delayedChargesIn * 4
-                          : (daysCount - 14) / 7 > 5 && (daysCount - 14) / 7 < 6
+                          : (daysCount - 7) / 7 > 5 && (daysCount - 7) / 7 < 6
                             ? delayedChargesIn * 5
-                            : (daysCount - 14) / 7 > 6 && (daysCount - 14) / 7 < 7
+                            : (daysCount - 7) / 7 > 6 && (daysCount - 7) / 7 < 7
                               ? delayedChargesIn * 6
-                              : (daysCount - 14) / 7 > 7 && (daysCount - 14) / 7 < 8
+                              : (daysCount - 7) / 7 > 7 && (daysCount - 7) / 7 < 8
                                 ? delayedChargesIn * 7
-                                : (delayedChargesIn * (daysCount - 14)) / 7,
+                                : (delayedChargesIn * (daysCount - 7)) / 7,
             });
         } else {
           db.collection('arrears').add({
@@ -606,25 +606,25 @@ export default function Areas() {
             amountPerInstallment: eachRe.data().amountPerInstallment,
             noOfInstallment: eachRe.data().noOfInstallment,
             status_of_payandgo: eachRe.data().status_of_payandgo,
-            delayed_days: Math.round(daysCount) - 14 < 0 ? 0 : Math.round(daysCount) - 14,
+            delayed_days: Math.round(daysCount) - 7 < 0 ? 0 : Math.round(daysCount) - 7,
             delayed_charges:
-              daysCount - 14 <= 7
+              daysCount - 7 <= 7
                 ? 0
-                : (daysCount - 14) / 7 < 2
+                : (daysCount - 7) / 7 < 2
                   ? delayedChargesIn
-                  : (daysCount - 14) / 7 > 2 && (daysCount - 14) / 7 < 3
+                  : (daysCount - 7) / 7 > 2 && (daysCount - 7) / 7 < 3
                     ? delayedChargesIn * 2
-                    : (daysCount - 14) / 7 > 3 && (daysCount - 14) / 7 < 4
+                    : (daysCount - 7) / 7 > 3 && (daysCount - 7) / 7 < 4
                       ? delayedChargesIn * 3
-                      : (daysCount - 14) / 7 > 4 && (daysCount - 14) / 7 < 5
+                      : (daysCount - 7) / 7 > 4 && (daysCount - 7) / 7 < 5
                         ? delayedChargesIn * 4
-                        : (daysCount - 14) / 7 > 5 && (daysCount - 14) / 7 < 6
+                        : (daysCount - 7) / 7 > 5 && (daysCount - 7) / 7 < 6
                           ? delayedChargesIn * 5
-                          : (daysCount - 14) / 7 > 6 && (daysCount - 14) / 7 < 7
+                          : (daysCount - 7) / 7 > 6 && (daysCount - 7) / 7 < 7
                             ? delayedChargesIn * 6
-                            : (daysCount - 14) / 7 > 7 && (daysCount - 14) / 7 < 8
+                            : (daysCount - 7) / 7 > 7 && (daysCount - 7) / 7 < 8
                               ? delayedChargesIn * 7
-                              : (delayedChargesIn * (daysCount - 14)) / 7,
+                              : (delayedChargesIn * (daysCount - 7)) / 7,
             date: firebase.firestore.FieldValue.serverTimestamp(),
           });
         }

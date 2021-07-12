@@ -1,5 +1,5 @@
-import React, {useState, useEffect, useRef} from 'react';
-import {useHistory} from 'react-router-dom';
+import React, { useState, useEffect, useRef } from "react";
+import { useHistory } from "react-router-dom";
 import {
   TextField,
   Grid,
@@ -8,38 +8,38 @@ import {
   Button,
   Fab,
   Card,
-  CardContent,
-} from '@material-ui/core';
-import CurrencyFormat from 'react-currency-format';
-import {Modal, Spin, Space, DatePicker} from 'antd';
+  CardContent
+} from "@material-ui/core";
+import CurrencyFormat from "react-currency-format";
+import { Modal, Spin, Space, DatePicker } from "antd";
 
 // styles
-import './Add_Paysheet_Model.css';
+import "./Add_Paysheet_Model.css";
 
-import db from '../../../../../../config/firebase.js';
-import firebase from 'firebase';
+import db from "../../../../../../config/firebase.js";
+import firebase from "firebase";
 
 //icons
-import HistoryIcon from '@material-ui/icons/History';
+import HistoryIcon from "@material-ui/icons/History";
 
 // components
-import AttendanceHistorys from './components/attendance_history_Model/Attendance_History';
-import CashSaleHistorys from './components/cash_sale_history_Model/Cash_Sale_History';
-import CashTargetHistorys from './components/cash_target_history_Model/Cash_Target_History';
-import ExcardHistorys from './components/excard_history_Model/Excard_History';
-import SaleTargetHistorys from './components/sale_target_history_Model/Sale_Target_History';
-import ShortageHistorys from './components/shortage_history_Model/Shortage_History';
+import AttendanceHistorys from "./components/attendance_history_Model/Attendance_History";
+import CashSaleHistorys from "./components/cash_sale_history_Model/Cash_Sale_History";
+import CashTargetHistorys from "./components/cash_target_history_Model/Cash_Target_History";
+import ExcardHistorys from "./components/excard_history_Model/Excard_History";
+import SaleTargetHistorys from "./components/sale_target_history_Model/Sale_Target_History";
+import ShortageHistorys from "./components/shortage_history_Model/Shortage_History";
 
 async function getGasshort(root, isFirstSalary, lastSalaryDate, currentDate) {
   var reGas = await db
-    .collection('gas_invoice')
-    .where('selectedType', '==', root)
+    .collection("gas_invoice")
+    .where("selectedType", "==", root)
     .get();
 
   var rootStatus;
 
-  if (root !== 'shop') {
-    rootStatus = await db.collection('shop').where('root', '==', root).get();
+  if (root !== "shop") {
+    rootStatus = await db.collection("shop").where("root", "==", root).get();
   }
 
   var gasShort = 0;
@@ -63,13 +63,13 @@ async function getGasshort(root, isFirstSalary, lastSalaryDate, currentDate) {
     }
   }
 
-  let countShop = await (await db.collection('shop').get()).docs.length;
+  let countShop = await (await db.collection("shop").get()).docs.length;
 
   return gasShort === 0
     ? 0
-    : root === 'shop'
+    : root === "shop"
     ? Math.round((gasShort / parseInt(countShop)) * 10) / 10
-    : rootStatus.docs[0].data().employee2 === ''
+    : rootStatus.docs[0].data().employee2 === ""
     ? Math.round(gasShort * 10) / 10
     : Math.round((gasShort / 2) * 10) / 10;
 }
@@ -81,8 +81,8 @@ async function getGasshortForTable(
   currentDate
 ) {
   var reGas = await db
-    .collection('gas_invoice')
-    .where('selectedType', '==', root)
+    .collection("gas_invoice")
+    .where("selectedType", "==", root)
     .get();
 
   var gasShort1 = [];
@@ -94,8 +94,8 @@ async function getGasshortForTable(
           gasShort1.push({
             date: reGas.docs[i].data().date,
             amount: reGas.docs[i].data().shortage,
-            short_type: 'Gas',
-            type: reGas.docs[i].data().selectedType,
+            short_type: "Gas",
+            type: reGas.docs[i].data().selectedType
           });
         }
       } else {
@@ -110,8 +110,8 @@ async function getGasshortForTable(
             gasShort1.push({
               date: reGas.docs[i].data().date,
               amount: reGas.docs[i].data().shortage,
-              short_type: 'Gas',
-              type: reGas.docs[i].data().selectedType,
+              short_type: "Gas",
+              type: reGas.docs[i].data().selectedType
             });
           }
         }
@@ -129,14 +129,14 @@ async function getGasInstallmentshort(
   currentDate
 ) {
   var reGas = await db
-    .collection('gas_installment')
-    .where('type', '==', root)
+    .collection("gas_installment")
+    .where("type", "==", root)
     .get();
 
   var rootStatus;
 
-  if (root !== 'shop') {
-    rootStatus = await db.collection('shop').where('root', '==', root).get();
+  if (root !== "shop") {
+    rootStatus = await db.collection("shop").where("root", "==", root).get();
   }
 
   var gasShort = 0;
@@ -160,13 +160,13 @@ async function getGasInstallmentshort(
     }
   }
 
-  let countShop = await (await db.collection('shop').get()).docs.length;
+  let countShop = await (await db.collection("shop").get()).docs.length;
 
   return gasShort === 0
     ? 0
-    : root === 'shop'
+    : root === "shop"
     ? Math.round((gasShort / parseInt(countShop)) * 10) / 10
-    : rootStatus.docs[0].data().employee2 === ''
+    : rootStatus.docs[0].data().employee2 === ""
     ? Math.round(gasShort * 10) / 10
     : Math.round((gasShort / 2) * 10) / 10;
 }
@@ -178,8 +178,8 @@ async function getGasInstallmenthortForTable(
   currentDate
 ) {
   var reGas = await db
-    .collection('gas_installment')
-    .where('type', '==', root)
+    .collection("gas_installment")
+    .where("type", "==", root)
     .get();
 
   var gasShort1 = [];
@@ -191,8 +191,8 @@ async function getGasInstallmenthortForTable(
           gasShort1.push({
             date: reGas.docs[i].data().date,
             amount: reGas.docs[i].data().shortage,
-            short_type: 'Gas_installment',
-            type: reGas.docs[i].data().type,
+            short_type: "Gas_installment",
+            type: reGas.docs[i].data().type
           });
         }
       } else {
@@ -207,8 +207,8 @@ async function getGasInstallmenthortForTable(
             gasShort1.push({
               date: reGas.docs[i].data().date,
               amount: reGas.docs[i].data().shortage,
-              short_type: 'Gas_installment',
-              type: reGas.docs[i].data().type,
+              short_type: "Gas_installment",
+              type: reGas.docs[i].data().type
             });
           }
         }
@@ -226,14 +226,14 @@ async function getInstallmentshort(
   currentDate
 ) {
   var reInstallment = await db
-    .collection('installment')
-    .where('type', '==', root)
+    .collection("installment")
+    .where("type", "==", root)
     .get();
 
   var rootStatus;
 
-  if (root !== 'shop') {
-    rootStatus = await db.collection('root').where('root', '==', root).get();
+  if (root !== "shop") {
+    rootStatus = await db.collection("root").where("root", "==", root).get();
   }
 
   var installShortage = 0;
@@ -259,13 +259,13 @@ async function getInstallmentshort(
     }
   }
 
-  let countShop = await (await db.collection('shop').get()).docs.length;
+  let countShop = await (await db.collection("shop").get()).docs.length;
 
   return installShortage === 0
     ? 0
-    : root === 'shop'
+    : root === "shop"
     ? Math.round((installShortage / parseInt(countShop)) * 10) / 10
-    : rootStatus.docs[0].data().employee2 === ''
+    : rootStatus.docs[0].data().employee2 === ""
     ? Math.round(installShortage * 10) / 10
     : Math.round((installShortage / 2) * 10) / 10;
 }
@@ -277,8 +277,8 @@ async function getInstallmentshortForTable(
   currentDate
 ) {
   var reInstallment = await db
-    .collection('installment')
-    .where('type', '==', root)
+    .collection("installment")
+    .where("type", "==", root)
     .get();
 
   var installShortage = [];
@@ -288,8 +288,8 @@ async function getInstallmentshortForTable(
         installShortage.push({
           date: reInstallment.docs[i].data().date,
           amount: reInstallment.docs[i].data().shortage,
-          short_type: 'Installment',
-          type: reInstallment.docs[i].data().type,
+          short_type: "Installment",
+          type: reInstallment.docs[i].data().type
         });
       }
     } else {
@@ -304,8 +304,8 @@ async function getInstallmentshortForTable(
           installShortage.push({
             date: reInstallment.docs[i].data().date,
             amount: reInstallment.docs[i].data().shortage,
-            short_type: 'Installment',
-            type: reInstallment.docs[i].data().type,
+            short_type: "Installment",
+            type: reInstallment.docs[i].data().type
           });
         }
       }
@@ -316,14 +316,14 @@ async function getInstallmentshortForTable(
 
 async function getShortage(root, isFirstSalary, lastSalaryDate, currentDate) {
   var reInvoice = await db
-    .collection('invoice')
-    .where('selectedType', '==', root)
+    .collection("invoice")
+    .where("selectedType", "==", root)
     .get();
 
   var rootStatus;
 
-  if (root !== 'shop') {
-    rootStatus = await db.collection('root').where('root', '==', root).get();
+  if (root !== "shop") {
+    rootStatus = await db.collection("root").where("root", "==", root).get();
   }
 
   var shortage = 0;
@@ -347,13 +347,13 @@ async function getShortage(root, isFirstSalary, lastSalaryDate, currentDate) {
     }
   }
 
-  let countShop = await (await db.collection('shop').get()).docs.length;
+  let countShop = await (await db.collection("shop").get()).docs.length;
 
   return shortage === 0
     ? 0
-    : root === 'shop'
+    : root === "shop"
     ? Math.round((shortage / parseInt(countShop)) * 10) / 10
-    : rootStatus.docs[0].data().employee2 === ''
+    : rootStatus.docs[0].data().employee2 === ""
     ? Math.round(shortage * 10) / 10
     : Math.round((shortage / 2) * 10) / 10;
 }
@@ -365,8 +365,8 @@ async function getShortageForTable(
   currentDate
 ) {
   var reInvoice = await db
-    .collection('invoice')
-    .where('selectedType', '==', root)
+    .collection("invoice")
+    .where("selectedType", "==", root)
     .get();
 
   var shortage = [];
@@ -376,8 +376,8 @@ async function getShortageForTable(
         shortage.push({
           date: reInvoice.docs[i].data().date,
           amount: reInvoice.docs[i].data().shortage,
-          short_type: 'Invoice',
-          type: reInvoice.docs[i].data().selectedType,
+          short_type: "Invoice",
+          type: reInvoice.docs[i].data().selectedType
         });
       }
     } else {
@@ -392,8 +392,8 @@ async function getShortageForTable(
           shortage.push({
             date: reInvoice.docs[i].data().date,
             amount: reInvoice.docs[i].data().shortage,
-            short_type: 'Invoice',
-            type: reInvoice.docs[i].data().selectedType,
+            short_type: "Invoice",
+            type: reInvoice.docs[i].data().selectedType
           });
         }
       }
@@ -410,8 +410,8 @@ async function getAllAttendance(
   currentDate
 ) {
   var reAt = await db
-    .collection('attendance_history')
-    .where('nic', '==', nic)
+    .collection("attendance_history")
+    .where("nic", "==", nic)
     .get();
 
   if (isFirstSalary) {
@@ -441,8 +441,8 @@ async function getAllAttendanceForTable(
   currentDate
 ) {
   var reAt = await db
-    .collection('attendance_history')
-    .where('nic', '==', nic)
+    .collection("attendance_history")
+    .where("nic", "==", nic)
     .get();
 
   if (isFirstSalary) {
@@ -472,20 +472,20 @@ async function getAllAttendanceForTable(
 
 async function getSaleTarget(root, currentDate) {
   var saleRe = await db
-    .collection('invoice')
-    .where('selectedType', '==', root)
+    .collection("invoice")
+    .where("selectedType", "==", root)
     .get();
 
   var salesTaregt = await db
-    .collection('targets')
-    .where('selectedType', '==', root)
+    .collection("targets")
+    .where("selectedType", "==", root)
     .get();
   var saleTargetValue = 0;
   var targetValue = 0;
 
   for (var k = 0; k < salesTaregt.docs.length; k++) {
     if (
-      salesTaregt.docs[k].data().target_type === 'Sale target' &&
+      salesTaregt.docs[k].data().target_type === "Sale target" &&
       new Date(
         salesTaregt.docs[k].data().start_date?.seconds * 1000
       ).getFullYear() === new Date().getFullYear() &&
@@ -513,14 +513,14 @@ async function getSaleTarget(root, currentDate) {
     }
   }
 
-  let countShop = await (await db.collection('shop').get()).docs.length;
+  let countShop = await (await db.collection("shop").get()).docs.length;
 
   return targetValue === 0
     ? 0
     : saleTargetValue === 0
     ? 0
     : saleTargetValue >= targetValue
-    ? root === 'shop'
+    ? root === "shop"
       ? 5000 / parseInt(countShop)
       : 5000 / 2
     : 0;
@@ -533,8 +533,8 @@ async function getSaleTargetForTable(
   currentDate
 ) {
   var saleRe = await db
-    .collection('invoice')
-    .where('selectedType', '==', root)
+    .collection("invoice")
+    .where("selectedType", "==", root)
     .get();
 
   var saleTargetValue = [];
@@ -549,7 +549,7 @@ async function getSaleTargetForTable(
           serail_number: saleRe.docs[i].data().items[n].serialNo,
           total:
             parseInt(saleRe.docs[i].data().items[n].purchasedPrice) *
-            parseInt(saleRe.docs[i].data().items[n].qty),
+            parseInt(saleRe.docs[i].data().items[n].qty)
         });
       }
     } else {
@@ -568,7 +568,7 @@ async function getSaleTargetForTable(
             serail_number: saleRe.docs[i].data().items[n].serialNo,
             total:
               parseInt(saleRe.docs[i].data().items[n].purchasedPrice) *
-              parseInt(saleRe.docs[i].data().items[n].qty),
+              parseInt(saleRe.docs[i].data().items[n].qty)
           });
         }
       }
@@ -584,17 +584,17 @@ async function cashTargetFunc(
   currentDate
 ) {
   var saleRe = await db
-    .collection('invoice')
-    .where('selectedType', '==', root)
+    .collection("invoice")
+    .where("selectedType", "==", root)
     .get();
   var installmentsRe = await db
-    .collection('installment')
-    .where('type', '==', root)
+    .collection("installment")
+    .where("type", "==", root)
     .get();
 
   var cashTaregtRpp = await db
-    .collection('targets')
-    .where('selectedType', '==', root)
+    .collection("targets")
+    .where("selectedType", "==", root)
     .get();
   var returnValue = 0;
   var threePresentage = 0;
@@ -602,7 +602,7 @@ async function cashTargetFunc(
 
   var dueCashTaregt = cashTaregtRpp.docs.filter(
     (ob) =>
-      ob.data().target_type === 'Cash target' &&
+      ob.data().target_type === "Cash target" &&
       new Date(ob.data().start_date?.seconds * 1000).getFullYear() ===
         new Date().getFullYear() &&
       new Date(ob.data().start_date?.seconds * 1000).getMonth() ===
@@ -613,7 +613,7 @@ async function cashTargetFunc(
     var targetValue = parseInt(dueCashTaregt[0].data().amount);
     var cashTargetValue = 0;
     for (let i = 0; i < saleRe.docs.length; i++) {
-      if (saleRe.docs[i].data().paymentWay === 'PayandGo') {
+      if (saleRe.docs[i].data().paymentWay === "PayandGo") {
         let seeBool1 =
           new Date(saleRe.docs[i].data()?.date.seconds * 1000) >
             new Date(dueCashTaregt[0].data()?.start_date.seconds * 1000) &&
@@ -666,9 +666,15 @@ async function cashTargetFunc(
                   100;
             }
           } else {
-             threePresentage =
+            if (installmentsRe.docs[i].data()?.arreasAmount > 0) {
+              threePresentage =
+                parseInt(threePresentage) +
+                (parseInt(installmentsRe.docs[i].data().amount) * 2.5) / 100;
+            } else {
+              threePresentage =
                 parseInt(threePresentage) +
                 (parseInt(installmentsRe.docs[i].data().amount) * 3) / 100;
+            }
           }
 
           fourPresentage =
@@ -688,7 +694,7 @@ async function cashTargetFunc(
     }
   } else {
     for (let i = 0; i < saleRe.docs.length; i++) {
-      if (saleRe.docs[i].data().paymentWay === 'PayandGo') {
+      if (saleRe.docs[i].data().paymentWay === "PayandGo") {
         if (isFirstSalary) {
           threePresentage =
             parseInt(threePresentage) +
@@ -752,9 +758,15 @@ async function cashTargetFunc(
                     100;
               }
             } else {
-               threePresentage =
+              if (installmentsRe.docs[i].data()?.arreasAmount > 0) {
+                threePresentage =
+                  parseInt(threePresentage) +
+                  (parseInt(installmentsRe.docs[i].data().amount) * 2.5) / 100;
+              } else {
+                threePresentage =
                   parseInt(threePresentage) +
                   (parseInt(installmentsRe.docs[i].data().amount) * 3) / 100;
+              }
             }
           }
         }
@@ -766,17 +778,17 @@ async function cashTargetFunc(
 
   var rootStatus;
 
-  if (root !== 'shop') {
-    rootStatus = await db.collection('root').where('root', '==', root).get();
+  if (root !== "shop") {
+    rootStatus = await db.collection("root").where("root", "==", root).get();
   }
 
-  let countShop = await (await db.collection('shop').get()).docs.length;
+  let countShop = await (await db.collection("shop").get()).docs.length;
 
   return returnValue === 0
     ? 0
-    : root === 'shop'
+    : root === "shop"
     ? Math.round((returnValue / parseInt(countShop)) * 10) / 10
-    : rootStatus.docs[0].data().employee2 === ''
+    : rootStatus.docs[0].data().employee2 === ""
     ? Math.round(returnValue * 10) / 10
     : Math.round((returnValue / 2) * 10) / 10;
 }
@@ -788,24 +800,24 @@ async function cashTargetFuncForTable(
   currentDate
 ) {
   var saleRe = await db
-    .collection('invoice')
-    .where('selectedType', '==', root)
+    .collection("invoice")
+    .where("selectedType", "==", root)
     .get();
   var installmentsRe = await db
-    .collection('installment')
-    .where('type', '==', root)
+    .collection("installment")
+    .where("type", "==", root)
     .get();
 
   var returnValue = [];
 
   for (let i = 0; i < saleRe.docs.length; i++) {
-    if (saleRe.docs[i].data().paymentWay === 'PayandGo') {
+    if (saleRe.docs[i].data().paymentWay === "PayandGo") {
       if (isFirstSalary) {
         returnValue.push({
           date: saleRe.docs[i].data().date,
-          type: 'Invoice',
+          type: "Invoice",
           invoice_no: saleRe.docs[i].data().invoice_number,
-          amount: saleRe.docs[i].data().downpayment,
+          amount: saleRe.docs[i].data().downpayment
         });
       } else {
         let seeBool1 =
@@ -817,9 +829,9 @@ async function cashTargetFuncForTable(
         if (seeBool1) {
           returnValue.push({
             date: saleRe.docs[i].data().date,
-            type: 'Invoice',
+            type: "Invoice",
             invoice_no: saleRe.docs[i].data().invoice_number,
-            amount: saleRe.docs[i].data().downpayment,
+            amount: saleRe.docs[i].data().downpayment
           });
         }
       }
@@ -831,9 +843,9 @@ async function cashTargetFuncForTable(
       if (installmentsRe.docs[i].data().isExpired === false) {
         returnValue.push({
           date: installmentsRe.docs[i].data().date,
-          type: 'Installment',
+          type: "Installment",
           invoice_no: installmentsRe.docs[i].data().invoice_number,
-          amount: installmentsRe.docs[i].data().amount,
+          amount: installmentsRe.docs[i].data().amount
         });
       }
     } else {
@@ -847,9 +859,9 @@ async function cashTargetFuncForTable(
         if (installmentsRe.docs[i].data().isExpired === false) {
           returnValue.push({
             date: installmentsRe.docs[i].data().date,
-            type: 'Installment',
+            type: "Installment",
             invoice_no: installmentsRe.docs[i].data().invoice_number,
-            amount: installmentsRe.docs[i].data().amount,
+            amount: installmentsRe.docs[i].data().amount
           });
         }
       }
@@ -866,14 +878,14 @@ async function getCashSaleFunc(
   currentDate
 ) {
   var saleRe = await db
-    .collection('invoice')
-    .where('selectedType', '==', root)
+    .collection("invoice")
+    .where("selectedType", "==", root)
     .get();
 
   var cashSale = 0;
 
   for (var i = 0; i < saleRe.docs.length; i++) {
-    if (saleRe.docs[i].data().paymentWay === 'FullPayment') {
+    if (saleRe.docs[i].data().paymentWay === "FullPayment") {
       if (isFirstSalary) {
         for (let n = 0; n < saleRe.docs[i].data().items.length; n++) {
           cashSale =
@@ -912,17 +924,17 @@ async function getCashSaleFunc(
 
   var rootStatus;
 
-  if (root !== 'shop') {
-    rootStatus = await db.collection('root').where('root', '==', root).get();
+  if (root !== "shop") {
+    rootStatus = await db.collection("root").where("root", "==", root).get();
   }
 
-  let countShop = await (await db.collection('shop').get()).docs.length;
+  let countShop = await (await db.collection("shop").get()).docs.length;
 
   return cashSale === 0
     ? 0
-    : root === 'shop'
+    : root === "shop"
     ? Math.round((cashSale / parseInt(countShop)) * 10) / 10
-    : rootStatus.docs[0].data().employee2 === ''
+    : rootStatus.docs[0].data().employee2 === ""
     ? Math.round(cashSale * 10) / 10
     : Math.round((cashSale / 2) * 10) / 10;
 }
@@ -934,14 +946,14 @@ async function getCashSaleFuncForTable(
   currentDate
 ) {
   var saleRe = await db
-    .collection('invoice')
-    .where('selectedType', '==', root)
+    .collection("invoice")
+    .where("selectedType", "==", root)
     .get();
 
   var cashSale = [];
 
   for (var i = 0; i < saleRe.docs.length; i++) {
-    if (saleRe.docs[i].data().paymentWay === 'FullPayment') {
+    if (saleRe.docs[i].data().paymentWay === "FullPayment") {
       if (isFirstSalary) {
         for (let n = 0; n < saleRe.docs[i].data().items.length; n++) {
           cashSale.push({
@@ -954,7 +966,7 @@ async function getCashSaleFuncForTable(
             ),
             qty: saleRe.docs[i].data().items[n].qty,
             item_name: saleRe.docs[i].data().items[n].item_name,
-            serail_number: saleRe.docs[i].data().items[n].serialNo,
+            serail_number: saleRe.docs[i].data().items[n].serialNo
           });
         }
       } else {
@@ -976,7 +988,7 @@ async function getCashSaleFuncForTable(
               ),
               qty: saleRe.docs[i].data().items[n].qty,
               item_name: saleRe.docs[i].data().items[n].item_name,
-              serail_number: saleRe.docs[i].data().items[n].serialNo,
+              serail_number: saleRe.docs[i].data().items[n].serialNo
             });
           }
         }
@@ -994,8 +1006,8 @@ async function withCylinderGas(
   currentDate
 ) {
   var gasCyli = await db
-    .collection('gas_invoice')
-    .where('selectedType', '==', root)
+    .collection("gas_invoice")
+    .where("selectedType", "==", root)
     .get();
 
   var gasCylP = 0;
@@ -1022,17 +1034,17 @@ async function withCylinderGas(
 
   var rootStatus;
 
-  if (root !== 'shop') {
-    rootStatus = await db.collection('root').where('root', '==', root).get();
+  if (root !== "shop") {
+    rootStatus = await db.collection("root").where("root", "==", root).get();
   }
 
-  let countShop = await (await db.collection('shop').get()).docs.length;
+  let countShop = await (await db.collection("shop").get()).docs.length;
 
   return gasCylP === 0
     ? 0
-    : root === 'shop'
+    : root === "shop"
     ? Math.round((gasCylP / parseInt(countShop)) * 10) / 10
-    : rootStatus.docs[0].data().employee2 === ''
+    : rootStatus.docs[0].data().employee2 === ""
     ? Math.round(gasCylP * 10) / 10
     : Math.round((gasCylP / 2) * 10) / 10;
 }
@@ -1044,14 +1056,14 @@ async function gasDownpayment(
   currentDate
 ) {
   var gasCyli = await db
-    .collection('gas_invoice')
-    .where('selectedType', '==', root)
+    .collection("gas_invoice")
+    .where("selectedType", "==", root)
     .get();
 
   var gasCylP = 0;
 
   for (var i = 0; i < gasCyli.docs.length; i++) {
-    if (gasCyli.docs[i].data().paymentWay !== 'FullPayment') {
+    if (gasCyli.docs[i].data().paymentWay !== "FullPayment") {
       if (isFirstSalary) {
         gasCylP =
           parseInt(gasCylP) +
@@ -1074,17 +1086,17 @@ async function gasDownpayment(
 
   var rootStatus;
 
-  if (root !== 'shop') {
-    rootStatus = await db.collection('root').where('root', '==', root).get();
+  if (root !== "shop") {
+    rootStatus = await db.collection("root").where("root", "==", root).get();
   }
 
-  let countShop = await (await db.collection('shop').get()).docs.length;
+  let countShop = await (await db.collection("shop").get()).docs.length;
 
   return gasCylP === 0
     ? 0
-    : root === 'shop'
+    : root === "shop"
     ? Math.round((gasCylP / parseInt(countShop)) * 10) / 10
-    : rootStatus.docs[0].data().employee2 === ''
+    : rootStatus.docs[0].data().employee2 === ""
     ? Math.round(gasCylP * 10) / 10
     : Math.round((gasCylP / 2) * 10) / 10;
 }
@@ -1096,8 +1108,8 @@ async function gasInstallment(
   currentDate
 ) {
   var gasCyli = await db
-    .collection('gas_installment')
-    .where('type', '==', root)
+    .collection("gas_installment")
+    .where("type", "==", root)
     .get();
 
   var gasCylP = 0;
@@ -1123,25 +1135,25 @@ async function gasInstallment(
 
   var rootStatus;
 
-  if (root !== 'shop') {
-    rootStatus = await db.collection('root').where('root', '==', root).get();
+  if (root !== "shop") {
+    rootStatus = await db.collection("root").where("root", "==", root).get();
   }
 
-  let countShop = await (await db.collection('shop').get()).docs.length;
+  let countShop = await (await db.collection("shop").get()).docs.length;
 
   return gasCylP === 0
     ? 0
-    : root === 'shop'
+    : root === "shop"
     ? Math.round((gasCylP / parseInt(countShop)) * 10) / 10
-    : rootStatus.docs[0].data().employee2 === ''
+    : rootStatus.docs[0].data().employee2 === ""
     ? Math.round(gasCylP * 10) / 10
     : Math.round((gasCylP / 2) * 10) / 10;
 }
 
 async function getExcardFunc(root, isFirstSalary, lastSalaryDate, currentDate) {
   var installmentsRe = await db
-    .collection('installment')
-    .where('type', '==', root)
+    .collection("installment")
+    .where("type", "==", root)
     .get();
 
   var excardAmount = 0;
@@ -1172,17 +1184,17 @@ async function getExcardFunc(root, isFirstSalary, lastSalaryDate, currentDate) {
 
   var rootStatus;
 
-  if (root !== 'shop') {
-    rootStatus = await db.collection('root').where('root', '==', root).get();
+  if (root !== "shop") {
+    rootStatus = await db.collection("root").where("root", "==", root).get();
   }
 
-  let countShop = await (await db.collection('shop').get()).docs.length;
+  let countShop = await (await db.collection("shop").get()).docs.length;
 
   return excardAmount === 0
     ? 0
-    : root === 'shop'
+    : root === "shop"
     ? Math.round((excardAmount / parseInt(countShop)) * 10) / 10
-    : rootStatus.docs[0].data().employee2 === ''
+    : rootStatus.docs[0].data().employee2 === ""
     ? Math.round(excardAmount * 10) / 10
     : Math.round((excardAmount / 2) * 10) / 10;
 }
@@ -1194,8 +1206,8 @@ async function getExcardFuncForTable(
   currentDate
 ) {
   var installmentsRe = await db
-    .collection('installment')
-    .where('type', '==', root)
+    .collection("installment")
+    .where("type", "==", root)
     .get();
 
   var excardList = [];
@@ -1206,7 +1218,7 @@ async function getExcardFuncForTable(
         excardList.push({
           date: installmentsRe.docs[i].data().date,
           amount: installmentsRe.docs[i].data().amount,
-          invoice_number: installmentsRe.docs[i].data().invoice_number,
+          invoice_number: installmentsRe.docs[i].data().invoice_number
         });
       }
     } else {
@@ -1221,7 +1233,7 @@ async function getExcardFuncForTable(
           excardList.push({
             date: installmentsRe.docs[i].data().date,
             amount: installmentsRe.docs[i].data().amount,
-            invoice_number: installmentsRe.docs[i].data().invoice_number,
+            invoice_number: installmentsRe.docs[i].data().invoice_number
           });
         }
       }
@@ -1231,7 +1243,7 @@ async function getExcardFuncForTable(
   return excardList;
 }
 
-export default function Add_Paysheet_Model({nic}) {
+export default function Add_Paysheet_Model({ nic }) {
   const [attendanceModel, setAttendanceModel] = useState(false);
   const [cashSaleModel, setCashSaleModel] = useState(false);
   const [cashTargetModel, setCashTargetModel] = useState(false);
@@ -1240,11 +1252,11 @@ export default function Add_Paysheet_Model({nic}) {
   const [shortageModel, setShortageModel] = useState(false);
 
   const [loading, setLoading] = useState(false);
-  const [validation, setValidation] = useState('');
+  const [validation, setValidation] = useState("");
   const [alreadyPaid, setAlreadyPaid] = useState(false);
 
   // eslint-disable-next-line
-  const [root, setRoot] = useState('');
+  const [root, setRoot] = useState("");
 
   const [attendanceList, setAttendanceList] = useState([]);
   // eslint-disable-next-line
@@ -1306,15 +1318,15 @@ export default function Add_Paysheet_Model({nic}) {
   useEffect(() => {
     isMounted.current = true;
 
-    window.addEventListener('offline', function (e) {
-      history.push('/connection_lost');
+    window.addEventListener("offline", function (e) {
+      history.push("/connection_lost");
     });
     setLoading(true);
     let purchesGoodsInitial = 0;
     let plusValuesGoodsInitial = 0;
 
-    db.collection('emp_purchased')
-      .where('nic', '==', nic)
+    db.collection("emp_purchased")
+      .where("nic", "==", nic)
       .get()
       .then((reEmpPurchased) => {
         let count1 = 0;
@@ -1323,8 +1335,8 @@ export default function Add_Paysheet_Model({nic}) {
           purchesGoodsInitial = purchesGoodsInitial + eachDataPu.data().total;
         });
         if (count1 === reEmpPurchased.docs.length) {
-          db.collection('goods_paid')
-            .where('nic', '==', nic)
+          db.collection("goods_paid")
+            .where("nic", "==", nic)
             .get()
             .then((reGoods) => {
               let count2 = 0;
@@ -1351,8 +1363,8 @@ export default function Add_Paysheet_Model({nic}) {
         }
       });
 
-    db.collection('salary')
-      .where('nic', '==', nic)
+    db.collection("salary")
+      .where("nic", "==", nic)
       .get()
       .then((reCheckStatus) => {
         let currentSalaryStatus = reCheckStatus.docs.some(
@@ -1364,14 +1376,14 @@ export default function Add_Paysheet_Model({nic}) {
         );
 
         if (currentSalaryStatus) {
-          setValidation('Already paid for the currrent month ! ');
+          setValidation("Already paid for the currrent month ! ");
           setAlreadyPaid(true);
         }
       });
 
-    db.collection('salary')
-      .where('nic', '==', nic)
-      .orderBy('date', 'asc')
+    db.collection("salary")
+      .where("nic", "==", nic)
+      .orderBy("date", "asc")
       .get()
       .then((reSalaryInt) => {
         if (reSalaryInt.docs.length > 0) {
@@ -1411,18 +1423,18 @@ export default function Add_Paysheet_Model({nic}) {
         }
       });
 
-    db.collection('shop')
-      .where('nic', '==', nic)
+    db.collection("shop")
+      .where("nic", "==", nic)
       .get()
       .then((reEmpShop) => {
         if (reEmpShop.docs.length > 0) {
           //++++++++++++++++++++++++++++++++
           //Shop
-          db.collection('shop')
+          db.collection("shop")
             .get()
             .then((reRoot) => {
               reRoot.docs.forEach((eachRoot) => {
-                let rootName = 'shop';
+                let rootName = "shop";
 
                 if (eachRoot.data().nic === nic) {
                   getSaleTarget(
@@ -1432,9 +1444,9 @@ export default function Add_Paysheet_Model({nic}) {
                     setSaleTarget(reSaleTarget);
                   });
 
-                  db.collection('salary')
-                    .where('nic', '==', nic)
-                    .orderBy('date', 'asc')
+                  db.collection("salary")
+                    .where("nic", "==", nic)
+                    .orderBy("date", "asc")
                     .get()
                     .then((reSalary) => {
                       if (reSalary.docs.length > 0) {
@@ -1759,14 +1771,14 @@ export default function Add_Paysheet_Model({nic}) {
                         //===========
                       }
                     });
-                  setRoot('shop');
+                  setRoot("shop");
                 }
               });
             });
         } else {
           //+++++++++++++++++++++++++++++++++
 
-          db.collection('root')
+          db.collection("root")
             .get()
             .then((reRoot) => {
               reRoot.docs.forEach((eachRoot) => {
@@ -1780,9 +1792,9 @@ export default function Add_Paysheet_Model({nic}) {
                     setSaleTarget(reSaleTarget);
                   });
 
-                  db.collection('salary')
-                    .where('nic', '==', nic)
-                    .orderBy('date', 'asc')
+                  db.collection("salary")
+                    .where("nic", "==", nic)
+                    .orderBy("date", "asc")
                     .get()
                     .then((reSalary) => {
                       if (reSalary.docs.length > 0) {
@@ -2119,9 +2131,9 @@ export default function Add_Paysheet_Model({nic}) {
                     setSaleTarget(reSaleTarget);
                   });
 
-                  db.collection('salary')
-                    .where('nic', '==', nic)
-                    .orderBy('date', 'asc')
+                  db.collection("salary")
+                    .where("nic", "==", nic)
+                    .orderBy("date", "asc")
                     .get()
                     .then((reSalary) => {
                       if (reSalary.docs.length > 0) {
@@ -2443,14 +2455,14 @@ export default function Add_Paysheet_Model({nic}) {
         }
       });
 
-    db.collection('employee')
-      .where('nic', '==', nic)
+    db.collection("employee")
+      .where("nic", "==", nic)
       .get()
       .then((reEmp) => {
         setBasicSalary(parseInt(reEmp.docs[0].data().basic));
         setPaidSecurityDepo(parseInt(reEmp.docs[0].data().security_deposit));
-        db.collection('loans')
-          .where('nic', '==', nic)
+        db.collection("loans")
+          .where("nic", "==", nic)
           .get()
           .then((reLoan) => {
             if (reLoan.docs.length > 0) {
@@ -2462,14 +2474,14 @@ export default function Add_Paysheet_Model({nic}) {
               }
             }
 
-            db.collection('salary_advance')
-              .where('nic', '==', nic)
+            db.collection("salary_advance")
+              .where("nic", "==", nic)
               .get()
               .then((salAd) => {
                 var unpaidamount = 0;
 
                 salAd.docs.forEach((reEach) => {
-                  if (reEach.data().status === 'unpaid') {
+                  if (reEach.data().status === "unpaid") {
                     unpaidamount =
                       unpaidamount + parseInt(reEach.data().amount);
                   }
@@ -2536,17 +2548,17 @@ export default function Add_Paysheet_Model({nic}) {
       cashSaleList: JSON.stringify(cashSaleList),
       excardsList: JSON.stringify(excardsList),
       date: date,
-      net_Salery: netSalary,
+      net_Salery: netSalary
     };
 
-    db.collection('goods_paid').add({
+    db.collection("goods_paid").add({
       paid_value: goods,
       nic: nic,
-      date: date,
+      date: date
     });
 
-    db.collection('salary')
-      .where('nic', '==', nic)
+    db.collection("salary")
+      .where("nic", "==", nic)
       .get()
       .then((reCheckStatus) => {
         let currentSalaryStatus = reCheckStatus.docs.some(
@@ -2560,71 +2572,71 @@ export default function Add_Paysheet_Model({nic}) {
         if (currentSalaryStatus) {
           setLoading(false);
           setAlreadyPaid(true);
-          setValidation('Already paid for the selected month ! ');
+          setValidation("Already paid for the selected month ! ");
         } else {
           setAlreadyPaid(false);
-          setValidation('');
-          db.collection('employee')
-            .where('nic', '==', nic)
+          setValidation("");
+          db.collection("employee")
+            .where("nic", "==", nic)
             .get()
             .then((reEmployeeSe) => {
-              db.collection('employee')
+              db.collection("employee")
                 .doc(reEmployeeSe.docs[0].id)
                 .update({
                   security_deposit:
                     parseInt(reEmployeeSe.docs[0].data().security_deposit) +
-                    parseInt(securityDeposit),
+                    parseInt(securityDeposit)
                 });
             });
 
-          db.collection('salary')
+          db.collection("salary")
             .add(dbList)
             .then(async (_) => {
-              db.collection('salary_advance')
-                .where('nic', '==', nic)
+              db.collection("salary_advance")
+                .where("nic", "==", nic)
                 .get()
                 .then((reAdd) => {
                   reAdd.docs.forEach((reEa) => {
-                    if (reEa.data().status === 'unpaid') {
-                      db.collection('salary_advance').doc(reEa.id).update({
-                        status: 'paid',
+                    if (reEa.data().status === "unpaid") {
+                      db.collection("salary_advance").doc(reEa.id).update({
+                        status: "paid"
                       });
                     }
                   });
                 });
-              db.collection('loans')
-                .where('nic', '==', nic)
+              db.collection("loans")
+                .where("nic", "==", nic)
                 .get()
                 .then((reLoan) => {
                   reLoan.docs.forEach((reEachL) => {
-                    if (reEachL.data().status === 'Ongoing') {
+                    if (reEachL.data().status === "Ongoing") {
                       if (
                         parseInt(reEachL.data().balance) - parseInt(loan) >
                         0
                       ) {
-                        db.collection('loans')
+                        db.collection("loans")
                           .doc(reEachL.id)
                           .update({
                             balance:
-                              parseInt(reEachL.data().balance) - parseInt(loan),
+                              parseInt(reEachL.data().balance) - parseInt(loan)
                           });
-                        db.collection('loan_history').add({
+                        db.collection("loan_history").add({
                           date: date,
                           amount: reEachL.data().amount,
                           balance:
                             parseInt(reEachL.data().balance) - parseInt(loan),
-                          docId: reEachL.id,
+                          docId: reEachL.id
                         });
                       } else {
-                        db.collection('loans').doc(reEachL.id).update({
+                        db.collection("loans").doc(reEachL.id).update({
                           balance: 0,
-                          status: 'Done',
+                          status: "Done"
                         });
-                        db.collection('loan_history').add({
+                        db.collection("loan_history").add({
                           date: date,
                           amount: reEachL.data().amount,
                           balance: 0,
-                          docId: reEachL.id,
+                          docId: reEachL.id
                         });
                       }
                     }
@@ -2641,9 +2653,9 @@ export default function Add_Paysheet_Model({nic}) {
     setLoading(true);
     setShortage(0);
 
-    db.collection('salary')
-      .where('nic', '==', nic)
-      .orderBy('date', 'asc')
+    db.collection("salary")
+      .where("nic", "==", nic)
+      .orderBy("date", "asc")
       .get()
       .then((reSalaryInt) => {
         if (reSalaryInt.docs.length > 0) {
@@ -2683,18 +2695,18 @@ export default function Add_Paysheet_Model({nic}) {
         }
       });
 
-    db.collection('shop')
-      .where('nic', '==', nic)
+    db.collection("shop")
+      .where("nic", "==", nic)
       .get()
       .then((reEmpShop) => {
         if (reEmpShop.docs.length > 0) {
           //++++++++++++++++++++++++++++++++
           //Shop
-          db.collection('shop')
+          db.collection("shop")
             .get()
             .then((reRoot) => {
               reRoot.docs.forEach((eachRoot) => {
-                let rootName = 'shop';
+                let rootName = "shop";
 
                 if (eachRoot.data().nic === nic) {
                   getSaleTarget(rootName, currentdateRe).then(
@@ -2703,9 +2715,9 @@ export default function Add_Paysheet_Model({nic}) {
                     }
                   );
 
-                  db.collection('salary')
-                    .where('nic', '==', nic)
-                    .orderBy('date', 'asc')
+                  db.collection("salary")
+                    .where("nic", "==", nic)
+                    .orderBy("date", "asc")
                     .get()
                     .then((reSalary) => {
                       if (reSalary.docs.length > 0) {
@@ -3037,7 +3049,7 @@ export default function Add_Paysheet_Model({nic}) {
 
           //+++++++++++++++++++++++++++++++++
         } else {
-          db.collection('root')
+          db.collection("root")
             .get()
             .then((reRoot) => {
               reRoot.docs.forEach((eachRoot) => {
@@ -3050,9 +3062,9 @@ export default function Add_Paysheet_Model({nic}) {
                     }
                   );
 
-                  db.collection('salary')
-                    .where('nic', '==', nic)
-                    .orderBy('date', 'asc')
+                  db.collection("salary")
+                    .where("nic", "==", nic)
+                    .orderBy("date", "asc")
                     .get()
                     .then((reSalary) => {
                       if (reSalary.docs.length > 0) {
@@ -3385,9 +3397,9 @@ export default function Add_Paysheet_Model({nic}) {
                     }
                   );
 
-                  db.collection('salary')
-                    .where('nic', '==', nic)
-                    .orderBy('date', 'asc')
+                  db.collection("salary")
+                    .where("nic", "==", nic)
+                    .orderBy("date", "asc")
                     .get()
                     .then((reSalary) => {
                       if (reSalary.docs.length > 0) {
@@ -3856,10 +3868,10 @@ export default function Add_Paysheet_Model({nic}) {
                   type="number"
                   label="Basic Salary"
                   size="small"
-                  InputProps={{inputProps: {min: 0}}}
+                  InputProps={{ inputProps: { min: 0 } }}
                   value={basicSalary}
                   onChange={(e) => {
-                    if (e.target.value !== '') {
+                    if (e.target.value !== "") {
                       setBasicSalary(parseInt(e.target.value.trim()));
                     }
                   }}
@@ -3880,10 +3892,10 @@ export default function Add_Paysheet_Model({nic}) {
                   type="number"
                   label="Insentive"
                   size="small"
-                  InputProps={{inputProps: {min: 0}}}
+                  InputProps={{ inputProps: { min: 0 } }}
                   value={insentive}
                   onChange={(e) => {
-                    if (e.target.value !== '') {
+                    if (e.target.value !== "") {
                       setInsentive(parseInt(e.target.value.trim()));
                     }
                   }}
@@ -3904,10 +3916,10 @@ export default function Add_Paysheet_Model({nic}) {
                   type="number"
                   label=" Phone Bill"
                   size="small"
-                  InputProps={{inputProps: {min: 0}}}
+                  InputProps={{ inputProps: { min: 0 } }}
                   value={phoneBill}
                   onChange={(e) => {
-                    if (e.target.value !== '') {
+                    if (e.target.value !== "") {
                       setPhoneBill(parseInt(e.target.value.trim()));
                     }
                   }}
@@ -3945,10 +3957,10 @@ export default function Add_Paysheet_Model({nic}) {
                   type="number"
                   label="EPF"
                   size="small"
-                  InputProps={{inputProps: {min: 0}}}
+                  InputProps={{ inputProps: { min: 0 } }}
                   value={epf}
                   onChange={(e) => {
-                    if (e.target.value !== '') {
+                    if (e.target.value !== "") {
                       setEPF(parseInt(e.target.value.trim()));
                     }
                   }}
@@ -3969,10 +3981,10 @@ export default function Add_Paysheet_Model({nic}) {
                   type="number"
                   label="Security Deposit"
                   size="small"
-                  InputProps={{inputProps: {min: 0}}}
+                  InputProps={{ inputProps: { min: 0 } }}
                   value={securityDeposit}
                   onChange={(e) => {
-                    if (e.target.value !== '') {
+                    if (e.target.value !== "") {
                       setSecurityDeposit(parseInt(e.target.value.trim()));
                     }
                   }}
@@ -3982,10 +3994,10 @@ export default function Add_Paysheet_Model({nic}) {
               <Grid item xs={12} sm={12}>
                 <p
                   style={{
-                    color: 'red',
-                    fontWeight: 'bold',
-                    fontSize: '12px',
-                    textAlign: 'center',
+                    color: "red",
+                    fontWeight: "bold",
+                    fontSize: "12px",
+                    textAlign: "center"
                   }}
                 >
                   Paid security deposit amount(LKR) : {paidSecurityDepo}
@@ -4007,10 +4019,10 @@ export default function Add_Paysheet_Model({nic}) {
                   type="number"
                   label=" Attendance deductions"
                   size="small"
-                  InputProps={{inputProps: {min: 0}}}
+                  InputProps={{ inputProps: { min: 0 } }}
                   value={deduction}
                   onChange={(e) => {
-                    if (e.target.value !== '') {
+                    if (e.target.value !== "") {
                       setDeduction(parseInt(e.target.value.trim()));
                     }
                   }}
@@ -4031,10 +4043,10 @@ export default function Add_Paysheet_Model({nic}) {
                   type="number"
                   label="purchased Goods"
                   size="small"
-                  InputProps={{inputProps: {min: 0}}}
+                  InputProps={{ inputProps: { min: 0 } }}
                   value={goods}
                   onChange={(e) => {
-                    if (e.target.value !== '') {
+                    if (e.target.value !== "") {
                       setGoods(parseInt(e.target.value.trim()));
                       setGoodsBalance(
                         goodsBalanceInitial - parseInt(e.target.value.trim()) <=
@@ -4051,10 +4063,10 @@ export default function Add_Paysheet_Model({nic}) {
               <Grid item xs={12} sm={8}>
                 <p
                   style={{
-                    color: 'red',
-                    fontWeight: 'bold',
-                    fontSize: '13px',
-                    textAlign: 'center',
+                    color: "red",
+                    fontWeight: "bold",
+                    fontSize: "13px",
+                    textAlign: "center"
                   }}
                 >
                   Due Balance(LKR) : {goodsBalance}
@@ -4076,10 +4088,10 @@ export default function Add_Paysheet_Model({nic}) {
                   label="Advance"
                   size="small"
                   disabled={advance === 0}
-                  InputProps={{inputProps: {min: 0}}}
+                  InputProps={{ inputProps: { min: 0 } }}
                   value={advance}
                   onChange={(e) => {
-                    if (e.target.value !== '') {
+                    if (e.target.value !== "") {
                       setAdvance(parseInt(e.target.value.trim()));
                     }
                   }}
@@ -4101,10 +4113,10 @@ export default function Add_Paysheet_Model({nic}) {
                   label="Loan"
                   size="small"
                   disabled={loanBalance === 0 ? true : false}
-                  InputProps={{inputProps: {min: 0}}}
+                  InputProps={{ inputProps: { min: 0 } }}
                   value={loan}
                   onChange={(e) => {
-                    if (e.target.value !== '') {
+                    if (e.target.value !== "") {
                       if (loanBalance >= parseInt(e.target.value)) {
                         setLoan(parseInt(e.target.value.trim()));
                       }
@@ -4115,10 +4127,10 @@ export default function Add_Paysheet_Model({nic}) {
               <Grid item xs={12} sm={12}>
                 <p
                   style={{
-                    color: 'red',
-                    fontWeight: 'bold',
-                    fontSize: '12px',
-                    textAlign: 'center',
+                    color: "red",
+                    fontWeight: "bold",
+                    fontSize: "12px",
+                    textAlign: "center"
                   }}
                 >
                   Current loan balance(LKR) : {loanBalance}
@@ -4139,10 +4151,10 @@ export default function Add_Paysheet_Model({nic}) {
                   type="number"
                   label="Shortage"
                   size="small"
-                  InputProps={{inputProps: {min: 0}}}
+                  InputProps={{ inputProps: { min: 0 } }}
                   value={shortage}
                   onChange={(e) => {
-                    if (e.target.value !== '') {
+                    if (e.target.value !== "") {
                       setShortage(parseInt(e.target.value.trim()));
                     }
                   }}
@@ -4171,11 +4183,11 @@ export default function Add_Paysheet_Model({nic}) {
                   type="number"
                   label="Sale Target"
                   size="small"
-                  InputProps={{inputProps: {min: 0}}}
+                  InputProps={{ inputProps: { min: 0 } }}
                   // disabled={saleTarget <= 0 ? true : false}
                   value={saleTarget}
                   onChange={(e) => {
-                    if (e.target.value !== '') {
+                    if (e.target.value !== "") {
                       setSaleTarget(parseInt(e.target.value.trim()));
                     }
                   }}
@@ -4201,11 +4213,11 @@ export default function Add_Paysheet_Model({nic}) {
                   type="number"
                   label=" Cash Target"
                   size="small"
-                  InputProps={{inputProps: {min: 0}}}
+                  InputProps={{ inputProps: { min: 0 } }}
                   // disabled={cashTarget <= 0 ? true : false}
                   value={cashTarget}
                   onChange={(e) => {
-                    if (e.target.value !== '') {
+                    if (e.target.value !== "") {
                       setCashTarget(parseInt(e.target.value.trim()));
                     }
                   }}
@@ -4231,11 +4243,11 @@ export default function Add_Paysheet_Model({nic}) {
                   type="number"
                   label="Cash Sale"
                   size="small"
-                  InputProps={{inputProps: {min: 0}}}
+                  InputProps={{ inputProps: { min: 0 } }}
                   // disabled={cashSale <= 0 ? true : false}
                   value={cashSale}
                   onChange={(e) => {
-                    if (e.target.value !== '') {
+                    if (e.target.value !== "") {
                       setCashSale(parseInt(e.target.value.trim()));
                     }
                   }}
@@ -4261,11 +4273,11 @@ export default function Add_Paysheet_Model({nic}) {
                   type="number"
                   label=" EX Card"
                   size="small"
-                  InputProps={{inputProps: {min: 0}}}
+                  InputProps={{ inputProps: { min: 0 } }}
                   // disabled={exCard <= 0 ? true : false}
                   value={exCard}
                   onChange={(e) => {
-                    if (e.target.value !== '') {
+                    if (e.target.value !== "") {
                       setExCard(parseInt(e.target.value.trim()));
                     }
                   }}
@@ -4292,11 +4304,11 @@ export default function Add_Paysheet_Model({nic}) {
                   type="number"
                   label=" With Cylider Gas"
                   size="small"
-                  InputProps={{inputProps: {min: 0}}}
+                  InputProps={{ inputProps: { min: 0 } }}
                   // disabled={exCard <= 0 ? true : false}
                   value={withCylinerGasV}
                   onChange={(e) => {
-                    if (e.target.value !== '') {
+                    if (e.target.value !== "") {
                       setWithCyliderGasV(parseInt(e.target.value.trim()));
                     }
                   }}
@@ -4318,11 +4330,11 @@ export default function Add_Paysheet_Model({nic}) {
                   type="number"
                   label=" Gas Downpayments"
                   size="small"
-                  InputProps={{inputProps: {min: 0}}}
+                  InputProps={{ inputProps: { min: 0 } }}
                   // disabled={exCard <= 0 ? true : false}
                   value={gasDownpaymentV}
                   onChange={(e) => {
-                    if (e.target.value !== '') {
+                    if (e.target.value !== "") {
                       setGasDownpaymentV(parseInt(e.target.value.trim()));
                     }
                   }}
@@ -4344,11 +4356,11 @@ export default function Add_Paysheet_Model({nic}) {
                   type="number"
                   label="Gas Installments"
                   size="small"
-                  InputProps={{inputProps: {min: 0}}}
+                  InputProps={{ inputProps: { min: 0 } }}
                   // disabled={exCard <= 0 ? true : false}
                   value={gasInstallmentV}
                   onChange={(e) => {
-                    if (e.target.value !== '') {
+                    if (e.target.value !== "") {
                       setGasInstallmentV(parseInt(e.target.value.trim()));
                     }
                   }}
@@ -4370,10 +4382,10 @@ export default function Add_Paysheet_Model({nic}) {
                   type="number"
                   label="Arreas Target"
                   size="small"
-                  InputProps={{inputProps: {min: 0}}}
+                  InputProps={{ inputProps: { min: 0 } }}
                   value={arresTarget}
                   onChange={(e) => {
-                    if (e.target.value !== '') {
+                    if (e.target.value !== "") {
                       setArresTarget(parseInt(e.target.value.trim()));
                     }
                   }}
@@ -4399,8 +4411,8 @@ export default function Add_Paysheet_Model({nic}) {
                         getChangedValuesFromdate(
                           firebase.firestore.Timestamp.fromDate(e.toDate())
                         );
-                        db.collection('salary')
-                          .where('nic', '==', nic)
+                        db.collection("salary")
+                          .where("nic", "==", nic)
                           .get()
                           .then((reCheckStatus) => {
                             let currentSalaryStatus = reCheckStatus.docs.some(
@@ -4418,12 +4430,12 @@ export default function Add_Paysheet_Model({nic}) {
                               setLoading(false);
                               setAlreadyPaid(true);
                               setValidation(
-                                'Already paid for the selected month ! '
+                                "Already paid for the selected month ! "
                               );
                             } else {
                               setLoading(false);
                               setAlreadyPaid(false);
-                              setValidation('');
+                              setValidation("");
                             }
                           });
                       } else {
@@ -4432,8 +4444,8 @@ export default function Add_Paysheet_Model({nic}) {
                           firebase.firestore.Timestamp.fromDate(new Date())
                         );
 
-                        db.collection('salary')
-                          .where('nic', '==', nic)
+                        db.collection("salary")
+                          .where("nic", "==", nic)
                           .get()
                           .then((reCheckStatus) => {
                             let currentSalaryStatus = reCheckStatus.docs.some(
@@ -4450,12 +4462,12 @@ export default function Add_Paysheet_Model({nic}) {
                               setLoading(false);
                               setAlreadyPaid(true);
                               setValidation(
-                                'Already paid for the current month ! '
+                                "Already paid for the current month ! "
                               );
                             } else {
                               setLoading(false);
                               setAlreadyPaid(false);
-                              setValidation('');
+                              setValidation("");
                             }
                           });
                       }
@@ -4514,7 +4526,7 @@ export default function Add_Paysheet_Model({nic}) {
                       color="textSecondary"
                       gutterBottom
                     >
-                      NET Salary ={' '}
+                      NET Salary ={" "}
                       <CurrencyFormat
                         value={
                           insentive +
@@ -4556,11 +4568,11 @@ export default function Add_Paysheet_Model({nic}) {
                                 shortage +
                                 goods)
                         }
-                        displayType={'text'}
+                        displayType={"text"}
                         thousandSeparator={true}
-                        prefix={' '}
+                        prefix={" "}
                       />
-                      {' /= '}
+                      {" /= "}
                     </Typography>
                   </Grid>
                 </Grid>
@@ -4601,7 +4613,7 @@ export default function Add_Paysheet_Model({nic}) {
                       : false
                   }
                 >
-                  {loading ? <Spin /> : 'Done'}
+                  {loading ? <Spin /> : "Done"}
                 </Button>
               </Grid>
             </Grid>

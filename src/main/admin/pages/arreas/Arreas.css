@@ -25,3 +25,15 @@
   font-size: large;
   color: #34314c;
 }
+
+.btnblockss{
+  background-color: red !important;
+  border-radius: 50px !important;
+  font-size: medium !important;
+  color: aliceblue !important;
+}
+
+.tblSpinner{
+  text-align: center !important;
+  justify-content: center !important;
+}

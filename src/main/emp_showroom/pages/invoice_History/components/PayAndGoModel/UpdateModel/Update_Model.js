@@ -1,30 +1,30 @@
-import React, {useState, useEffect} from 'react';
-import {Spin, Checkbox, DatePicker} from 'antd';
+import React, { useState, useEffect } from "react";
+import { Spin, Checkbox, DatePicker } from "antd";
 import {
   TextField,
   Grid,
   Container,
   Typography,
-  Button,
-} from '@material-ui/core';
-import CurrencyFormat from 'react-currency-format';
-import firebase from 'firebase';
+  Button
+} from "@material-ui/core";
+import CurrencyFormat from "react-currency-format";
+import firebase from "firebase";
 
-import db from '../../../../../../../config/firebase.js';
-import {ExclamationCircleOutlined} from '@ant-design/icons';
-import {useHistory} from 'react-router-dom';
-import {Modal} from 'antd';
-import moment from 'moment';
+import db from "../../../../../../../config/firebase.js";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
+import { useHistory } from "react-router-dom";
+import { Modal } from "antd";
+import moment from "moment";
 
 // styles
-import './Update_Model.css';
+import "./Update_Model.css";
 
-function isDateBeforeNextDate(date1, date2, nextD) {
-  let seeBool =
-    new Date(date2) >= new Date(date1) && new Date(date2) <= new Date(nextD);
+// function isDateBeforeNextDate(date1, date2, nextD) {
+//   let seeBool =
+//     new Date(date2) >= new Date(date1) && new Date(date2) <= new Date(nextD);
 
-  return seeBool;
-}
+//   return seeBool;
+// }
 
 function monthDiff(d1, d2) {
   var months;
@@ -50,7 +50,7 @@ export default function Update_Model({
   customer_id,
   closeModal,
   type,
-  isEx,
+  isEx
 }) {
   const [installments, setInstallments] = useState(0);
   const [intialBalance, setInitialBalance] = useState(0);
@@ -68,45 +68,51 @@ export default function Update_Model({
   const [gamisaraniInitialAmount, setGamisaraniInitialAmount] = useState(0);
   const [gamisaraniamount, setGamisaraniamount] = useState(0);
   // eslint-disable-next-line
-  const [gamisaraniId, setGamisaraniId] = useState('');
-  const [gamisaraniNic, setGamisaraniNic] = useState('');
+  const [gamisaraniId, setGamisaraniId] = useState("");
+  const [gamisaraniNic, setGamisaraniNic] = useState("");
 
   const [loadingNicsubmit, setLoadingNicSubmit] = useState(false);
   const [updateTimestamp, setTimestamp] = useState(null);
 
-  const [validation, setValidation] = useState('');
-  const [validationDate, setValidationDate] = useState('');
+  const [validation, setValidation] = useState("");
+  const [validationDate, setValidationDate] = useState("");
 
   const [shortage, setShortage] = useState(0);
   const [arreasAmount, setArreasAmount] = useState(0);
   const [isArreas, setIsArreas] = useState(false);
 
-  const {confirm} = Modal;
+  const { confirm } = Modal;
 
   let history = useHistory();
   let history1 = useHistory();
 
   useEffect(() => {
-    window.addEventListener('offline', function (e) {
-      history1.push('/connection_lost');
+    window.addEventListener("offline", function (e) {
+      history1.push("/connection_lost");
     });
 
-    db.collection('customer')
+    countArreas(new Date());
+
+    // eslint-disable-next-line
+  }, []);
+
+  const countArreas = (date) => {
+    db.collection("customer")
       .doc(customer_id)
       .get()
       .then((custDocRe) => {
         setCustomer(custDocRe.data());
       });
 
-    db.collection('installment')
-      .where('invoice_number', '==', invoice_no)
+    db.collection("installment")
+      .where("invoice_number", "==", invoice_no)
       .get()
       .then((instReDoc) => {
         setInstallments(instReDoc.docs.length);
       });
 
-    db.collection('invoice')
-      .where('invoice_number', '==', invoice_no)
+    db.collection("invoice")
+      .where("invoice_number", "==", invoice_no)
       .get()
       .then((inReDoc) => {
         setArreasAndInsAmount(
@@ -115,20 +121,20 @@ export default function Update_Model({
           inReDoc.docs[0].data().noOfInstallment,
           inReDoc.docs[0].data().balance,
           inReDoc,
-          new Date()
+          new Date(date)
         );
 
         setInitialBalance(inReDoc.docs[0].data().balance);
         setNextDate(inReDoc.docs[0].data().nextDate);
-        db.collection('installment')
-          .where('invoice_number', '==', invoice_no)
+        db.collection("installment")
+          .where("invoice_number", "==", invoice_no)
           .get()
           .then((instReDoc) => {
             const delayedChargesIn =
               (parseInt(inReDoc.docs[0].data().amountPerInstallment) * 5) / 100;
             if (instReDoc.docs.length === 0) {
               let daysCountNode1 =
-                (new Date().getTime() -
+                (new Date(date).getTime() -
                   new Date(
                     inReDoc.docs[0].data().nextDate.seconds * 1000
                   ).getTime()) /
@@ -146,91 +152,49 @@ export default function Update_Model({
 
               let monthsCount = monthDiff(
                 new Date(inReDoc.docs[0].data().nextDate.seconds * 1000),
-                new Date()
+                new Date(date)
               );
               setDelayedMonths(
                 parseInt(monthsCount) <= 0 ? 1 : parseInt(monthsCount)
               );
-              // let monthsRE =
-              //   parseInt(monthsCount) <= 0 ? 1 : parseInt(monthsCount)
-              // let newInstamount = instAmountProp * monthsRE
-              // setInstallmentAmount(
-              //   newInstamount + monthsRE > 1 ? instAmountProp : 0
-              // )
 
-              if (inReDoc.docs[0].data().selectedType === 'shop') {
-                if (7 - daysCountInitial >= 0) {
-                  setDelayedDays(0);
-                } else {
-                  setDelayedDays(daysCountInitial - 7);
-                  if (daysCountInitial / 7 > 0) {
-                    setAllInstallment((daysCountInitial - 7) / 7);
-                  }
-
-                  setDelayedCharges(
-                    daysCountInitial - 7 <= 7
-                      ? 0
-                      : (daysCountInitial - 7) / 7 < 2
-                      ? delayedChargesIn
-                      : (daysCountInitial - 7) / 7 > 2 &&
-                        (daysCountInitial - 7) / 7 < 3
-                      ? delayedChargesIn * 2
-                      : (daysCountInitial - 7) / 7 > 3 &&
-                        (daysCountInitial - 7) / 7 < 4
-                      ? delayedChargesIn * 3
-                      : (daysCountInitial - 7) / 7 > 4 &&
-                        (daysCountInitial - 7) / 7 < 5
-                      ? delayedChargesIn * 4
-                      : (daysCountInitial - 7) / 7 > 5 &&
-                        (daysCountInitial - 7) / 7 < 6
-                      ? delayedChargesIn * 5
-                      : (daysCountInitial - 7) / 7 > 6 &&
-                        (daysCountInitial - 7) / 7 < 7
-                      ? delayedChargesIn * 6
-                      : (daysCountInitial - 7) / 7 > 7 &&
-                        (daysCountInitial - 7) / 7 < 8
-                      ? delayedChargesIn * 7
-                      : (delayedChargesIn * (daysCountInitial - 7)) / 7
-                  );
-                }
+              if (7 - daysCountInitial >= 0) {
+                setDelayedDays(0);
+                setDelayedCharges(0);
               } else {
-                if (7 - daysCountInitial >= 0) {
-                  setDelayedDays(0);
-                } else {
-                  setDelayedDays(daysCountInitial - 7);
-                  if (daysCountInitial / 7 > 0) {
-                    setAllInstallment(Math.round((daysCountInitial - 7) / 7));
-                  }
-                  setDelayedCharges(
-                    daysCountInitial - 7 <= 7
-                      ? 0
-                      : (daysCountInitial - 7) / 7 < 2
-                      ? delayedChargesIn
-                      : (daysCountInitial - 7) / 7 > 2 &&
-                        (daysCountInitial - 7) / 7 < 3
-                      ? delayedChargesIn * 2
-                      : (daysCountInitial - 7) / 7 > 3 &&
-                        (daysCountInitial - 7) / 7 < 4
-                      ? delayedChargesIn * 3
-                      : (daysCountInitial - 7) / 7 > 4 &&
-                        (daysCountInitial - 7) / 7 < 5
-                      ? delayedChargesIn * 4
-                      : (daysCountInitial - 7) / 7 > 5 &&
-                        (daysCountInitial - 7) / 7 < 6
-                      ? delayedChargesIn * 5
-                      : (daysCountInitial - 7) / 7 > 6 &&
-                        (daysCountInitial - 7) / 7 < 7
-                      ? delayedChargesIn * 6
-                      : (daysCountInitial - 7) / 7 > 7 &&
-                        (daysCountInitial - 7) / 7 < 8
-                      ? delayedChargesIn * 7
-                      : (delayedChargesIn * (daysCountInitial - 7)) / 7
-                  );
+                setDelayedDays(daysCountInitial - 7);
+                if (daysCountInitial / 7 > 0) {
+                  setAllInstallment(Math.round((daysCountInitial - 7) / 7));
                 }
+                setDelayedCharges(
+                  daysCountInitial - 7 <= 7
+                    ? 0
+                    : (daysCountInitial - 7) / 7 < 2
+                    ? delayedChargesIn
+                    : (daysCountInitial - 7) / 7 > 2 &&
+                      (daysCountInitial - 7) / 7 < 3
+                    ? delayedChargesIn * 2
+                    : (daysCountInitial - 7) / 7 > 3 &&
+                      (daysCountInitial - 7) / 7 < 4
+                    ? delayedChargesIn * 3
+                    : (daysCountInitial - 7) / 7 > 4 &&
+                      (daysCountInitial - 7) / 7 < 5
+                    ? delayedChargesIn * 4
+                    : (daysCountInitial - 7) / 7 > 5 &&
+                      (daysCountInitial - 7) / 7 < 6
+                    ? delayedChargesIn * 5
+                    : (daysCountInitial - 7) / 7 > 6 &&
+                      (daysCountInitial - 7) / 7 < 7
+                    ? delayedChargesIn * 6
+                    : (daysCountInitial - 7) / 7 > 7 &&
+                      (daysCountInitial - 7) / 7 < 8
+                    ? delayedChargesIn * 7
+                    : (delayedChargesIn * (daysCountInitial - 7)) / 7
+                );
               }
             } else {
               let daysCountNode2 =
-                (new Date().getTime() -
+                (new Date(date).getTime() -
                   new Date(
                     inReDoc.docs[0].data()?.nextDate?.seconds * 1000
                   ).getTime()) /
@@ -245,93 +209,50 @@ export default function Update_Model({
                 daysCount = 0;
               } else {
                 daysCount = daysCountNode2;
-                //     daysCount =
-                // daysCountNode2 +
-                // daysCountOfMonth(
-                //   new Date().getMonth(),
-                //   new Date().getFullYear()
-                // );
               }
 
               let monthsCount = monthDiff(
                 new Date(inReDoc.docs[0].data()?.nextDate?.seconds * 1000),
-                new Date()
+                new Date(date)
               );
               setDelayedMonths(
                 parseInt(monthsCount) <= 0 ? 1 : parseInt(monthsCount)
               );
-              // let monthsRE =
-              //   parseInt(monthsCount) <= 0 ? 1 : parseInt(monthsCount)
-              // let newInstamount = instAmountProp * monthsRE
-              // setInstallmentAmount(
-              //   newInstamount + monthsRE > 1 ? instAmountProp : 0
-              // )
 
-              if (inReDoc.docs[0].data().selectedType === 'shop') {
-                if (7 - daysCount >= 0) {
-                  setDelayedDays(0);
-                } else {
-                  setDelayedDays(daysCount - 7);
-                  if (daysCount / 7 > 0) {
-                    setAllInstallment((daysCount - 7) / 7);
-                  }
-                  setDelayedCharges(
-                    daysCount - 7 <= 7
-                      ? 0
-                      : (daysCount - 7) / 7 < 2
-                      ? delayedChargesIn
-                      : (daysCount - 7) / 7 > 2 && (daysCount - 7) / 7 < 3
-                      ? delayedChargesIn * 2
-                      : (daysCount - 7) / 7 > 3 && (daysCount - 7) / 7 < 4
-                      ? delayedChargesIn * 3
-                      : (daysCount - 7) / 7 > 4 && (daysCount - 7) / 7 < 5
-                      ? delayedChargesIn * 4
-                      : (daysCount - 7) / 7 > 5 && (daysCount - 7) / 7 < 6
-                      ? delayedChargesIn * 5
-                      : (daysCount - 7) / 7 > 6 && (daysCount - 7) / 7 < 7
-                      ? delayedChargesIn * 6
-                      : (daysCount - 7) / 7 > 7 && (daysCount - 7) / 7 < 8
-                      ? delayedChargesIn * 7
-                      : (delayedChargesIn * (daysCount - 7)) / 7
-                  );
-                }
+              if (7 - daysCount >= 0) {
+                setDelayedDays(0);
+                setDelayedCharges(0);
               } else {
-                if (7 - daysCount >= 0) {
-                  setDelayedDays(0);
-                } else {
-                  setDelayedDays(daysCount - 7);
-                  if (daysCount / 7 > 0) {
-                    setAllInstallment(Math.round((daysCount - 7) / 7));
-                  }
-                  setDelayedCharges(
-                    daysCount - 7 <= 7
-                      ? 0
-                      : (daysCount - 7) / 7 < 2
-                      ? delayedChargesIn
-                      : (daysCount - 7) / 7 > 2 && (daysCount - 7) / 7 < 3
-                      ? delayedChargesIn * 2
-                      : (daysCount - 7) / 7 > 3 && (daysCount - 7) / 7 < 4
-                      ? delayedChargesIn * 3
-                      : (daysCount - 7) / 7 > 4 && (daysCount - 7) / 7 < 5
-                      ? delayedChargesIn * 4
-                      : (daysCount - 7) / 7 > 5 && (daysCount - 7) / 7 < 6
-                      ? delayedChargesIn * 5
-                      : (daysCount - 7) / 7 > 6 && (daysCount - 7) / 7 < 7
-                      ? delayedChargesIn * 6
-                      : (daysCount - 7) / 7 > 7 && (daysCount - 7) / 7 < 8
-                      ? delayedChargesIn * 7
-                      : (delayedChargesIn * (daysCount - 7)) / 7
-                  );
+                setDelayedDays(daysCount - 7);
+                if (daysCount / 7 > 0) {
+                  setAllInstallment(Math.round((daysCount - 7) / 7));
                 }
+                setDelayedCharges(
+                  daysCount - 7 <= 7
+                    ? 0
+                    : (daysCount - 7) / 7 < 2
+                    ? delayedChargesIn
+                    : (daysCount - 7) / 7 > 2 && (daysCount - 7) / 7 < 3
+                    ? delayedChargesIn * 2
+                    : (daysCount - 7) / 7 > 3 && (daysCount - 7) / 7 < 4
+                    ? delayedChargesIn * 3
+                    : (daysCount - 7) / 7 > 4 && (daysCount - 7) / 7 < 5
+                    ? delayedChargesIn * 4
+                    : (daysCount - 7) / 7 > 5 && (daysCount - 7) / 7 < 6
+                    ? delayedChargesIn * 5
+                    : (daysCount - 7) / 7 > 6 && (daysCount - 7) / 7 < 7
+                    ? delayedChargesIn * 6
+                    : (daysCount - 7) / 7 > 7 && (daysCount - 7) / 7 < 8
+                    ? delayedChargesIn * 7
+                    : (delayedChargesIn * (daysCount - 7)) / 7
+                );
               }
             }
           });
 
         setIsLoading(false);
       });
-
-    // eslint-disable-next-line
-  }, [invoice_no, isEx, instAmountProp, instCount, customer_id]);
+  };
 
   const setArreasAndInsAmount = async (
     nextDateRe,
@@ -346,8 +267,8 @@ export default function Update_Model({
         new Date(inReDoc.docs[0].data()?.nextDate?.seconds * 1000).getTime()) /
       (1000 * 3600 * 24);
 
-    db.collection('installment')
-      .where('invoice_number', '==', invoiceNo)
+    db.collection("installment")
+      .where("invoice_number", "==", invoiceNo)
       .get()
       .then((instReDoc) => {
         let paidAmount = 0;
@@ -373,22 +294,10 @@ export default function Update_Model({
             : parseInt(dueAmount - paidAmount);
 
         if (parseInt(dueAmount - paidAmount) > 0) {
-          if (inReDoc.docs[0].data().selectedType === 'shop') {
-            if (
-              7 - daysCountNode2 >= 0
-            ) {
-              setIsArreas(false);
-            } else {
-              setIsArreas(true);
-            }
+          if (7 - daysCountNode2 >= 0) {
+            setIsArreas(false);
           } else {
-            if (
-              7 - daysCountNode2 >= 0
-            ) {
-              setIsArreas(false);
-            } else {
-              setIsArreas(true);
-            }
+            setIsArreas(true);
           }
         }
 
@@ -410,126 +319,67 @@ export default function Update_Model({
   };
 
   const updateInstallment = async () => {
-    db.collection('invoice')
-      .where('invoice_number', '==', invoice_no)
+    db.collection("invoice")
+      .where("invoice_number", "==", invoice_no)
       .get()
       .then((reInvoice) => {
-        var reTotCal = parseInt(installmentAmount) + parseInt(gamisaraniamount);
-
-        var reCalMult =
-          reTotCal / parseInt(reInvoice.docs[0].data()?.amountPerInstallment);
-
-        if (reCalMult >= 1) {
-          db.collection('invoice')
-            .doc(reInvoice.docs[0].id)
-            .update({
-              nextDate: firebase.firestore.Timestamp.fromDate(
-                new Date(
-                  new Date(updateTimestamp.seconds * 1000).setMonth(
-                    new Date(updateTimestamp.seconds * 1000).getMonth() + 1,
-                    reInvoice.docs[0].data().installemtnDate
-                  )
+        db.collection("invoice")
+          .doc(reInvoice.docs[0].id)
+          .update({
+            nextDate: firebase.firestore.Timestamp.fromDate(
+              new Date(
+                new Date(updateTimestamp.seconds * 1000).setMonth(
+                  new Date(updateTimestamp.seconds * 1000).getMonth() + 1,
+                  parseInt(reInvoice.docs[0].data().installemtnDate)
                 )
-              ),
-            })
-            .then((_) => {});
-        } else {
-          db.collection('installment')
-            .where('invoice_number', '==', invoice_no)
-            .get()
-            .then((reInst) => {
-              var totalPlusInsAmount = 0;
-              // var monthCount = monthDiff(
-              //   new Date(reInvoice.docs[0].data()?.date.seconds * 1000),
-              //   new Date(reInvoice.docs[0].data()?.nextDate.seconds * 1000)
-              // );
-              var nestSee = new Date(
-                reInvoice.docs[0].data()?.nextDate.seconds * 1000
-              );
-
-              var last31 = nestSee.setMonth(nestSee.getMonth() - 1);
-
-              reInst.docs.forEach((reInstallmentCom) => {
-                if (
-                  isDateBeforeNextDate(
-                    new Date(last31),
-                    new Date(reInstallmentCom.data()?.date.seconds * 1000),
-                    new Date(reInvoice.docs[0].data()?.nextDate.seconds * 1000)
-                  )
-                ) {
-                  totalPlusInsAmount =
-                    parseInt(totalPlusInsAmount) +
-                    parseInt(reInstallmentCom.data()?.amount);
-                }
-              });
-
-              let seeToot = parseInt(totalPlusInsAmount) + reTotCal;
-
-              if (
-                parseInt(seeToot) >=
-                parseInt(reInvoice.docs[0].data()?.amountPerInstallment)
-              ) {
-                db.collection('invoice')
-                  .doc(reInvoice.docs[0].id)
-                  .update({
-                    nextDate: firebase.firestore.Timestamp.fromDate(
-                      new Date(
-                        new Date(updateTimestamp.seconds * 1000).setMonth(
-                          new Date(updateTimestamp.seconds * 1000).getMonth() +
-                            1,
-                          reInvoice.docs[0].data().installemtnDate
-                        )
-                      )
-                    ),
-                  })
-                  .then((_) => {});
-              }
-            });
-        }
+              )
+            )
+          })
+          .then((_) => {});
       });
 
     await db
-      .collection('installment')
-      .where('invoice_number', '==', invoice_no)
+      .collection("installment")
+      .where("invoice_number", "==", invoice_no)
       .get()
       .then(async (reInst) => {
         // let tot = parseInt(installmentAmount) + parseInt(gamisaraniamount);
-        await db.collection('installment').add({
+        await db.collection("installment").add({
           invoice_number: invoice_no,
           amount: parseInt(installmentAmount) + parseInt(gamisaraniamount),
-          delayed: delayedCharges === '' ? 0 : parseInt(delayedCharges),
+          delayed: delayedCharges === "" ? 0 : parseInt(delayedCharges),
           isExpired: isEx,
           balance: balance <= 0 ? 0 : balance,
           gamisarani_amount: parseInt(gamisaraniamount),
-          shortage: shortage === '' ? 0 : shortage,
+          shortage: shortage === "" ? 0 : shortage,
           type: type,
           isArreas: isArreas,
           arreasAmount: arreasAmount,
           dueInstallmentAmount: parseInt(instAmountProp),
-          date: updateTimestamp,
+          date: updateTimestamp
         });
       });
 
     await db
-      .collection('invoice')
-      .where('invoice_number', '==', invoice_no)
+      .collection("invoice")
+      .where("invoice_number", "==", invoice_no)
       .get()
       .then(async (reBalance) => {
         // let totot = parseInt(installmentAmount) + parseInt(gamisaraniamount);
         await db
-          .collection('invoice')
+          .collection("invoice")
           .doc(reBalance.docs[0].id)
           .update({
-            balance: balance <= 0 ? 0 : balance,
+            balance: balance <= 0 ? 0 : balance
           });
       });
 
     if (gamisarani && parseInt(gamisaraniamount) > 0) {
-      db.collection('gami_sarani')
+      db.collection("gami_sarani")
         .doc(gamisaraniId)
         .get()
         .then((getRe) => {
-          db.collection('gami_sarani')
+          db.collection("gami_sarani")
             .doc(gamisaraniId)
             .update({
               currentDeposit:
@@ -538,17 +388,17 @@ export default function Update_Model({
                 0
                   ? 0
                   : parseInt(getRe.data().currentDeposit) -
-                    parseInt(gamisaraniamount),
+                    parseInt(gamisaraniamount)
             })
             .then((re) => {
-              db.collection('gami_sarani_withdrawhistory').add({
+              db.collection("gami_sarani_withdrawhistory").add({
                 gami_nic: gamisaraniNic,
                 docId: gamisaraniId,
                 withdraw: parseInt(gamisaraniamount),
                 balance:
                   parseInt(getRe.data().currentDeposit) -
                   parseInt(gamisaraniamount),
-                date: updateTimestamp,
+                date: updateTimestamp
               });
             });
         });
@@ -560,24 +410,24 @@ export default function Update_Model({
       0
     ) {
       await db
-        .collection('arrears')
-        .where('invoice_number', '==', invoice_no)
+        .collection("arrears")
+        .where("invoice_number", "==", invoice_no)
         .get()
         .then(async (arrRe) => {
           if (arrRe.docs.length > 0) {
-            await db.collection('arrears').doc(arrRe.docs[0].id).delete();
+            await db.collection("arrears").doc(arrRe.docs[0].id).delete();
           }
         });
     }
 
     if (parseInt(balance) <= 0) {
       await db
-        .collection('invoice')
-        .where('invoice_number', '==', invoice_no)
+        .collection("invoice")
+        .where("invoice_number", "==", invoice_no)
         .get()
         .then((reIn) => {
-          db.collection('invoice').doc(reIn.docs[0].id).update({
-            status_of_payandgo: 'Done',
+          db.collection("invoice").doc(reIn.docs[0].id).update({
+            status_of_payandgo: "Done"
           });
         });
     }
@@ -585,10 +435,10 @@ export default function Update_Model({
 
   const showConfirm = async () => {
     if (updateTimestamp === null) {
-      setValidationDate('Please select the date of installment!');
+      setValidationDate("Please select the date of installment!");
     } else {
       confirm({
-        title: 'Do you Want to Print a Recipt?',
+        title: "Do you Want to Print a Recipt?",
         icon: <ExclamationCircleOutlined />,
 
         async onOk() {
@@ -601,14 +451,14 @@ export default function Update_Model({
               balance: balance - toto <= 0 ? 0 : balance - toto,
               gamisarani_amount: parseInt(gamisaraniamount),
               date: updateTimestamp,
-              delayedCharges: Math.round(delayedCharges),
+              delayedCharges: Math.round(delayedCharges)
             };
 
             let moveWith = {
               pathname:
-                '/showroom/invoice_history/payAndGo/updateModel/PrintReceipt',
-              search: '?query=abc',
-              state: {detail: passingWithCustomerObj},
+                "/showroom/invoice_history/payAndGo/updateModel/PrintReceipt",
+              search: "?query=abc",
+              state: { detail: passingWithCustomerObj }
             };
             history.push(moveWith);
           });
@@ -617,7 +467,7 @@ export default function Update_Model({
           await updateInstallment().then((_) => {
             window.location.reload();
           });
-        },
+        }
       });
     }
   };
@@ -638,8 +488,8 @@ export default function Update_Model({
 
   const getCurrentBalanceFromGami = () => {
     setLoadingNicSubmit(true);
-    db.collection('gami_sarani')
-      .where('nic', '==', gamisaraniNic)
+    db.collection("gami_sarani")
+      .where("nic", "==", gamisaraniNic)
       .get()
       .then((reGami) => {
         if (reGami.docs.length > 0) {
@@ -649,7 +499,7 @@ export default function Update_Model({
           setLoadingNicSubmit(false);
         } else {
           setLoadingNicSubmit(false);
-          setValidation('Any gamisarani customer not found from this NIC!');
+          setValidation("Any gamisarani customer not found from this NIC!");
         }
       });
   };
@@ -679,8 +529,8 @@ export default function Update_Model({
                 <DatePicker
                   onChange={(e) => {
                     if (e !== null) {
-                      db.collection('invoice')
-                        .where('invoice_number', '==', invoice_no)
+                      db.collection("invoice")
+                        .where("invoice_number", "==", invoice_no)
                         .get()
                         .then((inReDoc) => {
                           setArreasAndInsAmount(
@@ -689,6 +539,12 @@ export default function Update_Model({
                             inReDoc.docs[0].data().noOfInstallment,
                             inReDoc.docs[0].data().balance,
                             inReDoc,
+                            new Date(
+                              firebase.firestore.Timestamp.fromDate(e.toDate())
+                                .seconds * 1000
+                            )
+                          );
+                          countArreas(
                             new Date(
                               firebase.firestore.Timestamp.fromDate(e.toDate())
                                 .seconds * 1000
@@ -723,10 +579,10 @@ export default function Update_Model({
                   onChange={(e) => {
                     if (gamisarani) {
                       setGamisarani(false);
-                      setGamisaraniId('');
+                      setGamisaraniId("");
                       setGamisaraniInitialAmount(0);
                       setGamisaraniamount(0);
-                      setGamisaraniNic('');
+                      setGamisaraniNic("");
                     } else {
                       setGamisarani(true);
                     }
@@ -771,7 +627,7 @@ export default function Update_Model({
                   }
                   onClick={getCurrentBalanceFromGami}
                 >
-                  {loadingNicsubmit ? <Spin size="large" /> : 'Fetch'}
+                  {loadingNicsubmit ? <Spin size="large" /> : "Fetch"}
                 </Button>
               </Grid>
               <Grid className="lbl_topi" item xs={12} sm={4}>
@@ -794,12 +650,12 @@ export default function Update_Model({
                   disabled={
                     !gamisarani || gamisaraniInitialAmount === 0 ? true : false
                   }
-                  InputProps={{inputProps: {min: 0}}}
+                  InputProps={{ inputProps: { min: 0 } }}
                   value={gamisaraniamount}
                   onChange={(e) => {
                     if (
                       Math.round(e.target.value) >= 0 &&
-                      e.target.value !== '' &&
+                      e.target.value !== "" &&
                       intialBalance >=
                         parseInt(e.target.value.trim()) + gamisaraniamount
                     ) {
@@ -843,11 +699,11 @@ export default function Update_Model({
                   label="Installment Amount"
                   size="small"
                   value={installmentAmount}
-                  InputProps={{inputProps: {min: 0}}}
+                  InputProps={{ inputProps: { min: 0 } }}
                   onChange={(e) => {
                     if (
                       Math.round(e.target.value) >= 0 &&
-                      e.target.value !== '' &&
+                      e.target.value !== "" &&
                       intialBalance >=
                         parseInt(e.target.value.trim()) + gamisaraniamount
                     ) {
@@ -874,7 +730,7 @@ export default function Update_Model({
                   </Grid>
                   <Grid item xs={12} sm={4}>
                     <p className="lbl_arr">
-                      {instAmountProp * delayedMonths} ({instAmountProp} X{' '}
+                      {instAmountProp * delayedMonths} ({instAmountProp} X{" "}
                       {delayedMonths})
                     </p>
                   </Grid>
@@ -883,7 +739,7 @@ export default function Update_Model({
                 <br />
               </>
             ) : (
-              ''
+              ""
             )}
 
             <Grid container spacing={2}>
@@ -916,7 +772,7 @@ export default function Update_Model({
                   onChange={(e) => {
                     if (
                       Math.round(e.target.value) >= 0 &&
-                      e.target.value !== ''
+                      e.target.value !== ""
                     ) {
                       if (installmentAmount + gamisaraniamount > 0) {
                         setBalance(parseInt(e.target.value.trim()));
@@ -960,8 +816,8 @@ export default function Update_Model({
                 {delayedDays > 7 ? (
                   <p
                     style={{
-                      color: 'red',
-                      fontWeight: 'bold',
+                      color: "red",
+                      fontWeight: "bold"
                     }}
                   >
                     {Math.round(delayedDays)} days delayed !
@@ -987,9 +843,9 @@ export default function Update_Model({
                   label="Shortage"
                   size="small"
                   value={shortage}
-                  InputProps={{inputProps: {min: 0}}}
+                  InputProps={{ inputProps: { min: 0 } }}
                   onChange={(e) => {
-                    if (e.target.value !== '') {
+                    if (e.target.value !== "") {
                       setShortage(parseInt(e.target.value.trim()));
                     }
                   }}
@@ -1009,10 +865,10 @@ export default function Update_Model({
               </Grid>
               <Grid item xs={12} sm={6}>
                 <p className="next_date">
-                  {' '}
+                  {" "}
                   {nextDate === null
-                    ? ''
-                    : moment(nextDate?.toDate()).format('dddd, MMMM Do YYYY')}
+                    ? ""
+                    : moment(nextDate?.toDate()).format("dddd, MMMM Do YYYY")}
                 </p>
               </Grid>
 
@@ -1028,33 +884,33 @@ export default function Update_Model({
               <Grid item xs={12} sm={6}>
                 <div
                   style={{
-                    fontWeight: 'bold',
-                    fontSize: '20px',
+                    fontWeight: "bold",
+                    fontSize: "20px"
                   }}
                 >
                   <CurrencyFormat
                     value={totalPlusRed()}
-                    displayType={'text'}
+                    displayType={"text"}
                     thousandSeparator={true}
-                    prefix={' Rs. '}
+                    prefix={" Rs. "}
                   />
                   /=
                 </div>
                 <div
                   style={{
-                    fontWeight: 'bold',
-                    fontSize: '15px',
-                    color: 'grey',
+                    fontWeight: "bold",
+                    fontSize: "15px",
+                    color: "grey"
                   }}
                 >
                   (
-                  {'  ' +
+                  {"  " +
                     parseInt(installmentAmount) +
-                    ' + ' +
+                    " + " +
                     gamisaraniamount +
-                    ' + ' +
+                    " + " +
                     Math.round(delayedCharges) +
-                    ' '}
+                    " "}
                   )
                 </div>
               </Grid>

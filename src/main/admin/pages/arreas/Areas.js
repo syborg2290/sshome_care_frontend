@@ -34,7 +34,8 @@ export default function Areas() {
   const [arreasTableData, setArreasTableData] = useState([]);
   // eslint-disable-next-line
   const [arreasAllData, setArreasAllData] = useState([]);
-
+  
+   const {confirm} = Modal;
   let history = useHistory();
 
   const showModalArresHistory = () => {
@@ -239,74 +240,85 @@ export default function Areas() {
   }, []);
 
   const changeToBlacklist = (invoice_no, sel_type, balance) => {
-    db.collection("arrears")
-      .where("invoice_number", "==", invoice_no)
-      .get()
-      .then((reArreas) => {
-        setBlacklistLoading(true);
-        db.collection("invoice")
+    confirm({
+      title: (
+        <h5 className="confo_title">
+         Are you sure to continue ?
+        </h5>
+      ),
+      okText: 'Yes',
+      cancelText: 'No',
+      async onOk() {
+        db.collection("arrears")
           .where("invoice_number", "==", invoice_no)
           .get()
-          .then(async (reInVo) => {
-            await db.collection("invoice").doc(reInVo.docs[0].id).update({
-              status_of_payandgo: "blacklist"
-            });
-          })
-          .then(() => {
-            db.collection("customer")
-              .doc(reArreas.docs[0].data().customer_id)
-              .update({
-                status: "blacklist"
+          .then((reArreas) => {
+            setBlacklistLoading(true);
+            db.collection("invoice")
+              .where("invoice_number", "==", invoice_no)
+              .get()
+              .then(async (reInVo) => {
+                await db.collection("invoice").doc(reInVo.docs[0].id).update({
+                  status_of_payandgo: "blacklist"
+                });
               })
-              .then(async () => {
-                db.collection("blacklist")
-                  .add({
-                    InvoiceNo: invoice_no,
-                    FirstName: await (
-                      await db
-                        .collection("customer")
-                        .doc(reArreas.docs[0].data().customer_id)
-                        .get()
-                    ).data().fname,
-                    LastName: await (
-                      await db
-                        .collection("customer")
-                        .doc(reArreas.docs[0].data().customer_id)
-                        .get()
-                    ).data().lname,
-                    Type: sel_type,
-                    MID: await (
-                      await db
-                        .collection("customer")
-                        .doc(reArreas.docs[0].data().customer_id)
-                        .get()
-                    ).data().mid,
-                    NIC: await (
-                      await db
-                        .collection("customer")
-                        .doc(reArreas.docs[0].data().customer_id)
-                        .get()
-                    ).data().nic,
-                    Telephone: await (
-                      await db
-                        .collection("customer")
-                        .doc(reArreas.docs[0].data().customer_id)
-                        .get()
-                    ).data().mobile1,
-                    balance: balance
+              .then(() => {
+                db.collection("customer")
+                  .doc(reArreas.docs[0].data().customer_id)
+                  .update({
+                    status: "blacklist"
                   })
-                  .then((_) => {
-                    db.collection("arrears")
-                      .doc(reArreas.docs[0].id)
-                      .delete()
-                      .then(() => {
-                        setBlacklistLoading(false);
-                        window.location.reload();
+                  .then(async () => {
+                    db.collection("blacklist")
+                      .add({
+                        InvoiceNo: invoice_no,
+                        FirstName: await (
+                          await db
+                            .collection("customer")
+                            .doc(reArreas.docs[0].data().customer_id)
+                            .get()
+                        ).data().fname,
+                        LastName: await (
+                          await db
+                            .collection("customer")
+                            .doc(reArreas.docs[0].data().customer_id)
+                            .get()
+                        ).data().lname,
+                        Type: sel_type,
+                        MID: await (
+                          await db
+                            .collection("customer")
+                            .doc(reArreas.docs[0].data().customer_id)
+                            .get()
+                        ).data().mid,
+                        NIC: await (
+                          await db
+                            .collection("customer")
+                            .doc(reArreas.docs[0].data().customer_id)
+                            .get()
+                        ).data().nic,
+                        Telephone: await (
+                          await db
+                            .collection("customer")
+                            .doc(reArreas.docs[0].data().customer_id)
+                            .get()
+                        ).data().mobile1,
+                        balance: balance
+                      })
+                      .then((_) => {
+                        db.collection("arrears")
+                          .doc(reArreas.docs[0].id)
+                          .delete()
+                          .then(() => {
+                            setBlacklistLoading(false);
+                            window.location.reload();
+                          });
                       });
                   });
               });
           });
-      });
+      }
+    });
   };
 
   const checkInstallmentsStatus = async (eachRe) => {
@@ -349,11 +361,7 @@ export default function Areas() {
       daysCountInitial = daysCountNode1;
     }
 
-    if (7 - daysCountInitial >= 0) {
-    } else {
       if (daysCountInitial - 7 > 7) {
-        if (Math.round(daysCountInitial) - 7 >= 49) {
-        }
         db.collection("arrears")
           .where("invoice_number", "==", eachRe.data().invoice_number)
           .get()
@@ -362,7 +370,7 @@ export default function Areas() {
               db.collection("arrears")
                 .doc(reArreas.docs[0].id)
                 .update({
-                  arreas_amount: eachRe.data().amountPerInstallment,
+                  arreas_amount:  Math.round(eachRe.data().amountPerInstallment) * (Math.round((daysCountInitial - 7)/30)),
                   delayed_days: Math.round(daysCountInitial) - 7,
                   status_of_payandgo: eachRe.data().status_of_payandgo,
                   balance: eachRe.data().balance,
@@ -394,7 +402,7 @@ export default function Areas() {
             } else {
               db.collection("arrears").add({
                 invoice_number: eachRe.data().invoice_number,
-                arreas_amount: eachRe.data().amountPerInstallment,
+                arreas_amount: Math.round(eachRe.data().amountPerInstallment) * (Math.round((daysCountInitial - 7)/30)),
                 customer_id: eachRe.data().customer_id,
                 type: eachRe.data().selectedType,
                 villageRoot: eachRe.data().root_village,
@@ -434,7 +442,6 @@ export default function Areas() {
             }
           });
       }
-    }
   };
 
   const afterStateOfArreasCheck = async (instReDoc, eachRe) => {

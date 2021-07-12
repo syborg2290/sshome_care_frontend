@@ -59,6 +59,8 @@ export default function Dashboard() {
       history.push("/connection_lost");
     });
 
+    arreasAllDelete();
+
     db.collection("targets")
       .where("status", "==", "ongoing")
       .get()
@@ -113,6 +115,16 @@ export default function Dashboard() {
 
     // eslint-disable-next-line
   }, []);
+
+  const arreasAllDelete = () => {
+    db.collection("arrears")
+      .get()
+      .then((val) => {
+        val.docs.forEach(async (eachArr) => {
+          await db.collection("arrears").doc(eachArr.id).delete();
+        });
+      });
+  };
 
   return (
     <>

@@ -29,7 +29,6 @@ function isDateBeforeToday(date) {
 export default function Areas() {
   const [isLoading, setIsLoading] = useState(true);
   const [currentIndx, setCurrentIndx] = useState(0);
-
   const [arresHistory, setArresHistory] = useState(false); //  table models
   const [arreasTableData, setArreasTableData] = useState([]);
   // eslint-disable-next-line
@@ -183,6 +182,7 @@ export default function Areas() {
               NIC: eachRe.data().nic,
               Delayed_Days: Math.round(eachRe.data().delayed_days),
               Delayed_Charges: Math.round(eachRe.data().delayed_charges),
+
               History: <HistoryIcon onClick={showModalArresHistory} />
             });
           }
@@ -235,62 +235,21 @@ export default function Areas() {
       daysCountInitial = daysCountNode1;
     }
 
-    if (7 - daysCountInitial >= 0) {
-    } else {
-      if (daysCountInitial - 7 > 7) {
-        if (Math.round(daysCountInitial) - 7 >= 49) {
-        }
-        db.collection("arrears")
-          .where("invoice_number", "==", eachRe.data().invoice_number)
-          .get()
-          .then((reArreas) => {
-            if (reArreas.docs.length > 0) {
-              db.collection("arrears")
-                .doc(reArreas.docs[0].id)
-                .update({
-                  arreas_amount: eachRe.data().amountPerInstallment,
-                  delayed_days: Math.round(daysCountInitial) - 7,
-                  status_of_payandgo: eachRe.data().status_of_payandgo,
-                  balance: eachRe.data().balance,
-                  delayed_charges:
-                    daysCountInitial - 7 <= 7
-                      ? 0
-                      : (daysCountInitial - 7) / 7 < 2
-                      ? delayedChargesIn
-                      : (daysCountInitial - 7) / 7 > 2 &&
-                        (daysCountInitial - 7) / 7 < 3
-                      ? delayedChargesIn * 2
-                      : (daysCountInitial - 7) / 7 > 3 &&
-                        (daysCountInitial - 7) / 7 < 4
-                      ? delayedChargesIn * 3
-                      : (daysCountInitial - 7) / 7 > 4 &&
-                        (daysCountInitial - 7) / 7 < 5
-                      ? delayedChargesIn * 4
-                      : (daysCountInitial - 7) / 7 > 5 &&
-                        (daysCountInitial - 7) / 7 < 6
-                      ? delayedChargesIn * 5
-                      : (daysCountInitial - 7) / 7 > 6 &&
-                        (daysCountInitial - 7) / 7 < 7
-                      ? delayedChargesIn * 6
-                      : (daysCountInitial - 7) / 7 > 7 &&
-                        (daysCountInitial - 7) / 7 < 8
-                      ? delayedChargesIn * 7
-                      : (delayedChargesIn * (daysCountInitial - 7)) / 7
-                });
-            } else {
-              db.collection("arrears").add({
-                invoice_number: eachRe.data().invoice_number,
-                arreas_amount: eachRe.data().amountPerInstallment,
-                customer_id: eachRe.data().customer_id,
-                type: eachRe.data().selectedType,
-                villageRoot: eachRe.data().root_village,
-                mid: eachRe.data().mid,
-                nic: eachRe.data().nic,
-                balance: eachRe.data().balance,
-                amountPerInstallment: eachRe.data().amountPerInstallment,
-                noOfInstallment: eachRe.data().noOfInstallment,
-                status_of_payandgo: eachRe.data().status_of_payandgo,
+    if (daysCountInitial - 7 > 7) {
+      db.collection("arrears")
+        .where("invoice_number", "==", eachRe.data().invoice_number)
+        .get()
+        .then((reArreas) => {
+          if (reArreas.docs.length > 0) {
+            db.collection("arrears")
+              .doc(reArreas.docs[0].id)
+              .update({
+                arreas_amount:
+                  Math.round(eachRe.data().amountPerInstallment) *
+                  Math.round((daysCountInitial - 7) / 30),
                 delayed_days: Math.round(daysCountInitial) - 7,
+                status_of_payandgo: eachRe.data().status_of_payandgo,
+                balance: eachRe.data().balance,
                 delayed_charges:
                   daysCountInitial - 7 <= 7
                     ? 0
@@ -314,12 +273,52 @@ export default function Areas() {
                     : (daysCountInitial - 7) / 7 > 7 &&
                       (daysCountInitial - 7) / 7 < 8
                     ? delayedChargesIn * 7
-                    : (delayedChargesIn * (daysCountInitial - 7)) / 7,
-                date: firebase.firestore.FieldValue.serverTimestamp()
+                    : (delayedChargesIn * (daysCountInitial - 7)) / 7
               });
-            }
-          });
-      }
+          } else {
+            db.collection("arrears").add({
+              invoice_number: eachRe.data().invoice_number,
+              arreas_amount:
+                Math.round(eachRe.data().amountPerInstallment) *
+                Math.round((daysCountInitial - 7) / 30),
+              customer_id: eachRe.data().customer_id,
+              type: eachRe.data().selectedType,
+              villageRoot: eachRe.data().root_village,
+              mid: eachRe.data().mid,
+              nic: eachRe.data().nic,
+              balance: eachRe.data().balance,
+              amountPerInstallment: eachRe.data().amountPerInstallment,
+              noOfInstallment: eachRe.data().noOfInstallment,
+              status_of_payandgo: eachRe.data().status_of_payandgo,
+              delayed_days: Math.round(daysCountInitial) - 7,
+              delayed_charges:
+                daysCountInitial - 7 <= 7
+                  ? 0
+                  : (daysCountInitial - 7) / 7 < 2
+                  ? delayedChargesIn
+                  : (daysCountInitial - 7) / 7 > 2 &&
+                    (daysCountInitial - 7) / 7 < 3
+                  ? delayedChargesIn * 2
+                  : (daysCountInitial - 7) / 7 > 3 &&
+                    (daysCountInitial - 7) / 7 < 4
+                  ? delayedChargesIn * 3
+                  : (daysCountInitial - 7) / 7 > 4 &&
+                    (daysCountInitial - 7) / 7 < 5
+                  ? delayedChargesIn * 4
+                  : (daysCountInitial - 7) / 7 > 5 &&
+                    (daysCountInitial - 7) / 7 < 6
+                  ? delayedChargesIn * 5
+                  : (daysCountInitial - 7) / 7 > 6 &&
+                    (daysCountInitial - 7) / 7 < 7
+                  ? delayedChargesIn * 6
+                  : (daysCountInitial - 7) / 7 > 7 &&
+                    (daysCountInitial - 7) / 7 < 8
+                  ? delayedChargesIn * 7
+                  : (delayedChargesIn * (daysCountInitial - 7)) / 7,
+              date: firebase.firestore.FieldValue.serverTimestamp()
+            });
+          }
+        });
     }
   };
 
@@ -516,6 +515,7 @@ export default function Areas() {
               }
             }}
           />
+          )
         </Grid>
       </Grid>
     </div>

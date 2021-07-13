@@ -667,9 +667,19 @@ async function cashTargetFunc(
             }
           } else {
             if (installmentsRe.docs[i].data()?.arreasAmount > 0) {
-              threePresentage =
-                parseInt(threePresentage) +
-                (parseInt(installmentsRe.docs[i].data().amount) * 2.5) / 100;
+              let resultOf =
+                parseInt(installmentsRe.docs[i].data()?.arreasAmount) /
+                parseInt(installmentsRe.docs[i].data().dueInstallmentAmount);
+
+              if (resultOf >= 2) {
+                threePresentage =
+                  parseInt(threePresentage) +
+                  (parseInt(installmentsRe.docs[i].data().amount) * 2.5) / 100;
+              } else {
+                threePresentage =
+                  parseInt(threePresentage) +
+                  (parseInt(installmentsRe.docs[i].data().amount) * 3) / 100;
+              }
             } else {
               threePresentage =
                 parseInt(threePresentage) +
@@ -759,9 +769,20 @@ async function cashTargetFunc(
               }
             } else {
               if (installmentsRe.docs[i].data()?.arreasAmount > 0) {
-                threePresentage =
-                  parseInt(threePresentage) +
-                  (parseInt(installmentsRe.docs[i].data().amount) * 2.5) / 100;
+                let resultOf =
+                  parseInt(installmentsRe.docs[i].data()?.arreasAmount) /
+                  parseInt(installmentsRe.docs[i].data().dueInstallmentAmount);
+
+                if (resultOf >= 2) {
+                  threePresentage =
+                    parseInt(threePresentage) +
+                    (parseInt(installmentsRe.docs[i].data().amount) * 2.5) /
+                      100;
+                } else {
+                  threePresentage =
+                    parseInt(threePresentage) +
+                    (parseInt(installmentsRe.docs[i].data().amount) * 3) / 100;
+                }
               } else {
                 threePresentage =
                   parseInt(threePresentage) +

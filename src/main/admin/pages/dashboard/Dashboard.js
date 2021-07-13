@@ -58,9 +58,7 @@ export default function Dashboard() {
     window.addEventListener("offline", function (e) {
       history.push("/connection_lost");
     });
-
-    arreasAllDelete();
-
+    
     db.collection("targets")
       .where("status", "==", "ongoing")
       .get()
@@ -103,7 +101,8 @@ export default function Dashboard() {
       .then((onSnap) => {
         onSnap.docs.forEach(async (eachRe) => {
           let isBeforeDate = isDateBeforeToday(
-            new Date(eachRe.data()?.deadlineTimestamp?.seconds * 1000)
+            new Date(
+              new Date(eachRe.data()?.deadlineTimestamp?.seconds * 1000).setDate(new Date(eachRe.data()?.deadlineTimestamp?.seconds * 1000).getDate() + 7))
           );
           if (isBeforeDate) {
             db.collection("invoice").doc(eachRe.id).update({
@@ -112,7 +111,9 @@ export default function Dashboard() {
           }
         });
       });
-
+      
+    arreasAllDelete();
+    
     // eslint-disable-next-line
   }, []);
 

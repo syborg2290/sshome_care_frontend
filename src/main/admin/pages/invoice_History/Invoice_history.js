@@ -376,8 +376,9 @@ export default function Invoice_history() {
       .get()
       .then((custIn) => {
         custIn.docs.forEach((siDoc) => {
-          let isBeforeDate = isDateBeforeToday(
-            new Date(siDoc.data()?.deadlineTimestamp?.seconds * 1000)
+           let isBeforeDate = isDateBeforeToday(
+            new Date(
+              new Date(siDoc.data()?.deadlineTimestamp?.seconds * 1000).setDate(new Date(siDoc.data()?.deadlineTimestamp?.seconds * 1000).getDate() + 7))
           );
           if (isBeforeDate) {
             db.collection("invoice").doc(siDoc.id).update({

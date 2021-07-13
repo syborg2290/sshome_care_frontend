@@ -117,42 +117,13 @@ const structure = [
     link: '/showroom/ui/gass',
     icon: <BatteryStdIcon className="icons" />,
   },
-  // {
-  //   id: 16,
-  //   label: 'Loan',
-  //   link: '/showroom/ui/loan',
-  //   icon: <LocalAtmIcon className="icons" />,
-  // },
-  // {
-  //   id: 17,
-  //   label: 'Employees',
-  //   link: '/showroom/ui/employee',
-  //   icon: <GroupAddIcon className="icons" />,
-  // },
-  // {
-  //   id: 20,
-  //   label: 'Salary',
-  //   link: '/showroom/ui/salary',
-  //   icon: <MonetizationOnOutlinedIcon className="icons" />,
-  // },
-  // {
-  //   id: 18,
-  //   label: 'Attendance',
-  //   link: '/showroom/ui/attendance',
-  //   icon: <PlaylistAddCheckIcon className="icons" />,
-  // },
+  
   {
     id: 19,
     label: 'Root',
     link: '/showroom/ui/root',
     icon: <CommuteIcon className="icons" />,
   },
-  // {
-  //   id: 23,
-  //   label: 'Shop',
-  //   link: '/showroom/ui/shop',
-  //   icon: <StoreIcon className="icons" />,
-  // },
   {id: 2, type: 'divider'},
   {
     id: 9,
@@ -166,12 +137,6 @@ const structure = [
     link: '/showroom/ui/SeizedItems',
     icon: <EventBusyIcon className="icons" />,
   },
-  // {
-  //   id: 7,
-  //   label: 'Accounts',
-  //   link: '/showroom/ui/accounts',
-  //   icon: <PermIdentityIcon className="icons" />,
-  // },
 ];
 
 function Sidebar({location}) {

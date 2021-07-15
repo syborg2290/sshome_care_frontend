@@ -43,6 +43,11 @@ function isDateBeforeToday(date) {
   return new Date(date.toDateString()) < new Date(new Date().toDateString());
 }
 
+function isDateBeforeTodayUpdateDate(date,update) {
+  return new Date(date.toDateString()) < new Date(update.toDateString());
+}
+
+
 export default function Update_Model({
   invoice_no,
   instAmountProp,
@@ -50,7 +55,8 @@ export default function Update_Model({
   customer_id,
   closeModal,
   type,
-  isEx
+  isEx,
+  deadlineTimestamp
 }) {
   const [installments, setInstallments] = useState(0);
   const [intialBalance, setInitialBalance] = useState(0);
@@ -348,7 +354,18 @@ export default function Update_Model({
           invoice_number: invoice_no,
           amount: parseInt(installmentAmount) + parseInt(gamisaraniamount),
           delayed: delayedCharges === "" ? 0 : parseInt(delayedCharges),
-          isExpired: isEx,
+          isExpired: isEx ? isDateBeforeTodayUpdateDate(
+            new Date(
+              new Date(
+                deadlineTimestamp?.seconds * 1000
+              ).setDate(
+                new Date(
+                 deadlineTimestamp?.seconds * 1000
+                ).getDate() + 7
+              )
+            ),
+            new Date(updateTimestamp?.seconds * 1000)
+          ):isEx,
           balance: balance <= 0 ? 0 : balance,
           gamisarani_amount: parseInt(gamisaraniamount),
           shortage: shortage === "" ? 0 : shortage,

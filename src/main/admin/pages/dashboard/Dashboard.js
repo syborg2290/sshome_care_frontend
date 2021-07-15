@@ -22,10 +22,6 @@ function isDateBeforeToday(date) {
   return new Date(date.toDateString()) < new Date(new Date().toDateString());
 }
 
-// function isDateBeforeNextDate(date) {
-//   return new Date(date.toDateString()) > new Date(new Date().toDateString());
-// }
-
 // eslint-disable-next-line
 function daysCountOfMonth(month, year) {
   return parseInt(new Date(year, month, 0).getDate());
@@ -58,7 +54,7 @@ export default function Dashboard() {
     window.addEventListener("offline", function (e) {
       history.push("/connection_lost");
     });
-    
+
     db.collection("targets")
       .where("status", "==", "ongoing")
       .get()
@@ -102,7 +98,14 @@ export default function Dashboard() {
         onSnap.docs.forEach(async (eachRe) => {
           let isBeforeDate = isDateBeforeToday(
             new Date(
-              new Date(eachRe.data()?.deadlineTimestamp?.seconds * 1000).setDate(new Date(eachRe.data()?.deadlineTimestamp?.seconds * 1000).getDate() + 7))
+              new Date(
+                eachRe.data()?.deadlineTimestamp?.seconds * 1000
+              ).setDate(
+                new Date(
+                  eachRe.data()?.deadlineTimestamp?.seconds * 1000
+                ).getDate() + 7
+              )
+            )
           );
           if (isBeforeDate) {
             db.collection("invoice").doc(eachRe.id).update({
@@ -111,9 +114,9 @@ export default function Dashboard() {
           }
         });
       });
-      
+
     arreasAllDelete();
-    
+
     // eslint-disable-next-line
   }, []);
 

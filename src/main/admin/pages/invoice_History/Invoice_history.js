@@ -630,6 +630,7 @@ export default function Invoice_history() {
                     ? true
                     : false
                 }
+                deadlineTimestamp ={payangoAllData[currentIndx2]?.data?.deadlineTimestamp}
               />
             </div>
           </div>

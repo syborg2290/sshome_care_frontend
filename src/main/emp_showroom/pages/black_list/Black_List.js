@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import MUIDataTable from "mui-datatables";
 import { Modal } from "antd";
-import { Button, Grid } from "@material-ui/core";
+import {Grid } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 // components
 import BlackListCustomers from "../black_list/customer_model/BlackList_Customers";
@@ -27,9 +27,7 @@ export default function Black_List() {
   const [blacklistTableRow, setBlackListTableRow] = useState([]);
   const [allDataBlacklist, setAllData] = useState([]);
   let history = useHistory();
-  const showModalConfirmModal = () => {
-    setConfirmVisible(true);
-  };
+ 
 
   const showModalCustomer = () => {
     setVisibleCustomer(true);
@@ -188,16 +186,7 @@ export default function Black_List() {
                 <span className="icon_Edit">
                   <HistoryIcon onClick={showModalCustomerHistory} />
                 </span>
-                <span className="done_btn">
-                  <Button
-                    variant="contained"
-                    size="small"
-                    className="btnDone"
-                    onClick={showModalConfirmModal}
-                  >
-                    Done
-                  </Button>
-                </span>
+               
               </div>
             ),
           });

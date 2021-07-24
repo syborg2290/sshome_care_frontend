@@ -60,3 +60,8 @@
 .confo_Icon {
   color: rgba(233, 181, 13, 0.849) !important;
 }
+
+.date_margin{
+   margin-right: 10px !important;
+    margin-left: 5px !important;
+}

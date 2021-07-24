@@ -56,6 +56,10 @@ import Attendance from "../pages/attendance/Attendance";
 import Root from "../pages/root/Root";
 import Shop from "../pages/shop/Shop";
 
+/* Moved routes */
+import moved_gas from "../pages/moved_invoices/gas_invoice_history/gas_in_history";
+import  moved_invoices from "../pages/moved_invoices/invoice_History/Invoice_history"
+
 function Layout(props) {
   return (
     <div className="root">
@@ -150,6 +154,14 @@ function Layout(props) {
             <Route
               path="/admin/pages/purchasedHistory"
               component={PurchasedHistory}
+            />
+            <Route
+              path="/admin/pages/moved_gas"
+              component={moved_gas}
+            />
+             <Route
+              path="/admin/pages/moved_invoice"
+              component={moved_invoices}
             />
           </Switch>
         </div>

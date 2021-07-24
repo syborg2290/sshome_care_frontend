@@ -4,12 +4,11 @@ import MUIDataTable from "mui-datatables";
 import moment from "moment";
 // eslint-disable-next-line
 import CurrencyFormat from "react-currency-format";
-import { Button, Grid } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 
 // import db from "../../../../../../config/firebase.js";
 
 // components
-import UpdateInstallment from "../../../invoice_History/components/PayAndGoModel/UpdateModel/Update_Model";
 import InstallmentHistory from "../../../invoice_History/components/PayAndGoModel/HistoryModel/History_Model";
 import InstallmentView from "../../../invoice_History/components/PayAndGoModel/ViewModel/View_Model";
 
@@ -24,17 +23,8 @@ export default function Expire_invoice({ expire_list }) {
   const [currentIndx, setCurrentIndx] = useState(0);
   const [payangoTableData, setpayangoTableData] = useState([]);
   const [payangoAllData, setpayangoAllData] = useState([]);
-  const [installmentUpdate, setInstallmentUpdate] = useState(false); //  table models
   const [installmentvisible, setInstallmentVisible] = useState(false); //  table models
   const [installmentHistory, setInstallmentHistory] = useState(false); //  table models
-
-  const showModalUpdate = () => {
-    setInstallmentUpdate(true);
-  };
-
-  const closeModalUpdate = () => {
-    setInstallmentUpdate(false);
-  };
 
   const showModalHistory = () => {
     setInstallmentHistory(true);
@@ -168,21 +158,7 @@ export default function Expire_invoice({ expire_list }) {
         MID: each.data.mid,
         Action: (
           <div>
-            {
-              <Button
-                variant="contained"
-                color="primary"
-                size="small"
-                className="btn_paydex"
-                onClick={showModalUpdate}
-                style={{
-                  color: "white",
-                  backgroundColor: "#ff8c00",
-                }}
-              >
-                Update
-              </Button>
-            }
+           
             <span className="icon_visibl">
               <HistoryIcon onClick={showModalHistory} />
             </span>
@@ -200,36 +176,6 @@ export default function Expire_invoice({ expire_list }) {
 
   return (
     <>
-      {/*Start Installment Model Update */}
-
-      <Modal
-        visible={installmentUpdate}
-        className="update_Installment_Model"
-        footer={null}
-        onCancel={() => {
-          setInstallmentUpdate(false);
-        }}
-      >
-        <div className="update_Installment_Model">
-          <div className="update_Installment_Model_Main">
-            <div className="update_Installment_Model_Detail">
-              <UpdateInstallment
-                key={payangoAllData[currentIndx]?.id}
-                invoice_no={payangoAllData[currentIndx]?.data?.invoice_number}
-                instAmountProp={
-                  payangoAllData[currentIndx]?.data?.amountPerInstallment
-                }
-                instCount={payangoAllData[currentIndx]?.data?.noOfInstallment}
-                customer_id={payangoAllData[currentIndx]?.data?.customer_id}
-                closeModal={closeModalUpdate}
-                type={payangoAllData[currentIndx]?.data?.selectedType}
-                isEx={true}
-              />
-            </div>
-          </div>
-        </div>
-      </Modal>
-      {/*End Installment Model Update */}
 
       {/*Start Installment Model History */}
       <Modal

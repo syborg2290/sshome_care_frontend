@@ -4,7 +4,7 @@ import moment from "moment";
 import React, { useEffect, useState } from "react";
 import CurrencyFormat from "react-currency-format";
 import ModalImage from "react-modal-image";
-import db from "../../../../../../../../../config/firebase.js";
+import db from "../../../../../../../../config/firebase.js";
 // styles
 import "./view_modal.css";
 
@@ -219,7 +219,7 @@ export default function View_Model({ items_list_props, data }) {
                   <img
                     alt="Empty data"
                     className="imageFrontHis"
-                    src={require("../../../../../../../../../assets/avatar1132.jpg")}
+                    src={require("../../../../../../../../assets/avatar1132.jpg")}
                   />
                 ) : (
                   <ModalImage
@@ -235,7 +235,7 @@ export default function View_Model({ items_list_props, data }) {
                   <img
                     alt="Empty data"
                     className="imageBackHis"
-                    src={require("../../../../../../../../../assets/avater232.jpg")}
+                    src={require("../../../../../../../../assets/avater232.jpg")}
                   />
                 ) : (
                   <ModalImage
@@ -317,7 +317,7 @@ export default function View_Model({ items_list_props, data }) {
                       <img
                         alt="Empty data"
                         className="imageFrontHis"
-                        src={require("../../../../../../../../../assets/avatar1132.jpg")}
+                        src={require("../../../../../../../../assets/avatar1132.jpg")}
                       />
                     ) : (
                       <ModalImage
@@ -333,7 +333,7 @@ export default function View_Model({ items_list_props, data }) {
                       <img
                         alt="Empty data"
                         className="imageBackHis"
-                        src={require("../../../../../../../../../assets/avater232.jpg")}
+                        src={require("../../../../../../../../assets/avater232.jpg")}
                       />
                     ) : (
                       <ModalImage

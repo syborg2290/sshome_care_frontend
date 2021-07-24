@@ -3,7 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import HistoryIcon from "@material-ui/icons/History";
 // icons
 import VisibilityIcon from "@material-ui/icons/Visibility";
-import { Modal, Spin } from "antd";
+import { Modal, Spin, DatePicker } from "antd";
 import moment from "moment";
 import MUIDataTable from "mui-datatables";
 import PropTypes from "prop-types";
@@ -12,6 +12,7 @@ import CurrencyFormat from "react-currency-format";
 import { useHistory } from "react-router-dom";
 import db from "../../../../../../config/firebase.js";
 import InstallmentHistory from "./components/Easypayment/history_modal/history_modal";
+import firebase from "firebase";
 // components
 import UpdateInstallment from "./components/Easypayment/update_modal/update_modal";
 import InstallmentView from "./components/Easypayment/view_modal/view_modal";
@@ -42,20 +43,20 @@ function TabPanel(props) {
 TabPanel.propTypes = {
   children: PropTypes.node,
   index: PropTypes.any.isRequired,
-  value: PropTypes.any.isRequired,
+  value: PropTypes.any.isRequired
 };
 
 function a11yProps(index) {
   return {
     id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
+    "aria-controls": `simple-tabpanel-${index}`
   };
 }
 
 const useStyles = makeStyles((theme) => ({
   indicator: {
-    backgroundColor: "#222A44",
-  },
+    backgroundColor: "#222A44"
+  }
 }));
 
 function isDateBeforeToday(date) {
@@ -64,6 +65,7 @@ function isDateBeforeToday(date) {
 
 export default function Gas_Invoice_history() {
   const [isLoading, setIsLoading] = useState(true);
+  const [isMovedLoading, setIsMovedLoading] = useState(false);
   const [currentIndx, setCurrentIndx] = useState(0);
   const [currentIndx2, setCurrentIndx2] = useState(0);
   const classes = useStyles();
@@ -78,7 +80,13 @@ export default function Gas_Invoice_history() {
   const [installmentHistory, setInstallmentHistory] = useState(false); //  table models
   const [installmentFullPayment, setInstallmentFullPayment] = useState(false); //  table models
 
+  const [payangoDate1, setPayangoDate1] = useState(null);
+  const [payangoDate2, setPayangoDate2] = useState(null);
+  const [fullDate1, setFullDate1] = useState(null);
+  const [fullDate2, setFullDate2] = useState(null);
+
   let history2 = useHistory();
+  const { confirm } = Modal;
 
   const [rowsCount, setRowsCount] = useState(0);
 
@@ -113,9 +121,9 @@ export default function Gas_Invoice_history() {
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
+          style: { fontSize: "15px", color: "black", fontWeight: "600" }
+        })
+      }
     },
 
     {
@@ -123,27 +131,27 @@ export default function Gas_Invoice_history() {
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
+          style: { fontSize: "15px", color: "black", fontWeight: "600" }
+        })
+      }
     },
     {
       name: "Village",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
+          style: { fontSize: "15px", color: "black", fontWeight: "600" }
+        })
+      }
     },
     {
       name: "Date",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
+          style: { fontSize: "15px", color: "black", fontWeight: "600" }
+        })
+      }
     },
 
     {
@@ -151,18 +159,18 @@ export default function Gas_Invoice_history() {
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
+          style: { fontSize: "15px", color: "black", fontWeight: "600" }
+        })
+      }
     },
     {
       name: "NIC",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
+          style: { fontSize: "15px", color: "black", fontWeight: "600" }
+        })
+      }
     },
 
     {
@@ -174,10 +182,10 @@ export default function Gas_Invoice_history() {
             fontSize: "15px",
             color: "black",
             fontWeight: "600",
-            minWidth: "15px",
-          },
-        }),
-      },
+            minWidth: "15px"
+          }
+        })
+      }
     },
 
     {
@@ -185,18 +193,18 @@ export default function Gas_Invoice_history() {
       options: {
         filter: false,
         setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
+          style: { fontSize: "15px", color: "black", fontWeight: "600" }
+        })
+      }
     },
     {
       name: "Filter_Status",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
+          style: { fontSize: "15px", color: "black", fontWeight: "600" }
+        })
+      }
     },
 
     {
@@ -204,9 +212,9 @@ export default function Gas_Invoice_history() {
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
+          style: { fontSize: "15px", color: "black", fontWeight: "600" }
+        })
+      }
     },
     {
       name: "Action",
@@ -217,12 +225,12 @@ export default function Gas_Invoice_history() {
             fontSize: "15px",
             color: "black",
             fontWeight: "600",
-            minWidth: "215px",
+            minWidth: "215px"
             // maxWidth: "800px",
-          },
-        }),
-      },
-    },
+          }
+        })
+      }
+    }
   ];
   //END pay And Go Columns
 
@@ -233,36 +241,36 @@ export default function Gas_Invoice_history() {
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
+          style: { fontSize: "15px", color: "black", fontWeight: "600" }
+        })
+      }
     },
     {
       name: "Type",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
+          style: { fontSize: "15px", color: "black", fontWeight: "600" }
+        })
+      }
     },
     {
       name: "Village",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
+          style: { fontSize: "15px", color: "black", fontWeight: "600" }
+        })
+      }
     },
     {
       name: "Date",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
+          style: { fontSize: "15px", color: "black", fontWeight: "600" }
+        })
+      }
     },
 
     {
@@ -270,18 +278,18 @@ export default function Gas_Invoice_history() {
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
+          style: { fontSize: "15px", color: "black", fontWeight: "600" }
+        })
+      }
     },
     {
       name: "Full_Payment",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
+          style: { fontSize: "15px", color: "black", fontWeight: "600" }
+        })
+      }
     },
     {
       name: "Action",
@@ -291,11 +299,11 @@ export default function Gas_Invoice_history() {
           style: {
             fontSize: "15px",
             color: "black",
-            fontWeight: "600",
-          },
-        }),
-      },
-    },
+            fontWeight: "600"
+          }
+        })
+      }
+    }
   ];
 
   //END Full Payment Columns
@@ -317,7 +325,7 @@ export default function Gas_Invoice_history() {
           );
           if (isBeforeDate) {
             db.collection("gas_invoice").doc(siDoc.id).update({
-              status_of_payandgo: "expired",
+              status_of_payandgo: "expired"
             });
           }
         });
@@ -355,7 +363,7 @@ export default function Gas_Invoice_history() {
         reArray.forEach((siDoc) => {
           rawAllData.push({
             id: siDoc.id,
-            data: siDoc.data(),
+            data: siDoc.data()
           });
 
           rawData.push({
@@ -394,7 +402,7 @@ export default function Gas_Invoice_history() {
                     backgroundColor: "#e6e600",
                     padding: "6px",
                     borderRadius: "20px",
-                    font: "10px",
+                    font: "10px"
                   }}
                 >
                   Ongoing
@@ -406,7 +414,7 @@ export default function Gas_Invoice_history() {
                     backgroundColor: "#009900",
                     padding: "6px",
                     borderRadius: "20px",
-                    width: "100%",
+                    width: "100%"
                   }}
                 >
                   Done
@@ -418,7 +426,7 @@ export default function Gas_Invoice_history() {
                     backgroundColor: "#ff8c00",
                     padding: "6px",
                     borderRadius: "20px",
-                    width: "100%",
+                    width: "100%"
                   }}
                 >
                   Expired
@@ -430,7 +438,7 @@ export default function Gas_Invoice_history() {
                     backgroundColor: "red",
                     padding: "6px",
                     borderRadius: "20px",
-                    width: "100%",
+                    width: "100%"
                   }}
                 >
                   Blacklist
@@ -459,7 +467,7 @@ export default function Gas_Invoice_history() {
                   <VisibilityIcon onClick={showInstallmentView} />
                 </span>
               </div>
-            ),
+            )
           });
         });
         setpayangoAllData(rawAllData);
@@ -479,7 +487,7 @@ export default function Gas_Invoice_history() {
         cust.docs.forEach((siDoc) => {
           rawAllDataFull.push({
             id: siDoc.id,
-            data: siDoc.data(),
+            data: siDoc.data()
           });
           rawDataFull.push({
             InvoiceNo: siDoc.data().invoice_number,
@@ -510,7 +518,7 @@ export default function Gas_Invoice_history() {
                   <VisibilityIcon onClick={showInstallmentFullPayment} />
                 </span>
               </div>
-            ),
+            )
           });
         });
 
@@ -522,6 +530,105 @@ export default function Gas_Invoice_history() {
   }, []);
 
   //End Full Payment Rows
+
+  const moveAllDoneConfirm = (ifPayandgo) => {
+    confirm({
+      title: <h5 className="confo_title">Are you sure to continue ?</h5>,
+      okText: "Yes",
+      cancelText: "No",
+      async onOk() {
+        setIsMovedLoading(true);
+        if (ifPayandgo) {
+          if (payangoDate1 !== null) {
+            if (payangoDate2 !== null) {
+              db.collection("gas_invoice")
+                .where("customer_id", "!=", null)
+                .get()
+                .then((cust) => {
+                  cust.docs.forEach((eachDoc) => {
+                    if (eachDoc.data().status_of_payandgo === "Done") {
+                      let seeBool1 =
+                        new Date(eachDoc.data()?.date.seconds * 1000) >
+                          new Date(payangoDate1.seconds * 1000) &&
+                        new Date(eachDoc.data()?.date.seconds * 1000) <=
+                          new Date(payangoDate2.seconds * 1000);
+
+                      if (seeBool1) {
+                        db.collection("moved_gas_invoice")
+                          .add(eachDoc.data())
+                          .then(() => {
+                            db.collection("gas_installment")
+                              .where(
+                                "invoice_number",
+                                "==",
+                                eachDoc.data().invoice_number
+                              )
+                              .get()
+                              .then((installRe) => {
+                                if (installRe.docs.length > 0) {
+                                  installRe.docs.forEach((eachIntsll) => {
+                                    db.collection("moved_gas_installment")
+                                      .add(eachIntsll.data())
+                                      .then(() => {
+                                        db.collection("gas_installment")
+                                          .doc(eachIntsll.id)
+                                          .delete()
+                                          .then(() => {});
+                                      });
+                                  });
+                                }
+                                db.collection("gas_invoice")
+                                  .doc(eachDoc.id)
+                                  .delete()
+                                  .then(() => {});
+                                setIsMovedLoading(false);
+                                window.location.reload();
+                              });
+                          });
+                      }
+                    }
+                  });
+                });
+            }
+          }
+        } else {
+          if (fullDate1 !== null) {
+            if (fullDate2 !== null) {
+              db.collection("gas_invoice")
+                .where("customer_id", "==", null)
+                .get()
+                .then((cust) => {
+                  cust.docs.forEach((eachDoc) => {
+                    if (eachDoc.data().status_of_payandgo === "Done") {
+                      let seeBool1 =
+                        new Date(eachDoc.data()?.date.seconds * 1000) >
+                          new Date(fullDate1.seconds * 1000) &&
+                        new Date(eachDoc.data()?.date.seconds * 1000) <=
+                          new Date(fullDate2.seconds * 1000);
+
+                      if (seeBool1) {
+                        db.collection("moved_gas_invoice")
+                          .add(eachDoc.data())
+                          .then(() => {
+                            db.collection("gas_invoice")
+                              .doc(eachDoc.id)
+                              .delete()
+                              .then(() => {
+                                setIsMovedLoading(false);
+                                window.location.reload();
+                              });
+                          });
+                      }
+                    }
+                  });
+                  
+                });
+            }
+          }
+        }
+      }
+    });
+  };
 
   return (
     <>
@@ -638,15 +745,51 @@ export default function Gas_Invoice_history() {
           </Tabs>
         </AppBar>
         <TabPanel value={value} index={0}>
-          <Button
-            variant="contained"
-            className="loadAll"
-           
-          >
+          <Button variant="contained" className="loadAll">
             {isLoading ? (
               <Spin spinning={isLoading} size="small" />
             ) : (
               "Load All"
+            )}
+          </Button>
+          <span>From </span>
+          <DatePicker
+            className="date_margin"
+            onChange={(e) => {
+              if (e !== null) {
+                setPayangoDate1(
+                  firebase.firestore.Timestamp.fromDate(e.toDate())
+                );
+              } else {
+                setPayangoDate1(null);
+              }
+            }}
+          />
+          <span>To </span>
+          <DatePicker
+            className="date_margin"
+            onChange={(e) => {
+              if (e !== null) {
+                setPayangoDate2(
+                  firebase.firestore.Timestamp.fromDate(e.toDate())
+                );
+              } else {
+                setPayangoDate2(null);
+              }
+            }}
+          />
+          <Button
+            variant="contained"
+            color="primary"
+            size="small"
+            className="btn_pay"
+            disabled={isMovedLoading}
+            onClick={() => moveAllDoneConfirm(true)}
+          >
+            {isMovedLoading ? (
+              <Spin spinning={isLoading} size="small" />
+            ) : (
+              "Move all done"
             )}
           </Button>
           <Grid container spacing={4}>
@@ -680,15 +823,51 @@ export default function Gas_Invoice_history() {
                         />
                       ) : (
                         ""
-                      ),
-                    },
-                  },
+                      )
+                    }
+                  }
                 }}
               />
             </Grid>
           </Grid>
         </TabPanel>
         <TabPanel value={value} index={1}>
+          <span>From </span>
+          <DatePicker
+            className="date_margin"
+            onChange={(e) => {
+              if (e !== null) {
+                setFullDate1(firebase.firestore.Timestamp.fromDate(e.toDate()));
+              } else {
+                setFullDate1(null);
+              }
+            }}
+          />
+          <span>To </span>
+          <DatePicker
+            className="date_margin"
+            onChange={(e) => {
+              if (e !== null) {
+                setFullDate2(firebase.firestore.Timestamp.fromDate(e.toDate()));
+              } else {
+                setFullDate2(null);
+              }
+            }}
+          />
+          <Button
+            variant="contained"
+            color="primary"
+            size="small"
+            className="btn_pay"
+            disabled={isMovedLoading}
+            onClick={() => moveAllDoneConfirm(false)}
+          >
+            {isMovedLoading ? (
+              <Spin spinning={isLoading} size="small" />
+            ) : (
+              "Move all"
+            )}
+          </Button>
           <Grid container spacing={4}>
             <Grid item xs={12}>
               <MUIDataTable
@@ -719,9 +898,9 @@ export default function Gas_Invoice_history() {
                         />
                       ) : (
                         ""
-                      ),
-                    },
-                  },
+                      )
+                    }
+                  }
                 }}
               />
             </Grid>

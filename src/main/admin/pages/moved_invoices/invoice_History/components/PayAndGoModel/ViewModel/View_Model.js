@@ -1,12 +1,22 @@
-import { Container, Grid, Typography } from "@material-ui/core";
+import React, { useEffect, useState } from "react";
+import { Grid, Container, Typography } from "@material-ui/core";
+import CurrencyFormat from "react-currency-format";
 import { Spin } from "antd";
 import moment from "moment";
-import React, { useEffect, useState } from "react";
-import CurrencyFormat from "react-currency-format";
+
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import Paper from "@material-ui/core/Paper";
 import ModalImage from "react-modal-image";
-import db from "../../../../../../../../../config/firebase.js";
+
+import db from "../../../../../../../../config/firebase.js";
+
 // styles
-import "./view_modal.css";
+import "./View_Model.css";
 
 export default function View_Model({ items_list_props, data }) {
   const [trustees, setTrustees] = useState([]);
@@ -14,14 +24,14 @@ export default function View_Model({ items_list_props, data }) {
   const [itemsList, setItemList] = useState([]);
 
   useEffect(() => {
-    db.collection("gas_customer")
+    db.collection("customer")
       .doc(data.customer_id)
       .get()
       .then((getCust) => {
         setCustomer(getCust.data());
       });
 
-    db.collection("gas_trustee")
+    db.collection("trustee")
       .where("invoice_number", "==", data.invoice_number)
       .get()
       .then((reTrustee) => {
@@ -50,18 +60,39 @@ export default function View_Model({ items_list_props, data }) {
       });
 
     items_list_props.forEach((each) => {
-      setItemList((old) => [
-        ...old,
-        {
-          weight: each.weight,
-          stock_type: data?.selectedType,
-          price: each.price,
-          discount: each.discount,
-          qty: each.qty,
-          withCylinder: each.withCylinder ? "Yes" : "No",
-          gasType:each.gasType,
-        },
-      ]);
+      let itemDataSeMo = [];
+      let listOfSerilNo = [];
+      let listOfModelNo = [];
+      // let listOfChassisNo = [];
+      listOfSerilNo = each.serialNo;
+      listOfModelNo = each.modelNo;
+      // listOfChassisNo = each.chassisNo;
+
+      itemDataSeMo.push({
+        serialNo: listOfSerilNo,
+        modelNo: listOfModelNo,
+        // chassisNo: listOfChassisNo,
+      });
+      db.collection("item")
+        .doc(each.item_id)
+        .get()
+        .then((th) => {
+          setItemList((old) => [
+            ...old,
+            {
+              item_name: th.data().itemName,
+              stock_type: each.stock_type,
+              dp: each.downpayment,
+              listSe: itemDataSeMo,
+              discount: each.discount,
+              qty: each.qty,
+              color: th.data().color,
+              model_no: each.modelNo,
+              gurantee_type: th.data().guarantee,
+              gurantee_period: th.data().guaranteePeriod,
+            },
+          ]);
+        });
     });
   }, [items_list_props, data]);
 
@@ -150,7 +181,7 @@ export default function View_Model({ items_list_props, data }) {
                   <hr />
                 </Grid>
                 <Grid className="lbl_topis" item xs={12} sm={5}>
-                  Purchased date
+                  Purchase date
                 </Grid>
                 <Grid item xs={12} sm={1}>
                   :
@@ -219,7 +250,7 @@ export default function View_Model({ items_list_props, data }) {
                   <img
                     alt="Empty data"
                     className="imageFrontHis"
-                    src={require("../../../../../../../../../assets/avatar1132.jpg")}
+                    src={require("../../../../../../../../assets/avatar1132.jpg")}
                   />
                 ) : (
                   <ModalImage
@@ -235,7 +266,7 @@ export default function View_Model({ items_list_props, data }) {
                   <img
                     alt="Empty data"
                     className="imageBackHis"
-                    src={require("../../../../../../../../../assets/avater232.jpg")}
+                    src={require("../../../../../../../../assets/avater232.jpg")}
                   />
                 ) : (
                   <ModalImage
@@ -317,7 +348,7 @@ export default function View_Model({ items_list_props, data }) {
                       <img
                         alt="Empty data"
                         className="imageFrontHis"
-                        src={require("../../../../../../../../../assets/avatar1132.jpg")}
+                        src={require("../../../../../../../../assets/avatar1132.jpg")}
                       />
                     ) : (
                       <ModalImage
@@ -333,7 +364,7 @@ export default function View_Model({ items_list_props, data }) {
                       <img
                         alt="Empty data"
                         className="imageBackHis"
-                        src={require("../../../../../../../../../assets/avater232.jpg")}
+                        src={require("../../../../../../../../assets/avater232.jpg")}
                       />
                     ) : (
                       <ModalImage
@@ -397,7 +428,7 @@ export default function View_Model({ items_list_props, data }) {
               );
             })}
             <Grid className="lbl_topiSub" item xs={12} sm={12}>
-              Gas details
+              Item
             </Grid>
             <br />
             <Grid item xs={12} sm={6}>
@@ -407,7 +438,7 @@ export default function View_Model({ items_list_props, data }) {
             <Grid item xs={12} sm={6}></Grid>
             {itemsList.map((eachItem) => {
               return (
-                <Grid key={eachItem.weight} container spacing={2}>
+                <Grid key={eachItem.item_name} container spacing={2}>
                   {" "}
                   <Grid className="lbl_topis" item xs={12} sm={4}>
                     Stock type
@@ -419,32 +450,23 @@ export default function View_Model({ items_list_props, data }) {
                     <p>{eachItem.stock_type}</p>
                   </Grid>
                   <Grid className="lbl_topis" item xs={12} sm={4}>
-                    With cylinder
+                    Item Name
                   </Grid>
                   <Grid item xs={12} sm={1}>
                     :
                   </Grid>
                   <Grid item xs={12} sm={7}>
-                    <p>{eachItem.withCylinder}</p>
+                    <p>{eachItem.item_name}</p>
                   </Grid>
                   <Grid className="lbl_topis" item xs={12} sm={4}>
-                    Weight(KG)
-                  </Grid>
-                  <Grid item xs={12} sm={1}>
-                    :
-                  </Grid>
-                  <Grid item xs={12} sm={7}>
-                    <p>{eachItem.weight}</p>
-                  </Grid>
-                  <Grid className="lbl_topis" item xs={12} sm={4}>
-                    Price(LKR)
+                    Sale price(LKR)
                   </Grid>
                   <Grid item xs={12} sm={1}>
                     :
                   </Grid>
                   <Grid item xs={12} sm={7}>
                     <CurrencyFormat
-                      value={eachItem.price}
+                      value={eachItem.dp}
                       displayType={"text"}
                       thousandSeparator={true}
                       prefix={" "}
@@ -474,14 +496,78 @@ export default function View_Model({ items_list_props, data }) {
                     <p>{eachItem.qty}</p>
                   </Grid>
                   <Grid className="lbl_topis" item xs={12} sm={4}>
-                    Full or Empty
+                    Color
                   </Grid>
                   <Grid item xs={12} sm={1}>
                     :
                   </Grid>
                   <Grid item xs={12} sm={7}>
-                    <p>{eachItem?.gasType === undefined ? '':eachItem?.gasType}</p>
+                    <p>{eachItem.color}</p>
                   </Grid>
+                  <Grid className="lbl_topis" item xs={12} sm={4}>
+                    Guarantee Period
+                  </Grid>
+                  <Grid item xs={12} sm={1}>
+                    :
+                  </Grid>
+                  <Grid item xs={12} sm={7}>
+                    <p>
+                      {eachItem.gurantee_period.toString() +
+                        " " +
+                        eachItem.gurantee_type.value.toString()}
+                    </p>
+                  </Grid>
+                  <TableContainer
+                    component={Paper}
+                    className="main_containerNom"
+                  >
+                    <Table
+                      className="gass_Table"
+                      size="small"
+                      aria-label="a dense table"
+                    >
+                      <TableHead className="No_Table_head">
+                        <TableRow>
+                          <TableCell className="tbl_cell">SerialNo</TableCell>
+                          <TableCell className="tbl_cell" align="left">
+                            ModelNo
+                          </TableCell>
+                          {/* <TableCell className="tbl_cell" align="left">
+                            ChasisseNo
+                          </TableCell> */}
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {eachItem.listSe.length > 0
+                          ? eachItem?.listSe?.map((row) => (
+                              <TableRow key={0}>
+                                <TableCell component="th" scope="row">
+                                  {eachItem.listSe[0]?.serialNo?.map(
+                                    (serailNoT) => (
+                                      <h5 key={serailNoT}>{serailNoT}</h5>
+                                    )
+                                  )}
+                                </TableCell>
+                                <TableCell component="th" scope="row">
+                                  {eachItem.listSe[0]?.modelNo?.map(
+                                    (modelNoT) => (
+                                      <h5 key={Math.random()}>{modelNoT}</h5>
+                                    )
+                                  )}
+                                </TableCell>
+                                {/* <TableCell component="th" scope="row">
+                                  {eachItem.listSe[0]?.chassisNo?.map(
+                                    (chassisNoT) => (
+                                      <h5 key={chassisNoT}>{chassisNoT}</h5>
+                                    )
+                                  )}
+                                </TableCell> */}
+                              </TableRow>
+                            ))
+                          : ""}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
                   <Grid item xs={12} sm={12}>
                     <hr />
                   </Grid>

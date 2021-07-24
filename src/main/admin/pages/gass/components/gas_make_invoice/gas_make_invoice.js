@@ -514,10 +514,10 @@ function Make_invoice() {
                                 //+++++++++++++++++++++++++++++++++++
                                 if (tablerows[0].customer.customerId !== null) {
                                   let prevCust = await db
-                                    .collection('customer')
+                                    .collection('gas_customer')
                                     .doc(tablerows[0].customer.customerId)
                                     .get()
-                                  db.collection('customer')
+                                  db.collection('gas_customer')
                                     .doc(tablerows[0].customer.customerId)
                                     .update({
                                       fname:
@@ -627,7 +627,7 @@ function Make_invoice() {
                                           )
                                         })
                                         .then(_ => {
-                                          db.collection('trustee').add({
+                                          db.collection('gas_trustee').add({
                                             fname:
                                               tablerows[0].customer
                                                 .trustee1Fname,
@@ -664,7 +664,7 @@ function Make_invoice() {
                                             tablerows[0].customer
                                               .trustee2Mobile1
                                           ) {
-                                            db.collection('trustee').add({
+                                            db.collection('gas_trustee').add({
                                               fname:
                                                 tablerows[0].customer
                                                   .trustee2Fname,
@@ -821,7 +821,7 @@ function Make_invoice() {
                                         })
                                     })
                                 } else {
-                                  db.collection('customer')
+                                  db.collection('gas_customer')
                                     .add({
                                       fname:
                                         tablerows[0].customer.customerFname,
@@ -935,7 +935,7 @@ function Make_invoice() {
                                           )
                                         })
                                         .then(_ => {
-                                          db.collection('trustee').add({
+                                          db.collection('gas_trustee').add({
                                             fname:
                                               tablerows[0].customer
                                                 .trustee1Fname,
@@ -972,7 +972,7 @@ function Make_invoice() {
                                             tablerows[0].customer
                                               .trustee2Mobile1
                                           ) {
-                                            db.collection('trustee').add({
+                                            db.collection('gas_trustee').add({
                                               fname:
                                                 tablerows[0].customer
                                                   .trustee2Fname,

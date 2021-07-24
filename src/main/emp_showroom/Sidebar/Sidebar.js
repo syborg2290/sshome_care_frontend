@@ -16,7 +16,6 @@ import {
   LocalShipping as LocalShippingIcon,
   // eslint-disable-next-line
   GroupAdd as GroupAddIcon,
-  Commute as CommuteIcon,
   // eslint-disable-next-line
   PlaylistAddCheck as PlaylistAddCheckIcon,
   // eslint-disable-next-line
@@ -55,8 +54,6 @@ const structure = [
     icon: <DashboardIcon className="icons" />
   },
 
-  
-
   {
     id: 1,
     label: "Items",
@@ -82,6 +79,13 @@ const structure = [
     icon: <LibraryIcon className="icons" />
   },
 
+  {
+    id: 27,
+    label: "Gas",
+    link: "/showroom/ui/gass",
+    icon: <BuildIcon className="icons" />
+  },
+
   { id: 5, type: "divider" },
 
   {
@@ -102,7 +106,7 @@ const structure = [
     link: "/showroom/ui/Gamisarani",
     icon: <LocalShippingIcon className="icons" />
   },
-  
+
   { id: 2, type: "divider" },
   {
     id: 9,

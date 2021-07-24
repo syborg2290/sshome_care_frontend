@@ -447,6 +447,7 @@ export default function Gas_Invoice_history() {
                 .where("invoice_number", "==", data.invoice_number)
                 .get()
                 .then((reVal) => {
+                 
                   reVal.docs.forEach((eachMIns) => {
                     db.collection("gas_installment")
                       .add(eachMIns.data())
@@ -454,15 +455,19 @@ export default function Gas_Invoice_history() {
                         db.collection("moved_gas_installment")
                           .doc(eachMIns.id)
                           .delete()
-                          .then(() => {});
+                          .then(() => { });
+                        
                       });
                   });
-                  db.collection("moved_gas_invoice")
+                  
+                    db.collection("moved_gas_invoice")
                     .doc(docId)
                     .delete()
                     .then(() => {
-                      window.location.reload();
+                      
                     });
+                  
+                  
                 });
             });
         } else {
@@ -473,7 +478,7 @@ export default function Gas_Invoice_history() {
                 .doc(docId)
                 .delete()
                 .then(() => {
-                  window.location.reload();
+                 
                 });
             });
         }

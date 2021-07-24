@@ -434,6 +434,7 @@ export default function Invoice_history() {
                 .where("invoice_number", "==", data.invoice_number)
                 .get()
                 .then((reVal) => {
+                 
                   reVal.docs.forEach((eachIns) => {
                     db.collection("installment")
                       .add(eachIns.data())
@@ -442,14 +443,18 @@ export default function Invoice_history() {
                           .doc(eachIns.id)
                           .delete()
                           .then(() => {});
+                        
                       });
                   });
-                  db.collection("moved_invoice")
+                  
+                    db.collection("moved_invoice")
                     .doc(docId)
                     .delete()
                     .then(() => {
-                      window.location.reload();
+                     
                     });
+                  
+                  
                 });
             });
         } else {
@@ -460,7 +465,7 @@ export default function Invoice_history() {
                 .doc(docId)
                 .delete()
                 .then(() => {
-                  window.location.reload();
+                 
                 });
             });
         }

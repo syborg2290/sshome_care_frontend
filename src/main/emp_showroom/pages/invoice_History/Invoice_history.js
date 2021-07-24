@@ -4,8 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Spin, Modal } from "antd";
 import MUIDataTable from "mui-datatables";
 import moment from "moment";
-import CurrencyFormat from "react-currency-format";
-import { Button, Box, Tab, Tabs, AppBar, Grid } from "@material-ui/core";
+import { Box, Tab, Tabs, AppBar, Grid } from "@material-ui/core";
 
 import { useHistory } from "react-router-dom";
 import db from "../../../../config/firebase.js";
@@ -21,7 +20,6 @@ import "./Invoice_history.css";
 // icons
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import HistoryIcon from "@material-ui/icons/History";
-import PrintRoundedIcon from "@material-ui/icons/PrintRounded";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -69,7 +67,6 @@ function isDateBeforeToday(date) {
 export default function Invoice_history() {
   const [isLoading, setIsLoading] = useState(true);
   const [currentIndx, setCurrentIndx] = useState(0);
-  const [wrongNextCount, setWrongNextCount] = useState(0);
   const [currentIndx2, setCurrentIndx2] = useState(0);
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
@@ -78,91 +75,16 @@ export default function Invoice_history() {
   const [fullPaymentTableData, setFullPaymentTableData] = useState([]);
   const [fullPaymentAllData, setFullPaymentAllData] = useState([]);
 
-  const [installmentUpdate, setInstallmentUpdate] = useState(false); //  table models
   const [installmentvisible, setInstallmentVisible] = useState(false); //  table models
   const [installmentHistory, setInstallmentHistory] = useState(false); //  table models
   const [installmentFullPayment, setInstallmentFullPayment] = useState(false); //  table models
-  const [visibleConfirmPrint, setVisibleConfirmPrint] = useState(false);
-  const [wrongNextModal, setWrongNextModal] = useState(false);
-  const [printType, setPrintType] = useState("fullpayment");
 
-  let history = useHistory();
   let history2 = useHistory();
 
   const [rowsCount, setRowsCount] = useState(0);
 
-  const showVisibleConfirmPrintModal = (type) => {
-    setPrintType(type);
-    setVisibleConfirmPrint(true);
-  };
-
-  const PrintInvoice = async () => {
-    if (printType === "fullpayment") {
-      let passingWithCustomerObj = {
-        invoice_number: fullPaymentAllData[currentIndx].data?.invoice_number,
-        customerDetails: null,
-        installmentType: null,
-        installemtnDayDate: null,
-        discount: fullPaymentAllData[currentIndx].data?.discount,
-        subTotal:
-          parseInt(fullPaymentAllData[currentIndx].data?.total) +
-          parseInt(fullPaymentAllData[currentIndx].data?.discount),
-        total: fullPaymentAllData[currentIndx].data?.total,
-        discription: "",
-        balance: 0,
-        itemsList: fullPaymentAllData[currentIndx].data?.items,
-        backto: "invoice_history",
-      };
-
-      let moveWith = {
-        pathname: "/showroom/invoice/printInvoice",
-        search: "?query=abc",
-        state: { detail: passingWithCustomerObj },
-      };
-      history.push(moveWith);
-    } else {
-      db.collection("customer")
-        .doc(payangoAllData[currentIndx2]?.data?.customer_id)
-        .get()
-        .then((reCust) => {
-          let passingWithCustomerObj = {
-            invoice_number: payangoAllData[currentIndx2]?.data?.invoice_number,
-            customerDetails: reCust.data(),
-            installmentType:
-              payangoAllData[currentIndx2]?.data?.installmentType,
-            installemtnDayDate:
-              payangoAllData[currentIndx2]?.data?.installemtnDayDate,
-            discount: payangoAllData[currentIndx2]?.data?.discount,
-            subTotal:
-              parseInt(payangoAllData[currentIndx2]?.data?.total) +
-              parseInt(payangoAllData[currentIndx2]?.data?.discount),
-            total: payangoAllData[currentIndx2]?.data?.total,
-            discription: "",
-            balance: payangoAllData[currentIndx2]?.data?.balance,
-            itemsList: payangoAllData[currentIndx2]?.data?.items,
-            backto: "invoice_history",
-          };
-
-          let moveWith = {
-            pathname: "/showroom/invoice/printInvoice",
-            search: "?query=abc",
-            state: { detail: passingWithCustomerObj },
-          };
-          history.push(moveWith);
-        });
-    }
-  };
-
   const handleChange = (event, newValue) => {
     setValue(newValue);
-  };
-
-  const showModalUpdate = () => {
-    setInstallmentUpdate(true);
-  };
-
-  const closeModalUpdate = () => {
-    setInstallmentUpdate(false);
   };
 
   const showModalHistory = () => {
@@ -415,17 +337,8 @@ export default function Invoice_history() {
           }
         });
         
-        let wrongNextCountEx = 0;
-        
+      
         reArray.forEach((siDoc) => {
-          
-          if (
-            new Date(siDoc.data().nextDate.seconds * 1000).getFullYear() >
-            new Date().getFullYear() + 1
-          ) {
-             wrongNextCountEx = wrongNextCountEx + 1;
-            
-           }
           
           rawAllData.push({
             id: siDoc.id,
@@ -509,7 +422,6 @@ export default function Invoice_history() {
             ),
           });
         });
-        setWrongNextCount(wrongNextCountEx);
         setpayangoAllData(rawAllData);
         setpayangoTableData(rawData);
       });
@@ -560,27 +472,7 @@ export default function Invoice_history() {
 
   return (
     <>
-      <Modal
-        className="confo_model"
-        closable={null}
-        visible={visibleConfirmPrint}
-        cancelText="No"
-        okText="Yes"
-        bodyStyle={{ borderRadius: "30px" }}
-        onOk={PrintInvoice}
-        onCancel={() => {
-          setVisibleConfirmPrint(false);
-        }}
-      >
-        <div className="confoModel_body">
-          <PrintRoundedIcon className="confo_Icon" />
-          <h3 className="txtConfoModel_body">
-            Do you want to print an invoice?{" "}
-          </h3>
-        </div>
-      </Modal>
-      
-
+    
       {/*Start Installment Model History */}
       <Modal
         visible={installmentHistory}

@@ -11,7 +11,13 @@ import ItemTable from "../pages/item/assistant_item_table/Item_table_assistant";
 import StockHistory from "../pages/item/stock_History/Stock_History";
 import SellingHistory from "../pages/item/selling_History/Selling_History";
 
+import Gass from "../pages/gass/Gass";
+import GassCustomer from "../pages/gass/components/gas_customer_form/gas_customer";
+import GassInvoice from "../pages/gass/components/gas_make_invoice/gas_make_invoice";
+import GassInvoiceHistory from "../pages/gass/components/gas_invoice_history/gas_in_history";
+
 import RepairRecipt from "../pages/repairs/repairs_Model/repair_update_Recipt/Repair_recipt";
+import GassRecipt from "../pages/gass/components/Make_Recipt/Gass_Recipt";
 
 // pages
 import Dashboard from "../pages/dashboard/Dashboard";
@@ -46,6 +52,18 @@ function Layout(props) {
             <Route path="/showroom/ui/BlackList" component={BlackList} />
             <Route path="/showroom/ui/SeizedItems" component={SeizedItems} />
             <Route path="/showroom/ui/shop" component={Shop} />
+            
+             <Route path="/showroom/ui/Gass" component={Gass} />
+            <Route
+              path="/showroom/ui/gas_invoice_history"
+              component={GassInvoiceHistory}
+            />
+            <Route path="/showroom/ui/Gass_customer" component={GassCustomer} />
+            <Route path="/showroom/ui/Gass_invoice" component={GassInvoice} />
+             <Route
+              path="/showroom/gass/gass_Model/make_recipt/Gass_recipt"
+              component={GassRecipt}
+            />
             {/* components */}
             <Route path="/showroom/ui/ItemTable" component={ItemTable} />
             <Route path="/showroom/ui/StockHistory" component={StockHistory} />

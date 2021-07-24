@@ -626,6 +626,7 @@ export default function Invoice_history() {
                               )
                               .get()
                               .then((installRe) => {
+                                
                                 if (installRe.docs.length > 0) {
                                   installRe.docs.forEach((eachIntsll) => {
                                     db.collection("moved_installment")
@@ -635,15 +636,21 @@ export default function Invoice_history() {
                                           .doc(eachIntsll.id)
                                           .delete()
                                           .then(() => {});
+                                         
                                       });
                                   });
                                 }
-                                db.collection("invoice")
+                               
+                                  db.collection("invoice")
                                   .doc(eachDoc.id)
                                   .delete()
-                                  .then(() => {});
-                                setIsMovedLoading(false);
-                                window.location.reload();
+                                  .then(() => {
+                                    setIsMovedLoading(false);
+                                    
+                                  });
+                                
+                                
+                                
                               });
                           });
                       }
@@ -675,8 +682,8 @@ export default function Invoice_history() {
                               .doc(eachDoc.id)
                               .delete()
                               .then(() => {
-                                 setIsMovedLoading(false);
-                                window.location.reload();
+                                setIsMovedLoading(false);
+                                
                               });
                           });
                       }

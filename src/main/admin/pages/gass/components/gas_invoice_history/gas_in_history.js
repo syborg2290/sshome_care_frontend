@@ -565,7 +565,7 @@ export default function Gas_Invoice_history() {
                               )
                               .get()
                               .then((installRe) => {
-                               
+                                let count = 0;
                                 if (installRe.docs.length > 0) {
                                   installRe.docs.forEach((eachIntsll) => {
                                     db.collection("moved_gas_installment")
@@ -575,18 +575,25 @@ export default function Gas_Invoice_history() {
                                           .doc(eachIntsll.id)
                                           .delete()
                                           .then(() => {});
-                                         
+                                        count = count + 1;
                                       });
                                   });
-                                }
-                                
+                                  if (count >= installRe.docs.length) {
+                                    db.collection("gas_invoice")
+                                  .doc(eachDoc.id)
+                                  .delete()
+                                  .then(() => {});
+                                    setIsMovedLoading(false);
+                                  }
+                                } else {
                                    db.collection("gas_invoice")
                                   .doc(eachDoc.id)
                                   .delete()
-                                  .then(() => {
-                                    setIsMovedLoading(false);
-                                  });
-                                
+                                  .then(() => {});
+                                  setIsMovedLoading(false);
+                                }
+
+                               
                               });
                           });
                       }
@@ -619,13 +626,11 @@ export default function Gas_Invoice_history() {
                               .delete()
                               .then(() => {
                                 setIsMovedLoading(false);
-                               
                               });
                           });
                       }
                     }
                   });
-                  
                 });
             }
           }

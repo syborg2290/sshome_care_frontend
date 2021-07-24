@@ -434,7 +434,7 @@ export default function Invoice_history() {
                 .where("invoice_number", "==", data.invoice_number)
                 .get()
                 .then((reVal) => {
-                 
+                  let count = 0;
                   reVal.docs.forEach((eachIns) => {
                     db.collection("installment")
                       .add(eachIns.data())
@@ -442,19 +442,19 @@ export default function Invoice_history() {
                         db.collection("moved_installment")
                           .doc(eachIns.id)
                           .delete()
-                          .then(() => {});
-                        
+                          .then(() => { });
+                        count = count + 1;
                       });
-                  });
-                  
+                  }); 
+                  if (count >= reVal.docs.length) {
                     db.collection("moved_invoice")
                     .doc(docId)
                     .delete()
-                    .then(() => {
-                     
+                      .then(() => {
+                       window.location.reload();
                     });
-                  
-                  
+                   
+                  }
                 });
             });
         } else {
@@ -465,7 +465,7 @@ export default function Invoice_history() {
                 .doc(docId)
                 .delete()
                 .then(() => {
-                 
+                   window.location.reload();
                 });
             });
         }

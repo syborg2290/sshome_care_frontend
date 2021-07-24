@@ -626,7 +626,7 @@ export default function Invoice_history() {
                               )
                               .get()
                               .then((installRe) => {
-                                
+                                let count = 0;
                                 if (installRe.docs.length > 0) {
                                   installRe.docs.forEach((eachIntsll) => {
                                     db.collection("moved_installment")
@@ -635,21 +635,25 @@ export default function Invoice_history() {
                                         db.collection("installment")
                                           .doc(eachIntsll.id)
                                           .delete()
-                                          .then(() => {});
-                                         
+                                          .then(() => { });
+                                        count = count + 1;
                                       });
                                   });
-                                }
-                               
+                                  if (count >= installRe.docs.length) {
                                   db.collection("invoice")
                                   .doc(eachDoc.id)
                                   .delete()
-                                  .then(() => {
+                                  .then(() => {});
                                     setIsMovedLoading(false);
-                                    
-                                  });
-                                
-                                
+                                  }
+                                } else {
+                                  db.collection("invoice")
+                                  .doc(eachDoc.id)
+                                  .delete()
+                                  .then(() => {});
+                                  setIsMovedLoading(false);
+                                }
+
                                 
                               });
                           });
@@ -683,13 +687,11 @@ export default function Invoice_history() {
                               .delete()
                               .then(() => {
                                 setIsMovedLoading(false);
-                                
                               });
                           });
                       }
                     }
                   });
-                 
                 });
             }
           }

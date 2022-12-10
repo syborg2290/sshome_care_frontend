@@ -1,0 +1,15 @@
+.btn_manage_itm {
+  margin-top: 70px !important;
+  float: right;
+}
+
+.btn_manage_his {
+  margin-top: 70px !important;
+  float: right;
+  background-color: rgb(8, 8, 77) !important;
+  color: aliceblue !important;
+}
+
+.selectedItems {
+  width: 30% !important;
+}

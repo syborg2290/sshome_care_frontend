@@ -1,0 +1,64 @@
+.btn_Login {
+  margin: auto !important;
+  width: 100% !important;
+}
+
+.loginLoader {
+  margin: auto !important;
+}
+
+.form {
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 130px;
+}
+
+.formContainer {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  padding-left: 30px !important;
+  padding-right: 30px !important;
+  height: 70% !important;
+}
+
+.container {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.lock_Icon {
+  color: rgba(84, 84, 92, 0.87);
+}
+
+.lbl_Login {
+  font-weight: 700 !important;
+  text-align: center;
+  padding-top: 20px !important;
+  padding-bottom: 20px !important;
+  color: blue;
+}
+
+.greeting {
+  font-weight: 500 !important;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.particles_login {
+  height: 100vh !important;
+  width: 100vw !important;
+  display: flex !important;
+  /* justify-content: center;
+  align-items: center;
+  position: absolute; */
+  /* top: 0;
+  left: 0; */
+  background-color: #000022 !important;
+}

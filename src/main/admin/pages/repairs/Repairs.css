@@ -1,0 +1,70 @@
+.title_Span_repairs {
+  font-weight: 700;
+  font-size: large;
+  color: #34314c;
+}
+
+.repair_Table {
+  margin-top: 25px !important;
+}
+
+.btn_AddnewRepair {
+  margin-top: 80px !important;
+  float: right;
+  border-radius: 10px;
+  height: 40px;
+  text-align: center;
+}
+
+.btnupdate {
+  border-radius: 10px !important;
+  font-size: 10px !important;
+  margin-right: 10px !important;
+  margin-top: -15px !important;
+}
+
+.icon_views {
+  margin-right: 5px !important;
+  margin-top: 5px !important;
+}
+
+.icon_print {
+  text-align: center !important;
+  margin-right: 15px !important;
+  font-size: 35px !important;
+  margin: auto !important;
+  margin-bottom: -6px !important;
+}
+
+.statusRepir {
+  color: aliceblue;
+  font-weight: 500;
+  background-color: rgb(82, 177, 39);
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 4px;
+  padding-right: 4px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+.confo_IconRpr {
+  color: rgba(255, 145, 0, 0.945);
+  font-size: 18px !important;
+  font-weight: 900 !important;
+  margin: auto !important;
+  margin-top: 3px !important;
+}
+
+.txtConfoModel_bodyRpr {
+  margin-left: 10px !important;
+}
+
+.confo_modelRpr {
+  width: 25% !important;
+  border-top: 8px #ffffff !important;
+  margin-top: 50px !important;
+  border-radius: 8px 8px 8px 8px !important;
+}
+
+/* */

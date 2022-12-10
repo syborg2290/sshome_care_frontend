@@ -1,0 +1,53 @@
+.main_container_employee {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.16), 0 1px 2px rgba(0, 0, 0, 0.23);
+  background-color: white;
+  padding-bottom: 50px;
+  border-radius: 6px;
+  overflow: hidden !important;
+  margin-top: 30px !important;
+}
+
+.title_employee {
+  padding-top: 30px !important;
+}
+
+.trustee_title_employee {
+  padding-top: 30px !important;
+}
+
+.titles_hr_employee {
+  background-color: #222a44 !important;
+  height: 1px !important;
+}
+
+.txt_Labels_employee {
+  margin: auto !important;
+}
+
+.paper_employee {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  margin-top: 20px !important;
+}
+
+.form_employee {
+  width: 100% !important;
+  margin-top: 30px !important;
+}
+
+.btn_addCust__employee {
+  margin-top: 40px !important;
+  float: right !important;
+}
+
+.validate_Edit {
+  color: red;
+  text-align: center !important;
+  font-weight: 600 !important;
+}
+
+.btn_addEmplyee {
+  margin-top: 40px !important;
+  float: right !important;
+}

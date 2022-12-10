@@ -1,0 +1,49 @@
+.paper_gass {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  margin-top: 20px !important;
+  overflow: hidden !important;
+}
+
+.form_gass {
+  width: 100% !important;
+  margin-top: 30px !important;
+}
+
+.mainPrint_container_gass {
+  margin-top: 70px !important;
+  padding-top: 15px !important;
+  width: 595px !important;
+  /* height: 442px !important; */
+  background-color: rgb(255, 255, 255) !important;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+
+.company_title_gass {
+  text-align: center !important;
+  font-weight: 700 !important;
+  font-family: "Times New Roman", Times, serif !important;
+  margin-top: 20px !important;
+}
+
+.company_sub__title_gass {
+  text-align: center !important;
+  font-size: smaller !important;
+}
+
+.tiles_settlement_gass {
+  font-family: Georgia, "Times New Roman", Times, serif !important;
+  font-style: italic !important;
+  margin-top: 30px !important;
+  text-align: center !important;
+  padding-bottom: 15px !important;
+}
+.print_btn_gass {
+  background-color: rgb(8, 8, 126) !important;
+  float: right !important;
+  margin-top: 35px !important;
+  color: aliceblue !important;
+  border-radius: 8px !important;
+  width: 20% !important;
+}

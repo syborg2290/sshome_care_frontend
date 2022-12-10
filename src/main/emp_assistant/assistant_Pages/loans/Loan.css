@@ -1,0 +1,47 @@
+.loans_table {
+  margin-top: 40px !important;
+}
+
+.btnupdateLon {
+  border-radius: 10px !important;
+  font-size: 10px !important;
+  margin-left: 20px !important;
+  margin-top: -15px !important;
+}
+
+.sttLon {
+  background-color: orange;
+  color: aliceblue;
+  border-radius: 6px;
+  width: 60% !important;
+  text-align: center;
+  padding-right: 6px !important;
+  padding-right: 8px !important;
+}
+
+.sttLondone {
+  background-color: green;
+  color: aliceblue;
+  border-radius: 6px;
+  width: 60% !important;
+  text-align: center;
+  padding-right: 6px !important;
+  padding-right: 8px !important;
+}
+
+.btnLloan {
+  margin-top: 70px !important;
+  text-transform: none !important;
+  float: right !important;
+}
+
+.btn_loans {
+  margin-top: 70px !important;
+  background-color: rgba(3, 3, 99, 0.897) !important;
+  text-transform: none !important;
+  color: aliceblue !important;
+}
+
+/* .model_loan_add {
+  width: 50% !important;
+} */

@@ -1,0 +1,25 @@
+.menuButton {
+  margin-left: 12px;
+  margin-right: 36px;
+}
+
+/* .MuiList-root {
+  overflow: hidden !important;
+  white-space: nowrap;
+} */
+
+.sidebarList {
+  margin-top: 12px !important;
+}
+
+.icons {
+  color: white !important;
+}
+
+.divider {
+  background-color: rgba(255, 255, 255, 0.199) !important;
+}
+
+.mobileBackButton {
+  color: aliceblue !important;
+}

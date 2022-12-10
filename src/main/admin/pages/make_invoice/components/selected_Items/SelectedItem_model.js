@@ -101,7 +101,7 @@ export default function SelectedItem_Model({ itemListProps, closeModel }) {
       <Grid container spacing={2}>
         <Grid className="radioGrid_main" item xs={12} sm={12}>
         <Typography className="method_title" variant="h5" gutterBottom>
-            Select a Payment Method :
+            Select A Payment Method :
         </Typography>
           </Grid>
         <Grid className="hr_rGrid_main" item xs={12} sm={4}>

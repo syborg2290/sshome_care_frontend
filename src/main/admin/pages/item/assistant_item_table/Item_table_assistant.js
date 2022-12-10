@@ -24,7 +24,7 @@ import EditIcon from "@material-ui/icons/Edit";
 
 // styles
 import "./Item_table_assistant.css";
- 
+
 import db from "../../../../../config/firebase.js";
 
 export default function Item_table_assistant() {
@@ -35,6 +35,7 @@ export default function Item_table_assistant() {
   const [visible, setVisible] = useState(false);
   // eslint-disable-next-line
   const [currentIndx, setCurrentIndx] = useState(0);
+  const [rowsCount, setRowsCount] = useState(0);
   const [editVisible, setEditVisible] = useState(false);
 
   // let socket = socketIOClient(RealtimeServerApi);
@@ -57,10 +58,23 @@ export default function Item_table_assistant() {
     window.addEventListener("offline", function (e) {
       history.push("/connection_lost");
     });
+    
+    // db.collection("item").get().then((reV) => {
+    //   reV.docs.forEach((eachIt) => {
+    //     db.collection("item").doc(eachIt.id).update({
+    //        seized: false,
+    //     });
+    //    });
+    // });
+
+    let rowsCountUse = rowsCount + 25;
+    setRowsCount(rowsCountUse);
 
     db.collection("item")
       .orderBy("timestamp", "desc")
-      .onSnapshot((snapshot) => {
+      // .limit(25)
+      .get()
+      .then((snapshot) => {
         var newData = [];
         var itemData = [];
         var itemDataSeMo = [];
@@ -88,6 +102,7 @@ export default function Item_table_assistant() {
           newData.push([
             element.data().itemName,
             element.data().brand,
+            element.data().modelNoExtra,
             element.data().qty,
             element.data().color === "" ? " - " : element.data().color,
             element.data().guaranteePeriod === ""
@@ -101,7 +116,14 @@ export default function Item_table_assistant() {
               thousandSeparator={true}
               prefix={" "}
             />,
+            <CurrencyFormat
+              value={element.data().cashPrice}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={" "}
+            />,
             element.data().stock_type,
+            element.data()?.seized === true ? "Yes" : "No",
             <div
               color="secondary"
               size="small"
@@ -191,6 +213,15 @@ export default function Item_table_assistant() {
       },
     },
     {
+      name: "Model No",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
       name: "Qty",
       options: {
         filter: false,
@@ -227,7 +258,25 @@ export default function Item_table_assistant() {
       },
     },
     {
+      name: "Cash price(LKR)",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
       name: "Stock_Type",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+     {
+      name: "Seized",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -667,6 +716,11 @@ export default function Item_table_assistant() {
                     ? allTtemData[currentIndx].id
                     : ""
                 }
+                purchasedPrice={
+                  allTtemData[currentIndx] && allTtemData[currentIndx].data
+                    ? allTtemData[currentIndx].purchasedPrice
+                    : ""
+                }
               />
             </div>
           </div>
@@ -699,6 +753,196 @@ export default function Item_table_assistant() {
               onRowClick: (rowData, rowMeta) => {
                 setCurrentIndx(rowMeta.dataIndex);
               },
+              // onChangeRowsPerPage: (rowsCountNumber) => {
+              //   setIsLoading(true);
+              //   let rowsCountUseIn = rowsCount + rowsCountNumber;
+              //   setRowsCount(rowsCountUseIn);
+              //   db.collection("item")
+              //     .orderBy("timestamp", "desc")
+              //     .limit(rowsCountUseIn)
+              //     .get()
+              //     .then((snapshot) => {
+              //       var newData = [];
+              //       var itemData = [];
+              //       var itemDataSeMo = [];
+              //       var itemDataSeMoCon = [];
+              //       if (snapshot.docs.length > 0) {
+              //         itemDataSeMoCon.push({
+              //           serialNo: snapshot.docs[0].data().serialNo,
+              //           modelNo: snapshot.docs[0].modelNo,
+              //           chassisNo: snapshot.docs[0].chassisNo,
+              //         });
+              //       }
+              //       snapshot.docs.forEach((element) => {
+              //         itemData.push({
+              //           id: element.id,
+              //           data: element.data(),
+              //         });
+              //         itemDataSeMo.push({
+              //           serialNo: element.data().serialNo,
+              //           modelNo: element.data().modelNo,
+              //           chassisNo: element.data().chassisNo,
+              //         });
+              //         newData.push([
+              //           element.data().itemName,
+              //           element.data().brand,
+              //           element.data().modelNoExtra,
+              //           element.data().qty,
+              //           element.data().color === ""
+              //             ? " - "
+              //             : element.data().color,
+              //           element.data().guaranteePeriod === ""
+              //             ? " - "
+              //             : element.data().guaranteePeriod +
+              //               " " +
+              //               element.data().guarantee.value.toLowerCase(),
+              //           <CurrencyFormat
+              //             value={element.data().salePrice}
+              //             displayType={"text"}
+              //             thousandSeparator={true}
+              //             prefix={" "}
+              //           />,
+              //           <CurrencyFormat
+              //             value={element.data().cashPrice}
+              //             displayType={"text"}
+              //             thousandSeparator={true}
+              //             prefix={" "}
+              //           />,
+              //           element.data().stock_type,
+              //           <div
+              //             color="secondary"
+              //             size="small"
+              //             className={
+              //               element.data().qty !== 0
+              //                 ? element.data().qty >= 3
+              //                   ? "px-2"
+              //                   : "px-3"
+              //                 : "px-4"
+              //             }
+              //             variant="contained"
+              //           >
+              //             {element.data().qty !== 0 ? (
+              //               element.data().qty >= 3 ? (
+              //                 <p className="status">Available</p>
+              //               ) : (
+              //                 <p className="status">Low Stock</p>
+              //               )
+              //             ) : (
+              //               <p className="status">Out Of Stock</p>
+              //             )}
+              //           </div>,
+              //           <div className="table_icon">
+              //             <VisibilityIcon onClick={showModal} />
+              //             {element.data().stock_type === "main" ? (
+              //               <span className="icon_Edit">
+              //                 <EditIcon onClick={editModal} />
+              //               </span>
+              //             ) : null}
+              //           </div>,
+              //         ]);
+              //       });
+              //       setItemTableData(newData);
+              //       setAllItemData(itemData);
+              //       setItemListSeMo(itemDataSeMo);
+              //       setItemListSeMoCon(itemDataSeMoCon);
+              //       setIsLoading(false);
+              //     });
+              // },
+              // onChangePage: () => {
+              //   setIsLoading(true);
+              //   let rowsCountUseIn = rowsCount + 25;
+              //   setRowsCount(rowsCountUseIn);
+              //   db.collection("item")
+              //     .orderBy("timestamp", "desc")
+              //     .limit(rowsCountUseIn)
+              //     .get()
+              //     .then((snapshot) => {
+              //       var newData = [];
+              //       var itemData = [];
+              //       var itemDataSeMo = [];
+              //       var itemDataSeMoCon = [];
+              //       if (snapshot.docs.length > 0) {
+              //         itemDataSeMoCon.push({
+              //           serialNo: snapshot.docs[0].data().serialNo,
+              //           modelNo: snapshot.docs[0].modelNo,
+              //           chassisNo: snapshot.docs[0].chassisNo,
+              //         });
+              //       }
+              //       snapshot.docs.forEach((element) => {
+              //         itemData.push({
+              //           id: element.id,
+              //           data: element.data(),
+              //         });
+              //         itemDataSeMo.push({
+              //           serialNo: element.data().serialNo,
+              //           modelNo: element.data().modelNo,
+              //           chassisNo: element.data().chassisNo,
+              //         });
+              //         newData.push([
+              //           element.data().itemName,
+              //           element.data().brand,
+              //           element.data().modelNoExtra,
+              //           element.data().qty,
+              //           element.data().color === ""
+              //             ? " - "
+              //             : element.data().color,
+              //           element.data().guaranteePeriod === ""
+              //             ? " - "
+              //             : element.data().guaranteePeriod +
+              //               " " +
+              //               element.data().guarantee.value.toLowerCase(),
+              //           <CurrencyFormat
+              //             value={element.data().salePrice}
+              //             displayType={"text"}
+              //             thousandSeparator={true}
+              //             prefix={" "}
+              //           />,
+              //           <CurrencyFormat
+              //             value={element.data().cashPrice}
+              //             displayType={"text"}
+              //             thousandSeparator={true}
+              //             prefix={" "}
+              //           />,
+              //           element.data().stock_type,
+              //           <div
+              //             color="secondary"
+              //             size="small"
+              //             className={
+              //               element.data().qty !== 0
+              //                 ? element.data().qty >= 3
+              //                   ? "px-2"
+              //                   : "px-3"
+              //                 : "px-4"
+              //             }
+              //             variant="contained"
+              //           >
+              //             {element.data().qty !== 0 ? (
+              //               element.data().qty >= 3 ? (
+              //                 <p className="status">Available</p>
+              //               ) : (
+              //                 <p className="status">Low Stock</p>
+              //               )
+              //             ) : (
+              //               <p className="status">Out Of Stock</p>
+              //             )}
+              //           </div>,
+              //           <div className="table_icon">
+              //             <VisibilityIcon onClick={showModal} />
+              //             {element.data().stock_type === "main" ? (
+              //               <span className="icon_Edit">
+              //                 <EditIcon onClick={editModal} />
+              //               </span>
+              //             ) : null}
+              //           </div>,
+              //         ]);
+              //       });
+              //       setItemTableData(newData);
+              //       setAllItemData(itemData);
+              //       setItemListSeMo(itemDataSeMo);
+              //       setItemListSeMoCon(itemDataSeMoCon);
+              //       setIsLoading(false);
+              //     });
+              // },
               textLabels: {
                 body: {
                   noMatch: isLoading ? (

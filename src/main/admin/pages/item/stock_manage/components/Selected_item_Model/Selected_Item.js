@@ -37,7 +37,7 @@ async function getQtyStatus(qty) {
 }
 
 export default function Selected_Item({ itemListProps, closeModel }) {
-  const [selectedType, setSelectedType] = useState("shop");
+  const [selectedType, setSelectedType] = useState("");
   const [itemsData, setItemsData] = useState([]);
   // eslint-disable-next-line
   const [qty, setQty] = useState({});
@@ -47,7 +47,7 @@ export default function Selected_Item({ itemListProps, closeModel }) {
   // eslint-disable-next-line
   const [date, setDate] = useState(null);
 
-  const handleChange = (event) => {
+  const handleChange = async (event) => {
     setSelectedType(event.target.value);
   };
 
@@ -101,8 +101,11 @@ export default function Selected_Item({ itemListProps, closeModel }) {
     setLoadingSubmit(true);
     getQtyStatus(qty).then(async (reStatus) => {
       if (reStatus) {
+        var allItems = await db
+          .collection("item")
+          .where("stock_type", "==", selectedType)
+          .get();
         itemsData.forEach(async (eachItem) => {
-          var allItems = await db.collection("item").get();
           if (qty[eachItem.i] > 0) {
             if (allItems) {
               if (
@@ -118,8 +121,8 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                     ob.data().amountPerInstallment ===
                       eachItem.item.amountPerInstallment &&
                     ob.data().downPayment === eachItem.item.downPayment &&
-                    ob.data().discount === eachItem.item.discount &&
-                    ob.data().stock_type === selectedType
+                    ob.data().discount === eachItem.item.discount
+                  // ob.data().stock_type === selectedType
                   // ob.data().modelNo[0] === eachItem.item.modelNo[0]
                 )
               ) {
@@ -135,8 +138,8 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                     ob.data().amountPerInstallment ===
                       eachItem.item.amountPerInstallment &&
                     ob.data().downPayment === eachItem.item.downPayment &&
-                    ob.data().discount === eachItem.item.discount &&
-                    ob.data().stock_type === selectedType
+                    ob.data().discount === eachItem.item.discount
+                  // ob.data().stock_type === selectedType
                   // ob.data().modelNo[0] === eachItem.item.modelNo[0]
                 );
                 if (newArray) {
@@ -190,18 +193,19 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                         let prevUpdaModel = eachModelNo.concat(modelNosList);
                         let prevUpdaSerail = eachSerialNo.concat(serialNosList);
 
-                        db.collection("item")
-                          .doc(newArray[0].id)
-                          .update({
-                            qty: newArray[0].data().qty + qty[eachItem.i],
-                            modelNo: prevUpdaModel,
-                            serialNo: prevUpdaSerail,
-                            chassisNo: newArrayChassis,
-                          })
-                          .then((_) => {
-                            setLoadingSubmit(false);
-                            window.location.reload();
-                          });
+                        if (selectedType)
+                          db.collection("item")
+                            .doc(newArray[0].id)
+                            .update({
+                              qty: newArray[0].data().qty + qty[eachItem.i],
+                              modelNo: prevUpdaModel,
+                              serialNo: prevUpdaSerail,
+                              chassisNo: newArrayChassis,
+                            })
+                            .then((_) => {
+                              setLoadingSubmit(false);
+                              window.location.reload();
+                            });
                       });
                   }
                 }
@@ -216,10 +220,7 @@ export default function Selected_Item({ itemListProps, closeModel }) {
 
                 var modelNoNewList2 = eachItem.item.modelNo;
                 var serialNoNewList2 = eachItem.item.serialNo;
-                var chassisNoNewList2 = newArrayChassis2.splice(
-                  0,
-                  qty[eachItem.i]
-                );
+                var chassisNoNewList2 = newArrayChassis2;
 
                 for (let q = 0; q < qty[eachItem.i]; q++) {
                   serialNosList2.push(newArraySerial2[q]);
@@ -264,6 +265,7 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                         itemName: eachItem.item.itemName,
                         brand: eachItem.item.brand,
                         modelNo: prevUpdaModel2,
+                        modelNoExtra: prevUpdaModel2[0],
                         serialNo: prevUpdaSerail2,
                         chassisNo: chassisNoNewList2,
                         color: eachItem.item.color,
@@ -271,6 +273,7 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                         qty: prevUpdaSerail2.length,
                         cashPrice: eachItem.item.cashPrice,
                         salePrice: eachItem.item.salePrice,
+                        purchasedPrice: eachItem.item.purchasedPrice,
                         noOfInstallments: eachItem.item.noOfInstallments,
                         amountPerInstallment:
                           eachItem.item.amountPerInstallment,
@@ -374,7 +377,7 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                         </Col>
                       </Row>
                     }
-                    description={<span>{item.modelNo[0]}</span>}
+                    description={<span>Model No : {item.modelNo[0]}</span>}
                   />
                 </List.Item>
                 <Divider />
@@ -400,6 +403,9 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                     onChange={handleChange}
                     value={selectedType}
                   >
+                    <option onChange={handleChange} value={""}>
+                      Select the type
+                    </option>
                     {itemsData[0]?.item.stock_type === "main" ? null : (
                       <option onChange={handleChange} value={"main"}>
                         main
@@ -446,7 +452,11 @@ export default function Selected_Item({ itemListProps, closeModel }) {
                 color="primary"
                 className="btn_SelectdeDone"
                 onClick={exchangeItems}
-                disabled={date === null || isLoadingSubmit ? true : false}
+                disabled={
+                  date === null || isLoadingSubmit
+                    ? true
+                    : false || selectedType === ""
+                }
               >
                 {isLoadingSubmit ? <Spin size="large" /> : "Done"}
               </Button>

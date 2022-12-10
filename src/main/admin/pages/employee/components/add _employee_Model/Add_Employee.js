@@ -54,6 +54,7 @@ export default function Add_Employee({ close_model }) {
                 mobile2: mobile2.trim(),
                 basic: basic === "" ? 0 : parseInt(basic),
                 security_deposit: deposits === "" ? 0 : parseInt(deposits),
+                status: "work",
                 date: firebase.firestore.FieldValue.serverTimestamp(),
               })
               .then((_) => {

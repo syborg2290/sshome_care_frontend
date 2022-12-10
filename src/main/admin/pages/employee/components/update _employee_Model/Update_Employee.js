@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { TextField, Button } from "@material-ui/core";
-import { Spin } from "antd";
+import { Spin, Radio } from "antd";
 
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
@@ -22,9 +22,11 @@ export default function Update_Employe({
   address1Prop,
   address2Prop,
   basicProp,
+  statusProp,
   close_model,
 }) {
   const [nic, setNic] = useState(nicProp);
+  const [status, setstatus] = useState(statusProp);
   const [fname, setFirstName] = useState(fnameProp);
   const [lname, setLastName] = useState(lnameProp);
   const [addres1, setAddres1] = useState(address1Prop);
@@ -80,6 +82,7 @@ export default function Update_Employe({
                         mobile1: mobile1,
                         mobile2: mobile2,
                         basic: parseInt(basic),
+                        status: status,
                       })
                       .then(() => {
                         setLoadingSubmit(false);
@@ -98,6 +101,7 @@ export default function Update_Employe({
     window.addEventListener("offline", function (e) {
       history.push("/connection_lost");
     });
+   
   });
 
   return (
@@ -296,6 +300,22 @@ export default function Update_Employe({
                   }
                 }}
               />
+            </Grid>
+            <Grid item xs={12} sm={1}></Grid>
+            <Grid className="txt_Labels_employee_update" item xs={12} sm={4}>
+              Employe status :
+            </Grid>
+            <Grid item xs={12} sm={7}>
+              <Radio.Group
+                defaultValue={status}
+                buttonStyle="solid"
+                onChange={(e) => {
+                  setstatus(e.target.value);
+                }}
+              >
+                <Radio.Button value="work">Work</Radio.Button>
+                <Radio.Button value="notwork">Not work</Radio.Button>
+              </Radio.Group>
             </Grid>
             <Grid item xs={12} sm={1}></Grid>
           </Grid>

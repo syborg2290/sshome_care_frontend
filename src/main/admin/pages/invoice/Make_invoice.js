@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { Modal, Spin, DatePicker, Space, Checkbox, Radio } from "antd";
-import { PrinterFilled } from "@ant-design/icons";
-import { useLocation, useHistory } from "react-router-dom";
+import React, {useState, useEffect} from 'react';
+import {Modal, Spin, DatePicker, Space, Checkbox, Radio} from 'antd';
+import {PrinterFilled} from '@ant-design/icons';
+import {useLocation, useHistory} from 'react-router-dom';
 import {
   Button,
   TextField,
@@ -20,24 +20,21 @@ import {
   FormControl,
   Select,
   Card,
-} from "@material-ui/core";
+} from '@material-ui/core';
 
-import firebase from "firebase";
-import CurrencyFormat from "react-currency-format";
+import firebase from 'firebase';
+import CurrencyFormat from 'react-currency-format';
 
-import {
-  NotificationContainer,
-  NotificationManager,
-} from "react-notifications";
-import "react-notifications/lib/notifications.css";
+import {NotificationContainer, NotificationManager} from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
 
-import db, { storage } from "../../../../config/firebase.js";
-import "./Make_invoice.css";
+import db, {storage} from '../../../../config/firebase.js';
+import './Make_invoice.css';
 // icon
-import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
-import CloseOutlinedIcon from "@material-ui/icons/CloseOutlined";
-import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
-import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
+import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
+import CloseOutlinedIcon from '@material-ui/icons/CloseOutlined';
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+import {MinusCircleOutlined, PlusOutlined} from '@ant-design/icons';
 
 // components
 // import AddSerialNumber from "./components/Add_Serial_Number";
@@ -47,7 +44,7 @@ function Make_invoice() {
   const [allRoot, setAllRoot] = useState([]);
   const [loadingsubmit, setLoadingSubmit] = useState(false);
   const [loadingNicsubmit, setLoadingNicSubmit] = useState(false);
-  const [invoiceNumber, setInvoiceNumber] = useState("");
+  const [invoiceNumber, setInvoiceNumber] = useState('');
   const [tablerows, setTableRows] = useState([]);
   const [itemQty, setItemQty] = useState({});
   const [itemDP, setItemDP] = useState({});
@@ -60,26 +57,27 @@ function Make_invoice() {
   const [totalDiscount, setTotalDiscount] = useState(0);
   const [gamisaraniInitialAmount, setGamisaraniInitialAmount] = useState(0);
   const [gamisaraniamount, setGamisaraniamount] = useState(0);
-  const [gamisaraniId, setGamisaraniId] = useState("");
-  const [gamisaraniNic, setGamisaraniNic] = useState("");
+  const [gamisaraniId, setGamisaraniId] = useState('');
+  const [gamisaraniNic, setGamisaraniNic] = useState('');
   const [days, setDays] = useState(new Date().getDay());
   const [dates, setDates] = useState(new Date().getDate());
-  const [selectedType, setSelectedType] = useState("shop");
-  const [rootVillage, setRootVillage] = useState("");
+  const [selectedType, setSelectedType] = useState('shop');
+  const [rootVillage, setRootVillage] = useState('');
   const [gamisarani, setGamisarani] = useState(false);
   const [intialTimestamp, setInititialTimestamp] = useState(null);
   const [deadlineTimestamp, setDeadlineTimestamp] = useState(null);
   const [isFullPayment, setIsFullPayment] = useState(false);
   const [documentCharges, setDocumentCharges] = useState(0);
   const [visibleSerial, setVisibleSerial] = useState(false);
-  const [invoiceStatus, setInvoiceStatus] = useState("new");
+  const [invoiceStatus, setInvoiceStatus] = useState('new');
   const [currentIndex, setCurrentIndex] = useState(0);
-
+  const [fullname, setFullname] = useState('');
+  const [nic, setNic] = useState('');
   const [inputsSerialNo, setInputsSerialNo] = useState({});
 
   let history = useHistory();
   let history2 = useHistory();
-  const { confirm } = Modal;
+  const {confirm} = Modal;
 
   const handleChange = (event) => {
     setSelectedType(event.target.value);
@@ -101,10 +99,10 @@ function Make_invoice() {
           ...inputsSerialNo[currentIndex],
           [inputsSerialNo[currentIndex] === undefined
             ? 0
-            : Object.keys(inputsSerialNo[currentIndex]).length]: "",
+            : Object.keys(inputsSerialNo[currentIndex]).length]: '',
         },
       });
-      setInputsSerialNo({ ...combined });
+      setInputsSerialNo({...combined});
     }
   };
   const handleChangeAddSerialInputs = (e) => {
@@ -114,36 +112,36 @@ function Make_invoice() {
         [e.target.id]: e.target.value,
       },
     });
-    setInputsSerialNo({ ...combined2 });
+    setInputsSerialNo({...combined2});
   };
 
   useEffect(() => {
-    window.addEventListener("offline", function (e) {
-      history2.push("/connection_lost");
+    window.addEventListener('offline', function (e) {
+      history2.push('/connection_lost');
     });
 
     window.addEventListener(
-      "popstate",
+      'popstate',
       (event) => {
         if (event.state) {
-          history.push("/admin/ui/MakeInvoiceTable");
+          history.push('/admin/ui/MakeInvoiceTable');
         }
       },
       false
     );
 
     window.history.pushState(
-      { name: "browserBack" },
-      "on browser back click",
+      {name: 'browserBack'},
+      'on browser back click',
       window.location.href
     );
     window.history.pushState(
-      { name: "browserBack" },
-      "on browser back click",
+      {name: 'browserBack'},
+      'on browser back click',
       window.location.href
     );
 
-    setInvoiceNumber("IN-" + Math.floor(Math.random() * 1000000000 + 1));
+    setInvoiceNumber('IN-' + Math.floor(Math.random() * 1000000000 + 1));
 
     if (location.state != null) {
       var tableData = [];
@@ -152,10 +150,14 @@ function Make_invoice() {
       var keepDataDiscount = {};
       location.state.detail.forEach((obj) => {
         keepDataQTY[obj.i] = obj.qty;
-        keepDataDP[obj.i] = obj.item.salePrice;
+        keepDataDP[obj.i] =
+          obj.paymentWay === 'PayandGo'
+            ? obj.item.salePrice
+            : obj.item.cashPrice;
         keepDataDiscount[obj.i] = obj.item.discount;
         tableData.push(obj);
-        if (obj.paymentWay === "PayandGo") {
+        setSelectedType(obj.item.stock_type)
+        if (obj.paymentWay === 'PayandGo') {
           setIsFullPayment(false);
         } else {
           setIsFullPayment(true);
@@ -167,7 +169,7 @@ function Make_invoice() {
       setTableRows(tableData);
     }
 
-    db.collection("root")
+    db.collection('root')
       .get()
       .then((re) => {
         var rawRoot = [];
@@ -188,25 +190,25 @@ function Make_invoice() {
         (itemDP[tablerows[a].i] - itemDiscount[tablerows[a].i]) *
           itemQty[tablerows[a].i];
     }
-    let gamiam = gamisaraniamount === "" ? 0 : parseInt(gamisaraniamount);
+    let gamiam = gamisaraniamount === '' ? 0 : parseInt(gamisaraniamount);
     let fTotoS = subTotalValue - gamiam <= 0 ? 0 : subTotalValue - gamiam;
     return fTotoS;
   };
 
   const handleQTYChange = (e, itemid, row) => {
     try {
-      const { value } = e.target;
-      db.collection("item")
+      const {value} = e.target;
+      db.collection('item')
         .doc(itemid)
         .get()
         .then((doc) => {
-          if (Math.round(doc.data().qty) >= (value === "" ? 1 : value)) {
+          if (Math.round(doc.data().qty) >= (value === '' ? 1 : value)) {
             setItemQty({
               ...itemQty,
               [row.i]: value,
             });
           } else {
-            NotificationManager.warning("Out Of Stock");
+            NotificationManager.warning('Out Of Stock');
           }
         });
     } catch (error) {
@@ -218,19 +220,19 @@ function Make_invoice() {
     if (!isFullPayment) {
       if (deadlineTimestamp !== null) {
         if (balance === 0) {
-          NotificationManager.warning("Balance amount is required ! )");
+          NotificationManager.warning('Balance amount is required ! )');
         } else {
           if (itemAPI === 0) {
             NotificationManager.warning(
-              "Amount per installment amount is required ! )"
+              'Amount per installment amount is required ! )'
             );
           } else {
             if (itemNOI === 0) {
-              NotificationManager.warning("No of installment is required ! )");
+              NotificationManager.warning('No of installment is required ! )');
             } else {
               if (dpayment === 0) {
                 NotificationManager.warning(
-                  "Downpayment amount is required ! )"
+                  'Downpayment amount is required ! )'
                 );
               } else {
                 seFunc();
@@ -239,7 +241,7 @@ function Make_invoice() {
           }
         }
       } else {
-        NotificationManager.warning("Deadline date is not selected ! )");
+        NotificationManager.warning('Deadline date is not selected ! )');
       }
     } else {
       seFunc();
@@ -249,29 +251,46 @@ function Make_invoice() {
   const seFunc = () => {
     if (subTotalFunc() - totalDiscount < 0) {
       NotificationManager.warning(
-        "Issue with your calculations Pleace check again (May be Included minus values ! )"
+        'Issue with your calculations Pleace check again (May be Included minus values ! )'
       );
     } else {
+      
+      var times = new Date(
+      new Date(intialTimestamp?.seconds * 1000).setMonth(
+        new Date(intialTimestamp?.seconds * 1000).getMonth() + 1
+      )
+      ).setDate(parseInt(dates));
+      
+      const yearNumber = parseInt(new Date(intialTimestamp?.seconds * 1000).getFullYear());
+      const nextYearNumber = yearNumber+1;
+      const timesYear = parseInt(new Date(times).getFullYear());
+    
+     if(timesYear !== yearNumber && timesYear !== nextYearNumber){
+      NotificationManager.warning("Next date's year is wrong! press the button again");
+      
+     } else {
+       
+       
       if (
         gamisarani &&
-        (parseInt(gamisaraniamount) === "" ? 0 : parseInt(gamisaraniamount)) > 0
+        (parseInt(gamisaraniamount) === '' ? 0 : parseInt(gamisaraniamount)) > 0
       ) {
-        db.collection("gami_sarani")
+        db.collection('gami_sarani')
           .doc(gamisaraniId)
           .get()
           .then((getRe) => {
             let toto1 =
-              gamisaraniamount === "" ? 0 : parseInt(gamisaraniamount);
+              gamisaraniamount === '' ? 0 : parseInt(gamisaraniamount);
             let totoF = getRe.data().currentDeposit - toto1;
-            db.collection("gami_sarani")
+            db.collection('gami_sarani')
               .doc(gamisaraniId)
               .update({
                 currentDeposit: totoF <= 0 ? 0 : totoF,
               })
               .then((re) => {
                 let toto =
-                  gamisaraniamount === "" ? 0 : parseInt(gamisaraniamount);
-                db.collection("gami_sarani_withdrawhistory").add({
+                  gamisaraniamount === '' ? 0 : parseInt(gamisaraniamount);
+                db.collection('gami_sarani_withdrawhistory').add({
                   gami_nic: gamisaraniNic,
                   docId: gamisaraniId,
                   withdraw: toto,
@@ -286,8 +305,8 @@ function Make_invoice() {
                     </h5>
                   ),
                   icon: <PrinterFilled className="confo_icon" />,
-                  okText: "Yes",
-                  cancelText: "No",
+                  okText: 'Yes',
+                  cancelText: 'No',
                   async onOk() {
                     var arrayPassingItems = [];
 
@@ -296,9 +315,9 @@ function Make_invoice() {
                         item_id: one.id,
                         item_name: one.title,
                         qty: itemQty[one.i],
-                        downpayment: itemDP[one.i] === "" ? 0 : itemDP[one.i],
+                        downpayment: itemDP[one.i] === '' ? 0 : itemDP[one.i],
                         discount:
-                          itemDiscount[one.i] === "" ? 0 : itemDiscount[one.i],
+                          itemDiscount[one.i] === '' ? 0 : itemDiscount[one.i],
                       };
                       arrayPassingItems.push(objItem);
                     });
@@ -308,10 +327,10 @@ function Make_invoice() {
                         invoice_number: invoiceNumber,
                         customerDetails: tablerows[0].customer,
                         installemtnDay: days,
-                        installemtnDate: dates === "" ? 1 : dates,
+                        installemtnDate: dates === '' ? 1 : dates,
                         discount: totalDiscount,
                         subTotal: subTotalFunc(),
-                        paymentWay: isFullPayment ? "FullPayment" : "PayandGo",
+                        paymentWay: isFullPayment ? 'FullPayment' : 'PayandGo',
                         downpayment: dpayment,
                         noOfInstallment: itemNOI,
                         amountPerInstallment: itemAPI,
@@ -319,15 +338,15 @@ function Make_invoice() {
                         total: subTotalFunc() - totalDiscount,
                         // discription: discription,
                         itemsList: arrayPassingItems,
-                        backto: "item_list",
+                        backto: 'item_list',
                       };
 
                       let moveWith = {
-                        pathname: "/admin/invoice/printInvoice",
-                        search: "?query=abc",
-                        state: { detail: passingWithCustomerObj },
+                        pathname: '/admin/invoice/printInvoice',
+                        search: '?query=abc',
+                        state: {detail: passingWithCustomerObj},
                       };
-                      await invoiceIntoDb().then((_) => {
+                      await invoiceIntoDb(times).then((_) => {
                         history.push(moveWith);
                       });
                     } else {
@@ -338,7 +357,7 @@ function Make_invoice() {
                         installemtnDayDate: null,
                         discount: totalDiscount,
                         subTotal: subTotalFunc(),
-                        paymentWay: isFullPayment ? "FullPayment" : "PayandGo",
+                        paymentWay: isFullPayment ? 'FullPayment' : 'PayandGo',
                         downpayment: dpayment,
                         noOfInstallment: itemNOI,
                         amountPerInstallment: itemAPI,
@@ -346,21 +365,21 @@ function Make_invoice() {
                         total: subTotalFunc() - totalDiscount,
                         // discription: discription,
                         itemsList: arrayPassingItems,
-                        backto: "item_list",
+                        backto: 'item_list',
                       };
                       let moveWith = {
-                        pathname: "/admin/invoice/printInvoice",
-                        search: "?query=abc",
-                        state: { detail: passingWithoutCustomerObj },
+                        pathname: '/admin/invoice/printInvoice',
+                        search: '?query=abc',
+                        state: {detail: passingWithoutCustomerObj},
                       };
-                      await invoiceIntoDb().then((_) => {
+                      await invoiceIntoDb(times).then((_) => {
                         history.push(moveWith);
                       });
                     }
                   },
                   async onCancel() {
-                    await invoiceIntoDb().then((_) => {
-                      history.push("/admin/ui/MakeInvoiceTable");
+                    await invoiceIntoDb(times).then((_) => {
+                      history.push('/admin/ui/MakeInvoiceTable');
                     });
                   },
                 });
@@ -372,8 +391,8 @@ function Make_invoice() {
             <h5 className="confo_title">Do you Want to Print an Invoice?</h5>
           ),
           icon: <PrinterFilled className="confo_icon" />,
-          okText: "Yes",
-          cancelText: "No",
+          okText: 'Yes',
+          cancelText: 'No',
           async onOk() {
             var arrayPassingItems = [];
 
@@ -382,8 +401,8 @@ function Make_invoice() {
                 item_id: one.id,
                 item_name: one.title,
                 qty: itemQty[one.i],
-                downpayment: itemDP[one.i] === "" ? 0 : itemDP[one.i],
-                discount: itemDiscount[one.i] === "" ? 0 : itemDiscount[one.i],
+                downpayment: itemDP[one.i] === '' ? 0 : itemDP[one.i],
+                discount: itemDiscount[one.i] === '' ? 0 : itemDiscount[one.i],
               };
               arrayPassingItems.push(objItem);
             });
@@ -393,10 +412,10 @@ function Make_invoice() {
                 invoice_number: invoiceNumber,
                 customerDetails: tablerows[0].customer,
                 installemtnDay: days,
-                installemtnDate: dates === "" ? 1 : dates,
+                installemtnDate: dates === '' ? 1 : dates,
                 discount: totalDiscount,
                 subTotal: subTotalFunc(),
-                paymentWay: isFullPayment ? "FullPayment" : "PayandGo",
+                paymentWay: isFullPayment ? 'FullPayment' : 'PayandGo',
                 downpayment: dpayment,
                 noOfInstallment: itemNOI,
                 amountPerInstallment: itemAPI,
@@ -404,15 +423,15 @@ function Make_invoice() {
                 total: subTotalFunc() - totalDiscount,
                 // discription: discription,
                 itemsList: arrayPassingItems,
-                backto: "item_list",
+                backto: 'item_list',
               };
 
               let moveWith = {
-                pathname: "/admin/invoice/printInvoice",
-                search: "?query=abc",
-                state: { detail: passingWithCustomerObj },
+                pathname: '/admin/invoice/printInvoice',
+                search: '?query=abc',
+                state: {detail: passingWithCustomerObj},
               };
-              await invoiceIntoDb().then((_) => {
+              await invoiceIntoDb(times).then((_) => {
                 history.push(moveWith);
               });
             } else {
@@ -423,7 +442,7 @@ function Make_invoice() {
                 installemtnDayDate: null,
                 discount: totalDiscount,
                 subTotal: subTotalFunc(),
-                paymentWay: isFullPayment ? "FullPayment" : "PayandGo",
+                paymentWay: isFullPayment ? 'FullPayment' : 'PayandGo',
                 downpayment: dpayment,
                 noOfInstallment: itemNOI,
                 amountPerInstallment: itemAPI,
@@ -431,38 +450,38 @@ function Make_invoice() {
                 total: subTotalFunc() - totalDiscount,
                 // discription: discription,
                 itemsList: arrayPassingItems,
-                backto: "item_list",
+                backto: 'item_list',
               };
               let moveWith = {
-                pathname: "/admin/invoice/printInvoice",
-                search: "?query=abc",
-                state: { detail: passingWithoutCustomerObj },
+                pathname: '/admin/invoice/printInvoice',
+                search: '?query=abc',
+                state: {detail: passingWithoutCustomerObj},
               };
-              await invoiceIntoDb().then((_) => {
+              await invoiceIntoDb(times).then((_) => {
                 history.push(moveWith);
               });
             }
           },
           async onCancel() {
-            await invoiceIntoDb().then((_) => {
-              history.push("/admin/ui/MakeInvoiceTable");
+            await invoiceIntoDb(times).then((_) => {
+              history.push('/admin/ui/MakeInvoiceTable');
             });
           },
         });
       }
+     }
+      
+      
     }
   };
+  
+  
 
   // eslint-disable-next-line
-  const invoiceIntoDb = async () => {
-    setLoadingSubmit(true);
-    var times = new Date(
-      new Date(intialTimestamp?.seconds * 1000).setMonth(
-        new Date(intialTimestamp?.seconds * 1000).getMonth() + 1
-      )
-    );
-
-    if (tablerows.some((ob) => ob.customer !== null)) {
+  const invoiceIntoDb = async (times) => {
+    setLoadingSubmit(true); 
+      if(times){
+        if (tablerows.some((ob) => ob.customer !== null)) {
       if (deadlineTimestamp !== null) {
         let randomNumber = Math.floor(Math.random() * 1000000000) + 1000;
         //customerImageUrlFront
@@ -520,62 +539,62 @@ function Make_invoice() {
         }
 
         storage
-          .ref("images")
+          .ref('images')
           .child(
             tablerows[0]?.customer?.customerImageFileFront === null
-              ? "Avatar2.png"
+              ? 'Avatar2.png'
               : tablerows[0]?.customer?.customerImageFileFront?.name +
                   randomNumber
           )
           .getDownloadURL()
           .then((customerImageURLFront) => {
             storage
-              .ref("images")
+              .ref('images')
               .child(
                 tablerows[0]?.customer?.customerImageFile2Back === null
-                  ? "avatar1132.jpg"
+                  ? 'avatar1132.jpg'
                   : tablerows[0]?.customer?.customerImageFile2Back?.name +
                       randomNumber
               )
               .getDownloadURL()
               .then((customerImageURLBack) => {
                 storage
-                  .ref("images")
+                  .ref('images')
                   .child(
                     tablerows[0]?.customer?.trustee1ImageFile1Front === null
-                      ? "Avatar2.png"
+                      ? 'Avatar2.png'
                       : tablerows[0]?.customer?.trustee1ImageFile1Front?.name +
                           randomNumber
                   )
                   .getDownloadURL()
                   .then((trustee1ImageURLFront) => {
                     storage
-                      .ref("images")
+                      .ref('images')
                       .child(
                         tablerows[0]?.customer?.trustee1ImageFile2Back === null
-                          ? "avatar1132.jpg"
+                          ? 'avatar1132.jpg'
                           : tablerows[0]?.customer?.trustee1ImageFile2Back
                               ?.name + randomNumber
                       )
                       .getDownloadURL()
                       .then((trustee1ImageURLBack) => {
                         storage
-                          .ref("images")
+                          .ref('images')
                           .child(
                             tablerows[0]?.customer?.trustee2ImageFile1Front ===
                               null
-                              ? "Avatar2.png"
+                              ? 'Avatar2.png'
                               : tablerows[0]?.customer?.trustee2ImageFile1Front
                                   ?.name + randomNumber
                           )
                           .getDownloadURL()
                           .then((trustee2ImageURLFront) => {
                             storage
-                              .ref("images")
+                              .ref('images')
                               .child(
                                 tablerows[0]?.customer
                                   ?.trustee2ImageFile2Back === null
-                                  ? "avatar1132.jpg"
+                                  ? 'avatar1132.jpg'
                                   : tablerows[0]?.customer
                                       ?.trustee2ImageFile2Back?.name +
                                       randomNumber
@@ -586,10 +605,10 @@ function Make_invoice() {
 
                                 if (tablerows[0].customer.customerId !== null) {
                                   let prevCust = await db
-                                    .collection("customer")
+                                    .collection('customer')
                                     .doc(tablerows[0].customer.customerId)
                                     .get();
-                                  db.collection("customer")
+                                  db.collection('customer')
                                     .doc(tablerows[0].customer.customerId)
                                     .update({
                                       fname:
@@ -600,6 +619,7 @@ function Make_invoice() {
                                         tablerows[0].customer.customerAddress1,
                                       address2:
                                         tablerows[0].customer.customerAddress2,
+                                      root_village: rootVillage,
                                       root:
                                         tablerows[0].customer
                                           .customerRootToHome,
@@ -622,7 +642,7 @@ function Make_invoice() {
                                         let listOfSerilNo = [];
                                         let listOfModelNo = [];
                                         let listOfChassisNo = [];
-                                        if (invoiceStatus === "new") {
+                                        if (invoiceStatus === 'new') {
                                           for (
                                             var n = 0;
                                             n < parseInt(itemQty[one.i]);
@@ -650,7 +670,7 @@ function Make_invoice() {
                                         }
 
                                         if (
-                                          invoiceStatus !== "new"
+                                          invoiceStatus !== 'new'
                                             ? true
                                             : listOfSerilNo.length ===
                                               parseInt(itemQty[one.i])
@@ -660,13 +680,15 @@ function Make_invoice() {
                                             serialNo: listOfSerilNo,
                                             modelNo: listOfModelNo,
                                             chassisNo: listOfChassisNo,
+                                            purchasedPrice:
+                                              one.item.purchasedPrice,
                                             downpayment:
-                                              itemDP[one.i] === ""
+                                              itemDP[one.i] === ''
                                                 ? 0
                                                 : parseInt(itemDP[one.i]),
                                             qty: parseInt(itemQty[one.i]),
                                             discount:
-                                              itemDiscount[one.i] === ""
+                                              itemDiscount[one.i] === ''
                                                 ? 0
                                                 : itemDiscount[one.i],
                                             item_name: one.title,
@@ -676,23 +698,23 @@ function Make_invoice() {
                                         }
                                       });
 
-                                      db.collection("selling_history").add({
+                                      db.collection('selling_history').add({
                                         invoice_number: invoiceNumber,
                                         items: arrayItems,
                                         paymentWay: isFullPayment
-                                          ? "FullPayment"
-                                          : "PayandGo",
+                                          ? 'FullPayment'
+                                          : 'PayandGo',
                                         selectedType: selectedType,
                                         total:
                                           subTotalFunc() -
-                                          (totalDiscount === ""
+                                          (totalDiscount === ''
                                             ? 0
                                             : totalDiscount),
 
                                         date: intialTimestamp,
                                       });
 
-                                      db.collection("invoice")
+                                      db.collection('invoice')
                                         .add({
                                           invoice_number: invoiceNumber,
                                           items: arrayItems,
@@ -703,15 +725,15 @@ function Make_invoice() {
                                           mid: tablerows[0].customer.mid,
                                           installemtnDay: days,
                                           installemtnDate:
-                                            dates === "" ? 1 : dates,
+                                            dates === '' ? 1 : dates,
                                           gamisarani: gamisarani,
                                           gamisarani_amount:
-                                            gamisaraniamount === ""
+                                            gamisaraniamount === ''
                                               ? 0
                                               : parseInt(gamisaraniamount),
                                           paymentWay: isFullPayment
-                                            ? "FullPayment"
-                                            : "PayandGo",
+                                            ? 'FullPayment'
+                                            : 'PayandGo',
                                           downpayment: dpayment,
                                           noOfInstallment: itemNOI,
                                           amountPerInstallment: itemAPI,
@@ -720,25 +742,26 @@ function Make_invoice() {
                                           selectedType: selectedType,
                                           root_village: rootVillage,
                                           discount:
-                                            totalDiscount === ""
+                                            totalDiscount === ''
                                               ? 0
                                               : totalDiscount,
                                           shortage:
-                                            shortage === "" ? 0 : shortage,
+                                            shortage === '' ? 0 : shortage,
                                           total:
                                             subTotalFunc() -
-                                            (totalDiscount === ""
+                                            (totalDiscount === ''
                                               ? 0
                                               : totalDiscount),
-                                          status_of_payandgo: "onGoing",
+                                          status_of_payandgo: 'onGoing',
                                           date: intialTimestamp,
                                           document_charges: documentCharges,
+
                                           nextDate: firebase.firestore.Timestamp.fromDate(
-                                            times
+                                            new Date(times)
                                           ),
                                         })
                                         .then((_) => {
-                                          db.collection("trustee").add({
+                                          db.collection('trustee').add({
                                             fname:
                                               tablerows[0].customer
                                                 .trustee1Fname,
@@ -776,7 +799,7 @@ function Make_invoice() {
                                             tablerows[0].customer
                                               .trustee2Mobile1
                                           ) {
-                                            db.collection("trustee").add({
+                                            db.collection('trustee').add({
                                               fname:
                                                 tablerows[0].customer
                                                   .trustee2Fname,
@@ -805,11 +828,11 @@ function Make_invoice() {
                                             });
                                           }
 
-                                          if (invoiceStatus === "new") {
+                                          if (invoiceStatus === 'new') {
                                             tablerows.forEach(
                                               async (itemUDoc) => {
-                                                let newArray = await await db
-                                                  .collection("item")
+                                                let newArray =  await db
+                                                  .collection('item')
                                                   .doc(itemUDoc.id)
                                                   .get();
 
@@ -856,7 +879,7 @@ function Make_invoice() {
                                                       );
                                                     } else {
                                                       console.log(
-                                                        "Value does not exists!"
+                                                        'Value does not exists!'
                                                       );
                                                     }
                                                   }
@@ -880,9 +903,9 @@ function Make_invoice() {
 
                                                 //++++++++++++++++++++++++++++++++++++++++++++
 
-                                                if (invoiceStatus === "new") {
+                                                if (invoiceStatus === 'new') {
                                                   await db
-                                                    .collection("item")
+                                                    .collection('item')
                                                     .doc(itemUDoc.id)
                                                     .update({
                                                       qty:
@@ -902,7 +925,7 @@ function Make_invoice() {
                                         });
                                     });
                                 } else {
-                                  db.collection("customer")
+                                  db.collection('customer')
                                     .add({
                                       fname:
                                         tablerows[0].customer.customerFname,
@@ -915,6 +938,7 @@ function Make_invoice() {
                                       root:
                                         tablerows[0].customer
                                           .customerRootToHome,
+                                      root_village: rootVillage,
                                       nic: tablerows[0].customer.customerNic,
                                       mid: tablerows[0].customer.mid,
                                       relations_nics:
@@ -927,7 +951,7 @@ function Make_invoice() {
 
                                       customerFrontURL: customerImageURLFront,
                                       customerBackURL: customerImageURLBack,
-                                      status: "normal",
+                                      status: 'normal',
                                       date: firebase.firestore.FieldValue.serverTimestamp(),
                                     })
                                     .then((cust) => {
@@ -937,7 +961,7 @@ function Make_invoice() {
                                         let listOfSerilNo = [];
                                         let listOfModelNo = [];
                                         let listOfChassisNo = [];
-                                        if (invoiceStatus === "new") {
+                                        if (invoiceStatus === 'new') {
                                           for (
                                             var n = 0;
                                             n < parseInt(itemQty[one.i]);
@@ -964,7 +988,7 @@ function Make_invoice() {
                                           }
                                         }
                                         if (
-                                          invoiceStatus !== "new"
+                                          invoiceStatus !== 'new'
                                             ? true
                                             : listOfSerilNo.length ===
                                               parseInt(itemQty[one.i])
@@ -974,13 +998,15 @@ function Make_invoice() {
                                             serialNo: listOfSerilNo,
                                             modelNo: listOfModelNo,
                                             chassisNo: listOfChassisNo,
+                                            purchasedPrice:
+                                              one.item.purchasedPrice,
                                             downpayment:
-                                              itemDP[one.i] === ""
+                                              itemDP[one.i] === ''
                                                 ? 0
                                                 : parseInt(itemDP[one.i]),
                                             qty: parseInt(itemQty[one.i]),
                                             discount:
-                                              itemDiscount[one.i] === ""
+                                              itemDiscount[one.i] === ''
                                                 ? 0
                                                 : itemDiscount[one.i],
                                             item_name: one.title,
@@ -990,24 +1016,24 @@ function Make_invoice() {
                                         }
                                       });
 
-                                      db.collection("selling_history").add({
+                                      db.collection('selling_history').add({
                                         invoice_number: invoiceNumber,
                                         items: arrayItems,
                                         paymentWay: isFullPayment
-                                          ? "FullPayment"
-                                          : "PayandGo",
+                                          ? 'FullPayment'
+                                          : 'PayandGo',
 
                                         selectedType: selectedType,
                                         total:
                                           subTotalFunc() -
-                                          (totalDiscount === ""
+                                          (totalDiscount === ''
                                             ? 0
                                             : totalDiscount),
 
                                         date: intialTimestamp,
                                       });
 
-                                      db.collection("invoice")
+                                      db.collection('invoice')
                                         .add({
                                           invoice_number: invoiceNumber,
                                           items: arrayItems,
@@ -1017,15 +1043,15 @@ function Make_invoice() {
                                           mid: tablerows[0].customer.mid,
                                           installemtnDay: days,
                                           installemtnDate:
-                                            dates === "" ? 1 : dates,
+                                            dates === '' ? 1 : dates,
                                           gamisarani: gamisarani,
                                           gamisarani_amount:
-                                            gamisaraniamount === ""
+                                            gamisaraniamount === ''
                                               ? 0
                                               : parseInt(gamisaraniamount),
                                           paymentWay: isFullPayment
-                                            ? "FullPayment"
-                                            : "PayandGo",
+                                            ? 'FullPayment'
+                                            : 'PayandGo',
                                           downpayment: dpayment,
                                           noOfInstallment: itemNOI,
                                           amountPerInstallment: itemAPI,
@@ -1034,25 +1060,26 @@ function Make_invoice() {
                                           selectedType: selectedType,
                                           root_village: rootVillage,
                                           discount:
-                                            totalDiscount === ""
+                                            totalDiscount === ''
                                               ? 0
                                               : totalDiscount,
                                           shortage:
-                                            shortage === "" ? 0 : shortage,
+                                            shortage === '' ? 0 : shortage,
                                           total:
                                             subTotalFunc() -
-                                            (totalDiscount === ""
+                                            (totalDiscount === ''
                                               ? 0
                                               : totalDiscount),
-                                          status_of_payandgo: "onGoing",
+                                          status_of_payandgo: 'onGoing',
                                           date: intialTimestamp,
                                           document_charges: documentCharges,
+
                                           nextDate: firebase.firestore.Timestamp.fromDate(
-                                            times
+                                            new Date(times)
                                           ),
                                         })
                                         .then((_) => {
-                                          db.collection("trustee").add({
+                                          db.collection('trustee').add({
                                             fname:
                                               tablerows[0].customer
                                                 .trustee1Fname,
@@ -1090,7 +1117,7 @@ function Make_invoice() {
                                             tablerows[0].customer
                                               .trustee2Mobile1
                                           ) {
-                                            db.collection("trustee").add({
+                                            db.collection('trustee').add({
                                               fname:
                                                 tablerows[0].customer
                                                   .trustee2Fname,
@@ -1118,11 +1145,11 @@ function Make_invoice() {
                                               date: firebase.firestore.FieldValue.serverTimestamp(),
                                             });
                                           }
-                                          if (invoiceStatus === "new") {
+                                          if (invoiceStatus === 'new') {
                                             tablerows.forEach(
                                               async (itemUDoc) => {
-                                                let newArray = await await db
-                                                  .collection("item")
+                                                let newArray =  await db
+                                                  .collection('item')
                                                   .doc(itemUDoc.id)
                                                   .get();
 
@@ -1169,7 +1196,7 @@ function Make_invoice() {
                                                       );
                                                     } else {
                                                       console.log(
-                                                        "Value does not exists!"
+                                                        'Value does not exists!'
                                                       );
                                                     }
                                                   }
@@ -1193,9 +1220,9 @@ function Make_invoice() {
 
                                                 //++++++++++++++++++++++++++++++++++++++++++++
 
-                                                if (invoiceStatus === "new") {
+                                                if (invoiceStatus === 'new') {
                                                   await db
-                                                    .collection("item")
+                                                    .collection('item')
                                                     .doc(itemUDoc.id)
                                                     .update({
                                                       qty:
@@ -1223,8 +1250,11 @@ function Make_invoice() {
               });
           });
       } else {
-        NotificationManager.warning("Deadline date is not selected ! )");
+        NotificationManager.warning('Deadline date is not selected ! )');
       }
+      
+    
+      
     } else {
       let arrayItems = [];
 
@@ -1232,7 +1262,7 @@ function Make_invoice() {
         let listOfSerilNo = [];
         let listOfModelNo = [];
         let listOfChassisNo = [];
-        if (invoiceStatus === "new") {
+        if (invoiceStatus === 'new') {
           for (var n = 0; n < parseInt(itemQty[one.i]); n++) {
             listOfSerilNo.push(one.serialNo[n]);
             listOfModelNo.push(one.modelNo[n]);
@@ -1251,7 +1281,7 @@ function Make_invoice() {
           }
         }
         if (
-          invoiceStatus !== "new"
+          invoiceStatus !== 'new'
             ? true
             : listOfSerilNo.length === parseInt(itemQty[one.i])
         ) {
@@ -1260,9 +1290,10 @@ function Make_invoice() {
             serialNo: listOfSerilNo,
             modelNo: listOfModelNo,
             chassisNo: listOfChassisNo,
-            downpayment: itemDP[one.i] === "" ? 0 : parseInt(itemDP[one.i]),
+            purchasedPrice: one.item.purchasedPrice,
+            downpayment: itemDP[one.i] === '' ? 0 : parseInt(itemDP[one.i]),
             qty: parseInt(itemQty[one.i]),
-            discount: itemDiscount[one.i] === "" ? 0 : itemDiscount[one.i],
+            discount: itemDiscount[one.i] === '' ? 0 : itemDiscount[one.i],
             item_name: one.title,
             stock_type: one.item.stock_type,
           };
@@ -1270,16 +1301,16 @@ function Make_invoice() {
         }
       });
 
-      db.collection("selling_history").add({
+      db.collection('selling_history').add({
         invoice_number: invoiceNumber,
         items: arrayItems,
-        paymentWay: isFullPayment ? "FullPayment" : "PayandGo",
+        paymentWay: isFullPayment ? 'FullPayment' : 'PayandGo',
         selectedType: selectedType,
-        total: subTotalFunc() - (totalDiscount === "" ? 0 : totalDiscount),
+        total: subTotalFunc() - (totalDiscount === '' ? 0 : totalDiscount),
         date: intialTimestamp,
       });
 
-      await db.collection("invoice").add({
+      await db.collection('invoice').add({
         invoice_number: invoiceNumber,
         items: arrayItems,
         customer_id: null,
@@ -1287,8 +1318,8 @@ function Make_invoice() {
         installemtnDate: null,
         gamisarani: gamisarani,
         gamisarani_amount:
-          gamisaraniamount === "" ? 0 : parseInt(gamisaraniamount),
-        paymentWay: isFullPayment ? "FullPayment" : "PayandGo",
+          gamisaraniamount === '' ? 0 : parseInt(gamisaraniamount),
+        paymentWay: isFullPayment ? 'FullPayment' : 'PayandGo',
         downpayment: dpayment,
         noOfInstallment: itemNOI,
         amountPerInstallment: itemAPI,
@@ -1296,20 +1327,22 @@ function Make_invoice() {
         deadlineTimestamp: null,
         selectedType: selectedType,
         root_village: rootVillage,
-        discount: totalDiscount === "" ? 0 : totalDiscount,
-        shortage: shortage === "" ? 0 : shortage,
-        total: subTotalFunc() - (totalDiscount === "" ? 0 : totalDiscount),
-        status_of_payandgo: "Done",
+        discount: totalDiscount === '' ? 0 : totalDiscount,
+        shortage: shortage === '' ? 0 : shortage,
+        total: subTotalFunc() - (totalDiscount === '' ? 0 : totalDiscount),
+        status_of_payandgo: 'Done',
         // description: discription,
         date: intialTimestamp,
         document_charges: documentCharges,
+        fullname: fullname,
+        nic: nic,
         nextDate: null,
       });
 
-      if (invoiceStatus === "new") {
+      if (invoiceStatus === 'new') {
         tablerows.forEach(async (itemUDoc) => {
-          let newArray = await await db
-            .collection("item")
+          let newArray =  await db
+            .collection('item')
             .doc(itemUDoc.id)
             .get();
 
@@ -1335,7 +1368,7 @@ function Make_invoice() {
                 );
                 serialNoList.splice(indexVal, 1);
               } else {
-                console.log("Value does not exists!");
+                console.log('Value does not exists!');
               }
             }
           }
@@ -1350,9 +1383,9 @@ function Make_invoice() {
 
           //++++++++++++++++++++++++++++++++++++++++++++
 
-          if (invoiceStatus === "new") {
+          if (invoiceStatus === 'new') {
             await db
-              .collection("item")
+              .collection('item')
               .doc(itemUDoc.id)
               .update({
                 qty: Math.round(newArray.data().qty) - itemQty[itemUDoc.i],
@@ -1365,12 +1398,18 @@ function Make_invoice() {
       }
       setLoadingSubmit(false);
     }
+    
+  }
+    
+      
+
+    
   };
 
   const getCurrentBalanceFromGami = () => {
     setLoadingNicSubmit(true);
-    db.collection("gami_sarani")
-      .where("nic", "==", gamisaraniNic)
+    db.collection('gami_sarani')
+      .where('nic', '==', gamisaraniNic)
       .get()
       .then((reGami) => {
         if (reGami.docs.length > 0) {
@@ -1390,7 +1429,7 @@ function Make_invoice() {
         } else {
           setLoadingNicSubmit(false);
           NotificationManager.warning(
-            "Any gamisarani customer not found from this NIC!"
+            'Any gamisarani customer not found from this NIC!'
           );
         }
       });
@@ -1462,7 +1501,7 @@ function Make_invoice() {
                                         }}
                                       />
                                     ) : (
-                                      ""
+                                      ''
                                     )}
                                   </div>
                                 )
@@ -1545,12 +1584,12 @@ function Make_invoice() {
                               className="txt_qty"
                               variant="outlined"
                               size="small"
-                              InputProps={{ inputProps: { min: 1 } }}
+                              InputProps={{inputProps: {min: 1}}}
                               type="number"
                               fullWidth
                               value={itemQty[row.i]}
                               onChange={(e) => {
-                                if (e.target.value !== "") {
+                                if (e.target.value !== '') {
                                   handleQTYChange(e, row.id, row);
                                 }
                               }}
@@ -1566,19 +1605,19 @@ function Make_invoice() {
                           </TableCell>
 
                           <TableCell align="right">
-                            {" "}
+                            {' '}
                             <TextField
                               className="txt_dpayment"
                               variant="outlined"
                               size="small"
-                              InputProps={{ inputProps: { min: 0 } }}
+                              InputProps={{inputProps: {min: 0}}}
                               type="number"
                               fullWidth
                               key={row.i}
                               id={row.i.toString()}
                               value={itemDP[row.i]}
                               onChange={(e) => {
-                                if (e.target.value !== "") {
+                                if (e.target.value !== '') {
                                   setItemDP({
                                     ...itemDP,
                                     [row.i]: e.target.value,
@@ -1589,19 +1628,19 @@ function Make_invoice() {
                           </TableCell>
 
                           <TableCell align="right">
-                            {" "}
+                            {' '}
                             <TextField
                               className="txt_dpayment"
                               variant="outlined"
                               size="small"
-                              InputProps={{ inputProps: { min: 0 } }}
+                              InputProps={{inputProps: {min: 0}}}
                               type="number"
                               fullWidth
                               key={row.i}
                               id={row.i.toString()}
                               value={itemDiscount[row.i]}
                               onChange={(e) => {
-                                if (e.target.value !== "") {
+                                if (e.target.value !== '') {
                                   if (e.target.value < itemDP[row.i]) {
                                     setItemDiscount({
                                       ...itemDiscount,
@@ -1617,15 +1656,15 @@ function Make_invoice() {
                             key={row.i}
                             id={row.i.toString()}
                           >
-                            {" "}
+                            {' '}
                             <CurrencyFormat
                               value={
                                 parseInt(itemDP[row.i] - itemDiscount[row.i]) *
                                 itemQty[row.i]
                               }
-                              displayType={"text"}
+                              displayType={'text'}
                               thousandSeparator={true}
-                              prefix={" Rs. "}
+                              prefix={' Rs. '}
                             />
                           </TableCell>
                           <TableCell align="right">
@@ -1645,7 +1684,7 @@ function Make_invoice() {
                                     tablerows.splice(index, 1);
                                     setTableRows([...tablerows]);
                                     if (tablerows.length === 0) {
-                                      history.push("/admin/ui/ItemTable");
+                                      history.push('/admin/ui/ItemTable');
                                     }
                                     delete itemQty[row.i];
                                     delete itemDP[row.i];
@@ -1668,9 +1707,9 @@ function Make_invoice() {
                         <TableCell align="right" colSpan={1}>
                           <CurrencyFormat
                             value={subTotalFunc()}
-                            displayType={"text"}
+                            displayType={'text'}
                             thousandSeparator={true}
-                            prefix={" Rs. "}
+                            prefix={' Rs. '}
                           />
                         </TableCell>
                       </TableRow>
@@ -1684,12 +1723,12 @@ function Make_invoice() {
                             variant="outlined"
                             size="small"
                             type="number"
-                            InputProps={{ inputProps: { min: 0 } }}
+                            InputProps={{inputProps: {min: 0}}}
                             fullWidth
                             disabled={true}
                             value={totalDiscount}
                             onChange={(e) => {
-                              if (e.target.value !== "") {
+                              if (e.target.value !== '') {
                                 if (e.target.value < subTotalFunc()) {
                                   setTotalDiscount(e.target.value);
                                 }
@@ -1706,9 +1745,9 @@ function Make_invoice() {
                         <TableCell align="right" colSpan={1}>
                           <CurrencyFormat
                             value={subTotalFunc() - totalDiscount}
-                            displayType={"text"}
+                            displayType={'text'}
                             thousandSeparator={true}
-                            prefix={" Rs. "}
+                            prefix={' Rs. '}
                           />
                         </TableCell>
                       </TableRow>
@@ -1737,18 +1776,18 @@ function Make_invoice() {
                           className="txt_dpayment"
                           variant="outlined"
                           size="small"
-                          InputProps={{ inputProps: { min: 0 } }}
+                          InputProps={{inputProps: {min: 0}}}
                           type="number"
                           fullWidth
                           label="NOI"
                           disabled={
-                            tablerows.some((ob) => ob.paymentWay === "PayandGo")
+                            tablerows.some((ob) => ob.paymentWay === 'PayandGo')
                               ? false
                               : true
                           }
                           value={itemNOI}
                           onChange={(e) => {
-                            if (e.target.value !== "") {
+                            if (e.target.value !== '') {
                               setItemNOI(parseInt(e.target.value.trim()));
                               setBalance(
                                 parseInt(e.target.value.trim()) * itemAPI
@@ -1766,18 +1805,18 @@ function Make_invoice() {
                           className="txt_dpayment"
                           variant="outlined"
                           size="small"
-                          InputProps={{ inputProps: { min: 0 } }}
+                          InputProps={{inputProps: {min: 0}}}
                           type="number"
                           label=" API"
                           fullWidth
                           disabled={
-                            tablerows.some((ob) => ob.paymentWay === "PayandGo")
+                            tablerows.some((ob) => ob.paymentWay === 'PayandGo')
                               ? false
                               : true
                           }
                           value={itemAPI}
                           onChange={(e) => {
-                            if (e.target.value !== "") {
+                            if (e.target.value !== '') {
                               setItemAPI(parseInt(e.target.value.trim()));
                               setBalance(
                                 parseInt(e.target.value.trim()) * itemNOI
@@ -1797,17 +1836,17 @@ function Make_invoice() {
                           variant="outlined"
                           size="small"
                           label="Down Payment"
-                          InputProps={{ inputProps: { min: 0 } }}
+                          InputProps={{inputProps: {min: 0}}}
                           type="number"
                           fullWidth
                           value={dpayment}
                           disabled={
-                            tablerows.some((ob) => ob.paymentWay === "PayandGo")
+                            tablerows.some((ob) => ob.paymentWay === 'PayandGo')
                               ? false
                               : true
                           }
                           onChange={(e) => {
-                            if (e.target.value !== "") {
+                            if (e.target.value !== '') {
                               setDpayment(parseInt(e.target.value.trim()));
                             }
                           }}
@@ -1824,17 +1863,17 @@ function Make_invoice() {
                           variant="outlined"
                           size="small"
                           label="Balance"
-                          InputProps={{ inputProps: { min: 0 } }}
+                          InputProps={{inputProps: {min: 0}}}
                           type="number"
                           fullWidth
                           disabled={
-                            tablerows.some((ob) => ob.paymentWay === "PayandGo")
+                            tablerows.some((ob) => ob.paymentWay === 'PayandGo')
                               ? false
                               : true
                           }
                           value={balance}
                           onChange={(e) => {
-                            if (e.target.value !== "") {
+                            if (e.target.value !== '') {
                               setBalance(parseInt(e.target.value.trim()));
                             }
                           }}
@@ -1847,16 +1886,16 @@ function Make_invoice() {
                       <Grid className="lbl_MI" item xs={12} sm={4}>
                         <TextField
                           className="txt_dpayment"
-                          disabled={true}
+                          disabled={false}
                           variant="outlined"
                           size="small"
                           label="Shortage"
-                          InputProps={{ inputProps: { min: 0 } }}
+                          InputProps={{inputProps: {min: 0}}}
                           type="number"
                           fullWidth
                           value={shortage}
                           onChange={(e) => {
-                            if (e.target.value !== "") {
+                            if (e.target.value !== '') {
                               setShortage(parseInt(e.target.value.trim()));
                             }
                           }}
@@ -1876,9 +1915,9 @@ function Make_invoice() {
                           label=" Document Charges"
                           size="small"
                           value={documentCharges}
-                          InputProps={{ inputProps: { min: 0 } }}
+                          InputProps={{inputProps: {min: 0}}}
                           onChange={(e) => {
-                            if (e.target.value !== "") {
+                            if (e.target.value !== '') {
                               setDocumentCharges(
                                 parseInt(e.target.value.trim())
                               );
@@ -1900,14 +1939,13 @@ function Make_invoice() {
                           variant="outlined"
                           size="small"
                           disabled={
-                            // tablerows.some((ob) => ob.paymentWay === "PayandGo")
-                            //   ? false
-                            //   : true
-                            true
+                            tablerows.some((ob) => ob.paymentWay === 'PayandGo')
+                              ? false
+                              : true
                           }
                           placeholder="date"
                           type="number"
-                          InputProps={{ inputProps: { min: 1, max: 31 } }}
+                          InputProps={{inputProps: {min: 1, max: 31}}}
                           fullWidth
                           value={dates}
                           onChange={(e) => {
@@ -1933,12 +1971,11 @@ function Make_invoice() {
                           <Select
                             value={days}
                             disabled={
-                              // tablerows.some(
-                              //   (ob) => ob.paymentWay === "PayandGo"
-                              // )
-                              //   ? false
-                              //   : true
-                              true
+                              tablerows.some(
+                                (ob) => ob.paymentWay === 'PayandGo'
+                              )
+                                ? false
+                                : true
                             }
                             onChange={(e) => {
                               setDays(e.target.value);
@@ -1947,8 +1984,8 @@ function Make_invoice() {
                             variant="outlined"
                             label="day"
                             inputProps={{
-                              name: "day",
-                              id: "outlined-day-native-simple",
+                              name: 'day',
+                              id: 'outlined-day-native-simple',
                             }}
                           >
                             <option value={1}>Monday</option>
@@ -1982,10 +2019,10 @@ function Make_invoice() {
                           onChange={(e) => {
                             if (gamisarani) {
                               setGamisarani(false);
-                              setGamisaraniId("");
+                              setGamisaraniId('');
                               setGamisaraniInitialAmount(0);
                               setGamisaraniamount(0);
-                              setGamisaraniNic("");
+                              setGamisaraniNic('');
                             } else {
                               setGamisarani(true);
                             }
@@ -2028,7 +2065,7 @@ function Make_invoice() {
                           }
                           onClick={getCurrentBalanceFromGami}
                         >
-                          {loadingNicsubmit ? <Spin size="large" /> : "Fetch"}
+                          {loadingNicsubmit ? <Spin size="large" /> : 'Fetch'}
                         </Button>
                       </Grid>
                       <Grid item xs={12} sm={3}></Grid>
@@ -2051,7 +2088,7 @@ function Make_invoice() {
                               ? true
                               : false
                           }
-                          InputProps={{ inputProps: { min: 0 } }}
+                          InputProps={{inputProps: {min: 0}}}
                           value={gamisaraniamount}
                           onChange={(e) => {
                             if (
@@ -2110,7 +2147,7 @@ function Make_invoice() {
                       <br />
                       <div
                         hidden={
-                          tablerows.some((ob) => ob.paymentWay === "PayandGo")
+                          tablerows.some((ob) => ob.paymentWay === 'PayandGo')
                             ? false
                             : true
                         }
@@ -2129,24 +2166,25 @@ function Make_invoice() {
                                   e.toDate()
                                 )
                               );
-                              setDates(
-                                new Date(
-                                  firebase.firestore.Timestamp.fromDate(
-                                    e.toDate()
-                                  )?.seconds * 1000
-                                ).getDate()
-                              );
-                              setDays(
-                                new Date(
-                                  firebase.firestore.Timestamp.fromDate(
-                                    e.toDate()
-                                  )?.seconds * 1000
-                                ).getDay()
-                              );
+                              // setDates(
+                              //   new Date(
+                              //     firebase.firestore.Timestamp.fromDate(
+                              //       e.toDate()
+                              //     )?.seconds * 1000
+                              //   ).getDate()
+                              // );
+
+                              // setDays(
+                              //   new Date(
+                              //     firebase.firestore.Timestamp.fromDate(
+                              //       e.toDate()
+                              //     )?.seconds * 1000
+                              //   ).getDay()
+                              // );
                             } else {
                               setInititialTimestamp(null);
-                              setDates(new Date().getDate());
-                              setDays(new Date().getDay());
+                              // setDates(new Date().getDate());
+                              // setDays(new Date().getDay());
                             }
                           }}
                         />
@@ -2154,7 +2192,7 @@ function Make_invoice() {
                         <br />
                         <div
                           hidden={
-                            tablerows.some((ob) => ob.paymentWay === "PayandGo")
+                            tablerows.some((ob) => ob.paymentWay === 'PayandGo')
                               ? false
                               : true
                           }
@@ -2193,6 +2231,49 @@ function Make_invoice() {
                         }}
                       />
                     </Grid>
+                    {tablerows.some(
+                      (ob) => ob.paymentWay === 'PayandGo'
+                    ) ? null : (
+                      <>
+                        <Grid item xs={12} sm={4}></Grid>
+                        <Grid className="xxx" item xs={12} sm={4}>
+                          Full name
+                        </Grid>
+                        <Grid item xs={12} sm={4}>
+                          <TextField
+                            className="txt_fullname"
+                            variant="outlined"
+                            size="small"
+                            label="Full name"
+                            type="text"
+                            fullWidth
+                            value={fullname}
+                            onChange={(e) => {
+                              setFullname(e.target.value);
+                            }}
+                          />
+                        </Grid>
+                        <Grid item xs={12} sm={4}></Grid>
+                        <Grid className="xxx" item xs={12} sm={4}>
+                          NIC
+                        </Grid>
+                        <Grid item xs={12} sm={4}>
+                          <TextField
+                            className="txt_fullname"
+                            variant="outlined"
+                            size="small"
+                            label="NIC"
+                            type="text"
+                            fullWidth
+                            value={nic}
+                            onChange={(e) => {
+                              setNic(e.target.value);
+                            }}
+                          />
+                        </Grid>
+                      </>
+                    )}
+
                     <Grid item xs={12} sm={4}></Grid>
                     <Grid item xs={12} sm={4}>
                       Select a type
@@ -2207,7 +2288,10 @@ function Make_invoice() {
                             onChange={handleChange}
                             value={selectedType}
                           >
-                            <option onChange={handleChange} value={"shop"}>
+                             <option onChange={handleChange} value={'main'}>
+                              main
+                            </option>
+                            <option onChange={handleChange} value={'shop'}>
                               shop
                             </option>
                             {allRoot.map((each) => (
@@ -2238,6 +2322,8 @@ function Make_invoice() {
                     color="primary"
                     className="btn_addCustomer"
                     disabled={
+                      dates === '' ||
+                      dates === 0 ||
                       loadingsubmit ||
                       itemDP.length === 0 ||
                       tablerows.length === 0 ||
@@ -2249,7 +2335,7 @@ function Make_invoice() {
                     onClick={showConfirm}
                     endIcon={<ArrowForwardIcon />}
                   >
-                    {loadingsubmit ? <Spin size="large" /> : "Next"}
+                    {loadingsubmit ? <Spin size="large" /> : 'Next'}
                   </Button>
                 </Grid>
               </Grid>

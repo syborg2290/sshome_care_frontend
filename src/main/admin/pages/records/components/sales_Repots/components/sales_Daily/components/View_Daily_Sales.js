@@ -42,6 +42,7 @@ export default function View_Daily_Sales({ list }) {
 
   useEffect(() => {
     var raw = [];
+    // console.log(list.length)
     list.forEach((each) => {
       raw.push({
         Date: new Date(each.date).toDateString(),

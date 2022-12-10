@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Modal } from "antd";
 import MUIDataTable from "mui-datatables";
 import moment from "moment";
+// eslint-disable-next-line
 import CurrencyFormat from "react-currency-format";
 import { Button, Grid } from "@material-ui/core";
 
@@ -65,6 +66,15 @@ export default function Expire_invoice({ expire_list }) {
     },
     {
       name: "Date",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+     {
+      name: "Root_village",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -144,14 +154,16 @@ export default function Expire_invoice({ expire_list }) {
         InvoiceNo: each.data.invoice_number,
         Type: each.data.selectedType,
         Date: moment(each.data.date?.toDate()).format("dddd, MMMM Do YYYY"),
-        Balance: (
-          <CurrencyFormat
-            value={each.data.balance}
-            displayType={"text"}
-            thousandSeparator={true}
-            prefix={" "}
-          />
-        ),
+        Root_village:each.data.root_village,
+        // Balance: (
+        //   <CurrencyFormat
+        //     value={each.data.balance}
+        //     displayType={"text"}
+        //     thousandSeparator={true}
+        //     prefix={" "}
+        //   />
+        // ),
+        Balance:Math.round(each.data.balance),
         NIC: each.data.nic,
         MID: each.data.mid,
         Action: (
@@ -275,8 +287,11 @@ export default function Expire_invoice({ expire_list }) {
               selectableRows: "none",
               customToolbarSelect: () => {},
               filterType: "textField",
-              download: false,
-              print: false,
+              print: true,
+              download: true,
+              downloadOptions: {
+                filename: `Expired cards - ${new Date().toDateString()} - ${new Date().toLocaleTimeString('en-US')}.csv`,
+              },
               searchPlaceholder: "Search using any column names",
               elevation: 4,
               sort: true,

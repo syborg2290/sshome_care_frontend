@@ -18,8 +18,8 @@ import moment from "moment";
 // styles
 import "./Gass_Recipt.css";
 
-function createData(item, qty, unit, price) {
-  return { item, qty, unit, price };
+function createData(item, qty,fullEmpty ,unit, price) {
+  return { item, qty,fullEmpty ,unit, price };
 }
 
 class GassRecipt extends React.Component {
@@ -33,8 +33,9 @@ class GassRecipt extends React.Component {
     this.state.total = this.props.prop?.total;
     if (this.props.prop?.list !== undefined) {
       this.props.prop.list.forEach((ele) => {
+       
         this.state.rows.push(
-          createData(ele?.weight + " Kg", ele?.qty, ele?.unit, ele?.price)
+          createData(ele?.weight + " Kg", ele?.qty,ele?.gasType,ele?.unit, ele?.price)
         );
       });
     }
@@ -95,17 +96,20 @@ class GassRecipt extends React.Component {
                         <TableRow>
                           <TableCell>Weight(Kg)</TableCell>
                           <TableCell align="center">Qty</TableCell>
+                          <TableCell align="center">Full/Empty</TableCell>
                           <TableCell align="center">Unit Price(LKR)</TableCell>
                           <TableCell align="right">Price(LKR)</TableCell>
                         </TableRow>
                       </TableHead>
                       <TableBody>
                         {this.state.rows.map((row) => (
+                          
                           <TableRow key={row.item}>
                             <TableCell component="th" scope="row">
                               {row.item}
                             </TableCell>
                             <TableCell align="center">{row.qty}</TableCell>
+                            <TableCell align="center">{row.fullEmpty === "fullgas"?"Full":"Empty"}</TableCell>
                             <TableCell align="right">
                               {" "}
                               <CurrencyFormat

@@ -75,7 +75,7 @@ function loginUser(
       }
 
       if (role === "assistant") {
-        history.push("/assistant/dashboard");
+        history.push("/admin/dashboard");
       }
 
       if (role === "Showroom") {

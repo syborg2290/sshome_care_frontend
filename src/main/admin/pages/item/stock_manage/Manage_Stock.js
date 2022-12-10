@@ -38,6 +38,8 @@ export default function Manage_Stock() {
 
   let history = useHistory();
 
+  const [rowsCount, setRowsCount] = useState(0);
+
   const selectedModalClose = () => {
     window.location.reload();
     setSelectedItemModel(false);
@@ -68,9 +70,14 @@ export default function Manage_Stock() {
       history.push("/connection_lost");
     });
 
+    let rowsCountUse = rowsCount + 25;
+    setRowsCount(rowsCountUse);
+
     db.collection("item")
       .orderBy("timestamp", "desc")
-      .onSnapshot((snapshot) => {
+      // .limit(25)
+      .get()
+      .then((snapshot) => {
         var newData = [];
         var itemData = [];
 
@@ -83,6 +90,7 @@ export default function Manage_Stock() {
           newData.push([
             element.data().itemName,
             element.data().brand,
+            element.data().modelNoExtra,
             element.data().qty,
             element.data().color === "" ? " - " : element.data().color,
             element.data().guaranteePeriod === ""
@@ -92,6 +100,12 @@ export default function Manage_Stock() {
                 element.data().guarantee.value.toLowerCase(),
             <CurrencyFormat
               value={element.data().salePrice}
+              displayType={"text"}
+              thousandSeparator={true}
+              prefix={" "}
+            />,
+            <CurrencyFormat
+              value={element.data().cashPrice}
               displayType={"text"}
               thousandSeparator={true}
               prefix={" "}
@@ -148,6 +162,15 @@ export default function Manage_Stock() {
       },
     },
     {
+      name: "Model No",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
       name: "Qty",
       options: {
         filter: false,
@@ -176,6 +199,15 @@ export default function Manage_Stock() {
     },
     {
       name: "Sale price(LKR)",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+    {
+      name: "Cash price(LKR)",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -251,6 +283,81 @@ export default function Manage_Stock() {
         </Grid>
       </Grid>
 
+      <Button
+        variant="contained"
+        className="loadAll"
+        onClick={() => {
+          setIsLoading(true);
+          db.collection("item")
+            .orderBy("timestamp", "desc")
+            .get()
+            .then((snapshot) => {
+              var newData = [];
+              var itemData = [];
+
+              snapshot.docs.forEach((element) => {
+                itemData.push({
+                  id: element.id,
+                  data: element.data(),
+                });
+
+                newData.push([
+                  element.data().itemName,
+                  element.data().brand,
+                  element.data().modelNoExtra,
+                  element.data().qty,
+                  element.data().color === "" ? " - " : element.data().color,
+                  element.data().guaranteePeriod === ""
+                    ? " - "
+                    : element.data().guaranteePeriod +
+                      " " +
+                      element.data().guarantee.value.toLowerCase(),
+                  <CurrencyFormat
+                    value={element.data().salePrice}
+                    displayType={"text"}
+                    thousandSeparator={true}
+                    prefix={" "}
+                  />,
+                  <CurrencyFormat
+                    value={element.data().cashPrice}
+                    displayType={"text"}
+                    thousandSeparator={true}
+                    prefix={" "}
+                  />,
+                  element.data().stock_type,
+                  <div
+                    color="secondary"
+                    size="small"
+                    className={
+                      element.data().qty !== 0
+                        ? element.data().qty >= 3
+                          ? "px-2"
+                          : "px-3"
+                        : "px-4"
+                    }
+                    variant="contained"
+                  >
+                    {element.data().qty !== 0 ? (
+                      element.data().qty >= 3 ? (
+                        <p className="status">Available</p>
+                      ) : (
+                        <p className="status">Low Stock</p>
+                      )
+                    ) : (
+                      <p className="status">Out Of Stock</p>
+                    )}
+                  </div>,
+                ]);
+              });
+              setItemTableData(newData);
+              setAllItemData(itemData);
+              setIsLoading(false);
+            });
+        }}
+      >
+        {isLoading ? <Spin spinning={isLoading} size="small" /> : "Load All"}
+      </Button>
+
       <Grid className="tbl_Container" container spacing={4}>
         <Grid item xs={12}>
           <MUIDataTable
@@ -275,6 +382,152 @@ export default function Manage_Stock() {
               onRowClick: (rowData, rowMeta) => {
                 setCurrentIndx(rowMeta.dataIndex);
               },
+              // onChangeRowsPerPage: (rowsCountNumber) => {
+              //   setIsLoading(true);
+              //   let rowsCountUseIn = rowsCount + rowsCountNumber;
+              //   setRowsCount(rowsCountUseIn);
+              //   db.collection("item")
+              //     .orderBy("timestamp", "desc")
+              //     .limit(rowsCountUseIn)
+              //     .get()
+              //     .then((snapshot) => {
+              //       var newData = [];
+              //       var itemData = [];
+
+              //       snapshot.docs.forEach((element) => {
+              //         itemData.push({
+              //           id: element.id,
+              //           data: element.data(),
+              //         });
+
+              //         newData.push([
+              //           element.data().itemName,
+              //           element.data().brand,
+              //           element.data().modelNoExtra,
+              //           element.data().qty,
+              //           element.data().color === ""
+              //             ? " - "
+              //             : element.data().color,
+              //           element.data().guaranteePeriod === ""
+              //             ? " - "
+              //             : element.data().guaranteePeriod +
+              //               " " +
+              //               element.data().guarantee.value.toLowerCase(),
+              //           <CurrencyFormat
+              //             value={element.data().salePrice}
+              //             displayType={"text"}
+              //             thousandSeparator={true}
+              //             prefix={" "}
+              //           />,
+              //           <CurrencyFormat
+              //             value={element.data().cashPrice}
+              //             displayType={"text"}
+              //             thousandSeparator={true}
+              //             prefix={" "}
+              //           />,
+              //           element.data().stock_type,
+              //           <div
+              //             color="secondary"
+              //             size="small"
+              //             className={
+              //               element.data().qty !== 0
+              //                 ? element.data().qty >= 3
+              //                   ? "px-2"
+              //                   : "px-3"
+              //                 : "px-4"
+              //             }
+              //             variant="contained"
+              //           >
+              //             {element.data().qty !== 0 ? (
+              //               element.data().qty >= 3 ? (
+              //                 <p className="status">Available</p>
+              //               ) : (
+              //                 <p className="status">Low Stock</p>
+              //               )
+              //             ) : (
+              //               <p className="status">Out Of Stock</p>
+              //             )}
+              //           </div>,
+              //         ]);
+              //       });
+              //       setItemTableData(newData);
+              //       setAllItemData(itemData);
+              //       setIsLoading(false);
+              //     });
+              // },
+              // onChangePage: () => {
+              //   setIsLoading(true);
+              //   let rowsCountUseIn = rowsCount + 25;
+              //   setRowsCount(rowsCountUseIn);
+              //   db.collection("item")
+              //     .orderBy("timestamp", "desc")
+              //     .limit(rowsCountUseIn)
+              //     .get()
+              //     .then((snapshot) => {
+              //       var newData = [];
+              //       var itemData = [];
+
+              //       snapshot.docs.forEach((element) => {
+              //         itemData.push({
+              //           id: element.id,
+              //           data: element.data(),
+              //         });
+
+              //         newData.push([
+              //           element.data().itemName,
+              //           element.data().brand,
+              //           element.data().modelNoExtra,
+              //           element.data().qty,
+              //           element.data().color === ""
+              //             ? " - "
+              //             : element.data().color,
+              //           element.data().guaranteePeriod === ""
+              //             ? " - "
+              //             : element.data().guaranteePeriod +
+              //               " " +
+              //               element.data().guarantee.value.toLowerCase(),
+              //           <CurrencyFormat
+              //             value={element.data().salePrice}
+              //             displayType={"text"}
+              //             thousandSeparator={true}
+              //             prefix={" "}
+              //           />,
+              //           <CurrencyFormat
+              //             value={element.data().cashPrice}
+              //             displayType={"text"}
+              //             thousandSeparator={true}
+              //             prefix={" "}
+              //           />,
+              //           element.data().stock_type,
+              //           <div
+              //             color="secondary"
+              //             size="small"
+              //             className={
+              //               element.data().qty !== 0
+              //                 ? element.data().qty >= 3
+              //                   ? "px-2"
+              //                   : "px-3"
+              //                 : "px-4"
+              //             }
+              //             variant="contained"
+              //           >
+              //             {element.data().qty !== 0 ? (
+              //               element.data().qty >= 3 ? (
+              //                 <p className="status">Available</p>
+              //               ) : (
+              //                 <p className="status">Low Stock</p>
+              //               )
+              //             ) : (
+              //               <p className="status">Out Of Stock</p>
+              //             )}
+              //           </div>,
+              //         ]);
+              //       });
+              //       setItemTableData(newData);
+              //       setAllItemData(itemData);
+              //       setIsLoading(false);
+              //     });
+              // },
               onRowSelectionChange: (curRowSelected, allRowsSelected) => {
                 selectedItems = [];
                 allRowsSelected.forEach((single) => {

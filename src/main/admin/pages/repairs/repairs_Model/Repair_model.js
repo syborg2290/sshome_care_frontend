@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from 'react';
 
 import {
   TextField,
@@ -6,58 +6,69 @@ import {
   Container,
   Typography,
   Button,
-} from "@material-ui/core";
+  Select,
+} from '@material-ui/core';
 
-import { ExclamationCircleOutlined } from "@ant-design/icons";
-import { useHistory } from "react-router-dom";
-import { Modal, Spin } from "antd";
-import firebase from "firebase";
-import moment from "moment";
-import db from "../../../../../config/firebase.js";
+import {ExclamationCircleOutlined} from '@ant-design/icons';
+import {useHistory} from 'react-router-dom';
+import {Modal} from 'antd';
+import firebase from 'firebase';
+import moment from 'moment';
+import db from '../../../../../config/firebase.js';
 
 // styles
-import "./Repair_model.css";
+import './Repair_model.css';
 
-export default function Repair_model({ closeModel }) {
-  const { confirm } = Modal;
+export default function Repair_model({closeModel}) {
+  const {confirm} = Modal;
   let history = useHistory();
   let history2 = useHistory();
+  const [selectedType, setSelectedType] = useState('shop');
+  const [itemName, setItemName] = useState('');
+  const [serialNo, setSerialNo] = useState('');
+  const [model_no, setModel_no] = useState('');
+  const [cust_name, setCust_name] = useState('');
   // eslint-disable-next-line
-  // const [invoice, setInvoice] = useState("");
-  const [serialNo, setSerialNo] = useState("");
-  const [model_no, setModel_no] = useState("");
-  const [cust_name, setCust_name] = useState("");
-  // eslint-disable-next-line
-  const [nic, setNic] = useState("");
-  const [mobil_no1, setMobil_no1] = useState("");
-  const [mobil_no2, setMobil_no2] = useState("");
-  const [description, setDescription] = useState("");
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [nic, setNic] = useState('');
+  const [mobil_no1, setMobil_no1] = useState('');
+  const [mobil_no2, setMobil_no2] = useState('');
+  const [description, setDescription] = useState('');
+  const [allRoot, setAllRoot] = useState([]);
 
   useEffect(() => {
-    window.addEventListener("offline", function (e) {
-      history2.push("/connection_lost");
+    window.addEventListener('offline', function(e) {
+      history2.push('/connection_lost');
+    });
+    db.collection('root').get().then(re => {
+      var rawRoot = [];
+      re.docs.forEach(each => {
+        rawRoot.push(each.data().root);
+      });
+      setAllRoot(rawRoot);
     });
   });
 
-  const showConfirm = (item_name, inv, type) => {
+  const handleChange = event => {
+    setSelectedType(event.target.value);
+  };
+
+  const showConfirm = () => {
     confirm({
-      title: "Do you want to print a receipt?",
+      title: 'Do you want to print a receipt?',
       icon: <ExclamationCircleOutlined />,
       onOk() {
-        db.collection("repair")
+        db
+          .collection('repair')
           .add({
-            invoice_no: inv,
             serail_no: serialNo.trim(),
-            type: type,
+            type: selectedType,
             model_no: model_no.trim(),
             nic: nic,
             cust_name: cust_name.trim(),
             mobil_no1: mobil_no1.trim(),
             mobil_no2: mobil_no2.trim(),
-            item_name: item_name,
-            status: "accepted",
+            item_name: itemName,
+            status: 'accepted',
             description: description.trim(),
             date: firebase.firestore.FieldValue.serverTimestamp(),
           })
@@ -66,29 +77,29 @@ export default function Repair_model({ closeModel }) {
               serail_no: serialNo.trim(),
               model_no: model_no.trim(),
               nic: nic,
-              item_name: item_name,
+              item_name: itemName,
             };
             let moveWith = {
-              pathname: "/admin/repair/repairRecipt",
-              search: "?query=abc",
-              state: { detail: passingWithCustomerObj },
+              pathname: '/admin/repair/repairRecipt',
+              search: '?query=abc',
+              state: {detail: passingWithCustomerObj},
             };
             history.push(moveWith);
           });
       },
       onCancel() {
-        db.collection("repair")
+        db
+          .collection('repair')
           .add({
-            invoice_no: inv,
             serail_no: serialNo.trim(),
-            type: type,
+            type: selectedType,
             model_no: model_no.trim(),
             nic: nic,
             cust_name: cust_name.trim(),
             mobil_no1: mobil_no1.trim(),
             mobil_no2: mobil_no2.trim(),
-            item_name: item_name,
-            status: "accepted",
+            item_name: itemName,
+            status: 'accepted',
             description: description.trim(),
             date: firebase.firestore.FieldValue.serverTimestamp(),
           })
@@ -97,107 +108,6 @@ export default function Repair_model({ closeModel }) {
           });
       },
     });
-  };
-
-  const addRepair = async () => {
-    setLoading(true);
-    db.collection("invoice")
-      .get()
-      .then((re) => {
-        var count = 0;
-        re.docs.forEach((eachReturn) => {
-          eachReturn.data().items.forEach(async (reItem) => {
-            if (reItem.serialNo[0] === serialNo.trim()) {
-              if (reItem.modelNo[0] === model_no.trim()) {
-                let result = eachReturn.data().invoice_number;
-
-                let statusOfSeized = await db
-                  .collection("seized")
-                  .where("invoice_number", "==", result)
-                  .get();
-
-                if (statusOfSeized.docs.length > 0) {
-                  setLoading(false);
-                  setError("Serial number you entered is in the seized list!");
-                } else {
-                  db.collection("invoice")
-                    .where("invoice_number", "==", result)
-                    .get()
-                    .then((reThen) => {
-                      if (reThen.docs.length > 0) {
-                        reThen.docs.forEach((reInvo) => {
-                          reInvo.data().items.forEach((reI) => {
-                            db.collection("item")
-                              .doc(reI.item_id)
-                              .get()
-                              .then((itRe) => {
-                                let daysCountInitial =
-                                  (new Date().getTime() -
-                                    new Date(
-                                      reInvo.data()?.date?.seconds * 1000
-                                    ).getTime()) /
-                                  (1000 * 3600 * 24);
-
-                                if (itRe.data().guarantee.value === "Months") {
-                                  if (
-                                    Math.round(daysCountInitial / 30) <=
-                                    itRe.data().guaranteePeriod
-                                  ) {
-                                    setError(" ");
-                                    showConfirm(
-                                      itRe.data().itemName,
-                                      result,
-                                      eachReturn.data().selectedType
-                                    );
-                                    setLoading(false);
-                                  } else {
-                                    setLoading(false);
-                                    setError(
-                                      "Item's garuntee period is expired!"
-                                    );
-                                  }
-                                } else {
-                                  if (
-                                    Math.round(daysCountInitial / 365) <=
-                                    itRe.data().guaranteePeriod
-                                  ) {
-                                    setError(" ");
-                                    showConfirm(
-                                      itRe.data().itemName,
-                                      result,
-                                      eachReturn.data().selectedType
-                                    );
-                                    setLoading(false);
-                                  } else {
-                                    setLoading(false);
-                                    setError(
-                                      "Item's garuntee period is expired!"
-                                    );
-                                  }
-                                }
-                              });
-                          });
-                        });
-                      } else {
-                        setLoading(false);
-                        setError("Serial number you entered is not found!");
-                      }
-                    });
-                }
-              }
-            }
-          });
-          count = count + 1;
-        });
-        if (re.docs.length < count) {
-          setLoading(false);
-          if (error !== " ") {
-            setError("Serial number you entered is not found!");
-          } else {
-            setError("");
-          }
-        }
-      });
   };
 
   return (
@@ -211,8 +121,8 @@ export default function Repair_model({ closeModel }) {
       <div className="paper">
         <form className="form" noValidate>
           <Grid container spacing={2}>
-            {/* <Grid className="lbl_topi" item xs={12} sm={4}>
-              Invoice No
+            <Grid className="lbl_topi" item xs={12} sm={4}>
+              Item name
             </Grid>
             <Grid item xs={12} sm={2}>
               :
@@ -223,14 +133,14 @@ export default function Repair_model({ closeModel }) {
                 variant="outlined"
                 required
                 fullWidth
-                label="Invoice No"
+                label="Item name"
                 size="small"
-                value={invoice}
-                onChange={(e) => {
-                  setInvoice(e.target.value);
+                value={itemName}
+                onChange={e => {
+                  setItemName(e.target.value);
                 }}
               />
-            </Grid> */}
+            </Grid>
             <Grid className="lbl_topi" item xs={12} sm={4}>
               Serial No
             </Grid>
@@ -246,7 +156,7 @@ export default function Repair_model({ closeModel }) {
                 label=" Serial No"
                 size="small"
                 value={serialNo}
-                onChange={(e) => {
+                onChange={e => {
                   setSerialNo(e.target.value);
                 }}
               />
@@ -267,7 +177,7 @@ export default function Repair_model({ closeModel }) {
                 label="Model No"
                 size="small"
                 value={model_no}
-                onChange={(e) => {
+                onChange={e => {
                   setModel_no(e.target.value);
                 }}
               />
@@ -287,31 +197,12 @@ export default function Repair_model({ closeModel }) {
                 label="Full Name"
                 size="small"
                 value={cust_name}
-                onChange={(e) => {
+                onChange={e => {
                   setCust_name(e.target.value);
                 }}
               />
             </Grid>
-            {/* <Grid className="lbl_topi" item xs={12} sm={4}>
-              MID
-            </Grid>
-            <Grid item xs={12} sm={2}>
-              :
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                autoComplete="mic"
-                variant="outlined"
-                required
-                fullWidth
-                label="MID"
-                size="small"
-                value={mid}
-                onChange={(e) => {
-                  setMid(e.target.value);
-                }}
-              />
-            </Grid> */}
+
             <Grid className="lbl_topi" item xs={12} sm={4}>
               NIC
             </Grid>
@@ -327,7 +218,7 @@ export default function Repair_model({ closeModel }) {
                 label="NIC"
                 size="small"
                 value={nic}
-                onChange={(e) => {
+                onChange={e => {
                   setNic(e.target.value);
                 }}
               />
@@ -348,12 +239,12 @@ export default function Repair_model({ closeModel }) {
                 label="Mobil 1"
                 size="small"
                 value={mobil_no1}
-                onChange={(e) => {
+                onChange={e => {
                   setMobil_no1(e.target.value);
                 }}
               />
             </Grid>
-            <Grid className="lbl_topi" item xs={12} sm={6}></Grid>
+            <Grid className="lbl_topi" item xs={12} sm={6} />
             <Grid item xs={12} sm={6}>
               <TextField
                 autoComplete="mobil_no"
@@ -363,7 +254,7 @@ export default function Repair_model({ closeModel }) {
                 type="number"
                 size="small"
                 value={mobil_no2}
-                onChange={(e) => {
+                onChange={e => {
                   setMobil_no2(e.target.value);
                 }}
               />
@@ -385,10 +276,35 @@ export default function Repair_model({ closeModel }) {
                 label="Description"
                 size="small"
                 value={description}
-                onChange={(e) => {
+                onChange={e => {
                   setDescription(e.target.value);
                 }}
               />
+            </Grid>
+
+            <Grid className="lbl_topi" item xs={12} sm={4}>
+              Choose one
+            </Grid>
+            <Grid item xs={12} sm={2}>
+              :
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Select
+                className="roll_selector"
+                size="small"
+                native
+                onChange={handleChange}
+                value={selectedType}
+              >
+                <option onChange={handleChange} value={'shop'}>
+                  shop
+                </option>
+                {allRoot.map(each =>
+                  <option onChange={handleChange} key={each} value={each}>
+                    {each}
+                  </option>
+                )}
+              </Select>
             </Grid>
 
             <Grid className="lbl_topi" item xs={12} sm={4}>
@@ -399,34 +315,23 @@ export default function Repair_model({ closeModel }) {
             </Grid>
             <Grid item xs={12} sm={6}>
               <p>
-                {" "}
-                {moment(firebase.firestore.FieldValue.serverTimestamp()).format(
-                  "dddd, MMMM Do YYYY"
-                )}
+                {' '}{moment(
+                  firebase.firestore.FieldValue.serverTimestamp()
+                ).format('dddd, MMMM Do YYYY')}
               </p>
             </Grid>
           </Grid>
-          <p className="name_Msg">{error.length > 0 ? error : ""}</p>
+
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={9}></Grid>
+            <Grid item xs={12} sm={9} />
             <Grid item xs={12} sm={3}>
               <Button
                 variant="contained"
                 color="primary"
                 className="btn_update"
-                onClick={addRepair}
-                disabled={
-                  loading ||
-                  serialNo.length === 0 ||
-                  model_no.length === 0 ||
-                  cust_name.length === 0 ||
-                  nic.length === 0 ||
-                  mobil_no1.length === 0
-                    ? true
-                    : false
-                }
+                onClick={showConfirm}
               >
-                {loading ? <Spin /> : "Done"}
+                {'Add'}
               </Button>
             </Grid>
           </Grid>

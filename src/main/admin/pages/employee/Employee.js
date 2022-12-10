@@ -103,6 +103,16 @@ export default function Employee() {
     },
 
     {
+      name: "Status",
+      options: {
+        filter: false,
+        setCellHeaderProps: (value) => ({
+          style: { fontSize: "15px", color: "black", fontWeight: "600" },
+        }),
+      },
+    },
+
+    {
       name: "Action",
       options: {
         filter: true,
@@ -122,39 +132,66 @@ export default function Employee() {
       history.push("/connection_lost");
     });
 
-    db.collection("employee").onSnapshot((snap) => {
-      var raw = [];
-      var rawAlldata = [];
-      snap.docs.forEach((each) => {
-        rawAlldata.push({
-          id: each.id,
-          data: each.data(),
+    db.collection("employee")
+      .get()
+      .then((snap) => {
+        var raw = [];
+        var rawAlldata = [];
+        snap.docs.forEach((each) => {
+          rawAlldata.push({
+            id: each.id,
+            data: each.data(),
+          });
+          raw.push({
+            FirstName: each.data().fname,
+            LastName: each.data().lname,
+            NIC: each.data().nic,
+            Mobile: each.data().mobile1,
+            Status:
+              each.data().status === "work" ? (
+                <span
+                  style={{
+                    color: "white",
+                    backgroundColor: "green",
+                    padding: "6px",
+                    borderRadius: "20px",
+                    width: "100%",
+                  }}
+                >
+                  Work
+                </span>
+              ) : (
+                <span
+                  style={{
+                    color: "white",
+                    backgroundColor: "#ff8c00",
+                    padding: "6px",
+                    borderRadius: "20px",
+                    width: "100%",
+                  }}
+                >
+                  Not work
+                </span>
+              ),
+            Action: (
+              <div>
+                <VisibilityIcon className="btnView" onClick={EmployeeView} />
+                <span>
+                  <EditIcon className="btnEdit" onClick={EmployeeUpdate} />
+                </span>
+                <span>
+                  <AddShoppingCartRoundedIcon
+                    className="btnShopping"
+                    onClick={() => EmployeePurchasing(each.id)}
+                  />
+                </span>
+              </div>
+            ),
+          });
         });
-        raw.push({
-          FirstName: each.data().fname,
-          LastName: each.data().lname,
-          NIC: each.data().nic,
-          Mobile: each.data().mobile1,
-
-          Action: (
-            <div>
-              <VisibilityIcon className="btnView" onClick={EmployeeView} />
-              <span>
-                <EditIcon className="btnEdit" onClick={EmployeeUpdate} />
-              </span>
-              <span>
-                <AddShoppingCartRoundedIcon
-                  className="btnShopping"
-                  onClick={() => EmployeePurchasing(each.id)}
-                />
-              </span>
-            </div>
-          ),
-        });
+        setTableData(raw);
+        setallData(rawAlldata);
       });
-      setTableData(raw);
-      setallData(rawAlldata);
-    });
     // eslint-disable-next-line
   }, []);
 
@@ -240,6 +277,7 @@ export default function Employee() {
                 mobile1Prop={allData[currentIndx]?.data.mobile1}
                 mobile2Prop={allData[currentIndx]?.data.mobile2}
                 nicProp={allData[currentIndx]?.data.nic}
+                statusProp={allData[currentIndx]?.data.status}
                 close_model={() => {
                   setEmployeeUpdateModel(false);
                 }}

@@ -8,7 +8,7 @@ import {
   Button,
   Fab,
   Card,
-  CardContent,
+  CardContent
 } from "@material-ui/core";
 import CurrencyFormat from "react-currency-format";
 import { Modal, Spin, Space, DatePicker } from "antd";
@@ -32,7 +32,104 @@ import ShortageHistorys from "./components/shortage_history_Model/Shortage_Histo
 
 async function getGasshort(root, isFirstSalary, lastSalaryDate, currentDate) {
   var reGas = await db
-    .collection("gas_purchase_history")
+    .collection("gas_invoice")
+    .where("selectedType", "==", root)
+    .get();
+
+  var rootStatus;
+
+  if (root !== "shop") {
+    rootStatus = await db.collection("shop").where("root", "==", root).get();
+  }
+
+  var gasShort = 0;
+
+  for (var i = 0; i < reGas.docs.length; i++) {
+    if (reGas.docs[i].data().selectedType === root) {
+      if (isFirstSalary) {
+        gasShort = parseInt(gasShort) + parseInt(reGas.docs[i].data().shortage);
+      } else {
+        let seeBool3 =
+          new Date(reGas.docs[i].data()?.date.seconds * 1000) >
+            new Date(lastSalaryDate.seconds * 1000) &&
+          new Date(reGas.docs[i].data()?.date.seconds * 1000) <=
+            new Date(currentDate.seconds * 1000);
+
+        if (seeBool3) {
+          gasShort =
+            parseInt(gasShort) + parseInt(reGas.docs[i].data().shortage);
+        }
+      }
+    }
+  }
+
+  let countShop = await (await db.collection("shop").get()).docs.length;
+
+  return gasShort === 0
+    ? 0
+    : root === "shop"
+    ? Math.round((gasShort / parseInt(countShop)) * 10) / 10
+    : rootStatus.docs[0].data().employee2 === ""
+    ? Math.round(gasShort * 10) / 10
+    : Math.round((gasShort / 2) * 10) / 10;
+}
+
+async function getGasshortForTable(
+  root,
+  isFirstSalary,
+  lastSalaryDate,
+  currentDate
+) {
+  var reGas = await db
+    .collection("gas_invoice")
+    .where("selectedType", "==", root)
+    .get();
+
+  var gasShort1 = [];
+
+  for (var i = 0; i < reGas.docs.length; i++) {
+    if (reGas.docs[i].data().selectedType === root) {
+      if (isFirstSalary) {
+        if (reGas.docs[i].data().shortage > 0) {
+          gasShort1.push({
+            date: reGas.docs[i].data().date,
+            amount: reGas.docs[i].data().shortage,
+            short_type: "Gas",
+            type: reGas.docs[i].data().selectedType
+          });
+        }
+      } else {
+        let seeBool3 =
+          new Date(reGas.docs[i].data()?.date.seconds * 1000) >
+            new Date(lastSalaryDate.seconds * 1000) &&
+          new Date(reGas.docs[i].data()?.date.seconds * 1000) <=
+            new Date(currentDate.seconds * 1000);
+
+        if (seeBool3) {
+          if (reGas.docs[i].data().shortage > 0) {
+            gasShort1.push({
+              date: reGas.docs[i].data().date,
+              amount: reGas.docs[i].data().shortage,
+              short_type: "Gas",
+              type: reGas.docs[i].data().selectedType
+            });
+          }
+        }
+      }
+    }
+  }
+
+  return gasShort1;
+}
+
+async function getGasInstallmentshort(
+  root,
+  isFirstSalary,
+  lastSalaryDate,
+  currentDate
+) {
+  var reGas = await db
+    .collection("gas_installment")
     .where("type", "==", root)
     .get();
 
@@ -62,23 +159,26 @@ async function getGasshort(root, isFirstSalary, lastSalaryDate, currentDate) {
       }
     }
   }
+
+  let countShop = await (await db.collection("shop").get()).docs.length;
+
   return gasShort === 0
     ? 0
     : root === "shop"
-    ? Math.round(gasShort * 10) / 10
+    ? Math.round((gasShort / parseInt(countShop)) * 10) / 10
     : rootStatus.docs[0].data().employee2 === ""
     ? Math.round(gasShort * 10) / 10
     : Math.round((gasShort / 2) * 10) / 10;
 }
 
-async function getGasshortForTable(
+async function getGasInstallmenthortForTable(
   root,
   isFirstSalary,
   lastSalaryDate,
   currentDate
 ) {
   var reGas = await db
-    .collection("gas_purchase_history")
+    .collection("gas_installment")
     .where("type", "==", root)
     .get();
 
@@ -91,8 +191,8 @@ async function getGasshortForTable(
           gasShort1.push({
             date: reGas.docs[i].data().date,
             amount: reGas.docs[i].data().shortage,
-            short_type: "Gas",
-            type: reGas.docs[i].data().type,
+            short_type: "Gas_installment",
+            type: reGas.docs[i].data().type
           });
         }
       } else {
@@ -107,8 +207,8 @@ async function getGasshortForTable(
             gasShort1.push({
               date: reGas.docs[i].data().date,
               amount: reGas.docs[i].data().shortage,
-              short_type: "Gas",
-              type: reGas.docs[i].data().type,
+              short_type: "Gas_installment",
+              type: reGas.docs[i].data().type
             });
           }
         }
@@ -159,10 +259,12 @@ async function getInstallmentshort(
     }
   }
 
+  let countShop = await (await db.collection("shop").get()).docs.length;
+
   return installShortage === 0
     ? 0
     : root === "shop"
-    ? Math.round(installShortage * 10) / 10
+    ? Math.round((installShortage / parseInt(countShop)) * 10) / 10
     : rootStatus.docs[0].data().employee2 === ""
     ? Math.round(installShortage * 10) / 10
     : Math.round((installShortage / 2) * 10) / 10;
@@ -187,7 +289,7 @@ async function getInstallmentshortForTable(
           date: reInstallment.docs[i].data().date,
           amount: reInstallment.docs[i].data().shortage,
           short_type: "Installment",
-          type: reInstallment.docs[i].data().type,
+          type: reInstallment.docs[i].data().type
         });
       }
     } else {
@@ -203,7 +305,7 @@ async function getInstallmentshortForTable(
             date: reInstallment.docs[i].data().date,
             amount: reInstallment.docs[i].data().shortage,
             short_type: "Installment",
-            type: reInstallment.docs[i].data().type,
+            type: reInstallment.docs[i].data().type
           });
         }
       }
@@ -245,10 +347,12 @@ async function getShortage(root, isFirstSalary, lastSalaryDate, currentDate) {
     }
   }
 
+  let countShop = await (await db.collection("shop").get()).docs.length;
+
   return shortage === 0
     ? 0
     : root === "shop"
-    ? Math.round(shortage * 10) / 10
+    ? Math.round((shortage / parseInt(countShop)) * 10) / 10
     : rootStatus.docs[0].data().employee2 === ""
     ? Math.round(shortage * 10) / 10
     : Math.round((shortage / 2) * 10) / 10;
@@ -273,7 +377,7 @@ async function getShortageForTable(
           date: reInvoice.docs[i].data().date,
           amount: reInvoice.docs[i].data().shortage,
           short_type: "Invoice",
-          type: reInvoice.docs[i].data().selectedType,
+          type: reInvoice.docs[i].data().selectedType
         });
       }
     } else {
@@ -289,7 +393,7 @@ async function getShortageForTable(
             date: reInvoice.docs[i].data().date,
             amount: reInvoice.docs[i].data().shortage,
             short_type: "Invoice",
-            type: reInvoice.docs[i].data().selectedType,
+            type: reInvoice.docs[i].data().selectedType
           });
         }
       }
@@ -401,14 +505,15 @@ async function getSaleTarget(root, currentDate) {
           for (let n = 0; n < saleRe.docs[i].data().items.length; n++) {
             saleTargetValue =
               parseInt(saleTargetValue) +
-              parseInt(saleRe.docs[i].data().items[n].downpayment) *
-                parseInt(saleRe.docs[i].data().items[n].qty) -
-              parseInt(saleRe.docs[i].data().items[n].discount);
+              parseInt(saleRe.docs[i].data().items[n].purchasedPrice) *
+                parseInt(saleRe.docs[i].data().items[n].qty);
           }
         }
       }
     }
   }
+
+  let countShop = await (await db.collection("shop").get()).docs.length;
 
   return targetValue === 0
     ? 0
@@ -416,7 +521,7 @@ async function getSaleTarget(root, currentDate) {
     ? 0
     : saleTargetValue >= targetValue
     ? root === "shop"
-      ? 5000
+      ? 5000 / parseInt(countShop)
       : 5000 / 2
     : 0;
 }
@@ -443,9 +548,8 @@ async function getSaleTargetForTable(
           item_name: saleRe.docs[i].data().items[n].item_name,
           serail_number: saleRe.docs[i].data().items[n].serialNo,
           total:
-            parseInt(saleRe.docs[i].data().items[n].downpayment) *
-              parseInt(saleRe.docs[i].data().items[n].qty) -
-            parseInt(saleRe.docs[i].data().items[n].discount),
+            parseInt(saleRe.docs[i].data().items[n].purchasedPrice) *
+            parseInt(saleRe.docs[i].data().items[n].qty)
         });
       }
     } else {
@@ -463,9 +567,8 @@ async function getSaleTargetForTable(
             item_name: saleRe.docs[i].data().items[n].item_name,
             serail_number: saleRe.docs[i].data().items[n].serialNo,
             total:
-              parseInt(saleRe.docs[i].data().items[n].downpayment) *
-                parseInt(saleRe.docs[i].data().items[n].qty) -
-              parseInt(saleRe.docs[i].data().items[n].discount),
+              parseInt(saleRe.docs[i].data().items[n].purchasedPrice) *
+              parseInt(saleRe.docs[i].data().items[n].qty)
           });
         }
       }
@@ -540,12 +643,54 @@ async function cashTargetFunc(
 
       if (seeBool1) {
         if (installmentsRe.docs[i].data().isExpired === false) {
-          threePresentage =
-            parseInt(threePresentage) +
-            (parseInt(installmentsRe.docs[i].data().amount) * 3) / 100;
+          if (installmentsRe.docs[i].data()?.isArreas) {
+            if (
+              parseInt(installmentsRe.docs[i].data()?.dueInstallmentAmount) >
+              parseInt(installmentsRe.docs[i].data()?.amount)
+            ) {
+              threePresentage =
+                parseInt(threePresentage) +
+                (parseInt(installmentsRe.docs[i].data()?.amount) * 2.5) / 100;
+            } else {
+              let arreasAmountToMonth =
+                parseInt(installmentsRe.docs[i].data()?.amount) -
+                parseInt(installmentsRe.docs[i].data()?.dueInstallmentAmount);
+
+              threePresentage =
+                parseInt(threePresentage) + (arreasAmountToMonth * 3) / 100;
+
+              threePresentage =
+                parseInt(threePresentage) +
+                (parseInt(installmentsRe.docs[i].data().dueInstallmentAmount) *
+                  2.5) /
+                  100;
+            }
+          } else {
+            if (installmentsRe.docs[i].data()?.arreasAmount > 0) {
+              let resultOf =
+                parseInt(installmentsRe.docs[i].data()?.arreasAmount) /
+                parseInt(installmentsRe.docs[i].data().dueInstallmentAmount);
+
+              if (resultOf >= 2) {
+                threePresentage =
+                  parseInt(threePresentage) +
+                  (parseInt(installmentsRe.docs[i].data().amount) * 2.5) / 100;
+              } else {
+                threePresentage =
+                  parseInt(threePresentage) +
+                  (parseInt(installmentsRe.docs[i].data().amount) * 3) / 100;
+              }
+            } else {
+              threePresentage =
+                parseInt(threePresentage) +
+                (parseInt(installmentsRe.docs[i].data().amount) * 3) / 100;
+            }
+          }
+
           fourPresentage =
             parseInt(fourPresentage) +
             (parseInt(installmentsRe.docs[i].data().amount) * 4) / 100;
+
           cashTargetValue =
             parseInt(cashTargetValue) +
             parseInt(installmentsRe.docs[i].data().amount);
@@ -583,9 +728,11 @@ async function cashTargetFunc(
     for (let i = 0; i < installmentsRe.docs.length; i++) {
       if (isFirstSalary) {
         if (installmentsRe.docs[i].data().isExpired === false) {
-          threePresentage =
-            parseInt(threePresentage) +
-            (parseInt(installmentsRe.docs[i].data().amount) * 3) / 100;
+          threePresentage = installmentsRe.docs[i].data()?.isArreas
+            ? parseInt(threePresentage) +
+              (parseInt(installmentsRe.docs[i].data().amount) * 2.5) / 100
+            : parseInt(threePresentage) +
+              (parseInt(installmentsRe.docs[i].data().amount) * 3) / 100;
         }
       } else {
         let seeBool1 =
@@ -596,9 +743,52 @@ async function cashTargetFunc(
 
         if (seeBool1) {
           if (installmentsRe.docs[i].data().isExpired === false) {
-            threePresentage =
-              parseInt(threePresentage) +
-              (parseInt(installmentsRe.docs[i].data().amount) * 3) / 100;
+            if (installmentsRe.docs[i].data()?.isArreas) {
+              if (
+                parseInt(installmentsRe.docs[i].data()?.dueInstallmentAmount) >
+                parseInt(installmentsRe.docs[i].data()?.amount)
+              ) {
+                threePresentage =
+                  parseInt(threePresentage) +
+                  (parseInt(installmentsRe.docs[i].data()?.amount) * 2.5) / 100;
+              } else {
+                let arreasAmountToMonth =
+                  parseInt(installmentsRe.docs[i].data()?.amount) -
+                  parseInt(installmentsRe.docs[i].data()?.dueInstallmentAmount);
+
+                threePresentage =
+                  parseInt(threePresentage) + (arreasAmountToMonth * 3) / 100;
+
+                threePresentage =
+                  parseInt(threePresentage) +
+                  (parseInt(
+                    installmentsRe.docs[i].data().dueInstallmentAmount
+                  ) *
+                    2.5) /
+                    100;
+              }
+            } else {
+              if (installmentsRe.docs[i].data()?.arreasAmount > 0) {
+                let resultOf =
+                  parseInt(installmentsRe.docs[i].data()?.arreasAmount) /
+                  parseInt(installmentsRe.docs[i].data().dueInstallmentAmount);
+
+                if (resultOf >= 2) {
+                  threePresentage =
+                    parseInt(threePresentage) +
+                    (parseInt(installmentsRe.docs[i].data().amount) * 2.5) /
+                      100;
+                } else {
+                  threePresentage =
+                    parseInt(threePresentage) +
+                    (parseInt(installmentsRe.docs[i].data().amount) * 3) / 100;
+                }
+              } else {
+                threePresentage =
+                  parseInt(threePresentage) +
+                  (parseInt(installmentsRe.docs[i].data().amount) * 3) / 100;
+              }
+            }
           }
         }
       }
@@ -613,10 +803,12 @@ async function cashTargetFunc(
     rootStatus = await db.collection("root").where("root", "==", root).get();
   }
 
+  let countShop = await (await db.collection("shop").get()).docs.length;
+
   return returnValue === 0
     ? 0
     : root === "shop"
-    ? Math.round(returnValue * 10) / 10
+    ? Math.round((returnValue / parseInt(countShop)) * 10) / 10
     : rootStatus.docs[0].data().employee2 === ""
     ? Math.round(returnValue * 10) / 10
     : Math.round((returnValue / 2) * 10) / 10;
@@ -646,7 +838,7 @@ async function cashTargetFuncForTable(
           date: saleRe.docs[i].data().date,
           type: "Invoice",
           invoice_no: saleRe.docs[i].data().invoice_number,
-          amount: saleRe.docs[i].data().downpayment,
+          amount: saleRe.docs[i].data().downpayment
         });
       } else {
         let seeBool1 =
@@ -660,7 +852,7 @@ async function cashTargetFuncForTable(
             date: saleRe.docs[i].data().date,
             type: "Invoice",
             invoice_no: saleRe.docs[i].data().invoice_number,
-            amount: saleRe.docs[i].data().downpayment,
+            amount: saleRe.docs[i].data().downpayment
           });
         }
       }
@@ -674,7 +866,7 @@ async function cashTargetFuncForTable(
           date: installmentsRe.docs[i].data().date,
           type: "Installment",
           invoice_no: installmentsRe.docs[i].data().invoice_number,
-          amount: installmentsRe.docs[i].data().amount,
+          amount: installmentsRe.docs[i].data().amount
         });
       }
     } else {
@@ -690,7 +882,7 @@ async function cashTargetFuncForTable(
             date: installmentsRe.docs[i].data().date,
             type: "Installment",
             invoice_no: installmentsRe.docs[i].data().invoice_number,
-            amount: installmentsRe.docs[i].data().amount,
+            amount: installmentsRe.docs[i].data().amount
           });
         }
       }
@@ -757,10 +949,12 @@ async function getCashSaleFunc(
     rootStatus = await db.collection("root").where("root", "==", root).get();
   }
 
+  let countShop = await (await db.collection("shop").get()).docs.length;
+
   return cashSale === 0
     ? 0
     : root === "shop"
-    ? Math.round(cashSale * 10) / 10
+    ? Math.round((cashSale / parseInt(countShop)) * 10) / 10
     : rootStatus.docs[0].data().employee2 === ""
     ? Math.round(cashSale * 10) / 10
     : Math.round((cashSale / 2) * 10) / 10;
@@ -793,7 +987,7 @@ async function getCashSaleFuncForTable(
             ),
             qty: saleRe.docs[i].data().items[n].qty,
             item_name: saleRe.docs[i].data().items[n].item_name,
-            serail_number: saleRe.docs[i].data().items[n].serialNo,
+            serail_number: saleRe.docs[i].data().items[n].serialNo
           });
         }
       } else {
@@ -815,7 +1009,7 @@ async function getCashSaleFuncForTable(
               ),
               qty: saleRe.docs[i].data().items[n].qty,
               item_name: saleRe.docs[i].data().items[n].item_name,
-              serail_number: saleRe.docs[i].data().items[n].serialNo,
+              serail_number: saleRe.docs[i].data().items[n].serialNo
             });
           }
         }
@@ -824,6 +1018,157 @@ async function getCashSaleFuncForTable(
   }
 
   return cashSale;
+}
+
+async function withCylinderGas(
+  root,
+  isFirstSalary,
+  lastSalaryDate,
+  currentDate
+) {
+  var gasCyli = await db
+    .collection("gas_invoice")
+    .where("selectedType", "==", root)
+    .get();
+
+  var gasCylP = 0;
+
+  for (var i = 0; i < gasCyli.docs.length; i++) {
+    if (isFirstSalary) {
+      if (gasCyli.docs[i].data().items[0].withCylinder) {
+        gasCylP = gasCylP + 5;
+      }
+    } else {
+      let seeBool1 =
+        new Date(gasCyli.docs[i].data()?.date.seconds * 1000) >
+          new Date(lastSalaryDate.seconds * 1000) &&
+        new Date(gasCyli.docs[i].data()?.date.seconds * 1000) <=
+          new Date(currentDate.seconds * 1000);
+
+      if (seeBool1) {
+        if (gasCyli.docs[i].data().items[0].withCylinder) {
+          gasCylP = gasCylP + 5;
+        }
+      }
+    }
+  }
+
+  var rootStatus;
+
+  if (root !== "shop") {
+    rootStatus = await db.collection("root").where("root", "==", root).get();
+  }
+
+  let countShop = await (await db.collection("shop").get()).docs.length;
+
+  return gasCylP === 0
+    ? 0
+    : root === "shop"
+    ? Math.round((gasCylP / parseInt(countShop)) * 10) / 10
+    : rootStatus.docs[0].data().employee2 === ""
+    ? Math.round(gasCylP * 10) / 10
+    : Math.round((gasCylP / 2) * 10) / 10;
+}
+
+async function gasDownpayment(
+  root,
+  isFirstSalary,
+  lastSalaryDate,
+  currentDate
+) {
+  var gasCyli = await db
+    .collection("gas_invoice")
+    .where("selectedType", "==", root)
+    .get();
+
+  var gasCylP = 0;
+
+  for (var i = 0; i < gasCyli.docs.length; i++) {
+    if (gasCyli.docs[i].data().paymentWay !== "FullPayment") {
+      if (isFirstSalary) {
+        gasCylP =
+          parseInt(gasCylP) +
+          (parseInt(gasCyli.docs[i].data().downpayment) * 3) / 100;
+      } else {
+        let seeBool1 =
+          new Date(gasCyli.docs[i].data()?.date.seconds * 1000) >
+            new Date(lastSalaryDate.seconds * 1000) &&
+          new Date(gasCyli.docs[i].data()?.date.seconds * 1000) <=
+            new Date(currentDate.seconds * 1000);
+
+        if (seeBool1) {
+          gasCylP =
+            parseInt(gasCylP) +
+            (parseInt(gasCyli.docs[i].data().downpayment) * 3) / 100;
+        }
+      }
+    }
+  }
+
+  var rootStatus;
+
+  if (root !== "shop") {
+    rootStatus = await db.collection("root").where("root", "==", root).get();
+  }
+
+  let countShop = await (await db.collection("shop").get()).docs.length;
+
+  return gasCylP === 0
+    ? 0
+    : root === "shop"
+    ? Math.round((gasCylP / parseInt(countShop)) * 10) / 10
+    : rootStatus.docs[0].data().employee2 === ""
+    ? Math.round(gasCylP * 10) / 10
+    : Math.round((gasCylP / 2) * 10) / 10;
+}
+
+async function gasInstallment(
+  root,
+  isFirstSalary,
+  lastSalaryDate,
+  currentDate
+) {
+  var gasCyli = await db
+    .collection("gas_installment")
+    .where("type", "==", root)
+    .get();
+
+  var gasCylP = 0;
+
+  for (var i = 0; i < gasCyli.docs.length; i++) {
+    if (isFirstSalary) {
+      gasCylP =
+        parseInt(gasCylP) + (parseInt(gasCyli.docs[i].data().amount) * 3) / 100;
+    } else {
+      let seeBool1 =
+        new Date(gasCyli.docs[i].data()?.date.seconds * 1000) >
+          new Date(lastSalaryDate.seconds * 1000) &&
+        new Date(gasCyli.docs[i].data()?.date.seconds * 1000) <=
+          new Date(currentDate.seconds * 1000);
+
+      if (seeBool1) {
+        gasCylP =
+          parseInt(gasCylP) +
+          (parseInt(gasCyli.docs[i].data().amount) * 3) / 100;
+      }
+    }
+  }
+
+  var rootStatus;
+
+  if (root !== "shop") {
+    rootStatus = await db.collection("root").where("root", "==", root).get();
+  }
+
+  let countShop = await (await db.collection("shop").get()).docs.length;
+
+  return gasCylP === 0
+    ? 0
+    : root === "shop"
+    ? Math.round((gasCylP / parseInt(countShop)) * 10) / 10
+    : rootStatus.docs[0].data().employee2 === ""
+    ? Math.round(gasCylP * 10) / 10
+    : Math.round((gasCylP / 2) * 10) / 10;
 }
 
 async function getExcardFunc(root, isFirstSalary, lastSalaryDate, currentDate) {
@@ -864,10 +1209,12 @@ async function getExcardFunc(root, isFirstSalary, lastSalaryDate, currentDate) {
     rootStatus = await db.collection("root").where("root", "==", root).get();
   }
 
+  let countShop = await (await db.collection("shop").get()).docs.length;
+
   return excardAmount === 0
     ? 0
     : root === "shop"
-    ? Math.round(excardAmount * 10) / 10
+    ? Math.round((excardAmount / parseInt(countShop)) * 10) / 10
     : rootStatus.docs[0].data().employee2 === ""
     ? Math.round(excardAmount * 10) / 10
     : Math.round((excardAmount / 2) * 10) / 10;
@@ -892,7 +1239,7 @@ async function getExcardFuncForTable(
         excardList.push({
           date: installmentsRe.docs[i].data().date,
           amount: installmentsRe.docs[i].data().amount,
-          invoice_number: installmentsRe.docs[i].data().invoice_number,
+          invoice_number: installmentsRe.docs[i].data().invoice_number
         });
       }
     } else {
@@ -907,7 +1254,7 @@ async function getExcardFuncForTable(
           excardList.push({
             date: installmentsRe.docs[i].data().date,
             amount: installmentsRe.docs[i].data().amount,
-            invoice_number: installmentsRe.docs[i].data().invoice_number,
+            invoice_number: installmentsRe.docs[i].data().invoice_number
           });
         }
       }
@@ -959,6 +1306,9 @@ export default function Add_Paysheet_Model({ nic }) {
   const [saleTarget, setSaleTarget] = useState(0);
   const [cashTarget, setCashTarget] = useState(0);
   const [exCard, setExCard] = useState(0);
+  const [withCylinerGasV, setWithCyliderGasV] = useState(0);
+  const [gasDownpaymentV, setGasDownpaymentV] = useState(0);
+  const [gasInstallmentV, setGasInstallmentV] = useState(0);
   const [arresTarget, setArresTarget] = useState(0);
   const [cashSale, setCashSale] = useState(0);
 
@@ -1209,6 +1559,24 @@ export default function Add_Paysheet_Model({ nic }) {
                           setShortage((sho) => sho + parseInt(reShort));
                         });
 
+                        getGasInstallmentshort(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          setShortage((sho) => sho + parseInt(reShort));
+                        });
+
+                        getGasInstallmenthortForTable(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          shortageList.push(reShort);
+                        });
+
                         //================
 
                         getShortageForTable(
@@ -1234,6 +1602,33 @@ export default function Add_Paysheet_Model({ nic }) {
                           firebase.firestore.Timestamp.fromDate(new Date())
                         ).then((reShort) => {
                           shortageList.push(reShort);
+                        });
+
+                        withCylinderGas(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          setWithCyliderGasV((sho) => sho + parseInt(reShort));
+                        });
+
+                        gasDownpayment(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          setGasDownpaymentV((sho) => sho + parseInt(reShort));
+                        });
+
+                        gasInstallment(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          setGasInstallmentV((sho) => sho + parseInt(reShort));
                         });
 
                         //================
@@ -1312,6 +1707,25 @@ export default function Add_Paysheet_Model({ nic }) {
                         ).then((reShort) => {
                           setShortage((sho) => sho + parseInt(reShort));
                         });
+
+                        getGasInstallmentshort(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          setShortage((sho) => sho + parseInt(reShort));
+                        });
+
+                        getGasInstallmenthortForTable(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          shortageList.push(reShort);
+                        });
+
                         getGasshort(
                           rootName,
                           true,
@@ -1319,6 +1733,33 @@ export default function Add_Paysheet_Model({ nic }) {
                           firebase.firestore.Timestamp.fromDate(new Date())
                         ).then((reShort) => {
                           setShortage((sho) => sho + parseInt(reShort));
+                        });
+
+                        withCylinderGas(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          setWithCyliderGasV((sho) => sho + parseInt(reShort));
+                        });
+
+                        gasDownpayment(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          setGasDownpaymentV((sho) => sho + parseInt(reShort));
+                        });
+
+                        gasInstallment(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          setGasInstallmentV((sho) => sho + parseInt(reShort));
                         });
 
                         //=====================
@@ -1457,6 +1898,25 @@ export default function Add_Paysheet_Model({ nic }) {
                         ).then((reShort) => {
                           setShortage((sho) => sho + parseInt(reShort));
                         });
+
+                        getGasInstallmentshort(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          setShortage((sho) => sho + parseInt(reShort));
+                        });
+
+                        getGasInstallmenthortForTable(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          shortageList.push(reShort);
+                        });
+
                         getGasshort(
                           rootName,
                           false,
@@ -1464,6 +1924,33 @@ export default function Add_Paysheet_Model({ nic }) {
                           firebase.firestore.Timestamp.fromDate(new Date())
                         ).then((reShort) => {
                           setShortage((sho) => sho + parseInt(reShort));
+                        });
+
+                        withCylinderGas(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          setWithCyliderGasV((sho) => sho + parseInt(reShort));
+                        });
+
+                        gasDownpayment(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          setGasDownpaymentV((sho) => sho + parseInt(reShort));
+                        });
+
+                        gasInstallment(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          setGasInstallmentV((sho) => sho + parseInt(reShort));
                         });
 
                         //================
@@ -1569,6 +2056,25 @@ export default function Add_Paysheet_Model({ nic }) {
                         ).then((reShort) => {
                           setShortage((sho) => sho + parseInt(reShort));
                         });
+
+                        getGasInstallmentshort(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          setShortage((sho) => sho + parseInt(reShort));
+                        });
+
+                        getGasInstallmenthortForTable(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          shortageList.push(reShort);
+                        });
+
                         getGasshort(
                           rootName,
                           true,
@@ -1576,6 +2082,33 @@ export default function Add_Paysheet_Model({ nic }) {
                           firebase.firestore.Timestamp.fromDate(new Date())
                         ).then((reShort) => {
                           setShortage((sho) => sho + parseInt(reShort));
+                        });
+
+                        withCylinderGas(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          setWithCyliderGasV((sho) => sho + parseInt(reShort));
+                        });
+
+                        gasDownpayment(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          setGasDownpaymentV((sho) => sho + parseInt(reShort));
+                        });
+
+                        gasInstallment(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          setGasInstallmentV((sho) => sho + parseInt(reShort));
                         });
 
                         //=====================
@@ -1697,6 +2230,25 @@ export default function Add_Paysheet_Model({ nic }) {
                         ).then((reShort) => {
                           setShortage((sho) => sho + parseInt(reShort));
                         });
+
+                        getGasInstallmentshort(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          setShortage((sho) => sho + parseInt(reShort));
+                        });
+
+                        getGasInstallmenthortForTable(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          shortageList.push(reShort);
+                        });
+
                         getGasshort(
                           rootName,
                           false,
@@ -1704,6 +2256,33 @@ export default function Add_Paysheet_Model({ nic }) {
                           firebase.firestore.Timestamp.fromDate(new Date())
                         ).then((reShort) => {
                           setShortage((sho) => sho + parseInt(reShort));
+                        });
+
+                        withCylinderGas(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          setWithCyliderGasV((sho) => sho + parseInt(reShort));
+                        });
+
+                        gasDownpayment(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          setGasDownpaymentV((sho) => sho + parseInt(reShort));
+                        });
+
+                        gasInstallment(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          setGasInstallmentV((sho) => sho + parseInt(reShort));
                         });
 
                         //===============
@@ -1806,6 +2385,25 @@ export default function Add_Paysheet_Model({ nic }) {
                         ).then((reShort) => {
                           setShortage((sho) => sho + parseInt(reShort));
                         });
+
+                        getGasInstallmentshort(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          setShortage((sho) => sho + parseInt(reShort));
+                        });
+
+                        getGasInstallmenthortForTable(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          shortageList.push(reShort);
+                        });
+
                         getGasshort(
                           rootName,
                           true,
@@ -1815,6 +2413,32 @@ export default function Add_Paysheet_Model({ nic }) {
                           setShortage((sho) => sho + parseInt(reShort));
                         });
 
+                        withCylinderGas(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          setWithCyliderGasV((sho) => sho + parseInt(reShort));
+                        });
+
+                        gasDownpayment(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          setGasDownpaymentV((sho) => sho + parseInt(reShort));
+                        });
+
+                        gasInstallment(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          firebase.firestore.Timestamp.fromDate(new Date())
+                        ).then((reShort) => {
+                          setGasInstallmentV((sho) => sho + parseInt(reShort));
+                        });
                         //================
 
                         getShortageForTable(
@@ -1907,6 +2531,9 @@ export default function Add_Paysheet_Model({ nic }) {
       arresTarget +
       exCard +
       cashSale +
+      withCylinerGasV +
+      gasDownpaymentV +
+      gasInstallmentV +
       basicSalary;
 
     let netSalary = earnings - deductions <= 0 ? 0 : earnings - deductions;
@@ -1932,6 +2559,9 @@ export default function Add_Paysheet_Model({ nic }) {
       cashSale: cashSale,
       goodsValue: goods,
       root: root,
+      withCylinderGas: withCylinerGasV,
+      gasDownpayment: gasDownpaymentV,
+      gasInstallment: gasInstallmentV,
       attendanceList: JSON.stringify(attendanceList),
       shortageList: JSON.stringify(shortageList),
       saleTargetList: JSON.stringify(saleTargetList),
@@ -1939,13 +2569,13 @@ export default function Add_Paysheet_Model({ nic }) {
       cashSaleList: JSON.stringify(cashSaleList),
       excardsList: JSON.stringify(excardsList),
       date: date,
-      net_Salery: netSalary,
+      net_Salery: netSalary
     };
 
     db.collection("goods_paid").add({
       paid_value: goods,
       nic: nic,
-      date: date,
+      date: date
     });
 
     db.collection("salary")
@@ -1976,7 +2606,7 @@ export default function Add_Paysheet_Model({ nic }) {
                 .update({
                   security_deposit:
                     parseInt(reEmployeeSe.docs[0].data().security_deposit) +
-                    parseInt(securityDeposit),
+                    parseInt(securityDeposit)
                 });
             });
 
@@ -1990,7 +2620,7 @@ export default function Add_Paysheet_Model({ nic }) {
                   reAdd.docs.forEach((reEa) => {
                     if (reEa.data().status === "unpaid") {
                       db.collection("salary_advance").doc(reEa.id).update({
-                        status: "paid",
+                        status: "paid"
                       });
                     }
                   });
@@ -2009,25 +2639,25 @@ export default function Add_Paysheet_Model({ nic }) {
                           .doc(reEachL.id)
                           .update({
                             balance:
-                              parseInt(reEachL.data().balance) - parseInt(loan),
+                              parseInt(reEachL.data().balance) - parseInt(loan)
                           });
                         db.collection("loan_history").add({
                           date: date,
                           amount: reEachL.data().amount,
                           balance:
                             parseInt(reEachL.data().balance) - parseInt(loan),
-                          docId: reEachL.id,
+                          docId: reEachL.id
                         });
                       } else {
                         db.collection("loans").doc(reEachL.id).update({
                           balance: 0,
-                          status: "Done",
+                          status: "Done"
                         });
                         db.collection("loan_history").add({
                           date: date,
                           amount: reEachL.data().amount,
                           balance: 0,
-                          docId: reEachL.id,
+                          docId: reEachL.id
                         });
                       }
                     }
@@ -2191,6 +2821,7 @@ export default function Add_Paysheet_Model({ nic }) {
                         ).then((reShort) => {
                           setShortage((sho) => sho + parseInt(reShort));
                         });
+
                         getGasshort(
                           rootName,
                           false,
@@ -2198,6 +2829,42 @@ export default function Add_Paysheet_Model({ nic }) {
                           currentdateRe
                         ).then((reShort) => {
                           setShortage((sho) => sho + parseInt(reShort));
+                        });
+
+                        getGasInstallmentshort(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          setShortage((sho) => sho + parseInt(reShort));
+                        });
+
+                        withCylinderGas(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          setWithCyliderGasV((sho) => sho + parseInt(reShort));
+                        });
+
+                        gasDownpayment(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          setGasDownpaymentV((sho) => sho + parseInt(reShort));
+                        });
+
+                        gasInstallment(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          setGasInstallmentV((sho) => sho + parseInt(reShort));
                         });
 
                         //================
@@ -2219,6 +2886,15 @@ export default function Add_Paysheet_Model({ nic }) {
                           shortageList.push(reShort);
                         });
                         getGasshortForTable(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          shortageList.push(reShort);
+                        });
+
+                        getGasInstallmenthortForTable(
                           rootName,
                           false,
                           reSalary.docs[reSalary.docs.length - 1]?.data().date,
@@ -2312,6 +2988,42 @@ export default function Add_Paysheet_Model({ nic }) {
                           setShortage((sho) => sho + parseInt(reShort));
                         });
 
+                        getGasInstallmentshort(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          setShortage((sho) => sho + parseInt(reShort));
+                        });
+
+                        withCylinderGas(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          setWithCyliderGasV((sho) => sho + parseInt(reShort));
+                        });
+
+                        gasDownpayment(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          setGasDownpaymentV((sho) => sho + parseInt(reShort));
+                        });
+
+                        gasInstallment(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          setGasInstallmentV((sho) => sho + parseInt(reShort));
+                        });
+
                         //=====================
 
                         getShortageForTable(
@@ -2331,6 +3043,15 @@ export default function Add_Paysheet_Model({ nic }) {
                           shortageList.push(reShort);
                         });
                         getGasshortForTable(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          shortageList.push(reShort);
+                        });
+
+                        getGasInstallmenthortForTable(
                           rootName,
                           true,
                           reSalary.docs[0]?.data().date,
@@ -2456,6 +3177,42 @@ export default function Add_Paysheet_Model({ nic }) {
                           setShortage((sho) => sho + parseInt(reShort));
                         });
 
+                        getGasInstallmentshort(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          setShortage((sho) => sho + parseInt(reShort));
+                        });
+
+                        withCylinderGas(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          setWithCyliderGasV((sho) => sho + parseInt(reShort));
+                        });
+
+                        gasDownpayment(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          setGasDownpaymentV((sho) => sho + parseInt(reShort));
+                        });
+
+                        gasInstallment(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          setGasInstallmentV((sho) => sho + parseInt(reShort));
+                        });
+
                         //================
 
                         getShortageForTable(
@@ -2475,6 +3232,15 @@ export default function Add_Paysheet_Model({ nic }) {
                           shortageList.push(reShort);
                         });
                         getGasshortForTable(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          shortageList.push(reShort);
+                        });
+
+                        getGasInstallmenthortForTable(
                           rootName,
                           false,
                           reSalary.docs[reSalary.docs.length - 1]?.data().date,
@@ -2568,6 +3334,42 @@ export default function Add_Paysheet_Model({ nic }) {
                           setShortage((sho) => sho + parseInt(reShort));
                         });
 
+                        getGasInstallmentshort(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          setShortage((sho) => sho + parseInt(reShort));
+                        });
+
+                        withCylinderGas(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          setWithCyliderGasV((sho) => sho + parseInt(reShort));
+                        });
+
+                        gasDownpayment(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          setGasDownpaymentV((sho) => sho + parseInt(reShort));
+                        });
+
+                        gasInstallment(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          setGasInstallmentV((sho) => sho + parseInt(reShort));
+                        });
+
                         //=====================
 
                         getShortageForTable(
@@ -2587,6 +3389,15 @@ export default function Add_Paysheet_Model({ nic }) {
                           shortageList.push(reShort);
                         });
                         getGasshortForTable(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          shortageList.push(reShort);
+                        });
+
+                        getGasInstallmenthortForTable(
                           rootName,
                           true,
                           reSalary.docs[0]?.data().date,
@@ -2694,6 +3505,42 @@ export default function Add_Paysheet_Model({ nic }) {
                           setShortage((sho) => sho + parseInt(reShort));
                         });
 
+                        getGasInstallmentshort(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          setShortage((sho) => sho + parseInt(reShort));
+                        });
+
+                        withCylinderGas(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          setWithCyliderGasV((sho) => sho + parseInt(reShort));
+                        });
+
+                        gasDownpayment(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          setGasDownpaymentV((sho) => sho + parseInt(reShort));
+                        });
+
+                        gasInstallment(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          gasInstallmentV((sho) => sho + parseInt(reShort));
+                        });
+
                         //===============
                         getShortageForTable(
                           rootName,
@@ -2712,6 +3559,15 @@ export default function Add_Paysheet_Model({ nic }) {
                           shortageList.push(reShort);
                         });
                         getGasshortForTable(
+                          rootName,
+                          false,
+                          reSalary.docs[reSalary.docs.length - 1]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          shortageList.push(reShort);
+                        });
+
+                        getGasInstallmenthortForTable(
                           rootName,
                           false,
                           reSalary.docs[reSalary.docs.length - 1]?.data().date,
@@ -2803,6 +3659,42 @@ export default function Add_Paysheet_Model({ nic }) {
                           setShortage((sho) => sho + parseInt(reShort));
                         });
 
+                        getGasInstallmentshort(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          setShortage((sho) => sho + parseInt(reShort));
+                        });
+
+                        withCylinderGas(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          setWithCyliderGasV((sho) => sho + parseInt(reShort));
+                        });
+
+                        gasDownpayment(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          setGasDownpaymentV((sho) => sho + parseInt(reShort));
+                        });
+
+                        gasInstallment(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          setGasInstallmentV((sho) => sho + parseInt(reShort));
+                        });
+
                         //================
 
                         getShortageForTable(
@@ -2822,6 +3714,15 @@ export default function Add_Paysheet_Model({ nic }) {
                           shortageList.push(reShort);
                         });
                         getGasshortForTable(
+                          rootName,
+                          true,
+                          reSalary.docs[0]?.data().date,
+                          currentdateRe
+                        ).then((reShort) => {
+                          shortageList.push(reShort);
+                        });
+
+                        getGasInstallmenthortForTable(
                           rootName,
                           true,
                           reSalary.docs[0]?.data().date,
@@ -3117,7 +4018,7 @@ export default function Add_Paysheet_Model({ nic }) {
                     color: "red",
                     fontWeight: "bold",
                     fontSize: "12px",
-                    textAlign: "center",
+                    textAlign: "center"
                   }}
                 >
                   Paid security deposit amount(LKR) : {paidSecurityDepo}
@@ -3186,7 +4087,7 @@ export default function Add_Paysheet_Model({ nic }) {
                     color: "red",
                     fontWeight: "bold",
                     fontSize: "13px",
-                    textAlign: "center",
+                    textAlign: "center"
                   }}
                 >
                   Due Balance(LKR) : {goodsBalance}
@@ -3250,7 +4151,7 @@ export default function Add_Paysheet_Model({ nic }) {
                     color: "red",
                     fontWeight: "bold",
                     fontSize: "12px",
-                    textAlign: "center",
+                    textAlign: "center"
                   }}
                 >
                   Current loan balance(LKR) : {loanBalance}
@@ -3410,6 +4311,84 @@ export default function Add_Paysheet_Model({ nic }) {
               </Grid>
 
               <Grid className="lbl_topi" item xs={12} sm={4}>
+                With Cylinder Gas(LKR)
+              </Grid>
+              <Grid item xs={12} sm={1}>
+                :
+              </Grid>
+              <Grid item xs={12} sm={5}>
+                <TextField
+                  autoComplete="ex"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  type="number"
+                  label=" With Cylider Gas"
+                  size="small"
+                  InputProps={{ inputProps: { min: 0 } }}
+                  // disabled={exCard <= 0 ? true : false}
+                  value={withCylinerGasV}
+                  onChange={(e) => {
+                    if (e.target.value !== "") {
+                      setWithCyliderGasV(parseInt(e.target.value.trim()));
+                    }
+                  }}
+                />
+              </Grid>
+
+              <Grid className="lbl_topi" item xs={12} sm={4}>
+                Gas Downpayments(LKR)
+              </Grid>
+              <Grid item xs={12} sm={1}>
+                :
+              </Grid>
+              <Grid item xs={12} sm={5}>
+                <TextField
+                  autoComplete="ex"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  type="number"
+                  label=" Gas Downpayments"
+                  size="small"
+                  InputProps={{ inputProps: { min: 0 } }}
+                  // disabled={exCard <= 0 ? true : false}
+                  value={gasDownpaymentV}
+                  onChange={(e) => {
+                    if (e.target.value !== "") {
+                      setGasDownpaymentV(parseInt(e.target.value.trim()));
+                    }
+                  }}
+                />
+              </Grid>
+
+              <Grid className="lbl_topi" item xs={12} sm={4}>
+                Gas Installments(LKR)
+              </Grid>
+              <Grid item xs={12} sm={1}>
+                :
+              </Grid>
+              <Grid item xs={12} sm={5}>
+                <TextField
+                  autoComplete="ex"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  type="number"
+                  label="Gas Installments"
+                  size="small"
+                  InputProps={{ inputProps: { min: 0 } }}
+                  // disabled={exCard <= 0 ? true : false}
+                  value={gasInstallmentV}
+                  onChange={(e) => {
+                    if (e.target.value !== "") {
+                      setGasInstallmentV(parseInt(e.target.value.trim()));
+                    }
+                  }}
+                />
+              </Grid>
+
+              <Grid className="lbl_topi" item xs={12} sm={4}>
                 Arreas Target(LKR)
               </Grid>
               <Grid item xs={12} sm={1}>
@@ -3538,7 +4517,8 @@ export default function Add_Paysheet_Model({ nic }) {
                       gutterBottom
                     >
                       Insentive , Phone Bill , Sale Target , Cash Target , Cash
-                      Sale , Ex Card , Arreas Target
+                      Sale , Ex Card , Arreas Target , Withcylinder Gas(Rs.5
+                      each) , Gas Downpayments , Gas Installments
                     </Typography>
                   </Grid>
                   <Grid item xs={12} sm={2}>
@@ -3577,6 +4557,9 @@ export default function Add_Paysheet_Model({ nic }) {
                             exCard +
                             arresTarget +
                             cashSale +
+                            withCylinerGasV +
+                            gasDownpaymentV +
+                            gasInstallmentV +
                             basicSalary -
                             (epf +
                               securityDeposit +
@@ -3594,6 +4577,9 @@ export default function Add_Paysheet_Model({ nic }) {
                               exCard +
                               arresTarget +
                               cashSale +
+                              withCylinerGasV +
+                              gasDownpaymentV +
+                              gasInstallmentV +
                               basicSalary -
                               (epf +
                                 securityDeposit +
@@ -3640,6 +4626,9 @@ export default function Add_Paysheet_Model({ nic }) {
                     cashTarget.length === 0 ||
                     exCard.length === 0 ||
                     cashSale.length === 0 ||
+                    withCylinerGasV.length === 0 ||
+                    gasDownpaymentV.length === 0 ||
+                    gasInstallmentV.length === 0 ||
                     date === null
                       ? true
                       : false

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Modal, DatePicker, Space } from "antd";
+import { Modal, DatePicker, Space, Checkbox } from "antd";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import { useHistory } from "react-router-dom";
@@ -31,16 +31,17 @@ export default function Gass_Model() {
   const [selectedWeight, setSelectedWeight] = useState(0);
   const [selectedType, setSelectedType] = useState("shop");
   const [qty, setQty] = useState(0);
+  const [withoutC, setWithoutC] = useState(false);
   const [total, setTotal] = useState(0);
   const [unit, setUnit] = useState(0);
   const [saveTimestamp, setTimestamp] = useState(null);
   const [validation, setValidation] = useState("");
   const [shortage, setShortage] = useState(0);
 
-      let history2 = useHistory();
+  let history2 = useHistory();
 
   useEffect(() => {
-      window.addEventListener("offline", function (e) {
+    window.addEventListener("offline", function (e) {
       history2.push("/connection_lost");
     });
     db.collection("gas")
@@ -68,7 +69,7 @@ export default function Gass_Model() {
         });
         setAllRoot(rawRoot);
       });
-      // eslint-disable-next-line
+    // eslint-disable-next-line
   }, []);
 
   const handleChangeWeight = (event) => {
@@ -247,6 +248,7 @@ export default function Gass_Model() {
             <Grid className="qq" item xs={12} sm={5}>
               <TextField
                 variant="outlined"
+                disabled={selectedWeight === 0}
                 required
                 type="number"
                 InputProps={{ inputProps: { min: 0 } }}
@@ -262,12 +264,46 @@ export default function Gass_Model() {
                     if (reE?.data.weight === selectedWeight) {
                       if (reE?.data.qty - parseInt(e.target.value) >= 0) {
                         setQty(parseInt(e.target.value));
-                        setTotal(reE?.data.price * e.target.value.trim());
+                        if (withoutC) {
+                          setTotal(
+                            reE?.data.withoutCprice * e.target.value.trim()
+                          );
+                        } else {
+                          setTotal(reE?.data.price * e.target.value.trim());
+                        }
                       } else {
                         setValidation("Out of stock");
                       }
                     }
                   });
+                }}
+              />
+            </Grid>
+
+            <Grid item xs={12} sm={4}></Grid>
+            <Grid className="lbl_qty" item xs={12} sm={3}>
+              Without cylinder
+            </Grid>
+            <Grid className="qq" item xs={12} sm={5}>
+              <Checkbox
+                checked={withoutC}
+                disabled={selectedWeight === 0}
+                onChange={(e) => {
+                  if (withoutC) {
+                    setWithoutC(false);
+                    allWeightData.forEach((reE) => {
+                      if (reE?.data.weight === selectedWeight) {
+                        setTotal(reE?.data.withoutCprice * parseInt(qty));
+                      }
+                    });
+                  } else {
+                    setWithoutC(true);
+                    allWeightData.forEach((reE) => {
+                      if (reE?.data.weight === selectedWeight) {
+                        setTotal(reE?.data.price * parseInt(qty));
+                      }
+                    });
+                  }
                 }}
               />
             </Grid>
@@ -377,7 +413,9 @@ export default function Gass_Model() {
                 className="btn_updateGass"
                 onClick={showConfirm}
                 disabled={
-                  saveTimestamp === null || allWeight.length === 0
+                  saveTimestamp === null ||
+                  allWeight.length === 0 ||
+                  selectedWeight === 0
                     ? true
                     : false
                 }

@@ -119,45 +119,47 @@ export default function Salary() {
       history.push("/connection_lost");
     });
 
-    db.collection("employee").onSnapshot((snap) => {
-      var raw = [];
-      var rawAlldata = [];
+    db.collection("employee")
+      .get()
+      .then((snap) => {
+        var raw = [];
+        var rawAlldata = [];
 
-      snap.docs.forEach((each) => {
-        rawAlldata.push({
-          id: each.id,
-          data: each.data(),
-        });
+        snap.docs.forEach((each) => {
+          rawAlldata.push({
+            id: each.id,
+            data: each.data(),
+          });
 
-        raw.push({
-          FirstName: each.data().fname,
-          LastName: each.data().lname,
-          NIC: each.data().nic,
-          Mobile: each.data().mobile1,
-          Action: (
-            <div>
-              <HistoryIcon
-                className="btnView"
-                onClick={(e) => PayHistoryModels(each.data().nic)}
-              />
-              <span>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  size="small"
-                  className="btnupdateLon"
-                  onClick={AddPaysheetModel}
-                >
-                  Pay Sheet
-                </Button>
-              </span>
-            </div>
-          ),
+          raw.push({
+            FirstName: each.data().fname,
+            LastName: each.data().lname,
+            NIC: each.data().nic,
+            Mobile: each.data().mobile1,
+            Action: (
+              <div>
+                <HistoryIcon
+                  className="btnView"
+                  onClick={(e) => PayHistoryModels(each.data().nic)}
+                />
+                <span>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                    className="btnupdateLon"
+                    onClick={AddPaysheetModel}
+                  >
+                    Pay Sheet
+                  </Button>
+                </span>
+              </div>
+            ),
+          });
         });
+        setTableData(raw);
+        setallData(rawAlldata);
       });
-      setTableData(raw);
-      setallData(rawAlldata);
-    });
     // eslint-disable-next-line
   }, []);
 

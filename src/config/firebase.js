@@ -1,13 +1,12 @@
 import firebase from "firebase";
 
-// const firebaseConfig = {
-//   apiKey: "AIzaSyDJS6ppGGSjqXbiQenxaTIf07rsrXy_X0I",
-//   authDomain: "sshomecare-26068.firebaseapp.com",
-//   databaseURL: "https://sshomecare-26068.firebaseio.com",
-//   projectId: "sshomecare-26068",
-//   storageBucket: "sshomecare-26068.appspot.com",
-//   messagingSenderId: "929563061489",
-//   appId: "1:929563061489:web:9390a4111f46881684cd50"
+// var firebaseConfig = {
+//   apiKey: "AIzaSyB167WKe8q0Rxs5reM0bdsAhz65X5OOkfw",
+//   authDomain: "sshomecaretest.firebaseapp.com",
+//   projectId: "sshomecaretest",
+//   storageBucket: "sshomecaretest.appspot.com",
+//   messagingSenderId: "5857302130",
+//   appId: "1:5857302130:web:658668ac15c7f88a4dd4eb",
 // };
 
 const firebaseConfig = {

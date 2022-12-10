@@ -1,41 +1,48 @@
-import React from "react";
-import { HashRouter, Route, Switch, Redirect } from "react-router-dom";
+import React from 'react';
+import {HashRouter, Route, Switch, Redirect} from 'react-router-dom';
 
 // components
-import Layout from "../src/main/admin/Layout/Layout";
-import Layoutshowroom from "../src/main/emp_showroom/Layout_showroom/Layout_showroom";
-import LayoutAssistant from "../src/main/emp_assistant/assistant_Layout/Assistant_Layout";
+import Layout from '../src/main/admin/Layout/Layout';
+// eslint-disable-next-line
+import Layoutshowroom from '../src/main/emp_showroom/Layout/Layout';
 
 // pages
-import Error from "./main/error/Error";
-import Login from "./main/login/Login";
-import ConnectionLost from "./main/connection_lost_main/Connection_Error";
+import Error from './main/error/Error';
+import Login from './main/login/Login';
+import ConnectionLost from './main/connection_lost_main/Connection_Error';
 
 // context
-import { useUserState } from "./context/UserContext";
+import {useUserState} from './context/UserContext';
 
 export default function App() {
   // global
-  var { isAuthenticated } = useUserState();
-  var roleMain = localStorage.getItem("role");
+  var {isAuthenticated} = useUserState();
+  var roleMain = localStorage.getItem('role');
 
   return (
     <HashRouter>
       <Switch>
         <Route exact path="/" render={() => <Redirect to="/login" />} />
         <PrivateRoute
-          path={roleMain === "admin" ? "/admin" : "/error"}
+          path={roleMain === 'admin' ? '/admin' : '/error'}
           component={Layout}
         />
         <PrivateRoute
-          path={roleMain === "Showroom" ? "/showroom" : "/error"}
+          path={
+            roleMain === 'Showroom' ? '/showroom' : '/error' // path={roleMain === 'Showroom' ? '/showroom' : '/error'} // component={Layoutshowroom}
+          }
           component={Layoutshowroom}
         />
 
         <PrivateRoute
+          path={roleMain === 'assistant' ? '/admin' : '/error'}
+          component={Layout}
+        />
+
+        {/* <PrivateRoute
           path={roleMain === "assistant" ? "/assistant" : "/error"}
           component={LayoutAssistant}
-        />
+        /> */}
         <PublicRoute path="/login" component={Login} />
         <Route path="/connection_lost" component={ConnectionLost} />
         <Route component={Error} />
@@ -45,49 +52,44 @@ export default function App() {
 
   // #######################################################################
 
-  function PrivateRoute({ component, ...rest }) {
+  function PrivateRoute({component, ...rest}) {
     return (
       <Route
         {...rest}
-        render={(props) =>
-          isAuthenticated ? (
-            React.createElement(component, props)
-          ) : (
-              <Redirect
+        render={props =>
+          isAuthenticated
+            ? React.createElement(component, props)
+            : <Redirect
                 to={{
-                  pathname: "/login",
+                  pathname: '/login',
                   state: {
                     from: props.location,
                   },
                 }}
-              />
-            )
-        }
+              />}
       />
     );
   }
 
-  function PublicRoute({ component, ...rest }) {
-    var role = localStorage.getItem("role");
+  function PublicRoute({component, ...rest}) {
+    var role = localStorage.getItem('role');
     return (
       <Route
         {...rest}
-        render={(props) =>
-          isAuthenticated ? (
-            <Redirect
-              to={{
-                pathname:
-                  role === "admin"
-                    ? "/admin/dashboard"
-                    : role === "assistant"
-                      ? "/assistant/dashboard"
-                      : "/showroom/dashboard",
-              }}
-            />
-          ) : (
-              React.createElement(component, props)
-            )
-        }
+        render={props =>
+          isAuthenticated
+            ? <Redirect
+                to={{
+                  pathname:
+                    role === 'admin'
+                      ? '/admin/dashboard'
+                      : role === 'assistant'
+                        ? '/admin/dashboard'
+                        : '/showroom/dashboard',
+                } 
+                }
+              />
+            : React.createElement(component, props)}
       />
     );
   }

@@ -5,7 +5,7 @@ import {
   Grid,
   Container,
   Typography,
-  Button,
+  Button
 } from "@material-ui/core";
 import CurrencyFormat from "react-currency-format";
 import firebase from "firebase";
@@ -19,12 +19,12 @@ import moment from "moment";
 // styles
 import "./Update_Model.css";
 
-function isDateBeforeNextDate(date1, date2, nextD) {
-  let seeBool =
-    new Date(date2) >= new Date(date1) && new Date(date2) <= new Date(nextD);
+// function isDateBeforeNextDate(date1, date2, nextD) {
+//   let seeBool =
+//     new Date(date2) >= new Date(date1) && new Date(date2) <= new Date(nextD);
 
-  return seeBool;
-}
+//   return seeBool;
+// }
 
 function monthDiff(d1, d2) {
   var months;
@@ -34,9 +34,19 @@ function monthDiff(d1, d2) {
   return months <= 0 ? 0 : months;
 }
 
+// eslint-disable-next-line
 function daysCountOfMonth(month, year) {
   return parseInt(new Date(year, month, 0).getDate());
 }
+
+function isDateBeforeToday(date) {
+  return new Date(date.toDateString()) < new Date(new Date().toDateString());
+}
+
+function isDateBeforeTodayUpdateDate(date,update) {
+  return new Date(date.toDateString()) < new Date(update.toDateString());
+}
+
 
 export default function Update_Model({
   invoice_no,
@@ -46,13 +56,14 @@ export default function Update_Model({
   closeModal,
   type,
   isEx,
+  deadlineTimestamp
 }) {
   const [installments, setInstallments] = useState(0);
   const [intialBalance, setInitialBalance] = useState(0);
   const [balance, setBalance] = useState(0);
   const [nextDate, setNextDate] = useState(null);
   const [delayedDays, setDelayedDays] = useState(0);
-  const [installmentAmount, setInstallmentAmount] = useState(instAmountProp);
+  const [installmentAmount, setInstallmentAmount] = useState(0);
   // eslint-disable-next-line
   const [allInstallment, setAllInstallment] = useState(0);
   const [delayedMonths, setDelayedMonths] = useState(0);
@@ -73,6 +84,8 @@ export default function Update_Model({
   const [validationDate, setValidationDate] = useState("");
 
   const [shortage, setShortage] = useState(0);
+  const [arreasAmount, setArreasAmount] = useState(0);
+  const [isArreas, setIsArreas] = useState(false);
 
   const { confirm } = Modal;
 
@@ -83,6 +96,13 @@ export default function Update_Model({
     window.addEventListener("offline", function (e) {
       history1.push("/connection_lost");
     });
+
+    countArreas(new Date());
+
+    // eslint-disable-next-line
+  }, []);
+
+  const countArreas = (date) => {
     db.collection("customer")
       .doc(customer_id)
       .get()
@@ -101,283 +121,227 @@ export default function Update_Model({
       .where("invoice_number", "==", invoice_no)
       .get()
       .then((inReDoc) => {
-        setBalance(
-          inReDoc.docs[0].data().balance - instAmountProp <= 0
-            ? 0
-            : inReDoc.docs[0].data().balance - instAmountProp
+        setArreasAndInsAmount(
+          inReDoc.docs[0].data().date,
+          invoice_no,
+          inReDoc.docs[0].data().noOfInstallment,
+          inReDoc.docs[0].data().balance,
+          inReDoc,
+          new Date(date)
         );
+
         setInitialBalance(inReDoc.docs[0].data().balance);
         setNextDate(inReDoc.docs[0].data().nextDate);
         db.collection("installment")
           .where("invoice_number", "==", invoice_no)
           .get()
           .then((instReDoc) => {
+            const delayedChargesIn =
+              (parseInt(inReDoc.docs[0].data().amountPerInstallment) * 5) / 100;
             if (instReDoc.docs.length === 0) {
               let daysCountNode1 =
-                (new Date().getTime() -
+                (new Date(date).getTime() -
                   new Date(
-                    inReDoc.docs[0].data().date.seconds * 1000
+                    inReDoc.docs[0].data().nextDate.seconds * 1000
                   ).getTime()) /
                 (1000 * 3600 * 24);
-              let daysCountInitial = daysCountNode1;
+              let daysCountInitial = 0;
+              if (
+                !isDateBeforeToday(
+                  new Date(inReDoc.docs[0].data()?.nextDate?.seconds * 1000)
+                )
+              ) {
+                daysCountInitial = 0;
+              } else {
+                daysCountInitial = daysCountNode1;
+              }
+
               let monthsCount = monthDiff(
-                new Date(inReDoc.docs[0].data().date.seconds * 1000),
-                new Date()
+                new Date(inReDoc.docs[0].data().nextDate.seconds * 1000),
+                new Date(date)
               );
               setDelayedMonths(
                 parseInt(monthsCount) <= 0 ? 1 : parseInt(monthsCount)
               );
-              let monthsRE =
-                parseInt(monthsCount) <= 0 ? 1 : parseInt(monthsCount);
-              let newInstamount = instAmountProp * monthsRE;
-              setInstallmentAmount(
-                newInstamount + monthsRE > 1 ? instAmountProp : 0
-              );
 
-              if (inReDoc.docs[0].data().selectedType === "shop") {
-                if (7 - daysCountInitial >= 0) {
-                  setDelayedDays(0);
-                } else {
-                  setDelayedDays(daysCountInitial - 7);
-                  if (daysCountInitial / 7 > 0) {
-                    setAllInstallment((daysCountInitial - 7) / 7);
-                  }
-
-                  setDelayedCharges(
-                    daysCountInitial - 7 <= 7
-                      ? 0
-                      : (daysCountInitial - 7) / 7 < 2
-                      ? 99
-                      : (daysCountInitial - 7) / 7 > 2 &&
-                        (daysCountInitial - 7) / 7 < 3
-                      ? 198
-                      : (daysCountInitial - 7) / 7 > 3 &&
-                        (daysCountInitial - 7) / 7 < 4
-                      ? 297
-                      : (daysCountInitial - 7) / 7 > 4 &&
-                        (daysCountInitial - 7) / 7 < 5
-                      ? 396
-                      : (daysCountInitial - 7) / 7 > 5 &&
-                        (daysCountInitial - 7) / 7 < 6
-                      ? 495
-                      : (daysCountInitial - 7) / 7 > 6 &&
-                        (daysCountInitial - 7) / 7 < 7
-                      ? 594
-                      : (daysCountInitial - 7) / 7 > 7 &&
-                        (daysCountInitial - 7) / 7 < 8
-                      ? 693
-                      : 693
-                  );
-                }
+              if (7 - daysCountInitial >= 0) {
+                setDelayedDays(0);
+                setDelayedCharges(0);
               } else {
-                if (14 - daysCountInitial >= 0) {
-                  setDelayedDays(0);
-                } else {
-                  setDelayedDays(daysCountInitial - 14);
-                  if (daysCountInitial / 7 > 0) {
-                    setAllInstallment(Math.round((daysCountInitial - 14) / 7));
-                  }
-                  setDelayedCharges(
-                    daysCountInitial - 14 <= 7
-                      ? 0
-                      : (daysCountInitial - 14) / 7 < 2
-                      ? 99
-                      : (daysCountInitial - 14) / 7 > 2 &&
-                        (daysCountInitial - 14) / 7 < 3
-                      ? 198
-                      : (daysCountInitial - 14) / 7 > 3 &&
-                        (daysCountInitial - 14) / 7 < 4
-                      ? 297
-                      : (daysCountInitial - 14) / 7 > 4 &&
-                        (daysCountInitial - 14) / 7 < 5
-                      ? 396
-                      : (daysCountInitial - 14) / 7 > 5 &&
-                        (daysCountInitial - 14) / 7 < 6
-                      ? 495
-                      : (daysCountInitial - 14) / 7 > 6 &&
-                        (daysCountInitial - 14) / 7 < 7
-                      ? 594
-                      : (daysCountInitial - 14) / 7 > 7 &&
-                        (daysCountInitial - 14) / 7 < 8
-                      ? 693
-                      : 693
-                  );
+                setDelayedDays(daysCountInitial - 7);
+                if (daysCountInitial / 7 > 0) {
+                  setAllInstallment(Math.round((daysCountInitial - 7) / 7));
                 }
+                setDelayedCharges(
+                  daysCountInitial - 7 <= 7
+                    ? 0
+                    : (daysCountInitial - 7) / 7 < 2
+                    ? delayedChargesIn
+                    : (daysCountInitial - 7) / 7 > 2 &&
+                      (daysCountInitial - 7) / 7 < 3
+                    ? delayedChargesIn * 2
+                    : (daysCountInitial - 7) / 7 > 3 &&
+                      (daysCountInitial - 7) / 7 < 4
+                    ? delayedChargesIn * 3
+                    : (daysCountInitial - 7) / 7 > 4 &&
+                      (daysCountInitial - 7) / 7 < 5
+                    ? delayedChargesIn * 4
+                    : (daysCountInitial - 7) / 7 > 5 &&
+                      (daysCountInitial - 7) / 7 < 6
+                    ? delayedChargesIn * 5
+                    : (daysCountInitial - 7) / 7 > 6 &&
+                      (daysCountInitial - 7) / 7 < 7
+                    ? delayedChargesIn * 6
+                    : (daysCountInitial - 7) / 7 > 7 &&
+                      (daysCountInitial - 7) / 7 < 8
+                    ? delayedChargesIn * 7
+                    : (delayedChargesIn * (daysCountInitial - 7)) / 7
+                );
               }
             } else {
               let daysCountNode2 =
-                (new Date().getTime() -
+                (new Date(date).getTime() -
                   new Date(
                     inReDoc.docs[0].data()?.nextDate?.seconds * 1000
                   ).getTime()) /
                 (1000 * 3600 * 24);
-              let daysCount =
-                daysCountNode2 +
-                daysCountOfMonth(
-                  new Date().getMonth(),
-                  new Date().getFullYear()
-                );
+
+              let daysCount = 0;
+              if (
+                !isDateBeforeToday(
+                  new Date(inReDoc.docs[0].data()?.nextDate?.seconds * 1000)
+                )
+              ) {
+                daysCount = 0;
+              } else {
+                daysCount = daysCountNode2;
+              }
+
               let monthsCount = monthDiff(
                 new Date(inReDoc.docs[0].data()?.nextDate?.seconds * 1000),
-                new Date()
+                new Date(date)
               );
               setDelayedMonths(
                 parseInt(monthsCount) <= 0 ? 1 : parseInt(monthsCount)
               );
-              let monthsRE =
-                parseInt(monthsCount) <= 0 ? 1 : parseInt(monthsCount);
-              let newInstamount = instAmountProp * monthsRE;
-              setInstallmentAmount(
-                newInstamount + monthsRE > 1 ? instAmountProp : 0
-              );
 
-              if (inReDoc.docs[0].data().selectedType === "shop") {
-                if (7 - daysCount >= 0) {
-                  setDelayedDays(0);
-                } else {
-                  setDelayedDays(daysCount - 7);
-                  if (daysCount / 7 > 0) {
-                    setAllInstallment((daysCount - 7) / 7);
-                  }
-                  setDelayedCharges(
-                    daysCount - 7 <= 7
-                      ? 0
-                      : (daysCount - 7) / 7 < 2
-                      ? 99
-                      : (daysCount - 7) / 7 > 2 && (daysCount - 7) / 7 < 3
-                      ? 198
-                      : (daysCount - 7) / 7 > 3 && (daysCount - 7) / 7 < 4
-                      ? 297
-                      : (daysCount - 7) / 7 > 4 && (daysCount - 7) / 7 < 5
-                      ? 396
-                      : (daysCount - 7) / 7 > 5 && (daysCount - 7) / 7 < 6
-                      ? 495
-                      : (daysCount - 7) / 7 > 6 && (daysCount - 7) / 7 < 7
-                      ? 594
-                      : (daysCount - 7) / 7 > 7 && (daysCount - 7) / 7 < 8
-                      ? 693
-                      : 693
-                  );
-                }
+              if (7 - daysCount >= 0) {
+                setDelayedDays(0);
+                setDelayedCharges(0);
               } else {
-                if (14 - daysCount >= 0) {
-                  setDelayedDays(0);
-                } else {
-                  setDelayedDays(daysCount - 14);
-                  if (daysCount / 7 > 0) {
-                    setAllInstallment(Math.round((daysCount - 14) / 7));
-                  }
-                  setDelayedCharges(
-                    daysCount - 14 <= 7
-                      ? 0
-                      : (daysCount - 14) / 7 < 2
-                      ? 99
-                      : (daysCount - 14) / 7 > 2 && (daysCount - 14) / 7 < 3
-                      ? 198
-                      : (daysCount - 14) / 7 > 3 && (daysCount - 14) / 7 < 4
-                      ? 297
-                      : (daysCount - 14) / 7 > 4 && (daysCount - 14) / 7 < 5
-                      ? 396
-                      : (daysCount - 14) / 7 > 5 && (daysCount - 14) / 7 < 6
-                      ? 495
-                      : (daysCount - 14) / 7 > 6 && (daysCount - 14) / 7 < 7
-                      ? 594
-                      : (daysCount - 14) / 7 > 7 && (daysCount - 14) / 7 < 8
-                      ? 693
-                      : 693
-                  );
+                setDelayedDays(daysCount - 7);
+                if (daysCount / 7 > 0) {
+                  setAllInstallment(Math.round((daysCount - 7) / 7));
                 }
+                setDelayedCharges(
+                  daysCount - 7 <= 7
+                    ? 0
+                    : (daysCount - 7) / 7 < 2
+                    ? delayedChargesIn
+                    : (daysCount - 7) / 7 > 2 && (daysCount - 7) / 7 < 3
+                    ? delayedChargesIn * 2
+                    : (daysCount - 7) / 7 > 3 && (daysCount - 7) / 7 < 4
+                    ? delayedChargesIn * 3
+                    : (daysCount - 7) / 7 > 4 && (daysCount - 7) / 7 < 5
+                    ? delayedChargesIn * 4
+                    : (daysCount - 7) / 7 > 5 && (daysCount - 7) / 7 < 6
+                    ? delayedChargesIn * 5
+                    : (daysCount - 7) / 7 > 6 && (daysCount - 7) / 7 < 7
+                    ? delayedChargesIn * 6
+                    : (daysCount - 7) / 7 > 7 && (daysCount - 7) / 7 < 8
+                    ? delayedChargesIn * 7
+                    : (delayedChargesIn * (daysCount - 7)) / 7
+                );
               }
             }
           });
 
         setIsLoading(false);
       });
-     // eslint-disable-next-line
-  }, [invoice_no, isEx, instAmountProp, instCount, customer_id]);
+  };
+
+  const setArreasAndInsAmount = async (
+    nextDateRe,
+    invoiceNo,
+    installmentCount,
+    balance,
+    inReDoc,
+    date
+  ) => {
+    let daysCountNode2 =
+      (new Date(date).getTime() -
+        new Date(inReDoc.docs[0].data()?.nextDate?.seconds * 1000).getTime()) /
+      (1000 * 3600 * 24);
+
+    db.collection("installment")
+      .where("invoice_number", "==", invoiceNo)
+      .get()
+      .then((instReDoc) => {
+        let paidAmount = 0;
+        instReDoc.forEach((siDoc) => {
+          paidAmount = parseInt(paidAmount) + parseInt(siDoc.data()?.amount);
+        });
+        let totalMonthsOfInst =
+          (new Date(new Date(date)).getFullYear() -
+            new Date(nextDateRe.seconds * 1000).getFullYear()) *
+            12 +
+          (new Date(new Date(date)).getMonth() -
+            new Date(nextDateRe.seconds * 1000).getMonth());
+
+        let dueAmount =
+          parseInt(
+            totalMonthsOfInst - 1 > installmentCount
+              ? installmentCount
+              : totalMonthsOfInst - 1
+          ) * instAmountProp;
+        let dueAmountOfArreas =
+          parseInt(dueAmount - paidAmount) < 0
+            ? 0
+            : parseInt(dueAmount - paidAmount);
+
+        if (parseInt(dueAmount - paidAmount) > 0) {
+          if (7 - daysCountNode2 >= 0) {
+            setIsArreas(false);
+          } else {
+            setIsArreas(true);
+          }
+        }
+
+        setArreasAmount(dueAmountOfArreas);
+        if (parseInt(installmentCount) <= parseInt(totalMonthsOfInst - 1)) {
+          setInstallmentAmount(dueAmountOfArreas);
+          setBalance(
+            balance - dueAmountOfArreas <= 0 ? 0 : balance - dueAmountOfArreas
+          );
+        } else {
+          setInstallmentAmount(dueAmountOfArreas + parseInt(instAmountProp));
+          setBalance(
+            balance - (dueAmountOfArreas + parseInt(instAmountProp)) <= 0
+              ? 0
+              : balance - (dueAmountOfArreas + parseInt(instAmountProp))
+          );
+        }
+      });
+  };
 
   const updateInstallment = async () => {
     db.collection("invoice")
       .where("invoice_number", "==", invoice_no)
       .get()
       .then((reInvoice) => {
-        var reTotCal = parseInt(installmentAmount) + parseInt(gamisaraniamount);
-
-        var reCalMult =
-          reTotCal / parseInt(reInvoice.docs[0].data()?.amountPerInstallment);
-
-        if (reCalMult >= 1) {
-          db.collection("invoice")
-            .doc(reInvoice.docs[0].id)
-            .update({
-              nextDate: firebase.firestore.Timestamp.fromDate(
-                new Date(
-                  new Date(
-                    reInvoice.docs[0].data()?.nextDate.seconds * 1000
-                  ).setMonth(
-                    new Date(
-                      reInvoice.docs[0].data()?.nextDate.seconds * 1000
-                    ).getMonth() + reCalMult
-                  )
+        db.collection("invoice")
+          .doc(reInvoice.docs[0].id)
+          .update({
+            nextDate: firebase.firestore.Timestamp.fromDate(
+              new Date(
+                new Date(updateTimestamp.seconds * 1000).setMonth(
+                  new Date(updateTimestamp.seconds * 1000).getMonth() + 1,
+                  parseInt(reInvoice.docs[0].data().installemtnDate)
                 )
-              ),
-            })
-            .then((_) => {});
-        } else {
-          db.collection("installment")
-            .where("invoice_number", "==", invoice_no)
-            .get()
-            .then((reInst) => {
-              var totalPlusInsAmount = 0;
-              // var monthCount = monthDiff(
-              //   new Date(reInvoice.docs[0].data()?.date.seconds * 1000),
-              //   new Date(reInvoice.docs[0].data()?.nextDate.seconds * 1000)
-              // );
-              var nestSee = new Date(
-                reInvoice.docs[0].data()?.nextDate.seconds * 1000
-              );
-
-              var last31 = nestSee.setMonth(nestSee.getMonth() - 1);
-
-              reInst.docs.forEach((reInstallmentCom) => {
-                if (
-                  isDateBeforeNextDate(
-                    new Date(last31),
-                    new Date(reInstallmentCom.data()?.date.seconds * 1000),
-                    new Date(reInvoice.docs[0].data()?.nextDate.seconds * 1000)
-                  )
-                ) {
-                  totalPlusInsAmount =
-                    parseInt(totalPlusInsAmount) +
-                    parseInt(reInstallmentCom.data()?.amount);
-                }
-              });
-
-              let seeToot = parseInt(totalPlusInsAmount) + reTotCal;
-
-              if (
-                parseInt(seeToot) >=
-                parseInt(reInvoice.docs[0].data()?.amountPerInstallment)
-              ) {
-                db.collection("invoice")
-                  .doc(reInvoice.docs[0].id)
-                  .update({
-                    nextDate: firebase.firestore.Timestamp.fromDate(
-                      new Date(
-                        new Date(
-                          reInvoice.docs[0].data()?.nextDate.seconds * 1000
-                        ).setMonth(
-                          new Date(
-                            reInvoice.docs[0].data()?.nextDate.seconds * 1000
-                          ).getMonth() + Math.round(seeToot)
-                        )
-                      )
-                    ),
-                  })
-                  .then((_) => {});
-              }
-            });
-        }
+              )
+            )
+          })
+          .then((_) => {});
       });
 
     await db
@@ -390,12 +354,26 @@ export default function Update_Model({
           invoice_number: invoice_no,
           amount: parseInt(installmentAmount) + parseInt(gamisaraniamount),
           delayed: delayedCharges === "" ? 0 : parseInt(delayedCharges),
-          isExpired: isEx,
+          isExpired: isEx ? isDateBeforeTodayUpdateDate(
+            new Date(
+              new Date(
+                deadlineTimestamp?.seconds * 1000
+              ).setDate(
+                new Date(
+                 deadlineTimestamp?.seconds * 1000
+                ).getDate() + 7
+              )
+            ),
+            new Date(updateTimestamp?.seconds * 1000)
+          ):isEx,
           balance: balance <= 0 ? 0 : balance,
           gamisarani_amount: parseInt(gamisaraniamount),
           shortage: shortage === "" ? 0 : shortage,
           type: type,
-          date: updateTimestamp,
+          isArreas: isArreas,
+          arreasAmount: arreasAmount,
+          dueInstallmentAmount: parseInt(instAmountProp),
+          date: updateTimestamp
         });
       });
 
@@ -409,7 +387,7 @@ export default function Update_Model({
           .collection("invoice")
           .doc(reBalance.docs[0].id)
           .update({
-            balance: balance <= 0 ? 0 : balance,
+            balance: balance <= 0 ? 0 : balance
           });
       });
 
@@ -427,7 +405,7 @@ export default function Update_Model({
                 0
                   ? 0
                   : parseInt(getRe.data().currentDeposit) -
-                    parseInt(gamisaraniamount),
+                    parseInt(gamisaraniamount)
             })
             .then((re) => {
               db.collection("gami_sarani_withdrawhistory").add({
@@ -437,7 +415,7 @@ export default function Update_Model({
                 balance:
                   parseInt(getRe.data().currentDeposit) -
                   parseInt(gamisaraniamount),
-                date: updateTimestamp,
+                date: updateTimestamp
               });
             });
         });
@@ -466,7 +444,7 @@ export default function Update_Model({
         .get()
         .then((reIn) => {
           db.collection("invoice").doc(reIn.docs[0].id).update({
-            status_of_payandgo: "Done",
+            status_of_payandgo: "Done"
           });
         });
     }
@@ -490,14 +468,14 @@ export default function Update_Model({
               balance: balance - toto <= 0 ? 0 : balance - toto,
               gamisarani_amount: parseInt(gamisaraniamount),
               date: updateTimestamp,
-              delayedCharges: Math.round(delayedCharges),
+              delayedCharges: Math.round(delayedCharges)
             };
 
             let moveWith = {
               pathname:
                 "/admin/invoice_history/payAndGo/updateModel/PrintReceipt",
               search: "?query=abc",
-              state: { detail: passingWithCustomerObj },
+              state: { detail: passingWithCustomerObj }
             };
             history.push(moveWith);
           });
@@ -506,7 +484,7 @@ export default function Update_Model({
           await updateInstallment().then((_) => {
             window.location.reload();
           });
-        },
+        }
       });
     }
   };
@@ -557,6 +535,49 @@ export default function Update_Model({
         <div className="paper">
           <form className="form" noValidate>
             <Grid container spacing={2}>
+              <br />
+              <Grid className="lbl_topi" item xs={12} sm={4}>
+                Date
+              </Grid>
+              <Grid item xs={12} sm={2}>
+                :
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <DatePicker
+                  onChange={(e) => {
+                    if (e !== null) {
+                      db.collection("invoice")
+                        .where("invoice_number", "==", invoice_no)
+                        .get()
+                        .then((inReDoc) => {
+                          setArreasAndInsAmount(
+                            inReDoc.docs[0].data().date,
+                            invoice_no,
+                            inReDoc.docs[0].data().noOfInstallment,
+                            inReDoc.docs[0].data().balance,
+                            inReDoc,
+                            new Date(
+                              firebase.firestore.Timestamp.fromDate(e.toDate())
+                                .seconds * 1000
+                            )
+                          );
+                          countArreas(
+                            new Date(
+                              firebase.firestore.Timestamp.fromDate(e.toDate())
+                                .seconds * 1000
+                            )
+                          );
+                          setTimestamp(
+                            firebase.firestore.Timestamp.fromDate(e.toDate())
+                          );
+                        });
+                    } else {
+                      setTimestamp(null);
+                    }
+                  }}
+                />
+              </Grid>
+              <br />
               <Grid className="lbl_topi-gami" item xs={12} sm={12}>
                 -Gamisarani Customers-
                 <br />
@@ -671,6 +692,13 @@ export default function Update_Model({
                 <p className="validate_updateEmployee">{validation}</p>
                 <hr />
               </Grid>
+              <Grid item xs={12} sm={12}>
+                <hr />
+                <p className="validate_updateEmployee">
+                  Arreas amount (Rs. ) : {arreasAmount.toFixed(2)}
+                </p>
+              </Grid>
+
               <Grid className="lbl_topi" item xs={12} sm={4}>
                 Amount of Installment(LKR)
               </Grid>
@@ -715,7 +743,7 @@ export default function Update_Model({
 
                 <Grid container spacing={2} className="arriGrid">
                   <Grid className="lbl_topi-txt" item xs={12} sm={8}>
-                    Amount of Installment Arrears(LKR):
+                    Due installments amount(LKR):
                   </Grid>
                   <Grid item xs={12} sm={4}>
                     <p className="lbl_arr">
@@ -772,26 +800,6 @@ export default function Update_Model({
               </Grid>
 
               <Grid className="lbl_topi" item xs={12} sm={4}>
-                Date
-              </Grid>
-              <Grid item xs={12} sm={2}>
-                :
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <DatePicker
-                  onChange={(e) => {
-                    if (e !== null) {
-                      setTimestamp(
-                        firebase.firestore.Timestamp.fromDate(e.toDate())
-                      );
-                    } else {
-                      setTimestamp(null);
-                    }
-                  }}
-                />
-              </Grid>
-
-              <Grid className="lbl_topi" item xs={12} sm={4}>
                 Delayed Charges(LKR)
               </Grid>
               <Grid item xs={12} sm={2}>
@@ -826,7 +834,7 @@ export default function Update_Model({
                   <p
                     style={{
                       color: "red",
-                      fontWeight: "bold",
+                      fontWeight: "bold"
                     }}
                   >
                     {Math.round(delayedDays)} days delayed !
@@ -894,7 +902,7 @@ export default function Update_Model({
                 <div
                   style={{
                     fontWeight: "bold",
-                    fontSize: "20px",
+                    fontSize: "20px"
                   }}
                 >
                   <CurrencyFormat
@@ -909,7 +917,7 @@ export default function Update_Model({
                   style={{
                     fontWeight: "bold",
                     fontSize: "15px",
-                    color: "grey",
+                    color: "grey"
                   }}
                 >
                   (

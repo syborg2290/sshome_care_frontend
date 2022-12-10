@@ -7,7 +7,8 @@ import { useHistory } from "react-router-dom";
 import db from "../../../../config/firebase.js";
 
 // icons
-import AddIcon from "@material-ui/icons/Add";
+import AddShoppingCartRoundedIcon from "@material-ui/icons/AddShoppingCartRounded";
+import AddIcon from '@material-ui/icons/Add';
 
 // components
 import SeizedAddModel from "../seized_items/seized_Model/addNew_Model/Add_Model";
@@ -36,16 +37,7 @@ export default function Seized_item() {
   //START pay And Go Columns
   const seizedTableColomns = [
     {
-      name: "Serial_number",
-      options: {
-        filter: true,
-        setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
-    },
-    {
-      name: "Type",
+      name: "Serial_No",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
@@ -72,7 +64,7 @@ export default function Seized_item() {
       },
     },
     {
-      name: "MID",
+      name: "Brand",
       options: {
         filter: false,
         setCellHeaderProps: (value) => ({
@@ -85,7 +77,20 @@ export default function Seized_item() {
       },
     },
     {
-      name: "NIC",
+      name: "Color",
+      options: {
+        filter: false,
+        setCellHeaderProps: (value) => ({
+          style: {
+            fontSize: "15px",
+            color: "black",
+            fontWeight: "600",
+          },
+        }),
+      },
+    },
+     {
+      name: "Price",
       options: {
         filter: false,
         setCellHeaderProps: (value) => ({
@@ -98,7 +103,7 @@ export default function Seized_item() {
       },
     },
     {
-      name: "Sized_date",
+      name: "Action",
       options: {
         filter: false,
         setCellHeaderProps: (value) => ({
@@ -133,14 +138,17 @@ export default function Seized_item() {
           });
 
           rowData.push({
-            // InvoiceNo: RESnap.data()?.invoice_number,
-            Serial_number: RESnap.data()?.serialNo,
-            Type: RESnap.data()?.type,
-            Model_No: RESnap.data()?.model_no,
-            Item_Name: RESnap.data()?.item_name,
-            MID: RESnap.data()?.mid,
-            NIC: RESnap.data()?.nic,
-            Sized_date: RESnap.data()?.date,
+            Serial_No: RESnap.data()?.serialNo,
+            Model_No: RESnap.data()?.modelNo,
+            Item_Name: RESnap.data()?.itemName,
+            Brand: RESnap.data()?.brand,
+            Color: RESnap.data()?.color,
+            Price: RESnap.data()?.price,
+            Action:<div>
+                <span className="icon_visibl">
+                <AddShoppingCartRoundedIcon onClick={()=>sellItem(RESnap.id)} />
+                </span>
+              </div>
           });
         });
         setSeizedTableData(rowData);
@@ -149,6 +157,12 @@ export default function Seized_item() {
       });
     // eslint-disable-next-line
   }, []);
+  
+  const sellItem= (id) => {
+    db.collection("seized").doc(id).delete().then((_) => {
+       window.location.reload()
+    });
+ }
 
   return (
     <>
@@ -175,6 +189,9 @@ export default function Seized_item() {
       </Modal>
 
       {/*END Add repairs Model */}
+      
+      
+     
 
       <Button
         variant="contained"

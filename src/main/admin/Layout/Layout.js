@@ -43,6 +43,9 @@ import BlackList from "../pages/black_list/Black_List";
 import Customer from "../pages/customer/customer_table/Customer_table_assistant";
 import InvoiceHistory from "../pages/invoice_History/Invoice_history";
 import Gass from "../pages/gass/Gass";
+import GassCustomer from "../pages/gass/components/gas_customer_form/gas_customer";
+import GassInvoice from "../pages/gass/components/gas_make_invoice/gas_make_invoice";
+import GassInvoiceHistory from "../pages/gass/components/gas_invoice_history/gas_in_history";
 import Loans from "../pages/loans/Loan";
 import Repair from "../pages/repairs/Repairs";
 import GamiSarani from "../pages/gami_sarani/Gami_Sarani";
@@ -52,6 +55,10 @@ import Salary from "../pages/salary/Salary";
 import Attendance from "../pages/attendance/Attendance";
 import Root from "../pages/root/Root";
 import Shop from "../pages/shop/Shop";
+
+/* Moved routes */
+import moved_gas from "../pages/moved_invoices/gas_invoice_history/gas_in_history";
+import  moved_invoices from "../pages/moved_invoices/invoice_History/Invoice_history"
 
 function Layout(props) {
   return (
@@ -73,6 +80,12 @@ function Layout(props) {
             <Route path="/admin/ui/arries" component={Arries} />
             <Route path="/admin/ui/Gamisarani" component={GamiSarani} />
             <Route path="/admin/ui/Gass" component={Gass} />
+            <Route
+              path="/admin/ui/gas_invoice_history"
+              component={GassInvoiceHistory}
+            />
+            <Route path="/admin/ui/Gass_customer" component={GassCustomer} />
+            <Route path="/admin/ui/Gass_invoice" component={GassInvoice} />
             <Route path="/admin/ui/loan" component={Loans} />
             <Route path="/admin/ui/Repair" component={Repair} />
             <Route path="/admin/ui/BlackList" component={BlackList} />
@@ -142,7 +155,14 @@ function Layout(props) {
               path="/admin/pages/purchasedHistory"
               component={PurchasedHistory}
             />
-            
+            <Route
+              path="/admin/pages/moved_gas"
+              component={moved_gas}
+            />
+             <Route
+              path="/admin/pages/moved_invoice"
+              component={moved_invoices}
+            />
           </Switch>
         </div>
       </>

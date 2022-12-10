@@ -68,7 +68,7 @@ async function sumEachSameDaySales(allSales) {
           new Date(allSales[i].date).getFullYear() &&
         new Date(ob.date).getMonth() ===
           new Date(allSales[i].date).getMonth() &&
-        new Date(ob.date).getDate() === new Date(allSales[i].date).getDate()
+        new Date(ob.date).getDate() === new Date(allSales[i].date).getDate() && ob.type===allSales[i].type
     );
 
     if (result) {
@@ -78,11 +78,11 @@ async function sumEachSameDaySales(allSales) {
             new Date(allSales[i].date).getFullYear() &&
           new Date(ob.date).getMonth() ===
             new Date(allSales[i].date).getMonth() &&
-          new Date(ob.date).getDate() === new Date(allSales[i].date).getDate()
+          new Date(ob.date).getDate() === new Date(allSales[i].date).getDate() && ob.type===allSales[i].type
       );
 
       reduceDup[indexFor] = {
-        date: reduceDup[indexFor].date,
+        date: new Date(allSales[i].date),
         total:
           parseInt(reduceDup[indexFor].total) + parseInt(allSales[i].total),
         type: reduceDup[indexFor].type,
@@ -101,7 +101,6 @@ async function sumEachSameDaySales(allSales) {
 
 async function dateEachSameDaySales(allSales, date) {
   var reduceDup = [];
-
   for (let i = 0; i < allSales.length; i++) {
     if (
       new Date(date).getFullYear() ===
@@ -109,6 +108,7 @@ async function dateEachSameDaySales(allSales, date) {
       new Date(date).getMonth() === new Date(allSales[i].date).getMonth() &&
       new Date(date).getDate() === new Date(allSales[i].date).getDate()
     ) {
+      // console.log(allSales[i].type);
       reduceDup.push({
         date: new Date(allSales[i].date),
         type: allSales[i].type,

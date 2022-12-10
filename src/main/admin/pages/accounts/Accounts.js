@@ -37,7 +37,7 @@ export default function Accounts() {
   useEffect(() => {
     db.collection("user")
       .orderBy("timestamp", "desc")
-      .onSnapshot((snapshot) => {
+      .get().then((snapshot) => {
         var newData = [];
         var userData = [];
         snapshot.docs.forEach((element) => {

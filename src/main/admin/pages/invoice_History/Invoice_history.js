@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
-import { Spin, Modal } from "antd";
+import { Spin, Modal, DatePicker } from "antd";
 import MUIDataTable from "mui-datatables";
 import moment from "moment";
 import CurrencyFormat from "react-currency-format";
@@ -9,11 +9,13 @@ import { Button, Box, Tab, Tabs, AppBar, Grid } from "@material-ui/core";
 
 import { useHistory } from "react-router-dom";
 import db from "../../../../config/firebase.js";
+import firebase from "firebase";
 
 // components
 import UpdateInstallment from "../invoice_History/components/PayAndGoModel/UpdateModel/Update_Model";
 import InstallmentHistory from "../invoice_History/components/PayAndGoModel/HistoryModel/History_Model";
 import InstallmentView from "../invoice_History/components/PayAndGoModel/ViewModel/View_Model";
+import Wrongnext from "./components/PayAndGoModel/wrongNextDate/wrongNext_model";
 import InstallmentFullPayment from "../invoice_History/components/FullPaymentModel/Full_Payment_Model";
 
 // styles
@@ -47,20 +49,20 @@ function TabPanel(props) {
 TabPanel.propTypes = {
   children: PropTypes.node,
   index: PropTypes.any.isRequired,
-  value: PropTypes.any.isRequired,
+  value: PropTypes.any.isRequired
 };
 
 function a11yProps(index) {
   return {
     id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
+    "aria-controls": `simple-tabpanel-${index}`
   };
 }
 
 const useStyles = makeStyles((theme) => ({
   indicator: {
-    backgroundColor: "#222A44",
-  },
+    backgroundColor: "#222A44"
+  }
 }));
 
 function isDateBeforeToday(date) {
@@ -69,7 +71,9 @@ function isDateBeforeToday(date) {
 
 export default function Invoice_history() {
   const [isLoading, setIsLoading] = useState(true);
+  const [isMovedLoading, setIsMovedLoading] = useState(false);
   const [currentIndx, setCurrentIndx] = useState(0);
+  const [wrongNextCount, setWrongNextCount] = useState(0);
   const [currentIndx2, setCurrentIndx2] = useState(0);
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
@@ -83,10 +87,19 @@ export default function Invoice_history() {
   const [installmentHistory, setInstallmentHistory] = useState(false); //  table models
   const [installmentFullPayment, setInstallmentFullPayment] = useState(false); //  table models
   const [visibleConfirmPrint, setVisibleConfirmPrint] = useState(false);
+  const [wrongNextModal, setWrongNextModal] = useState(false);
   const [printType, setPrintType] = useState("fullpayment");
+
+  const [payangoDate1, setPayangoDate1] = useState(null);
+  const [payangoDate2, setPayangoDate2] = useState(null);
+  const [fullDate1, setFullDate1] = useState(null);
+  const [fullDate2, setFullDate2] = useState(null);
 
   let history = useHistory();
   let history2 = useHistory();
+  const { confirm } = Modal;
+
+  const [rowsCount, setRowsCount] = useState(0);
 
   const showVisibleConfirmPrintModal = (type) => {
     setPrintType(type);
@@ -108,13 +121,13 @@ export default function Invoice_history() {
         discription: "",
         balance: 0,
         itemsList: fullPaymentAllData[currentIndx].data?.items,
-        backto: "invoice_history",
+        backto: "invoice_history"
       };
 
       let moveWith = {
         pathname: "/admin/invoice/printInvoice",
         search: "?query=abc",
-        state: { detail: passingWithCustomerObj },
+        state: { detail: passingWithCustomerObj }
       };
       history.push(moveWith);
     } else {
@@ -137,13 +150,13 @@ export default function Invoice_history() {
             discription: "",
             balance: payangoAllData[currentIndx2]?.data?.balance,
             itemsList: payangoAllData[currentIndx2]?.data?.items,
-            backto: "invoice_history",
+            backto: "invoice_history"
           };
 
           let moveWith = {
             pathname: "/admin/invoice/printInvoice",
             search: "?query=abc",
-            state: { detail: passingWithCustomerObj },
+            state: { detail: passingWithCustomerObj }
           };
           history.push(moveWith);
         });
@@ -181,9 +194,9 @@ export default function Invoice_history() {
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
+          style: { fontSize: "15px", color: "black", fontWeight: "600" }
+        })
+      }
     },
 
     {
@@ -191,27 +204,27 @@ export default function Invoice_history() {
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
+          style: { fontSize: "15px", color: "black", fontWeight: "600" }
+        })
+      }
     },
     {
       name: "Village",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
+          style: { fontSize: "15px", color: "black", fontWeight: "600" }
+        })
+      }
     },
     {
       name: "Date",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
+          style: { fontSize: "15px", color: "black", fontWeight: "600" }
+        })
+      }
     },
 
     {
@@ -219,18 +232,18 @@ export default function Invoice_history() {
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
+          style: { fontSize: "15px", color: "black", fontWeight: "600" }
+        })
+      }
     },
     {
       name: "NIC",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
+          style: { fontSize: "15px", color: "black", fontWeight: "600" }
+        })
+      }
     },
 
     {
@@ -242,10 +255,10 @@ export default function Invoice_history() {
             fontSize: "15px",
             color: "black",
             fontWeight: "600",
-            minWidth: "15px",
-          },
-        }),
-      },
+            minWidth: "15px"
+          }
+        })
+      }
     },
 
     {
@@ -253,9 +266,9 @@ export default function Invoice_history() {
       options: {
         filter: false,
         setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
+          style: { fontSize: "15px", color: "black", fontWeight: "600" }
+        })
+      }
     },
 
     {
@@ -263,9 +276,9 @@ export default function Invoice_history() {
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
+          style: { fontSize: "15px", color: "black", fontWeight: "600" }
+        })
+      }
     },
     {
       name: "Action",
@@ -276,12 +289,12 @@ export default function Invoice_history() {
             fontSize: "15px",
             color: "black",
             fontWeight: "600",
-            minWidth: "215px",
+            minWidth: "215px"
             // maxWidth: "800px",
-          },
-        }),
-      },
-    },
+          }
+        })
+      }
+    }
   ];
   //END pay And Go Columns
 
@@ -292,36 +305,36 @@ export default function Invoice_history() {
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
+          style: { fontSize: "15px", color: "black", fontWeight: "600" }
+        })
+      }
     },
     {
       name: "Type",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
+          style: { fontSize: "15px", color: "black", fontWeight: "600" }
+        })
+      }
     },
     {
       name: "Village",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
+          style: { fontSize: "15px", color: "black", fontWeight: "600" }
+        })
+      }
     },
     {
       name: "Date",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
+          style: { fontSize: "15px", color: "black", fontWeight: "600" }
+        })
+      }
     },
 
     {
@@ -329,18 +342,18 @@ export default function Invoice_history() {
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
+          style: { fontSize: "15px", color: "black", fontWeight: "600" }
+        })
+      }
     },
     {
       name: "Full_Payment",
       options: {
         filter: true,
         setCellHeaderProps: (value) => ({
-          style: { fontSize: "15px", color: "black", fontWeight: "600" },
-        }),
-      },
+          style: { fontSize: "15px", color: "black", fontWeight: "600" }
+        })
+      }
     },
     {
       name: "Action",
@@ -350,11 +363,11 @@ export default function Invoice_history() {
           style: {
             fontSize: "15px",
             color: "black",
-            fontWeight: "600",
-          },
-        }),
-      },
-    },
+            fontWeight: "600"
+          }
+        })
+      }
+    }
   ];
 
   //END Full Payment Columns
@@ -368,23 +381,36 @@ export default function Invoice_history() {
 
     db.collection("invoice")
       .where("status_of_payandgo", "==", "onGoing")
-      .onSnapshot((custIn) => {
+      .get()
+      .then((custIn) => {
         custIn.docs.forEach((siDoc) => {
           let isBeforeDate = isDateBeforeToday(
-            new Date(siDoc.data()?.deadlineTimestamp?.seconds * 1000)
+            new Date(
+              new Date(siDoc.data()?.deadlineTimestamp?.seconds * 1000).setDate(
+                new Date(
+                  siDoc.data()?.deadlineTimestamp?.seconds * 1000
+                ).getDate() + 7
+              )
+            )
           );
           if (isBeforeDate) {
             db.collection("invoice").doc(siDoc.id).update({
-              status_of_payandgo: "expired",
+              status_of_payandgo: "expired"
             });
           }
         });
       });
+
+    let rowsCountUse = rowsCount + 25;
+    setRowsCount(rowsCountUse);
+
     db.collection("invoice")
       // .orderBy("customer_id", "desc")
       .where("customer_id", "!=", null)
       // .orderBy("date", "desc")
-      .onSnapshot((cust) => {
+      // .limit(25)
+      .get()
+      .then((cust) => {
         var rawData = [];
         var rawAllData = [];
 
@@ -404,10 +430,19 @@ export default function Invoice_history() {
           }
         });
 
+        let wrongNextCountEx = 0;
+
         reArray.forEach((siDoc) => {
+          if (
+            new Date(siDoc.data().nextDate.seconds * 1000).getFullYear() >
+            new Date().getFullYear() + 1
+          ) {
+            wrongNextCountEx = wrongNextCountEx + 1;
+          }
+
           rawAllData.push({
             id: siDoc.id,
-            data: siDoc.data(),
+            data: siDoc.data()
           });
 
           rawData.push({
@@ -420,23 +455,9 @@ export default function Invoice_history() {
             ),
             MID: siDoc.data().mid,
             NIC: siDoc.data().nic,
-            Total_Discount: (
-              <CurrencyFormat
-                value={siDoc.data().discount}
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={" "}
-              />
-            ),
+            Total_Discount: siDoc.data().discount,
 
-            Balance: (
-              <CurrencyFormat
-                value={siDoc.data().balance}
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={" "}
-              />
-            ),
+            Balance: siDoc.data().balance,
             Status:
               siDoc.data().status_of_payandgo === "onGoing" ? (
                 <span
@@ -445,7 +466,7 @@ export default function Invoice_history() {
                     backgroundColor: "#e6e600",
                     padding: "6px",
                     borderRadius: "20px",
-                    font: "10px",
+                    font: "10px"
                   }}
                 >
                   Ongoing
@@ -457,7 +478,7 @@ export default function Invoice_history() {
                     backgroundColor: "#009900",
                     padding: "6px",
                     borderRadius: "20px",
-                    width: "100%",
+                    width: "100%"
                   }}
                 >
                   Done
@@ -469,7 +490,7 @@ export default function Invoice_history() {
                     backgroundColor: "#ff8c00",
                     padding: "6px",
                     borderRadius: "20px",
-                    width: "100%",
+                    width: "100%"
                   }}
                 >
                   Expired
@@ -481,7 +502,7 @@ export default function Invoice_history() {
                     backgroundColor: "red",
                     padding: "6px",
                     borderRadius: "20px",
-                    width: "100%",
+                    width: "100%"
                   }}
                 >
                   Blacklist
@@ -515,9 +536,10 @@ export default function Invoice_history() {
                   />
                 </span>
               </div>
-            ),
+            )
           });
         });
+        setWrongNextCount(wrongNextCountEx);
         setpayangoAllData(rawAllData);
         setpayangoTableData(rawData);
       });
@@ -528,13 +550,14 @@ export default function Invoice_history() {
       // .orderBy("customer_id", "desc")
       .orderBy("date", "desc")
       .where("customer_id", "==", null)
-      .onSnapshot((cust) => {
+      .get()
+      .then((cust) => {
         var rawDataFull = [];
         var rawAllDataFull = [];
         cust.docs.forEach((siDoc) => {
           rawAllDataFull.push({
             id: siDoc.id,
-            data: siDoc.data(),
+            data: siDoc.data()
           });
           rawDataFull.push({
             InvoiceNo: siDoc.data().invoice_number,
@@ -543,22 +566,8 @@ export default function Invoice_history() {
             Date: moment(siDoc.data()?.date?.toDate()).format(
               "dddd, MMMM Do YYYY"
             ),
-            Total_Discount: (
-              <CurrencyFormat
-                value={siDoc.data().discount}
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={" "}
-              />
-            ),
-            Full_Payment: (
-              <CurrencyFormat
-                value={siDoc.data().total}
-                displayType={"text"}
-                thousandSeparator={true}
-                prefix={" "}
-              />
-            ),
+            Total_Discount: siDoc.data().discount,
+            Full_Payment: siDoc.data().total,
             Action: (
               <div>
                 <span className="icon_visibl">
@@ -570,7 +579,7 @@ export default function Invoice_history() {
                   />
                 </span>
               </div>
-            ),
+            )
           });
         });
 
@@ -582,6 +591,114 @@ export default function Invoice_history() {
   }, []);
 
   //End Full Payment Rows
+
+  const moveAllDoneConfirm = (ifPayandgo) => {
+    confirm({
+      title: <h5 className="confo_title">Are you sure to continue ?</h5>,
+      okText: "Yes",
+      cancelText: "No",
+      async onOk() {
+        setIsMovedLoading(true);
+        if (ifPayandgo) {
+          if (payangoDate1 !== null) {
+            if (payangoDate2 !== null) {
+              db.collection("invoice")
+                .where("customer_id", "!=", null)
+                .get()
+                .then((cust) => {
+                  cust.docs.forEach((eachDoc) => {
+                    if (eachDoc.data().status_of_payandgo === "Done") {
+                      let seeBool1 =
+                        new Date(eachDoc.data()?.date.seconds * 1000) >
+                          new Date(payangoDate1.seconds * 1000) &&
+                        new Date(eachDoc.data()?.date.seconds * 1000) <=
+                          new Date(payangoDate2.seconds * 1000);
+
+                      if (seeBool1) {
+                        db.collection("moved_invoice")
+                          .add(eachDoc.data())
+                          .then(() => {
+                            db.collection("installment")
+                              .where(
+                                "invoice_number",
+                                "==",
+                                eachDoc.data().invoice_number
+                              )
+                              .get()
+                              .then((installRe) => {
+                                let count = 0;
+                                if (installRe.docs.length > 0) {
+                                  installRe.docs.forEach((eachIntsll) => {
+                                    db.collection("moved_installment")
+                                      .add(eachIntsll.data())
+                                      .then(() => {
+                                        db.collection("installment")
+                                          .doc(eachIntsll.id)
+                                          .delete()
+                                          .then(() => { });
+                                        count = count + 1;
+                                      });
+                                  });
+                                  if (count >= installRe.docs.length) {
+                                  db.collection("invoice")
+                                  .doc(eachDoc.id)
+                                  .delete()
+                                  .then(() => {});
+                                    setIsMovedLoading(false);
+                                  }
+                                } else {
+                                  db.collection("invoice")
+                                  .doc(eachDoc.id)
+                                  .delete()
+                                  .then(() => {});
+                                  setIsMovedLoading(false);
+                                }
+
+                                
+                              });
+                          });
+                      }
+                    }
+                  });
+                });
+            }
+          }
+        } else {
+          if (fullDate1 !== null) {
+            if (fullDate2 !== null) {
+              db.collection("invoice")
+                .where("customer_id", "==", null)
+                .get()
+                .then((cust) => {
+                  cust.docs.forEach((eachDoc) => {
+                    if (eachDoc.data().status_of_payandgo === "Done") {
+                      let seeBool1 =
+                        new Date(eachDoc.data()?.date.seconds * 1000) >
+                          new Date(fullDate1.seconds * 1000) &&
+                        new Date(eachDoc.data()?.date.seconds * 1000) <=
+                          new Date(fullDate2.seconds * 1000);
+
+                      if (seeBool1) {
+                        db.collection("moved_invoice")
+                          .add(eachDoc.data())
+                          .then(() => {
+                            db.collection("invoice")
+                              .doc(eachDoc.id)
+                              .delete()
+                              .then(() => {
+                                setIsMovedLoading(false);
+                              });
+                          });
+                      }
+                    }
+                  });
+                });
+            }
+          }
+        }
+      }
+    });
+  };
 
   return (
     <>
@@ -631,6 +748,9 @@ export default function Invoice_history() {
                   "expired"
                     ? true
                     : false
+                }
+                deadlineTimestamp={
+                  payangoAllData[currentIndx2]?.data?.deadlineTimestamp
                 }
               />
             </div>
@@ -705,6 +825,25 @@ export default function Invoice_history() {
         </div>
       </Modal>
       {/*End Installment Model Full Payment */}
+
+      <Modal
+        visible={wrongNextModal}
+        className="history_Installment_Model"
+        footer={null}
+        onCancel={() => {
+          // setWrongNextModal(false);
+          window.location.reload();
+        }}
+      >
+        <div className="Installment_Model">
+          <div className="Installment_Model_Main">
+            <div className="Installment_Model_Detail">
+              <Wrongnext />
+            </div>
+          </div>
+        </div>
+      </Modal>
+
       <div component="main" className="main_container">
         <AppBar className="appBar" position="static">
           <Tabs
@@ -717,6 +856,213 @@ export default function Invoice_history() {
           </Tabs>
         </AppBar>
         <TabPanel value={value} index={0}>
+          <Button
+            variant="contained"
+            className="loadAll"
+            onClick={() => {
+              setWrongNextModal(true);
+            }}
+          >
+            Wrong next dates = {wrongNextCount}
+          </Button>
+          <Button
+            variant="contained"
+            className="loadAll"
+            onClick={() => {
+              setIsLoading(true);
+              db.collection("invoice")
+                // .orderBy("customer_id", "desc")
+                .where("customer_id", "!=", null)
+                // .orderBy("date", "desc")
+                .get()
+                .then((cust) => {
+                  var rawData = [];
+                  var rawAllData = [];
+
+                  var reArray = cust.docs;
+                  reArray.sort((a, b) => {
+                    if (
+                      new Date(a.data().date.seconds * 1000).getFullYear() >=
+                        new Date(b.data().date.seconds * 1000).getFullYear() &&
+                      new Date(a.data().date.seconds * 1000).getMonth() >=
+                        new Date(b.data().date.seconds * 1000).getMonth() &&
+                      new Date(a.data().date.seconds * 1000).getDate() >=
+                        new Date(b.data().date.seconds * 1000).getDate()
+                    ) {
+                      return -1;
+                    } else {
+                      return 1;
+                    }
+                  });
+
+                  reArray.forEach((siDoc) => {
+                    rawAllData.push({
+                      id: siDoc.id,
+                      data: siDoc.data()
+                    });
+
+                    rawData.push({
+                      InvoiceNo: siDoc.data().invoice_number,
+                      // SerialNo: siDoc.data().items[0].serialNo,
+                      Type: siDoc.data().selectedType,
+                      Village: siDoc.data().root_village,
+                      Date: moment(siDoc.data()?.date?.toDate()).format(
+                        "dddd, MMMM Do YYYY"
+                      ),
+                      MID: siDoc.data().mid,
+                      NIC: siDoc.data().nic,
+                      Total_Discount: (
+                        <CurrencyFormat
+                          value={siDoc.data().discount}
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          prefix={" "}
+                        />
+                      ),
+
+                      Balance: (
+                        <CurrencyFormat
+                          value={siDoc.data().balance}
+                          displayType={"text"}
+                          thousandSeparator={true}
+                          prefix={" "}
+                        />
+                      ),
+                      Status:
+                        siDoc.data().status_of_payandgo === "onGoing" ? (
+                          <span
+                            style={{
+                              color: "black",
+                              backgroundColor: "#e6e600",
+                              padding: "6px",
+                              borderRadius: "20px",
+                              font: "10px"
+                            }}
+                          >
+                            Ongoing
+                          </span>
+                        ) : siDoc.data().status_of_payandgo === "Done" ? (
+                          <span
+                            style={{
+                              color: "white",
+                              backgroundColor: "#009900",
+                              padding: "6px",
+                              borderRadius: "20px",
+                              width: "100%"
+                            }}
+                          >
+                            Done
+                          </span>
+                        ) : siDoc.data().status_of_payandgo === "expired" ? (
+                          <span
+                            style={{
+                              color: "white",
+                              backgroundColor: "#ff8c00",
+                              padding: "6px",
+                              borderRadius: "20px",
+                              width: "100%"
+                            }}
+                          >
+                            Expired
+                          </span>
+                        ) : (
+                          <span
+                            style={{
+                              color: "white",
+                              backgroundColor: "red",
+                              padding: "6px",
+                              borderRadius: "20px",
+                              width: "100%"
+                            }}
+                          >
+                            Blacklist
+                          </span>
+                        ),
+                      Action: (
+                        <div>
+                          {siDoc.data().status_of_payandgo === "onGoing" ||
+                          siDoc.data().status_of_payandgo === "expired" ? (
+                            <Button
+                              variant="contained"
+                              color="primary"
+                              size="small"
+                              className="btn_pay"
+                              onClick={showModalUpdate}
+                            >
+                              Update
+                            </Button>
+                          ) : (
+                            ""
+                          )}
+                          <span className="icon_visibl">
+                            <HistoryIcon onClick={showModalHistory} />
+                          </span>
+                          <span className="icon_Edit">
+                            <VisibilityIcon onClick={showInstallmentView} />
+                          </span>
+                          <span className="icon_print">
+                            <PrintRoundedIcon
+                              onClick={() =>
+                                showVisibleConfirmPrintModal("payandgo")
+                              }
+                            />
+                          </span>
+                        </div>
+                      )
+                    });
+                  });
+                  setpayangoAllData(rawAllData);
+                  setpayangoTableData(rawData);
+                  setIsLoading(false);
+                });
+            }}
+          >
+            {isLoading ? (
+              <Spin spinning={isLoading} size="small" />
+            ) : (
+              "Load All"
+            )}
+          </Button>
+          <span>From </span>
+          <DatePicker
+            className="date_margin"
+            onChange={(e) => {
+              if (e !== null) {
+                setPayangoDate1(
+                  firebase.firestore.Timestamp.fromDate(e.toDate())
+                );
+              } else {
+                setPayangoDate1(null);
+              }
+            }}
+          />
+          <span>To </span>
+          <DatePicker
+            className="date_margin"
+            onChange={(e) => {
+              if (e !== null) {
+                setPayangoDate2(
+                  firebase.firestore.Timestamp.fromDate(e.toDate())
+                );
+              } else {
+                setPayangoDate2(null);
+              }
+            }}
+          />
+          <Button
+            variant="contained"
+            color="primary"
+            size="small"
+            className="btn_pay"
+            disabled={isMovedLoading}
+            onClick={() => moveAllDoneConfirm(true)}
+          >
+            {isMovedLoading ? (
+              <Spin spinning={isLoading} size="small" />
+            ) : (
+              "Move all done"
+            )}
+          </Button>
           <Grid container spacing={4}>
             <Grid item xs={12}>
               <MUIDataTable
@@ -729,8 +1075,13 @@ export default function Invoice_history() {
                   selectableRows: "none",
                   customToolbarSelect: () => {},
                   filterType: "textField",
-                  download: false,
-                  print: false,
+                  print: true,
+                  download: true,
+                  downloadOptions: {
+                    filename: `Invoice(Easy) - ${new Date().toDateString()} - ${new Date().toLocaleTimeString(
+                      "en-US"
+                    )}.csv`
+                  },
                   searchPlaceholder: "Search using any column names",
                   elevation: 4,
                   sort: true,
@@ -747,15 +1098,51 @@ export default function Invoice_history() {
                         />
                       ) : (
                         ""
-                      ),
-                    },
-                  },
+                      )
+                    }
+                  }
                 }}
               />
             </Grid>
           </Grid>
         </TabPanel>
         <TabPanel value={value} index={1}>
+          <span>From </span>
+          <DatePicker
+            className="date_margin"
+            onChange={(e) => {
+              if (e !== null) {
+                setFullDate1(firebase.firestore.Timestamp.fromDate(e.toDate()));
+              } else {
+                setFullDate1(null);
+              }
+            }}
+          />
+          <span>To </span>
+          <DatePicker
+            className="date_margin"
+            onChange={(e) => {
+              if (e !== null) {
+                setFullDate2(firebase.firestore.Timestamp.fromDate(e.toDate()));
+              } else {
+                setFullDate2(null);
+              }
+            }}
+          />
+          <Button
+            variant="contained"
+            color="primary"
+            size="small"
+            className="btn_pay"
+            disabled={isMovedLoading}
+            onClick={() => moveAllDoneConfirm(false)}
+          >
+            {isMovedLoading ? (
+              <Spin spinning={isLoading} size="small" />
+            ) : (
+              "Move all"
+            )}
+          </Button>
           <Grid container spacing={4}>
             <Grid item xs={12}>
               <MUIDataTable
@@ -768,8 +1155,13 @@ export default function Invoice_history() {
                   selectableRows: "none",
                   customToolbarSelect: () => {},
                   filterType: "textField",
-                  download: false,
-                  print: false,
+                  print: true,
+                  download: true,
+                  downloadOptions: {
+                    filename: `Invoice(Full) - ${new Date().toDateString()} - ${new Date().toLocaleTimeString(
+                      "en-US"
+                    )}.csv`
+                  },
                   searchPlaceholder: "Search using any column names",
                   elevation: 4,
                   sort: true,
@@ -786,9 +1178,9 @@ export default function Invoice_history() {
                         />
                       ) : (
                         ""
-                      ),
-                    },
-                  },
+                      )
+                    }
+                  }
                 }}
               />
             </Grid>

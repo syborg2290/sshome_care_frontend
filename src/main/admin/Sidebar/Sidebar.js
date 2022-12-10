@@ -20,7 +20,7 @@ import {
   MonetizationOnOutlined as MonetizationOnOutlinedIcon,
   ReceiptOutlined as ReceiptOutlinedIcon,
   LocalAtm as LocalAtmIcon,
-  Store as StoreIcon,
+  Store as StoreIcon
 } from "@material-ui/icons";
 
 import { useTheme } from "@material-ui/styles";
@@ -38,7 +38,7 @@ import SidebarLink from "./components/SidebarLink/SidebarLink";
 import {
   useLayoutState,
   useLayoutDispatch,
-  toggleSidebar,
+  toggleSidebar
 } from "../../../context/LayoutContext";
 
 const structure = [
@@ -46,14 +46,14 @@ const structure = [
     id: 0,
     label: "Dashboard",
     link: "/admin/dashboard",
-    icon: <DashboardIcon className="icons" />,
+    icon: <DashboardIcon className="icons" />
   },
 
   {
     id: 21,
     label: "Make Invoice",
     link: "/admin/ui/MakeInvoiceTable",
-    icon: <ReceiptOutlinedIcon className="icons" />,
+    icon: <ReceiptOutlinedIcon className="icons" />
   },
 
   {
@@ -66,21 +66,21 @@ const structure = [
       { label: "Add Item", link: "/admin/ui/AddItem" },
       { label: "Stock History", link: "/admin/ui/StockHistory" },
       { label: "Manage Stock", link: "/admin/ui/ManageStock" },
-      { label: "Selling History", link: "/admin/ui/SellingHistory" },
-    ],
+      { label: "Selling History", link: "/admin/ui/SellingHistory" }
+    ]
   },
   {
     id: 4,
     label: "Customers",
     link: "/admin/ui/Customer",
-    icon: <GroupIcon className="icons" />,
+    icon: <GroupIcon className="icons" />
   },
 
   {
     id: 11,
     label: "Invoice",
     link: "/admin/ui/InvoiceHistory",
-    icon: <LibraryIcon className="icons" />,
+    icon: <LibraryIcon className="icons" />
   },
 
   { id: 5, type: "divider" },
@@ -89,82 +89,90 @@ const structure = [
     id: 10,
     label: "Arreas",
     link: "/admin/ui/arries",
-    icon: <MoneyOffIcon className="icons" />,
+    icon: <MoneyOffIcon className="icons" />
   },
   {
     id: 6,
     label: "Repairs",
     link: "/admin/ui/Repair",
-    icon: <BuildIcon className="icons" />,
+    icon: <BuildIcon className="icons" />
   },
   {
     id: 13,
     label: "Gami Sarani",
     link: "/admin/ui/Gamisarani",
-    icon: <LocalShippingIcon className="icons" />,
+    icon: <LocalShippingIcon className="icons" />
   },
 
   {
     id: 27,
     label: "Gas",
     link: "/admin/ui/gass",
-    icon: <BatteryStdIcon className="icons" />,
+    icon: <BatteryStdIcon className="icons" />
   },
   {
     id: 16,
     label: "Loan",
     link: "/admin/ui/loan",
-    icon: <LocalAtmIcon className="icons" />,
+    icon: <LocalAtmIcon className="icons" />
   },
   {
     id: 17,
     label: "Employees",
     link: "/admin/ui/employee",
-    icon: <GroupAddIcon className="icons" />,
+    icon: <GroupAddIcon className="icons" />
   },
   {
     id: 20,
     label: "Salary",
     link: "/admin/ui/salary",
-    icon: <MonetizationOnOutlinedIcon className="icons" />,
+    icon: <MonetizationOnOutlinedIcon className="icons" />
   },
   {
     id: 18,
     label: "Attendance",
     link: "/admin/ui/attendance",
-    icon: <PlaylistAddCheckIcon className="icons" />,
+    icon: <PlaylistAddCheckIcon className="icons" />
   },
   {
     id: 19,
     label: "Root",
     link: "/admin/ui/root",
-    icon: <CommuteIcon className="icons" />,
+    icon: <CommuteIcon className="icons" />
   },
-   {
+  {
     id: 23,
     label: "Shop",
     link: "/admin/ui/shop",
-    icon: <StoreIcon className="icons" />,
+    icon: <StoreIcon className="icons" />
   },
   { id: 2, type: "divider" },
   {
     id: 9,
     label: "Black list",
     link: "/admin/ui/BlackList",
-    icon: <PersonAddDisabledIcon className="icons" />,
+    icon: <PersonAddDisabledIcon className="icons" />
   },
   {
     id: 12,
     label: "Seized Item",
     link: "/admin/ui/SeizedItems",
-    icon: <EventBusyIcon className="icons" />,
+    icon: <EventBusyIcon className="icons" />
   },
   {
     id: 7,
     label: "Accounts",
     link: "/admin/ui/accounts",
-    icon: <PermIdentityIcon className="icons" />,
+    icon: <PermIdentityIcon className="icons" />
   },
+  {
+    id: 50,
+    label: "Moved",
+    children: [
+      { label: "Gas", link: "/admin/pages/moved_gas" },
+      { label: "Other items", link: "/admin/pages/moved_invoice" }
+    ]
+  }
 ];
 
 function Sidebar({ location }) {
@@ -178,7 +186,7 @@ function Sidebar({ location }) {
   // local
   var [isPermanent, setPermanent] = useState(true);
 
-  useEffect(function () {
+  useEffect(function() {
     window.addEventListener("resize", handleWindowWidthChange);
     handleWindowWidthChange();
     return function cleanup() {
@@ -191,13 +199,13 @@ function Sidebar({ location }) {
       variant={isPermanent ? "permanent" : "temporary"}
       className={classNames(classes.drawer, {
         [classes.drawerOpen]: isSidebarOpened,
-        [classes.drawerClose]: !isSidebarOpened,
+        [classes.drawerClose]: !isSidebarOpened
       })}
       classes={{
         paper: classNames({
           [classes.drawerOpen]: isSidebarOpened,
-          [classes.drawerClose]: !isSidebarOpened,
-        }),
+          [classes.drawerClose]: !isSidebarOpened
+        })
       }}
       open={isSidebarOpened}
     >
@@ -206,20 +214,20 @@ function Sidebar({ location }) {
         <IconButton onClick={() => toggleSidebar(layoutDispatch)}>
           <ArrowBackIcon
             classes={{
-              root: classNames(classes.headerIcon, classes.headerIconCollapse),
+              root: classNames(classes.headerIcon, classes.headerIconCollapse)
             }}
           />
         </IconButton>
       </div>
       <List className="sidebarList">
-        {structure.map((link) => (
+        {structure.map(link =>
           <SidebarLink
             key={link.id}
             location={location}
             isSidebarOpened={isSidebarOpened}
             {...link}
           />
-        ))}
+        )}
       </List>
     </Drawer>
   );

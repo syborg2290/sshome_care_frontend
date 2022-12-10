@@ -215,6 +215,46 @@ export default function Pay_History_Model() {
         }),
       },
     },
+
+    {
+      name: "With_Cylinder_Gas",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: {
+            fontSize: "15px",
+            color: "black",
+            fontWeight: "600",
+          },
+        }),
+      },
+    },
+    {
+      name: "Gas_Downpayments",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: {
+            fontSize: "15px",
+            color: "black",
+            fontWeight: "600",
+          },
+        }),
+      },
+    },
+    {
+      name: "Gas_Installments",
+      options: {
+        filter: true,
+        setCellHeaderProps: (value) => ({
+          style: {
+            fontSize: "15px",
+            color: "black",
+            fontWeight: "600",
+          },
+        }),
+      },
+    },
     {
       name: "Arreas_Target",
       options: {
@@ -388,6 +428,30 @@ export default function Pay_History_Model() {
               Ex_Card: (
                 <CurrencyFormat
                   value={saDoc.data()?.exCard}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+              With_Cylinder_Gas: (
+                <CurrencyFormat
+                  value={saDoc.data()?.withCylinderGas}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+              Gas_Downpayments: (
+                <CurrencyFormat
+                  value={saDoc.data()?.gasDownpayment}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={" "}
+                />
+              ),
+              Gas_Installments: (
+                <CurrencyFormat
+                  value={saDoc.data()?.gasInstallment}
                   displayType={"text"}
                   thousandSeparator={true}
                   prefix={" "}

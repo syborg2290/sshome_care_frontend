@@ -25,6 +25,7 @@ const overrides = {
   },
 };
 
+// eslint-disable-next-line
 export default {
   default: createMuiTheme({ ...defaultTheme, ...overrides }),
 };

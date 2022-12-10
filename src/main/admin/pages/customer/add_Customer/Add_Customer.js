@@ -82,6 +82,7 @@ export default function Add_Customer() {
   const [trustee1Id, setTrustee1Id] = useState(null);
   // eslint-disable-next-line
   const [trustee2Id, setTrustee2Id] = useState(null);
+   // eslint-disable-next-line
   const [isItNull, setIsItNull] = useState(null);
 
   let history = useHistory();
@@ -221,10 +222,11 @@ export default function Add_Customer() {
                                             ? null
                                             : trustee2Doc.docs[0].id,
                                         customerNic: nic.trim(),
-                                        mid:
-                                          doc.docs.length === 0
-                                            ? mid.trim()
-                                            : doc.docs[0].data().mid,
+                                        // mid:
+                                        //   doc.docs.length === 0
+                                        //     ? mid.trim()
+                                        //     : doc.docs[0].data().mid,
+                                         mid:mid.trim(),
                                         customerFname: fname.trim(),
                                         customerLname: lname.trim(),
                                         customerAddress1: addres1.trim(),
@@ -1796,13 +1798,6 @@ export default function Add_Customer() {
                   className="btn_MakeCustomer"
                   endIcon={<DoneIcon />}
                   onClick={submit}
-                  disabled={
-                    isItNull === undefined ||
-                    mid.length === 0 ||
-                    nic.length === 0
-                      ? true
-                      : false
-                  }
                 >
                   Submit
                 </Button>
